@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="RCP Platform" sequenceNumber="5">
+<?pde version="3.8"?><target name="RCP Platform" sequenceNumber="6">
 <locations>
 <location path="${eclipse_home}" type="Profile"/>
 <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
@@ -7,6 +7,10 @@
 <unit id="org.eclipse.rcp.source.feature.group" version="4.6.1.v20160907-1200"/>
 <unit id="org.eclipse.rcp.feature.group" version="4.6.1.v20160907-1200"/>
 <repository location="http://download.eclipse.org/eclipse/updates/4.6"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.babel.nls_eclipse_de.feature.group" version="4.6.0.v20160813060001"/>
+<repository location="http://download.eclipse.org/technology/babel/update-site/R0.14.0/neon"/>
 </location>
 </locations>
 <environment>

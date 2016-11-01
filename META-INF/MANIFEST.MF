@@ -4,6 +4,7 @@ Bundle-Name: App
 Bundle-SymbolicName: epd-editor;singleton:=true
 Bundle-Version: 1.0.0
 Bundle-Activator: app.rcp.Activator
+Eclipse-BundleShape: dir
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.equinox.event,
@@ -12,3 +13,15 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.navigator
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ClassPath: .,
+ libs/commons-codec-1.2.jar,
+ libs/commons-httpclient-3.1.jar,
+ libs/commons-logging-1.0.4.jar,
+ libs/jersey-apache-client-1.19.jar,
+ libs/jersey-client-1.19.jar,
+ libs/jersey-core-1.19.jar,
+ libs/jersey-multipart-1.19.jar,
+ libs/jsr311-api-1.1.1.jar,
+ libs/mimepull-1.9.3.jar,
+ libs/olca-ilcd-1.6.0.jar,
+ libs/slf4j-api-1.7.2.jar

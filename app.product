@@ -152,6 +152,7 @@
       <plugin id="org.eclipse.ui.cocoa.nl_de" fragment="true"/>
       <plugin id="org.eclipse.ui.forms"/>
       <plugin id="org.eclipse.ui.forms.nl_de" fragment="true"/>
+      <plugin id="org.eclipse.ui.navigator"/>
       <plugin id="org.eclipse.ui.nl_de" fragment="true"/>
       <plugin id="org.eclipse.ui.win32.nl_de" fragment="true"/>
       <plugin id="org.eclipse.ui.workbench"/>

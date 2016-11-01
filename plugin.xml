@@ -2,38 +2,71 @@
 <?eclipse version="3.4"?>
 <plugin>
 
-   <extension
-         id="application"
-         point="org.eclipse.core.runtime.applications">
+   <extension id="application"
+              point="org.eclipse.core.runtime.applications">
       <application>
-         <run
-               class="app.rcp.App">
+         <run class="app.rcp.App">
          </run>
       </application>
    </extension>
-   <extension
-         point="org.eclipse.ui.perspectives">
-      <perspective
-            name="RCP Perspective"
-            class="app.rcp.Perspective"
-            id="app.perspective">
+   <extension point="org.eclipse.ui.perspectives">
+      <perspective name="RCP Perspective"
+                   class="app.rcp.Perspective"
+                   id="app.perspective">
       </perspective>
    </extension>
-   <extension
-         id="product"
-         point="org.eclipse.core.runtime.products">
-      <product
-            application="epd-editor.application"
-            name="EPD Editor">
-         <property
-               name="windowImages"
-               value="icons/eclipse16.png,icons/eclipse32.png,icons/eclipse48.png,icons/eclipse64.png, icons/eclipse128.png,icons/eclipse256.png">
+   <extension id="product"
+              point="org.eclipse.core.runtime.products">
+      <product application="epd-editor.application"
+               name="EPD Editor">
+         <property name="windowImages"
+                   value="icons/eclipse16.png,icons/eclipse32.png,icons/eclipse48.png,icons/eclipse64.png, icons/eclipse128.png,icons/eclipse256.png">
          </property>
-         <property
-               name="appName"
-               value="EPD Editor">
+         <property name="appName"
+                   value="EPD Editor">
          </property>
       </product>
    </extension>
+
+   <extension point="org.eclipse.ui.navigator.viewer">
+         <viewer viewerId="app.navi.Navigator">
+               <options>
+		        <property name="org.eclipse.ui.navigator.hideLinkWithEditorAction"
+		                  value="true">
+		         </property>
+		         <property name="org.eclipse.ui.navigator.hideCollapseAllAction"
+		                   value="true">
+		         </property>
+		         <property name="org.eclipse.ui.navigator.hideAvailableCustomizationsDialog"
+		                   value="true">
+		         </property>
+			</options>
+         </viewer>
+         <!--
+         <viewerContentBinding viewerId="app.navi.Navigator">
+			<includes>
+				<contentExtension isRoot="true"
+				                  pattern="app.navi.NavigationContent"/>
+			</includes>
+		 </viewerContentBinding>
+		 
+		<viewerActionBinding viewerId="app.navi.Navigator">
+			<includes>
+				<actionExtension pattern="app.navi.NavigationMenu"/>
+			</includes>
+		</viewerActionBinding>    
+		-->    
+   </extension>
+
+	<!-- Navigation view -->
+	<extension 
+		point="org.eclipse.ui.views">
+		<view 
+			allowMultiple="false" 
+			class="app.navi.Navigator" 
+			id="app.navi.Navigator" 
+			name="Navigation"
+			icon="icons/data.png"/>
+	</extension>
 
 </plugin>

@@ -13,11 +13,49 @@ public class Navigator extends CommonNavigator {
 
 	public static final String ID = "app.navi.Navigator";
 
+	private NavigationRoot root;
+
+	@Override
+	protected Object getInitialInput() {
+		root = new NavigationRoot();
+		return root;
+	}
+
 	@Override
 	protected CommonViewer createCommonViewerObject(Composite parent) {
 		CommonViewer viewer = super.createCommonViewerObject(parent);
 		viewer.setUseHashlookup(true);
 		return viewer;
+	}
+
+	public NavigationRoot getRoot() {
+		return root;
+	}
+
+	public static void refresh() {
+		CommonViewer viewer = getNavigationViewer();
+		NavigationRoot root = getNavigationRoot();
+		if (viewer != null && root != null) {
+			root.update();
+			viewer.refresh();
+		}
+	}
+
+	private static CommonViewer getNavigationViewer() {
+		CommonViewer viewer = null;
+		Navigator instance = getInstance();
+		if (instance != null) {
+			viewer = instance.getCommonViewer();
+		}
+		return viewer;
+	}
+
+	private static NavigationRoot getNavigationRoot() {
+		NavigationRoot root = null;
+		Navigator navigator = getInstance();
+		if (navigator != null)
+			root = navigator.getRoot();
+		return root;
 	}
 
 	private static Navigator getInstance() {

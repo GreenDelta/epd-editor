@@ -42,14 +42,14 @@
 		         </property>
 			</options>
          </viewer>
-         <!--
+         
          <viewerContentBinding viewerId="app.navi.Navigator">
 			<includes>
 				<contentExtension isRoot="true"
 				                  pattern="app.navi.NavigationContent"/>
 			</includes>
 		 </viewerContentBinding>
-		 
+		 <!--
 		<viewerActionBinding viewerId="app.navi.Navigator">
 			<includes>
 				<actionExtension pattern="app.navi.NavigationMenu"/>
@@ -57,6 +57,36 @@
 		</viewerActionBinding>    
 		-->    
    </extension>
+   
+   <extension point="org.eclipse.ui.navigator.navigatorContent">
+		
+		<navigatorContent 
+			activeByDefault="true" 
+			contentProvider="app.navi.NavigationContent" 
+			id="app.navi.NavigationContent" 
+			labelProvider="app.navi.NavigationLabel" 
+			name="#Navigation content" 
+			priority="normal">
+			<triggerPoints>
+				<instanceof value="app.navi.NavigationElement"/>
+			</triggerPoints>
+			<commonSorter class="app.navi.NavigationSorter"/>
+			<possibleChildren>
+				<instanceof value="app.navi.NavigationElement"/>
+			</possibleChildren>
+		</navigatorContent>
+		
+		<!--
+		<actionProvider 
+			class="sophena.rcp.navigation.NavigationMenu" 
+			id="sophena.NavigationMenu" 
+			priority="normal">
+			<enablement></enablement>
+		</actionProvider>
+		-->
+		
+	</extension>
+	
 
 	<!-- Navigation view -->
 	<extension 

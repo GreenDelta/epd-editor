@@ -8,20 +8,20 @@ import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 
 public class WorkbenchWindow extends WorkbenchWindowAdvisor {
 
-    public WorkbenchWindow(IWorkbenchWindowConfigurer configurer) {
-        super(configurer);
-    }
-    
-    @Override
-    public ActionBarAdvisor createActionBarAdvisor(IActionBarConfigurer configurer) {
-        return new ActionBarAdvisor(configurer);
-    }
-    
-    @Override
-    public void preWindowOpen() {
-        IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
-        configurer.setInitialSize(new Point(400, 300));
-        configurer.setShowCoolBar(false);
-        configurer.setShowStatusLine(false);
-    }
+	public WorkbenchWindow(IWorkbenchWindowConfigurer configurer) {
+		super(configurer);
+	}
+
+	@Override
+	public ActionBarAdvisor createActionBarAdvisor(IActionBarConfigurer conf) {
+		return new ActionBar(conf);
+	}
+
+	@Override
+	public void preWindowOpen() {
+		IWorkbenchWindowConfigurer conf = getWindowConfigurer();
+		conf.setInitialSize(new Point(800, 600));
+		conf.setShowCoolBar(true);
+		conf.setShowStatusLine(false);
+	}
 }

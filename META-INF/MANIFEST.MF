@@ -7,6 +7,7 @@ Bundle-Activator: app.rcp.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.equinox.event,
- org.eclipse.equinox.ds
+ org.eclipse.equinox.ds,
+ org.eclipse.ui.forms
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

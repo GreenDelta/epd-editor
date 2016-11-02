@@ -1,6 +1,5 @@
-package epd.io;
+package epd.index;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -8,24 +7,26 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import epd.model.EpdDescriptor;
+import epd.model.Ref;
 
-class EpdDescriptorCollector extends DefaultHandler {
+class RefCollector extends DefaultHandler {
 
-	private List<EpdDescriptor> descriptors = new ArrayList<>();
+	private final List<Ref> refs;
+	private final String lang;
 
 	private boolean isEpdDataSet;
 	private boolean inName;
 	private boolean inUUID;
 	private boolean inVersion;
 
-	private String lang;
+	private String currentLang;
 	private String currentName;
 	private String currentId;
 	private String currentVersion;
 
-	public List<EpdDescriptor> getDescriptors() {
-		return descriptors;
+	public RefCollector(List<Ref> refs, String lang) {
+		this.refs = refs;
+		this.lang = lang;
 	}
 
 	@Override
@@ -48,7 +49,7 @@ class EpdDescriptorCollector extends DefaultHandler {
 		} else if (matchElement("dataSetVersion", localName, qName)) {
 			inVersion = true;
 		} else if (matchElement("baseName", localName, qName)) {
-			lang = attributes.getValue("xml:lang");
+			currentLang = attributes.getValue("xml:lang");
 			inName = true;
 		}
 	}
@@ -75,7 +76,7 @@ class EpdDescriptorCollector extends DefaultHandler {
 		if (inVersion)
 			currentVersion = new String(ch, start, length);
 		if (inName) {
-			if (currentName == null || Objects.equals(EpdStore.lang, lang))
+			if (currentName == null || Objects.equals(lang, currentLang))
 				currentName = new String(ch, start, length);
 		}
 	}
@@ -92,11 +93,10 @@ class EpdDescriptorCollector extends DefaultHandler {
 	public void endDocument() throws SAXException {
 		if (!isEpdDataSet)
 			return;
-		EpdDescriptor d = new EpdDescriptor();
+		Ref d = new Ref();
 		d.name = currentName;
-		d.refId = currentId;
+		d.uuid = currentId;
 		d.version = currentVersion;
-		descriptors.add(d);
+		refs.add(d);
 	}
-
 }

@@ -1,5 +1,6 @@
 package app.navi;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import org.eclipse.swt.graphics.Image;
 import org.openlca.ilcd.commons.DataSetType;
 
 import app.rcp.Icon;
+import epd.model.Ref;
 
 public class DataTypeElement implements NavigationElement {
 
@@ -20,7 +22,14 @@ public class DataTypeElement implements NavigationElement {
 
 	@Override
 	public List<NavigationElement> getChilds() {
-		return Collections.emptyList();
+		if (type != DataSetType.PROCESS)
+			return Collections.emptyList();
+		List<NavigationElement> childs = new ArrayList<>();
+		for (Ref ref : Navigator.index.processes) {
+			DataRefElement e = new DataRefElement(ref);
+			childs.add(e);
+		}
+		return childs;
 	}
 
 	@Override

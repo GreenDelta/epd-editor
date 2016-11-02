@@ -3,11 +3,6 @@ package epd.io;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 
 import org.openlca.ilcd.io.FileStore;
 import org.openlca.ilcd.processes.Process;
@@ -97,32 +92,4 @@ public class EpdStore implements Closeable {
 		}
 	}
 
-	public List<EpdDescriptor> getDescriptors() {
-		log.trace("get EPD descriptors");
-		try {
-			File dir = ilcdStore.getFolder(Process.class);
-			if (dir == null)
-				return Collections.emptyList();
-			EpdDescriptorCollector collector = collectDescriptions(dir);
-			return collector.getDescriptors();
-		} catch (Exception e) {
-			log.error("failed to list EPD descriptors", e);
-			return Collections.emptyList();
-		}
-	}
-
-	private EpdDescriptorCollector collectDescriptions(File dir)
-			throws Exception {
-		SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
-		EpdDescriptorCollector collector = new EpdDescriptorCollector();
-		for (File file : dir.listFiles()) {
-			if (!file.getName().toLowerCase().endsWith(".xml")) {
-				log.warn("there is a non-XML file in the process "
-						+ "folder: {}", file);
-				continue;
-			}
-			parser.parse(file, collector);
-		}
-		return collector;
-	}
 }

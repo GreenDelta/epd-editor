@@ -21,7 +21,9 @@ public class WorkbenchWindow extends WorkbenchWindowAdvisor {
 	public void preWindowOpen() {
 		IWorkbenchWindowConfigurer conf = getWindowConfigurer();
 		conf.setInitialSize(new Point(800, 600));
+		conf.setShowMenuBar(true);
 		conf.setShowCoolBar(true);
-		conf.setShowStatusLine(false);
+		conf.setShowStatusLine(true);
+		conf.setShowProgressIndicator(true);
 	}
 }

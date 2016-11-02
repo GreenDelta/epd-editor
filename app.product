@@ -8,6 +8,7 @@
 
    <launcherArgs>
       <programArgs>-nl en
+-data @noDefault
       </programArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>

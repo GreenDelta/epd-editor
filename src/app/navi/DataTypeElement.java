@@ -36,7 +36,7 @@ public class DataTypeElement implements NavigationElement {
 		case EXTERNAL_FILE:
 			return "#External Files";
 		case FLOW:
-			return "#Flows";
+			return "#Products";
 		case FLOW_PROPERTY:
 			return "#Flow Properties";
 		case LCIA_METHOD:

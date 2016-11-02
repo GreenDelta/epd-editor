@@ -5,7 +5,7 @@
    <extension id="application"
               point="org.eclipse.core.runtime.applications">
       <application>
-         <run class="app.rcp.App">
+         <run class="app.rcp.Application">
          </run>
       </application>
    </extension>

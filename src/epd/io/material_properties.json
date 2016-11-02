@@ -1,0 +1,14 @@
+[
+	{
+		"id":"pr1",
+		"name":"average mass per unit area",
+		"unit":"kg/m^2",
+		"unitDescription":"kilograms per square metre"
+	},
+	{
+		"id":"pr2",
+		"name":"raw density",
+		"unit":"kg/m^3",
+		"unitDescription":"kilograms per cubic metre"
+	}
+]

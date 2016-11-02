@@ -1,10 +1,13 @@
 package app.rcp;
 
 import org.eclipse.jface.action.ICoolBarManager;
+import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.ToolBarContributionItem;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
@@ -26,6 +29,15 @@ public class ActionBar extends ActionBarAdvisor {
 		save = ActionFactory.SAVE.create(window);
 		saveAs = ActionFactory.SAVE_AS.create(window);
 		saveAll = ActionFactory.SAVE_ALL.create(window);
+	}
+
+	@Override
+	protected void fillMenuBar(IMenuManager menuBar) {
+		super.fillMenuBar(menuBar);
+		MenuManager menu = new MenuManager("#File",
+				IWorkbenchActionConstants.M_FILE);
+		menu.add(new ImportAction());
+		menuBar.add(menu);
 	}
 
 	@Override

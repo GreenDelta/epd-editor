@@ -6,6 +6,8 @@ import java.util.List;
 import org.eclipse.swt.graphics.Image;
 import org.openlca.ilcd.commons.DataSetType;
 
+import app.rcp.Icon;
+
 public class DataTypeElement implements NavigationElement {
 
 	private final DataSetType type;
@@ -54,7 +56,7 @@ public class DataTypeElement implements NavigationElement {
 
 	@Override
 	public Image getImage() {
-		return null;
+		return Icon.img(type);
 	}
 
 	@Override

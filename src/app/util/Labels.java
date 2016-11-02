@@ -1,4 +1,4 @@
-package app;
+package app.util;
 
 public class Labels {
 

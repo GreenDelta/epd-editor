@@ -21,9 +21,15 @@ public class WorkbenchWindow extends WorkbenchWindowAdvisor {
 	public void preWindowOpen() {
 		IWorkbenchWindowConfigurer conf = getWindowConfigurer();
 		conf.setInitialSize(new Point(800, 600));
-		conf.setShowMenuBar(true);
 		conf.setShowCoolBar(true);
 		conf.setShowStatusLine(true);
 		conf.setShowProgressIndicator(true);
+		conf.setShowMenuBar(true);
+		conf.setTitle("EPD - Editor 2.0 \u03B1");
+	}
+
+	@Override
+	public void postWindowClose() {
+		ImageManager.dispose();
 	}
 }

@@ -9,8 +9,12 @@ import org.openlca.ilcd.contacts.Contact;
 import org.openlca.ilcd.flowproperties.FlowProperty;
 import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.methods.LCIAMethod;
+import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.processes.ProcessName;
 import org.openlca.ilcd.sources.Source;
 import org.openlca.ilcd.units.UnitGroup;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Describes a data set reference.
@@ -37,6 +41,36 @@ public class Ref {
 		ref.uri = r.uri;
 		ref.uuid = r.uuid;
 		ref.version = r.version;
+		return ref;
+	}
+
+	public static Ref of(Object dataSet, String lang) {
+		if (dataSet == null)
+			return new Ref();
+		if (dataSet instanceof Process)
+			return of((Process) dataSet, lang);
+		Logger log = LoggerFactory.getLogger(Ref.class);
+		log.error("Could not create Ref from {}", dataSet);
+		return new Ref();
+	}
+
+	public static Ref of(Process p, String lang) {
+		Ref ref = new Ref();
+		ref.type = DataSetType.PROCESS;
+		if (p == null)
+			return ref;
+		if (p.adminInfo != null && p.adminInfo.publication != null) {
+			ref.uri = p.adminInfo.publication.uri;
+			ref.version = p.adminInfo.publication.version;
+		}
+		if (p.processInfo != null && p.processInfo.dataSetInfo != null) {
+			ref.uuid = p.processInfo.dataSetInfo.uuid;
+			ref.description = LangString.getVal(
+					p.processInfo.dataSetInfo.comment, lang);
+			ProcessName name = p.processInfo.dataSetInfo.name;
+			if (name != null)
+				ref.name = LangString.getVal(name.name, lang);
+		}
 		return ref;
 	}
 
@@ -99,4 +133,5 @@ public class Ref {
 			return null;
 		}
 	}
+
 }

@@ -59,7 +59,7 @@ public class Ref {
 	private static void fill(Ref ref, Process p, String lang) {
 		if (p == null)
 			return;
-		if (p.processInfo != null && p.processInfo.dataSetInfo != null)
+		if (p.processInfo == null && p.processInfo.dataSetInfo == null)
 			return;
 		ref.description = LangString.getVal(
 				p.processInfo.dataSetInfo.comment, lang);

@@ -10,6 +10,8 @@ public enum Icon {
 
 	EPD("epd.png"),
 
+	FOLDER("folder.png"),
+
 	IMPORT("import.png"),
 
 	PRODUCT("product.png"),

@@ -13,11 +13,14 @@ import org.openlca.ilcd.io.FileStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import epd.index.Index;
+
 public class App {
 
 	public static String lang;
 	public static FileStore store;
 	public static File workspace;
+	public static Index index;
 
 	public static void init() {
 		try {
@@ -30,6 +33,7 @@ public class App {
 			workspace = dir;
 			store = new FileStore(dir);
 			lang = "en";
+			index = Index.load(new File(dir, "index.json"));
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(App.class);
 			log.error("failed to init App", e);

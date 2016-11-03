@@ -9,20 +9,15 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.CommonViewer;
 
-import app.App;
-import epd.index.Index;
-
 public class Navigator extends CommonNavigator {
 
 	public static final String ID = "app.navi.Navigator";
 
-	public static Index index;
 	private NavigationRoot root;
 
 	@Override
 	protected Object getInitialInput() {
 		root = new NavigationRoot();
-		index = Index.create(App.store, App.lang);
 		return root;
 	}
 

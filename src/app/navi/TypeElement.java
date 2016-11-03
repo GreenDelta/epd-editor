@@ -6,6 +6,7 @@ import java.util.List;
 import org.eclipse.swt.graphics.Image;
 import org.openlca.ilcd.commons.DataSetType;
 
+import app.App;
 import app.rcp.Icon;
 import epd.index.CategoryNode;
 import epd.index.TypeNode;
@@ -36,9 +37,9 @@ public class TypeElement implements NavigationElement {
 		if (childs == null)
 			return;
 		childs.clear();
-		if (Navigator.index == null)
+		if (App.index == null)
 			return;
-		TypeNode node = Navigator.index.getNode(type);
+		TypeNode node = App.index.getNode(type);
 		if (node == null)
 			return;
 		for (CategoryNode catNode : node.categories) {
@@ -84,7 +85,7 @@ public class TypeElement implements NavigationElement {
 
 	@Override
 	public Image getImage() {
-		return Icon.img(type);
+		return Icon.FOLDER.img();
 	}
 
 	@Override

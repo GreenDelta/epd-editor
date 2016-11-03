@@ -8,11 +8,13 @@ import org.eclipse.swt.graphics.Image;
 import app.rcp.Icon;
 import epd.model.Ref;
 
-public class DataRefElement implements NavigationElement {
+public class RefElement implements NavigationElement {
 
 	private final Ref ref;
+	private NavigationElement parent;
 
-	public DataRefElement(Ref ref) {
+	public RefElement(NavigationElement parent, Ref ref) {
+		this.parent = parent;
 		this.ref = ref;
 	}
 
@@ -23,7 +25,7 @@ public class DataRefElement implements NavigationElement {
 
 	@Override
 	public NavigationElement getParent() {
-		return null;
+		return parent;
 	}
 
 	@Override

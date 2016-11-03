@@ -57,7 +57,7 @@ public class NavigationLabel extends ColumnLabelProvider implements
 
 	@Override
 	public Font getFont(Object obj) {
-		if (obj instanceof DataTypeElement)
+		if (obj instanceof TypeElement)
 			return boldFont;
 		return null;
 	}

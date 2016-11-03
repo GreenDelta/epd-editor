@@ -15,12 +15,12 @@ public class NavigationRoot implements NavigationElement {
 		if (childs != null)
 			return childs;
 		childs = Arrays.asList(
-				new DataTypeElement(this, DataSetType.PROCESS),
-				new DataTypeElement(this, DataSetType.CONTACT),
-				new DataTypeElement(this, DataSetType.SOURCE),
-				new DataTypeElement(this, DataSetType.FLOW),
-				new DataTypeElement(this, DataSetType.FLOW_PROPERTY),
-				new DataTypeElement(this, DataSetType.UNIT_GROUP));
+				new TypeElement(this, DataSetType.PROCESS),
+				new TypeElement(this, DataSetType.CONTACT),
+				new TypeElement(this, DataSetType.SOURCE),
+				new TypeElement(this, DataSetType.FLOW),
+				new TypeElement(this, DataSetType.FLOW_PROPERTY),
+				new TypeElement(this, DataSetType.UNIT_GROUP));
 		return childs;
 	}
 

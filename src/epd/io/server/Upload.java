@@ -85,7 +85,7 @@ class Upload {
 		if (flow == null || flow.flowProperties == null)
 			return;
 		DataStoreSync sync = new DataStoreSync(fileStore, webStore);
-		for (FlowPropertyRef ref : flow.flowProperties.flowProperty) {
+		for (FlowPropertyRef ref : flow.flowProperties) {
 			DataSetReference propRef = ref.flowProperty;
 			if (propRef == null)
 				continue;

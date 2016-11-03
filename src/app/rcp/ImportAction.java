@@ -3,6 +3,7 @@ package app.rcp;
 import java.io.File;
 
 import org.eclipse.jface.action.Action;
+import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.io.ZipStore;
 import org.openlca.ilcd.processes.Process;
 import org.slf4j.Logger;
@@ -44,7 +45,8 @@ class ImportAction extends Action {
 		}
 	}
 
-	private void run(Class<?> type, ZipStore zip) throws Exception {
+	private void run(Class<? extends IDataSet> type, ZipStore zip)
+			throws Exception {
 		zip.iterator(type).forEachRemaining(d -> {
 			Ref ref = Ref.of(d, App.lang);
 			if (ref == null || !ref.isValid())

@@ -1,35 +1,54 @@
 package app.navi;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 import org.openlca.ilcd.commons.DataSetType;
 
 import app.rcp.Icon;
+import epd.index.CategoryNode;
+import epd.index.TypeNode;
 import epd.model.Ref;
 
-public class DataTypeElement implements NavigationElement {
+public class TypeElement implements NavigationElement {
 
 	private final DataSetType type;
 	private final NavigationRoot parent;
+	private List<NavigationElement> childs;
 
-	public DataTypeElement(NavigationRoot parent, DataSetType type) {
+	public TypeElement(NavigationRoot parent, DataSetType type) {
 		this.parent = parent;
 		this.type = type;
 	}
 
 	@Override
 	public List<NavigationElement> getChilds() {
-		if (type != DataSetType.PROCESS)
-			return Collections.emptyList();
-		List<NavigationElement> childs = new ArrayList<>();
-		for (Ref ref : Navigator.index.processes) {
-			DataRefElement e = new DataRefElement(ref);
-			childs.add(e);
+		if (childs == null) {
+			childs = new ArrayList<>();
+			update();
 		}
 		return childs;
+	}
+
+	@Override
+	public void update() {
+		if (childs == null)
+			return;
+		childs.clear();
+		if (Navigator.index == null)
+			return;
+		TypeNode node = Navigator.index.getNode(type);
+		if (node == null)
+			return;
+		for (CategoryNode catNode : node.categories) {
+			CategoryElement e = new CategoryElement(this, catNode);
+			childs.add(e);
+		}
+		for (Ref ref : node.refs) {
+			RefElement e = new RefElement(parent, ref);
+			childs.add(e);
+		}
 	}
 
 	@Override
@@ -66,10 +85,6 @@ public class DataTypeElement implements NavigationElement {
 	@Override
 	public Image getImage() {
 		return Icon.img(type);
-	}
-
-	@Override
-	public void update() {
 	}
 
 	@Override

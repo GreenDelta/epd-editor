@@ -3,13 +3,13 @@ package epd.io.conversion;
 import java.util.List;
 
 import org.openlca.ilcd.commons.Other;
+import org.openlca.ilcd.commons.Publication;
 import org.openlca.ilcd.flows.AdminInfo;
 import org.openlca.ilcd.flows.DataSetInfo;
 import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.flows.FlowInfo;
 import org.openlca.ilcd.flows.LCIMethod;
-import org.openlca.ilcd.flows.ModellingAndValidation;
-import org.openlca.ilcd.flows.Publication;
+import org.openlca.ilcd.flows.Modelling;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
@@ -82,11 +82,11 @@ public class FlowDecorator {
 	private String readVersion(Flow flow) {
 		if (flow == null)
 			return null;
-		AdminInfo info = flow.administrativeInformation;
+		AdminInfo info = flow.adminInfo;
 		if (info == null)
 			return null;
 		Publication pub = info.publication;
-		return pub == null ? null : pub.dataSetVersion;
+		return pub == null ? null : pub.version;
 	}
 
 	public void write() {
@@ -139,12 +139,12 @@ public class FlowDecorator {
 	}
 
 	private Other getInfoExtension(Flow flow, boolean create) {
-		FlowInfo flowInfo = flow.flowInformation;
+		FlowInfo flowInfo = flow.flowInfo;
 		if (flowInfo == null) {
 			if (!create)
 				return null;
 			flowInfo = new FlowInfo();
-			flow.flowInformation = flowInfo;
+			flow.flowInfo = flowInfo;
 		}
 		DataSetInfo dataInfo = flowInfo.dataSetInfo;
 		if (dataInfo == null) {
@@ -162,12 +162,12 @@ public class FlowDecorator {
 	}
 
 	private Other getMethodExtension(Flow flow, boolean create) {
-		ModellingAndValidation mav = flow.modellingAndValidation;
+		Modelling mav = flow.modelling;
 		if (mav == null) {
 			if (!create)
 				return null;
-			mav = new ModellingAndValidation();
-			flow.modellingAndValidation = mav;
+			mav = new Modelling();
+			flow.modelling = mav;
 		}
 		LCIMethod method = mav.lciMethod;
 		if (method == null) {
@@ -187,17 +187,17 @@ public class FlowDecorator {
 	private void writeVersion(Flow flow) {
 		if (flow == null)
 			return;
-		AdminInfo info = flow.administrativeInformation;
+		AdminInfo info = flow.adminInfo;
 		if (info == null) {
 			info = new AdminInfo();
-			flow.administrativeInformation = info;
+			flow.adminInfo = info;
 		}
 		Publication pub = info.publication;
 		if (pub == null) {
 			pub = new Publication();
 			info.publication = pub;
 		}
-		pub.dataSetVersion = product.version;
+		pub.version = product.version;
 	}
 
 	private Flow loadFlow() {

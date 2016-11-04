@@ -1,10 +1,8 @@
 package epd.io.conversion;
 
-import org.openlca.ilcd.commons.DataSetReference;
-import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Other;
 import org.openlca.ilcd.commons.QuantitativeReferenceType;
+import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.processes.DataSetInfo;
 import org.openlca.ilcd.processes.Exchange;
 import org.openlca.ilcd.processes.Method;
@@ -15,11 +13,9 @@ import org.openlca.ilcd.processes.QuantitativeReference;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import epd.io.EpdStore;
 import epd.io.MappingConfig;
 import epd.model.DeclaredProduct;
 import epd.model.EpdDataSet;
-import epd.model.Ref;
 
 /**
  * Converts an EPD to an ILCD process data set
@@ -61,19 +57,13 @@ class EpdConverter {
 		createRefExchange(product.flow, 0, product.amount);
 	}
 
-	private void createRefExchange(Ref flow, int refId,
+	private void createRefExchange(Ref flowRef, int refId,
 			double amount) {
 		Exchange exchange = new Exchange();
 		exchange.resultingAmount = amount;
 		exchange.meanAmount = amount;
 		exchange.id = refId;
-		DataSetReference ref = new DataSetReference();
-		exchange.flow = ref;
-		ref.uuid = flow.uuid;
-		ref.uri = "../flows/" + flow.uuid;
-		ref.type = DataSetType.FLOW;
-		LangString.set(ref.description, flow.name,
-				EpdStore.lang);
+		exchange.flow = flowRef;
 		process.exchanges.add(exchange);
 	}
 

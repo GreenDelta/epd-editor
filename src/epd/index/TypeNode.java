@@ -11,8 +11,7 @@ import org.openlca.ilcd.commons.Category;
 import org.openlca.ilcd.commons.Classification;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.IDataSet;
-
-import epd.model.Ref;
+import org.openlca.ilcd.commons.Ref;
 
 public class TypeNode {
 

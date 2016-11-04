@@ -6,8 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.openlca.ilcd.commons.Category;
-
-import epd.model.Ref;
+import org.openlca.ilcd.commons.Ref;
 
 public class CategoryNode {
 

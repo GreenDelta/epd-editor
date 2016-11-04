@@ -3,7 +3,7 @@ package epd.io.server;
 import java.util.Objects;
 import java.util.Set;
 
-import org.openlca.ilcd.commons.DataSetReference;
+import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.contacts.Contact;
 import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.flows.FlowPropertyRef;
@@ -20,7 +20,6 @@ import epd.io.MappingConfig;
 import epd.io.conversion.Converter;
 import epd.model.DeclaredProduct;
 import epd.model.EpdDataSet;
-import epd.model.Ref;
 
 class Upload {
 
@@ -86,10 +85,10 @@ class Upload {
 			return;
 		DataStoreSync sync = new DataStoreSync(fileStore, webStore);
 		for (FlowPropertyRef ref : flow.flowProperties) {
-			DataSetReference propRef = ref.flowProperty;
+			Ref propRef = ref.flowProperty;
 			if (propRef == null)
 				continue;
-			sync.run(Ref.of(propRef));
+			sync.run(propRef);
 		}
 	}
 

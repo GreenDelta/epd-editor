@@ -1,13 +1,13 @@
 package epd.io.conversion;
 
 import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Other;
+import org.openlca.ilcd.commons.Ref;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
-import epd.model.Ref;
 
 /**
  * Creates a data set reference element in an extension point (see the generic
@@ -104,10 +104,14 @@ class DataSetRefExtension {
 			Ref ref = new Ref();
 			ref.type = type;
 			ref.uuid = element.getAttribute("refObjectId");
-			Element descriptionElement = Util.getChild(element,
+			Element nameElement = Util.getChild(element,
 					"shortDescription");
-			if (descriptionElement != null)
-				ref.name = descriptionElement.getTextContent();
+			if (nameElement != null) {
+				// TODO: support multiple languages here
+				String lang = nameElement.getAttribute("xml:lang");
+				String val = nameElement.getTextContent();
+				LangString.set(ref.name, val, lang);
+			}
 			return ref;
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
@@ -136,10 +140,14 @@ class DataSetRefExtension {
 		e.setAttribute("type", type);
 		e.setAttribute("refObjectId", d.uuid);
 		e.setAttribute("uri", "../" + path + "/" + d.uuid);
-		Element descriptionElement = doc.createElementNS(
-				"http://lca.jrc.it/ILCD/Common", "common:shortDescription");
-		e.appendChild(descriptionElement);
-		descriptionElement.setTextContent(d.name);
+		for (LangString name : d.name) {
+			Element nameElem = doc.createElementNS(
+					"http://lca.jrc.it/ILCD/Common",
+					"common:shortDescription");
+			e.appendChild(nameElem);
+			e.setAttribute("xml:lang", name.lang);
+			nameElem.setTextContent(name.value);
+		}
 		return e;
 	}
 }

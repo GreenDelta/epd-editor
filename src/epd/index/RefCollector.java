@@ -3,11 +3,10 @@ package epd.index;
 import java.util.List;
 import java.util.Objects;
 
+import org.openlca.ilcd.commons.Ref;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-
-import epd.model.Ref;
 
 class RefCollector extends DefaultHandler {
 
@@ -94,7 +93,7 @@ class RefCollector extends DefaultHandler {
 		if (!isEpdDataSet)
 			return;
 		Ref d = new Ref();
-		d.name = currentName;
+		// d.name = currentName; TODO: reference name
 		d.uuid = currentId;
 		d.version = currentVersion;
 		refs.add(d);

@@ -5,12 +5,12 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.commons.Ref;
 
 import app.App;
 import app.rcp.Icon;
 import epd.index.CategoryNode;
 import epd.index.TypeNode;
-import epd.model.Ref;
 
 public class TypeElement implements NavigationElement {
 

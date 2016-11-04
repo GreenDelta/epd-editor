@@ -2,8 +2,10 @@ package epd.io.conversion;
 
 import java.util.List;
 
+import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Other;
 import org.openlca.ilcd.commons.Publication;
+import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.flows.AdminInfo;
 import org.openlca.ilcd.flows.DataSetInfo;
 import org.openlca.ilcd.flows.Flow;
@@ -17,7 +19,6 @@ import org.w3c.dom.Element;
 import epd.io.EpdStore;
 import epd.model.DeclaredProduct;
 import epd.model.MaterialPropertyValue;
-import epd.model.Ref;
 
 /**
  * We use the original flow data set from the server or the openLCA export and
@@ -113,7 +114,7 @@ public class FlowDecorator {
 		if (product.properties.isEmpty())
 			matML.clear();
 		else {
-			matML.createStructure(product.flow.name);
+			matML.createStructure(LangString.getFirst(product.flow.name));
 			for (MaterialPropertyValue value : product.properties)
 				matML.append(value);
 		}

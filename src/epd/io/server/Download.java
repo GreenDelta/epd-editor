@@ -3,6 +3,7 @@ package epd.io.server;
 import java.util.Objects;
 import java.util.Set;
 
+import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.contacts.Contact;
 import org.openlca.ilcd.io.FileStore;
 import org.openlca.ilcd.io.NetworkClient;
@@ -18,7 +19,6 @@ import epd.io.EpdStore;
 import epd.model.DeclaredProduct;
 import epd.model.EpdDataSet;
 import epd.model.EpdDescriptor;
-import epd.model.Ref;
 
 class Download {
 
@@ -63,7 +63,7 @@ class Download {
 			return null;
 		for (Exchange exchange : process.exchanges) {
 			if (exchangeId == exchange.id)
-				return Ref.of(exchange.flow);
+				return exchange.flow;
 		}
 		return null;
 	}

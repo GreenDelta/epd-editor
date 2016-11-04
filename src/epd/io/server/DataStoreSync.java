@@ -9,13 +9,13 @@ import java.util.HashSet;
 import java.util.Queue;
 import java.util.Set;
 
+import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.io.DataStore;
 import org.openlca.ilcd.sources.Source;
 import org.openlca.ilcd.util.SourceBag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import epd.model.Ref;
 import epd.util.Dirs;
 
 /**
@@ -66,7 +66,7 @@ public class DataStoreSync {
 
 	private Object sync(Ref ref) {
 		try {
-			Class<?> type = ref.getDataSetType();
+			Class<?> type = ref.getDataSetClass();
 			if (target.contains(type, ref.uuid))
 				return null;
 			Object model = source.get(type, ref.uuid);

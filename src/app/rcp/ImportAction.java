@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.eclipse.jface.action.Action;
 import org.openlca.ilcd.commons.IDataSet;
+import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.io.ZipStore;
 import org.openlca.ilcd.processes.Process;
 import org.slf4j.Logger;
@@ -13,7 +14,6 @@ import app.App;
 import app.navi.Navigator;
 import app.util.FileChooser;
 import app.util.MsgBox;
-import epd.model.Ref;
 
 class ImportAction extends Action {
 
@@ -48,7 +48,7 @@ class ImportAction extends Action {
 	private void run(Class<? extends IDataSet> type, ZipStore zip)
 			throws Exception {
 		zip.iterator(type).forEachRemaining(d -> {
-			Ref ref = Ref.of(d, App.lang);
+			Ref ref = Ref.of(d);
 			if (ref == null || !ref.isValid())
 				return;
 			try {

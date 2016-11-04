@@ -5,10 +5,10 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 import org.openlca.ilcd.commons.Category;
+import org.openlca.ilcd.commons.Ref;
 
 import app.rcp.Icon;
 import epd.index.CategoryNode;
-import epd.model.Ref;
 import epd.util.Strings;
 
 public class CategoryElement implements NavigationElement {

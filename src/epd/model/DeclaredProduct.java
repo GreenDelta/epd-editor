@@ -2,6 +2,8 @@ package epd.model;
 
 import java.util.ArrayList;
 
+import org.openlca.ilcd.commons.Ref;
+
 public class DeclaredProduct {
 
 	public double amount = 1;
@@ -17,14 +19,19 @@ public class DeclaredProduct {
 	public DeclaredProduct clone() {
 		DeclaredProduct clone = new DeclaredProduct();
 		clone.amount = amount;
-		clone.flow = flow;
-		clone.genericFlow = genericFlow;
+		if (flow != null)
+			clone.flow = flow.clone();
+		if (genericFlow != null)
+			clone.genericFlow = genericFlow.clone();
 		clone.vendorSpecific = vendorSpecific;
-		clone.vendor = vendor;
-		clone.documentation = documentation;
+		if (vendor != null)
+			clone.vendor = vendor.clone();
+		if (documentation != null)
+			clone.documentation = documentation.clone();
 		clone.version = version;
 		for (MaterialPropertyValue v : properties) {
-			clone.properties.add(v);
+			if (v != null)
+				clone.properties.add(v.clone());
 		}
 		return clone;
 	}

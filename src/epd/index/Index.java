@@ -8,14 +8,13 @@ import java.util.List;
 
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.IDataSet;
+import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.io.FileStore;
 import org.openlca.ilcd.processes.Process;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
-
-import epd.model.Ref;
 
 public class Index {
 
@@ -30,10 +29,10 @@ public class Index {
 		return node;
 	}
 
-	public void add(IDataSet ds, String lang) {
+	public void add(IDataSet ds) {
 		if (ds == null)
 			return;
-		Ref ref = Ref.of(ds, lang);
+		Ref ref = Ref.of(ds);
 		TypeNode root = getNode(ds.getDataSetType());
 		List<CategoryNode> catNodes = root.syncCategories(ds);
 		if (catNodes.isEmpty()) {
@@ -49,8 +48,7 @@ public class Index {
 		if (store == null)
 			return idx;
 		try {
-			store.iterator(Process.class).forEachRemaining(
-					d -> idx.add(d, lang));
+			store.iterator(Process.class).forEachRemaining(d -> idx.add(d));
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Index.class);
 			log.error("failed to index data sets", e);

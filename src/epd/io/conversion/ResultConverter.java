@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.openlca.ilcd.commons.DataSetReference;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.ExchangeDirection;
 import org.openlca.ilcd.commons.ExchangeFunction;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Other;
+import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.processes.Exchange;
 import org.openlca.ilcd.processes.LCIAResult;
 import org.openlca.ilcd.processes.Process;
@@ -61,7 +61,7 @@ class ResultConverter {
 		return results;
 	}
 
-	private static IndicatorResult readResult(DataSetReference ref,
+	private static IndicatorResult readResult(Ref ref,
 			Other extension, MappingConfig config) {
 		if (ref == null)
 			return null;
@@ -131,18 +131,17 @@ class ResultConverter {
 		return other;
 	}
 
-	private static DataSetReference createRef(IndicatorMapping mapping,
+	private static Ref createRef(IndicatorMapping mapping,
 			boolean forFlow) {
 		if (mapping == null)
 			return null;
-		DataSetReference ref = new DataSetReference();
+		Ref ref = new Ref();
 		ref.uuid = mapping.indicatorRefId;
 		String path = forFlow ? "flows" : "lciamethods";
 		ref.uri = "../" + path + "/" + mapping.indicatorRefId;
 		ref.type = forFlow ? DataSetType.FLOW
 				: DataSetType.LCIA_METHOD;
-		LangString.set(ref.description,
-				mapping.indicatorLabel, EpdStore.lang);
+		LangString.set(ref.name, mapping.indicatorLabel, EpdStore.lang);
 		return ref;
 	}
 

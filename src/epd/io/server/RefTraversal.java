@@ -12,11 +12,9 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
-import org.openlca.ilcd.commons.DataSetReference;
+import org.openlca.ilcd.commons.Ref;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import epd.model.Ref;
 
 /**
  * Traverses an object graph and collects all references to other data sets.
@@ -36,8 +34,8 @@ class RefTraversal {
 			Object next = traversals.poll();
 			if (next == null)
 				continue;
-			if (next instanceof DataSetReference) {
-				Ref ref = Ref.of((DataSetReference) next);
+			if (next instanceof Ref) {
+				Ref ref = (Ref) next;
 				if (ref.isValid())
 					refs.add(ref);
 				continue;

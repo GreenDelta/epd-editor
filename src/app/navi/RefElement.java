@@ -4,9 +4,11 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
+import org.openlca.ilcd.commons.LangString;
+import org.openlca.ilcd.commons.Ref;
 
+import app.App;
 import app.rcp.Icon;
-import epd.model.Ref;
 
 public class RefElement implements NavigationElement {
 
@@ -35,7 +37,7 @@ public class RefElement implements NavigationElement {
 
 	@Override
 	public String getLabel() {
-		return ref.name;
+		return LangString.getFirst(ref.name, App.lang);
 	}
 
 	@Override

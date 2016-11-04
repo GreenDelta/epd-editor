@@ -19,7 +19,6 @@ import epd.model.DeclaredProduct;
 import epd.model.EpdDataSet;
 import epd.model.IndicatorResult;
 import epd.model.ModuleEntry;
-import epd.model.Ref;
 import epd.model.Scenario;
 import epd.model.SubType;
 
@@ -61,7 +60,7 @@ class ProcessConverter {
 			log.warn("could not find a reference flow in data set {}", dataSet);
 			return;
 		}
-		product.flow = Ref.of(exchange.flow, langs);
+		product.flow = exchange.flow;
 		if (exchange.resultingAmount != null)
 			product.amount = exchange.resultingAmount;
 	}

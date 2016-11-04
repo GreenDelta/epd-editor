@@ -63,6 +63,20 @@ public class Navigator extends CommonNavigator {
 		return root;
 	}
 
+	public static TypeElement getTypeRoot(DataSetType type) {
+		Navigator navigator = getInstance();
+		if (navigator == null || navigator.root == null)
+			return new TypeElement(null, type);
+		for (NavigationElement e : navigator.root.getChilds()) {
+			if (!(e instanceof TypeElement))
+				continue;
+			TypeElement te = (TypeElement) e;
+			if (te.type == type)
+				return te;
+		}
+		return new TypeElement(null, type);
+	}
+
 	public static void refresh() {
 		CommonViewer viewer = getNavigationViewer();
 		NavigationRoot root = getNavigationRoot();

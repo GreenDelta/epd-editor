@@ -62,10 +62,13 @@ public class M extends NLS {
 	public static String Export;
 	public static String ExportEnergy;
 	public static String ExternalDocumentationSources;
+
 	public static String File;
+	public static String Filter;
 	public static String Flow;
 	public static String FlowDiagramsOrPictures;
 	public static String FreshWaterNetUse;
+
 	public static String GeneralInformation;
 	public static String Generic;
 	public static String GenericProduct;
@@ -145,9 +148,11 @@ public class M extends NLS {
 	public static String PhotochemicalOzoneCreation;
 	public static String Pictogram;
 	public static String ProcessInformation;
+	public static String Product;
 	public static String ProductSystem;
 	public static String Property;
 	public static String PublicationAndOwnership;
+
 	public static String QuantitativeProperties;
 	public static String RadioactiveWasteDisposed;
 	public static String ReferenceYear;

@@ -28,7 +28,7 @@ public class Store {
 		}
 	}
 
-	public static void saveEPD(EpdDataSet dataSet) {
+	public static Process saveEPD(EpdDataSet dataSet) {
 		Logger log = LoggerFactory.getLogger(Store.class);
 		try {
 			log.trace("update EPD data set {}", dataSet);
@@ -36,8 +36,10 @@ public class Store {
 			Process process = Converter.convert(dataSet, config);
 			App.store.put(process, process.processInfo.dataSetInfo.uuid);
 			Converter.writeProductData(dataSet, App.store);
+			return process;
 		} catch (Exception e) {
 			log.error("failed to save EPD data set " + dataSet, e);
+			return null;
 		}
 	}
 

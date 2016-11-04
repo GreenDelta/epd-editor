@@ -14,7 +14,7 @@ import epd.index.TypeNode;
 
 public class TypeElement implements NavigationElement {
 
-	private final DataSetType type;
+	public final DataSetType type;
 	private final NavigationRoot parent;
 	private List<NavigationElement> childs;
 

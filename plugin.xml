@@ -49,13 +49,11 @@
 				                  pattern="app.navi.NavigationContent"/>
 			</includes>
 		 </viewerContentBinding>
-		 <!--
 		<viewerActionBinding viewerId="app.navi.Navigator">
 			<includes>
 				<actionExtension pattern="app.navi.NavigationMenu"/>
 			</includes>
 		</viewerActionBinding>    
-		-->    
    </extension>
    
    <extension point="org.eclipse.ui.navigator.navigatorContent">
@@ -76,14 +74,12 @@
 			</possibleChildren>
 		</navigatorContent>
 		
-		<!--
 		<actionProvider 
-			class="sophena.rcp.navigation.NavigationMenu" 
-			id="sophena.NavigationMenu" 
+			class="app.navi.NavigationMenu" 
+			id="app.navi.NavigationMenu" 
 			priority="normal">
 			<enablement></enablement>
 		</actionProvider>
-		-->
 		
 	</extension>
 	

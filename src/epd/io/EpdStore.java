@@ -69,10 +69,11 @@ public class EpdStore implements Closeable {
 			log.trace("open EPD data set {}", descriptor);
 			Process process = ilcdStore.get(Process.class,
 					descriptor.refId);
-			MappingConfig config = Configs.getMappingConfig(this);
+			MappingConfig config = Configs
+					.getMappingConfig(ilcdStore.getRootFolder());
 			String[] langs = new String[] { lang, "en" };
 			EpdDataSet dataSet = Converter.convert(process, config, langs);
-			Converter.readProductData(dataSet, this);
+			Converter.readProductData(dataSet, ilcdStore);
 			return dataSet;
 		} catch (Exception e) {
 			log.error("failed to open EPD data set " + descriptor, e);
@@ -83,10 +84,11 @@ public class EpdStore implements Closeable {
 	public void save(EpdDataSet dataSet) {
 		try {
 			log.trace("update EPD data set {}", dataSet);
-			MappingConfig config = Configs.getMappingConfig(this);
+			MappingConfig config = Configs
+					.getMappingConfig(ilcdStore.getRootFolder());
 			Process process = Converter.convert(dataSet, config);
 			ilcdStore.put(process, process.processInfo.dataSetInfo.uuid);
-			Converter.writeProductData(dataSet, this);
+			Converter.writeProductData(dataSet, ilcdStore);
 		} catch (Exception e) {
 			log.error("failed to save EPD data set " + dataSet, e);
 		}

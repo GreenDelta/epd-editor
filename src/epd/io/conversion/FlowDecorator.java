@@ -12,11 +12,11 @@ import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.flows.FlowInfo;
 import org.openlca.ilcd.flows.LCIMethod;
 import org.openlca.ilcd.flows.Modelling;
+import org.openlca.ilcd.io.FileStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 
-import epd.io.EpdStore;
 import epd.model.DeclaredProduct;
 import epd.model.MaterialPropertyValue;
 
@@ -30,9 +30,9 @@ public class FlowDecorator {
 	private Logger log = LoggerFactory.getLogger(getClass());
 
 	private final DeclaredProduct product;
-	private final EpdStore store;
+	private final FileStore store;
 
-	public FlowDecorator(DeclaredProduct product, EpdStore store) {
+	public FlowDecorator(DeclaredProduct product, FileStore store) {
 		this.product = product;
 		this.store = store;
 	}
@@ -101,7 +101,7 @@ public class FlowDecorator {
 			writeInfoExtension(flow);
 			writeMethodExtension(flow);
 			writeVersion(flow);
-			store.ilcdStore.put(flow, product.flow.uuid);
+			store.put(flow, product.flow.uuid);
 		} catch (Exception e) {
 			log.error("failed to write flow properties for " + product, e);
 		}
@@ -208,7 +208,7 @@ public class FlowDecorator {
 		}
 		Ref ref = product.flow;
 		try {
-			Flow flow = store.ilcdStore.get(Flow.class, ref.uuid);
+			Flow flow = store.get(Flow.class, ref.uuid);
 			if (flow == null)
 				log.warn("Could not find flow {} in local storage", ref);
 			return flow;

@@ -1,5 +1,10 @@
 package app.navi;
 
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
@@ -8,6 +13,10 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.CommonViewer;
+import org.openlca.ilcd.commons.DataSetType;
+
+import app.editors.epd.EpdEditor;
+import app.util.Viewers;
 
 public class Navigator extends CommonNavigator {
 
@@ -26,6 +35,28 @@ public class Navigator extends CommonNavigator {
 		CommonViewer viewer = super.createCommonViewerObject(parent);
 		viewer.setUseHashlookup(true);
 		return viewer;
+	}
+
+	@Override
+	protected void initListeners(TreeViewer viewer) {
+		super.initListeners(viewer);
+		viewer.setUseHashlookup(true);
+		ColumnViewerToolTipSupport.enableFor(viewer);
+		viewer.addDoubleClickListener(new IDoubleClickListener() {
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				onDoubleClick(event.getSelection());
+			}
+		});
+	}
+
+	private void onDoubleClick(ISelection selection) {
+		Object element = Viewers.getFirst(selection);
+		if (element instanceof RefElement) {
+			RefElement e = (RefElement) element;
+			if (e.ref.type == DataSetType.PROCESS)
+				EpdEditor.open(e.ref);
+		}
 	}
 
 	public NavigationRoot getRoot() {

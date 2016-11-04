@@ -56,7 +56,8 @@ class Upload {
 	private void uploadEpd(EpdDataSet dataSet) {
 		log.trace("upload EPD: {}", dataSet);
 		try {
-			MappingConfig config = Configs.getMappingConfig(store);
+			MappingConfig config = Configs
+					.getMappingConfig(fileStore.getRootFolder());
 			Process process = Converter.convert(dataSet, config);
 			webStore.put(process, process.getUUID());
 		} catch (Exception e) {

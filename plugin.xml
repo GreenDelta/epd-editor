@@ -98,5 +98,16 @@
 			name="Navigation"
 			icon="icons/data.png"/>
 	</extension>
+	
+ <extension
+       point="org.eclipse.ui.editors">
+    <editor
+          default="false"
+          icon="icons/epd.png"
+          id="epd.editor"
+          name="EPD Editor"
+          class="app.editors.epd.EpdEditor">
+    </editor>
+ </extension>
 
 </plugin>

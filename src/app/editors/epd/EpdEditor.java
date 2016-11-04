@@ -2,36 +2,31 @@ package app.editors.epd;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Plugin;
 import org.eclipse.jface.dialogs.InputDialog;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IPersistableElement;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
-import org.openlca.app.M;
-import org.openlca.app.util.Editors;
 import org.openlca.ilcd.commons.LangString;
+import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.processes.AdminInfo;
 import org.openlca.ilcd.processes.DataSetInfo;
-import org.osgi.framework.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.greendelta.olca.plugins.oekobaudat.rcp.ui.editor.product.DeclaredProductPage;
-import com.greendelta.olca.plugins.oekobaudat.rcp.ui.start.StartPageView;
-
+import app.M;
+import app.Store;
+import app.editors.Editors;
+import app.editors.RefEditorInput;
 import app.util.UI;
 import epd.io.EpdStore;
 import epd.model.DeclaredProduct;
 import epd.model.EpdDataSet;
-import epd.model.EpdDescriptor;
+import epd.model.Version;
 import epd.model.Xml;
 import epd.util.Strings;
 
@@ -47,12 +42,9 @@ public class EpdEditor extends FormEditor {
 
 	private List<Runnable> saveHandlers = new ArrayList<>();
 
-	public static void open(EpdDescriptor d) {
-		if (!Plugin.getEpdStore().contains(d)) {
-			Error.showBox(Messages.EPD_DOWNLOAD_FAILED);
-			return;
-		}
-		Editors.open(new EditorInput(d), ID);
+	public static void open(Ref ref) {
+		RefEditorInput input = new RefEditorInput(ref);
+		Editors.open(input, ID);
 	}
 
 	@Override
@@ -61,8 +53,8 @@ public class EpdEditor extends FormEditor {
 		super.init(s, input);
 		setPartName(Strings.cut(input.getName(), 75));
 		try {
-			EditorInput in = (EditorInput) input;
-			dataSet = Plugin.getEpdStore().open(in.descriptor);
+			RefEditorInput in = (RefEditorInput) input;
+			dataSet = Store.openEPD(in.ref);
 			dataSet.structs();
 		} catch (Exception e) {
 			throw new PartInitException(
@@ -74,7 +66,6 @@ public class EpdEditor extends FormEditor {
 		return dataSet;
 	}
 
-	@Override
 	public void setDirty(boolean b) {
 		if (dirty != b) {
 			dirty = b;
@@ -96,10 +87,10 @@ public class EpdEditor extends FormEditor {
 	protected void addPages() {
 		try {
 			addPage(new InfoPage(this));
-			addPage(new ModelingPage(this));
-			addPage(new AdminPage(this));
-			addPage(new ModulePage(this));
-			addPage(new DeclaredProductPage(this));
+			// addPage(new ModelingPage(this));
+			// addPage(new AdminPage(this));
+			// addPage(new ModulePage(this));
+			// addPage(new DeclaredProductPage(this));
 		} catch (Exception e) {
 			log.error("failed to add editor page", e);
 		}
@@ -109,13 +100,13 @@ public class EpdEditor extends FormEditor {
 	public void doSave(IProgressMonitor monitor) {
 		try {
 			updateVersion();
-			Plugin.getEpdStore().save(dataSet);
+			Store.saveEPD(dataSet);
 			for (Runnable handler : saveHandlers) {
 				handler.run();
 			}
 			setDirty(false);
 			productChanged = false;
-			StartPageView.refresh();
+			// TODO: StartPageView.refresh(); -> update navigation
 		} catch (Exception e) {
 			log.error("failed to save EPD data set", e);
 		}
@@ -143,7 +134,7 @@ public class EpdEditor extends FormEditor {
 	public void doSaveAs() {
 		InputDialog d = new InputDialog(UI.shell(), M.SaveAs,
 				"#Save EPD as a new data set with the following name:",
-				Messages.EPD + " " + M.Name, null);
+				M.EPD + " " + M.Name, null);
 		if (d.open() != Window.OK)
 			return;
 		String name = d.getValue();
@@ -156,9 +147,9 @@ public class EpdEditor extends FormEditor {
 			AdminInfo info = clone.adminInfo;
 			info.publication.version = Version.asString(0);
 			info.dataEntry.timeStamp = Xml.now();
-			Plugin.getEpdStore().save(clone);
-			EpdEditor.open(clone.toDescriptor(EpdStore.lang));
-			StartPageView.refresh();
+			Store.saveEPD(clone);
+			// TODO: EpdEditor.open(clone.toDescriptor(lang)(EpdStore.lang));
+			// TODO StartPageView.refresh();
 		} catch (Exception e) {
 			log.error("failed to save EPD as new data set", e);
 		}
@@ -169,58 +160,4 @@ public class EpdEditor extends FormEditor {
 		return true;
 	}
 
-	private static class EditorInput implements IEditorInput {
-
-		private EpdDescriptor descriptor;
-
-		public EditorInput(EpdDescriptor descriptor) {
-			this.descriptor = descriptor;
-		}
-
-		@Override
-		@SuppressWarnings("rawtypes")
-		public Object getAdapter(Class adapter) {
-			return null;
-		}
-
-		@Override
-		public boolean exists() {
-			return true;
-		}
-
-		@Override
-		public ImageDescriptor getImageDescriptor() {
-			return null;
-		}
-
-		@Override
-		public String getName() {
-			if (descriptor == null || descriptor.name == null)
-				return "New EPD";
-			else
-				return descriptor.name;
-		}
-
-		@Override
-		public IPersistableElement getPersistable() {
-			return null;
-		}
-
-		@Override
-		public String getToolTipText() {
-			return getName();
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (obj == null)
-				return false;
-			if (obj == this)
-				return true;
-			if (!(obj instanceof EditorInput))
-				return false;
-			EditorInput other = (EditorInput) obj;
-			return Objects.equals(this.descriptor, other.descriptor);
-		}
-	}
 }

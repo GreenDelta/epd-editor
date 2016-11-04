@@ -6,7 +6,13 @@ import org.openlca.ilcd.commons.DataSetType;
 
 public enum Icon {
 
+	ADD("add.png"),
+
 	CONTACT("contact.png"),
+
+	DELETE("delete.png"),
+
+	DOCUMENT("document.png"),
 
 	EPD("epd.png"),
 
@@ -56,6 +62,27 @@ public enum Icon {
 			return QUANTITY.img();
 		case UNIT_GROUP:
 			return UNIT.img();
+		default:
+			return null;
+		}
+	}
+
+	public static ImageDescriptor des(DataSetType type) {
+		if (type == null)
+			return null;
+		switch (type) {
+		case PROCESS:
+			return EPD.des();
+		case CONTACT:
+			return CONTACT.des();
+		case SOURCE:
+			return SOURCE.des();
+		case FLOW:
+			return PRODUCT.des();
+		case FLOW_PROPERTY:
+			return QUANTITY.des();
+		case UNIT_GROUP:
+			return UNIT.des();
 		default:
 			return null;
 		}

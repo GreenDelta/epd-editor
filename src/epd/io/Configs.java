@@ -46,10 +46,6 @@ public final class Configs {
 		return get(stream, clazz);
 	}
 
-	public static MappingConfig getMappingConfig(File file) {
-		return get(file, MappingConfig.class);
-	}
-
 	public static ServerConfig getServerConfig(File file) {
 		return get(file, ServerConfig.class);
 	}
@@ -84,7 +80,8 @@ public final class Configs {
 	}
 
 	private static <T> T get(InputStream stream, Class<T> clazz) {
-		try (InputStreamReader reader = new InputStreamReader(stream, "utf-8")) {
+		try (InputStreamReader reader = new InputStreamReader(stream,
+				"utf-8")) {
 			Gson gson = new Gson();
 			return gson.fromJson(reader, clazz);
 		} catch (Exception e) {
@@ -94,14 +91,14 @@ public final class Configs {
 		}
 	}
 
-	public static MappingConfig getMappingConfig(EpdStore store) {
-		if (store == null || store.baseDir == null)
+	public static MappingConfig getMappingConfig(File workspace) {
+		if (workspace == null || !workspace.isDirectory())
 			return getDefaultMappingConfig();
-		File file = new File(store.baseDir, MAPPING_CONFIG);
+		File file = new File(workspace, MAPPING_CONFIG);
 		if (!file.exists())
 			return getDefaultMappingConfig();
 		else
-			return getMappingConfig(file);
+			return get(file, MappingConfig.class);
 	}
 
 	public static ServerConfig getServerConfig(EpdStore store) {
@@ -126,7 +123,8 @@ public final class Configs {
 
 	public static void save(Object config, File file) {
 		try (FileOutputStream fos = new FileOutputStream(file);
-				OutputStreamWriter writer = new OutputStreamWriter(fos, "utf-8");
+				OutputStreamWriter writer = new OutputStreamWriter(fos,
+						"utf-8");
 				BufferedWriter buffer = new BufferedWriter(writer)) {
 			Gson gson = new Gson();
 			String string = gson.toJson(config);

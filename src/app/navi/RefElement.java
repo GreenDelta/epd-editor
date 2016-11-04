@@ -12,7 +12,7 @@ import app.rcp.Icon;
 
 public class RefElement implements NavigationElement {
 
-	private final Ref ref;
+	public final Ref ref;
 	private NavigationElement parent;
 
 	public RefElement(NavigationElement parent, Ref ref) {

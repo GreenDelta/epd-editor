@@ -160,10 +160,13 @@ public class M extends NLS {
 	public static String ReviewType;
 	public static String Reviewer;
 	public static String Reviews;
+
 	public static String SafetyMargin;
 	public static String SafetyMargins;
+	public static String SaveAs;
 	public static String SaveWithNewProduct;
 	public static String SaveWithNewProduct_Question;
+
 	public static String Scenario;
 	public static String Scenarios;
 	public static String Search;

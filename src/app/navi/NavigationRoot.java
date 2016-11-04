@@ -26,6 +26,9 @@ public class NavigationRoot implements NavigationElement {
 
 	@Override
 	public void update() {
+		for (NavigationElement child : getChilds()) {
+			child.update();
+		}
 	}
 
 	@Override

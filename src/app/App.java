@@ -40,6 +40,12 @@ public class App {
 		}
 	}
 
+	public static void dumpIndex() {
+		Logger log = LoggerFactory.getLogger(App.class);
+		log.info("update index file");
+		index.dump(new File(workspace, "index.json"));
+	}
+
 	public static Job runInUI(String name, Runnable runnable) {
 		WrappedUIJob job = new WrappedUIJob(name, runnable);
 		job.setUser(true);

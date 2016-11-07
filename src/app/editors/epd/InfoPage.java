@@ -20,6 +20,7 @@ import org.openlca.ilcd.processes.Technology;
 
 import app.App;
 import app.M;
+import app.editors.RefTable;
 import app.editors.RefText;
 import app.editors.TranslationView;
 import app.rcp.Icon;
@@ -54,7 +55,7 @@ class InfoPage extends FormPage {
 		Composite body = UI.formBody(form, mForm.getToolkit());
 		createInfoSection(body);
 		new CategorySection(editor, dataSet).render(body, toolkit);
-		SourceTable.create(info.dataSetInfo.externalDocs, lang)
+		RefTable.create(DataSetType.SOURCE, info.dataSetInfo.externalDocs)
 				.withEditor(editor)
 				.withTitle(M.ExternalDocumentationSources)
 				.render(body, toolkit);
@@ -62,7 +63,7 @@ class InfoPage extends FormPage {
 		createTimeSection(body);
 		createGeographySection(body);
 		createTechnologySection(body);
-		SourceTable.create(info.technology.pictures, lang)
+		RefTable.create(DataSetType.SOURCE, info.technology.pictures)
 				.withEditor(editor)
 				.withTitle(M.FlowDiagramsOrPictures)
 				.render(body, toolkit);

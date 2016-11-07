@@ -15,15 +15,16 @@ import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.processes.AdminInfo;
 import org.openlca.ilcd.processes.DataSetInfo;
+import org.openlca.ilcd.processes.Process;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import app.App;
 import app.M;
 import app.Store;
 import app.editors.Editors;
 import app.editors.RefEditorInput;
 import app.util.UI;
-import epd.io.EpdStore;
 import epd.model.DeclaredProduct;
 import epd.model.EpdDataSet;
 import epd.model.Version;
@@ -87,7 +88,7 @@ public class EpdEditor extends FormEditor {
 	protected void addPages() {
 		try {
 			addPage(new InfoPage(this));
-			// addPage(new ModelingPage(this));
+			addPage(new ModelingPage(this));
 			// addPage(new AdminPage(this));
 			// addPage(new ModulePage(this));
 			// addPage(new DeclaredProductPage(this));
@@ -142,13 +143,13 @@ public class EpdEditor extends FormEditor {
 			EpdDataSet clone = dataSet.clone();
 			clone.structs();
 			DataSetInfo dsInfo = clone.processInfo.dataSetInfo;
-			LangString.set(dsInfo.name.name, name, EpdStore.lang);
+			LangString.set(dsInfo.name.name, name, App.lang);
 			dsInfo.uuid = UUID.randomUUID().toString();
 			AdminInfo info = clone.adminInfo;
 			info.publication.version = Version.asString(0);
 			info.dataEntry.timeStamp = Xml.now();
-			Store.saveEPD(clone);
-			// TODO: EpdEditor.open(clone.toDescriptor(lang)(EpdStore.lang));
+			Process process = Store.saveEPD(clone);
+			EpdEditor.open(Ref.of(process));
 			// TODO StartPageView.refresh();
 		} catch (Exception e) {
 			log.error("failed to save EPD as new data set", e);

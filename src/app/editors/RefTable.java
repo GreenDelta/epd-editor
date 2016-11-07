@@ -1,4 +1,4 @@
-package app.editors.epd;
+package app.editors;
 
 import java.util.List;
 
@@ -10,38 +10,44 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
+import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 
-import app.M;
+import app.App;
+import app.editors.epd.EpdEditor;
 import app.rcp.Icon;
+import app.rcp.Labels;
 import app.util.Actions;
 import app.util.Tables;
 import app.util.UI;
 import app.util.Viewers;
 
-class SourceTable {
+public class RefTable {
 
+	private final DataSetType type;
 	private final String lang;
-	private final List<Ref> sources;
+	private final List<Ref> refs;
+
 	private EpdEditor editor;
-	private String title = M.Sources;
+	private String title = "?";
 
-	private SourceTable(List<Ref> sources, String lang) {
-		this.sources = sources;
-		this.lang = lang;
+	private RefTable(DataSetType type, List<Ref> refs) {
+		this.type = type;
+		this.refs = refs;
+		this.lang = App.lang;
 	}
 
-	public static SourceTable create(List<Ref> sources, String lang) {
-		return new SourceTable(sources, lang);
+	public static RefTable create(DataSetType type, List<Ref> refs) {
+		return new RefTable(type, refs);
 	}
 
-	public SourceTable withEditor(EpdEditor editor) {
+	public RefTable withEditor(EpdEditor editor) {
 		this.editor = editor;
 		return this;
 	}
 
-	public SourceTable withTitle(String title) {
+	public RefTable withTitle(String title) {
 		this.title = title;
 		return this;
 	}
@@ -50,24 +56,23 @@ class SourceTable {
 		Section section = UI.section(parent, tk, title);
 		Composite comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
-		TableViewer table = Tables.createViewer(comp, M.Source);
+		TableViewer table = Tables.createViewer(comp, Labels.get(type));
 		table.setLabelProvider(new Label());
-		Tables.bindColumnWidths(table, 1);
-		Action[] actions = createSourceActions(table);
+		Action[] actions = createActions(table);
 		Actions.bind(section, actions);
 		Actions.bind(table, actions);
-		table.setInput(sources);
+		table.setInput(refs);
+		table.getTable().getColumn(0).pack();
 	}
 
-	private Action[] createSourceActions(TableViewer table) {
+	private Action[] createActions(TableViewer table) {
 		Action[] actions = new Action[2];
-		// TODO: select a source
 		actions[0] = Actions.create("#Add", Icon.ADD.des(), () -> {
-			// BaseDescriptor d = ModelSelectionDialog.select(ModelType.SOURCE);
-			// if (!(d instanceof SourceDescriptor))
-			// return;
-			// sources.add(Refs.of(d, lang));
-			table.setInput(sources);
+			Ref ref = RefSelectionDialog.select(type);
+			if (ref == null || refs.contains(ref))
+				return;
+			refs.add(ref);
+			table.setInput(refs);
 			if (editor != null)
 				editor.setDirty(true);
 		});
@@ -75,8 +80,8 @@ class SourceTable {
 			Ref ref = Viewers.getFirstSelected(table);
 			if (ref == null)
 				return;
-			sources.remove(ref);
-			table.setInput(sources);
+			refs.remove(ref);
+			table.setInput(refs);
 			if (editor != null)
 				editor.setDirty(true);
 		});
@@ -89,7 +94,7 @@ class SourceTable {
 		public Image getColumnImage(Object obj, int col) {
 			if (!(obj instanceof Ref))
 				return null;
-			return Icon.SOURCE.img();
+			return Icon.img(type);
 		}
 
 		@Override

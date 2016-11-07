@@ -90,10 +90,12 @@ public class RefText extends Composite {
 	public void setRef(Ref ref) {
 		this.ref = ref;
 		if (text != null) {
-			if (ref != null)
-				text.setText(LangString.getFirst(ref.name, App.lang));
-			else
+			if (ref == null)
 				text.setText("");
+			else {
+				String s = LangString.getFirst(ref.name, App.lang);
+				text.setText(s == null ? "" : s);
+			}
 		}
 		if (onChange != null)
 			onChange.accept(ref);

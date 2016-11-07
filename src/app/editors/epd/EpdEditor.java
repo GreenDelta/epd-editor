@@ -90,7 +90,7 @@ public class EpdEditor extends FormEditor {
 			addPage(new InfoPage(this));
 			addPage(new ModelingPage(this));
 			addPage(new AdminPage(this));
-			// addPage(new ModulePage(this));
+			addPage(new ModulePage(this));
 			// addPage(new DeclaredProductPage(this));
 		} catch (Exception e) {
 			log.error("failed to add editor page", e);

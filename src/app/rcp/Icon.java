@@ -8,9 +8,15 @@ public enum Icon {
 
 	ADD("add.png"),
 
+	CHECK_TRUE("check_true.png"),
+
+	CHECK_FALSE("check_false.png"),
+
 	COLLAPSE("collapse.png"),
 
 	CONTACT("contact.png"),
+
+	COPY("copy.png"),
 
 	DELETE("delete.png"),
 
@@ -20,9 +26,13 @@ public enum Icon {
 
 	EXPAND("expand.png"),
 
+	EXPORT("export.png"),
+
 	FOLDER("folder.png"),
 
 	IMPORT("import.png"),
+
+	PASTE("paste.png"),
 
 	PRODUCT("product.png"),
 

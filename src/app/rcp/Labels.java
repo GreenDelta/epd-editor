@@ -3,6 +3,7 @@ package app.rcp;
 import org.openlca.ilcd.commons.DataSetType;
 
 import app.M;
+import epd.model.Indicator;
 import epd.model.SubType;
 
 public class Labels {
@@ -52,5 +53,14 @@ public class Labels {
 		default:
 			return M.None;
 		}
+	}
+
+	public static String get(Indicator indicator) {
+		if (indicator == null)
+			return "unknown";
+		String name = indicator.name();
+		String key = "Indicator_" + name;
+		String val = M.getMap().get(key);
+		return val == null ? "unknown" : val;
 	}
 }

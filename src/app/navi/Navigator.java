@@ -86,6 +86,14 @@ public class Navigator extends CommonNavigator {
 		}
 	}
 
+	public static void refresh(NavigationElement e) {
+		if (e == null)
+			return;
+		e.update();
+		CommonViewer viewer = getNavigationViewer();
+		viewer.refresh(e);
+	}
+
 	private static CommonViewer getNavigationViewer() {
 		CommonViewer viewer = null;
 		Navigator instance = getInstance();

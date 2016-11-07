@@ -72,7 +72,7 @@ public class ListFolderElement implements NavigationElement {
 			childs.add(new FileElement(this, file));
 	}
 
-	private File getFolder() {
+	public File getFolder() {
 		FileStore store = App.store;
 		File root = null;
 		if (store == null)

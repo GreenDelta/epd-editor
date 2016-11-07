@@ -13,10 +13,9 @@ import org.eclipse.ui.forms.widgets.ImageHyperlink;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Time;
+import org.openlca.ilcd.processes.Location;
 import org.openlca.ilcd.processes.ProcessInfo;
 import org.openlca.ilcd.processes.Technology;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import app.M;
 import app.editors.TranslationView;
@@ -29,8 +28,6 @@ import epd.model.SafetyMargins;
 import epd.util.Strings;
 
 class InfoPage extends FormPage {
-
-	private Logger log = LoggerFactory.getLogger(getClass());
 
 	private final EpdEditor editor;
 	private final String lang;
@@ -177,41 +174,16 @@ class InfoPage extends FormPage {
 	}
 
 	private void createGeographySection(Composite body) {
-		org.openlca.ilcd.processes.Location location = info.geography.location;
+		Location location = info.geography.location;
 		Composite comp = UI.formSection(body, toolkit, M.Geography);
 		toolkit.createLabel(comp, M.Location);
-		// TODO:
-		// LocationViewer viewer = new LocationViewer(comp);
-		// viewer.setNullable(true);
-		// initLocationViewer(viewer);
-		// viewer.addSelectionChangedListener(loc -> {
-		// if (loc == null)
-		// location.code = null;
-		// else
-		// location.code = loc.getCode();
-		// editor.setDirty(true);
-		// });
+		LocationCombo viewer = new LocationCombo();
+		viewer.create(comp, location.code, code -> {
+			location.code = code;
+			editor.setDirty(true);
+		});
 		multiText(comp, M.GeographyDescription, location.description);
 	}
-
-	// private void initLocationViewer(LocationViewer viewer) {
-	// try {
-	// LocationDao dao = new LocationDao(Database.get());
-	// List<Location> locations = dao.getAll();
-	// viewer.setInput(locations);
-	// String code = info.geography.location.code;
-	// if (code == null)
-	// return;
-	// for (Location location : locations) {
-	// if (Objects.equals(location.getCode(), code)) {
-	// viewer.select(location);
-	// break;
-	// }
-	// }
-	// } catch (Exception e) {
-	// log.error("failed to initialize location viewer", e);
-	// }
-	// }
 
 	private void text(Composite comp, String label, List<LangString> list) {
 		Text text = UI.formText(comp, toolkit, label);

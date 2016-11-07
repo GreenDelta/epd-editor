@@ -9,6 +9,7 @@ import org.eclipse.ui.navigator.CommonActionProvider;
 import org.openlca.ilcd.commons.DataSetType;
 
 import app.M;
+import app.navi.actions.ListFileImport;
 import app.util.Actions;
 import app.util.Viewers;
 import app.wizards.EpdWizard;
@@ -28,6 +29,10 @@ public class NavigationMenu extends CommonActionProvider {
 			TypeElement e = (TypeElement) first;
 			if (e.type == DataSetType.PROCESS)
 				menu.add(Actions.create(M.NewEPD, () -> EpdWizard.open()));
+		}
+		if (first instanceof ListFolderElement) {
+			ListFolderElement e = (ListFolderElement) first;
+			menu.add(new ListFileImport(e));
 		}
 	}
 }

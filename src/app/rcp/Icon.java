@@ -30,7 +30,11 @@ public enum Icon {
 
 	SOURCE("source.png"),
 
-	UNIT("unit.png");
+	UNIT("unit.png"),
+
+	UP("up.png"),
+
+	UP_DISABLED("up.png");
 
 	private final String fileName;
 

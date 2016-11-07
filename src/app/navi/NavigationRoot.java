@@ -20,7 +20,9 @@ public class NavigationRoot implements NavigationElement {
 				new TypeElement(this, DataSetType.SOURCE),
 				new TypeElement(this, DataSetType.FLOW),
 				new TypeElement(this, DataSetType.FLOW_PROPERTY),
-				new TypeElement(this, DataSetType.UNIT_GROUP));
+				new TypeElement(this, DataSetType.UNIT_GROUP),
+				new ListFolderElement(this, ListType.LOCATION),
+				new ListFolderElement(this, ListType.CLASSIFICATION));
 		return childs;
 	}
 

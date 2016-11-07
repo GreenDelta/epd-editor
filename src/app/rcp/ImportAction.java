@@ -51,11 +51,11 @@ class ImportAction extends Action {
 			run(Flow.class, zip);
 			run(FlowProperty.class, zip);
 			run(UnitGroup.class, zip);
-			App.dumpIndex();
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to import data sets", e);
 		}
+		App.dumpIndex();
 	}
 
 	private void run(Class<? extends IDataSet> type, ZipStore zip)

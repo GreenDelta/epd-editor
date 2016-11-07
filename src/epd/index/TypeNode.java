@@ -38,7 +38,8 @@ public class TypeNode {
 				node = sync(cat, childs);
 				childs = node.childs;
 			}
-			nodes.add(node);
+			if (node != null)
+				nodes.add(node);
 		}
 		return nodes;
 	}

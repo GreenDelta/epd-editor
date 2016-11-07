@@ -39,8 +39,9 @@ public class Index {
 			root.refs.add(ref);
 			return;
 		}
-		for (CategoryNode catNode : catNodes)
+		for (CategoryNode catNode : catNodes) {
 			catNode.refs.add(ref);
+		}
 	}
 
 	public static Index create(FileStore store, String lang) {

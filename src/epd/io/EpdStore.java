@@ -13,10 +13,12 @@ import epd.io.conversion.Converter;
 import epd.model.EpdDataSet;
 import epd.model.EpdDescriptor;
 
+@Deprecated
 public class EpdStore implements Closeable {
 
 	private Logger log = LoggerFactory.getLogger(getClass());
 
+	@Deprecated
 	public static String lang = "en";
 
 	public final File baseDir;

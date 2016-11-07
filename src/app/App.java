@@ -32,7 +32,7 @@ public class App {
 			Platform.getInstanceLocation().set(workspaceUrl, true);
 			workspace = dir;
 			store = new FileStore(dir);
-			lang = "en";
+			lang = "de"; // TODO: config
 			index = Index.load(new File(dir, "index.json"));
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(App.class);

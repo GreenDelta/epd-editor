@@ -11,18 +11,20 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
+import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Time;
 import org.openlca.ilcd.processes.Location;
 import org.openlca.ilcd.processes.ProcessInfo;
 import org.openlca.ilcd.processes.Technology;
 
+import app.App;
 import app.M;
+import app.editors.RefText;
 import app.editors.TranslationView;
 import app.rcp.Icon;
 import app.util.Colors;
 import app.util.UI;
-import epd.io.EpdStore;
 import epd.model.EpdDataSet;
 import epd.model.SafetyMargins;
 import epd.util.Strings;
@@ -39,7 +41,7 @@ class InfoPage extends FormPage {
 	public InfoPage(EpdEditor editor) {
 		super(editor, "EpdInfoPage", M.DataSetInformation);
 		this.editor = editor;
-		this.lang = EpdStore.lang;
+		this.lang = App.lang;
 		dataSet = editor.getDataSet();
 		info = dataSet.processInfo;
 	}
@@ -148,17 +150,14 @@ class InfoPage extends FormPage {
 		multiText(comp, M.TechnologyDescription, tech.description);
 		multiText(comp, M.TechnologicalApplicability,
 				tech.applicability);
-		// TODO
-		// TextDropComponent drop = UIFactory.createDropComponent(comp,
-		// M.Pictogram, toolkit, ModelType.SOURCE);
-		// drop.setContent(Refs.of(tech.pictogram, Database.get()));
-		// drop.setHandler(d -> {
-		// if (!(d instanceof SourceDescriptor))
-		// tech.pictogram = null;
-		// else
-		// tech.pictogram = Refs.of(d, lang);
-		// editor.setDirty(true);
-		// });
+		UI.formLabel(comp, M.Pictogram);
+		RefText refText = new RefText(comp, toolkit, DataSetType.SOURCE);
+		UI.gridData(refText, true, false);
+		refText.setRef(tech.pictogram);
+		refText.onChange(ref -> {
+			tech.pictogram = ref;
+			editor.setDirty(true);
+		});
 	}
 
 	private void createTimeSection(Composite body) {

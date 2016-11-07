@@ -8,6 +8,8 @@ public enum Icon {
 
 	ADD("add.png"),
 
+	COLLAPSE("collapse.png"),
+
 	CONTACT("contact.png"),
 
 	DELETE("delete.png"),
@@ -15,6 +17,8 @@ public enum Icon {
 	DOCUMENT("document.png"),
 
 	EPD("epd.png"),
+
+	EXPAND("expand.png"),
 
 	FOLDER("folder.png"),
 

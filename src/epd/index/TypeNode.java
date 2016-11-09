@@ -23,6 +23,14 @@ public class TypeNode {
 		this.type = type;
 	}
 
+	void remove(Ref ref) {
+		if (ref == null)
+			return;
+		refs.remove(ref);
+		for (CategoryNode cat : categories)
+			cat.remove(ref);
+	}
+
 	List<CategoryNode> syncCategories(IDataSet ds) {
 		if (ds == null)
 			return Collections.emptyList();

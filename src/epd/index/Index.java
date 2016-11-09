@@ -44,6 +44,15 @@ public class Index {
 		}
 	}
 
+	public void remove(Ref ref) {
+		if (ref == null)
+			return;
+		TypeNode root = getNode(ref.type);
+		if (root == null)
+			return;
+		root.remove(ref);
+	}
+
 	public static Index create(FileStore store, String lang) {
 		Index idx = new Index();
 		if (store == null)

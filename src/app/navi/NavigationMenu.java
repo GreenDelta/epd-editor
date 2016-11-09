@@ -10,6 +10,7 @@ import org.openlca.ilcd.commons.DataSetType;
 
 import app.M;
 import app.navi.actions.ListFileImport;
+import app.navi.actions.RefDeleteAction;
 import app.util.Actions;
 import app.util.Viewers;
 import app.wizards.EpdWizard;
@@ -33,6 +34,10 @@ public class NavigationMenu extends CommonActionProvider {
 		if (first instanceof ListFolderElement) {
 			ListFolderElement e = (ListFolderElement) first;
 			menu.add(new ListFileImport(e));
+		}
+		if (first instanceof RefElement) {
+			RefElement e = (RefElement) first;
+			menu.add(new RefDeleteAction(e));
 		}
 	}
 }

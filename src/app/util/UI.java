@@ -103,14 +103,13 @@ public class UI {
 	}
 
 	/** Creates a nice form header with the given title and returns the form. */
-	public static ScrolledForm formHeader(IManagedForm managedForm,
-			String title) {
-		ScrolledForm form = managedForm.getForm();
-		FormToolkit toolkit = managedForm.getToolkit();
-		toolkit.getHyperlinkGroup().setHyperlinkUnderlineMode(
+	public static ScrolledForm formHeader(IManagedForm mform, String title) {
+		ScrolledForm form = mform.getForm();
+		FormToolkit tk = mform.getToolkit();
+		tk.getHyperlinkGroup().setHyperlinkUnderlineMode(
 				HyperlinkSettings.UNDERLINE_HOVER);
 		form.setText(title);
-		toolkit.decorateFormHeading(form.getForm());
+		form.getForm().setForeground(Colors.get(70, 70, 70));
 		return form;
 	}
 
@@ -121,15 +120,20 @@ public class UI {
 		return client;
 	}
 
-	public static Section section(Composite parent, FormToolkit toolkit,
+	public static Section section(Composite parent, FormToolkit tk,
 			String label) {
-		Section section = toolkit.createSection(parent,
-				ExpandableComposite.TITLE_BAR | ExpandableComposite.FOCUS_TITLE
+		Section s = tk.createSection(parent,
+				ExpandableComposite.TITLE_BAR
+						| ExpandableComposite.FOCUS_TITLE
 						| ExpandableComposite.EXPANDED
 						| ExpandableComposite.TWISTIE);
-		gridData(section, true, false);
-		section.setText(label);
-		return section;
+		s.setTitleBarBackground(Colors.get(245, 245, 245));
+		s.setTitleBarBorderColor(Colors.get(170, 170, 170));
+		s.setTitleBarForeground(Colors.get(70, 70, 70));
+		s.setToggleColor(Colors.get(70, 70, 70));
+		gridData(s, true, false);
+		s.setText(label);
+		return s;
 	}
 
 	/**

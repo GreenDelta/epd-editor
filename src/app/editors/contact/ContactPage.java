@@ -1,18 +1,22 @@
 package app.editors.contact;
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
+import org.openlca.ilcd.commons.AdminInfo;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.contacts.Contact;
 import org.openlca.ilcd.contacts.DataSetInfo;
 
 import app.App;
 import app.editors.RefText;
+import app.editors.VersionField;
 import app.util.TextBuilder;
 import app.util.UI;
+import epd.model.Xml;
 
 public class ContactPage extends FormPage {
 
@@ -34,7 +38,25 @@ public class ContactPage extends FormPage {
 		Composite body = UI.formBody(form, tk);
 		TextBuilder tb = new TextBuilder(editor, this, tk);
 		infoSection(body, tb);
+		adminSection(body);
+	}
 
+	private void adminSection(Composite body) {
+		Composite comp = UI.formSection(body, tk,
+				"#Administrative information");
+		AdminInfo info = contact.adminInfo;
+		Text timeT = UI.formText(comp, tk, "#Last change");
+		timeT.setText(Xml.toString(info.dataEntry.timeStamp));
+		Text uuidT = UI.formText(comp, tk, "#UUID");
+		if (contact.getUUID() != null)
+			uuidT.setText(contact.getUUID());
+		VersionField vf = new VersionField(comp, tk);
+		vf.setVersion(contact.getVersion());
+		vf.onChange(v -> info.publication.version = v);
+		editor.onSaved(() -> {
+			vf.setVersion(info.publication.version);
+			timeT.setText(Xml.toString(info.dataEntry.timeStamp));
+		});
 	}
 
 	private void infoSection(Composite body, TextBuilder tb) {

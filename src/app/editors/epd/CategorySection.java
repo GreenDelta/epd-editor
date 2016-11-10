@@ -76,7 +76,7 @@ class CategorySection {
 			return;
 		info.classifications.add(classification);
 		viewer.setInput(info.classifications);
-		editor.setDirty(true);
+		editor.setDirty();
 	}
 
 	private void deleteRow(TableViewer viewer) {
@@ -85,7 +85,7 @@ class CategorySection {
 			return;
 		info.classifications.remove(classification);
 		viewer.setInput(info.classifications);
-		editor.setDirty(true);
+		editor.setDirty();
 	}
 
 	private void importFile() {

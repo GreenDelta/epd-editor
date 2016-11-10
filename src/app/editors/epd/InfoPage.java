@@ -1,6 +1,5 @@
 package app.editors.epd;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 import org.eclipse.swt.SWT;
@@ -22,9 +21,9 @@ import app.App;
 import app.M;
 import app.editors.RefTable;
 import app.editors.RefText;
-import app.editors.TranslationView;
 import app.rcp.Icon;
 import app.util.Colors;
+import app.util.TextBuilder;
 import app.util.UI;
 import epd.model.EpdDataSet;
 import epd.model.SafetyMargins;
@@ -53,16 +52,17 @@ class InfoPage extends FormPage {
 		String name = LangString.getFirst(info.dataSetInfo.name.name, lang);
 		ScrolledForm form = UI.formHeader(mForm, M.EPD + ": " + name);
 		Composite body = UI.formBody(form, mForm.getToolkit());
-		createInfoSection(body);
+		TextBuilder tb = new TextBuilder(editor, this, toolkit);
+		createInfoSection(body, tb);
 		new CategorySection(editor, dataSet).render(body, toolkit);
 		RefTable.create(DataSetType.SOURCE, info.dataSetInfo.externalDocs)
 				.withEditor(editor)
 				.withTitle(M.ExternalDocumentationSources)
 				.render(body, toolkit);
 		createSafetyMarginsSection(body);
-		createTimeSection(body);
-		createGeographySection(body);
-		createTechnologySection(body);
+		createTimeSection(body, tb);
+		createGeographySection(body, tb);
+		createTechnologySection(body, tb);
 		RefTable.create(DataSetType.SOURCE, info.technology.pictures)
 				.withEditor(editor)
 				.withTitle(M.FlowDiagramsOrPictures)
@@ -70,17 +70,17 @@ class InfoPage extends FormPage {
 		form.reflow(true);
 	}
 
-	private void createInfoSection(Composite parent) {
+	private void createInfoSection(Composite parent, TextBuilder tb) {
 		Composite comp = UI.formSection(parent, toolkit,
 				M.GeneralInformation);
 		uuid(comp);
-		text(comp, M.Name,
+		tb.text(comp, M.Name,
 				info.dataSetInfo.name.name);
-		text(comp, M.QuantitativeProperties,
+		tb.text(comp, M.QuantitativeProperties,
 				info.dataSetInfo.name.flowProperties);
-		text(comp, M.Synonyms,
+		tb.text(comp, M.Synonyms,
 				info.dataSetInfo.synonyms);
-		multiText(comp, M.Comment,
+		tb.multiText(comp, M.Comment,
 				info.dataSetInfo.comment);
 		createFileLink(comp);
 	}
@@ -122,7 +122,7 @@ class InfoPage extends FormPage {
 			text.setText(margins.description);
 		text.addModifyListener(e -> {
 			dataSet.safetyMargins.description = text.getText();
-			editor.setDirty(true);
+			editor.setDirty();
 		});
 	}
 
@@ -131,7 +131,7 @@ class InfoPage extends FormPage {
 		SafetyMargins margins = dataSet.safetyMargins;
 		if (Strings.nullOrEmpty(t)) {
 			margins.margins = null;
-			editor.setDirty(true);
+			editor.setDirty();
 			return;
 		}
 		try {
@@ -142,14 +142,15 @@ class InfoPage extends FormPage {
 			else
 				text.setText("");
 		}
-		editor.setDirty(true);
+		editor.setDirty();
 	}
 
-	private void createTechnologySection(Composite body) {
+	private void createTechnologySection(Composite body, TextBuilder tb) {
 		Technology tech = info.technology;
 		Composite comp = UI.formSection(body, toolkit, M.Technology);
-		multiText(comp, M.TechnologyDescription, tech.description);
-		multiText(comp, M.TechnologicalApplicability,
+		tb.multiText(comp, M.TechnologyDescription,
+				tech.description);
+		tb.multiText(comp, M.TechnologicalApplicability,
 				tech.applicability);
 		UI.formLabel(comp, M.Pictogram);
 		RefText refText = new RefText(comp, toolkit, DataSetType.SOURCE);
@@ -157,11 +158,11 @@ class InfoPage extends FormPage {
 		refText.setRef(tech.pictogram);
 		refText.onChange(ref -> {
 			tech.pictogram = ref;
-			editor.setDirty(true);
+			editor.setDirty();
 		});
 	}
 
-	private void createTimeSection(Composite body) {
+	private void createTimeSection(Composite body, TextBuilder tb) {
 		Time time = info.time;
 		Composite comp = UI.formSection(body, toolkit, M.Time);
 		intText(comp, M.ReferenceYear, time.referenceYear, val -> {
@@ -170,41 +171,19 @@ class InfoPage extends FormPage {
 		intText(comp, M.ValidUntil, time.validUntil, val -> {
 			time.validUntil = val;
 		});
-		multiText(comp, M.TimeDescription, time.description);
+		tb.multiText(comp, M.TimeDescription, time.description);
 	}
 
-	private void createGeographySection(Composite body) {
+	private void createGeographySection(Composite body, TextBuilder tb) {
 		Location location = info.geography.location;
 		Composite comp = UI.formSection(body, toolkit, M.Geography);
 		toolkit.createLabel(comp, M.Location);
 		LocationCombo viewer = new LocationCombo();
 		viewer.create(comp, location.code, code -> {
 			location.code = code;
-			editor.setDirty(true);
+			editor.setDirty();
 		});
-		multiText(comp, M.GeographyDescription, location.description);
-	}
-
-	private void text(Composite comp, String label, List<LangString> list) {
-		Text text = UI.formText(comp, toolkit, label);
-		text(text, label, list);
-	}
-
-	private void multiText(Composite comp, String label,
-			List<LangString> list) {
-		Text text = UI.formMultiText(comp, toolkit, label);
-		text(text, label, list);
-	}
-
-	private void text(Text text, String label, List<LangString> list) {
-		String val = LangString.getVal(list, lang);
-		if (val != null)
-			text.setText(val);
-		text.addModifyListener(e -> {
-			LangString.set(list, text.getText(), lang);
-			editor.setDirty(true);
-		});
-		TranslationView.register(this, label, text, list);
+		tb.multiText(comp, M.GeographyDescription, location.description);
 	}
 
 	private void intText(Composite comp, String label, Integer initial,
@@ -220,7 +199,7 @@ class InfoPage extends FormPage {
 			} catch (Exception ex) {
 				text.setBackground(Colors.errorColor());
 			}
-			editor.setDirty(true);
+			editor.setDirty();
 		});
 	}
 }

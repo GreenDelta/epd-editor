@@ -17,12 +17,11 @@ import org.openlca.ilcd.processes.AdminInfo;
 import org.openlca.ilcd.processes.DataEntry;
 import org.openlca.ilcd.processes.Publication;
 
-import app.App;
 import app.M;
 import app.editors.RefText;
-import app.editors.TranslationView;
 import app.editors.VersionField;
 import app.util.Controls;
+import app.util.TextBuilder;
 import app.util.UI;
 import epd.model.Xml;
 
@@ -68,7 +67,7 @@ class AdminPage extends FormPage {
 		t.setRef(adminInfo.dataEntry.documentor);
 		t.onChange(ref -> {
 			adminInfo.dataEntry.documentor = ref;
-			editor.setDirty(true);
+			editor.setDirty();
 		});
 	}
 
@@ -101,7 +100,7 @@ class AdminPage extends FormPage {
 		t.setRef(adminInfo.publication.owner);
 		t.onChange(ref -> {
 			adminInfo.publication.owner = ref;
-			editor.setDirty(true);
+			editor.setDirty();
 		});
 
 	}
@@ -113,7 +112,7 @@ class AdminPage extends FormPage {
 			check.setSelection(b);
 		Controls.onSelect(check, e -> {
 			adminInfo.publication.copyright = check.getSelection();
-			editor.setDirty(true);
+			editor.setDirty();
 		});
 	}
 
@@ -123,21 +122,13 @@ class AdminPage extends FormPage {
 		editor.onSaved(() -> v.setVersion(adminInfo.publication.version));
 		v.onChange(version -> {
 			adminInfo.publication.version = version;
-			editor.setDirty(true);
+			editor.setDirty();
 		});
 	}
 
 	private void accessRestrictions(Composite comp) {
-		List<LangString> strings = adminInfo.publication.accessRestrictions;
-		Text t = UI.formMultiText(comp, toolkit,
-				M.AccessRestrictions);
-		String s = LangString.getVal(strings, App.lang);
-		if (s != null)
-			t.setText(s);
-		TranslationView.register(this, M.AccessRestrictions, t, strings);
-		t.addModifyListener(e -> {
-			LangString.set(strings, t.getText(), App.lang);
-			editor.setDirty(true);
-		});
+		List<LangString> list = adminInfo.publication.accessRestrictions;
+		new TextBuilder(editor, this, toolkit)
+				.text(comp, M.AccessRestrictions, list);
 	}
 }

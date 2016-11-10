@@ -104,7 +104,7 @@ class ScenarioTable extends AbstractTableViewer<Scenario> {
 		scenario.defaultScenario = false;
 		scenarios.add(scenario);
 		setInput();
-		editor.setDirty(true);
+		editor.setDirty();
 	}
 
 	@OnRemove
@@ -112,7 +112,7 @@ class ScenarioTable extends AbstractTableViewer<Scenario> {
 		for (Scenario scenario : getAllSelected())
 			scenarios.remove(scenario);
 		setInput();
-		editor.setDirty(true);
+		editor.setDirty();
 	}
 
 	private class TextModifier extends TextCellModifier<Scenario> {
@@ -148,7 +148,7 @@ class ScenarioTable extends AbstractTableViewer<Scenario> {
 				scenario.group = newText;
 			else if (DESCRIPTION.equals(type))
 				scenario.description = newText;
-			editor.setDirty(true);
+			editor.setDirty();
 		}
 	}
 
@@ -166,7 +166,7 @@ class ScenarioTable extends AbstractTableViewer<Scenario> {
 					element.defaultScenario = value;
 				else
 					scenario.defaultScenario = false;
-			editor.setDirty(true);
+			editor.setDirty();
 		}
 	}
 

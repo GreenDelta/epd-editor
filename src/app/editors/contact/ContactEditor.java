@@ -20,12 +20,13 @@ import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.editors.Editors;
+import app.editors.IEditor;
 import app.editors.RefEditorInput;
 import epd.model.Version;
 import epd.model.Xml;
 import epd.util.Strings;
 
-public class ContactEditor extends FormEditor {
+public class ContactEditor extends FormEditor implements IEditor {
 
 	private static final String ID = "contact.editor";
 
@@ -71,6 +72,7 @@ public class ContactEditor extends FormEditor {
 			contact.contactInfo.dataSetInfo = new DataSetInfo();
 	}
 
+	@Override
 	public void setDirty() {
 		if (!dirty) {
 			dirty = true;

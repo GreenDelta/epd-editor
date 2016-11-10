@@ -74,7 +74,7 @@ public class RefTable {
 			refs.add(ref);
 			table.setInput(refs);
 			if (editor != null)
-				editor.setDirty(true);
+				editor.setDirty();
 		});
 		actions[1] = Actions.create("#Remove", Icon.DELETE.des(), () -> {
 			Ref ref = Viewers.getFirstSelected(table);
@@ -83,7 +83,7 @@ public class RefTable {
 			refs.remove(ref);
 			table.setInput(refs);
 			if (editor != null)
-				editor.setDirty(true);
+				editor.setDirty();
 		});
 		return actions;
 	}

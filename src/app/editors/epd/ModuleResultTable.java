@@ -111,7 +111,7 @@ class ModuleResultTable {
 			if (Objects.equals(newVal, row.amount.value))
 				return;
 			row.amount.value = newVal;
-			editor.setDirty(true);
+			editor.setDirty();
 		}
 	}
 

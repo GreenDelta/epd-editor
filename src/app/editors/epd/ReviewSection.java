@@ -7,24 +7,21 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.ReviewType;
 import org.openlca.ilcd.processes.Modelling;
 import org.openlca.ilcd.processes.Review;
 
-import app.App;
 import app.M;
 import app.editors.RefTable;
 import app.editors.RefText;
-import app.editors.TranslationView;
 import app.rcp.Icon;
 import app.util.Actions;
+import app.util.TextBuilder;
 import app.util.UI;
 import app.util.Viewers;
 
@@ -63,7 +60,7 @@ class ReviewSection {
 		modelling.validation.reviews.add(review);
 		new Sec(review);
 		form.reflow(true);
-		editor.setDirty(true);
+		editor.setDirty();
 	}
 
 	private class Sec {
@@ -98,7 +95,7 @@ class ReviewSection {
 			t.setRef(review.report);
 			t.onChange(ref -> {
 				review.report = ref;
-				editor.setDirty(true);
+				editor.setDirty();
 			});
 		}
 
@@ -110,16 +107,8 @@ class ReviewSection {
 		}
 
 		private void detailsText(Composite comp) {
-			Text t = UI.formMultiText(comp, toolkit, M.ReviewDetails);
-			String s = LangString.getVal(review.details, App.lang);
-			if (s != null)
-				t.setText(s);
-			TranslationView.register(page, M.ReviewDetails, t,
-					review.details);
-			t.addModifyListener(e -> {
-				LangString.set(review.details, t.getText(), App.lang);
-				editor.setDirty(true);
-			});
+			TextBuilder tb = new TextBuilder(editor, page, toolkit);
+			tb.multiText(comp, M.ReviewDetails, review.details);
 		}
 
 		private void typeCombo(Composite comp) {
@@ -136,7 +125,7 @@ class ReviewSection {
 			c.addSelectionChangedListener((e) -> {
 				ReviewType type = Viewers.getFirst(e.getSelection());
 				review.type = type;
-				editor.setDirty(true);
+				editor.setDirty();
 			});
 		}
 
@@ -144,7 +133,7 @@ class ReviewSection {
 			modelling.validation.reviews.remove(review);
 			section.dispose();
 			form.reflow(true);
-			editor.setDirty(true);
+			editor.setDirty();
 		}
 	}
 

@@ -121,7 +121,7 @@ class ModulePage extends FormPage {
 		module.module = Module.A1;
 		modules.add(module);
 		moduleTable.setInput(modules);
-		editor.setDirty(true);
+		editor.setDirty();
 	}
 
 	private void removeModule() {
@@ -130,7 +130,7 @@ class ModulePage extends FormPage {
 			return;
 		modules.remove(module);
 		moduleTable.setInput(modules);
-		editor.setDirty(true);
+		editor.setDirty();
 	}
 
 	private ModuleResultTable createResultSection(Composite body) {
@@ -150,7 +150,7 @@ class ModulePage extends FormPage {
 				Icon.CHECK_TRUE.des(), () -> {
 					new ModuleResultSync(dataSet).run();
 					resultTable.refresh();
-					editor.setDirty(true);
+					editor.setDirty();
 				});
 		actions[1] = Actions.create(M.Export, Icon.EXPORT.des(),
 				() -> exportResults());
@@ -181,7 +181,7 @@ class ModulePage extends FormPage {
 			resultTable.refresh();
 			moduleTable.refresh();
 			scenarioTable.setInput();
-			editor.setDirty(true);
+			editor.setDirty();
 		});
 	}
 
@@ -240,7 +240,7 @@ class ModulePage extends FormPage {
 			if (entry.module == module)
 				return;
 			entry.module = module;
-			editor.setDirty(true);
+			editor.setDirty();
 		}
 	}
 
@@ -272,7 +272,7 @@ class ModulePage extends FormPage {
 			if (Objects.equals(module.scenario, scenario))
 				return;
 			module.scenario = scenario;
-			editor.setDirty(true);
+			editor.setDirty();
 		}
 	}
 
@@ -288,7 +288,7 @@ class ModulePage extends FormPage {
 			if (Objects.equals(module.description, text))
 				return;
 			module.description = text;
-			editor.setDirty(true);
+			editor.setDirty();
 		}
 	}
 

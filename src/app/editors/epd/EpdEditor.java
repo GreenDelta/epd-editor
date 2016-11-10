@@ -23,6 +23,7 @@ import app.App;
 import app.M;
 import app.Store;
 import app.editors.Editors;
+import app.editors.IEditor;
 import app.editors.RefEditorInput;
 import app.util.UI;
 import epd.model.DeclaredProduct;
@@ -31,7 +32,7 @@ import epd.model.Version;
 import epd.model.Xml;
 import epd.util.Strings;
 
-public class EpdEditor extends FormEditor {
+public class EpdEditor extends FormEditor implements IEditor {
 
 	private static final String ID = "epd.editor";
 
@@ -69,16 +70,17 @@ public class EpdEditor extends FormEditor {
 		return dataSet;
 	}
 
-	public void setDirty(boolean b) {
-		if (dirty != b) {
-			dirty = b;
+	@Override
+	public void setDirty() {
+		if (!dirty) {
+			dirty = true;
 			editorDirtyStateChanged();
 		}
 	}
 
 	public void setProductChanged() {
 		this.productChanged = true;
-		setDirty(true);
+		setDirty();
 	}
 
 	@Override
@@ -107,8 +109,9 @@ public class EpdEditor extends FormEditor {
 			for (Runnable handler : saveHandlers) {
 				handler.run();
 			}
-			setDirty(false);
+			dirty = false;
 			productChanged = false;
+			editorDirtyStateChanged();
 			// TODO: StartPageView.refresh(); -> update navigation
 		} catch (Exception e) {
 			log.error("failed to save EPD data set", e);

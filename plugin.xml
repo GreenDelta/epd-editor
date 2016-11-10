@@ -104,6 +104,13 @@
           name="EPD Editor"
           class="app.editors.epd.EpdEditor">
     </editor>
+    <editor
+          default="false"
+          icon="icons/contact.png"
+          id="contact.editor"
+          name="Contact Editor"
+          class="app.editors.contact.ContactEditor">
+    </editor>
  </extension>
 
 </plugin>

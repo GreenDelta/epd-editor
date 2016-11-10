@@ -15,6 +15,7 @@ import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.openlca.ilcd.commons.DataSetType;
 
+import app.editors.contact.ContactEditor;
 import app.editors.epd.EpdEditor;
 import app.util.Viewers;
 
@@ -51,11 +52,13 @@ public class Navigator extends CommonNavigator {
 	}
 
 	private void onDoubleClick(ISelection selection) {
-		Object element = Viewers.getFirst(selection);
-		if (element instanceof RefElement) {
-			RefElement e = (RefElement) element;
+		Object obj = Viewers.getFirst(selection);
+		if (obj instanceof RefElement) {
+			RefElement e = (RefElement) obj;
 			if (e.ref.type == DataSetType.PROCESS)
 				EpdEditor.open(e.ref);
+			else if (e.ref.type == DataSetType.CONTACT)
+				ContactEditor.open(e.ref);
 		}
 	}
 

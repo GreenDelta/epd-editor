@@ -3,12 +3,14 @@ package app;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
+import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.io.FileStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +46,13 @@ public class App {
 		Logger log = LoggerFactory.getLogger(App.class);
 		log.info("update index file");
 		index.dump(new File(workspace, "index.json"));
+	}
+
+	public static String s(List<LangString> strings) {
+		if (strings == null)
+			return "";
+		String s = LangString.getVal(strings, lang);
+		return s == null ? "" : s;
 	}
 
 	public static Job runInUI(String name, Runnable runnable) {

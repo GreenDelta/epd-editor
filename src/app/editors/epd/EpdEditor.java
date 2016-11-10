@@ -44,6 +44,8 @@ public class EpdEditor extends FormEditor {
 	private List<Runnable> saveHandlers = new ArrayList<>();
 
 	public static void open(Ref ref) {
+		if (ref == null)
+			return;
 		RefEditorInput input = new RefEditorInput(ref);
 		Editors.open(input, ID);
 	}

@@ -17,6 +17,7 @@ import org.openlca.ilcd.commons.DataSetType;
 
 import app.editors.contact.ContactEditor;
 import app.editors.epd.EpdEditor;
+import app.editors.source.SourceEditor;
 import app.util.Viewers;
 
 public class Navigator extends CommonNavigator {
@@ -59,6 +60,8 @@ public class Navigator extends CommonNavigator {
 				EpdEditor.open(e.ref);
 			else if (e.ref.type == DataSetType.CONTACT)
 				ContactEditor.open(e.ref);
+			else if (e.ref.type == DataSetType.SOURCE)
+				SourceEditor.open(e.ref);
 		}
 	}
 

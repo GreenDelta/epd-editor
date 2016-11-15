@@ -92,6 +92,7 @@ class ReviewSection {
 		private void createReportText(Composite comp) {
 			UI.formLabel(comp, M.CompleteReviewReport);
 			RefText t = new RefText(comp, toolkit, DataSetType.SOURCE);
+			UI.gridData(t, true, false);
 			t.setRef(review.report);
 			t.onChange(ref -> {
 				review.report = ref;

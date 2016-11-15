@@ -111,6 +111,13 @@
           name="Contact Editor"
           class="app.editors.contact.ContactEditor">
     </editor>
+    <editor
+          default="false"
+          icon="icons/source.png"
+          id="source.editor"
+          name="Source Editor"
+          class="app.editors.source.SourceEditor">
+    </editor>
  </extension>
 
 </plugin>

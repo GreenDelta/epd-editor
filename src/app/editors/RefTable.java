@@ -15,7 +15,6 @@ import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 
 import app.App;
-import app.editors.epd.EpdEditor;
 import app.rcp.Icon;
 import app.rcp.Labels;
 import app.util.Actions;
@@ -29,7 +28,7 @@ public class RefTable {
 	private final String lang;
 	private final List<Ref> refs;
 
-	private EpdEditor editor;
+	private IEditor editor;
 	private String title = "?";
 
 	private RefTable(DataSetType type, List<Ref> refs) {
@@ -42,7 +41,7 @@ public class RefTable {
 		return new RefTable(type, refs);
 	}
 
-	public RefTable withEditor(EpdEditor editor) {
+	public RefTable withEditor(IEditor editor) {
 		this.editor = editor;
 		return this;
 	}

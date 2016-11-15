@@ -12,6 +12,7 @@ import org.openlca.ilcd.contacts.Contact;
 import org.openlca.ilcd.contacts.DataSetInfo;
 
 import app.App;
+import app.editors.CategorySection;
 import app.editors.RefText;
 import app.editors.VersionField;
 import app.util.TextBuilder;
@@ -38,25 +39,8 @@ public class ContactPage extends FormPage {
 		Composite body = UI.formBody(form, tk);
 		TextBuilder tb = new TextBuilder(editor, this, tk);
 		infoSection(body, tb);
+		categorySection(body);
 		adminSection(body);
-	}
-
-	private void adminSection(Composite body) {
-		Composite comp = UI.formSection(body, tk,
-				"#Administrative information");
-		AdminInfo info = contact.adminInfo;
-		Text timeT = UI.formText(comp, tk, "#Last change");
-		timeT.setText(Xml.toString(info.dataEntry.timeStamp));
-		Text uuidT = UI.formText(comp, tk, "#UUID");
-		if (contact.getUUID() != null)
-			uuidT.setText(contact.getUUID());
-		VersionField vf = new VersionField(comp, tk);
-		vf.setVersion(contact.getVersion());
-		vf.onChange(v -> info.publication.version = v);
-		editor.onSaved(() -> {
-			vf.setVersion(info.publication.version);
-			timeT.setText(Xml.toString(info.dataEntry.timeStamp));
-		});
 	}
 
 	private void infoSection(Composite body, TextBuilder tb) {
@@ -76,6 +60,31 @@ public class ContactPage extends FormPage {
 		logo.onChange(ref -> {
 			info.logo = ref;
 			editor.setDirty();
+		});
+	}
+
+	private void categorySection(Composite body) {
+		DataSetInfo info = contact.contactInfo.dataSetInfo;
+		CategorySection section = new CategorySection(editor,
+				DataSetType.CONTACT, info.classifications);
+		section.render(body, tk);
+	}
+
+	private void adminSection(Composite body) {
+		Composite comp = UI.formSection(body, tk,
+				"#Administrative information");
+		AdminInfo info = contact.adminInfo;
+		Text timeT = UI.formText(comp, tk, "#Last change");
+		timeT.setText(Xml.toString(info.dataEntry.timeStamp));
+		Text uuidT = UI.formText(comp, tk, "#UUID");
+		if (contact.getUUID() != null)
+			uuidT.setText(contact.getUUID());
+		VersionField vf = new VersionField(comp, tk);
+		vf.setVersion(contact.getVersion());
+		vf.onChange(v -> info.publication.version = v);
+		editor.onSaved(() -> {
+			vf.setVersion(info.publication.version);
+			timeT.setText(Xml.toString(info.dataEntry.timeStamp));
 		});
 	}
 

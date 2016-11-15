@@ -1,4 +1,4 @@
-package app.editors.epd;
+package app.editors;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -20,15 +20,15 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.openlca.ilcd.commons.Classification;
+import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.lists.Category;
 import org.openlca.ilcd.lists.CategoryList;
 import org.openlca.ilcd.lists.CategorySystem;
-import org.openlca.ilcd.lists.DataSetType;
+import org.openlca.ilcd.lists.ContentType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,16 +40,40 @@ import app.util.Viewers;
 
 public class CategoryDialog extends FormDialog {
 
-	private Logger log = LoggerFactory.getLogger(getClass());
+	private final ContentType type;
 
+	private Logger log = LoggerFactory.getLogger(getClass());
 	private List<CategorySystem> systems = new ArrayList<>();
 	private TreeViewer treeViewer;
-
 	private CategorySystem selectedSystem;
 	private Category selectedCategory;
 
-	public CategoryDialog(Shell shell) {
-		super(shell);
+	public CategoryDialog(DataSetType type) {
+		super(UI.shell());
+		this.type = mapType(type);
+	}
+
+	private ContentType mapType(DataSetType type) {
+		if (type == null)
+			return null;
+		switch (type) {
+		case CONTACT:
+			return ContentType.CONTACT;
+		case FLOW:
+			return ContentType.FLOW;
+		case FLOW_PROPERTY:
+			return ContentType.FLOW_PROPERTY;
+		case LCIA_METHOD:
+			return ContentType.LCIA_METHOD;
+		case PROCESS:
+			return ContentType.PROCESS;
+		case SOURCE:
+			return ContentType.SOURCE;
+		case UNIT_GROUP:
+			return ContentType.UNIT_GROUP;
+		default:
+			return null;
+		}
 	}
 
 	@Override
@@ -172,7 +196,7 @@ public class CategoryDialog extends FormDialog {
 		if (system == null)
 			return Collections.emptyList();
 		for (CategoryList list : system.categories) {
-			if (list.dataType == DataSetType.PROCESS)
+			if (list.type == type)
 				return list.categories;
 		}
 		return Collections.emptyList();

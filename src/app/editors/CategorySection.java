@@ -1,4 +1,4 @@
-package app.editors.epd;
+package app.editors;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -14,8 +14,9 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
+import org.openlca.ilcd.commons.Category;
 import org.openlca.ilcd.commons.Classification;
-import org.openlca.ilcd.processes.DataSetInfo;
+import org.openlca.ilcd.commons.DataSetType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,18 +28,20 @@ import app.util.FileChooser;
 import app.util.Tables;
 import app.util.UI;
 import app.util.Viewers;
-import epd.model.EpdDataSet;
 
-class CategorySection {
+public class CategorySection {
 
 	private Logger log = LoggerFactory.getLogger(getClass());
 
-	private EpdEditor editor;
-	private DataSetInfo info;
+	private final IEditor editor;
+	private final DataSetType type;
+	private final List<Classification> classifications;
 
-	public CategorySection(EpdEditor editor, EpdDataSet ds) {
+	public CategorySection(IEditor editor, DataSetType type,
+			List<Classification> list) {
 		this.editor = editor;
-		this.info = ds.processInfo.dataSetInfo;
+		this.type = type;
+		classifications = list;
 	}
 
 	public void render(Composite parent, FormToolkit tk) {
@@ -49,7 +52,7 @@ class CategorySection {
 				M.ClassificationSystem,
 				M.CategoryPath);
 		viewer.setLabelProvider(new RowLabel());
-		viewer.setInput(info.classifications);
+		viewer.setInput(classifications);
 		Tables.bindColumnWidths(viewer, 0.3, 0.7);
 		bindActions(section, viewer);
 	}
@@ -68,14 +71,14 @@ class CategorySection {
 	}
 
 	private void addRow(TableViewer viewer) {
-		CategoryDialog dialog = new CategoryDialog(UI.shell());
+		CategoryDialog dialog = new CategoryDialog(type);
 		if (dialog.open() != Window.OK)
 			return;
 		Classification classification = dialog.getSelection();
 		if (classification == null)
 			return;
-		info.classifications.add(classification);
-		viewer.setInput(info.classifications);
+		classifications.add(classification);
+		viewer.setInput(classifications);
 		editor.setDirty();
 	}
 
@@ -83,8 +86,8 @@ class CategorySection {
 		Classification classification = Viewers.getFirstSelected(viewer);
 		if (classification == null)
 			return;
-		info.classifications.remove(classification);
-		viewer.setInput(info.classifications);
+		classifications.remove(classification);
+		viewer.setInput(classifications);
 		editor.setDirty();
 	}
 
@@ -131,12 +134,12 @@ class CategorySection {
 		}
 
 		private String getPath(Classification classification) {
-			List<org.openlca.ilcd.commons.Category> classes = classification.categories;
+			List<Category> classes = classification.categories;
 			classification.categories.sort((c1, c2) -> c1.level - c2.level);
 			StringBuilder path = new StringBuilder();
 			for (int i = 0; i < classes.size(); i++) {
-				org.openlca.ilcd.commons.Category clazz = classes.get(i);
-				if (clazz.classId != null)
+				Category clazz = classes.get(i);
+				if (clazz.classId != null && clazz.classId.length() < 8)
 					path.append(clazz.classId).append(" ");
 				path.append(clazz.value);
 				if (i < (classes.size() - 1))

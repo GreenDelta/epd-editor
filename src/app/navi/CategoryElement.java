@@ -68,7 +68,7 @@ public class CategoryElement implements NavigationElement {
 		if (node == null || node.category == null)
 			return null;
 		Category cat = node.category;
-		if (cat.classId != null)
+		if (cat.classId != null && cat.classId.length() < 8)
 			return cat.classId + " " + cat.value;
 		return cat.value;
 	}

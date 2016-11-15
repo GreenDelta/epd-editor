@@ -13,12 +13,14 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Time;
+import org.openlca.ilcd.processes.DataSetInfo;
 import org.openlca.ilcd.processes.Location;
 import org.openlca.ilcd.processes.ProcessInfo;
 import org.openlca.ilcd.processes.Technology;
 
 import app.App;
 import app.M;
+import app.editors.CategorySection;
 import app.editors.RefTable;
 import app.editors.RefText;
 import app.rcp.Icon;
@@ -53,8 +55,8 @@ class InfoPage extends FormPage {
 		ScrolledForm form = UI.formHeader(mForm, M.EPD + ": " + name);
 		Composite body = UI.formBody(form, mForm.getToolkit());
 		TextBuilder tb = new TextBuilder(editor, this, toolkit);
-		createInfoSection(body, tb);
-		new CategorySection(editor, dataSet).render(body, toolkit);
+		infoSection(body, tb);
+		categorySection(body);
 		RefTable.create(DataSetType.SOURCE, info.dataSetInfo.externalDocs)
 				.withEditor(editor)
 				.withTitle(M.ExternalDocumentationSources)
@@ -70,7 +72,7 @@ class InfoPage extends FormPage {
 		form.reflow(true);
 	}
 
-	private void createInfoSection(Composite parent, TextBuilder tb) {
+	private void infoSection(Composite parent, TextBuilder tb) {
 		Composite comp = UI.formSection(parent, toolkit,
 				M.GeneralInformation);
 		uuid(comp);
@@ -83,6 +85,13 @@ class InfoPage extends FormPage {
 		tb.multiText(comp, M.Comment,
 				info.dataSetInfo.comment);
 		createFileLink(comp);
+	}
+
+	private void categorySection(Composite body) {
+		DataSetInfo info = dataSet.processInfo.dataSetInfo;
+		CategorySection section = new CategorySection(editor,
+				DataSetType.PROCESS, info.classifications);
+		section.render(body, toolkit);
 	}
 
 	private void uuid(Composite comp) {

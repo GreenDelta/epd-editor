@@ -8,16 +8,16 @@ import org.eclipse.jface.action.Action;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import app.navi.ListFolderElement;
+import app.navi.FolderElement;
 import app.navi.Navigator;
 import app.rcp.Icon;
 import app.util.FileChooser;
 
 public class ListFileImport extends Action {
 
-	private final ListFolderElement e;
+	private final FolderElement e;
 
-	public ListFileImport(ListFolderElement e) {
+	public ListFileImport(FolderElement e) {
 		this.e = e;
 		setText("#Import File");
 		setImageDescriptor(Icon.IMPORT.des());

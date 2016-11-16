@@ -31,8 +31,8 @@ public class NavigationMenu extends CommonActionProvider {
 			if (e.type == DataSetType.PROCESS)
 				menu.add(Actions.create(M.NewEPD, () -> EpdWizard.open()));
 		}
-		if (first instanceof ListFolderElement) {
-			ListFolderElement e = (ListFolderElement) first;
+		if (first instanceof FolderElement) {
+			FolderElement e = (FolderElement) first;
 			menu.add(new ListFileImport(e));
 		}
 		if (first instanceof RefElement) {

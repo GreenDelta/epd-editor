@@ -10,13 +10,13 @@ import org.openlca.ilcd.io.FileStore;
 import app.App;
 import app.rcp.Icon;
 
-public class ListFolderElement implements NavigationElement {
+public class FolderElement implements NavigationElement {
 
-	public final ListType type;
+	public final FolderType type;
 	private final NavigationElement parent;
 	private List<NavigationElement> childs;
 
-	public ListFolderElement(NavigationElement parent, ListType type) {
+	public FolderElement(NavigationElement parent, FolderType type) {
 		this.parent = parent;
 		this.type = type;
 	}
@@ -49,6 +49,8 @@ public class ListFolderElement implements NavigationElement {
 			return "#Classifications";
 		case LOCATION:
 			return "#Locations";
+		case DOC:
+			return "#Documents";
 		default:
 			return "?";
 		}
@@ -90,6 +92,8 @@ public class ListFolderElement implements NavigationElement {
 			return "classifications";
 		case LOCATION:
 			return "locations";
+		case DOC:
+			return "external_docs";
 		default:
 			return "other";
 		}

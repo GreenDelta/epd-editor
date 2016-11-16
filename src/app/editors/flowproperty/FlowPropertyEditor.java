@@ -1,4 +1,4 @@
-package app.editors.contact;
+package app.editors.flowproperty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +12,10 @@ import org.openlca.ilcd.commons.AdminInfo;
 import org.openlca.ilcd.commons.DataEntry;
 import org.openlca.ilcd.commons.Publication;
 import org.openlca.ilcd.commons.Ref;
-import org.openlca.ilcd.contacts.Contact;
-import org.openlca.ilcd.contacts.ContactInfo;
-import org.openlca.ilcd.contacts.DataSetInfo;
+import org.openlca.ilcd.flowproperties.DataSetInfo;
+import org.openlca.ilcd.flowproperties.FlowProperty;
+import org.openlca.ilcd.flowproperties.FlowPropertyInfo;
+import org.openlca.ilcd.flowproperties.QuantitativeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,11 +27,12 @@ import epd.model.Version;
 import epd.model.Xml;
 import epd.util.Strings;
 
-public class ContactEditor extends FormEditor implements IEditor {
+public class FlowPropertyEditor extends FormEditor implements IEditor {
 
-	private static final String ID = "contact.editor";
+	private static final String ID = "flowproperty.editor";
 
-	Contact contact;
+	FlowProperty property;
+
 	private boolean dirty;
 	private List<Runnable> saveHandlers = new ArrayList<>();
 
@@ -48,7 +50,7 @@ public class ContactEditor extends FormEditor implements IEditor {
 		setPartName(Strings.cut(input.getName(), 75));
 		try {
 			RefEditorInput in = (RefEditorInput) input;
-			contact = App.store.get(Contact.class, in.ref.uuid);
+			property = App.store.get(FlowProperty.class, in.ref.uuid);
 			initStructs();
 		} catch (Exception e) {
 			throw new PartInitException(
@@ -57,18 +59,20 @@ public class ContactEditor extends FormEditor implements IEditor {
 	}
 
 	private void initStructs() {
-		if (contact == null)
-			contact = new Contact();
-		if (contact.adminInfo == null)
-			contact.adminInfo = new AdminInfo();
-		if (contact.adminInfo.dataEntry == null)
-			contact.adminInfo.dataEntry = new DataEntry();
-		if (contact.adminInfo.publication == null)
-			contact.adminInfo.publication = new Publication();
-		if (contact.contactInfo == null)
-			contact.contactInfo = new ContactInfo();
-		if (contact.contactInfo.dataSetInfo == null)
-			contact.contactInfo.dataSetInfo = new DataSetInfo();
+		if (property == null)
+			property = new FlowProperty();
+		if (property.adminInfo == null)
+			property.adminInfo = new AdminInfo();
+		if (property.adminInfo.dataEntry == null)
+			property.adminInfo.dataEntry = new DataEntry();
+		if (property.adminInfo.publication == null)
+			property.adminInfo.publication = new Publication();
+		if (property.flowPropertyInfo == null)
+			property.flowPropertyInfo = new FlowPropertyInfo();
+		if (property.flowPropertyInfo.dataSetInfo == null)
+			property.flowPropertyInfo.dataSetInfo = new DataSetInfo();
+		if (property.flowPropertyInfo.quantitativeReference == null)
+			property.flowPropertyInfo.quantitativeReference = new QuantitativeReference();
 	}
 
 	@Override
@@ -88,7 +92,7 @@ public class ContactEditor extends FormEditor implements IEditor {
 	public void doSave(IProgressMonitor monitor) {
 		try {
 			updateVersion();
-			App.store.put(contact, contact.getUUID());
+			App.store.put(property, property.getUUID());
 			// TODO: navigation refresh
 			for (Runnable handler : saveHandlers) {
 				handler.run();
@@ -102,7 +106,7 @@ public class ContactEditor extends FormEditor implements IEditor {
 	}
 
 	private void updateVersion() {
-		AdminInfo info = contact.adminInfo;
+		AdminInfo info = property.adminInfo;
 		Version v = Version.fromString(info.publication.version);
 		v.incUpdate();
 		info.publication.version = v.toString();
@@ -125,7 +129,6 @@ public class ContactEditor extends FormEditor implements IEditor {
 	@Override
 	protected void addPages() {
 		try {
-			addPage(new ContactPage(this));
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to add page", e);

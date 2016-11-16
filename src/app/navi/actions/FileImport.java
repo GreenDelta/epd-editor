@@ -13,11 +13,11 @@ import app.navi.Navigator;
 import app.rcp.Icon;
 import app.util.FileChooser;
 
-public class ListFileImport extends Action {
+public class FileImport extends Action {
 
 	private final FolderElement e;
 
-	public ListFileImport(FolderElement e) {
+	public FileImport(FolderElement e) {
 		this.e = e;
 		setText("#Import File");
 		setImageDescriptor(Icon.IMPORT.des());
@@ -27,7 +27,7 @@ public class ListFileImport extends Action {
 	public void run() {
 		if (e == null)
 			return;
-		File source = FileChooser.open("*.xml");
+		File source = FileChooser.open(e.getFileExtension());
 		if (source == null || !source.exists())
 			return;
 		File folder = e.getFolder();

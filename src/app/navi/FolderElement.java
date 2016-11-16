@@ -84,6 +84,21 @@ public class FolderElement implements NavigationElement {
 		return new File(root, getFolderName());
 	}
 
+	public String getFileExtension() {
+		if (type == null)
+			return "*.*";
+		switch (type) {
+		case CLASSIFICATION:
+			return "*.xml";
+		case DOC:
+			return "*.*";
+		case LOCATION:
+			return "*.*";
+		default:
+			return "*.*";
+		}
+	}
+
 	private String getFolderName() {
 		if (type == null)
 			return "other";
@@ -98,4 +113,5 @@ public class FolderElement implements NavigationElement {
 			return "other";
 		}
 	}
+
 }

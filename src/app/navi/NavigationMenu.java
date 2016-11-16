@@ -5,11 +5,13 @@ import java.util.List;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.actions.ActionContext;
+import org.eclipse.ui.dialogs.FilteredList;
 import org.eclipse.ui.navigator.CommonActionProvider;
 import org.openlca.ilcd.commons.DataSetType;
 
 import app.M;
-import app.navi.actions.ListFileImport;
+import app.navi.actions.FileDeletion;
+import app.navi.actions.FileImport;
 import app.navi.actions.RefDeleteAction;
 import app.util.Actions;
 import app.util.Viewers;
@@ -33,11 +35,16 @@ public class NavigationMenu extends CommonActionProvider {
 		}
 		if (first instanceof FolderElement) {
 			FolderElement e = (FolderElement) first;
-			menu.add(new ListFileImport(e));
+			menu.add(new FileImport(e));
 		}
 		if (first instanceof RefElement) {
 			RefElement e = (RefElement) first;
 			menu.add(new RefDeleteAction(e));
 		}
+		if (first instanceof FileElement) {
+			FileElement e = (FileElement) first;
+			menu.add(new FileDeletion(e));
+		}
+
 	}
 }

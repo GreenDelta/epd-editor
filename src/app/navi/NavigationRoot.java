@@ -22,7 +22,8 @@ public class NavigationRoot implements NavigationElement {
 				new TypeElement(this, DataSetType.FLOW_PROPERTY),
 				new TypeElement(this, DataSetType.UNIT_GROUP),
 				new FolderElement(this, FolderType.LOCATION),
-				new FolderElement(this, FolderType.CLASSIFICATION));
+				new FolderElement(this, FolderType.CLASSIFICATION),
+				new FolderElement(this, FolderType.DOC));
 		return childs;
 	}
 

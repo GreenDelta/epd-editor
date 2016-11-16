@@ -1,0 +1,40 @@
+package app.navi.actions;
+
+import java.nio.file.Files;
+
+import org.eclipse.jface.action.Action;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import app.navi.FileElement;
+import app.navi.Navigator;
+import app.rcp.Icon;
+import app.util.MsgBox;
+
+public class FileDeletion extends Action {
+
+	private final FileElement e;
+
+	public FileDeletion(FileElement e) {
+		this.e = e;
+		setText("#Delete file");
+		setImageDescriptor(Icon.DELETE.des());
+	}
+
+	@Override
+	public void run() {
+		if (e == null || e.file == null || !e.file.exists())
+			return;
+		boolean b = MsgBox.ask("#Delete file?",
+				"Do you really want to delete the selected file?");
+		if (!b)
+			return;
+		try {
+			Files.delete(e.file.toPath());
+			Navigator.refresh(e.getParent());
+		} catch (Exception ex) {
+			Logger log = LoggerFactory.getLogger(getClass());
+			log.error("failed to delete file " + e.file, ex);
+		}
+	}
+}

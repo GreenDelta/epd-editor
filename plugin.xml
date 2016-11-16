@@ -118,6 +118,13 @@
           name="Source Editor"
           class="app.editors.source.SourceEditor">
     </editor>
+    <editor
+          default="false"
+          icon="icons/quantity.png"
+          id="flowproperty.editor"
+          name="Flow Propery Editor"
+          class="app.editors.flowproperty.FlowPropertyEditor">
+    </editor>
  </extension>
 
 </plugin>

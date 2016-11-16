@@ -61,7 +61,7 @@ public class RefTable {
 		Actions.bind(section, actions);
 		Actions.bind(table, actions);
 		table.setInput(refs);
-		table.getTable().getColumn(0).pack();
+		table.getTable().getColumn(0).setWidth(350);
 	}
 
 	private Action[] createActions(TableViewer table) {

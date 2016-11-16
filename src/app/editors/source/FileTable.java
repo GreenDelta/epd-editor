@@ -52,7 +52,7 @@ class FileTable {
 		Actions.bind(section, actions);
 		Actions.bind(table, actions);
 		table.setInput(fileRefs);
-		table.getTable().getColumn(0).setWidth(250);
+		table.getTable().getColumn(0).setWidth(350);
 	}
 
 	private Action[] createActions(TableViewer table) {

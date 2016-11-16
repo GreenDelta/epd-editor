@@ -14,6 +14,7 @@ import org.openlca.ilcd.flowproperties.QuantitativeReference;
 
 import app.App;
 import app.editors.CategorySection;
+import app.editors.RefText;
 import app.editors.VersionField;
 import app.util.TextBuilder;
 import app.util.UI;
@@ -40,9 +41,7 @@ class FlowPropertyPage extends FormPage {
 		TextBuilder tb = new TextBuilder(editor, this, tk);
 		infoSection(body, tb);
 		categorySection(body);
-		Composite comp = UI.formSection(body, tk, "#Quantitative reference");
-		QuantitativeReference qRef = property.flowPropertyInfo.quantitativeReference;
-
+		unitGroupSection(body);
 		adminSection(body);
 	}
 
@@ -59,6 +58,19 @@ class FlowPropertyPage extends FormPage {
 		CategorySection section = new CategorySection(editor,
 				DataSetType.FLOW_PROPERTY, info.classifications);
 		section.render(body, tk);
+	}
+
+	private void unitGroupSection(Composite body) {
+		Composite comp = UI.formSection(body, tk, "#Quantitative reference");
+		QuantitativeReference qRef = property.flowPropertyInfo.quantitativeReference;
+		UI.formLabel(comp, tk, "#Unit group");
+		RefText refText = new RefText(comp, tk, DataSetType.UNIT_GROUP);
+		UI.gridData(refText, true, false);
+		refText.setRef(qRef.unitGroup);
+		refText.onChange(ref -> {
+			qRef.unitGroup = ref;
+			editor.setDirty();
+		});
 	}
 
 	private void adminSection(Composite body) {

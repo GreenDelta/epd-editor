@@ -129,6 +129,7 @@ public class FlowPropertyEditor extends FormEditor implements IEditor {
 	@Override
 	protected void addPages() {
 		try {
+			addPage(new FlowPropertyPage(this));
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to add page", e);

@@ -45,7 +45,7 @@ class SourcePage extends FormPage {
 		infoSection(body, tb);
 		categorySection(body);
 		contacts(body);
-		// TODO: file table
+		new FileTable(editor).render(body, tk);
 		adminSection(body);
 	}
 

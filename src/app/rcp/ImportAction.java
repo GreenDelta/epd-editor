@@ -1,6 +1,9 @@
 package app.rcp;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 import org.eclipse.jface.action.Action;
 import org.openlca.ilcd.commons.IDataSet;
@@ -51,6 +54,7 @@ class ImportAction extends Action {
 			run(Flow.class, zip);
 			run(FlowProperty.class, zip);
 			run(UnitGroup.class, zip);
+			extDocs(zip);
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to import data sets", e);
@@ -72,5 +76,19 @@ class ImportAction extends Action {
 				throw new RuntimeException("failed to save " + ref, e);
 			}
 		});
+	}
+
+	private void extDocs(ZipStore zip) throws Exception {
+		File targetDir = new File(App.store.getRootFolder(),
+				"external_docs");
+		if (!targetDir.exists())
+			targetDir.mkdirs();
+		for (Path doc : zip.getEntries("external_docs")) {
+			String name = doc.getFileName().toString();
+			File target = new File(targetDir, name);
+			log.info("import file {}", name);
+			Files.copy(doc, target.toPath(),
+					StandardCopyOption.REPLACE_EXISTING);
+		}
 	}
 }

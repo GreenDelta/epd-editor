@@ -26,7 +26,6 @@ import app.editors.Editors;
 import app.editors.IEditor;
 import app.editors.RefEditorInput;
 import app.util.UI;
-import epd.model.DeclaredProduct;
 import epd.model.EpdDataSet;
 import epd.model.Version;
 import epd.model.Xml;
@@ -124,12 +123,6 @@ public class EpdEditor extends FormEditor implements IEditor {
 		v.incUpdate();
 		info.publication.version = v.toString();
 		info.dataEntry.timeStamp = Xml.now();
-		if (!productChanged || dataSet.declaredProduct == null)
-			return;
-		DeclaredProduct product = dataSet.declaredProduct;
-		v = Version.fromString(product.version);
-		v.incUpdate();
-		product.version = v.toString();
 	}
 
 	public void onSaved(Runnable handler) {

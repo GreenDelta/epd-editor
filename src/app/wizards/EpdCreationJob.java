@@ -22,8 +22,8 @@ import app.editors.epd.EpdEditor;
 import app.navi.Navigator;
 import epd.io.EpdStore;
 import epd.io.conversion.FlowDecorator;
-import epd.model.DeclaredProduct;
 import epd.model.EpdDataSet;
+import epd.model.EpdProduct;
 import epd.model.Xml;
 
 public class EpdCreationJob extends UIJob {
@@ -65,11 +65,11 @@ public class EpdCreationJob extends UIJob {
 		ds.structs();
 		ds.processInfo.dataSetInfo.uuid = refId;
 		LangString.set(ds.processInfo.dataSetInfo.name.name,
-				epdName, EpdStore.lang);
+				epdName, App.lang);
 		ds.adminInfo.dataEntry.timeStamp = Xml.now();
 		ds.adminInfo.publication.version = "00.00";
 		setDataFormats(ds.adminInfo.dataEntry);
-		DeclaredProduct declaredProduct = new DeclaredProduct();
+		EpdProduct declaredProduct = new EpdProduct();
 		declaredProduct.flow = flowDescriptor;
 		new FlowDecorator(declaredProduct, App.store).read();
 		ds.declaredProduct = declaredProduct;

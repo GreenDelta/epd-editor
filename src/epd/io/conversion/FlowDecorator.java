@@ -17,7 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 
-import epd.model.DeclaredProduct;
+import epd.model.EpdProduct;
 import epd.model.MaterialPropertyValue;
 
 /**
@@ -29,10 +29,10 @@ public class FlowDecorator {
 
 	private Logger log = LoggerFactory.getLogger(getClass());
 
-	private final DeclaredProduct product;
+	private final EpdProduct product;
 	private final FileStore store;
 
-	public FlowDecorator(DeclaredProduct product, FileStore store) {
+	public FlowDecorator(EpdProduct product, FileStore store) {
 		this.product = product;
 		this.store = store;
 	}

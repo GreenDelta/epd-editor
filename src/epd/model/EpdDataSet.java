@@ -26,7 +26,6 @@ public class EpdDataSet {
 	public ProcessInfo processInfo;
 	public Modelling modelling;
 	public AdminInfo adminInfo;
-	public DeclaredProduct declaredProduct;
 
 	public SubType subType;
 	public SafetyMargins safetyMargins;
@@ -98,8 +97,6 @@ public class EpdDataSet {
 			clone.modelling = modelling.clone();
 		if (adminInfo != null)
 			clone.adminInfo = adminInfo.clone();
-		if (declaredProduct != null)
-			clone.declaredProduct = declaredProduct.clone();
 		if (safetyMargins != null)
 			clone.safetyMargins = safetyMargins.clone();
 		for (IndicatorResult r : results)

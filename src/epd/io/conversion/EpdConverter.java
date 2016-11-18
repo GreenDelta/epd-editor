@@ -14,7 +14,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import epd.io.MappingConfig;
-import epd.model.DeclaredProduct;
+import epd.model.EpdProduct;
 import epd.model.EpdDataSet;
 
 /**
@@ -46,7 +46,7 @@ class EpdConverter {
 	}
 
 	private void mapDeclaredProduct(EpdDataSet dataSet) {
-		DeclaredProduct product = dataSet.declaredProduct;
+		EpdProduct product = dataSet.declaredProduct;
 		if (product == null || product.flow == null)
 			return;
 		QuantitativeReference qRef = new QuantitativeReference();

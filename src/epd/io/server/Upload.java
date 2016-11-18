@@ -18,7 +18,7 @@ import epd.io.Configs;
 import epd.io.EpdStore;
 import epd.io.MappingConfig;
 import epd.io.conversion.Converter;
-import epd.model.DeclaredProduct;
+import epd.model.EpdProduct;
 import epd.model.EpdDataSet;
 
 class Upload {
@@ -43,7 +43,7 @@ class Upload {
 
 	private void uploadProducts(EpdDataSet dataSet) {
 		try {
-			DeclaredProduct product = dataSet.declaredProduct;
+			EpdProduct product = dataSet.declaredProduct;
 			if (product != null) {
 				uploadFlow(product.flow);
 				uploadFlow(product.genericFlow);

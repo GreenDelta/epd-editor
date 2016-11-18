@@ -15,8 +15,8 @@ import org.w3c.dom.Element;
 
 import epd.io.MappingConfig;
 import epd.model.Amount;
-import epd.model.DeclaredProduct;
 import epd.model.EpdDataSet;
+import epd.model.EpdProduct;
 import epd.model.IndicatorResult;
 import epd.model.ModuleEntry;
 import epd.model.Scenario;
@@ -31,7 +31,6 @@ class ProcessConverter {
 
 	private final Process process;
 	private final MappingConfig config;
-	private String[] langs;
 
 	public ProcessConverter(Process process, MappingConfig config) {
 		this.process = process;
@@ -41,7 +40,6 @@ class ProcessConverter {
 	public EpdDataSet convert(String[] langs) {
 		if (process == null)
 			return null;
-		this.langs = langs;
 		EpdDataSet dataSet = new EpdDataSet();
 		dataSet.processInfo = process.processInfo;
 		dataSet.modelling = process.modelling;
@@ -53,7 +51,7 @@ class ProcessConverter {
 	}
 
 	private void mapDeclaredProduct(EpdDataSet dataSet) {
-		DeclaredProduct product = new DeclaredProduct();
+		EpdProduct product = new EpdProduct();
 		dataSet.declaredProduct = product;
 		Exchange exchange = getProductExchange();
 		if (exchange == null) {

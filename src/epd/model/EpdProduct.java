@@ -4,9 +4,8 @@ import java.util.ArrayList;
 
 import org.openlca.ilcd.commons.Ref;
 
-public class DeclaredProduct {
+public class EpdProduct {
 
-	public double amount = 1;
 	public Ref flow;
 	public Ref genericFlow;
 	public boolean vendorSpecific;
@@ -16,9 +15,8 @@ public class DeclaredProduct {
 	public final ArrayList<MaterialPropertyValue> properties = new ArrayList<>();
 
 	@Override
-	public DeclaredProduct clone() {
-		DeclaredProduct clone = new DeclaredProduct();
-		clone.amount = amount;
+	public EpdProduct clone() {
+		EpdProduct clone = new EpdProduct();
 		if (flow != null)
 			clone.flow = flow.clone();
 		if (genericFlow != null)

@@ -19,6 +19,7 @@ import app.editors.contact.ContactEditor;
 import app.editors.epd.EpdEditor;
 import app.editors.flowproperty.FlowPropertyEditor;
 import app.editors.source.SourceEditor;
+import app.editors.unitgroup.UnitGroupEditor;
 import app.util.Viewers;
 
 public class Navigator extends CommonNavigator {
@@ -65,6 +66,8 @@ public class Navigator extends CommonNavigator {
 				SourceEditor.open(e.ref);
 			else if (e.ref.type == DataSetType.FLOW_PROPERTY)
 				FlowPropertyEditor.open(e.ref);
+			else if (e.ref.type == DataSetType.UNIT_GROUP)
+				UnitGroupEditor.open(e.ref);
 		}
 	}
 

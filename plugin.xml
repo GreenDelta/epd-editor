@@ -125,6 +125,13 @@
           name="Flow Propery Editor"
           class="app.editors.flowproperty.FlowPropertyEditor">
     </editor>
+    <editor
+          default="false"
+          icon="icons/unit.png"
+          id="unitgroup.editor"
+          name="Unit group"
+          class="app.editors.unitgroup.UnitGroupEditor">
+    </editor>
  </extension>
 
 </plugin>

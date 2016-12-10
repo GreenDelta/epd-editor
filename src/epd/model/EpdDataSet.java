@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openlca.ilcd.commons.LangString;
+import org.openlca.ilcd.commons.QuantitativeReferenceType;
 import org.openlca.ilcd.processes.Exchange;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.ProcessName;
@@ -55,18 +56,26 @@ public class EpdDataSet {
 		return clone;
 	}
 
-	public Exchange getProductExchange() {
+	/**
+	 * Returns the product exchange of the EPD data set. If the EPD does not
+	 * have such a reference exchange it will be directly created when this
+	 * method is called.
+	 */
+	public Exchange productExchange() {
 		QuantitativeReference qRef = Processes
-				.getQuantitativeReference(process);
-		if (qRef == null || qRef.referenceFlows.isEmpty())
-			return null;
-		Integer id = qRef.referenceFlows.get(0);
-		if (id == null)
-			return null;
+				.quantitativeReference(process);
+		qRef.type = QuantitativeReferenceType.REFERENCE_FLOWS;
+		if (qRef.referenceFlows.isEmpty())
+			qRef.referenceFlows.add(1);
+		int id = qRef.referenceFlows.get(0);
 		for (Exchange exchange : process.exchanges) {
 			if (id == exchange.id)
 				return exchange;
 		}
-		return null;
+		Exchange e = Processes.exchange(process);
+		e.meanAmount = 1d;
+		e.resultingAmount = 1d;
+		e.id = id;
+		return e;
 	}
 }

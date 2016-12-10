@@ -8,14 +8,11 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.progress.UIJob;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.LangString;
-import org.openlca.ilcd.commons.QuantitativeReferenceType;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.processes.ComplianceDeclaration;
 import org.openlca.ilcd.processes.DataEntry;
-import org.openlca.ilcd.processes.Exchange;
 import org.openlca.ilcd.processes.Modelling;
 import org.openlca.ilcd.processes.Process;
-import org.openlca.ilcd.processes.QuantitativeReference;
 import org.openlca.ilcd.util.Processes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,22 +69,12 @@ public class EpdCreationJob extends UIJob {
 		Processes.dataEntry(p).timeStamp = Xml.now();
 		Processes.publication(p).version = "00.00";
 		setDataFormats(p);
-		writeQRef(p);
+		ds.productExchange().flow = productRef;
 		writeCompliance(p);
 		Store.saveEPD(ds);
 		App.index.add(p);
+		App.dumpIndex();
 		return Ref.of(p);
-	}
-
-	private void writeQRef(Process p) {
-		QuantitativeReference qRef = Processes.quantitativeReference(p);
-		qRef.type = QuantitativeReferenceType.REFERENCE_FLOWS;
-		qRef.referenceFlows.add(1);
-		Exchange e = Processes.exchange(p);
-		e.id = 1;
-		e.meanAmount = 1.0;
-		e.resultingAmount = 1.0;
-		e.flow = productRef;
 	}
 
 	private void setDataFormats(Process p) {

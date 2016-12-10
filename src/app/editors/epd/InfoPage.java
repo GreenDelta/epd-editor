@@ -14,6 +14,7 @@ import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Time;
 import org.openlca.ilcd.processes.DataSetInfo;
+import org.openlca.ilcd.processes.Exchange;
 import org.openlca.ilcd.processes.Location;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.ProcessName;
@@ -60,6 +61,7 @@ class InfoPage extends FormPage {
 		TextBuilder tb = new TextBuilder(editor, this, toolkit);
 		infoSection(body, tb);
 		categorySection(body);
+		qRefSection(body);
 		RefTable.create(DataSetType.SOURCE,
 				Processes.dataSetInfo(process).externalDocs)
 				.withEditor(editor)
@@ -117,6 +119,33 @@ class InfoPage extends FormPage {
 		// TODO:
 		// Controls.onClick(link, e -> Browser.openFile(dataSet,
 		// Plugin.getEpdStore()));
+	}
+
+	private void qRefSection(Composite parent) {
+		Composite comp = UI.formSection(parent, toolkit,
+				M.DeclaredProduct);
+		UI.formLabel(comp, toolkit, M.Product);
+		RefText refText = new RefText(comp, toolkit, DataSetType.FLOW);
+		UI.gridData(refText, true, false);
+		Exchange exchange = dataSet.productExchange();
+		refText.setRef(exchange.flow);
+		refText.onChange(ref -> {
+			exchange.flow = ref;
+			editor.setDirty();
+		});
+		Text amountText = UI.formText(comp, toolkit, M.Amount);
+		amountText.setText(Double.toString(exchange.meanAmount));
+		amountText.addModifyListener(e -> {
+			try {
+				double val = Double.parseDouble(amountText.getText());
+				exchange.meanAmount = val;
+				exchange.resultingAmount = val;
+				amountText.setBackground(Colors.white());
+			} catch (Exception ex) {
+				amountText.setBackground(Colors.errorColor());
+			}
+		});
+		// TODO: show unit
 	}
 
 	private void createSafetyMarginsSection(Composite parent) {

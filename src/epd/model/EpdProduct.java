@@ -12,7 +12,6 @@ public class EpdProduct {
 	public boolean vendorSpecific;
 	public Ref vendor;
 	public Ref documentation;
-	public String version;
 	public final ArrayList<MaterialPropertyValue> properties = new ArrayList<>();
 
 }

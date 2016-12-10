@@ -17,6 +17,7 @@ import org.openlca.ilcd.commons.DataSetType;
 
 import app.editors.contact.ContactEditor;
 import app.editors.epd.EpdEditor;
+import app.editors.flow.FlowEditor;
 import app.editors.flowproperty.FlowPropertyEditor;
 import app.editors.source.SourceEditor;
 import app.editors.unitgroup.UnitGroupEditor;
@@ -60,6 +61,8 @@ public class Navigator extends CommonNavigator {
 			RefElement e = (RefElement) obj;
 			if (e.ref.type == DataSetType.PROCESS)
 				EpdEditor.open(e.ref);
+			if (e.ref.type == DataSetType.FLOW)
+				FlowEditor.open(e.ref);
 			else if (e.ref.type == DataSetType.CONTACT)
 				ContactEditor.open(e.ref);
 			else if (e.ref.type == DataSetType.SOURCE)

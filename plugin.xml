@@ -106,6 +106,13 @@
     </editor>
     <editor
           default="false"
+          icon="icons/product.png"
+          id="flow.editor"
+          name="Flow Editor"
+          class="app.editors.flow.FlowEditor">
+    </editor>
+    <editor
+          default="false"
           icon="icons/contact.png"
           id="contact.editor"
           name="Contact Editor"

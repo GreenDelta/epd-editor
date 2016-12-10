@@ -6,12 +6,14 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
+import org.eclipse.ui.forms.widgets.Section;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.flows.DataSetInfo;
 import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.util.Flows;
 
 import app.App;
+import app.M;
 import app.editors.CategorySection;
 import app.editors.VersionField;
 import app.util.TextBuilder;
@@ -40,7 +42,8 @@ class FlowPage extends FormPage {
 		TextBuilder tb = new TextBuilder(editor, this, tk);
 		infoSection(body, tb);
 		categorySection(body);
-		flowSection(body);
+		materialPropertySection(body);
+		propertySection(body);
 		adminSection(body);
 	}
 
@@ -58,7 +61,13 @@ class FlowPage extends FormPage {
 		section.render(body, tk);
 	}
 
-	private void flowSection(Composite body) {
+	private void materialPropertySection(Composite parent) {
+		Section section = UI.section(parent, tk, M.MaterialProperties);
+		UI.gridData(section, true, false);
+		new MaterialPropertyTable(editor, section, tk);
+	}
+
+	private void propertySection(Composite body) {
 		FlowPropertySection section = new FlowPropertySection(editor,
 				DataSetType.FLOW, product.flow.flowProperties);
 		section.render(body, tk);

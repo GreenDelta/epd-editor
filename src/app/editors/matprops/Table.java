@@ -1,6 +1,5 @@
 package app.editors.matprops;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -30,13 +29,14 @@ class Table {
 	private final static String UNIT = M.Unit;
 	private final static String DESCRIPTION = M.UnitDescription;
 
-	private List<MaterialProperty> properties = new ArrayList<>();
 	private MaterialPropertyEditor editor;
+	private List<MaterialProperty> properties;
 	private TableViewer viewer;
 
 	public Table(MaterialPropertyEditor editor, Section section,
 			FormToolkit tk) {
 		this.editor = editor;
+		this.properties = editor.properties;
 		Composite comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
 		viewer = Tables.createViewer(comp, NAME, UNIT, DESCRIPTION);
@@ -47,10 +47,6 @@ class Table {
 		mf.bind(UNIT, new UnitModifier());
 		mf.bind(DESCRIPTION, new DescriptionModifier());
 		bindActions(viewer, section);
-	}
-
-	public void setInput(List<MaterialProperty> properties) {
-		this.properties = properties;
 		viewer.setInput(properties);
 	}
 
@@ -70,7 +66,7 @@ class Table {
 		property.id = UUID.randomUUID().toString().replace("", "");
 		property.name = "new property";
 		properties.add(property);
-		setInput(properties);
+		viewer.setInput(properties);
 		editor.setDirty();
 	}
 
@@ -79,7 +75,7 @@ class Table {
 		if (property == null)
 			return;
 		properties.remove(property);
-		setInput(properties);
+		viewer.setInput(properties);
 		editor.setDirty();
 	}
 

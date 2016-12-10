@@ -22,7 +22,7 @@ public class MaterialPropertyEditor extends FormEditor implements IEditor {
 
 	private Logger log = LoggerFactory.getLogger(getClass());
 
-	private List<MaterialProperty> properties;
+	List<MaterialProperty> properties;
 	private boolean dirty;
 
 	public static void open() {
@@ -52,7 +52,7 @@ public class MaterialPropertyEditor extends FormEditor implements IEditor {
 	@Override
 	protected void addPages() {
 		try {
-			addPage(new Page(this, properties));
+			addPage(new Page(this));
 		} catch (Exception e) {
 			log.error("failed to add editor page", e);
 		}

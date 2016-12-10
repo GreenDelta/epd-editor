@@ -1,7 +1,5 @@
 package app.editors.matprops;
 
-import java.util.List;
-
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
@@ -11,19 +9,15 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import app.M;
 import app.util.UI;
-import epd.model.MaterialProperty;
 
 class Page extends FormPage {
 
 	private FormToolkit toolkit;
 	private MaterialPropertyEditor editor;
-	private List<MaterialProperty> properties;
 
-	public Page(MaterialPropertyEditor editor,
-			List<MaterialProperty> properties) {
+	public Page(MaterialPropertyEditor editor) {
 		super(editor, "MaterialPropertyPage", M.MaterialProperties);
 		this.editor = editor;
-		this.properties = properties;
 	}
 
 	@Override
@@ -40,8 +34,7 @@ class Page extends FormPage {
 		Section section = UI.section(parent, toolkit,
 				M.MaterialProperties);
 		UI.gridData(section, true, true);
-		Table viewer = new Table(editor, section, toolkit);
-		viewer.setInput(properties);
+		new Table(editor, section, toolkit);
 	}
 
 }

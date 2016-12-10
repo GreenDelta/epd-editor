@@ -10,11 +10,13 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.flows.DataSetInfo;
 import org.openlca.ilcd.flows.Flow;
+import org.openlca.ilcd.flows.FlowName;
 import org.openlca.ilcd.util.Flows;
 
 import app.App;
 import app.M;
 import app.editors.CategorySection;
+import app.editors.RefText;
 import app.editors.VersionField;
 import app.util.TextBuilder;
 import app.util.UI;
@@ -42,17 +44,28 @@ class FlowPage extends FormPage {
 		TextBuilder tb = new TextBuilder(editor, this, tk);
 		infoSection(body, tb);
 		categorySection(body);
-		materialPropertySection(body);
-		propertySection(body);
+		VendorSection.create(body, tk, editor);
+		propertySections(body);
 		adminSection(body);
+		form.reflow(true);
 	}
 
 	private void infoSection(Composite body, TextBuilder tb) {
 		Composite comp = UI.formSection(body, tk, "#Flow information");
+		FlowName fName = Flows.flowName(product.flow);
+		tb.text(comp, "#Name", fName.baseName);
 		DataSetInfo info = Flows.dataSetInfo(product.flow);
-		// tb.text(comp, "#Name", (List<LangString>) info.name);
 		tb.text(comp, "#Synonyms", info.synonyms);
 		tb.text(comp, "#Description", info.generalComment);
+
+		UI.formLabel(comp, tk, M.GenericProduct);
+		RefText rt = new RefText(comp, tk, DataSetType.FLOW);
+		UI.gridData(rt, true, false);
+		rt.setRef(product.genericFlow);
+		rt.onChange(ref -> {
+			product.genericFlow = ref;
+			editor.setDirty();
+		});
 	}
 
 	private void categorySection(Composite body) {
@@ -61,16 +74,13 @@ class FlowPage extends FormPage {
 		section.render(body, tk);
 	}
 
-	private void materialPropertySection(Composite parent) {
-		Section section = UI.section(parent, tk, M.MaterialProperties);
-		UI.gridData(section, true, false);
-		new MaterialPropertyTable(editor, section, tk);
-	}
-
-	private void propertySection(Composite body) {
+	private void propertySections(Composite body) {
 		FlowPropertySection section = new FlowPropertySection(editor,
 				DataSetType.FLOW, product.flow.flowProperties);
 		section.render(body, tk);
+		Section s = UI.section(body, tk, M.MaterialProperties);
+		UI.gridData(s, true, false);
+		new MaterialPropertyTable(editor, s, tk);
 	}
 
 	private void adminSection(Composite body) {

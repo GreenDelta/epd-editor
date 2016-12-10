@@ -8,11 +8,15 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.progress.UIJob;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.LangString;
+import org.openlca.ilcd.commons.QuantitativeReferenceType;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.processes.ComplianceDeclaration;
 import org.openlca.ilcd.processes.DataEntry;
+import org.openlca.ilcd.processes.Exchange;
 import org.openlca.ilcd.processes.Modelling;
 import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.processes.QuantitativeReference;
+import org.openlca.ilcd.util.Processes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,9 +24,7 @@ import app.App;
 import app.Store;
 import app.editors.epd.EpdEditor;
 import app.navi.Navigator;
-import epd.io.conversion.FlowDecorator;
 import epd.model.EpdDataSet;
-import epd.model.EpdProduct;
 import epd.model.Xml;
 
 public class EpdCreationJob extends UIJob {
@@ -61,26 +63,34 @@ public class EpdCreationJob extends UIJob {
 	private Ref createEpd() throws Exception {
 		String refId = UUID.randomUUID().toString();
 		EpdDataSet ds = new EpdDataSet();
-		ds.structs();
-		ds.processInfo.dataSetInfo.uuid = refId;
-		LangString.set(ds.processInfo.dataSetInfo.name.name,
+		Process p = new Process();
+		ds.process = p;
+		Processes.dataSetInfo(p).uuid = refId;
+		LangString.set(Processes.processName(p).name,
 				epdName, App.lang);
-		ds.adminInfo.dataEntry.timeStamp = Xml.now();
-		ds.adminInfo.publication.version = "00.00";
-		setDataFormats(ds.adminInfo.dataEntry);
-
-		EpdProduct declaredProduct = new EpdProduct();
-		declaredProduct.flow = productRef;
-		new FlowDecorator(declaredProduct, App.store).read();
-		ds.declaredProduct = declaredProduct;
-
-		writeCompliance(ds.modelling);
-		Process p = Store.saveEPD(ds);
+		Processes.dataEntry(p).timeStamp = Xml.now();
+		Processes.publication(p).version = "00.00";
+		setDataFormats(p);
+		writeQRef(p);
+		writeCompliance(p);
+		p = Store.saveEPD(ds);
 		App.index.add(p);
 		return Ref.of(p);
 	}
 
-	private void setDataFormats(DataEntry entry) {
+	private void writeQRef(Process p) {
+		QuantitativeReference qRef = Processes.quantitativeReference(p);
+		qRef.type = QuantitativeReferenceType.REFERENCE_FLOWS;
+		qRef.referenceFlows.add(1);
+		Exchange e = Processes.exchange(p);
+		e.id = 1;
+		e.meanAmount = 1.0;
+		e.resultingAmount = 1.0;
+		e.flow = productRef;
+	}
+
+	private void setDataFormats(Process p) {
+		DataEntry entry = Processes.dataEntry(p);
 		Ref ref = new Ref();
 		entry.formats.add(ref);
 		ref.uuid = "a97a0155-0234-4b87-b4ce-a45da52f2a40";
@@ -98,15 +108,15 @@ public class EpdCreationJob extends UIJob {
 				"EPD Data Format Extensions", "en");
 	}
 
-	private void writeCompliance(Modelling modelling) {
-		ComplianceDeclaration declaration = new ComplianceDeclaration();
+	private void writeCompliance(Process p) {
+		ComplianceDeclaration decl = new ComplianceDeclaration();
 		Ref ref = new Ref();
 		ref.type = DataSetType.SOURCE;
 		ref.uri = "../sources/b00f9ec0-7874-11e3-981f-0800200c9a66";
 		ref.uuid = "b00f9ec0-7874-11e3-981f-0800200c9a66";
 		LangString.set(ref.name, "DIN EN 15804", App.lang);
-		declaration.system = ref;
-		modelling.complianceDeclatations = new ComplianceDeclaration[] {
-				declaration };
+		decl.system = ref;
+		Modelling m = Processes.modelling(p);
+		m.complianceDeclatations = new ComplianceDeclaration[] { decl };
 	}
 }

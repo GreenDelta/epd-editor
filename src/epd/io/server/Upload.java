@@ -18,7 +18,6 @@ import epd.io.Configs;
 import epd.io.EpdStore;
 import epd.io.MappingConfig;
 import epd.io.conversion.Converter;
-import epd.model.EpdProduct;
 import epd.model.EpdDataSet;
 
 class Upload {
@@ -42,15 +41,16 @@ class Upload {
 	}
 
 	private void uploadProducts(EpdDataSet dataSet) {
-		try {
-			EpdProduct product = dataSet.declaredProduct;
-			if (product != null) {
-				uploadFlow(product.flow);
-				uploadFlow(product.genericFlow);
-			}
-		} catch (Exception e) {
-			log.error("failed to upload data set", e);
-		}
+		// TODO: sync products
+		// try {
+		// EpdProduct product = dataSet.declaredProduct;
+		// if (product != null) {
+		// uploadFlow(product.flow);
+		// uploadFlow(product.genericFlow);
+		// }
+		// } catch (Exception e) {
+		// log.error("failed to upload data set", e);
+		// }
 	}
 
 	private void uploadEpd(EpdDataSet dataSet) {

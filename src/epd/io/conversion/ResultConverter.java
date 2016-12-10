@@ -53,7 +53,7 @@ class ResultConverter {
 			MappingConfig config) {
 		List<IndicatorResult> results = new ArrayList<>();
 		for (LCIAResult element : process.lciaResults) {
-			IndicatorResult result = readResult(element.lciaMethod,
+			IndicatorResult result = readResult(element.method,
 					element.other, config);
 			if (result != null)
 				results.add(result);
@@ -116,18 +116,18 @@ class ResultConverter {
 		if (indicator == null)
 			return;
 		if (indicator.getGroup() == IndicatorGroup.RESOURCE_USE)
-			exchange.exchangeDirection = ExchangeDirection.INPUT;
+			exchange.direction = ExchangeDirection.INPUT;
 		else
-			exchange.exchangeDirection = ExchangeDirection.OUTPUT;
+			exchange.direction = ExchangeDirection.OUTPUT;
 	}
 
 	private static Other createLciaResult(Process process,
 			IndicatorMapping mapping) {
-		LCIAResult element = new LCIAResult();
-		process.lciaResults.add(element);
-		element.lciaMethod = createRef(mapping, false);
+		LCIAResult r = new LCIAResult();
+		process.lciaResults.add(r);
+		r.method = createRef(mapping, false);
 		Other other = new Other();
-		element.other = other;
+		r.other = other;
 		return other;
 	}
 

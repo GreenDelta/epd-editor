@@ -7,6 +7,7 @@
 * Unit group editor
 * Online connections
 * Upload / Download
+* Upload and download product references (direct and generic; see todos)
 * Local search
 * Online search
 * Material properties

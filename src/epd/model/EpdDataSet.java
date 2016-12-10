@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openlca.ilcd.commons.LangString;
+import org.openlca.ilcd.processes.Exchange;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.ProcessName;
+import org.openlca.ilcd.processes.QuantitativeReference;
 import org.openlca.ilcd.util.Processes;
 
 public class EpdDataSet {
@@ -51,5 +53,20 @@ public class EpdDataSet {
 		for (Scenario s : scenarios)
 			clone.scenarios.add(s.clone());
 		return clone;
+	}
+
+	public Exchange getProductExchange() {
+		QuantitativeReference qRef = Processes
+				.getQuantitativeReference(process);
+		if (qRef == null || qRef.referenceFlows.isEmpty())
+			return null;
+		Integer id = qRef.referenceFlows.get(0);
+		if (id == null)
+			return null;
+		for (Exchange exchange : process.exchanges) {
+			if (id == exchange.id)
+				return exchange;
+		}
+		return null;
 	}
 }

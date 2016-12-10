@@ -29,7 +29,6 @@ public class Store {
 			MappingConfig config = Configs.getMappingConfig(App.workspace);
 			String[] langs = new String[] { App.lang };
 			EpdDataSet dataSet = Converter.convert(process, config, langs);
-			Converter.readProductData(dataSet, App.store);
 			return dataSet;
 		} catch (Exception e) {
 			log.error("failed to open EPD data set " + ref, e);
@@ -44,7 +43,6 @@ public class Store {
 			MappingConfig config = Configs.getMappingConfig(App.workspace);
 			Process process = Converter.convert(dataSet, config);
 			App.store.put(process, process.processInfo.dataSetInfo.uuid);
-			Converter.writeProductData(dataSet, App.store);
 			return process;
 		} catch (Exception e) {
 			log.error("failed to save EPD data set " + dataSet, e);

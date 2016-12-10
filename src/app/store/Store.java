@@ -1,8 +1,9 @@
-package app;
+package app.store;
 
 import java.io.File;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.xml.bind.JAXB;
@@ -14,10 +15,12 @@ import org.openlca.ilcd.processes.Process;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import app.App;
 import epd.io.Configs;
 import epd.io.MappingConfig;
 import epd.io.conversion.Converter;
 import epd.model.EpdDataSet;
+import epd.model.MaterialProperty;
 
 public class Store {
 
@@ -67,6 +70,14 @@ public class Store {
 			log.error("failed read location files from " + folder, e);
 		}
 		return set;
+	}
+
+	public static void saveMaterialProperties(List<MaterialProperty> list) {
+		MaterialProperties.save(list);
+	}
+
+	public static List<MaterialProperty> getMaterialProperties() {
+		return MaterialProperties.get();
 	}
 
 }

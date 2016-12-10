@@ -23,10 +23,10 @@ import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.M;
-import app.Store;
 import app.editors.Editors;
 import app.editors.IEditor;
 import app.editors.RefEditorInput;
+import app.store.Store;
 import app.util.UI;
 import epd.model.EpdDataSet;
 import epd.model.Version;

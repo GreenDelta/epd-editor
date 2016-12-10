@@ -132,6 +132,13 @@
           name="Unit group"
           class="app.editors.unitgroup.UnitGroupEditor">
     </editor>
+    <editor
+          default="false"
+          icon="icons/quantity.png"
+          id="material.properties.editor"
+          name="Material Properties"
+          class="app.editors.matprops.MaterialPropertyEditor">
+    </editor>
  </extension>
 
 </plugin>

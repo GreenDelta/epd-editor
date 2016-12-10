@@ -22,7 +22,6 @@ public final class Configs {
 
 	private static final String MAPPING_CONFIG = "mapping_config.json";
 	private static final String SERVER_CONFIG = "server_config.json";
-	private static final String MATERIAL_PROPERTIES = "material_properties.json";
 
 	private Configs() {
 	}
@@ -35,12 +34,6 @@ public final class Configs {
 		return getDefault(SERVER_CONFIG, ServerConfig.class);
 	}
 
-	public static List<MaterialProperty> getDefaultMaterialProperties() {
-		MaterialProperty[] properties = getDefault(MATERIAL_PROPERTIES,
-				MaterialProperty[].class);
-		return new ArrayList<>(Arrays.asList(properties));
-	}
-
 	private static <T> T getDefault(String fileName, Class<T> clazz) {
 		InputStream stream = Configs.class.getResourceAsStream(fileName);
 		return get(stream, clazz);
@@ -48,11 +41,6 @@ public final class Configs {
 
 	public static ServerConfig getServerConfig(File file) {
 		return get(file, ServerConfig.class);
-	}
-
-	public static List<MaterialProperty> getMaterialProperties(File file) {
-		MaterialProperty[] properties = get(file, MaterialProperty[].class);
-		return new ArrayList<>(Arrays.asList(properties));
 	}
 
 	private static <T> T get(File file, Class<T> clazz) {
@@ -111,16 +99,6 @@ public final class Configs {
 			return getServerConfig(file);
 	}
 
-	public static List<MaterialProperty> getMaterialProperties(EpdStore store) {
-		if (store == null || store.baseDir == null)
-			return getDefaultMaterialProperties();
-		File file = new File(store.baseDir, MATERIAL_PROPERTIES);
-		if (!file.exists())
-			return getDefaultMaterialProperties();
-		else
-			return getMaterialProperties(file);
-	}
-
 	public static void save(Object config, File file) {
 		try (FileOutputStream fos = new FileOutputStream(file);
 				OutputStreamWriter writer = new OutputStreamWriter(fos,
@@ -145,8 +123,4 @@ public final class Configs {
 		save(config, file);
 	}
 
-	public static void save(List<MaterialProperty> properties, EpdStore store) {
-		File file = new File(store.baseDir, MATERIAL_PROPERTIES);
-		save(properties, file);
-	}
 }

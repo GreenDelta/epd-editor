@@ -10,7 +10,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.openlca.ilcd.lists.Location;
 
-import app.Store;
+import app.store.Store;
 import app.util.Controls;
 import app.util.UI;
 import epd.util.Strings;

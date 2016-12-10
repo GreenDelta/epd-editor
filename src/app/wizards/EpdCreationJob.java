@@ -18,9 +18,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.App;
-import app.Store;
 import app.editors.epd.EpdEditor;
 import app.navi.Navigator;
+import app.store.Store;
 import epd.model.EpdDataSet;
 import epd.model.Xml;
 

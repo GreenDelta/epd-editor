@@ -14,6 +14,9 @@ import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 
+import app.editors.matprops.MaterialPropertyEditor;
+import app.util.Actions;
+
 public class ActionBar extends ActionBarAdvisor {
 
 	private IWorkbenchAction save;
@@ -34,10 +37,16 @@ public class ActionBar extends ActionBarAdvisor {
 	@Override
 	protected void fillMenuBar(IMenuManager menuBar) {
 		super.fillMenuBar(menuBar);
-		MenuManager menu = new MenuManager("#File",
+		MenuManager fileMenu = new MenuManager("#File",
 				IWorkbenchActionConstants.M_FILE);
-		menu.add(new ImportAction());
-		menuBar.add(menu);
+		fileMenu.add(new ImportAction());
+		menuBar.add(fileMenu);
+		MenuManager editMenu = new MenuManager("#Edit",
+				IWorkbenchActionConstants.M_EDIT);
+		editMenu.add(Actions.create("#Material properties",
+				Icon.QUANTITY.des(),
+				() -> MaterialPropertyEditor.open()));
+		menuBar.add(editMenu);
 	}
 
 	@Override

@@ -40,12 +40,8 @@ class Page extends FormPage {
 		Section section = UI.section(parent, toolkit,
 				M.MaterialProperties);
 		UI.gridData(section, true, true);
-		Composite comp = UI.sectionClient(section, toolkit);
-		UI.gridLayout(comp, 1);
-		Table viewer = new Table(editor,
-				comp);
+		Table viewer = new Table(editor, section, toolkit);
 		viewer.setInput(properties);
-		viewer.bindTo(section);
 	}
 
 }

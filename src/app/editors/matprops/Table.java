@@ -5,61 +5,65 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.BaseLabelProvider;
-import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.Section;
 
 import app.M;
+import app.rcp.Icon;
+import app.util.Actions;
 import app.util.Tables;
-import app.util.tables.AbstractTableViewer;
+import app.util.UI;
+import app.util.Viewers;
+import app.util.tables.ModifySupport;
 import app.util.tables.TextCellModifier;
 import epd.model.MaterialProperty;
 
-class Table extends AbstractTableViewer<MaterialProperty> {
+class Table {
 
 	private final static String NAME = M.Name;
 	private final static String UNIT = M.Unit;
 	private final static String DESCRIPTION = M.UnitDescription;
 
 	private List<MaterialProperty> properties = new ArrayList<>();
-
 	private MaterialPropertyEditor editor;
+	private TableViewer viewer;
 
-	public Table(MaterialPropertyEditor editor,
-			Composite parent) {
-		super(parent);
+	public Table(MaterialPropertyEditor editor, Section section,
+			FormToolkit tk) {
 		this.editor = editor;
-		getModifySupport().bind(NAME, new NameModifier());
-		getModifySupport().bind(UNIT, new UnitModifier());
-		getModifySupport().bind(DESCRIPTION, new DescriptionModifier());
-		Tables.bindColumnWidths(getViewer(), 0.35, 0.25, 0.40);
-		getViewer().refresh(true);
-	}
-
-	@Override
-	protected String[] getColumnHeaders() {
-		return new String[] { NAME, UNIT, DESCRIPTION };
-	}
-
-	@Override
-	protected IBaseLabelProvider getLabelProvider() {
-		return new LabelProvider();
+		Composite comp = UI.sectionClient(section, tk);
+		UI.gridLayout(comp, 1);
+		viewer = Tables.createViewer(comp, NAME, UNIT, DESCRIPTION);
+		viewer.setLabelProvider(new Label());
+		Tables.bindColumnWidths(viewer, 0.35, 0.25, 0.40);
+		ModifySupport<MaterialProperty> mf = new ModifySupport<>(viewer);
+		mf.bind(NAME, new NameModifier());
+		mf.bind(UNIT, new UnitModifier());
+		mf.bind(DESCRIPTION, new DescriptionModifier());
+		bindActions(viewer, section);
 	}
 
 	public void setInput(List<MaterialProperty> properties) {
 		this.properties = properties;
-		if (properties == null)
-			setInput(new MaterialProperty[0]);
-		else
-			setInput(properties
-					.toArray(new MaterialProperty[properties.size()]));
-		getViewer().refresh(true);
+		viewer.setInput(properties);
 	}
 
-	@OnAdd
-	protected void onCreate() {
+	private void bindActions(TableViewer table, Section section) {
+		Action add = Actions.create("#Add", Icon.ADD.des(),
+				this::onCreate);
+		Action remove = Actions.create("#Remove", Icon.DELETE.des(),
+				this::onRemove);
+		Actions.bind(section, add, remove);
+		Actions.bind(table, add, remove);
+	}
+
+	private void onCreate() {
 		if (properties == null)
 			return;
 		MaterialProperty property = new MaterialProperty();
@@ -70,17 +74,16 @@ class Table extends AbstractTableViewer<MaterialProperty> {
 		editor.setDirty();
 	}
 
-	@OnRemove
-	protected void onRemove() {
-		if (properties == null)
+	private void onRemove() {
+		MaterialProperty property = Viewers.getFirstSelected(viewer);
+		if (property == null)
 			return;
-		for (MaterialProperty property : getAllSelected())
-			properties.remove(property);
+		properties.remove(property);
 		setInput(properties);
 		editor.setDirty();
 	}
 
-	private class LabelProvider extends BaseLabelProvider implements
+	private class Label extends BaseLabelProvider implements
 			ITableLabelProvider {
 
 		@Override

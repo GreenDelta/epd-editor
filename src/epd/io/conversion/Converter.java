@@ -18,8 +18,8 @@ public class Converter {
 		return new ProcessConverter(process, config).convert(langs);
 	}
 
-	public static Process convert(EpdDataSet dataSet, MappingConfig config) {
-		return new EpdConverter(dataSet, config).convert();
+	public static void writeExtensions(EpdDataSet dataSet, MappingConfig config) {
+		new EpdConverter(dataSet, config).convert();
 	}
 
 }

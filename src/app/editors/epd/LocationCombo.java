@@ -58,8 +58,10 @@ class LocationCombo {
 	private void onSelect(Consumer<String> fn) {
 		Controls.onSelect(combo, e -> {
 			int idx = combo.getSelectionIndex();
-			if (idx == 0)
+			if (idx <= 0) {
 				fn.accept(null);
+				return;
+			}
 			Location location = locations.get(idx - 1);
 			fn.accept(location.code);
 		});

@@ -64,6 +64,7 @@ public class EpdCreationJob extends UIJob {
 		String refId = UUID.randomUUID().toString();
 		EpdDataSet ds = new EpdDataSet();
 		Process p = new Process();
+		p.version = "1.1";
 		ds.process = p;
 		Processes.dataSetInfo(p).uuid = refId;
 		LangString.set(Processes.processName(p).name,
@@ -73,7 +74,7 @@ public class EpdCreationJob extends UIJob {
 		setDataFormats(p);
 		writeQRef(p);
 		writeCompliance(p);
-		p = Store.saveEPD(ds);
+		Store.saveEPD(ds);
 		App.index.add(p);
 		return Ref.of(p);
 	}

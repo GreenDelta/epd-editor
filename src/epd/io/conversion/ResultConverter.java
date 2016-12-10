@@ -75,21 +75,20 @@ class ResultConverter {
 		return result;
 	}
 
-	static void writeResults(EpdDataSet dataSet, Process process,
-			MappingConfig config) {
-		if (Util.hasNull(dataSet, process, config))
+	static void writeResults(EpdDataSet ds, MappingConfig config) {
+		if (Util.hasNull(ds, ds.process, config))
 			return;
 		Document doc = Util.createDocument();
-		for (IndicatorResult result : dataSet.results) {
+		for (IndicatorResult result : ds.results) {
 			Indicator indicator = result.indicator;
 			IndicatorMapping mapping = config.getIndicatorMapping(indicator);
 			if (mapping == null)
 				continue;
 			Other other = null;
 			if (indicator.isInventoryIndicator())
-				other = createLciResult(process, mapping);
+				other = createLciResult(ds.process, mapping);
 			else
-				other = createLciaResult(process, mapping);
+				other = createLciaResult(ds.process, mapping);
 			if (other != null) {
 				AmountConverter.writeAmounts(result.amounts, other, doc);
 				addUnitRef(other, mapping, doc);

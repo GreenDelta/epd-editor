@@ -58,8 +58,9 @@ class Upload {
 		try {
 			MappingConfig config = Configs
 					.getMappingConfig(fileStore.getRootFolder());
-			Process process = Converter.convert(dataSet, config);
-			webStore.put(process, process.getUUID());
+			Converter.writeExtensions(dataSet, config);
+			Process p = dataSet.process;
+			webStore.put(p, p.getUUID());
 		} catch (Exception e) {
 			log.error("failed to upload EPD data set", e);
 		}

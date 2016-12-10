@@ -4,18 +4,15 @@ import java.util.List;
 import java.util.Objects;
 
 import org.openlca.ilcd.commons.Other;
-import org.openlca.ilcd.processes.Exchange;
 import org.openlca.ilcd.processes.Method;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.ProcessInfo;
-import org.openlca.ilcd.processes.QuantitativeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 
 import epd.io.MappingConfig;
 import epd.model.Amount;
-import epd.model.DeclaredProduct;
 import epd.model.EpdDataSet;
 import epd.model.IndicatorResult;
 import epd.model.ModuleEntry;
@@ -31,7 +28,6 @@ class ProcessConverter {
 
 	private final Process process;
 	private final MappingConfig config;
-	private String[] langs;
 
 	public ProcessConverter(Process process, MappingConfig config) {
 		this.process = process;
@@ -41,45 +37,11 @@ class ProcessConverter {
 	public EpdDataSet convert(String[] langs) {
 		if (process == null)
 			return null;
-		this.langs = langs;
 		EpdDataSet dataSet = new EpdDataSet();
-		dataSet.processInfo = process.processInfo;
-		dataSet.modelling = process.modelling;
-		dataSet.adminInfo = process.adminInfo;
-		mapDeclaredProduct(dataSet);
+		dataSet.process = process;
 		readExtensions(dataSet);
 		mapResults(dataSet);
 		return dataSet;
-	}
-
-	private void mapDeclaredProduct(EpdDataSet dataSet) {
-		DeclaredProduct product = new DeclaredProduct();
-		dataSet.declaredProduct = product;
-		Exchange exchange = getProductExchange();
-		if (exchange == null) {
-			log.warn("could not find a reference flow in data set {}", dataSet);
-			return;
-		}
-		product.flow = exchange.flow;
-		if (exchange.resultingAmount != null)
-			product.amount = exchange.resultingAmount;
-	}
-
-	private Exchange getProductExchange() {
-		ProcessInfo processInfo = process.processInfo;
-		if (processInfo == null)
-			return null;
-		QuantitativeReference qRef = processInfo.quantitativeReference;
-		if (qRef == null || qRef.referenceFlows.isEmpty())
-			return null;
-		Integer id = qRef.referenceFlows.get(0);
-		if (id == null)
-			return null;
-		for (Exchange exchange : process.exchanges) {
-			if (id == exchange.id)
-				return exchange;
-		}
-		return null;
 	}
 
 	private void readExtensions(EpdDataSet dataSet) {

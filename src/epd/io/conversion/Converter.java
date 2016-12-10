@@ -1,6 +1,5 @@
 package epd.io.conversion;
 
-import org.openlca.ilcd.io.FileStore;
 import org.openlca.ilcd.processes.Process;
 
 import epd.io.MappingConfig;
@@ -21,14 +20,6 @@ public class Converter {
 
 	public static Process convert(EpdDataSet dataSet, MappingConfig config) {
 		return new EpdConverter(dataSet, config).convert();
-	}
-
-	public static void writeProductData(EpdDataSet dataSet, FileStore store) {
-		new FlowDecorator(dataSet.declaredProduct, store).write();
-	}
-
-	public static void readProductData(EpdDataSet dataSet, FileStore store) {
-		new FlowDecorator(dataSet.declaredProduct, store).read();
 	}
 
 }

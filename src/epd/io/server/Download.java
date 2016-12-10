@@ -16,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import epd.io.EpdStore;
-import epd.model.DeclaredProduct;
 import epd.model.EpdDataSet;
 import epd.model.EpdDescriptor;
 
@@ -81,12 +80,13 @@ class Download {
 	}
 
 	private void syncGenericProduct(EpdDataSet dataSet) {
-		if (dataSet == null || dataSet.declaredProduct == null)
-			return;
-		DeclaredProduct product = dataSet.declaredProduct;
-		if (product.genericFlow == null)
-			return;
-		syncFlow(product.genericFlow);
+		// TODO: sync products
+		// if (dataSet == null || dataSet.declaredProduct == null)
+		// return;
+		// EpdProduct product = dataSet.declaredProduct;
+		// if (product.genericFlow == null)
+		// return;
+		// syncFlow(product.genericFlow);
 	}
 
 	private void syncFlow(Ref ref) {

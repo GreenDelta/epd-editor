@@ -5,7 +5,6 @@ import java.util.List;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Other;
 import org.openlca.ilcd.commons.Publication;
-import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.flows.AdminInfo;
 import org.openlca.ilcd.flows.DataSetInfo;
 import org.openlca.ilcd.flows.Flow;
@@ -17,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 
-import epd.model.DeclaredProduct;
+import epd.model.EpdProduct;
 import epd.model.MaterialPropertyValue;
 
 /**
@@ -29,10 +28,10 @@ public class FlowDecorator {
 
 	private Logger log = LoggerFactory.getLogger(getClass());
 
-	private final DeclaredProduct product;
+	private final EpdProduct product;
 	private final FileStore store;
 
-	public FlowDecorator(DeclaredProduct product, FileStore store) {
+	public FlowDecorator(EpdProduct product, FileStore store) {
 		this.product = product;
 		this.store = store;
 	}
@@ -41,7 +40,7 @@ public class FlowDecorator {
 		if (product == null || store == null)
 			return;
 		log.trace("read flow properties for {}", product);
-		Flow flow = loadFlow();
+		Flow flow = product.flow;
 		if (flow == null)
 			return;
 		readInfoExtension(flow);
@@ -95,13 +94,13 @@ public class FlowDecorator {
 			return;
 		log.trace("write flow properties for {}", product);
 		try {
-			Flow flow = loadFlow();
+			Flow flow = product.flow;
 			if (flow == null)
 				return;
 			writeInfoExtension(flow);
 			writeMethodExtension(flow);
 			writeVersion(flow);
-			store.put(flow, product.flow.uuid);
+			store.put(flow, flow.getUUID());
 		} catch (Exception e) {
 			log.error("failed to write flow properties for " + product, e);
 		}
@@ -114,7 +113,7 @@ public class FlowDecorator {
 		if (product.properties.isEmpty())
 			matML.clear();
 		else {
-			matML.createStructure(LangString.getFirst(product.flow.name));
+			matML.createStructure(LangString.getFirst(product.flow.getName()));
 			for (MaterialPropertyValue value : product.properties)
 				matML.append(value);
 		}
@@ -201,20 +200,4 @@ public class FlowDecorator {
 		pub.version = product.version;
 	}
 
-	private Flow loadFlow() {
-		if (product.flow == null) {
-			log.warn("product {} has no flow reference", product);
-			return null;
-		}
-		Ref ref = product.flow;
-		try {
-			Flow flow = store.get(Flow.class, ref.uuid);
-			if (flow == null)
-				log.warn("Could not find flow {} in local storage", ref);
-			return flow;
-		} catch (Exception e) {
-			log.error("failed to load flow " + ref, e);
-			return null;
-		}
-	}
 }

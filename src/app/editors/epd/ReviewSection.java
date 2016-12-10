@@ -13,8 +13,9 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.ReviewType;
-import org.openlca.ilcd.processes.Modelling;
 import org.openlca.ilcd.processes.Review;
+import org.openlca.ilcd.processes.Validation;
+import org.openlca.ilcd.util.Processes;
 
 import app.M;
 import app.editors.RefTable;
@@ -27,7 +28,7 @@ import app.util.Viewers;
 
 class ReviewSection {
 
-	private Modelling modelling;
+	private Validation validation;
 	private EpdEditor editor;
 	private FormPage page;
 
@@ -35,8 +36,8 @@ class ReviewSection {
 	private FormToolkit toolkit;
 	private ScrolledForm form;
 
-	public ReviewSection(Modelling modelling, EpdEditor editor, FormPage page) {
-		this.modelling = modelling;
+	public ReviewSection(EpdEditor editor, FormPage page) {
+		this.validation = Processes.validation(editor.dataSet.process);
 		this.editor = editor;
 		this.page = page;
 	}
@@ -47,7 +48,7 @@ class ReviewSection {
 		Section section = UI.section(body, toolkit, M.Reviews);
 		parent = UI.sectionClient(section, toolkit);
 		UI.gridLayout(parent, 1);
-		for (Review review : modelling.validation.reviews)
+		for (Review review : validation.reviews)
 			new Sec(review);
 		Action addAction = Actions.create(M.AddReview,
 				Icon.ADD.des(), this::addReview);
@@ -57,7 +58,7 @@ class ReviewSection {
 
 	private void addReview() {
 		Review review = new Review();
-		modelling.validation.reviews.add(review);
+		validation.reviews.add(review);
 		new Sec(review);
 		form.reflow(true);
 		editor.setDirty();
@@ -74,7 +75,7 @@ class ReviewSection {
 		}
 
 		private void createUi() {
-			int idx = modelling.validation.reviews.indexOf(review) + 1;
+			int idx = validation.reviews.indexOf(review) + 1;
 			section = UI.section(parent, toolkit, M.Review + " " + idx);
 			Composite body = UI.sectionClient(section, toolkit);
 			UI.gridLayout(body, 1);
@@ -131,7 +132,7 @@ class ReviewSection {
 		}
 
 		private void delete() {
-			modelling.validation.reviews.remove(review);
+			validation.reviews.remove(review);
 			section.dispose();
 			form.reflow(true);
 			editor.setDirty();

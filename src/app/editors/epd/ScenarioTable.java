@@ -16,7 +16,6 @@ import app.util.UI;
 import app.util.tables.AbstractTableViewer;
 import app.util.tables.CheckBoxCellModifier;
 import app.util.tables.TextCellModifier;
-import epd.model.EpdDataSet;
 import epd.model.Scenario;
 
 class ScenarioTable extends AbstractTableViewer<Scenario> {
@@ -27,14 +26,12 @@ class ScenarioTable extends AbstractTableViewer<Scenario> {
 	private final static String DEFAULT = M.Default;
 
 	private final EpdEditor editor;
-	private final EpdDataSet dataSet;
 	private final List<Scenario> scenarios;
 
 	public ScenarioTable(EpdEditor editor, Composite parent) {
 		super(parent);
 		this.editor = editor;
-		this.dataSet = editor.getDataSet();
-		this.scenarios = dataSet.scenarios;
+		this.scenarios = editor.dataSet.scenarios;
 		Tables.bindColumnWidths(getViewer(), 0.25, 0.25, 0.25, 0.25);
 		applyCellModifySupport();
 		getViewer().refresh(true);
@@ -160,12 +157,13 @@ class ScenarioTable extends AbstractTableViewer<Scenario> {
 		}
 
 		@Override
-		protected void setChecked(Scenario element, boolean value) {
-			for (Scenario scenario : dataSet.scenarios)
-				if (scenario == element)
-					element.defaultScenario = value;
+		protected void setChecked(Scenario checked, boolean value) {
+			for (Scenario scenario : scenarios) {
+				if (Objects.equals(scenario, checked))
+					checked.defaultScenario = value;
 				else
 					scenario.defaultScenario = false;
+			}
 			editor.setDirty();
 		}
 	}

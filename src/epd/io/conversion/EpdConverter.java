@@ -14,8 +14,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import epd.io.MappingConfig;
-import epd.model.EpdProduct;
 import epd.model.EpdDataSet;
+import epd.model.EpdProduct;
 
 /**
  * Converts an EPD to an ILCD process data set
@@ -36,9 +36,7 @@ class EpdConverter {
 			return null;
 		process = new Process();
 		process.version = "1.1";
-		process.modelling = dataSet.modelling;
-		process.adminInfo = dataSet.adminInfo;
-		process.processInfo = dataSet.processInfo;
+		dataSet.process = process;
 		mapDeclaredProduct(dataSet);
 		ResultConverter.writeResults(dataSet, process, config);
 		writeExtensions();

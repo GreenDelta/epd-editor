@@ -13,9 +13,11 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
-import org.openlca.ilcd.processes.AdminInfo;
-import org.openlca.ilcd.processes.DataSetInfo;
+import org.openlca.ilcd.processes.DataEntry;
 import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.processes.ProcessName;
+import org.openlca.ilcd.processes.Publication;
+import org.openlca.ilcd.util.Processes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,9 +39,8 @@ public class EpdEditor extends FormEditor implements IEditor {
 
 	private Logger log = LoggerFactory.getLogger(getClass());
 
-	private EpdDataSet dataSet;
+	public EpdDataSet dataSet;
 	private boolean dirty;
-	private boolean productChanged;
 
 	private List<Runnable> saveHandlers = new ArrayList<>();
 
@@ -58,15 +59,10 @@ public class EpdEditor extends FormEditor implements IEditor {
 		try {
 			RefEditorInput in = (RefEditorInput) input;
 			dataSet = Store.openEPD(in.ref);
-			dataSet.structs();
 		} catch (Exception e) {
 			throw new PartInitException(
 					"Failed to open editor: no correct input", e);
 		}
-	}
-
-	public EpdDataSet getDataSet() {
-		return dataSet;
 	}
 
 	@Override
@@ -75,11 +71,6 @@ public class EpdEditor extends FormEditor implements IEditor {
 			dirty = true;
 			editorDirtyStateChanged();
 		}
-	}
-
-	public void setProductChanged() {
-		this.productChanged = true;
-		setDirty();
 	}
 
 	@Override
@@ -94,7 +85,6 @@ public class EpdEditor extends FormEditor implements IEditor {
 			addPage(new ModelingPage(this));
 			addPage(new AdminPage(this));
 			addPage(new ModulePage(this));
-			// addPage(new DeclaredProductPage(this));
 		} catch (Exception e) {
 			log.error("failed to add editor page", e);
 		}
@@ -109,7 +99,6 @@ public class EpdEditor extends FormEditor implements IEditor {
 				handler.run();
 			}
 			dirty = false;
-			productChanged = false;
 			editorDirtyStateChanged();
 			// TODO: StartPageView.refresh(); -> update navigation
 		} catch (Exception e) {
@@ -118,11 +107,12 @@ public class EpdEditor extends FormEditor implements IEditor {
 	}
 
 	private void updateVersion() {
-		AdminInfo info = dataSet.adminInfo;
-		Version v = Version.fromString(info.publication.version);
+		Publication pub = Processes.publication(dataSet.process);
+		Version v = Version.fromString(pub.version);
 		v.incUpdate();
-		info.publication.version = v.toString();
-		info.dataEntry.timeStamp = Xml.now();
+		pub.version = v.toString();
+		DataEntry entry = Processes.dataEntry(dataSet.process);
+		entry.timeStamp = Xml.now();
 	}
 
 	public void onSaved(Runnable handler) {
@@ -139,15 +129,14 @@ public class EpdEditor extends FormEditor implements IEditor {
 		String name = d.getValue();
 		try {
 			EpdDataSet clone = dataSet.clone();
-			clone.structs();
-			DataSetInfo dsInfo = clone.processInfo.dataSetInfo;
-			LangString.set(dsInfo.name.name, name, App.lang);
-			dsInfo.uuid = UUID.randomUUID().toString();
-			AdminInfo info = clone.adminInfo;
-			info.publication.version = Version.asString(0);
-			info.dataEntry.timeStamp = Xml.now();
-			Process process = Store.saveEPD(clone);
-			EpdEditor.open(Ref.of(process));
+			Process p = clone.process;
+			ProcessName cName = Processes.processName(p);
+			LangString.set(cName.name, name, App.lang);
+			Processes.dataSetInfo(p).uuid = UUID.randomUUID().toString();
+			Processes.publication(p).version = Version.asString(0);
+			Processes.dataEntry(p).timeStamp = Xml.now();
+			Store.saveEPD(clone);
+			EpdEditor.open(Ref.of(p));
 			// TODO StartPageView.refresh();
 		} catch (Exception e) {
 			log.error("failed to save EPD as new data set", e);

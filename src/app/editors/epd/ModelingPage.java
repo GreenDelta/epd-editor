@@ -11,7 +11,8 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.processes.Modelling;
+import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.util.Processes;
 
 import app.App;
 import app.M;
@@ -20,7 +21,6 @@ import app.rcp.Labels;
 import app.util.TextBuilder;
 import app.util.UI;
 import app.util.Viewers;
-import epd.model.EpdDataSet;
 import epd.model.SubType;
 
 class ModelingPage extends FormPage {
@@ -29,14 +29,12 @@ class ModelingPage extends FormPage {
 
 	private final String lang;
 	private EpdEditor editor;
-	private EpdDataSet dataSet;
-	private Modelling modelling;
+	private Process process;
 
 	public ModelingPage(EpdEditor editor) {
 		super(editor, "EpdInfoPage", M.ModellingAndValidation);
 		this.editor = editor;
-		dataSet = editor.getDataSet();
-		modelling = dataSet.modelling;
+		process = editor.dataSet.process;
 		lang = App.lang;
 	}
 
@@ -47,16 +45,17 @@ class ModelingPage extends FormPage {
 				M.ModellingAndValidation);
 		Composite body = UI.formBody(form, mform.getToolkit());
 		createModelingSection(body);
-		RefTable.create(DataSetType.SOURCE, modelling.method.methodSources)
+		RefTable.create(DataSetType.SOURCE,
+				Processes.method(process).methodSources)
 				.withEditor(editor)
 				.withTitle(M.LCAMethodDetails)
 				.render(body, toolkit);
 		RefTable.create(DataSetType.SOURCE,
-				modelling.representativeness.sources)
+				Processes.representativeness(process).sources)
 				.withEditor(editor)
 				.withTitle(M.DataSources)
 				.render(body, toolkit);
-		new ReviewSection(modelling, editor, this)
+		new ReviewSection(editor, this)
 				.render(body, toolkit, form);
 		form.reflow(true);
 	}
@@ -68,7 +67,7 @@ class ModelingPage extends FormPage {
 		createSubTypeViewer(comp);
 		TextBuilder tb = new TextBuilder(editor, this, toolkit);
 		tb.multiText(comp, M.UseAdvice,
-				modelling.representativeness.useAdvice);
+				Processes.representativeness(process).useAdvice);
 	}
 
 	private ComboViewer createSubTypeViewer(Composite parent) {
@@ -89,17 +88,17 @@ class ModelingPage extends FormPage {
 		selectSubType(viewer);
 		viewer.addSelectionChangedListener((event) -> {
 			SubType type = Viewers.getFirst(event.getSelection());
-			dataSet.subType = type;
+			editor.dataSet.subType = type;
 			editor.setDirty();
 		});
 		return viewer;
 	}
 
 	private void selectSubType(ComboViewer combo) {
-		if (dataSet.subType == null)
+		if (editor.dataSet.subType == null)
 			return;
 		StructuredSelection s = new StructuredSelection(
-				dataSet.subType);
+				editor.dataSet.subType);
 		combo.setSelection(s);
 	}
 }

@@ -50,7 +50,7 @@ class ModulePage extends FormPage {
 	public ModulePage(EpdEditor editor) {
 		super(editor, "ModulesPage", M.EnvironmentalIndicators);
 		this.editor = editor;
-		dataSet = editor.getDataSet();
+		dataSet = editor.dataSet;
 		modules = dataSet.moduleEntries;
 		Collections.sort(modules, (e1, e2) -> {
 			Module m1 = e1.module;

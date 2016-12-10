@@ -15,8 +15,10 @@ import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Time;
 import org.openlca.ilcd.processes.DataSetInfo;
 import org.openlca.ilcd.processes.Location;
-import org.openlca.ilcd.processes.ProcessInfo;
+import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.processes.ProcessName;
 import org.openlca.ilcd.processes.Technology;
+import org.openlca.ilcd.util.Processes;
 
 import app.App;
 import app.M;
@@ -36,7 +38,7 @@ class InfoPage extends FormPage {
 	private final EpdEditor editor;
 	private final String lang;
 	private final EpdDataSet dataSet;
-	private final ProcessInfo info;
+	private final Process process;
 
 	private FormToolkit toolkit;
 
@@ -44,20 +46,22 @@ class InfoPage extends FormPage {
 		super(editor, "EpdInfoPage", M.DataSetInformation);
 		this.editor = editor;
 		this.lang = App.lang;
-		dataSet = editor.getDataSet();
-		info = dataSet.processInfo;
+		dataSet = editor.dataSet;
+		process = dataSet.process;
 	}
 
 	@Override
 	protected void createFormContent(IManagedForm mForm) {
 		toolkit = mForm.getToolkit();
-		String name = LangString.getFirst(info.dataSetInfo.name.name, lang);
+		ProcessName pName = Processes.processName(process);
+		String name = LangString.getFirst(pName.name, lang);
 		ScrolledForm form = UI.formHeader(mForm, M.EPD + ": " + name);
 		Composite body = UI.formBody(form, mForm.getToolkit());
 		TextBuilder tb = new TextBuilder(editor, this, toolkit);
 		infoSection(body, tb);
 		categorySection(body);
-		RefTable.create(DataSetType.SOURCE, info.dataSetInfo.externalDocs)
+		RefTable.create(DataSetType.SOURCE,
+				Processes.dataSetInfo(process).externalDocs)
 				.withEditor(editor)
 				.withTitle(M.ExternalDocumentationSources)
 				.render(body, toolkit);
@@ -65,7 +69,8 @@ class InfoPage extends FormPage {
 		createTimeSection(body, tb);
 		createGeographySection(body, tb);
 		createTechnologySection(body, tb);
-		RefTable.create(DataSetType.SOURCE, info.technology.pictures)
+		RefTable.create(DataSetType.SOURCE,
+				Processes.technology(process).pictures)
 				.withEditor(editor)
 				.withTitle(M.FlowDiagramsOrPictures)
 				.render(body, toolkit);
@@ -76,19 +81,18 @@ class InfoPage extends FormPage {
 		Composite comp = UI.formSection(parent, toolkit,
 				M.GeneralInformation);
 		uuid(comp);
-		tb.text(comp, M.Name,
-				info.dataSetInfo.name.name);
+		ProcessName pName = Processes.processName(process);
+		tb.text(comp, M.Name, pName.name);
 		tb.text(comp, M.QuantitativeProperties,
-				info.dataSetInfo.name.flowProperties);
-		tb.text(comp, M.Synonyms,
-				info.dataSetInfo.synonyms);
-		tb.multiText(comp, M.Comment,
-				info.dataSetInfo.comment);
+				pName.flowProperties);
+		DataSetInfo info = Processes.dataSetInfo(process);
+		tb.text(comp, M.Synonyms, info.synonyms);
+		tb.multiText(comp, M.Comment, info.comment);
 		createFileLink(comp);
 	}
 
 	private void categorySection(Composite body) {
-		DataSetInfo info = dataSet.processInfo.dataSetInfo;
+		DataSetInfo info = Processes.dataSetInfo(process);
 		CategorySection section = new CategorySection(editor,
 				DataSetType.PROCESS, info.classifications);
 		section.render(body, toolkit);
@@ -97,8 +101,9 @@ class InfoPage extends FormPage {
 	private void uuid(Composite comp) {
 		Text text = UI.formText(comp, toolkit, M.UUID);
 		text.setEditable(false);
-		if (info.dataSetInfo.uuid != null)
-			text.setText(info.dataSetInfo.uuid);
+		DataSetInfo info = Processes.dataSetInfo(process);
+		if (info.uuid != null)
+			text.setText(info.uuid);
 	}
 
 	private void createFileLink(Composite comp) {
@@ -106,7 +111,8 @@ class InfoPage extends FormPage {
 		ImageHyperlink link = toolkit.createImageHyperlink(comp, SWT.NONE);
 		link.setForeground(Colors.linkBlue());
 		link.setImage(Icon.DOCUMENT.img());
-		String uuid = info.dataSetInfo.uuid;
+		DataSetInfo info = Processes.dataSetInfo(process);
+		String uuid = info.uuid;
 		link.setText("../processes/" + uuid + ".xml");
 		// TODO:
 		// Controls.onClick(link, e -> Browser.openFile(dataSet,
@@ -155,7 +161,7 @@ class InfoPage extends FormPage {
 	}
 
 	private void createTechnologySection(Composite body, TextBuilder tb) {
-		Technology tech = info.technology;
+		Technology tech = Processes.technology(process);
 		Composite comp = UI.formSection(body, toolkit, M.Technology);
 		tb.multiText(comp, M.TechnologyDescription,
 				tech.description);
@@ -172,7 +178,7 @@ class InfoPage extends FormPage {
 	}
 
 	private void createTimeSection(Composite body, TextBuilder tb) {
-		Time time = info.time;
+		Time time = Processes.time(process);
 		Composite comp = UI.formSection(body, toolkit, M.Time);
 		intText(comp, M.ReferenceYear, time.referenceYear, val -> {
 			time.referenceYear = val;
@@ -184,7 +190,7 @@ class InfoPage extends FormPage {
 	}
 
 	private void createGeographySection(Composite body, TextBuilder tb) {
-		Location location = info.geography.location;
+		Location location = Processes.location(process);
 		Composite comp = UI.formSection(body, toolkit, M.Geography);
 		toolkit.createLabel(comp, M.Location);
 		LocationCombo viewer = new LocationCombo();

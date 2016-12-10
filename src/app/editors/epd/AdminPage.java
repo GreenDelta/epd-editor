@@ -1,7 +1,5 @@
 package app.editors.epd;
 
-import java.util.List;
-
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.eclipse.swt.widgets.Button;
@@ -12,10 +10,10 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.commons.LangString;
-import org.openlca.ilcd.processes.AdminInfo;
 import org.openlca.ilcd.processes.DataEntry;
+import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.Publication;
+import org.openlca.ilcd.util.Processes;
 
 import app.M;
 import app.editors.RefText;
@@ -30,20 +28,12 @@ class AdminPage extends FormPage {
 	private FormToolkit toolkit;
 
 	private EpdEditor editor;
-	private AdminInfo adminInfo;
+	private Process process;
 
 	public AdminPage(EpdEditor editor) {
 		super(editor, "EpdInfoPage", M.AdministrativeInformation);
 		this.editor = editor;
-		adminInfo = editor.getDataSet().adminInfo;
-		if (adminInfo == null) {
-			adminInfo = new AdminInfo();
-			editor.getDataSet().adminInfo = adminInfo;
-		}
-		if (adminInfo.dataEntry == null)
-			adminInfo.dataEntry = new DataEntry();
-		if (adminInfo.publication == null)
-			adminInfo.publication = new Publication();
+		process = editor.dataSet.process;
 	}
 
 	@Override
@@ -64,9 +54,10 @@ class AdminPage extends FormPage {
 		UI.formLabel(comp, M.Documentor);
 		RefText t = new RefText(comp, toolkit, DataSetType.CONTACT);
 		UI.gridData(t, true, false);
-		t.setRef(adminInfo.dataEntry.documentor);
+		DataEntry entry = Processes.dataEntry(process);
+		t.setRef(entry.documentor);
 		t.onChange(ref -> {
-			adminInfo.dataEntry.documentor = ref;
+			entry.documentor = ref;
 			editor.setDirty();
 		});
 	}
@@ -74,13 +65,14 @@ class AdminPage extends FormPage {
 	private void createLastUpdateText(Composite comp) {
 		Text text = UI.formText(comp, toolkit, M.LastUpdate);
 		text.setEditable(false);
+		DataEntry entry = Processes.dataEntry(process);
 		editor.onSaved(() -> {
-			XMLGregorianCalendar t = adminInfo.dataEntry.timeStamp;
+			XMLGregorianCalendar t = entry.timeStamp;
 			text.setText(Xml.toString(t));
 		});
-		if (adminInfo.dataEntry.timeStamp == null)
+		if (entry.timeStamp == null)
 			return;
-		String s = Xml.toString(adminInfo.dataEntry.timeStamp);
+		String s = Xml.toString(entry.timeStamp);
 		text.setText(s);
 	}
 
@@ -97,9 +89,10 @@ class AdminPage extends FormPage {
 		UI.formLabel(comp, M.Owner);
 		RefText t = new RefText(comp, toolkit, DataSetType.CONTACT);
 		UI.gridData(t, true, false);
-		t.setRef(adminInfo.publication.owner);
+		Publication pub = Processes.publication(process);
+		t.setRef(pub.owner);
 		t.onChange(ref -> {
-			adminInfo.publication.owner = ref;
+			pub.owner = ref;
 			editor.setDirty();
 		});
 
@@ -107,28 +100,30 @@ class AdminPage extends FormPage {
 
 	private void copyright(Composite composite) {
 		Button check = UI.formCheckBox(composite, toolkit, M.Copyright);
-		Boolean b = adminInfo.publication.copyright;
-		if (b != null)
-			check.setSelection(b);
+		Publication pub = Processes.publication(process);
+		if (pub.copyright != null)
+			check.setSelection(pub.copyright);
 		Controls.onSelect(check, e -> {
-			adminInfo.publication.copyright = check.getSelection();
+			pub.copyright = check.getSelection();
 			editor.setDirty();
 		});
 	}
 
 	private void version(Composite comp) {
 		VersionField v = new VersionField(comp, toolkit);
-		v.setVersion(adminInfo.publication.version);
-		editor.onSaved(() -> v.setVersion(adminInfo.publication.version));
+		Publication pub = Processes.publication(process);
+		v.setVersion(pub.version);
+		editor.onSaved(() -> v.setVersion(pub.version));
 		v.onChange(version -> {
-			adminInfo.publication.version = version;
+			pub.version = version;
 			editor.setDirty();
 		});
 	}
 
 	private void accessRestrictions(Composite comp) {
-		List<LangString> list = adminInfo.publication.accessRestrictions;
+		Publication pub = Processes.publication(process);
 		new TextBuilder(editor, this, toolkit)
-				.text(comp, M.AccessRestrictions, list);
+				.text(comp, M.AccessRestrictions,
+						pub.accessRestrictions);
 	}
 }

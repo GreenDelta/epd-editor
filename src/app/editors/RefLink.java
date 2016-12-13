@@ -39,6 +39,11 @@ public class RefLink extends Composite {
 		createAddButton();
 		link = toolkit.createImageHyperlink(this, SWT.TOP);
 		link.setForeground(Colors.linkBlue());
+		Controls.onClick(link, e -> {
+			if (ref == null)
+				return;
+			Editors.open(ref);
+		});
 		setLinkText();
 		createRemoveLink();
 	}

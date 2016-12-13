@@ -7,12 +7,49 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.UIJob;
+import org.openlca.ilcd.commons.Ref;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.M;
+import app.editors.contact.ContactEditor;
+import app.editors.epd.EpdEditor;
+import app.editors.flow.FlowEditor;
+import app.editors.flowproperty.FlowPropertyEditor;
+import app.editors.source.SourceEditor;
+import app.editors.unitgroup.UnitGroupEditor;
 
 public class Editors {
+
+	public static void open(Ref ref) {
+		if (ref == null || ref.type == null || ref.uuid == null)
+			return;
+		switch (ref.type) {
+		case PROCESS:
+			EpdEditor.open(ref);
+			break;
+		case FLOW:
+			FlowEditor.open(ref);
+			break;
+		case CONTACT:
+			ContactEditor.open(ref);
+			break;
+		case SOURCE:
+			SourceEditor.open(ref);
+			break;
+		case FLOW_PROPERTY:
+			FlowPropertyEditor.open(ref);
+			break;
+		case UNIT_GROUP:
+			UnitGroupEditor.open(ref);
+			break;
+		case LCIA_METHOD:
+			// TODO: LCIA editor
+			break;
+		case EXTERNAL_FILE:
+			break;
+		}
+	}
 
 	public static void open(IEditorInput input, String editorId) {
 		new OpenInUIJob(input, editorId).schedule();

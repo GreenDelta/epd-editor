@@ -1,9 +1,6 @@
 package app.navi;
 
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IViewPart;
@@ -15,12 +12,7 @@ import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.openlca.ilcd.commons.DataSetType;
 
-import app.editors.contact.ContactEditor;
-import app.editors.epd.EpdEditor;
-import app.editors.flow.FlowEditor;
-import app.editors.flowproperty.FlowPropertyEditor;
-import app.editors.source.SourceEditor;
-import app.editors.unitgroup.UnitGroupEditor;
+import app.editors.Editors;
 import app.util.Viewers;
 
 public class Navigator extends CommonNavigator {
@@ -47,31 +39,13 @@ public class Navigator extends CommonNavigator {
 		super.initListeners(viewer);
 		viewer.setUseHashlookup(true);
 		ColumnViewerToolTipSupport.enableFor(viewer);
-		viewer.addDoubleClickListener(new IDoubleClickListener() {
-			@Override
-			public void doubleClick(DoubleClickEvent event) {
-				onDoubleClick(event.getSelection());
+		viewer.addDoubleClickListener(e -> {
+			Object obj = Viewers.getFirstSelected(viewer);
+			if (obj instanceof RefElement) {
+				RefElement refEl = (RefElement) obj;
+				Editors.open(refEl.ref);
 			}
 		});
-	}
-
-	private void onDoubleClick(ISelection selection) {
-		Object obj = Viewers.getFirst(selection);
-		if (obj instanceof RefElement) {
-			RefElement e = (RefElement) obj;
-			if (e.ref.type == DataSetType.PROCESS)
-				EpdEditor.open(e.ref);
-			if (e.ref.type == DataSetType.FLOW)
-				FlowEditor.open(e.ref);
-			else if (e.ref.type == DataSetType.CONTACT)
-				ContactEditor.open(e.ref);
-			else if (e.ref.type == DataSetType.SOURCE)
-				SourceEditor.open(e.ref);
-			else if (e.ref.type == DataSetType.FLOW_PROPERTY)
-				FlowPropertyEditor.open(e.ref);
-			else if (e.ref.type == DataSetType.UNIT_GROUP)
-				UnitGroupEditor.open(e.ref);
-		}
 	}
 
 	public NavigationRoot getRoot() {

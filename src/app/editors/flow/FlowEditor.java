@@ -1,13 +1,9 @@
 package app.editors.flow;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.forms.editor.FormEditor;
 import org.openlca.ilcd.commons.Publication;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.flows.Flow;
@@ -16,8 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.App;
+import app.editors.DataSetEditor;
 import app.editors.Editors;
-import app.editors.IEditor;
 import app.editors.RefEditorInput;
 import epd.io.conversion.FlowExtensions;
 import epd.model.EpdProduct;
@@ -25,14 +21,11 @@ import epd.model.Version;
 import epd.model.Xml;
 import epd.util.Strings;
 
-public class FlowEditor extends FormEditor implements IEditor {
+public class FlowEditor extends DataSetEditor {
 
 	private static final String ID = "flow.editor";
 
 	EpdProduct product;
-
-	private boolean dirty;
-	private List<Runnable> saveHandlers = new ArrayList<>();
 
 	public static void open(Ref ref) {
 		if (ref == null)
@@ -54,19 +47,6 @@ public class FlowEditor extends FormEditor implements IEditor {
 			throw new PartInitException(
 					"Failed to open editor: no correct input", e);
 		}
-	}
-
-	@Override
-	public void setDirty() {
-		if (!dirty) {
-			dirty = true;
-			editorDirtyStateChanged();
-		}
-	}
-
-	@Override
-	public boolean isDirty() {
-		return dirty;
 	}
 
 	@Override
@@ -94,19 +74,6 @@ public class FlowEditor extends FormEditor implements IEditor {
 		v.incUpdate();
 		pub.version = v.toString();
 		Flows.dataEntry(product.flow).timeStamp = Xml.now();
-	}
-
-	public void onSaved(Runnable handler) {
-		saveHandlers.add(handler);
-	}
-
-	@Override
-	public boolean isSaveAsAllowed() {
-		return false;
-	}
-
-	@Override
-	public void doSaveAs() {
 	}
 
 	@Override

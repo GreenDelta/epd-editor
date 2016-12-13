@@ -1,7 +1,5 @@
 package app.editors.epd;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -10,7 +8,6 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.forms.editor.FormEditor;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.processes.DataEntry;
@@ -23,8 +20,9 @@ import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.M;
+import app.editors.DataSetEditor;
+import app.editors.DependencyPage;
 import app.editors.Editors;
-import app.editors.IEditor;
 import app.editors.RefEditorInput;
 import app.store.Store;
 import app.util.UI;
@@ -33,16 +31,13 @@ import epd.model.Version;
 import epd.model.Xml;
 import epd.util.Strings;
 
-public class EpdEditor extends FormEditor implements IEditor {
+public class EpdEditor extends DataSetEditor {
 
 	private static final String ID = "epd.editor";
 
 	private Logger log = LoggerFactory.getLogger(getClass());
 
 	public EpdDataSet dataSet;
-	private boolean dirty;
-
-	private List<Runnable> saveHandlers = new ArrayList<>();
 
 	public static void open(Ref ref) {
 		if (ref == null)
@@ -66,25 +61,13 @@ public class EpdEditor extends FormEditor implements IEditor {
 	}
 
 	@Override
-	public void setDirty() {
-		if (!dirty) {
-			dirty = true;
-			editorDirtyStateChanged();
-		}
-	}
-
-	@Override
-	public boolean isDirty() {
-		return dirty;
-	}
-
-	@Override
 	protected void addPages() {
 		try {
 			addPage(new InfoPage(this));
 			addPage(new ModelingPage(this));
 			addPage(new AdminPage(this));
 			addPage(new ModulePage(this));
+			addPage(new DependencyPage(this, dataSet.process));
 		} catch (Exception e) {
 			log.error("failed to add editor page", e);
 		}
@@ -113,10 +96,6 @@ public class EpdEditor extends FormEditor implements IEditor {
 		pub.version = v.toString();
 		DataEntry entry = Processes.dataEntry(dataSet.process);
 		entry.timeStamp = Xml.now();
-	}
-
-	public void onSaved(Runnable handler) {
-		saveHandlers.add(handler);
 	}
 
 	@Override

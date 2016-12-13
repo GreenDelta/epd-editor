@@ -1,40 +1,33 @@
 package app.editors.unitgroup;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.forms.editor.FormEditor;
 import org.openlca.ilcd.commons.AdminInfo;
 import org.openlca.ilcd.commons.DataEntry;
 import org.openlca.ilcd.commons.Publication;
 import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.units.DataSetInfo;
+import org.openlca.ilcd.units.QuantitativeReference;
 import org.openlca.ilcd.units.UnitGroup;
 import org.openlca.ilcd.units.UnitGroupInfo;
-import org.openlca.ilcd.units.QuantitativeReference;
-import org.openlca.ilcd.units.DataSetInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.App;
+import app.editors.DataSetEditor;
 import app.editors.Editors;
-import app.editors.IEditor;
 import app.editors.RefEditorInput;
 import epd.model.Version;
 import epd.model.Xml;
 import epd.util.Strings;
 
-public class UnitGroupEditor extends FormEditor implements IEditor {
+public class UnitGroupEditor extends DataSetEditor {
 
 	private static final String ID = "unitgroup.editor";
 
 	UnitGroup property;
-
-	private boolean dirty;
-	private List<Runnable> saveHandlers = new ArrayList<>();
 
 	public static void open(Ref ref) {
 		if (ref == null)
@@ -76,19 +69,6 @@ public class UnitGroupEditor extends FormEditor implements IEditor {
 	}
 
 	@Override
-	public void setDirty() {
-		if (!dirty) {
-			dirty = true;
-			editorDirtyStateChanged();
-		}
-	}
-
-	@Override
-	public boolean isDirty() {
-		return dirty;
-	}
-
-	@Override
 	public void doSave(IProgressMonitor monitor) {
 		try {
 			updateVersion();
@@ -111,19 +91,6 @@ public class UnitGroupEditor extends FormEditor implements IEditor {
 		v.incUpdate();
 		info.publication.version = v.toString();
 		info.dataEntry.timeStamp = Xml.now();
-	}
-
-	public void onSaved(Runnable handler) {
-		saveHandlers.add(handler);
-	}
-
-	@Override
-	public boolean isSaveAsAllowed() {
-		return false;
-	}
-
-	@Override
-	public void doSaveAs() {
 	}
 
 	@Override

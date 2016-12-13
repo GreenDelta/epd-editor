@@ -37,11 +37,11 @@ class AdminPage extends FormPage {
 	}
 
 	@Override
-	protected void createFormContent(IManagedForm managedForm) {
-		toolkit = managedForm.getToolkit();
-		ScrolledForm form = UI.formHeader(managedForm,
+	protected void createFormContent(IManagedForm mform) {
+		toolkit = mform.getToolkit();
+		ScrolledForm form = UI.formHeader(mform,
 				M.AdministrativeInformation);
-		Composite body = UI.formBody(form, managedForm.getToolkit());
+		Composite body = UI.formBody(form, mform.getToolkit());
 		createDataEntrySection(body);
 		createPublicationSection(body);
 		form.reflow(true);

@@ -7,8 +7,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
-import org.eclipse.ui.forms.widgets.TableWrapData;
-import org.eclipse.ui.forms.widgets.TableWrapLayout;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
@@ -17,6 +15,7 @@ import app.App;
 import app.rcp.Icon;
 import app.util.Colors;
 import app.util.Controls;
+import app.util.UI;
 import epd.util.Strings;
 
 public class RefLink extends Composite {
@@ -36,30 +35,17 @@ public class RefLink extends Composite {
 
 	private void createContent() {
 		toolkit.adapt(this);
-		TableWrapLayout layout = createLayout();
-		setLayout(layout);
-		// order of the method calls is important (fills from left to right)
-		createLink();
+		UI.innerGrid(this, 3);
 		createAddButton();
-		createRemoveButton();
-	}
-
-	private TableWrapLayout createLayout() {
-		TableWrapLayout layout = new TableWrapLayout();
-		layout.numColumns = 3;
-		layout.leftMargin = 0;
-		layout.rightMargin = 0;
-		layout.topMargin = 0;
-		layout.bottomMargin = 0;
-		layout.horizontalSpacing = 0;
-		layout.verticalSpacing = 0;
-		return layout;
+		link = toolkit.createImageHyperlink(this, SWT.TOP);
+		link.setForeground(Colors.linkBlue());
+		setLinkText();
+		createRemoveLink();
 	}
 
 	private void createAddButton() {
 		Button btn = toolkit.createButton(this, "#Select", SWT.PUSH);
 		btn.setToolTipText("#Select data set");
-		btn.setLayoutData(new TableWrapData());
 		btn.setImage(Icon.img(type));
 		Controls.onSelect(btn, e -> {
 			Ref ref = RefSelectionDialog.select(type);
@@ -68,24 +54,14 @@ public class RefLink extends Composite {
 		});
 	}
 
-	private void createRemoveButton() {
-		Button btn = toolkit.createButton(this, "", SWT.PUSH);
-		btn.setLayoutData(new TableWrapData());
-		btn.setImage(Icon.DELETE.img());
-		btn.setToolTipText("#Remove data set link");
-		Controls.onSelect(btn, e -> {
+	private void createRemoveLink() {
+		ImageHyperlink l = toolkit.createImageHyperlink(this, SWT.BOTTOM);
+		l.setToolTipText("#Remove data set link");
+		l.setHoverImage(Icon.DELETE.img());
+		l.setImage(Icon.DELETE_DIS.img());
+		Controls.onClick(l, e -> {
 			setRef(null);
 		});
-	}
-
-	private void createLink() {
-		link = toolkit.createImageHyperlink(this, SWT.NONE);
-		link.setForeground(Colors.linkBlue());
-		TableWrapData layoutData = new TableWrapData(TableWrapData.FILL,
-				TableWrapData.FILL);
-		layoutData.grabHorizontal = true;
-		link.setLayoutData(layoutData);
-		setLinkText();
 	}
 
 	public void setRef(Ref ref) {

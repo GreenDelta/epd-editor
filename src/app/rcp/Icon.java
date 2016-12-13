@@ -20,6 +20,8 @@ public enum Icon {
 
 	DELETE("delete.png"),
 
+	DELETE_DIS("delete_dis.png"),
+
 	DOCUMENT("document.png"),
 
 	EPD("epd.png"),

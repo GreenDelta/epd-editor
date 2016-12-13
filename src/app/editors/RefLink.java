@@ -5,8 +5,8 @@ import java.util.function.Consumer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.ImageHyperlink;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 import org.openlca.ilcd.commons.DataSetType;
@@ -15,17 +15,19 @@ import org.openlca.ilcd.commons.Ref;
 
 import app.App;
 import app.rcp.Icon;
+import app.util.Colors;
 import app.util.Controls;
+import epd.util.Strings;
 
-public class RefText extends Composite {
+public class RefLink extends Composite {
 
-	private Text text;
+	private ImageHyperlink link;
 	private DataSetType type;
 	private FormToolkit toolkit;
 	private Ref ref;
 	private Consumer<Ref> onChange;
 
-	public RefText(Composite parent, FormToolkit tk, DataSetType type) {
+	public RefLink(Composite parent, FormToolkit tk, DataSetType type) {
 		super(parent, SWT.FILL);
 		this.type = type;
 		this.toolkit = tk;
@@ -37,8 +39,8 @@ public class RefText extends Composite {
 		TableWrapLayout layout = createLayout();
 		setLayout(layout);
 		// order of the method calls is important (fills from left to right)
+		createLink();
 		createAddButton();
-		createTextField();
 		createRemoveButton();
 	}
 
@@ -55,7 +57,7 @@ public class RefText extends Composite {
 	}
 
 	private void createAddButton() {
-		Button btn = toolkit.createButton(this, "", SWT.PUSH);
+		Button btn = toolkit.createButton(this, "#Select", SWT.PUSH);
 		btn.setToolTipText("#Select data set");
 		btn.setLayoutData(new TableWrapData());
 		btn.setImage(Icon.img(type));
@@ -76,33 +78,39 @@ public class RefText extends Composite {
 		});
 	}
 
-	private void createTextField() {
-		text = toolkit.createText(this, "", SWT.BORDER);
-		text.setEditable(false);
+	private void createLink() {
+		link = toolkit.createImageHyperlink(this, SWT.NONE);
+		link.setForeground(Colors.linkBlue());
 		TableWrapData layoutData = new TableWrapData(TableWrapData.FILL,
 				TableWrapData.FILL);
 		layoutData.grabHorizontal = true;
-		text.setLayoutData(layoutData);
-		if (ref != null)
-			text.setText(LangString.getFirst(ref.name, App.lang));
+		link.setLayoutData(layoutData);
+		setLinkText();
 	}
 
 	public void setRef(Ref ref) {
 		this.ref = ref;
-		if (text != null) {
-			if (ref == null)
-				text.setText("");
-			else {
-				String s = LangString.getFirst(ref.name, App.lang);
-				text.setText(s == null ? "" : s);
-			}
-		}
+		setLinkText();
+		this.pack();
 		if (onChange != null)
 			onChange.accept(ref);
 	}
 
 	public void onChange(Consumer<Ref> fn) {
 		this.onChange = fn;
+	}
+
+	private void setLinkText() {
+		if (link == null)
+			return;
+		String t = "#none";
+		if (ref != null) {
+			String s = LangString.getFirst(ref.name, App.lang);
+			if (s != null)
+				t = s;
+		}
+		t = Strings.cut(t, 120);
+		link.setText(t);
 	}
 
 }

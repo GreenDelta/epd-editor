@@ -24,8 +24,8 @@ import org.openlca.ilcd.util.Processes;
 import app.App;
 import app.M;
 import app.editors.CategorySection;
+import app.editors.RefLink;
 import app.editors.RefTable;
-import app.editors.RefText;
 import app.rcp.Icon;
 import app.util.Colors;
 import app.util.TextBuilder;
@@ -125,8 +125,7 @@ class InfoPage extends FormPage {
 		Composite comp = UI.formSection(parent, toolkit,
 				M.DeclaredProduct);
 		UI.formLabel(comp, toolkit, M.Product);
-		RefText refText = new RefText(comp, toolkit, DataSetType.FLOW);
-		UI.gridData(refText, true, false);
+		RefLink refText = new RefLink(comp, toolkit, DataSetType.FLOW);
 		Exchange exchange = dataSet.productExchange();
 		refText.setRef(exchange.flow);
 		refText.onChange(ref -> {
@@ -197,8 +196,7 @@ class InfoPage extends FormPage {
 		tb.multiText(comp, M.TechnologicalApplicability,
 				tech.applicability);
 		UI.formLabel(comp, M.Pictogram);
-		RefText refText = new RefText(comp, toolkit, DataSetType.SOURCE);
-		UI.gridData(refText, true, false);
+		RefLink refText = new RefLink(comp, toolkit, DataSetType.SOURCE);
 		refText.setRef(tech.pictogram);
 		refText.onChange(ref -> {
 			tech.pictogram = ref;

@@ -1,5 +1,4 @@
 ## TODO
-* Flow editor -> product editor
 
 * RefLink instead of text with nicer buttons
 

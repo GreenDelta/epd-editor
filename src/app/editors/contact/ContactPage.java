@@ -13,7 +13,7 @@ import org.openlca.ilcd.contacts.DataSetInfo;
 
 import app.App;
 import app.editors.CategorySection;
-import app.editors.RefText;
+import app.editors.RefLink;
 import app.editors.VersionField;
 import app.util.TextBuilder;
 import app.util.UI;
@@ -54,8 +54,7 @@ class ContactPage extends FormPage {
 		tb.text(comp, "#WWW-Address", info.wwwAddress,
 				t -> info.wwwAddress = t);
 		UI.formLabel(comp, tk, "#Logo");
-		RefText logo = new RefText(comp, tk, DataSetType.SOURCE);
-		UI.gridData(logo, true, false);
+		RefLink logo = new RefLink(comp, tk, DataSetType.SOURCE);
 		logo.setRef(info.logo);
 		logo.onChange(ref -> {
 			info.logo = ref;

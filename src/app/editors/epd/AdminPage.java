@@ -16,7 +16,7 @@ import org.openlca.ilcd.processes.Publication;
 import org.openlca.ilcd.util.Processes;
 
 import app.M;
-import app.editors.RefText;
+import app.editors.RefLink;
 import app.editors.VersionField;
 import app.util.Controls;
 import app.util.TextBuilder;
@@ -52,8 +52,7 @@ class AdminPage extends FormPage {
 				M.DataEntry);
 		createLastUpdateText(comp);
 		UI.formLabel(comp, M.Documentor);
-		RefText t = new RefText(comp, toolkit, DataSetType.CONTACT);
-		UI.gridData(t, true, false);
+		RefLink t = new RefLink(comp, toolkit, DataSetType.CONTACT);
 		DataEntry entry = Processes.dataEntry(process);
 		t.setRef(entry.documentor);
 		t.onChange(ref -> {
@@ -87,8 +86,7 @@ class AdminPage extends FormPage {
 
 	private void owner(Composite comp) {
 		UI.formLabel(comp, M.Owner);
-		RefText t = new RefText(comp, toolkit, DataSetType.CONTACT);
-		UI.gridData(t, true, false);
+		RefLink t = new RefLink(comp, toolkit, DataSetType.CONTACT);
 		Publication pub = Processes.publication(process);
 		t.setRef(pub.owner);
 		t.onChange(ref -> {

@@ -16,7 +16,7 @@ import org.openlca.ilcd.util.Flows;
 import app.App;
 import app.M;
 import app.editors.CategorySection;
-import app.editors.RefText;
+import app.editors.RefLink;
 import app.editors.VersionField;
 import app.util.TextBuilder;
 import app.util.UI;
@@ -59,8 +59,7 @@ class FlowPage extends FormPage {
 		tb.text(comp, "#Description", info.generalComment);
 
 		UI.formLabel(comp, tk, M.GenericProduct);
-		RefText rt = new RefText(comp, tk, DataSetType.FLOW);
-		UI.gridData(rt, true, false);
+		RefLink rt = new RefLink(comp, tk, DataSetType.FLOW);
 		rt.setRef(product.genericFlow);
 		rt.onChange(ref -> {
 			product.genericFlow = ref;

@@ -16,8 +16,8 @@ import org.openlca.ilcd.sources.Source;
 
 import app.App;
 import app.editors.CategorySection;
+import app.editors.RefLink;
 import app.editors.RefTable;
-import app.editors.RefText;
 import app.editors.VersionField;
 import app.util.TextBuilder;
 import app.util.UI;
@@ -57,8 +57,7 @@ class SourcePage extends FormPage {
 		tb.text(comp, "#Comment", info.description);
 		// TODO: source type combo
 		UI.formLabel(comp, tk, "#Logo");
-		RefText logo = new RefText(comp, tk, DataSetType.SOURCE);
-		UI.gridData(logo, true, false);
+		RefLink logo = new RefLink(comp, tk, DataSetType.SOURCE);
 		logo.setRef(info.logo);
 		logo.onChange(ref -> {
 			info.logo = ref;

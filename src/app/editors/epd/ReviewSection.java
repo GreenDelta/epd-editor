@@ -18,8 +18,8 @@ import org.openlca.ilcd.processes.Validation;
 import org.openlca.ilcd.util.Processes;
 
 import app.M;
+import app.editors.RefLink;
 import app.editors.RefTable;
-import app.editors.RefText;
 import app.rcp.Icon;
 import app.util.Actions;
 import app.util.TextBuilder;
@@ -92,8 +92,7 @@ class ReviewSection {
 
 		private void createReportText(Composite comp) {
 			UI.formLabel(comp, M.CompleteReviewReport);
-			RefText t = new RefText(comp, toolkit, DataSetType.SOURCE);
-			UI.gridData(t, true, false);
+			RefLink t = new RefLink(comp, toolkit, DataSetType.SOURCE);
 			t.setRef(review.report);
 			t.onChange(ref -> {
 				review.report = ref;

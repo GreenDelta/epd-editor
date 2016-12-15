@@ -26,6 +26,8 @@ public enum Icon {
 
 	EPD("epd.png"),
 
+	ERROR("error.png"),
+
 	EXPAND("expand.png"),
 
 	EXPORT("export.png"),
@@ -33,6 +35,8 @@ public enum Icon {
 	FOLDER("folder.png"),
 
 	IMPORT("import.png"),
+
+	OK("ok.png"),
 
 	PASTE("paste.png"),
 

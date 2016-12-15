@@ -1,9 +1,9 @@
 package app;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
@@ -84,16 +84,15 @@ public class App {
 		return job;
 	}
 
-	public static void runWithProgress(String name, Runnable runnable) {
-		IProgressService progress = PlatformUI.getWorkbench()
-				.getProgressService();
+	public static void runWithProgress(String name,
+			Consumer<IProgressMonitor> fn) {
 		try {
-			progress.run(true, false, (monitor) -> {
-				monitor.beginTask(name, IProgressMonitor.UNKNOWN);
-				runnable.run();
-				monitor.done();
+			IProgressService progress = PlatformUI.getWorkbench()
+					.getProgressService();
+			progress.run(true, false, monitor -> {
+				fn.accept(monitor);
 			});
-		} catch (InvocationTargetException | InterruptedException e) {
+		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(App.class);
 			log.error("Error while running progress " + name, e);
 		}

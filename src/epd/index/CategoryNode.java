@@ -3,6 +3,7 @@ package epd.index;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import org.openlca.ilcd.commons.Category;
@@ -20,6 +21,21 @@ public class CategoryNode {
 		refs.remove(ref);
 		for (CategoryNode child : childs)
 			child.remove(ref);
+	}
+
+	Ref find(Ref ref) {
+		if (ref == null)
+			return null;
+		for (Ref r : refs) {
+			if (Objects.equals(r.uuid, ref.uuid))
+				return r;
+		}
+		for (CategoryNode n : childs) {
+			Ref r = n.find(ref);
+			if (r != null)
+				return r;
+		}
+		return null;
 	}
 
 	boolean contains(Ref ref) {

@@ -53,6 +53,16 @@ public class Index {
 		root.remove(ref);
 	}
 
+	/** Get the reference with the same type and UUID from the tree. */
+	public Ref find(Ref ref) {
+		if (ref == null)
+			return null;
+		TypeNode root = getNode(ref.type);
+		if (root == null)
+			return null;
+		return root.find(ref);
+	}
+
 	public static Index create(FileStore store, String lang) {
 		Index idx = new Index();
 		if (store == null)

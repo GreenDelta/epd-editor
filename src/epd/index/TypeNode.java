@@ -31,6 +31,21 @@ public class TypeNode {
 			cat.remove(ref);
 	}
 
+	Ref find(Ref ref) {
+		if (ref == null)
+			return null;
+		for (Ref r : refs) {
+			if (Objects.equals(r.uuid, ref.uuid))
+				return r;
+		}
+		for (CategoryNode n : categories) {
+			Ref r = n.find(ref);
+			if (r != null)
+				return r;
+		}
+		return null;
+	}
+
 	List<CategoryNode> syncCategories(IDataSet ds) {
 		if (ds == null)
 			return Collections.emptyList();

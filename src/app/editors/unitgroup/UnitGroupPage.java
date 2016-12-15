@@ -27,7 +27,7 @@ class UnitGroupPage extends FormPage {
 	UnitGroupPage(UnitGroupEditor editor) {
 		super(editor, "#UnitGroupPage", "#Unit Group Data Set");
 		this.editor = editor;
-		this.property = editor.property;
+		this.property = editor.unitGroup;
 	}
 
 	@Override

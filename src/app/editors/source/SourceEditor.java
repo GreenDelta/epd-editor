@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.editors.DataSetEditor;
+import app.editors.DependencyPage;
 import app.editors.Editors;
 import app.editors.RefEditorInput;
 import epd.model.Version;
@@ -94,6 +95,7 @@ public class SourceEditor extends DataSetEditor {
 	protected void addPages() {
 		try {
 			addPage(new SourcePage(this));
+			addPage(new DependencyPage(this, source));
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to add page", e);

@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.editors.DataSetEditor;
+import app.editors.DependencyPage;
 import app.editors.Editors;
 import app.editors.RefEditorInput;
 import epd.model.Version;
@@ -27,7 +28,7 @@ public class UnitGroupEditor extends DataSetEditor {
 
 	private static final String ID = "unitgroup.editor";
 
-	UnitGroup property;
+	UnitGroup unitGroup;
 
 	public static void open(Ref ref) {
 		if (ref == null)
@@ -43,7 +44,7 @@ public class UnitGroupEditor extends DataSetEditor {
 		setPartName(Strings.cut(input.getName(), 75));
 		try {
 			RefEditorInput in = (RefEditorInput) input;
-			property = App.store.get(UnitGroup.class, in.ref.uuid);
+			unitGroup = App.store.get(UnitGroup.class, in.ref.uuid);
 			initStructs();
 		} catch (Exception e) {
 			throw new PartInitException(
@@ -52,27 +53,27 @@ public class UnitGroupEditor extends DataSetEditor {
 	}
 
 	private void initStructs() {
-		if (property == null)
-			property = new UnitGroup();
-		if (property.adminInfo == null)
-			property.adminInfo = new AdminInfo();
-		if (property.adminInfo.dataEntry == null)
-			property.adminInfo.dataEntry = new DataEntry();
-		if (property.adminInfo.publication == null)
-			property.adminInfo.publication = new Publication();
-		if (property.unitGroupInfo == null)
-			property.unitGroupInfo = new UnitGroupInfo();
-		if (property.unitGroupInfo.dataSetInfo == null)
-			property.unitGroupInfo.dataSetInfo = new DataSetInfo();
-		if (property.unitGroupInfo.quantitativeReference == null)
-			property.unitGroupInfo.quantitativeReference = new QuantitativeReference();
+		if (unitGroup == null)
+			unitGroup = new UnitGroup();
+		if (unitGroup.adminInfo == null)
+			unitGroup.adminInfo = new AdminInfo();
+		if (unitGroup.adminInfo.dataEntry == null)
+			unitGroup.adminInfo.dataEntry = new DataEntry();
+		if (unitGroup.adminInfo.publication == null)
+			unitGroup.adminInfo.publication = new Publication();
+		if (unitGroup.unitGroupInfo == null)
+			unitGroup.unitGroupInfo = new UnitGroupInfo();
+		if (unitGroup.unitGroupInfo.dataSetInfo == null)
+			unitGroup.unitGroupInfo.dataSetInfo = new DataSetInfo();
+		if (unitGroup.unitGroupInfo.quantitativeReference == null)
+			unitGroup.unitGroupInfo.quantitativeReference = new QuantitativeReference();
 	}
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		try {
 			updateVersion();
-			App.store.put(property, property.getUUID());
+			App.store.put(unitGroup, unitGroup.getUUID());
 			// TODO: navigation refresh
 			for (Runnable handler : saveHandlers) {
 				handler.run();
@@ -86,7 +87,7 @@ public class UnitGroupEditor extends DataSetEditor {
 	}
 
 	private void updateVersion() {
-		AdminInfo info = property.adminInfo;
+		AdminInfo info = unitGroup.adminInfo;
 		Version v = Version.fromString(info.publication.version);
 		v.incUpdate();
 		info.publication.version = v.toString();
@@ -97,6 +98,7 @@ public class UnitGroupEditor extends DataSetEditor {
 	protected void addPages() {
 		try {
 			addPage(new UnitGroupPage(this));
+			addPage(new DependencyPage(this, unitGroup));
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to add page", e);

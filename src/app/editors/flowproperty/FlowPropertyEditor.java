@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.editors.DataSetEditor;
+import app.editors.DependencyPage;
 import app.editors.Editors;
 import app.editors.RefEditorInput;
 import epd.model.Version;
@@ -97,6 +98,7 @@ public class FlowPropertyEditor extends DataSetEditor {
 	protected void addPages() {
 		try {
 			addPage(new FlowPropertyPage(this));
+			addPage(new DependencyPage(this, property));
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to add page", e);

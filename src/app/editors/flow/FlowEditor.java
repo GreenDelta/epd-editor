@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.editors.DataSetEditor;
+import app.editors.DependencyPage;
 import app.editors.Editors;
 import app.editors.RefEditorInput;
 import epd.io.conversion.FlowExtensions;
@@ -80,6 +81,7 @@ public class FlowEditor extends DataSetEditor {
 	protected void addPages() {
 		try {
 			addPage(new FlowPage(this));
+			addPage(new DependencyPage(this, product.flow));
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to add page", e);

@@ -30,17 +30,9 @@ public final class Configs {
 		return getDefault(MAPPING_CONFIG, MappingConfig.class);
 	}
 
-	public static ServerConfig getDefaultServerConfig() {
-		return getDefault(SERVER_CONFIG, ServerConfig.class);
-	}
-
 	private static <T> T getDefault(String fileName, Class<T> clazz) {
 		InputStream stream = Configs.class.getResourceAsStream(fileName);
 		return get(stream, clazz);
-	}
-
-	public static ServerConfig getServerConfig(File file) {
-		return get(file, ServerConfig.class);
 	}
 
 	private static <T> T get(File file, Class<T> clazz) {
@@ -55,10 +47,6 @@ public final class Configs {
 
 	public static MappingConfig getMappingConfig(InputStream stream) {
 		return get(stream, MappingConfig.class);
-	}
-
-	public static ServerConfig getServerConfig(InputStream stream) {
-		return get(stream, ServerConfig.class);
 	}
 
 	public static List<MaterialProperty> getMaterialProperties(
@@ -89,16 +77,6 @@ public final class Configs {
 			return get(file, MappingConfig.class);
 	}
 
-	public static ServerConfig getServerConfig(EpdStore store) {
-		if (store == null || store.baseDir == null)
-			return getDefaultServerConfig();
-		File file = new File(store.baseDir, SERVER_CONFIG);
-		if (!file.exists())
-			return getDefaultServerConfig();
-		else
-			return getServerConfig(file);
-	}
-
 	public static void save(Object config, File file) {
 		try (FileOutputStream fos = new FileOutputStream(file);
 				OutputStreamWriter writer = new OutputStreamWriter(fos,
@@ -115,11 +93,6 @@ public final class Configs {
 
 	public static void save(MappingConfig config, EpdStore store) {
 		File file = new File(store.baseDir, MAPPING_CONFIG);
-		save(config, file);
-	}
-
-	public static void save(ServerConfig config, EpdStore store) {
-		File file = new File(store.baseDir, SERVER_CONFIG);
 		save(config, file);
 	}
 

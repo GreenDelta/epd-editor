@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.eclipse.ui.forms.editor.FormEditor;
 
-public abstract class DataSetEditor extends FormEditor implements IEditor {
+public abstract class BaseEditor extends FormEditor implements IEditor {
 
 	protected boolean dirty;
 	protected List<Runnable> saveHandlers = new ArrayList<>();

@@ -6,42 +6,32 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.openlca.ilcd.descriptors.DataStock;
 import org.openlca.ilcd.descriptors.DescriptorList;
 import org.openlca.ilcd.descriptors.ProcessDescriptor;
-import org.openlca.ilcd.io.NetworkClient;
+import org.openlca.ilcd.io.SodaClient;
+import org.openlca.ilcd.io.SodaConnection;
 import org.openlca.ilcd.processes.Process;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import epd.io.EpdStore;
-import epd.io.ServerCredentials;
 import epd.model.EpdDataSet;
 import epd.model.EpdDescriptor;
 
 public class Connection implements Closeable {
 
 	private Logger log = LoggerFactory.getLogger(getClass());
-	private final NetworkClient client;
-	public final ServerCredentials credentials;
+	private final SodaClient client;
 
-	private Connection(ServerCredentials credentials) throws Exception {
-		log.trace("create new network adapter {}", credentials);
-		client = new NetworkClient(credentials.url, credentials.user,
-				credentials.password);
-		if (credentials.dataStockUuid != null) {
-			DataStock dataStock = new DataStock();
-			dataStock.uuid = credentials.dataStockUuid;
-			dataStock.shortName = credentials.dataStockName;
-			client.setDataStock(dataStock);
-		}
+	private Connection(SodaConnection con) throws Exception {
+		log.trace("create new network adapter {}", con);
+		client = new SodaClient(con);
 		client.connect();
-		this.credentials = credentials;
 	}
 
-	public static Connection create(ServerCredentials credentials)
+	public static Connection create(SodaConnection con)
 			throws Exception {
-		return new Connection(credentials);
+		return new Connection(con);
 	}
 
 	public List<EpdDescriptor> search(String term) {

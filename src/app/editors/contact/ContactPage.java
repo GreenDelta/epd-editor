@@ -41,6 +41,7 @@ class ContactPage extends FormPage {
 		infoSection(body, tb);
 		categorySection(body);
 		adminSection(body);
+		form.reflow(true);
 	}
 
 	private void infoSection(Composite body, TextBuilder tb) {

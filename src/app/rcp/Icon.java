@@ -14,6 +14,8 @@ public enum Icon {
 
 	COLLAPSE("collapse.png"),
 
+	CONNECTION("connection.png"),
+
 	CONTACT("contact.png"),
 
 	COPY("copy.png"),

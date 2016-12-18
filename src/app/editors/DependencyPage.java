@@ -29,11 +29,11 @@ import app.util.Viewers;
 
 public class DependencyPage extends FormPage {
 
-	private DataSetEditor editor;
+	private BaseEditor editor;
 	private IDataSet dataSet;
 	private HashMap<String, Ref> indexRefs = new HashMap<>();
 
-	public DependencyPage(DataSetEditor editor, IDataSet dataSet) {
+	public DependencyPage(BaseEditor editor, IDataSet dataSet) {
 		super(editor, "DependencyPage", "#Dependencies");
 		this.editor = editor;
 		this.dataSet = dataSet;

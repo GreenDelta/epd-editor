@@ -6,7 +6,7 @@ import java.util.Set;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.contacts.Contact;
 import org.openlca.ilcd.io.FileStore;
-import org.openlca.ilcd.io.NetworkClient;
+import org.openlca.ilcd.io.SodaClient;
 import org.openlca.ilcd.processes.Exchange;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.ProcessInfo;
@@ -23,11 +23,11 @@ class Download {
 
 	private Logger log = LoggerFactory.getLogger(getClass());
 
-	private final NetworkClient webStore;
+	private final SodaClient webStore;
 	private final FileStore localStore;
 	private final EpdStore epdStore;
 
-	public Download(NetworkClient webStore, EpdStore epdStore) {
+	public Download(SodaClient webStore, EpdStore epdStore) {
 		this.webStore = webStore;
 		this.epdStore = epdStore;
 		this.localStore = epdStore.ilcdStore;

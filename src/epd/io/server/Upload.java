@@ -8,7 +8,7 @@ import org.openlca.ilcd.contacts.Contact;
 import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.flows.FlowPropertyRef;
 import org.openlca.ilcd.io.FileStore;
-import org.openlca.ilcd.io.NetworkClient;
+import org.openlca.ilcd.io.SodaClient;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.sources.Source;
 import org.slf4j.Logger;
@@ -24,11 +24,11 @@ class Upload {
 
 	private Logger log = LoggerFactory.getLogger(getClass());
 
-	private final NetworkClient webStore;
+	private final SodaClient webStore;
 	private final FileStore fileStore;
 	private final EpdStore store;
 
-	public Upload(NetworkClient client, EpdStore store) {
+	public Upload(SodaClient client, EpdStore store) {
 		this.webStore = client;
 		this.store = store;
 		fileStore = store.ilcdStore;

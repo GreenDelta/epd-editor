@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.App;
-import app.editors.DataSetEditor;
+import app.editors.BaseEditor;
 import app.editors.DependencyPage;
 import app.editors.Editors;
 import app.editors.RefEditorInput;
@@ -23,7 +23,7 @@ import epd.model.Version;
 import epd.model.Xml;
 import epd.util.Strings;
 
-public class SourceEditor extends DataSetEditor {
+public class SourceEditor extends BaseEditor {
 
 	private static final String ID = "source.editor";
 

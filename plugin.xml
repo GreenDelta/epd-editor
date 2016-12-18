@@ -146,6 +146,13 @@
           name="Material Properties"
           class="app.editors.matprops.MaterialPropertyEditor">
     </editor>
+    <editor
+          default="false"
+          icon="icons/connection.png"
+          id="connection.editor"
+          name="Connection"
+          class="app.editors.connection.ConnectionEditor">
+    </editor>
  </extension>
 
 </plugin>

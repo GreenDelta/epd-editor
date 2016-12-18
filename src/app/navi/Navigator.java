@@ -13,6 +13,7 @@ import org.eclipse.ui.navigator.CommonViewer;
 import org.openlca.ilcd.commons.DataSetType;
 
 import app.editors.Editors;
+import app.editors.connection.ConnectionEditor;
 import app.util.Viewers;
 
 public class Navigator extends CommonNavigator {
@@ -44,6 +45,9 @@ public class Navigator extends CommonNavigator {
 			if (obj instanceof RefElement) {
 				RefElement refEl = (RefElement) obj;
 				Editors.open(refEl.ref);
+			} else if (obj instanceof ConnectionElement) {
+				ConnectionElement conEl = (ConnectionElement) obj;
+				ConnectionEditor.open(conEl.con);
 			}
 		});
 	}

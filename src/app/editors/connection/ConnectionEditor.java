@@ -12,7 +12,9 @@ import org.slf4j.LoggerFactory;
 
 import app.editors.BaseEditor;
 import app.editors.Editors;
+import app.navi.Navigator;
 import app.rcp.Icon;
+import app.store.Connections;
 import epd.util.Strings;
 
 public class ConnectionEditor extends BaseEditor {
@@ -51,6 +53,9 @@ public class ConnectionEditor extends BaseEditor {
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
+		Connections.save(con);
+		Navigator.refresh(); // TODO
+		setPartName(Strings.cut(con.toString(), 75));
 	}
 
 	private static class Input implements IEditorInput {

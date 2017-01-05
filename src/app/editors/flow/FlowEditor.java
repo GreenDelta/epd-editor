@@ -56,7 +56,7 @@ public class FlowEditor extends BaseEditor {
 			updateVersion();
 			FlowExtensions.write(product);
 			Flow flow = product.flow;
-			App.store.put(flow, flow.getUUID());
+			App.store.put(flow);
 			// TODO: navigation refresh
 			for (Runnable handler : saveHandlers) {
 				handler.run();

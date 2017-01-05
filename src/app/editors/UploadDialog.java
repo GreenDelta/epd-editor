@@ -1,5 +1,11 @@
 package app.editors;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -12,13 +18,16 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.util.RefTree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.M;
 import app.rcp.Icon;
+import app.util.Controls;
 import app.util.Tables;
 import app.util.UI;
 import epd.util.Strings;
@@ -27,10 +36,12 @@ public class UploadDialog extends Wizard {
 
 	private Logger log = LoggerFactory.getLogger(getClass());
 	private final Ref ref;
+	private final List<Ref> allRefs = new ArrayList<>();
 	private Page page;
 
 	private UploadDialog(Ref ref) {
 		this.ref = ref;
+		allRefs.add(ref);
 		setNeedsProgressMonitor(true);
 	}
 
@@ -79,11 +90,49 @@ public class UploadDialog extends Wizard {
 			UI.filler(comp);
 			Button check = new Button(comp, SWT.CHECK);
 			check.setText("#Synchronize dependencies");
+			Controls.onSelect(check, e -> {
+				collectRefs();
+			});
 			table = Tables.createViewer(parent, "#Data set", "UUID",
 					"Version");
 			table.setLabelProvider(new TableLabel());
 			Tables.bindColumnWidths(table, 0.6, 0.2, 0.2);
-			table.setInput(new Ref[] { ref });
+			table.setInput(allRefs);
+		}
+
+		private void collectRefs() {
+			try {
+				getContainer().run(true, false, monitor -> {
+					monitor.beginTask("#Collect references",
+							IProgressMonitor.UNKNOWN);
+					allRefs.clear();
+					ArrayDeque<Ref> queue = new ArrayDeque<>();
+					queue.push(ref);
+					while (!queue.isEmpty()) {
+						Ref next = queue.poll();
+						allRefs.add(next);
+						for (Ref dep : getDependencies(next)) {
+							if (allRefs.contains(dep) || queue.contains(dep))
+								continue;
+							queue.add(dep);
+						}
+					}
+					App.runInUI("update table", () -> table.setInput(allRefs));
+					monitor.done();
+				});
+			} catch (Exception e) {
+				log.error("failed to collect references", e);
+			}
+		}
+
+		private List<Ref> getDependencies(Ref ref) {
+			try {
+				IDataSet ds = App.store.get(ref.getDataSetClass(), ref.uuid);
+				return RefTree.create(ds).getRefs();
+			} catch (Exception e) {
+				log.error("failed to get dependencies for {}", ref, e);
+				return Collections.emptyList();
+			}
 		}
 	}
 
@@ -114,6 +163,5 @@ public class UploadDialog extends Wizard {
 				return null;
 			}
 		}
-
 	}
 }

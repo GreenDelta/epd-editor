@@ -4,10 +4,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
-import org.openlca.ilcd.commons.AdminInfo;
 import org.openlca.ilcd.commons.DataEntry;
 import org.openlca.ilcd.commons.Publication;
 import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.flowproperties.AdminInfo;
 import org.openlca.ilcd.flowproperties.DataSetInfo;
 import org.openlca.ilcd.flowproperties.FlowProperty;
 import org.openlca.ilcd.flowproperties.FlowPropertyInfo;
@@ -73,7 +73,7 @@ public class FlowPropertyEditor extends BaseEditor {
 	public void doSave(IProgressMonitor monitor) {
 		try {
 			updateVersion();
-			App.store.put(property, property.getUUID());
+			App.store.put(property);
 			// TODO: navigation refresh
 			for (Runnable handler : saveHandlers) {
 				handler.run();

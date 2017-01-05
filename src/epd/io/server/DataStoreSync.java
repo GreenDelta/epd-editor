@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Queue;
 import java.util.Set;
 
+import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.io.DataStore;
 import org.openlca.ilcd.sources.Source;
@@ -66,15 +67,15 @@ public class DataStoreSync {
 
 	private Object sync(Ref ref) {
 		try {
-			Class<?> type = ref.getDataSetClass();
+			Class<? extends IDataSet> type = ref.getDataSetClass();
 			if (target.contains(type, ref.uuid))
 				return null;
-			Object model = source.get(type, ref.uuid);
+			IDataSet model = source.get(type, ref.uuid);
 			if (model == null)
 				return null;
 			if (model instanceof Source)
 				syncSource((Source) model, ref);
-			target.put(model, ref.uuid);
+			target.put(model);
 			return model;
 		} catch (Exception e) {
 			log.error("failed to sync " + ref, e);
@@ -85,9 +86,9 @@ public class DataStoreSync {
 	private void syncSource(Source model, Ref ref) throws Exception {
 		File file = downloadFile(model);
 		if (file == null)
-			target.put(model, ref.uuid);
+			target.put(model);
 		else {
-			target.put(model, ref.uuid, file);
+			target.put(model, file);
 			log.trace("delete directory {}", file.getParentFile());
 			Dirs.delete(file.getParentFile().toPath());
 		}

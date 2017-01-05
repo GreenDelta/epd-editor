@@ -123,7 +123,7 @@ class ResultConverter {
 	private static Other createLciaResult(Process process,
 			IndicatorMapping mapping) {
 		LCIAResult r = new LCIAResult();
-		process.lciaResults.add(r);
+		process.add(r);
 		r.method = createRef(mapping, false);
 		Other other = new Other();
 		r.other = other;

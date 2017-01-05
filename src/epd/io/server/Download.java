@@ -38,7 +38,7 @@ class Download {
 			log.trace("download EPD {}", descriptor);
 			Process process = webStore
 					.get(Process.class, descriptor.refId);
-			localStore.put(process, descriptor.refId);
+			localStore.put(process);
 			syncFlow(getRefProductRef(process));
 			EpdDataSet dataSet = epdStore.open(descriptor);
 			syncGenericProduct(dataSet);

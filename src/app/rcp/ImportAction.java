@@ -70,7 +70,7 @@ class ImportAction extends Action {
 				return;
 			log.info("import {}", ref);
 			try {
-				App.store.put(d, ref.uuid);
+				App.store.put(d);
 				App.index.add(d);
 			} catch (Exception e) {
 				throw new RuntimeException("failed to save " + ref, e);

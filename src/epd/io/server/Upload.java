@@ -60,7 +60,7 @@ class Upload {
 					.getMappingConfig(fileStore.getRootFolder());
 			Converter.writeExtensions(dataSet, config);
 			Process p = dataSet.process;
-			webStore.put(p, p.getUUID());
+			webStore.put(p);
 		} catch (Exception e) {
 			log.error("failed to upload EPD data set", e);
 		}
@@ -74,7 +74,7 @@ class Upload {
 			log.trace("upload flow {}", id);
 			if (fileStore.contains(Flow.class, id)) {
 				Flow flow = fileStore.get(Flow.class, id);
-				webStore.put(flow, id); // considers updated versions
+				webStore.put(flow); // considers updated versions
 				syncFlow(flow);
 			}
 		} catch (Exception e) {

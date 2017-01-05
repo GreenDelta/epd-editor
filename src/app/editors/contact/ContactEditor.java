@@ -4,10 +4,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
-import org.openlca.ilcd.commons.AdminInfo;
 import org.openlca.ilcd.commons.DataEntry;
 import org.openlca.ilcd.commons.Publication;
 import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.contacts.AdminInfo;
 import org.openlca.ilcd.contacts.Contact;
 import org.openlca.ilcd.contacts.ContactInfo;
 import org.openlca.ilcd.contacts.DataSetInfo;
@@ -70,7 +70,7 @@ public class ContactEditor extends BaseEditor {
 	public void doSave(IProgressMonitor monitor) {
 		try {
 			updateVersion();
-			App.store.put(contact, contact.getUUID());
+			App.store.put(contact);
 			// TODO: navigation refresh
 			for (Runnable handler : saveHandlers) {
 				handler.run();

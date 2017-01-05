@@ -46,7 +46,7 @@ public class Store {
 			MappingConfig config = Configs.getMappingConfig(App.workspace);
 			Converter.writeExtensions(dataSet, config);
 			Process process = dataSet.process;
-			App.store.put(process, process.getUUID());
+			App.store.put(process);
 		} catch (Exception e) {
 			log.error("failed to save EPD data set " + dataSet, e);
 		}

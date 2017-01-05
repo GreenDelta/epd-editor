@@ -4,10 +4,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
-import org.openlca.ilcd.commons.AdminInfo;
 import org.openlca.ilcd.commons.DataEntry;
 import org.openlca.ilcd.commons.Publication;
 import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.units.AdminInfo;
 import org.openlca.ilcd.units.DataSetInfo;
 import org.openlca.ilcd.units.QuantitativeReference;
 import org.openlca.ilcd.units.UnitGroup;
@@ -73,7 +73,7 @@ public class UnitGroupEditor extends BaseEditor {
 	public void doSave(IProgressMonitor monitor) {
 		try {
 			updateVersion();
-			App.store.put(unitGroup, unitGroup.getUUID());
+			App.store.put(unitGroup);
 			// TODO: navigation refresh
 			for (Runnable handler : saveHandlers) {
 				handler.run();

@@ -6,8 +6,8 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
-import org.openlca.ilcd.commons.AdminInfo;
 import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.contacts.AdminInfo;
 import org.openlca.ilcd.contacts.Contact;
 import org.openlca.ilcd.contacts.DataSetInfo;
 

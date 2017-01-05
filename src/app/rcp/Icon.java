@@ -26,6 +26,8 @@ public enum Icon {
 
 	DOCUMENT("document.png"),
 
+	DOWNLOAD("download.png"),
+
 	EPD("epd.png"),
 
 	ERROR("error.png"),
@@ -52,7 +54,9 @@ public enum Icon {
 
 	UP("up.png"),
 
-	UP_DISABLED("up.png");
+	UP_DISABLED("up.png"),
+
+	UPLOAD("upload.png");
 
 	private final String fileName;
 

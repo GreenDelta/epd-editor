@@ -48,6 +48,7 @@ class ConnectionPage extends FormPage {
 		text(comp, M.User, con.user, t -> con.user = t);
 		text(comp, M.Password, con.password, t -> con.password = t);
 		createDataStockCombo(comp);
+		new DataSection(con).create(body, tk);
 		form.reflow(true);
 	}
 
@@ -76,6 +77,8 @@ class ConnectionPage extends FormPage {
 		button.setText(M.GetFromServer);
 		Controls.onSelect(button, e -> loadDataStocks());
 		updateStockCombo();
+		if (con.dataStockName != null)
+			stockCombo.setText(con.dataStockName);
 	}
 
 	private void loadDataStocks() {
@@ -121,6 +124,7 @@ class ConnectionPage extends FormPage {
 		DataStock stock = dataStocks.get(idx - 1);
 		con.dataStockName = stock.shortName;
 		con.dataStockId = stock.uuid;
+		editor.setDirty();
 	}
 
 }

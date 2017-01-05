@@ -102,42 +102,48 @@
           icon="icons/epd.png"
           id="epd.editor"
           name="EPD Editor"
-          class="app.editors.epd.EpdEditor">
+          class="app.editors.epd.EpdEditor"
+          contributorClass="app.editors.DataSetToolBar">
     </editor>
     <editor
           default="false"
           icon="icons/product.png"
           id="flow.editor"
           name="Flow Editor"
-          class="app.editors.flow.FlowEditor">
+          class="app.editors.flow.FlowEditor"
+          contributorClass="app.editors.DataSetToolBar">
     </editor>
     <editor
           default="false"
           icon="icons/contact.png"
           id="contact.editor"
           name="Contact Editor"
-          class="app.editors.contact.ContactEditor">
+          class="app.editors.contact.ContactEditor"
+          contributorClass="app.editors.DataSetToolBar">
     </editor>
     <editor
           default="false"
           icon="icons/source.png"
           id="source.editor"
           name="Source Editor"
-          class="app.editors.source.SourceEditor">
+          class="app.editors.source.SourceEditor"
+          contributorClass="app.editors.DataSetToolBar">
     </editor>
     <editor
           default="false"
           icon="icons/quantity.png"
           id="flowproperty.editor"
           name="Flow Propery Editor"
-          class="app.editors.flowproperty.FlowPropertyEditor">
+          class="app.editors.flowproperty.FlowPropertyEditor"
+          contributorClass="app.editors.DataSetToolBar">
     </editor>
     <editor
           default="false"
           icon="icons/unit.png"
           id="unitgroup.editor"
           name="Unit group"
-          class="app.editors.unitgroup.UnitGroupEditor">
+          class="app.editors.unitgroup.UnitGroupEditor"
+          contributorClass="app.editors.DataSetToolBar">
     </editor>
     <editor
           default="false"

@@ -27,7 +27,7 @@ public class SourceEditor extends BaseEditor {
 
 	private static final String ID = "source.editor";
 
-	Source source;
+	public Source source;
 
 	public static void open(Ref ref) {
 		if (ref == null)

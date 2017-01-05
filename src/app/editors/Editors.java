@@ -4,6 +4,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.UIJob;
@@ -53,6 +54,17 @@ public class Editors {
 
 	public static void open(IEditorInput input, String editorId) {
 		new OpenInUIJob(input, editorId).schedule();
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T extends IEditorPart> T getActive() {
+		try {
+			return (T) getActivePage().getActiveEditor();
+		} catch (ClassCastException e) {
+			Logger log = LoggerFactory.getLogger(Editors.class);
+			log.error("Error getting active editor", e);
+			return null;
+		}
 	}
 
 	private static IWorkbenchPage getActivePage() {

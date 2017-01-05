@@ -1,5 +1,7 @@
 package app.editors.connection;
 
+import java.util.Objects;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
@@ -55,6 +57,8 @@ public class ConnectionEditor extends BaseEditor {
 	public void doSave(IProgressMonitor monitor) {
 		Connections.save(con);
 		Navigator.refresh(); // TODO
+		dirty = false;
+		editorDirtyStateChanged();
 		setPartName(Strings.cut(con.toString(), 75));
 	}
 
@@ -94,6 +98,18 @@ public class ConnectionEditor extends BaseEditor {
 		@Override
 		public String getToolTipText() {
 			return con.toString();
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (obj == null)
+				return false;
+			if (obj == this)
+				return true;
+			if (!(obj instanceof Input))
+				return false;
+			Input other = (Input) obj;
+			return Objects.equals(this.con, other.con);
 		}
 	}
 

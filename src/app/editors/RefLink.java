@@ -49,7 +49,7 @@ public class RefLink extends Composite {
 	}
 
 	private void createAddButton() {
-		Button btn = toolkit.createButton(this, "#Select", SWT.PUSH);
+		Button btn = toolkit.createButton(this, "", SWT.PUSH);
 		btn.setToolTipText("#Select data set");
 		btn.setImage(Icon.img(type));
 		Controls.onSelect(btn, e -> {

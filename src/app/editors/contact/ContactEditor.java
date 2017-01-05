@@ -27,7 +27,7 @@ public class ContactEditor extends BaseEditor {
 
 	private static final String ID = "contact.editor";
 
-	Contact contact;
+	public Contact contact;
 
 	public static void open(Ref ref) {
 		if (ref == null)

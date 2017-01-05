@@ -28,7 +28,7 @@ public class UnitGroupEditor extends BaseEditor {
 
 	private static final String ID = "unitgroup.editor";
 
-	UnitGroup unitGroup;
+	public UnitGroup unitGroup;
 
 	public static void open(Ref ref) {
 		if (ref == null)

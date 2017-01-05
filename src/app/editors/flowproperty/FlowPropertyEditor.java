@@ -28,7 +28,7 @@ public class FlowPropertyEditor extends BaseEditor {
 
 	private static final String ID = "flowproperty.editor";
 
-	FlowProperty property;
+	public FlowProperty property;
 
 	public static void open(Ref ref) {
 		if (ref == null)

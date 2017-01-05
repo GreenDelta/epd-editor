@@ -20,7 +20,7 @@ public class Labels {
 		case EXTERNAL_FILE:
 			return "#External File";
 		case FLOW:
-			return "#Product";
+			return "#Flow";
 		case FLOW_PROPERTY:
 			return "#Flow Property";
 		case LCIA_METHOD:

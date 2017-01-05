@@ -4,6 +4,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.part.EditorActionBarContributor;
 import org.openlca.ilcd.commons.IDataSet;
+import org.openlca.ilcd.commons.Ref;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +41,7 @@ public class DataSetToolBar extends EditorActionBarContributor {
 			log.error("could not get data set from {}", p);
 			return;
 		}
-
+		UploadDialog.open(Ref.of(ds));
 	}
 
 	private IDataSet getDataSet(IEditorPart p) {

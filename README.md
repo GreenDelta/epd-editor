@@ -13,3 +13,4 @@
 * (Indicator mappings)
 
 bug: scenario table: org.eclipse.core.runtime.AssertionFailedException: assertion failed: Column 0 has no label provider
+bug: close editors for deleted data sets

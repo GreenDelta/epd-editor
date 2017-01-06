@@ -1,32 +1,24 @@
-package app.editors;
+package app.editors.upload;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.openlca.ilcd.commons.IDataSet;
-import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
-import org.openlca.ilcd.util.RefTree;
+import org.openlca.ilcd.util.DependencyTraversal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.M;
-import app.rcp.Icon;
 import app.util.Controls;
 import app.util.Tables;
 import app.util.UI;
@@ -36,6 +28,8 @@ public class UploadDialog extends Wizard {
 	private Logger log = LoggerFactory.getLogger(getClass());
 	private final Ref ref;
 	private final List<Ref> allRefs = new ArrayList<>();
+
+	private ConnectionCombo conCombo;
 	private Page page;
 
 	private UploadDialog(Ref ref) {
@@ -72,7 +66,7 @@ public class UploadDialog extends Wizard {
 
 		private Page() {
 			super("UploadDialogPage", M.UploadDataSet + ": " +
-					App.header(ref.name, 75), null);
+					App.header(ref.name, 50), null);
 			setPageComplete(true);
 		}
 
@@ -84,13 +78,27 @@ public class UploadDialog extends Wizard {
 			Composite comp = new Composite(parent, SWT.NONE);
 			UI.innerGrid(comp, 2).verticalSpacing = 10;
 			UI.gridData(comp, true, false);
-			Combo combo = UI.formCombo(comp, "#Connection");
+			conCombo = ConnectionCombo.create(comp);
 			UI.filler(comp);
+			createCheck(comp);
+			createTable(parent);
+		}
+
+		private void createCheck(Composite comp) {
 			Button check = new Button(comp, SWT.CHECK);
 			check.setText("#Synchronize dependencies");
 			Controls.onSelect(check, e -> {
-				collectRefs();
+				if (check.getSelection()) {
+					collectRefs();
+				} else {
+					allRefs.clear();
+					allRefs.add(ref);
+					table.setInput(allRefs);
+				}
 			});
+		}
+
+		private void createTable(Composite parent) {
 			table = Tables.createViewer(parent, "#Data set", "UUID",
 					"Version");
 			table.setLabelProvider(new TableLabel());
@@ -104,65 +112,16 @@ public class UploadDialog extends Wizard {
 					monitor.beginTask("#Collect references:",
 							IProgressMonitor.UNKNOWN);
 					allRefs.clear();
-					ArrayDeque<Ref> queue = new ArrayDeque<>();
-					queue.push(ref);
-					while (!queue.isEmpty()) {
-						Ref next = queue.poll();
-						allRefs.add(next);
+					new DependencyTraversal(App.store).on(ref, ds -> {
+						Ref next = Ref.of(ds);
 						monitor.subTask(App.header(next.name, 75));
-						collectNext(next, queue);
-					}
+						allRefs.add(next);
+					});
 					App.runInUI("update table", () -> table.setInput(allRefs));
 					monitor.done();
 				});
 			} catch (Exception e) {
 				log.error("failed to collect references", e);
-			}
-		}
-
-		private void collectNext(Ref next, ArrayDeque<Ref> queue) {
-			try {
-				IDataSet ds = App.store.get(next.getDataSetClass(), next.uuid);
-				if (ds == null) {
-					log.warn("could not get data set for {}", next);
-					return;
-				}
-				for (Ref dep : RefTree.create(ds).getRefs()) {
-					if (allRefs.contains(dep) || queue.contains(dep))
-						continue;
-					queue.add(dep);
-				}
-			} catch (Exception e) {
-				log.error("failed to get dependencies for {}", next, e);
-			}
-		}
-	}
-
-	private class TableLabel extends LabelProvider
-			implements ITableLabelProvider {
-
-		@Override
-		public Image getColumnImage(Object obj, int col) {
-			if (col != 0 || !(obj instanceof Ref))
-				return null;
-			Ref ref = (Ref) obj;
-			return Icon.img(ref.type);
-		}
-
-		@Override
-		public String getColumnText(Object obj, int col) {
-			if (!(obj instanceof Ref))
-				return null;
-			Ref ref = (Ref) obj;
-			switch (col) {
-			case 0:
-				return LangString.getFirst(ref.name, App.lang);
-			case 1:
-				return ref.uuid;
-			case 2:
-				return ref.version;
-			default:
-				return null;
 			}
 		}
 	}

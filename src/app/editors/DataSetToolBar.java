@@ -15,6 +15,7 @@ import app.editors.flow.FlowEditor;
 import app.editors.flowproperty.FlowPropertyEditor;
 import app.editors.source.SourceEditor;
 import app.editors.unitgroup.UnitGroupEditor;
+import app.editors.upload.UploadDialog;
 import app.rcp.Icon;
 import app.util.Actions;
 import app.util.MsgBox;

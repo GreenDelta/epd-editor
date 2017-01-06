@@ -2,7 +2,6 @@ package app.editors;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -19,6 +18,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.openlca.ilcd.commons.IDataSet;
+import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.util.RefTree;
 import org.slf4j.Logger;
@@ -30,7 +30,6 @@ import app.rcp.Icon;
 import app.util.Controls;
 import app.util.Tables;
 import app.util.UI;
-import epd.util.Strings;
 
 public class UploadDialog extends Wizard {
 
@@ -73,8 +72,7 @@ public class UploadDialog extends Wizard {
 
 		private Page() {
 			super("UploadDialogPage", M.UploadDataSet + ": " +
-					Strings.cut(App.s(ref.name), 75),
-					null);
+					App.header(ref.name, 75), null);
 			setPageComplete(true);
 		}
 
@@ -103,7 +101,7 @@ public class UploadDialog extends Wizard {
 		private void collectRefs() {
 			try {
 				getContainer().run(true, false, monitor -> {
-					monitor.beginTask("#Collect references",
+					monitor.beginTask("#Collect references:",
 							IProgressMonitor.UNKNOWN);
 					allRefs.clear();
 					ArrayDeque<Ref> queue = new ArrayDeque<>();
@@ -111,11 +109,8 @@ public class UploadDialog extends Wizard {
 					while (!queue.isEmpty()) {
 						Ref next = queue.poll();
 						allRefs.add(next);
-						for (Ref dep : getDependencies(next)) {
-							if (allRefs.contains(dep) || queue.contains(dep))
-								continue;
-							queue.add(dep);
-						}
+						monitor.subTask(App.header(next.name, 75));
+						collectNext(next, queue);
 					}
 					App.runInUI("update table", () -> table.setInput(allRefs));
 					monitor.done();
@@ -125,13 +120,20 @@ public class UploadDialog extends Wizard {
 			}
 		}
 
-		private List<Ref> getDependencies(Ref ref) {
+		private void collectNext(Ref next, ArrayDeque<Ref> queue) {
 			try {
-				IDataSet ds = App.store.get(ref.getDataSetClass(), ref.uuid);
-				return RefTree.create(ds).getRefs();
+				IDataSet ds = App.store.get(next.getDataSetClass(), next.uuid);
+				if (ds == null) {
+					log.warn("could not get data set for {}", next);
+					return;
+				}
+				for (Ref dep : RefTree.create(ds).getRefs()) {
+					if (allRefs.contains(dep) || queue.contains(dep))
+						continue;
+					queue.add(dep);
+				}
 			} catch (Exception e) {
-				log.error("failed to get dependencies for {}", ref, e);
-				return Collections.emptyList();
+				log.error("failed to get dependencies for {}", next, e);
 			}
 		}
 	}
@@ -141,7 +143,7 @@ public class UploadDialog extends Wizard {
 
 		@Override
 		public Image getColumnImage(Object obj, int col) {
-			if (!(obj instanceof Ref))
+			if (col != 0 || !(obj instanceof Ref))
 				return null;
 			Ref ref = (Ref) obj;
 			return Icon.img(ref.type);
@@ -154,7 +156,7 @@ public class UploadDialog extends Wizard {
 			Ref ref = (Ref) obj;
 			switch (col) {
 			case 0:
-				return App.s(ref.name);
+				return LangString.getFirst(ref.name, App.lang);
 			case 1:
 				return ref.uuid;
 			case 2:

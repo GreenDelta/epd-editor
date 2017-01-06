@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import epd.index.Index;
+import epd.util.Strings;
 
 public class App {
 
@@ -53,6 +54,11 @@ public class App {
 			return "";
 		String s = LangString.getVal(strings, lang);
 		return s == null ? "" : s;
+	}
+
+	public static String header(List<LangString> strings, int length) {
+		String s = LangString.getFirst(strings, lang);
+		return s == null ? "" : Strings.cut(s, length);
 	}
 
 	public static Job runInUI(String name, Runnable runnable) {

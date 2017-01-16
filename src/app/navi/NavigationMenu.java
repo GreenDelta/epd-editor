@@ -9,6 +9,7 @@ import org.eclipse.ui.navigator.CommonActionProvider;
 import org.openlca.ilcd.commons.DataSetType;
 
 import app.M;
+import app.navi.actions.ConnectionDeleteAction;
 import app.navi.actions.FileDeletion;
 import app.navi.actions.FileImport;
 import app.navi.actions.NewConnectionAction;
@@ -48,6 +49,10 @@ public class NavigationMenu extends CommonActionProvider {
 		if (first instanceof ConnectionFolder) {
 			ConnectionFolder cf = (ConnectionFolder) first;
 			menu.add(new NewConnectionAction(cf));
+		}
+		if (first instanceof ConnectionElement) {
+			ConnectionElement e = (ConnectionElement) first;
+			menu.add(new ConnectionDeleteAction(e));
 		}
 
 	}

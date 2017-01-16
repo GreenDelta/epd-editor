@@ -31,6 +31,14 @@ public class Connections {
 		return list;
 	}
 
+	public static void delete(SodaConnection con) {
+		if (con == null)
+			return;
+		File f = new File(dir(), con.uuid + ".json");
+		if (f.exists())
+			f.delete();
+	}
+
 	private static File dir() {
 		File dir = new File(App.workspace, "connections");
 		if (!dir.exists())

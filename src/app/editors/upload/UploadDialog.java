@@ -21,10 +21,12 @@ import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.M;
+import app.StatusView;
 import app.util.Controls;
 import app.util.MsgBox;
 import app.util.Tables;
 import app.util.UI;
+import epd.io.RefStatus;
 
 public class UploadDialog extends Wizard {
 
@@ -58,12 +60,14 @@ public class UploadDialog extends Wizard {
 			Upload upload = new Upload(client);
 			getContainer().run(true, false, monitor -> {
 				monitor.beginTask("Upload", allRefs.size());
+				List<RefStatus> stats = new ArrayList<>();
 				for (Ref ref : allRefs) {
 					monitor.subTask(App.header(ref.name, 50));
-					upload.next(ref);
+					stats.add(upload.next(ref));
 					monitor.worked(1);
 				}
 				monitor.done();
+				StatusView.open("#Upload result", stats);
 			});
 			return true;
 		} catch (Exception e) {

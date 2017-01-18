@@ -159,6 +159,13 @@
           name="Connection"
           class="app.editors.connection.ConnectionEditor">
     </editor>
+    <editor
+          default="false"
+          icon="icons/info.png"
+          id="status.view"
+          name="Status"
+          class="app.StatusView">
+    </editor>
  </extension>
 
 </plugin>

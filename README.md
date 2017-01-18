@@ -1,9 +1,11 @@
 ## TODO
 
-* upload references from extensions
-* upload external files
 * version check in SodaClient.contains(ref)
 * show status view after upload
+* upload external files
+
+* upload references from extensions
+* Upload and download product references (direct and generic; see todos)
 * high performance import with re-indexing
 * 
 
@@ -11,8 +13,6 @@
 * Source type combo in SourcePage
 * updates of data sets in navigation tree (clean empty categories)
 * Navigator.refresh -> remember expansion state (like in openLCA)
-* Upload / Download
-* Upload and download product references (direct and generic; see todos)
 * Local search
 * Online search
 * LCIA editor

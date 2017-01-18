@@ -1,7 +1,7 @@
 ## TODO
 
-* version check in SodaClient.contains(ref)
-* show status view after upload
+* Online search
+* Download
 * upload external files
 
 * upload references from extensions
@@ -14,7 +14,6 @@
 * updates of data sets in navigation tree (clean empty categories)
 * Navigator.refresh -> remember expansion state (like in openLCA)
 * Local search
-* Online search
 * LCIA editor
 * (Indicator mappings)
 

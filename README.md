@@ -1,10 +1,16 @@
 ## TODO
 
+* upload references from extensions
+* upload external files
+* version check in SodaClient.contains(ref)
+* show status view after upload
+* high performance import with re-indexing
+* 
+
 * show product unit in quantitative reference of EPD
 * Source type combo in SourcePage
 * updates of data sets in navigation tree (clean empty categories)
 * Navigator.refresh -> remember expansion state (like in openLCA)
-* Online connections
 * Upload / Download
 * Upload and download product references (direct and generic; see todos)
 * Local search
@@ -14,3 +20,4 @@
 
 bug: scenario table: org.eclipse.core.runtime.AssertionFailedException: assertion failed: Column 0 has no label provider
 bug: close editors for deleted data sets
+bug: close connection editor when connection is deleted

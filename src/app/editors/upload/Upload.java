@@ -5,6 +5,7 @@ import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.io.SodaClient;
 
 import app.App;
+import epd.io.RefStatus;
 
 class Upload {
 
@@ -14,14 +15,19 @@ class Upload {
 		this.client = client;
 	}
 
-	void next(Ref ref) {
+	RefStatus next(Ref ref) {
 		try {
+			if (client.contains(ref.getDataSetClass(), ref.uuid))
+				return new RefStatus(RefStatus.INFO, ref,
+						"#Already on the server");
+
 			IDataSet ds = App.store.get(ref.getDataSetClass(), ref.uuid);
 			client.put(ds);
 			// TODO: upload external files ...
+			return new RefStatus(RefStatus.OK, ref, "#Uploaded");
 		} catch (Exception e) {
-			// TODO: log etc
-			e.printStackTrace();
+			return new RefStatus(RefStatus.ERROR, ref,
+					"#Upload failed: " + e.getMessage());
 		}
 	}
 

@@ -8,6 +8,8 @@ public enum Icon {
 
 	ADD("add.png"),
 
+	CANCELED("canceled.png"),
+
 	CHECK_TRUE("check_true.png"),
 
 	CHECK_FALSE("check_false.png"),
@@ -40,6 +42,8 @@ public enum Icon {
 
 	IMPORT("import.png"),
 
+	INFO("info.png"),
+
 	OK("ok.png"),
 
 	PASTE("paste.png"),
@@ -56,7 +60,9 @@ public enum Icon {
 
 	UP_DISABLED("up.png"),
 
-	UPLOAD("upload.png");
+	UPLOAD("upload.png"),
+
+	WARNING("warning.png");
 
 	private final String fileName;
 

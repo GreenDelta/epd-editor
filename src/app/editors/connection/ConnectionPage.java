@@ -48,6 +48,7 @@ class ConnectionPage extends FormPage {
 		text(comp, M.User, con.user, t -> con.user = t);
 		text(comp, M.Password, con.password, t -> con.password = t);
 		createDataStockCombo(comp);
+		new DataStockLink(editor).render(comp, tk);
 		new DataSection(con).create(body, tk);
 		form.reflow(true);
 	}

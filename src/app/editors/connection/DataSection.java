@@ -1,5 +1,8 @@
 package app.editors.connection;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -68,13 +71,23 @@ class DataSection {
 		Class<? extends IDataSet> cs = getClass(type);
 		if (cs == null)
 			return;
-		try (SodaClient client = new SodaClient(con)) {
-			client.connect();
-			DescriptorList list = client.search(cs, name);
-			table.setInput(list.descriptors);
-		} catch (Exception e) {
-			MsgBox.error("#Search failed", e.getMessage());
-		}
+		String[] error = new String[1];
+		List<Descriptor> result = new ArrayList<>();
+		App.run("#Search online", () -> {
+			try (SodaClient client = new SodaClient(con)) {
+				client.connect();
+				DescriptorList list = client.search(cs, name);
+				result.addAll(list.descriptors);
+			} catch (Exception e) {
+				error[0] = e.getMessage();
+			}
+		}, () -> {
+			if (error[0] == null)
+				table.setInput(result);
+			else
+				MsgBox.error("#Search failed", error[0]);
+		});
+
 	}
 
 	private Class<? extends IDataSet> getClass(DataSetType type) {

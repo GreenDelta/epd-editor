@@ -1,6 +1,5 @@
 ## TODO
 
-* Online search
 * Download
 * upload external files
 

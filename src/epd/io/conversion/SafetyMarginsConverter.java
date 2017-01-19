@@ -32,17 +32,17 @@ class SafetyMarginsConverter {
 		if (element == null)
 			return false;
 		String nsUri = element.getNamespaceURI();
-		return Objects.equals(nsUri, Converter.NAMESPACE)
+		return Objects.equals(nsUri, ProcessExtensions.NAMESPACE)
 				&& Objects.equals(element.getLocalName(), "safetyMargins");
 	}
 
 	private static SafetyMargins fromElement(Element element) {
 		SafetyMargins margins = new SafetyMargins();
 		NodeList nodeList = element.getElementsByTagNameNS(
-				Converter.NAMESPACE, "margins");
+				ProcessExtensions.NAMESPACE, "margins");
 		Double val = Util.getDoubleContent(nodeList);
 		margins.margins = val;
-		nodeList = element.getElementsByTagNameNS(Converter.NAMESPACE,
+		nodeList = element.getElementsByTagNameNS(ProcessExtensions.NAMESPACE,
 				"description");
 		margins.description = Util.getTextContent(nodeList);
 		return margins;
@@ -61,7 +61,7 @@ class SafetyMarginsConverter {
 
 	private static Element toElement(SafetyMargins margins, Document doc) {
 		try {
-			String nsUri = Converter.NAMESPACE;
+			String nsUri = ProcessExtensions.NAMESPACE;
 			Element root = doc.createElementNS(nsUri, "epd:safetyMargins");
 			if (margins.margins != null) {
 				Element e = doc.createElementNS(nsUri, "epd:margins");

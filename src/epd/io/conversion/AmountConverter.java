@@ -37,7 +37,7 @@ class AmountConverter {
 		if (element == null)
 			return false;
 		String nsUri = element.getNamespaceURI();
-		if (!Objects.equals(nsUri, Converter.NAMESPACE))
+		if (!Objects.equals(nsUri, ProcessExtensions.NAMESPACE))
 			return false;
 		if (!Objects.equals(element.getLocalName(), "amount"))
 			return false;
@@ -91,7 +91,7 @@ class AmountConverter {
 
 	private static Element toElement(Amount amount, Document doc) {
 		try {
-			String nsUri = Converter.NAMESPACE;
+			String nsUri = ProcessExtensions.NAMESPACE;
 			Element element = doc.createElementNS(nsUri, "epd:amount");
 			if (amount.module != null)
 				element.setAttributeNS(nsUri, "epd:module",

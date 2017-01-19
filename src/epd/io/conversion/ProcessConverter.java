@@ -7,13 +7,11 @@ import org.openlca.ilcd.commons.Other;
 import org.openlca.ilcd.processes.Method;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.ProcessInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 
-import epd.io.MappingConfig;
 import epd.model.Amount;
 import epd.model.EpdDataSet;
+import epd.model.IndicatorMapping;
 import epd.model.IndicatorResult;
 import epd.model.ModuleEntry;
 import epd.model.Scenario;
@@ -24,17 +22,16 @@ import epd.model.SubType;
  */
 class ProcessConverter {
 
-	private Logger log = LoggerFactory.getLogger(getClass());
-
 	private final Process process;
-	private final MappingConfig config;
+	private final List<IndicatorMapping> indicators;
 
-	public ProcessConverter(Process process, MappingConfig config) {
+	public ProcessConverter(Process process,
+			List<IndicatorMapping> indicators) {
 		this.process = process;
-		this.config = config;
+		this.indicators = indicators;
 	}
 
-	public EpdDataSet convert(String[] langs) {
+	public EpdDataSet convert() {
 		if (process == null)
 			return null;
 		EpdDataSet dataSet = new EpdDataSet();
@@ -75,7 +72,7 @@ class ProcessConverter {
 
 	private void mapResults(EpdDataSet dataSet) {
 		List<IndicatorResult> results = ResultConverter.readResults(process,
-				config);
+				indicators);
 		dataSet.results.addAll(results);
 		// data sets may not have the module-entry extension, thus we have to
 		// find the module entries for such data sets from the results

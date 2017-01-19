@@ -1,5 +1,7 @@
 package epd.io.conversion;
 
+import java.util.List;
+
 import org.openlca.ilcd.commons.Other;
 import org.openlca.ilcd.processes.DataSetInfo;
 import org.openlca.ilcd.processes.Method;
@@ -8,8 +10,8 @@ import org.openlca.ilcd.util.Processes;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import epd.io.MappingConfig;
 import epd.model.EpdDataSet;
+import epd.model.IndicatorMapping;
 
 /**
  * Converts an EPD to an ILCD process data set
@@ -17,11 +19,11 @@ import epd.model.EpdDataSet;
 class EpdConverter {
 
 	private final EpdDataSet dataSet;
-	private final MappingConfig config;
+	private final List<IndicatorMapping> indicators;
 
-	public EpdConverter(EpdDataSet dataSet, MappingConfig config) {
+	public EpdConverter(EpdDataSet dataSet, List<IndicatorMapping> indicators) {
 		this.dataSet = dataSet;
-		this.config = config;
+		this.indicators = indicators;
 	}
 
 	public void convert() {
@@ -29,7 +31,7 @@ class EpdConverter {
 			return;
 		if (dataSet.process == null)
 			dataSet.process = new Process();
-		ResultConverter.writeResults(dataSet, config);
+		ResultConverter.writeResults(dataSet, indicators);
 		writeExtensions();
 	}
 

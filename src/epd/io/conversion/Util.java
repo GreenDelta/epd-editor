@@ -47,7 +47,7 @@ class Util {
 		Document doc = createDocument();
 		if (extension == null || doc == null)
 			return null;
-		return doc.createElementNS(Converter.NAMESPACE, "epd:" + tagName);
+		return doc.createElementNS(ProcessExtensions.NAMESPACE, "epd:" + tagName);
 	}
 
 	static Double getDoubleContent(NodeList nodeList) {

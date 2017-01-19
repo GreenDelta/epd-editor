@@ -3,6 +3,7 @@ package epd.io.conversion;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.ExchangeDirection;
@@ -16,8 +17,7 @@ import org.openlca.ilcd.processes.Process;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import epd.io.EpdStore;
-import epd.io.MappingConfig;
+import app.App;
 import epd.model.Amount;
 import epd.model.EpdDataSet;
 import epd.model.Indicator;
@@ -28,7 +28,7 @@ import epd.model.IndicatorResult;
 class ResultConverter {
 
 	static List<IndicatorResult> readResults(Process process,
-			MappingConfig config) {
+			List<IndicatorMapping> config) {
 		if (process == null || config == null)
 			return Collections.emptyList();
 		List<IndicatorResult> results = new ArrayList<>();
@@ -38,7 +38,7 @@ class ResultConverter {
 	}
 
 	private static List<IndicatorResult> readLciResults(Process process,
-			MappingConfig config) {
+			List<IndicatorMapping> config) {
 		List<IndicatorResult> results = new ArrayList<>();
 		for (Exchange exchange : process.exchanges) {
 			IndicatorResult result = readResult(exchange.flow,
@@ -50,7 +50,7 @@ class ResultConverter {
 	}
 
 	private static List<IndicatorResult> readLciaResults(Process process,
-			MappingConfig config) {
+			List<IndicatorMapping> config) {
 		List<IndicatorResult> results = new ArrayList<>();
 		for (LCIAResult element : process.lciaResults) {
 			IndicatorResult result = readResult(element.method,
@@ -62,10 +62,10 @@ class ResultConverter {
 	}
 
 	private static IndicatorResult readResult(Ref ref,
-			Other extension, MappingConfig config) {
+			Other extension, List<IndicatorMapping> indicators) {
 		if (ref == null)
 			return null;
-		Indicator indicator = config.getIndicator(ref.uuid);
+		Indicator indicator = get(indicators, ref.uuid);
 		if (indicator == null)
 			return null;
 		IndicatorResult result = new IndicatorResult();
@@ -75,13 +75,22 @@ class ResultConverter {
 		return result;
 	}
 
-	static void writeResults(EpdDataSet ds, MappingConfig config) {
-		if (Util.hasNull(ds, ds.process, config))
+	private static Indicator get(List<IndicatorMapping> indicators,
+			String uuid) {
+		for (IndicatorMapping i : indicators) {
+			if (Objects.equals(i.indicatorRefId, uuid))
+				return i.indicator;
+		}
+		return null;
+	}
+
+	static void writeResults(EpdDataSet ds, List<IndicatorMapping> indicators) {
+		if (Util.hasNull(ds, ds.process, indicators))
 			return;
 		Document doc = Util.createDocument();
 		for (IndicatorResult result : ds.results) {
 			Indicator indicator = result.indicator;
-			IndicatorMapping mapping = config.getIndicatorMapping(indicator);
+			IndicatorMapping mapping = get(indicators, indicator);
 			if (mapping == null)
 				continue;
 			Other other = null;
@@ -94,6 +103,15 @@ class ResultConverter {
 				addUnitRef(other, mapping, doc);
 			}
 		}
+	}
+
+	private static IndicatorMapping get(List<IndicatorMapping> indicators,
+			Indicator indicator) {
+		for (IndicatorMapping i : indicators) {
+			if (i.indicator == indicator)
+				return i;
+		}
+		return null;
 	}
 
 	private static Other createLciResult(Process process,
@@ -140,7 +158,7 @@ class ResultConverter {
 		ref.uri = "../" + path + "/" + mapping.indicatorRefId;
 		ref.type = forFlow ? DataSetType.FLOW
 				: DataSetType.LCIA_METHOD;
-		LangString.set(ref.name, mapping.indicatorLabel, EpdStore.lang);
+		LangString.set(ref.name, mapping.indicatorLabel, App.lang);
 		return ref;
 	}
 
@@ -148,7 +166,7 @@ class ResultConverter {
 			Document doc) {
 		if (other == null || mapping == null)
 			return;
-		Element root = doc.createElementNS(Converter.NAMESPACE,
+		Element root = doc.createElementNS(ProcessExtensions.NAMESPACE,
 				"epd:referenceToUnitGroupDataSet");
 		root.setAttribute("type", "unit group data set");
 		root.setAttribute("refObjectId", mapping.unitRefId);

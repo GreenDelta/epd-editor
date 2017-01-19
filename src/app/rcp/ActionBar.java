@@ -14,6 +14,7 @@ import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 
+import app.editors.indicators.IndicatorMappingEditor;
 import app.editors.matprops.MaterialPropertyEditor;
 import app.util.Actions;
 
@@ -46,6 +47,9 @@ public class ActionBar extends ActionBarAdvisor {
 		editMenu.add(Actions.create("#Material properties",
 				Icon.QUANTITY.des(),
 				() -> MaterialPropertyEditor.open()));
+		editMenu.add(Actions.create("#Indicator mappings",
+				Icon.QUANTITY.des(),
+				() -> IndicatorMappingEditor.open()));
 		menuBar.add(editMenu);
 	}
 

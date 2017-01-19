@@ -37,7 +37,7 @@ class ScenarioConverter {
 		if (element == null)
 			return false;
 		String nsUri = element.getNamespaceURI();
-		if (!Objects.equals(nsUri, Converter.NAMESPACE))
+		if (!Objects.equals(nsUri, ProcessExtensions.NAMESPACE))
 			return false;
 		if (!Objects.equals(element.getLocalName(), "scenarios"))
 			return false;
@@ -47,7 +47,7 @@ class ScenarioConverter {
 
 	private static List<Scenario> fromElement(Element element) {
 		List<Scenario> scenarios = new ArrayList<>();
-		NodeList list = element.getElementsByTagNameNS(Converter.NAMESPACE,
+		NodeList list = element.getElementsByTagNameNS(ProcessExtensions.NAMESPACE,
 				"scenario");
 		for (int i = 0; i < list.getLength(); i++) {
 			Node node = list.item(i);
@@ -87,7 +87,7 @@ class ScenarioConverter {
 				|| dataSet.scenarios.isEmpty())
 			return;
 		Util.clear(other, "scenarios");
-		Element root = doc.createElementNS(Converter.NAMESPACE, "epd:scenarios");
+		Element root = doc.createElementNS(ProcessExtensions.NAMESPACE, "epd:scenarios");
 		for (Scenario scenario : dataSet.scenarios) {
 			Element element = toElement(scenario, doc);
 			if (element != null)
@@ -98,7 +98,7 @@ class ScenarioConverter {
 
 	private static Element toElement(Scenario scenario, Document doc) {
 		try {
-			String nsUri = Converter.NAMESPACE;
+			String nsUri = ProcessExtensions.NAMESPACE;
 			Element element = doc.createElementNS(nsUri, "epd:scenario");
 			if (scenario.name != null)
 				element.setAttribute("epd:name", scenario.name);

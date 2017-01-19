@@ -154,6 +154,13 @@
     </editor>
     <editor
           default="false"
+          icon="icons/quantity.png"
+          id="indicator.mapping.editor"
+          name="Indicator mappings"
+          class="app.editors.indicators.IndicatorMappingEditor">
+    </editor>
+    <editor
+          default="false"
           icon="icons/connection.png"
           id="connection.editor"
           name="Connection"

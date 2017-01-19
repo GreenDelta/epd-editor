@@ -39,14 +39,14 @@ class ModuleConverter {
 		if (element == null)
 			return false;
 		String nsUri = element.getNamespaceURI();
-		return Objects.equals(nsUri, Converter.NAMESPACE_OLCA)
+		return Objects.equals(nsUri, ProcessExtensions.NAMESPACE_OLCA)
 				&& Objects.equals(element.getLocalName(), "modules");
 	}
 
 	private static List<ModuleEntry> fromElement(Element element) {
 		List<ModuleEntry> modules = new ArrayList<>();
 		NodeList moduleList = element.getElementsByTagNameNS(
-				Converter.NAMESPACE_OLCA, "module");
+				ProcessExtensions.NAMESPACE_OLCA, "module");
 		for (int i = 0; i < moduleList.getLength(); i++) {
 			Node node = moduleList.item(i);
 			NamedNodeMap attributes = node.getAttributes();
@@ -80,7 +80,7 @@ class ModuleConverter {
 	static void writeModules(EpdDataSet dataSet, Other other, Document doc) {
 		if (other == null || doc == null || !shouldWriteEntries(dataSet))
 			return;
-		Element root = doc.createElementNS(Converter.NAMESPACE_OLCA,
+		Element root = doc.createElementNS(ProcessExtensions.NAMESPACE_OLCA,
 				"olca:modules");
 		for (ModuleEntry module : dataSet.moduleEntries) {
 			Element element = toElement(module, doc);
@@ -105,7 +105,7 @@ class ModuleConverter {
 		if (document == null)
 			return null;
 		try {
-			String nsUri = Converter.NAMESPACE_OLCA;
+			String nsUri = ProcessExtensions.NAMESPACE_OLCA;
 			Element element = document.createElementNS(nsUri, "olca:module");
 			if (module.module != null)
 				element.setAttribute("olca:name", module.module.getLabel());

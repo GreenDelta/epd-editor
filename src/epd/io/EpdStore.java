@@ -9,7 +9,8 @@ import org.openlca.ilcd.processes.Process;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import epd.io.conversion.Converter;
+import app.store.IndicatorMappings;
+import epd.io.conversion.ProcessExtensions;
 import epd.model.EpdDataSet;
 import epd.model.EpdDescriptor;
 
@@ -71,10 +72,8 @@ public class EpdStore implements Closeable {
 			log.trace("open EPD data set {}", descriptor);
 			Process process = ilcdStore.get(Process.class,
 					descriptor.refId);
-			MappingConfig config = Configs
-					.getMappingConfig(ilcdStore.getRootFolder());
-			String[] langs = new String[] { lang, "en" };
-			EpdDataSet dataSet = Converter.convert(process, config, langs);
+			EpdDataSet dataSet = ProcessExtensions.read(process,
+					IndicatorMappings.get());
 			return dataSet;
 		} catch (Exception e) {
 			log.error("failed to open EPD data set " + descriptor, e);

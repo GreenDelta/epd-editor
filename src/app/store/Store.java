@@ -16,9 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.App;
-import epd.io.Configs;
-import epd.io.MappingConfig;
-import epd.io.conversion.Converter;
+import epd.io.conversion.ProcessExtensions;
 import epd.model.EpdDataSet;
 import epd.model.MaterialProperty;
 
@@ -29,9 +27,8 @@ public class Store {
 		try {
 			log.trace("open EPD data set {}", ref);
 			Process process = App.store.get(Process.class, ref.uuid);
-			MappingConfig config = Configs.getMappingConfig(App.workspace);
-			String[] langs = new String[] { App.lang };
-			EpdDataSet dataSet = Converter.convert(process, config, langs);
+			EpdDataSet dataSet = ProcessExtensions.read(process,
+					IndicatorMappings.get());
 			return dataSet;
 		} catch (Exception e) {
 			log.error("failed to open EPD data set " + ref, e);
@@ -43,8 +40,7 @@ public class Store {
 		Logger log = LoggerFactory.getLogger(Store.class);
 		try {
 			log.trace("update EPD data set {}", dataSet);
-			MappingConfig config = Configs.getMappingConfig(App.workspace);
-			Converter.writeExtensions(dataSet, config);
+			ProcessExtensions.write(dataSet, IndicatorMappings.get());
 			Process process = dataSet.process;
 			App.store.put(process);
 		} catch (Exception e) {

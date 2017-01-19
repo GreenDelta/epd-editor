@@ -1,6 +1,6 @@
 ## TODO
 
-* document references in extensions 
+* harmonize extension reading
 * upload references from extensions
 
 * Download
@@ -21,3 +21,9 @@ bug: scenario table: org.eclipse.core.runtime.AssertionFailedException: assertio
 bug: close editors for deleted data sets
 bug: close connection editor when connection is deleted
 
+* open external files on double click
+
+## EPD Extensions
+The EPD format adds some extensions to the process and flow data sets of the 
+ILCD format. These extensions can be read and written with the two converter
+classes ...

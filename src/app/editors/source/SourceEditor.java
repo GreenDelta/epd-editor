@@ -19,6 +19,7 @@ import app.editors.BaseEditor;
 import app.editors.DependencyPage;
 import app.editors.Editors;
 import app.editors.RefEditorInput;
+import app.editors.XmlPage;
 import epd.model.Version;
 import epd.model.Xml;
 import epd.util.Strings;
@@ -96,6 +97,7 @@ public class SourceEditor extends BaseEditor {
 		try {
 			addPage(new SourcePage(this));
 			addPage(new DependencyPage(this, source));
+			addPage(new XmlPage(this, source));
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to add page", e);

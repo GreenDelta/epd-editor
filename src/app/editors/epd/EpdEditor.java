@@ -24,6 +24,7 @@ import app.editors.BaseEditor;
 import app.editors.DependencyPage;
 import app.editors.Editors;
 import app.editors.RefEditorInput;
+import app.editors.XmlPage;
 import app.store.Store;
 import app.util.UI;
 import epd.model.EpdDataSet;
@@ -68,6 +69,7 @@ public class EpdEditor extends BaseEditor {
 			addPage(new AdminPage(this));
 			addPage(new ModulePage(this));
 			addPage(new DependencyPage(this, dataSet.process));
+			addPage(new XmlPage(this, dataSet.process));
 		} catch (Exception e) {
 			log.error("failed to add editor page", e);
 		}

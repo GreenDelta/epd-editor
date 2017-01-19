@@ -16,6 +16,7 @@ import app.editors.BaseEditor;
 import app.editors.DependencyPage;
 import app.editors.Editors;
 import app.editors.RefEditorInput;
+import app.editors.XmlPage;
 import epd.io.conversion.FlowExtensions;
 import epd.model.EpdProduct;
 import epd.model.Version;
@@ -82,6 +83,7 @@ public class FlowEditor extends BaseEditor {
 		try {
 			addPage(new FlowPage(this));
 			addPage(new DependencyPage(this, product.flow));
+			addPage(new XmlPage(this, product.flow));
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to add page", e);

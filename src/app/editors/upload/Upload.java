@@ -1,8 +1,15 @@
 package app.editors.upload;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.io.SodaClient;
+import org.openlca.ilcd.sources.FileRef;
+import org.openlca.ilcd.sources.Source;
+import org.openlca.ilcd.util.Sources;
 
 import app.App;
 import epd.io.RefStatus;
@@ -27,13 +34,33 @@ class Upload {
 			if (ds == null)
 				return new RefStatus(RefStatus.ERROR, ref,
 						"#Data set does not exist");
-			client.put(ds);
-			// TODO: upload external files ...
+			if (ds instanceof Source)
+				uploadSource((Source) ds);
+			else
+				client.put(ds);
 			return new RefStatus(RefStatus.OK, ref, "#Uploaded");
 		} catch (Exception e) {
 			cancelAll = true;
 			return new RefStatus(RefStatus.ERROR, ref,
 					"#Upload failed: " + e.getMessage());
+		}
+	}
+
+	private void uploadSource(Source source) throws Exception {
+		List<FileRef> fileRefs = Sources.getFileRefs(source);
+		List<File> files = new ArrayList<>();
+		for (FileRef ref : fileRefs) {
+			File file = App.store.getExternalDocument(ref);
+			if (file == null || !file.exists())
+				continue;
+			files.add(file);
+		}
+		if (files.isEmpty())
+			client.put(source);
+		else {
+			File[] array = files.toArray(
+					new File[files.size()]);
+			client.put(source, array);
 		}
 	}
 }

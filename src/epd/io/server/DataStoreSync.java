@@ -88,7 +88,7 @@ public class DataStoreSync {
 		if (file == null)
 			target.put(model);
 		else {
-			target.put(model, file);
+			target.put(model, new File[] { file });
 			log.trace("delete directory {}", file.getParentFile());
 			Dirs.delete(file.getParentFile().toPath());
 		}

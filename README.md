@@ -1,12 +1,13 @@
 ## TODO
 
-* Download
-* upload external files
-
+* document references in extensions 
 * upload references from extensions
+
+* Download
+
 * Upload and download product references (direct and generic; see todos)
 * high performance import with re-indexing
-* 
+* support multiple versions 
 
 * show product unit in quantitative reference of EPD
 * Source type combo in SourcePage
@@ -19,3 +20,4 @@
 bug: scenario table: org.eclipse.core.runtime.AssertionFailedException: assertion failed: Column 0 has no label provider
 bug: close editors for deleted data sets
 bug: close connection editor when connection is deleted
+

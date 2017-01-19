@@ -1,6 +1,4 @@
-package epd.io;
-
-import epd.model.Indicator;
+package epd.model;
 
 public class IndicatorMapping {
 

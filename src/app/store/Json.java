@@ -13,8 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 
-import epd.io.Configs;
-
 class Json {
 
 	private Json() {
@@ -29,7 +27,7 @@ class Json {
 			String string = gson.toJson(obj);
 			buffer.write(string);
 		} catch (Exception e) {
-			Logger log = LoggerFactory.getLogger(Configs.class);
+			Logger log = LoggerFactory.getLogger(Json.class);
 			log.error("failed to write " + obj + " to " + file, e);
 		}
 	}
@@ -38,7 +36,7 @@ class Json {
 		try (FileInputStream fis = new FileInputStream(file)) {
 			return read(fis, clazz);
 		} catch (Exception e) {
-			Logger log = LoggerFactory.getLogger(Configs.class);
+			Logger log = LoggerFactory.getLogger(Json.class);
 			log.error("failed to read " + clazz + " from file " + file, e);
 			return null;
 		}
@@ -50,7 +48,7 @@ class Json {
 			Gson gson = new Gson();
 			return gson.fromJson(reader, clazz);
 		} catch (Exception e) {
-			Logger log = LoggerFactory.getLogger(Configs.class);
+			Logger log = LoggerFactory.getLogger(Json.class);
 			log.error("failed to read " + clazz, e);
 			return null;
 		}

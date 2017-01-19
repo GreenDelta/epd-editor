@@ -17,12 +17,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import epd.io.EpdStore;
-import epd.io.IndicatorMapping;
 import epd.io.MappingConfig;
 import epd.model.Amount;
 import epd.model.EpdDataSet;
 import epd.model.Indicator;
 import epd.model.IndicatorGroup;
+import epd.model.IndicatorMapping;
 import epd.model.IndicatorResult;
 
 class ResultConverter {

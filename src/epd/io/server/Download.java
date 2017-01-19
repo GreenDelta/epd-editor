@@ -19,6 +19,7 @@ import epd.io.EpdStore;
 import epd.model.EpdDataSet;
 import epd.model.EpdDescriptor;
 
+@Deprecated
 class Download {
 
 	private Logger log = LoggerFactory.getLogger(getClass());
@@ -40,9 +41,8 @@ class Download {
 					.get(Process.class, descriptor.refId);
 			localStore.put(process);
 			syncFlow(getRefProductRef(process));
-			EpdDataSet dataSet = epdStore.open(descriptor);
-			syncGenericProduct(dataSet);
-			syncActorsAndSources(dataSet);
+			// syncGenericProduct(dataSet);
+			// syncActorsAndSources(dataSet);
 		} catch (Exception e) {
 			log.error("download failed", e);
 		}

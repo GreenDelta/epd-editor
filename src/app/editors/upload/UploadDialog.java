@@ -156,6 +156,7 @@ public class UploadDialog extends Wizard {
 						Ref next = Ref.of(ds);
 						monitor.subTask(App.header(next.name, 75));
 						allRefs.add(next);
+						ExtRefs.add(ds, allRefs);
 					});
 					App.runInUI("update table", () -> table.setInput(allRefs));
 					monitor.done();

@@ -4,11 +4,13 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.App;
+import epd.model.Indicator;
 import epd.model.IndicatorMapping;
 
 public final class IndicatorMappings {
@@ -19,6 +21,26 @@ public final class IndicatorMappings {
 	private static List<IndicatorMapping> cached;
 
 	private IndicatorMappings() {
+	}
+
+	public static IndicatorMapping get(Indicator indicator) {
+		if (indicator == null)
+			return null;
+		for (IndicatorMapping im : get()) {
+			if (im.indicator == indicator)
+				return im;
+		}
+		return null;
+	}
+
+	public static IndicatorMapping get(String indicatorID) {
+		if (indicatorID == null)
+			return null;
+		for (IndicatorMapping im : get()) {
+			if (Objects.equals(indicatorID, im.indicatorRefId))
+				return im;
+		}
+		return null;
 	}
 
 	public static List<IndicatorMapping> get() {

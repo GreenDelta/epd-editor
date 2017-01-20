@@ -10,7 +10,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.openlca.ilcd.lists.Location;
 
-import app.store.Store;
+import app.store.Locations;
 import app.util.Controls;
 import app.util.UI;
 import epd.util.Strings;
@@ -40,7 +40,7 @@ class LocationCombo {
 
 	private void initLocations(String selectedCode) {
 		boolean found = false;
-		for (Location loc : Store.getLocations()) {
+		for (Location loc : Locations.get()) {
 			locations.add(loc);
 			if (Strings.nullOrEqual(loc.code, selectedCode))
 				found = true;

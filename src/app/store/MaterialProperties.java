@@ -11,11 +11,11 @@ import org.slf4j.LoggerFactory;
 import app.App;
 import epd.model.MaterialProperty;
 
-class MaterialProperties {
+public class MaterialProperties {
 
 	private static final String NAME = "material_properties.json";
 
-	static List<MaterialProperty> get() {
+	public static List<MaterialProperty> get() {
 		List<MaterialProperty> list = fromFile();
 		if (list != null)
 			return list;
@@ -30,7 +30,7 @@ class MaterialProperties {
 		}
 	}
 
-	static void save(List<MaterialProperty> properties) {
+	public static void save(List<MaterialProperty> properties) {
 		File file = file();
 		Json.write(properties, file);
 	}

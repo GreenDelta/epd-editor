@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import app.editors.Editors;
 import app.editors.IEditor;
 import app.editors.SimpleEditorInput;
-import app.store.Store;
+import app.store.MaterialProperties;
 import epd.model.MaterialProperty;
 
 public class MaterialPropertyEditor extends FormEditor implements IEditor {
@@ -33,7 +33,7 @@ public class MaterialPropertyEditor extends FormEditor implements IEditor {
 	public void init(IEditorSite site, IEditorInput input)
 			throws PartInitException {
 		super.init(site, input);
-		properties = Store.getMaterialProperties();
+		properties = MaterialProperties.get();
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class MaterialPropertyEditor extends FormEditor implements IEditor {
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		Store.saveMaterialProperties(properties);
+		MaterialProperties.save(properties);
 		dirty = false;
 		editorDirtyStateChanged();
 	}

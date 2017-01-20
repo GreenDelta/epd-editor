@@ -1,13 +1,22 @@
 package app.editors.indicators;
 
+import java.util.List;
+
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
-import org.eclipse.ui.forms.widgets.Section;
 
+import app.rcp.Labels;
+import app.util.Tables;
 import app.util.UI;
+import epd.model.IndicatorGroup;
+import epd.model.IndicatorMapping;
 
 class Page extends FormPage {
 
@@ -24,14 +33,51 @@ class Page extends FormPage {
 		ScrolledForm form = UI.formHeader(mform,
 				"#Indicator mappings");
 		Composite body = UI.formBody(form, mform.getToolkit());
-		createTable(body, tk);
+		for (IndicatorGroup group : IndicatorGroup.values()) {
+			createSection(group, body, tk);
+		}
 		form.reflow(true);
 	}
 
-	private void createTable(Composite parent, FormToolkit tk) {
-		Section section = UI.section(parent, tk,
-				"#Indicator mappings");
-		UI.gridData(section, true, true);
-		// new Table(editor, section, toolkit);
+	private void createSection(IndicatorGroup group, Composite parent,
+			FormToolkit tk) {
+		Composite comp = UI.formSection(parent, tk, Labels.get(group));
+		UI.gridLayout(comp, 1);
+		TableViewer table = Tables.createViewer(comp, "Indicator",
+				"Data set reference", "Unit reference");
+		Tables.bindColumnWidths(table, 0.4, 0.3, 0.3);
+		table.setLabelProvider(new Label());
+		List<IndicatorMapping> list = editor.getGroup(group);
+		table.setInput(list);
+	}
+
+	private class Label extends LabelProvider implements ITableLabelProvider {
+
+		@Override
+		public Image getColumnImage(Object obj, int col) {
+			return null;
+		}
+
+		@Override
+		public String getColumnText(Object obj, int col) {
+			if (!(obj instanceof IndicatorMapping))
+				return null;
+			IndicatorMapping im = (IndicatorMapping) obj;
+			if (im.indicator == null)
+				return null;
+			switch (col) {
+			case 0:
+				return Labels.get(im.indicator);
+			case 1:
+				String pref = im.indicator.isInventoryIndicator() ? "Flow: "
+						: "LCIA Method: ";
+				return pref + im.indicatorRefId;
+			case 2:
+				return im.unitLabel + ": " + im.unitRefId;
+			default:
+				return null;
+			}
+		}
+
 	}
 }

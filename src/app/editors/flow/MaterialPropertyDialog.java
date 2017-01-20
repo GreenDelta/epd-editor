@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.M;
-import app.store.Store;
+import app.store.MaterialProperties;
 import app.util.UI;
 import app.util.Viewers;
 import epd.model.MaterialProperty;
@@ -63,7 +63,7 @@ class MaterialPropertyDialog extends Dialog {
 
 	private void setInput(ComboViewer viewer) {
 		try {
-			List<MaterialProperty> props = Store.getMaterialProperties();
+			List<MaterialProperty> props = MaterialProperties.get();
 			Collections.sort(props,
 					(p1, p2) -> Strings.compare(p1.name, p2.name));
 			viewer.setInput(props);

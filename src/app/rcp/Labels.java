@@ -4,6 +4,7 @@ import org.openlca.ilcd.commons.DataSetType;
 
 import app.M;
 import epd.model.Indicator;
+import epd.model.IndicatorGroup;
 import epd.model.SubType;
 
 public class Labels {
@@ -62,5 +63,20 @@ public class Labels {
 		String key = "Indicator_" + name;
 		String val = M.getMap().get(key);
 		return val == null ? "unknown" : val;
+	}
+
+	public static String get(IndicatorGroup group) {
+		switch (group) {
+		case ENVIRONMENTAL:
+			return M.EnvironmentalParameters;
+		case OUTPUT_FLOWS:
+			return M.OutputParameters;
+		case RESOURCE_USE:
+			return M.ResourceParameters;
+		case WASTE_DISPOSAL:
+			return M.WasteParameters;
+		default:
+			return "#unknown";
+		}
 	}
 }

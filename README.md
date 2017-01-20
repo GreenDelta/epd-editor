@@ -1,8 +1,6 @@
 ## TODO
 
-* initial editor for indicator mappings
 * change the reading of MaterialProperties as for Connections and IndicatorMappings
-* harmonize extension reading
 * upload references from extensions
 
 * Download
@@ -17,7 +15,7 @@
 * Navigator.refresh -> remember expansion state (like in openLCA)
 * Local search
 * LCIA editor
-* allow editing of indicator mappings 
+* allow editing of indicator mappings (best would be probably a simple wizard)
 
 bug: scenario table: org.eclipse.core.runtime.AssertionFailedException: assertion failed: Column 0 has no label provider
 bug: close editors for deleted data sets

@@ -15,18 +15,26 @@ public final class IndicatorMappings {
 
 	private static final String NAME = "indicator_mappings.json";
 
+	// the indicator mappings are used in each conversion; so we cache them
+	private static List<IndicatorMapping> cached;
+
 	private IndicatorMappings() {
 	}
 
 	public static List<IndicatorMapping> get() {
+		if (cached != null)
+			return cached;
 		List<IndicatorMapping> list = fromFile();
-		if (list != null)
+		if (list != null) {
+			cached = list;
 			return list;
+		}
 		try (InputStream is = IndicatorMappings.class
 				.getResourceAsStream(NAME)) {
 			IndicatorMapping[] mappings = Json.read(is,
 					IndicatorMapping[].class);
-			return asList(mappings);
+			cached = asList(mappings);
+			return cached;
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(IndicatorMappings.class);
 			log.error("failed to read " + NAME, e);
@@ -37,6 +45,7 @@ public final class IndicatorMappings {
 	static void save(List<IndicatorMapping> mappings) {
 		File file = file();
 		Json.write(mappings, file);
+		cached = null;
 	}
 
 	private static List<IndicatorMapping> fromFile() {

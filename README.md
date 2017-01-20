@@ -1,9 +1,10 @@
 ## TODO
 
+* re-index function
+
 * high performance import with re-indexing
 
 * Download (including references from extensions)
-* support multiple versions 
 
 * show product unit in quantitative reference of EPD
 * Source type combo in SourcePage
@@ -13,6 +14,7 @@
 * Application settings: data set language
 * LCIA editor
 * flow editors: show extensions only for product flows; rename navi labels
+* support multiple versions 
 
 bug: scenario table: org.eclipse.core.runtime.AssertionFailedException: assertion failed: Column 0 has no label provider
 bug: close editors for deleted data sets

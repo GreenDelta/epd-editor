@@ -6,11 +6,10 @@ import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.List;
 
+import org.openlca.ilcd.commons.Classification;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
-import org.openlca.ilcd.io.FileStore;
-import org.openlca.ilcd.processes.Process;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,9 +31,14 @@ public class Index {
 	public void add(IDataSet ds) {
 		if (ds == null)
 			return;
-		Ref ref = Ref.of(ds);
-		TypeNode root = getNode(ds.getDataSetType());
-		List<CategoryNode> catNodes = root.syncCategories(ds);
+		add(Ref.of(ds), ds.getClassifications());
+	}
+
+	public void add(Ref ref, List<Classification> classes) {
+		if (ref == null || !ref.isValid())
+			return;
+		TypeNode root = getNode(ref.type);
+		List<CategoryNode> catNodes = root.syncCategories(classes);
 		if (catNodes.isEmpty()) {
 			root.refs.add(ref);
 			return;
@@ -61,19 +65,6 @@ public class Index {
 		if (root == null)
 			return null;
 		return root.find(ref);
-	}
-
-	public static Index create(FileStore store, String lang) {
-		Index idx = new Index();
-		if (store == null)
-			return idx;
-		try {
-			store.iterator(Process.class).forEachRemaining(d -> idx.add(d));
-		} catch (Exception e) {
-			Logger log = LoggerFactory.getLogger(Index.class);
-			log.error("failed to index data sets", e);
-		}
-		return idx;
 	}
 
 	public void dump(File file) {

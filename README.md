@@ -19,7 +19,9 @@
 bug: scenario table: org.eclipse.core.runtime.AssertionFailedException: assertion failed: Column 0 has no label provider
 bug: close editors for deleted data sets
 bug: close connection editor when connection is deleted
+bug: catch error: open data set that does not exist
 
+* cleanup: re-index on failor or cancellation 
 * sources: open external files on double click
 * allow editing of indicator mappings (best would be probably a simple wizard)
 

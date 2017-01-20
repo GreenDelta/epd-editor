@@ -1,5 +1,7 @@
 package app.rcp;
 
+import java.io.File;
+
 import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -16,13 +18,16 @@ import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.progress.IProgressService;
+import org.openlca.ilcd.io.ZipStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.editors.indicators.IndicatorMappingEditor;
 import app.editors.matprops.MaterialPropertyEditor;
 import app.store.CleanUp;
+import app.store.ZipImport;
 import app.util.Actions;
+import app.util.FileChooser;
 import app.util.MsgBox;
 
 public class ActionBar extends ActionBarAdvisor {
@@ -47,7 +52,8 @@ public class ActionBar extends ActionBarAdvisor {
 		super.fillMenuBar(menuBar);
 		MenuManager fileMenu = new MenuManager("#File",
 				IWorkbenchActionConstants.M_FILE);
-		fileMenu.add(new ImportAction());
+		fileMenu.add(Actions.create("#Import Data Package",
+				Icon.IMPORT.des(), this::importZip));
 		menuBar.add(fileMenu);
 		MenuManager editMenu = new MenuManager("#Edit",
 				IWorkbenchActionConstants.M_EDIT);
@@ -82,6 +88,25 @@ public class ActionBar extends ActionBarAdvisor {
 				.getProgressService();
 		try {
 			progress.run(true, true, new CleanUp());
+		} catch (Exception e) {
+			Logger log = LoggerFactory.getLogger(getClass());
+			log.error("failed to delete data sets", e);
+		}
+	}
+
+	private void importZip() {
+		File zipFile = FileChooser.open("*.zip");
+		if (zipFile == null)
+			return;
+		boolean b = MsgBox.ask("#Import data sets?", "#Should we import all "
+				+ "data sets from the selected file?");
+		if (!b)
+			return;
+		IProgressService progress = PlatformUI.getWorkbench()
+				.getProgressService();
+		try {
+			ZipStore zip = new ZipStore(zipFile);
+			progress.run(true, true, new ZipImport(zip));
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to delete data sets", e);

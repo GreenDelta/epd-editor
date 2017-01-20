@@ -10,7 +10,6 @@ import java.util.Set;
 import org.openlca.ilcd.commons.Category;
 import org.openlca.ilcd.commons.Classification;
 import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
 
 public class TypeNode {
@@ -46,14 +45,11 @@ public class TypeNode {
 		return null;
 	}
 
-	List<CategoryNode> syncCategories(IDataSet ds) {
-		if (ds == null)
-			return Collections.emptyList();
-		List<Classification> list = ds.getClassifications();
-		if (list.isEmpty())
+	List<CategoryNode> syncCategories(List<Classification> classes) {
+		if (classes == null || classes.isEmpty())
 			return Collections.emptyList();
 		List<CategoryNode> nodes = new ArrayList<>();
-		for (Classification c : list) {
+		for (Classification c : classes) {
 			Collections.sort(c.categories, (c1, c2) -> c1.level - c2.level);
 			CategoryNode node = null;
 			List<CategoryNode> childs = categories;

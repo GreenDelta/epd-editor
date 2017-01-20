@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import app.App;
 import app.navi.Navigator;
 import app.util.MsgBox;
+import epd.index.Index;
 
 /**
  * Deletes all data sets and external documents from the editors
@@ -54,7 +55,10 @@ public class CleanUp implements IRunnableWithProgress {
 				}
 			}
 			monitor.subTask("re-index");
-			// TODO: re-index
+			if (failors == 0) {
+				App.index = new Index();
+				App.dumpIndex();
+			}
 			monitor.done();
 			App.runInUI("Refresh...", this::refreshUI);
 		} catch (Exception e) {
@@ -97,5 +101,6 @@ public class CleanUp implements IRunnableWithProgress {
 		Navigator.refresh();
 		MsgBox.info("#Deleted data sets",
 				deleted + " data sets removed. " + failors + " errors");
+		// TODO: re-index if there where errors
 	}
 }

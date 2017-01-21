@@ -95,6 +95,26 @@
 			icon="icons/data.png"/>
 	</extension>
 	
+	<extension
+		point="org.eclipse.ui.commandImages">
+		<image
+			commandId="org.eclipse.ui.file.save"
+			icon="icons/save.png"
+			disabledIcon="icons/save_dis.png">
+		</image>
+		<image
+			commandId="org.eclipse.ui.file.saveAs"
+			icon="icons/save_as.png"
+			disabledIcon="icons/save_as_dis.png">
+		</image>
+		<image
+			commandId="org.eclipse.ui.file.saveAll"
+			icon="icons/save_all.png"
+			disabledIcon="icons/save_all_dis.png">
+		</image>
+	</extension>
+	
+	
  <extension
        point="org.eclipse.ui.editors">
     <editor

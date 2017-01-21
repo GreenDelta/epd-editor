@@ -9,6 +9,7 @@ import org.openlca.ilcd.commons.Ref;
 
 import app.App;
 import app.rcp.Icon;
+import epd.util.Strings;
 
 public class RefElement implements NavigationElement {
 
@@ -32,7 +33,9 @@ public class RefElement implements NavigationElement {
 
 	@Override
 	public int compareTo(NavigationElement other) {
-		return 0;
+		if (!(other instanceof RefElement))
+			return 1;
+		return Strings.compare(this.getLabel(), other.getLabel());
 	}
 
 	@Override

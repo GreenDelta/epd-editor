@@ -1,9 +1,7 @@
 ## TODO
 
-* sort data sets by name in navigation
 * re-index function
 * Download (including references from extensions)
-* improved icons for save actions
 * creation actions
 * show product unit in quantitative reference of EPD
 * Source type combo in SourcePage

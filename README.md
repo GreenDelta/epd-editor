@@ -1,29 +1,35 @@
 ## TODO
 
+* sort data sets by name in navigation
 * re-index function
-
-* high performance import with re-indexing
-
 * Download (including references from extensions)
-
+* improved icons for save actions
+* creation actions
 * show product unit in quantitative reference of EPD
 * Source type combo in SourcePage
 * updates of data sets in navigation tree (clean empty categories)
 * Navigator.refresh -> remember expansion state (like in openLCA)
 * Local search
-* Application settings: data set language
-* LCIA editor
+* Application settings: data set language, application language, RAM
 * flow editors: show extensions only for product flows; rename navi labels
-* support multiple versions 
+* fetch also categories from elementary flows in indexing etc.
+* cross platform builds and tests
+* Data set export with dependencies as zip package
+* externalize strings
+* cleanup: re-index on failor or cancellation 
+* sources: open external files on double click
+* allow editing of indicator mappings (best would be probably a simple wizard)
+* LCIA editor: show fields + editing (first remove getters and setters in core API)
+
 
 bug: scenario table: org.eclipse.core.runtime.AssertionFailedException: assertion failed: Column 0 has no label provider
 bug: close editors for deleted data sets
 bug: close connection editor when connection is deleted
 bug: catch error: open data set that does not exist
 
-* cleanup: re-index on failor or cancellation 
-* sources: open external files on double click
-* allow editing of indicator mappings (best would be probably a simple wizard)
+## For future versions
+* proxy settings
+* support multiple versions 
 
 ## EPD Extensions
 The EPD format adds some extensions to the process and flow data sets of the 

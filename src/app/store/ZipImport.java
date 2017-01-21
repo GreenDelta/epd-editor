@@ -97,6 +97,7 @@ public class ZipImport implements IRunnableWithProgress {
 	}
 
 	private void extDocs(IProgressMonitor monitor) throws Exception {
+		monitor.subTask("external_docs");
 		File targetDir = new File(App.store.getRootFolder(),
 				"external_docs");
 		if (!targetDir.exists())
@@ -106,7 +107,6 @@ public class ZipImport implements IRunnableWithProgress {
 				break;
 			String name = doc.getFileName().toString();
 			File target = new File(targetDir, name);
-			log.info("import file {}", name);
 			Files.copy(doc, target.toPath(),
 					StandardCopyOption.REPLACE_EXISTING);
 			monitor.worked(1);

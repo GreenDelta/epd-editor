@@ -13,6 +13,7 @@ import app.editors.contact.ContactEditor;
 import app.editors.epd.EpdEditor;
 import app.editors.flow.FlowEditor;
 import app.editors.flowproperty.FlowPropertyEditor;
+import app.editors.methods.MethodEditor;
 import app.editors.source.SourceEditor;
 import app.editors.unitgroup.UnitGroupEditor;
 import app.editors.upload.UploadDialog;
@@ -58,6 +59,8 @@ public class DataSetToolBar extends EditorActionBarContributor {
 			return ((SourceEditor) p).source;
 		if (p instanceof UnitGroupEditor)
 			return ((UnitGroupEditor) p).unitGroup;
+		if (p instanceof MethodEditor)
+			return ((MethodEditor) p).method;
 		return null;
 	}
 

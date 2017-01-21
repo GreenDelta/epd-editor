@@ -17,6 +17,7 @@ import app.editors.contact.ContactEditor;
 import app.editors.epd.EpdEditor;
 import app.editors.flow.FlowEditor;
 import app.editors.flowproperty.FlowPropertyEditor;
+import app.editors.methods.MethodEditor;
 import app.editors.source.SourceEditor;
 import app.editors.unitgroup.UnitGroupEditor;
 
@@ -45,7 +46,7 @@ public class Editors {
 			UnitGroupEditor.open(ref);
 			break;
 		case LCIA_METHOD:
-			// TODO: LCIA editor
+			MethodEditor.open(ref);
 			break;
 		case EXTERNAL_FILE:
 			break;

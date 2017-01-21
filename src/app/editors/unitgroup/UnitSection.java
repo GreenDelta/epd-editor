@@ -1,7 +1,5 @@
 package app.editors.unitgroup;
 
-import java.util.List;
-
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -10,6 +8,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 import org.openlca.ilcd.units.Unit;
+import org.openlca.ilcd.units.UnitGroup;
 
 import app.App;
 import app.util.Tables;
@@ -17,10 +16,10 @@ import app.util.UI;
 
 class UnitSection {
 
-	private final List<Unit> units;
+	private final UnitGroup group;
 
-	UnitSection(List<Unit> units) {
-		this.units = units;
+	UnitSection(UnitGroup group) {
+		this.group = group;
 	}
 
 	void render(Composite parent, FormToolkit tk) {
@@ -32,7 +31,8 @@ class UnitSection {
 				"#Factor",
 				"#Comment");
 		viewer.setLabelProvider(new RowLabel());
-		viewer.setInput(units);
+		if (group != null)
+			viewer.setInput(group.units);
 		Tables.bindColumnWidths(viewer, 0.2, 0.3, 0.5);
 
 	}
@@ -54,9 +54,9 @@ class UnitSection {
 			case 0:
 				return unit.name;
 			case 1:
-				return String.valueOf(unit.meanValue);
+				return String.valueOf(unit.factor);
 			case 2:
-				return App.s(unit.generalComment);
+				return App.s(unit.comment);
 			default:
 				return null;
 			}

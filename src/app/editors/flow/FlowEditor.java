@@ -46,8 +46,7 @@ public class FlowEditor extends BaseEditor {
 			Flow flow = App.store.get(Flow.class, in.ref.uuid);
 			product = FlowExtensions.read(flow);
 		} catch (Exception e) {
-			throw new PartInitException(
-					"Failed to open editor: no correct input", e);
+			throw new PartInitException("Failed to open flow editor", e);
 		}
 	}
 

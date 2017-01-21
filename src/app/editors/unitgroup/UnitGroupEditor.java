@@ -7,11 +7,8 @@ import org.eclipse.ui.PartInitException;
 import org.openlca.ilcd.commons.DataEntry;
 import org.openlca.ilcd.commons.Publication;
 import org.openlca.ilcd.commons.Ref;
-import org.openlca.ilcd.units.AdminInfo;
-import org.openlca.ilcd.units.DataSetInfo;
-import org.openlca.ilcd.units.QuantitativeReference;
 import org.openlca.ilcd.units.UnitGroup;
-import org.openlca.ilcd.units.UnitGroupInfo;
+import org.openlca.ilcd.util.UnitGroups;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,28 +43,10 @@ public class UnitGroupEditor extends BaseEditor {
 		try {
 			RefEditorInput in = (RefEditorInput) input;
 			unitGroup = App.store.get(UnitGroup.class, in.ref.uuid);
-			initStructs();
 		} catch (Exception e) {
 			throw new PartInitException(
 					"Failed to open editor: no correct input", e);
 		}
-	}
-
-	private void initStructs() {
-		if (unitGroup == null)
-			unitGroup = new UnitGroup();
-		if (unitGroup.adminInfo == null)
-			unitGroup.adminInfo = new AdminInfo();
-		if (unitGroup.adminInfo.dataEntry == null)
-			unitGroup.adminInfo.dataEntry = new DataEntry();
-		if (unitGroup.adminInfo.publication == null)
-			unitGroup.adminInfo.publication = new Publication();
-		if (unitGroup.unitGroupInfo == null)
-			unitGroup.unitGroupInfo = new UnitGroupInfo();
-		if (unitGroup.unitGroupInfo.dataSetInfo == null)
-			unitGroup.unitGroupInfo.dataSetInfo = new DataSetInfo();
-		if (unitGroup.unitGroupInfo.quantitativeReference == null)
-			unitGroup.unitGroupInfo.quantitativeReference = new QuantitativeReference();
 	}
 
 	@Override
@@ -88,17 +67,18 @@ public class UnitGroupEditor extends BaseEditor {
 	}
 
 	private void updateVersion() {
-		AdminInfo info = unitGroup.adminInfo;
-		Version v = Version.fromString(info.publication.version);
+		Publication pub = UnitGroups.publication(unitGroup);
+		DataEntry entry = UnitGroups.dataEntry(unitGroup);
+		Version v = Version.fromString(pub.version);
 		v.incUpdate();
-		info.publication.version = v.toString();
-		info.dataEntry.timeStamp = Xml.now();
+		pub.version = v.toString();
+		entry.timeStamp = Xml.now();
 	}
 
 	@Override
 	protected void addPages() {
 		try {
-			addPage(new UnitGroupPage(this));
+			addPage(new InfoPage(this));
 			addPage(new DependencyPage(this, unitGroup));
 			addPage(new XmlPage(this, unitGroup));
 		} catch (Exception e) {

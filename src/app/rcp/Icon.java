@@ -44,6 +44,8 @@ public enum Icon {
 
 	INFO("info.png"),
 
+	METHOD("method.png"),
+
 	OK("ok.png"),
 
 	PASTE("paste.png"),
@@ -86,6 +88,8 @@ public enum Icon {
 		if (type == null)
 			return null;
 		switch (type) {
+		case LCIA_METHOD:
+			return METHOD.img();
 		case PROCESS:
 			return EPD.img();
 		case CONTACT:

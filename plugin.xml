@@ -147,6 +147,14 @@
     </editor>
     <editor
           default="false"
+          icon="icons/method.png"
+          id="method.editor"
+          name="LCIA Method"
+          class="app.editors.methods.MethodEditor"
+          contributorClass="app.editors.DataSetToolBar">
+    </editor>
+    <editor
+          default="false"
           icon="icons/quantity.png"
           id="material.properties.editor"
           name="Material Properties"

@@ -22,6 +22,12 @@ public class CategoryElement implements NavigationElement {
 		this.node = node;
 	}
 
+	public Category getCategory() {
+		if (node == null)
+			return null;
+		return node.category;
+	}
+
 	@Override
 	public List<NavigationElement> getChilds() {
 		if (childs == null) {

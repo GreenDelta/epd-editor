@@ -1,5 +1,13 @@
 ## TODO
 
+* New data set actions -> navigation + File menu;
+
+* add New actions to File-Menu
+* bug: error when opening new EPD data set
+* delete EPD Wizard
+* flows: allow flow type change...
+* create Categories class in store package that manages access to category files
+* New data set action: find name of classification system from category files.
 * re-index function
 * Download (including references from extensions)
 * creation actions
@@ -9,9 +17,8 @@
 * Navigator.refresh -> remember expansion state (like in openLCA)
 * Local search
 * Application settings: data set language, application language, RAM
-* flow editors: show extensions only for product flows; rename navi labels
 * fetch also categories from elementary flows in indexing etc.
-* cross platform builds and tests
+* cross platform builds and tests; + default data package
 * Data set export with dependencies as zip package
 * externalize strings
 * cleanup: re-index on failor or cancellation 

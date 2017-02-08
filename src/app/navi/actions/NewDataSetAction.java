@@ -12,6 +12,7 @@ import org.openlca.ilcd.commons.Classification;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.LangString;
+import org.openlca.ilcd.commons.ProcessType;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.contacts.Contact;
 import org.openlca.ilcd.flowproperties.FlowProperty;
@@ -99,6 +100,7 @@ public class NewDataSetAction extends Action {
 		try {
 			App.store.put(ds);
 			App.index.add(ds);
+			App.dumpIndex();
 			Navigator.refresh(parent);
 			Editors.open(Ref.of(ds));
 		} catch (Exception e) {
@@ -191,6 +193,7 @@ public class NewDataSetAction extends Action {
 			if (category != null)
 				info.classifications.add(category);
 		});
+		Processes.method(p).processType = ProcessType.EPD;
 		LangString.set(Processes.processName(p).name, "New EPD", App.lang);
 		Processes.dataEntry(p).timeStamp = Xml.now();
 		Processes.publication(p).version = "00.00.000";

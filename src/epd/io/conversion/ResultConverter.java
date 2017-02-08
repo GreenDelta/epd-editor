@@ -52,6 +52,8 @@ class ResultConverter {
 	private static List<IndicatorResult> readLciaResults(Process process,
 			List<IndicatorMapping> config) {
 		List<IndicatorResult> results = new ArrayList<>();
+		if (process.lciaResults == null)
+			return results;
 		for (LCIAResult element : process.lciaResults) {
 			IndicatorResult result = readResult(element.method,
 					element.other, config);

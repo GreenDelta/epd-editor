@@ -2,6 +2,7 @@ package app.rcp;
 
 import java.io.File;
 
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -18,12 +19,16 @@ import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.progress.IProgressService;
+import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.io.ZipStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.editors.indicators.IndicatorMappingEditor;
 import app.editors.matprops.MaterialPropertyEditor;
+import app.navi.Navigator;
+import app.navi.TypeElement;
+import app.navi.actions.NewDataSetAction;
 import app.store.CleanUp;
 import app.store.ZipImport;
 import app.util.Actions;
@@ -52,6 +57,7 @@ public class ActionBar extends ActionBarAdvisor {
 		super.fillMenuBar(menuBar);
 		MenuManager fileMenu = new MenuManager("#File",
 				IWorkbenchActionConstants.M_FILE);
+		addNewMenu(fileMenu);
 		fileMenu.add(Actions.create("#Import Data Package",
 				Icon.IMPORT.des(), this::importZip));
 		menuBar.add(fileMenu);
@@ -67,6 +73,17 @@ public class ActionBar extends ActionBarAdvisor {
 		editMenu.add(Actions.create("#Delete all data sets",
 				Icon.DELETE.des(), this::cleanUp));
 		menuBar.add(editMenu);
+	}
+
+	private void addNewMenu(MenuManager fileMenu) {
+		MenuManager mm = new MenuManager("#New...");
+		fileMenu.add(mm);
+		DataSetType[] types = { DataSetType.PROCESS, DataSetType.FLOW };
+		for (DataSetType type : types) {
+			TypeElement navElem = Navigator.getTypeRoot(type);
+			Action a = new NewDataSetAction(navElem);
+			mm.add(a);
+		}
 	}
 
 	@Override

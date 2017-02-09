@@ -1,5 +1,7 @@
 package app.editors.flow;
 
+import java.util.function.Supplier;
+
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
@@ -37,8 +39,10 @@ class FlowPage extends FormPage {
 
 	@Override
 	protected void createFormContent(IManagedForm mform) {
-		ScrolledForm form = UI.formHeader(mform,
-				"#Flow: " + App.s(product.flow.getName()));
+		Supplier<String> title = () -> "#Flow: "
+				+ App.s(product.flow.getName());
+		ScrolledForm form = UI.formHeader(mform, title.get());
+		editor.onSaved(() -> form.setText(title.get()));
 		tk = mform.getToolkit();
 		Composite body = UI.formBody(form, tk);
 		TextBuilder tb = new TextBuilder(editor, this, tk);

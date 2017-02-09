@@ -1,5 +1,7 @@
 package app.editors.methods;
 
+import java.util.function.Supplier;
+
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
@@ -25,8 +27,10 @@ class InfoPage extends FormPage {
 
 	@Override
 	protected void createFormContent(IManagedForm mform) {
-		ScrolledForm form = UI.formHeader(mform,
-				"#LCIA Method: " + App.s(method.getName()));
+		Supplier<String> title = () -> "#LCIA Method: "
+				+ App.s(method.getName());
+		ScrolledForm form = UI.formHeader(mform, title.get());
+		editor.onSaved(() -> form.setText(title.get()));
 		tk = mform.getToolkit();
 		Composite body = UI.formBody(form, tk);
 		TextBuilder tb = new TextBuilder(editor, this, tk);

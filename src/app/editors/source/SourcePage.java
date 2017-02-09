@@ -1,6 +1,7 @@
 package app.editors.source;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
@@ -37,8 +38,9 @@ class SourcePage extends FormPage {
 
 	@Override
 	protected void createFormContent(IManagedForm mform) {
-		ScrolledForm form = UI.formHeader(mform,
-				"#Source: " + App.s(source.getName()));
+		Supplier<String> title = () -> "#Source: " + App.s(source.getName());
+		ScrolledForm form = UI.formHeader(mform, title.get());
+		editor.onSaved(() -> form.setText(title.get()));
 		tk = mform.getToolkit();
 		Composite body = UI.formBody(form, tk);
 		TextBuilder tb = new TextBuilder(editor, this, tk);

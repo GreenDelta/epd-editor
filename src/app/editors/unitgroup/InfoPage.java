@@ -1,5 +1,7 @@
 package app.editors.unitgroup;
 
+import java.util.function.Supplier;
+
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
@@ -34,8 +36,10 @@ class InfoPage extends FormPage {
 
 	@Override
 	protected void createFormContent(IManagedForm mform) {
-		ScrolledForm form = UI.formHeader(mform,
-				"#Unit Group: " + App.s(unitGroup.getName()));
+		Supplier<String> title = () -> "#Unit Group: "
+				+ App.s(unitGroup.getName());
+		ScrolledForm form = UI.formHeader(mform, title.get());
+		editor.onSaved(() -> form.setText(title.get()));
 		tk = mform.getToolkit();
 		Composite body = UI.formBody(form, tk);
 		TextBuilder tb = new TextBuilder(editor, this, tk);

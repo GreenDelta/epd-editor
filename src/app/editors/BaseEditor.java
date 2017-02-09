@@ -36,4 +36,8 @@ public abstract class BaseEditor extends FormEditor implements IEditor {
 	public void doSaveAs() {
 	}
 
+	@Override
+	public void setPartName(String partName) {
+		super.setPartName(partName);
+	}
 }

@@ -20,7 +20,6 @@ import app.editors.RefEditorInput;
 import app.editors.XmlPage;
 import epd.model.Version;
 import epd.model.Xml;
-import epd.util.Strings;
 
 public class UnitGroupEditor extends BaseEditor {
 
@@ -39,7 +38,7 @@ public class UnitGroupEditor extends BaseEditor {
 	public void init(IEditorSite s, IEditorInput input)
 			throws PartInitException {
 		super.init(s, input);
-		setPartName(Strings.cut(input.getName(), 75));
+		Editors.setTabTitle(input, this);
 		try {
 			RefEditorInput in = (RefEditorInput) input;
 			unitGroup = App.store.get(UnitGroup.class, in.ref.uuid);
@@ -60,6 +59,7 @@ public class UnitGroupEditor extends BaseEditor {
 			}
 			dirty = false;
 			editorDirtyStateChanged();
+			Editors.setTabTitle(unitGroup, this);
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to save contact data set");

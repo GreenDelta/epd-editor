@@ -30,7 +30,6 @@ import app.util.UI;
 import epd.model.EpdDataSet;
 import epd.model.Version;
 import epd.model.Xml;
-import epd.util.Strings;
 
 public class EpdEditor extends BaseEditor {
 
@@ -51,7 +50,7 @@ public class EpdEditor extends BaseEditor {
 	public void init(IEditorSite s, IEditorInput input)
 			throws PartInitException {
 		super.init(s, input);
-		setPartName(Strings.cut(input.getName(), 75));
+		Editors.setTabTitle(input, this);
 		try {
 			RefEditorInput in = (RefEditorInput) input;
 			dataSet = Store.openEPD(in.ref);
@@ -85,6 +84,7 @@ public class EpdEditor extends BaseEditor {
 			}
 			dirty = false;
 			editorDirtyStateChanged();
+			Editors.setTabTitle(dataSet.process, this);
 			// TODO: StartPageView.refresh(); -> update navigation
 		} catch (Exception e) {
 			log.error("failed to save EPD data set", e);

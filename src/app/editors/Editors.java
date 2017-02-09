@@ -8,10 +8,12 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.UIJob;
+import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import app.App;
 import app.M;
 import app.editors.contact.ContactEditor;
 import app.editors.epd.EpdEditor;
@@ -20,8 +22,23 @@ import app.editors.flowproperty.FlowPropertyEditor;
 import app.editors.methods.MethodEditor;
 import app.editors.source.SourceEditor;
 import app.editors.unitgroup.UnitGroupEditor;
+import epd.util.Strings;
 
 public class Editors {
+
+	public static void setTabTitle(IEditorInput input, BaseEditor editor) {
+		if (input == null || editor == null)
+			return;
+		String title = input.getName();
+		editor.setPartName(Strings.cut(title, 75));
+	}
+
+	public static void setTabTitle(IDataSet ds, BaseEditor editor) {
+		if (ds == null || editor == null)
+			return;
+		String title = App.s(ds.getName());
+		editor.setPartName(Strings.cut(title, 75));
+	}
 
 	public static void open(Ref ref) {
 		if (ref == null || ref.type == null || ref.uuid == null)

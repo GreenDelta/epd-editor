@@ -1,6 +1,7 @@
 package app.editors.epd;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -11,7 +12,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Time;
 import org.openlca.ilcd.processes.DataSetInfo;
 import org.openlca.ilcd.processes.Exchange;
@@ -37,7 +37,6 @@ import epd.util.Strings;
 class InfoPage extends FormPage {
 
 	private final EpdEditor editor;
-	private final String lang;
 	private final EpdDataSet dataSet;
 	private final Process process;
 
@@ -46,7 +45,6 @@ class InfoPage extends FormPage {
 	public InfoPage(EpdEditor editor) {
 		super(editor, "EpdInfoPage", M.DataSetInformation);
 		this.editor = editor;
-		this.lang = App.lang;
 		dataSet = editor.dataSet;
 		process = dataSet.process;
 	}
@@ -55,8 +53,9 @@ class InfoPage extends FormPage {
 	protected void createFormContent(IManagedForm mForm) {
 		toolkit = mForm.getToolkit();
 		ProcessName pName = Processes.processName(process);
-		String name = LangString.getFirst(pName.name, lang);
-		ScrolledForm form = UI.formHeader(mForm, M.EPD + ": " + name);
+		Supplier<String> title = () -> M.EPD + ": " + App.s(pName.name);
+		ScrolledForm form = UI.formHeader(mForm, title.get());
+		editor.onSaved(() -> form.setText(title.get()));
 		Composite body = UI.formBody(form, mForm.getToolkit());
 		TextBuilder tb = new TextBuilder(editor, this, toolkit);
 		infoSection(body, tb);

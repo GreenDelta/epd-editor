@@ -22,7 +22,6 @@ import app.editors.RefEditorInput;
 import app.editors.XmlPage;
 import epd.model.Version;
 import epd.model.Xml;
-import epd.util.Strings;
 
 public class SourceEditor extends BaseEditor {
 
@@ -41,7 +40,7 @@ public class SourceEditor extends BaseEditor {
 	public void init(IEditorSite s, IEditorInput input)
 			throws PartInitException {
 		super.init(s, input);
-		setPartName(Strings.cut(input.getName(), 75));
+		Editors.setTabTitle(input, this);
 		try {
 			RefEditorInput in = (RefEditorInput) input;
 			source = App.store.get(Source.class, in.ref.uuid);
@@ -78,6 +77,7 @@ public class SourceEditor extends BaseEditor {
 			}
 			dirty = false;
 			editorDirtyStateChanged();
+			Editors.setTabTitle(source, this);
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to save contact data set");

@@ -21,7 +21,6 @@ import epd.io.conversion.FlowExtensions;
 import epd.model.EpdProduct;
 import epd.model.Version;
 import epd.model.Xml;
-import epd.util.Strings;
 
 public class FlowEditor extends BaseEditor {
 
@@ -40,7 +39,7 @@ public class FlowEditor extends BaseEditor {
 	public void init(IEditorSite s, IEditorInput input)
 			throws PartInitException {
 		super.init(s, input);
-		setPartName(Strings.cut(input.getName(), 75));
+		Editors.setTabTitle(input, this);
 		try {
 			RefEditorInput in = (RefEditorInput) input;
 			Flow flow = App.store.get(Flow.class, in.ref.uuid);
@@ -63,6 +62,7 @@ public class FlowEditor extends BaseEditor {
 			}
 			dirty = false;
 			editorDirtyStateChanged();
+			Editors.setTabTitle(flow, this);
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to save flow data set", e);

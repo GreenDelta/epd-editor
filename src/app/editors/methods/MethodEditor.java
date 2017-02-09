@@ -15,7 +15,6 @@ import app.editors.DependencyPage;
 import app.editors.Editors;
 import app.editors.RefEditorInput;
 import app.editors.XmlPage;
-import epd.util.Strings;
 
 public class MethodEditor extends BaseEditor {
 
@@ -34,7 +33,7 @@ public class MethodEditor extends BaseEditor {
 	public void init(IEditorSite site, IEditorInput input)
 			throws PartInitException {
 		super.init(site, input);
-		setPartName(Strings.cut(input.getName(), 75));
+		Editors.setTabTitle(input, this);
 		try {
 			RefEditorInput in = (RefEditorInput) input;
 			method = App.store.get(LCIAMethod.class, in.ref.uuid);
@@ -57,6 +56,8 @@ public class MethodEditor extends BaseEditor {
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
+
+		Editors.setTabTitle(method, this);
 	}
 
 }

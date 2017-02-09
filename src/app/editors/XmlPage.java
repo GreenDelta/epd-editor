@@ -31,7 +31,7 @@ public class XmlPage extends FormPage {
 	@Override
 	protected void createFormContent(IManagedForm mform) {
 		FormToolkit tk = mform.getToolkit();
-		ScrolledForm form = UI.formHeader(mform, "#Dependencies");
+		ScrolledForm form = UI.formHeader(mform, "#XML");
 		Composite body = UI.formBody(form, tk);
 		text = new StyledText(body, SWT.NONE);
 		tk.adapt(text);

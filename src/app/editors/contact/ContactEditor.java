@@ -17,6 +17,7 @@ import app.editors.DependencyPage;
 import app.editors.Editors;
 import app.editors.RefEditorInput;
 import app.editors.XmlPage;
+import app.store.Data;
 import epd.model.Version;
 import epd.model.Xml;
 
@@ -51,14 +52,13 @@ public class ContactEditor extends BaseEditor {
 	public void doSave(IProgressMonitor monitor) {
 		try {
 			updateVersion();
-			App.store.put(contact);
+			Data.update(contact);
 			for (Runnable handler : saveHandlers) {
 				handler.run();
 			}
 			dirty = false;
 			editorDirtyStateChanged();
 			Editors.setTabTitle(contact, this);
-			// TODO: navigation refresh
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to save contact data set");

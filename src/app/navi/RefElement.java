@@ -1,8 +1,5 @@
 package app.navi;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.eclipse.swt.graphics.Image;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
@@ -11,19 +8,14 @@ import app.App;
 import app.rcp.Icon;
 import epd.util.Strings;
 
-public class RefElement implements NavigationElement {
+public class RefElement extends NavigationElement {
 
-	public final Ref ref;
+	public Ref ref;
 	private NavigationElement parent;
 
 	public RefElement(NavigationElement parent, Ref ref) {
 		this.parent = parent;
 		this.ref = ref;
-	}
-
-	@Override
-	public List<NavigationElement> getChilds() {
-		return Collections.emptyList();
 	}
 
 	@Override

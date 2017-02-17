@@ -1,8 +1,5 @@
 package app.navi;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.swt.graphics.Image;
 import org.openlca.ilcd.commons.Category;
 import org.openlca.ilcd.commons.Ref;
@@ -11,11 +8,10 @@ import app.rcp.Icon;
 import epd.index.CategoryNode;
 import epd.util.Strings;
 
-public class CategoryElement implements NavigationElement {
+public class CategoryElement extends NavigationElement {
 
 	private NavigationElement parent;
 	private CategoryNode node;
-	private List<NavigationElement> childs;
 
 	public CategoryElement(NavigationElement parent, CategoryNode node) {
 		this.parent = parent;
@@ -29,22 +25,13 @@ public class CategoryElement implements NavigationElement {
 	}
 
 	@Override
-	public List<NavigationElement> getChilds() {
-		if (childs == null) {
-			childs = new ArrayList<>();
-			update();
-		}
-		return childs;
-	}
-
-	@Override
 	public void update() {
 		if (childs == null)
 			return;
 		childs.clear();
 		if (node == null)
 			return;
-		for (CategoryNode catNode : node.childs) {
+		for (CategoryNode catNode : node.categories) {
 			CategoryElement e = new CategoryElement(this, catNode);
 			childs.add(e);
 		}

@@ -1,20 +1,15 @@
 package app.navi;
 
 import java.util.Arrays;
-import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 import org.openlca.ilcd.commons.DataSetType;
 
-public class NavigationRoot implements NavigationElement {
-
-	private List<NavigationElement> childs;
+public class NavigationRoot extends NavigationElement {
 
 	@Override
-	public List<NavigationElement> getChilds() {
-		if (childs != null)
-			return childs;
-		childs = Arrays.asList(
+	public void update() {
+		childs.addAll(Arrays.asList(
 				new TypeElement(this, DataSetType.PROCESS),
 				new TypeElement(this, DataSetType.CONTACT),
 				new TypeElement(this, DataSetType.SOURCE),
@@ -25,14 +20,9 @@ public class NavigationRoot implements NavigationElement {
 				new FolderElement(this, FolderType.LOCATION),
 				new FolderElement(this, FolderType.CLASSIFICATION),
 				new FolderElement(this, FolderType.DOC),
-				new ConnectionFolder(this));
-		return childs;
-	}
-
-	@Override
-	public void update() {
+				new ConnectionFolder(this)));
 		for (NavigationElement child : getChilds()) {
-			child.update();
+			child.getChilds();
 		}
 	}
 

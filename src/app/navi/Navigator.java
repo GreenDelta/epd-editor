@@ -72,9 +72,7 @@ public class Navigator extends CommonNavigator {
 
 	public static void refresh() {
 		CommonViewer viewer = getNavigationViewer();
-		NavigationRoot root = getNavigationRoot();
-		if (viewer != null && root != null) {
-			root.update();
+		if (viewer != null) {
 			viewer.refresh();
 		}
 	}
@@ -119,4 +117,5 @@ public class Navigator extends CommonNavigator {
 			return (Navigator) part;
 		return null;
 	}
+
 }

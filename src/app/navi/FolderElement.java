@@ -1,7 +1,6 @@
 package app.navi;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
@@ -10,7 +9,7 @@ import org.openlca.ilcd.io.FileStore;
 import app.App;
 import app.rcp.Icon;
 
-public class FolderElement implements NavigationElement {
+public class FolderElement extends NavigationElement {
 
 	public final FolderType type;
 	private final NavigationElement parent;
@@ -19,15 +18,6 @@ public class FolderElement implements NavigationElement {
 	public FolderElement(NavigationElement parent, FolderType type) {
 		this.parent = parent;
 		this.type = type;
-	}
-
-	@Override
-	public List<NavigationElement> getChilds() {
-		if (childs == null) {
-			childs = new ArrayList<>();
-			update();
-		}
-		return childs;
 	}
 
 	@Override

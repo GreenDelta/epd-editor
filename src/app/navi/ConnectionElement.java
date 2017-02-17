@@ -1,14 +1,11 @@
 package app.navi;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.eclipse.swt.graphics.Image;
 import org.openlca.ilcd.io.SodaConnection;
 
 import app.rcp.Icon;
 
-public class ConnectionElement implements NavigationElement {
+public class ConnectionElement extends NavigationElement {
 
 	private final ConnectionFolder parent;
 	public final SodaConnection con;
@@ -16,11 +13,6 @@ public class ConnectionElement implements NavigationElement {
 	public ConnectionElement(ConnectionFolder parent, SodaConnection con) {
 		this.parent = parent;
 		this.con = con;
-	}
-
-	@Override
-	public List<NavigationElement> getChilds() {
-		return Collections.emptyList();
 	}
 
 	@Override

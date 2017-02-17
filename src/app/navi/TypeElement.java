@@ -1,8 +1,5 @@
 package app.navi;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.swt.graphics.Image;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.Ref;
@@ -12,24 +9,14 @@ import app.rcp.Icon;
 import epd.index.CategoryNode;
 import epd.index.TypeNode;
 
-public class TypeElement implements NavigationElement {
+public class TypeElement extends NavigationElement {
 
 	public final DataSetType type;
 	private final NavigationRoot parent;
-	private List<NavigationElement> childs;
 
 	public TypeElement(NavigationRoot parent, DataSetType type) {
 		this.parent = parent;
 		this.type = type;
-	}
-
-	@Override
-	public List<NavigationElement> getChilds() {
-		if (childs == null) {
-			childs = new ArrayList<>();
-			update();
-		}
-		return childs;
 	}
 
 	@Override

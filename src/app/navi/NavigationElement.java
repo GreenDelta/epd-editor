@@ -1,20 +1,34 @@
 package app.navi;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 
-public interface NavigationElement {
+public abstract class NavigationElement {
 
-	List<NavigationElement> getChilds();
+	/**
+	 * The list of child elements which is null initially and will be created on
+	 * demand.
+	 */
+	protected List<NavigationElement> childs;
 
-	NavigationElement getParent();
+	public final List<NavigationElement> getChilds() {
+		if (childs == null) {
+			childs = new ArrayList<>();
+			update();
+		}
+		return childs;
+	}
 
-	int compareTo(NavigationElement other);
+	public abstract void update();
 
-	String getLabel();
+	public abstract NavigationElement getParent();
 
-	Image getImage();
+	public abstract int compareTo(NavigationElement other);
 
-	void update();
+	public abstract String getLabel();
+
+	public abstract Image getImage();
+
 }

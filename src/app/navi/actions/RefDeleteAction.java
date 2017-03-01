@@ -3,6 +3,7 @@ package app.navi.actions;
 import org.eclipse.jface.action.Action;
 import org.openlca.ilcd.commons.Ref;
 
+import app.editors.Editors;
 import app.navi.RefElement;
 import app.rcp.Icon;
 import app.store.Data;
@@ -28,6 +29,7 @@ public class RefDeleteAction extends Action {
 		if (!b)
 			return;
 		Ref ref = e.ref;
+		Editors.close(ref);
 		Data.delete(ref);
 	}
 

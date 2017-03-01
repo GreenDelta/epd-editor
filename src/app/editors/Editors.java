@@ -1,10 +1,13 @@
 package app.editors;
 
+import java.util.Objects;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.UIJob;
@@ -72,6 +75,26 @@ public class Editors {
 
 	public static void open(IEditorInput input, String editorId) {
 		new OpenInUIJob(input, editorId).schedule();
+	}
+
+	public static void close(Ref ref) {
+		if (ref == null)
+			return;
+		IWorkbenchPage page = getActivePage();
+		try {
+			for (IEditorReference er : page.getEditorReferences()) {
+				IEditorInput input = er.getEditorInput();
+				if (!(input instanceof RefEditorInput))
+					continue;
+				Ref editorRef = ((RefEditorInput) input).ref;
+				if (Objects.equals(ref, editorRef)) {
+					page.closeEditor(er.getEditor(false), false);
+				}
+			}
+		} catch (Exception e) {
+			Logger log = LoggerFactory.getLogger(Editors.class);
+			log.error("Failed to close editors for " + ref, e);
+		}
 	}
 
 	@SuppressWarnings("unchecked")

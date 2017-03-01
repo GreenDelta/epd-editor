@@ -33,7 +33,7 @@ public final class Locations {
 					set.add(loc);
 			}
 		} catch (Exception e) {
-			Logger log = LoggerFactory.getLogger(Store.class);
+			Logger log = LoggerFactory.getLogger(Locations.class);
 			log.error("failed read location files from " + folder, e);
 		}
 		return set;

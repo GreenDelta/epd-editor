@@ -34,7 +34,7 @@ public class TypeElement extends NavigationElement {
 			childs.add(e);
 		}
 		for (Ref ref : node.refs) {
-			RefElement e = new RefElement(parent, ref);
+			RefElement e = new RefElement(this, ref);
 			childs.add(e);
 		}
 	}

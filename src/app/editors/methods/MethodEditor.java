@@ -15,6 +15,7 @@ import app.editors.DependencyPage;
 import app.editors.Editors;
 import app.editors.RefEditorInput;
 import app.editors.XmlPage;
+import app.store.Data;
 
 public class MethodEditor extends BaseEditor {
 
@@ -56,8 +57,19 @@ public class MethodEditor extends BaseEditor {
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-
-		Editors.setTabTitle(method, this);
+		try {
+			// TODO update version
+			Data.save(method);
+			for (Runnable handler : saveHandlers) {
+				handler.run();
+			}
+			dirty = false;
+			editorDirtyStateChanged();
+			Editors.setTabTitle(method, this);
+		} catch (Exception e) {
+			Logger log = LoggerFactory.getLogger(getClass());
+			log.error("failed to save LCIA data set", e);
+		}
 	}
 
 }

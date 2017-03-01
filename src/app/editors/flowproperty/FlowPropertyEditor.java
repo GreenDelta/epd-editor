@@ -21,6 +21,7 @@ import app.editors.DependencyPage;
 import app.editors.Editors;
 import app.editors.RefEditorInput;
 import app.editors.XmlPage;
+import app.store.Data;
 import epd.model.Version;
 import epd.model.Xml;
 
@@ -73,8 +74,7 @@ public class FlowPropertyEditor extends BaseEditor {
 	public void doSave(IProgressMonitor monitor) {
 		try {
 			updateVersion();
-			App.store.put(property);
-			// TODO: navigation refresh
+			Data.save(property);
 			for (Runnable handler : saveHandlers) {
 				handler.run();
 			}
@@ -83,7 +83,7 @@ public class FlowPropertyEditor extends BaseEditor {
 			Editors.setTabTitle(property, this);
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
-			log.error("failed to save contact data set");
+			log.error("failed to save contact data set", e);
 		}
 	}
 

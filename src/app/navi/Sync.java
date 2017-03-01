@@ -100,7 +100,7 @@ public class Sync implements Runnable {
 			}
 			if (elem instanceof RefElement) {
 				RefElement re = (RefElement) elem;
-				return !node.contains(re.ref);
+				return !node.refs.contains(re.ref);
 			}
 			return false;
 		});

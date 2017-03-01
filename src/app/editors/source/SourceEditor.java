@@ -20,6 +20,7 @@ import app.editors.DependencyPage;
 import app.editors.Editors;
 import app.editors.RefEditorInput;
 import app.editors.XmlPage;
+import app.store.Data;
 import epd.model.Version;
 import epd.model.Xml;
 
@@ -70,8 +71,7 @@ public class SourceEditor extends BaseEditor {
 	public void doSave(IProgressMonitor monitor) {
 		try {
 			updateVersion();
-			App.store.put(source);
-			// TODO: navigation refresh
+			Data.save(source);
 			for (Runnable handler : saveHandlers) {
 				handler.run();
 			}

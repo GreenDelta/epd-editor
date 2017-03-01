@@ -17,6 +17,7 @@ import app.editors.DependencyPage;
 import app.editors.Editors;
 import app.editors.RefEditorInput;
 import app.editors.XmlPage;
+import app.store.Data;
 import epd.io.conversion.FlowExtensions;
 import epd.model.EpdProduct;
 import epd.model.Version;
@@ -53,16 +54,13 @@ public class FlowEditor extends BaseEditor {
 	public void doSave(IProgressMonitor monitor) {
 		try {
 			updateVersion();
-			FlowExtensions.write(product);
-			Flow flow = product.flow;
-			App.store.put(flow);
-			// TODO: navigation refresh
+			Data.save(product);
 			for (Runnable handler : saveHandlers) {
 				handler.run();
 			}
 			dirty = false;
 			editorDirtyStateChanged();
-			Editors.setTabTitle(flow, this);
+			Editors.setTabTitle(product.flow, this);
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to save flow data set", e);

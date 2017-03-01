@@ -25,7 +25,7 @@ import app.editors.DependencyPage;
 import app.editors.Editors;
 import app.editors.RefEditorInput;
 import app.editors.XmlPage;
-import app.store.Store;
+import app.store.Data;
 import app.util.UI;
 import epd.model.EpdDataSet;
 import epd.model.Version;
@@ -53,7 +53,7 @@ public class EpdEditor extends BaseEditor {
 		Editors.setTabTitle(input, this);
 		try {
 			RefEditorInput in = (RefEditorInput) input;
-			dataSet = Store.openEPD(in.ref);
+			dataSet = Data.getEPD(in.ref);
 		} catch (Exception e) {
 			throw new PartInitException(
 					"Failed to open editor: no correct input", e);
@@ -78,14 +78,13 @@ public class EpdEditor extends BaseEditor {
 	public void doSave(IProgressMonitor monitor) {
 		try {
 			updateVersion();
-			Store.saveEPD(dataSet);
+			Data.save(dataSet);
 			for (Runnable handler : saveHandlers) {
 				handler.run();
 			}
 			dirty = false;
 			editorDirtyStateChanged();
 			Editors.setTabTitle(dataSet.process, this);
-			// TODO: StartPageView.refresh(); -> update navigation
 		} catch (Exception e) {
 			log.error("failed to save EPD data set", e);
 		}
@@ -116,9 +115,8 @@ public class EpdEditor extends BaseEditor {
 			Processes.dataSetInfo(p).uuid = UUID.randomUUID().toString();
 			Processes.publication(p).version = Version.asString(0);
 			Processes.dataEntry(p).timeStamp = Xml.now();
-			Store.saveEPD(clone);
+			Data.save(clone);
 			EpdEditor.open(Ref.of(p));
-			// TODO StartPageView.refresh();
 		} catch (Exception e) {
 			log.error("failed to save EPD as new data set", e);
 		}

@@ -6,7 +6,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IPersistableElement;
 import org.eclipse.ui.PartInitException;
 import org.openlca.ilcd.io.SodaConnection;
 import org.slf4j.Logger;
@@ -14,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import app.editors.BaseEditor;
 import app.editors.Editors;
-import app.navi.Navigator;
+import app.editors.SimpleEditorInput;
 import app.rcp.Icon;
 import app.store.Connections;
 import epd.util.Strings;
@@ -56,48 +55,23 @@ public class ConnectionEditor extends BaseEditor {
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		Connections.save(con);
-		Navigator.refresh(); // TODO
 		dirty = false;
 		editorDirtyStateChanged();
 		setPartName(Strings.cut(con.toString(), 75));
 	}
 
-	private static class Input implements IEditorInput {
+	public static class Input extends SimpleEditorInput {
 
-		final SodaConnection con;
+		public final SodaConnection con;
 
 		Input(SodaConnection con) {
+			super(con != null ? con.toString() : "null-connection");
 			this.con = con;
-		}
-
-		@Override
-		public <T> T getAdapter(Class<T> adapter) {
-			return null;
-		}
-
-		@Override
-		public boolean exists() {
-			return true;
 		}
 
 		@Override
 		public ImageDescriptor getImageDescriptor() {
 			return Icon.CONNECTION.des();
-		}
-
-		@Override
-		public String getName() {
-			return con.toString();
-		}
-
-		@Override
-		public IPersistableElement getPersistable() {
-			return null;
-		}
-
-		@Override
-		public String getToolTipText() {
-			return con.toString();
 		}
 
 		@Override

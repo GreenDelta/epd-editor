@@ -3,7 +3,6 @@ package app.navi.actions;
 import org.eclipse.jface.action.Action;
 
 import app.navi.ConnectionElement;
-import app.navi.Navigator;
 import app.rcp.Icon;
 import app.store.Connections;
 import app.util.MsgBox;
@@ -28,7 +27,6 @@ public class ConnectionDeleteAction extends Action {
 		if (!b)
 			return;
 		Connections.delete(e.con);
-		Navigator.refresh(e.getParent());
 	}
 
 }

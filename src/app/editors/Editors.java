@@ -1,6 +1,7 @@
 package app.editors;
 
 import java.util.Objects;
+import java.util.function.Predicate;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -13,11 +14,13 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.UIJob;
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.io.SodaConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.M;
+import app.editors.connection.ConnectionEditor;
 import app.editors.contact.ContactEditor;
 import app.editors.epd.EpdEditor;
 import app.editors.flow.FlowEditor;
@@ -78,22 +81,36 @@ public class Editors {
 	}
 
 	public static void close(Ref ref) {
-		if (ref == null)
-			return;
-		IWorkbenchPage page = getActivePage();
+		close(input -> {
+			if (!(input instanceof RefEditorInput))
+				return false;
+			Ref editorRef = ((RefEditorInput) input).ref;
+			return Objects.equals(ref, editorRef);
+		});
+	}
+
+	public static void close(SodaConnection con) {
+		close(input -> {
+			if (!(input instanceof ConnectionEditor.Input))
+				return false;
+			SodaConnection editorCon = ((ConnectionEditor.Input) input).con;
+			return Objects.equals(con, editorCon);
+		});
+	}
+
+	private static void close(Predicate<IEditorInput> fn) {
 		try {
+			IWorkbenchPage page = getActivePage();
 			for (IEditorReference er : page.getEditorReferences()) {
 				IEditorInput input = er.getEditorInput();
-				if (!(input instanceof RefEditorInput))
-					continue;
-				Ref editorRef = ((RefEditorInput) input).ref;
-				if (Objects.equals(ref, editorRef)) {
-					page.closeEditor(er.getEditor(false), false);
+				if (fn.test(input)) {
+					IEditorPart editor = er.getEditor(false);
+					page.closeEditor(editor, false);
 				}
 			}
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Editors.class);
-			log.error("Failed to close editors for " + ref, e);
+			log.error("Failed to close editors", e);
 		}
 	}
 

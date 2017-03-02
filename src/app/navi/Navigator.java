@@ -11,6 +11,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.openlca.ilcd.commons.DataSetType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import app.editors.Editors;
 import app.editors.connection.ConnectionEditor;
@@ -70,6 +72,21 @@ public class Navigator extends CommonNavigator {
 		return new TypeElement(null, type);
 	}
 
+	public static void refreshConnections() {
+		try {
+			NavigationRoot root = Navigator.getInstance().root;
+			if (root.childs == null)
+				return;
+			for (NavigationElement e : root.childs) {
+				if (e instanceof ConnectionFolder)
+					refresh(e);
+			}
+		} catch (Exception e) {
+			Logger log = LoggerFactory.getLogger(Navigator.class);
+			log.error("failed to refresh connections", e);
+		}
+	}
+
 	public static void refresh() {
 		CommonViewer viewer = getNavigationViewer();
 		if (viewer != null) {
@@ -92,14 +109,6 @@ public class Navigator extends CommonNavigator {
 			viewer = instance.getCommonViewer();
 		}
 		return viewer;
-	}
-
-	private static NavigationRoot getNavigationRoot() {
-		NavigationRoot root = null;
-		Navigator navigator = getInstance();
-		if (navigator != null)
-			root = navigator.getRoot();
-		return root;
 	}
 
 	private static Navigator getInstance() {

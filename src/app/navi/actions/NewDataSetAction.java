@@ -33,10 +33,10 @@ import app.App;
 import app.editors.Editors;
 import app.navi.CategoryElement;
 import app.navi.NavigationElement;
-import app.navi.Navigator;
 import app.navi.RefElement;
 import app.navi.TypeElement;
 import app.rcp.Icon;
+import app.store.Data;
 import app.util.MsgBox;
 import epd.model.Xml;
 
@@ -98,10 +98,7 @@ public class NewDataSetAction extends Action {
 		if (ds == null)
 			return;
 		try {
-			App.store.put(ds);
-			App.index.add(ds);
-			App.dumpIndex();
-			Navigator.refresh(parent);
+			Data.save(ds);
 			Editors.open(Ref.of(ds));
 		} catch (Exception e) {
 			MsgBox.error("#Failed to create data set", e.getMessage());

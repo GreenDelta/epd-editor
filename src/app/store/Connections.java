@@ -8,6 +8,8 @@ import java.util.List;
 import org.openlca.ilcd.io.SodaConnection;
 
 import app.App;
+import app.editors.Editors;
+import app.navi.Navigator;
 import epd.util.Strings;
 
 public class Connections {
@@ -17,6 +19,7 @@ public class Connections {
 			return;
 		File f = new File(dir(), con.uuid + ".json");
 		Json.write(con, f);
+		Navigator.refreshConnections();
 	}
 
 	public static List<SodaConnection> get() {
@@ -35,8 +38,11 @@ public class Connections {
 		if (con == null)
 			return;
 		File f = new File(dir(), con.uuid + ".json");
-		if (f.exists())
+		if (f.exists()) {
 			f.delete();
+		}
+		Navigator.refreshConnections();
+		Editors.close(con);
 	}
 
 	private static File dir() {

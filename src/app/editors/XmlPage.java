@@ -5,6 +5,7 @@ import java.io.StringWriter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
@@ -55,14 +56,32 @@ public class XmlPage extends FormPage {
 	}
 
 	private void styleText(String xml) {
+		try {
+			XmlTokenizer tokenizer = new XmlTokenizer();
+			for (Token token : tokenizer.parse(xml)) {
+				StyleRange range = new StyleRange();
+				range.start = token.start;
+				range.length = token.end - token.start;
+				range.foreground = color(token.type);
+				text.setStyleRange(range);
+			}
+		} catch (Exception e) {
+			Logger log = LoggerFactory.getLogger(getClass());
+			log.error("failed to convert data set to XML", e);
+		}
 	}
 
-	private void styleOperator(int start, int length) {
-		StyleRange styleRange = new StyleRange();
-		styleRange.start = start;
-		styleRange.length = length;
-		styleRange.foreground = Colors.gray();
-		text.setStyleRange(styleRange);
+	private Color color(TokenType type) {
+		if (type == null)
+			return Colors.darkGray(); // TODO: red ..
+		switch (type) {
+		case INSTRUCTION:
+			return Colors.gray();
+		case MARKUP_VALUE:
+			return Colors.linkBlue();
+		default:
+			return Colors.black();
+		}
 	}
 
 }

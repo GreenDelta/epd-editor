@@ -26,6 +26,7 @@ public class XmlPage extends FormPage {
 	public XmlPage(BaseEditor editor, IDataSet dataSet) {
 		super(editor, "XmlPage", "#XML");
 		this.dataSet = dataSet;
+		editor.onSaved(this::fillText);
 	}
 
 	@Override
@@ -36,6 +37,11 @@ public class XmlPage extends FormPage {
 		text = new StyledText(body, SWT.NONE);
 		tk.adapt(text);
 		UI.gridData(text, true, true);
+		fillText();
+		form.reflow(true);
+	}
+
+	private void fillText() {
 		StringWriter writer = new StringWriter();
 		try {
 			new XmlBinder().toWriter(dataSet, writer);
@@ -46,7 +52,6 @@ public class XmlPage extends FormPage {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to convert data set to XML", e);
 		}
-		form.reflow(true);
 	}
 
 	private void styleText(String xml) {

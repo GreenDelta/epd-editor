@@ -79,11 +79,8 @@ class ModulePage extends FormPage {
 		Section section = UI.section(parent, toolkit, M.Scenarios);
 		section.setExpanded(false);
 		UI.gridData(section, true, false);
-		Composite composite = UI.sectionClient(section, toolkit);
-		UI.gridLayout(composite, 1);
-		scenarioTable = new ScenarioTable(editor, composite);
+		scenarioTable = new ScenarioTable(editor, section, toolkit);
 		scenarioTable.setInput();
-		scenarioTable.bindTo(section);
 	}
 
 	private TableViewer createModuleSection(Composite parent) {
@@ -95,7 +92,7 @@ class ModulePage extends FormPage {
 		TableViewer viewer = Tables.createViewer(composite, columns);
 		ModuleLabel label = new ModuleLabel();
 		viewer.setLabelProvider(label);
-		// TODO: Viewers.sortByLabels(viewer, label, 0, 1, 2, 3);
+		// Viewers.sortByLabels(viewer, label, 0, 1, 2, 3);
 		Tables.bindColumnWidths(viewer, 0.25, 0.25, 0.25, 0.25);
 		Action[] actions = createModuleActions();
 		Actions.bind(section, actions);

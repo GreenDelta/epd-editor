@@ -1,24 +1,30 @@
 package app.editors.epd;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.BaseLabelProvider;
-import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.Section;
 
 import app.M;
 import app.rcp.Icon;
+import app.util.Actions;
 import app.util.Tables;
 import app.util.UI;
-import app.util.tables.AbstractTableViewer;
+import app.util.Viewers;
 import app.util.tables.CheckBoxCellModifier;
+import app.util.tables.ModifySupport;
 import app.util.tables.TextCellModifier;
 import epd.model.Scenario;
 
-class ScenarioTable extends AbstractTableViewer<Scenario> {
+class ScenarioTable {
 
 	private final static String NAME = M.Name;
 	private final static String GROUP = M.Group;
@@ -26,33 +32,60 @@ class ScenarioTable extends AbstractTableViewer<Scenario> {
 	private final static String DEFAULT = M.Default;
 
 	private final EpdEditor editor;
+	private final TableViewer table;
 	private final List<Scenario> scenarios;
 
-	public ScenarioTable(EpdEditor editor, Composite parent) {
-		super(parent);
+	public ScenarioTable(EpdEditor editor, Section section, FormToolkit tk) {
 		this.editor = editor;
 		this.scenarios = editor.dataSet.scenarios;
-		Tables.bindColumnWidths(getViewer(), 0.25, 0.25, 0.25, 0.25);
-		applyCellModifySupport();
-		getViewer().refresh(true);
-		UI.gridData(getViewer().getControl(), true, true).heightHint = 150;
+		Composite comp = UI.sectionClient(section, tk);
+		UI.gridLayout(comp, 1);
+		table = Tables.createViewer(comp, NAME, GROUP, DESCRIPTION, DEFAULT);
+		table.setLabelProvider(new LabelProvider());
+		Tables.bindColumnWidths(table, 0.25, 0.25, 0.25, 0.25);
+		addModifiers();
+		UI.gridData(table.getControl(), true, true).heightHint = 150;
+		bindActions(section);
 	}
 
-	private void applyCellModifySupport() {
-		getModifySupport().bind(NAME, new TextModifier(NAME));
-		getModifySupport().bind(GROUP, new TextModifier(GROUP));
-		getModifySupport().bind(DESCRIPTION, new TextModifier(DESCRIPTION));
-		getModifySupport().bind(DEFAULT, new DefaultModifier());
+	private void addModifiers() {
+		ModifySupport<Scenario> ms = new ModifySupport<>(table);
+		ms.bind(NAME, new TextModifier(NAME));
+		ms.bind(GROUP, new TextModifier(GROUP));
+		ms.bind(DESCRIPTION, new TextModifier(DESCRIPTION));
+		ms.bind(DEFAULT, new DefaultModifier());
 	}
 
-	@Override
-	protected String[] getColumnHeaders() {
-		return new String[] { NAME, GROUP, DESCRIPTION, DEFAULT };
+	private void bindActions(Section section) {
+		Action add = Actions.create("#Add", Icon.ADD.des(), this::onCreate);
+		Action rem = Actions.create("#Remove", Icon.DELETE.des(),
+				this::onRemove);
+		Actions.bind(section, add, rem);
+		Actions.bind(table, add, rem);
 	}
 
-	@Override
-	protected IBaseLabelProvider getLabelProvider() {
-		return new LabelProvider();
+	public void setInput() {
+		if (scenarios == null)
+			table.setInput(Collections.emptyList());
+		else
+			table.setInput(scenarios);
+	}
+
+	protected void onCreate() {
+		Scenario scenario = new Scenario();
+		scenario.name = "New scenario";
+		scenario.defaultScenario = false;
+		scenarios.add(scenario);
+		setInput();
+		editor.setDirty();
+	}
+
+	protected void onRemove() {
+		List<Scenario> selection = Viewers.getAllSelected(table);
+		for (Scenario s : selection)
+			scenarios.remove(s);
+		setInput();
+		editor.setDirty();
 	}
 
 	private class LabelProvider extends BaseLabelProvider implements
@@ -84,32 +117,6 @@ class ScenarioTable extends AbstractTableViewer<Scenario> {
 				return null;
 			}
 		}
-	}
-
-	public void setInput() {
-		if (scenarios == null)
-			setInput(new Scenario[0]);
-		else
-			setInput(scenarios.toArray(new Scenario[scenarios.size()]));
-		getViewer().refresh(true);
-	}
-
-	@OnAdd
-	protected void onCreate() {
-		Scenario scenario = new Scenario();
-		scenario.name = "New scenario";
-		scenario.defaultScenario = false;
-		scenarios.add(scenario);
-		setInput();
-		editor.setDirty();
-	}
-
-	@OnRemove
-	protected void onRemove() {
-		for (Scenario scenario : getAllSelected())
-			scenarios.remove(scenario);
-		setInput();
-		editor.setDirty();
 	}
 
 	private class TextModifier extends TextCellModifier<Scenario> {

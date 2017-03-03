@@ -57,7 +57,7 @@ class ModulePage extends FormPage {
 			Module m2 = e2.module;
 			if (m1 == null || m2 == null || m1 == m2)
 				return Strings.compare(e1.scenario, e2.scenario);
-			return Strings.compare(m1.getLabel(), m2.getLabel());
+			return m1.ordinal() - m2.ordinal();
 		});
 	}
 
@@ -85,23 +85,28 @@ class ModulePage extends FormPage {
 
 	private TableViewer createModuleSection(Composite parent) {
 		Section section = UI.section(parent, toolkit, M.Modules);
-		Composite composite = UI.sectionClient(section, toolkit);
-		UI.gridLayout(composite, 1);
+		Composite comp = UI.sectionClient(section, toolkit);
+		UI.gridLayout(comp, 1);
 		String[] columns = new String[] { M.Module, M.Scenario,
 				M.ProductSystem, M.Description };
-		TableViewer viewer = Tables.createViewer(composite, columns);
-		ModuleLabel label = new ModuleLabel();
-		viewer.setLabelProvider(label);
-		// Viewers.sortByLabels(viewer, label, 0, 1, 2, 3);
-		Tables.bindColumnWidths(viewer, 0.25, 0.25, 0.25, 0.25);
+		TableViewer table = Tables.createViewer(comp, columns);
+		table.setLabelProvider(new ModuleLabel());
+		Tables.addSorter(table, 0, (ModuleEntry e1, ModuleEntry e2) -> {
+			if (e1.module == null || e2.module == null)
+				return 0;
+			return e1.module.ordinal() - e2.module.ordinal();
+		});
+		Tables.addSorter(table, 1, (ModuleEntry e) -> e.scenario);
+		Tables.addSorter(table, 3, (ModuleEntry e) -> e.description);
+		Tables.bindColumnWidths(table, 0.25, 0.25, 0.25, 0.25);
 		Action[] actions = createModuleActions();
 		Actions.bind(section, actions);
-		Actions.bind(viewer, actions);
-		ModifySupport<ModuleEntry> modifiers = new ModifySupport<>(viewer);
+		Actions.bind(table, actions);
+		ModifySupport<ModuleEntry> modifiers = new ModifySupport<>(table);
 		modifiers.bind(M.Module, new ModuleModifier());
 		modifiers.bind(M.Scenario, new ScenarioModifier());
 		modifiers.bind(M.Description, new DescriptionModifier());
-		return viewer;
+		return table;
 	}
 
 	private Action[] createModuleActions() {

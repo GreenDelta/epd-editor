@@ -1,11 +1,13 @@
 package epd.io.conversion;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.openlca.ilcd.commons.Other;
 import org.openlca.ilcd.processes.DataSetInfo;
 import org.openlca.ilcd.processes.Method;
 import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.processes.QuantitativeReference;
 import org.openlca.ilcd.util.Processes;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -31,8 +33,19 @@ class EpdConverter {
 			return;
 		if (dataSet.process == null)
 			dataSet.process = new Process();
+		clearResults(dataSet.process);
 		ResultConverter.writeResults(dataSet, indicators);
 		writeExtensions();
+	}
+
+	/** Remove all result exchanges. */
+	private void clearResults(Process p) {
+		if (p == null)
+			return;
+		QuantitativeReference qref = Processes.getQuantitativeReference(p);
+		List<Integer> refFlows = qref == null ? Collections.emptyList()
+				: qref.referenceFlows;
+		p.exchanges.removeIf(e -> !refFlows.contains(e.id));
 	}
 
 	private void writeExtensions() {

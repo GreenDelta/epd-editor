@@ -43,6 +43,8 @@ public class XmlPage extends FormPage {
 	}
 
 	private void fillText() {
+		if (dataSet == null || text == null)
+			return;
 		StringWriter writer = new StringWriter();
 		try {
 			new XmlBinder().toWriter(dataSet, writer);

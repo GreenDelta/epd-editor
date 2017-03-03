@@ -68,9 +68,6 @@ class ModuleConverter {
 		case "name":
 			module.module = Module.fromLabel(value);
 			break;
-		case "productsystem-id":
-			module.productSystemId = value;
-			break;
 		case "scenario":
 			module.scenario = value;
 			break;
@@ -94,8 +91,7 @@ class ModuleConverter {
 		if (dataSet == null)
 			return false;
 		for (ModuleEntry entry : dataSet.moduleEntries) {
-			if (Strings.notEmpty(entry.productSystemId)
-					|| Strings.notEmpty(entry.description))
+			if (Strings.notEmpty(entry.description))
 				return true;
 		}
 		return false;
@@ -109,9 +105,6 @@ class ModuleConverter {
 			Element element = document.createElementNS(nsUri, "olca:module");
 			if (module.module != null)
 				element.setAttribute("olca:name", module.module.getLabel());
-			if (module.productSystemId != null)
-				element.setAttribute("olca:productsystem-id",
-						module.productSystemId);
 			if (module.scenario != null)
 				element.setAttribute("olca:scenario", module.scenario);
 			if (module.description != null)

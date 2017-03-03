@@ -115,10 +115,27 @@ class ModulePage extends FormPage {
 
 	private void createModule() {
 		ModuleEntry module = new ModuleEntry();
-		module.module = Module.A1;
+		module.module = nextModule();
 		modules.add(module);
 		moduleTable.setInput(modules);
 		editor.setDirty();
+	}
+
+	private Module nextModule() {
+		Module[] mods = Module.values();
+		int selected = 0;
+		for (ModuleEntry e : modules) {
+			for (int i = 0; i < mods.length; i++) {
+				if (e.module != mods[i])
+					continue;
+				if (i < selected)
+					break;
+				selected = i + 1;
+			}
+		}
+		if (selected < mods.length)
+			return mods[selected];
+		return mods[0];
 	}
 
 	private void removeModule() {

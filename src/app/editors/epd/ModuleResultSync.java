@@ -80,8 +80,7 @@ class ModuleResultSync implements Runnable {
 	private Amount findAmount(IndicatorResult result, ModuleEntry entry) {
 		for (Amount amount : result.amounts) {
 			if (Objects.equals(entry.module, amount.module)
-					&& Strings.nullOrEqual(entry.scenario,
-							amount.scenario))
+					&& Strings.nullOrEqual(entry.scenario, amount.scenario))
 				return amount;
 		}
 		return null;

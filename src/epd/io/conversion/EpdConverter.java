@@ -46,6 +46,7 @@ class EpdConverter {
 		List<Integer> refFlows = qref == null ? Collections.emptyList()
 				: qref.referenceFlows;
 		p.exchanges.removeIf(e -> !refFlows.contains(e.id));
+		p.lciaResults = null;
 	}
 
 	private void writeExtensions() {

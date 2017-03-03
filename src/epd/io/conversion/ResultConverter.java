@@ -116,15 +116,19 @@ class ResultConverter {
 		return null;
 	}
 
-	private static Other createLciResult(Process process,
-			IndicatorMapping mapping) {
-		Exchange exchange = new Exchange();
-		exchange.id = process.exchanges.size();
-		process.exchanges.add(exchange);
-		exchange.flow = createRef(mapping, true);
-		setExchangeAttributes(mapping, exchange);
+	private static Other createLciResult(Process p, IndicatorMapping mapping) {
+		int nextId = 1;
+		for (Exchange e : p.exchanges) {
+			if (e.id >= nextId)
+				nextId = e.id + 1;
+		}
+		Exchange e = new Exchange();
+		e.id = nextId;
+		p.exchanges.add(e);
+		e.flow = createRef(mapping, true);
+		setExchangeAttributes(mapping, e);
 		Other other = new Other();
-		exchange.other = other;
+		e.other = other;
 		return other;
 	}
 

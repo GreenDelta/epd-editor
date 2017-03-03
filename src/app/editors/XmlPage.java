@@ -76,9 +76,15 @@ public class XmlPage extends FormPage {
 			return Colors.darkGray(); // TODO: red ..
 		switch (type) {
 		case INSTRUCTION:
-			return Colors.gray();
+			return Colors.get(217, 217, 217);
+		case ATTRIBUTE:
+			return Colors.get(186, 36, 91);
+		case ATTRIBUTE_VALUE:
+			return Colors.get(241, 128, 22);
+		case MARKUP:
+			return Colors.get(0, 128, 128);
 		case MARKUP_VALUE:
-			return Colors.linkBlue();
+			return Colors.black();
 		default:
 			return Colors.black();
 		}

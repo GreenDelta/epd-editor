@@ -16,6 +16,12 @@ public class Strings {
 	private Strings() {
 	}
 
+	public static String trim(String s) {
+		if (s == null)
+			return null;
+		return s.trim();
+	}
+
 	/**
 	 * Cut a string to the given length. Appends "..." if the string was
 	 * truncated.

@@ -16,6 +16,7 @@ import org.w3c.dom.NodeList;
 
 import epd.model.EpdDataSet;
 import epd.model.Scenario;
+import epd.util.Strings;
 
 class ScenarioConverter {
 
@@ -47,19 +48,22 @@ class ScenarioConverter {
 
 	private static List<Scenario> fromElement(Element element) {
 		List<Scenario> scenarios = new ArrayList<>();
-		NodeList list = element.getElementsByTagNameNS(ProcessExtensions.NAMESPACE,
+		NodeList list = element.getElementsByTagNameNS(
+				ProcessExtensions.NAMESPACE,
 				"scenario");
 		for (int i = 0; i < list.getLength(); i++) {
 			Node node = list.item(i);
-			NamedNodeMap attributes = node.getAttributes();
+			NamedNodeMap atts = node.getAttributes();
 			Scenario scenario = new Scenario();
-			for (int m = 0; m < attributes.getLength(); m++) {
-				String attName = attributes.item(m).getLocalName();
-				String attVal = attributes.item(m).getNodeValue();
+			scenarios.add(scenario);
+			for (int m = 0; m < atts.getLength(); m++) {
+				String attName = atts.item(m).getLocalName();
+				String attVal = atts.item(m).getNodeValue();
 				setField(scenario, attName, attVal);
 			}
-			scenario.description = node.getTextContent();
-			scenarios.add(scenario);
+			Element e = Util.getChild((Element) node, "description");
+			if (e != null)
+				scenario.description = Strings.trim(e.getTextContent());
 		}
 		return scenarios;
 	}
@@ -87,7 +91,8 @@ class ScenarioConverter {
 				|| dataSet.scenarios.isEmpty())
 			return;
 		Util.clear(other, "scenarios");
-		Element root = doc.createElementNS(ProcessExtensions.NAMESPACE, "epd:scenarios");
+		Element root = doc.createElementNS(ProcessExtensions.NAMESPACE,
+				"epd:scenarios");
 		for (Scenario scenario : dataSet.scenarios) {
 			Element element = toElement(scenario, doc);
 			if (element != null)
@@ -107,7 +112,8 @@ class ScenarioConverter {
 			if (scenario.group != null)
 				element.setAttribute("epd:group", scenario.group);
 			if (scenario.description != null) {
-				Element description = doc.createElementNS(nsUri, "description");
+				Element description = doc.createElementNS(nsUri,
+						"epd:description");
 				description.setTextContent(scenario.description);
 				element.appendChild(description);
 			}

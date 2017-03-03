@@ -78,5 +78,6 @@ class DataStockLink {
 			t = con.dataStockName + " | " + con.dataStockId;
 		}
 		link.setText(t);
+		link.getParent().pack();
 	}
 }

@@ -1,4 +1,4 @@
-package app.editors.upload;
+package app.editors.io;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.io.SodaClient;
-import org.openlca.ilcd.io.SodaConnection;
 import org.openlca.ilcd.util.DependencyTraversal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +54,9 @@ public class UploadDialog extends Wizard {
 
 	@Override
 	public boolean performFinish() {
-		SodaClient client = makeClient();
+		SodaClient client = conCombo.makeClient();
+		if (client == null)
+			return false;
 		try {
 			Upload upload = new Upload(client);
 			getContainer().run(true, false, monitor -> {
@@ -73,24 +74,6 @@ public class UploadDialog extends Wizard {
 		} catch (Exception e) {
 			MsgBox.error("#Upload failed", e.getMessage());
 			return false;
-		}
-	}
-
-	private SodaClient makeClient() {
-		SodaConnection con = conCombo.selected;
-		if (con == null) {
-			MsgBox.error("#No connection",
-					"#There is no connection selected");
-			return null;
-		}
-		try {
-			SodaClient client = new SodaClient(con);
-			client.connect();
-			return client;
-		} catch (Exception e) {
-			MsgBox.error("#Connection failed",
-					"#Connection to client failed: " + e.getMessage());
-			return null;
 		}
 	}
 

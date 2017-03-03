@@ -3,6 +3,7 @@
 
 * Download (including references from extensions)
 
+
 * flows: allow flow type change... -> no just allow to create products but only
   show product information when type is PRODUCT?
 

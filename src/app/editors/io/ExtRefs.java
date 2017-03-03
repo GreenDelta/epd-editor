@@ -1,4 +1,4 @@
-package app.editors.upload;
+package app.editors.io;
 
 import java.util.Arrays;
 import java.util.List;

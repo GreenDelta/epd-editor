@@ -1,11 +1,15 @@
-package app.editors.upload;
+package app.editors.io;
+
+import java.util.Objects;
 
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.openlca.ilcd.io.SodaClient;
 import org.openlca.ilcd.io.SodaConnection;
 
 import app.store.Connections;
 import app.util.Controls;
+import app.util.MsgBox;
 import app.util.UI;
 
 class ConnectionCombo {
@@ -37,5 +41,39 @@ class ConnectionCombo {
 		Controls.onSelect(combo, e -> {
 			selected = cons[combo.getSelectionIndex()];
 		});
+	}
+
+	void select(SodaConnection con) {
+		if (con == null)
+			return;
+		int idx = -1;
+		for (int i = 0; i < cons.length; i++) {
+			if (Objects.equals(cons[i], con)) {
+				idx = i;
+				break;
+			}
+		}
+		if (idx > -1) {
+			selected = con;
+			combo.select(idx);
+		}
+	}
+
+	SodaClient makeClient() {
+		SodaConnection con = selected;
+		if (con == null) {
+			MsgBox.error("#No connection",
+					"#There is no connection selected");
+			return null;
+		}
+		try {
+			SodaClient client = new SodaClient(con);
+			client.connect();
+			return client;
+		} catch (Exception e) {
+			MsgBox.error("#Connection failed",
+					"#Connection to client failed: " + e.getMessage());
+			return null;
+		}
 	}
 }

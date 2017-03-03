@@ -1,4 +1,4 @@
-package app.editors.upload;
+package app.editors.io;
 
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;

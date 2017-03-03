@@ -2,12 +2,11 @@ package app.editors.connection;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
@@ -15,7 +14,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.IDataSet;
-import org.openlca.ilcd.commons.LangString;
+import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.contacts.Contact;
 import org.openlca.ilcd.descriptors.Descriptor;
 import org.openlca.ilcd.descriptors.DescriptorList;
@@ -30,12 +29,14 @@ import org.openlca.ilcd.units.UnitGroup;
 
 import app.App;
 import app.M;
+import app.editors.io.DownloadDialog;
 import app.rcp.Icon;
+import app.util.Actions;
 import app.util.Controls;
 import app.util.MsgBox;
 import app.util.Tables;
 import app.util.UI;
-import epd.util.Strings;
+import app.util.Viewers;
 
 class DataSection {
 
@@ -64,19 +65,20 @@ class DataSection {
 		table = Tables.createViewer(parent, M.Name, M.UUID, M.Version,
 				M.Comment);
 		Tables.bindColumnWidths(table, 0.3, 0.2, 0.2, 0.3);
-		table.setLabelProvider(new Label());
+		table.setLabelProvider(new TableLabel());
+		bindDownload();
 	}
 
 	private void runSearch(DataSetType type, String name) {
-		Class<? extends IDataSet> cs = getClass(type);
-		if (cs == null)
+		Class<? extends IDataSet> clazz = getClass(type);
+		if (clazz == null)
 			return;
 		String[] error = new String[1];
 		List<Descriptor> result = new ArrayList<>();
 		App.run("#Search online", () -> {
 			try (SodaClient client = new SodaClient(con)) {
 				client.connect();
-				DescriptorList list = client.search(cs, name);
+				DescriptorList list = client.search(clazz, name);
 				result.addAll(list.descriptors);
 			} catch (Exception e) {
 				error[0] = e.getMessage();
@@ -87,7 +89,6 @@ class DataSection {
 			else
 				MsgBox.error("#Search failed", error[0]);
 		});
-
 	}
 
 	private Class<? extends IDataSet> getClass(DataSetType type) {
@@ -113,36 +114,17 @@ class DataSection {
 		}
 	}
 
-	private class Label extends LabelProvider implements ITableLabelProvider {
-
-		@Override
-		public Image getColumnImage(Object obj, int col) {
-			if (!(obj instanceof Descriptor))
-				return null;
-			if (col != 0)
-				return null;
-			Descriptor d = (Descriptor) obj;
-			return Icon.img(d.toRef().type);
-		}
-
-		@Override
-		public String getColumnText(Object obj, int col) {
-			if (!(obj instanceof Descriptor))
-				return null;
-			Descriptor d = (Descriptor) obj;
-			switch (col) {
-			case 0:
-				return LangString.getFirst(d.name, App.lang);
-			case 1:
-				return d.uuid;
-			case 2:
-				return d.version;
-			case 3:
-				String val = LangString.getFirst(d.comment, App.lang);
-				return Strings.cut(val, 75);
-			default:
-				return null;
-			}
-		}
+	private void bindDownload() {
+		Action action = Actions.create("#Download", Icon.DOWNLOAD.des(), () -> {
+			List<Descriptor> selected = Viewers.getAllSelected(table);
+			if (selected.isEmpty())
+				return;
+			List<Ref> refs = selected.stream()
+					.map(d -> d.toRef())
+					.collect(Collectors.toList());
+			DownloadDialog.open(con, refs);
+		});
+		Actions.bind(table, action);
 	}
+
 }

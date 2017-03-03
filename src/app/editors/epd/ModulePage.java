@@ -91,11 +91,7 @@ class ModulePage extends FormPage {
 				M.ProductSystem, M.Description };
 		TableViewer table = Tables.createViewer(comp, columns);
 		table.setLabelProvider(new ModuleLabel());
-		Tables.addSorter(table, 0, (ModuleEntry e1, ModuleEntry e2) -> {
-			if (e1.module == null || e2.module == null)
-				return 0;
-			return e1.module.ordinal() - e2.module.ordinal();
-		});
+		Tables.addSorter(table, 0, (ModuleEntry e) -> e.module);
 		Tables.addSorter(table, 1, (ModuleEntry e) -> e.scenario);
 		Tables.addSorter(table, 3, (ModuleEntry e) -> e.description);
 		Tables.bindColumnWidths(table, 0.25, 0.25, 0.25, 0.25);

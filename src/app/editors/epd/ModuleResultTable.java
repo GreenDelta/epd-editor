@@ -40,7 +40,12 @@ class ModuleResultTable {
 		modifySupport.bind(M.Value, new AmountModifier());
 		ResultLabel label = new ResultLabel();
 		viewer.setLabelProvider(label);
-		// TODO: Viewers.sortByLabels(viewer, label, 0, 1, 2, 4);
+		Tables.addSorter(viewer, 0, (ResultRow r) -> r.amount.module);
+		Tables.addSorter(viewer, 1, (ResultRow r) -> r.amount.scenario);
+		Tables.addSorter(viewer, 2, (ResultRow r) -> r.result.indicator);
+		Tables.addSorter(viewer, 3, (ResultRow r) -> r.amount.value);
+		Tables.addSorter(viewer, 4,
+				(ResultRow r) -> r.result.indicator.getUnit());
 	}
 
 	public void refresh() {

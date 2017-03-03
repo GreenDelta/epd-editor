@@ -1,9 +1,6 @@
 ## TODO
 
 
-bug: scenario table: org.eclipse.core.runtime.AssertionFailedException: assertion failed: Column 0 has no label provider
-* sort modules in life cycle stage order (A1 -> A1-A3 -> A2 -> A3 etc.)
-
 * Download (including references from extensions)
 
 * flows: allow flow type change... -> no just allow to create products but only
@@ -12,7 +9,6 @@ bug: scenario table: org.eclipse.core.runtime.AssertionFailedException: assertio
 * remove empty categories from navigation tree
 
 * create Categories class in store package that manages access to category files
-* New data set action: find name of classification system from category files.
 * re-index function
 * show product unit in quantitative reference of EPD
 * Source type combo in SourcePage

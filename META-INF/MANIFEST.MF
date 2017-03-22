@@ -14,10 +14,6 @@ Require-Bundle: org.eclipse.ui,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ClassPath: .,
- libs/commons-codec-1.2.jar,
- libs/commons-httpclient-3.1.jar,
- libs/commons-logging-1.0.4.jar,
- libs/jersey-apache-client-1.19.jar,
  libs/jersey-client-1.19.jar,
  libs/jersey-core-1.19.jar,
  libs/jersey-multipart-1.19.jar,

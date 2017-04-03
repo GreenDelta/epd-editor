@@ -1,6 +1,10 @@
 package app.editors.io;
 
+import java.io.File;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -13,7 +17,10 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.io.SodaClient;
+import org.openlca.ilcd.sources.FileRef;
+import org.openlca.ilcd.sources.Source;
 import org.openlca.ilcd.util.RefTree;
+import org.openlca.ilcd.util.Sources;
 
 import app.App;
 import epd.model.RefStatus;
@@ -34,7 +41,8 @@ class Download implements IRunnableWithProgress {
 	}
 
 	@Override
-	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+	public void run(IProgressMonitor monitor)
+			throws InvocationTargetException, InterruptedException {
 		monitor.beginTask("#Download data sets", IProgressMonitor.UNKNOWN);
 		while (!queue.isEmpty()) {
 			Ref ref = queue.poll();
@@ -44,6 +52,9 @@ class Download implements IRunnableWithProgress {
 				continue;
 			monitor.subTask("#Save data set " + App.s(ds.getName()));
 			save(ref, ds);
+			if (ds instanceof Source) {
+				extDocs((Source) ds);
+			}
 			if (!withDependencies)
 				continue;
 			for (Ref next : RefTree.create(ds).getRefs()) {
@@ -53,6 +64,24 @@ class Download implements IRunnableWithProgress {
 			}
 		}
 		App.dumpIndex();
+	}
+
+	private void extDocs(Source source) {
+		for (FileRef ref : Sources.getFileRefs(source)) {
+			String fileName = Sources.getFileName(ref);
+			if (fileName == null || fileName.isEmpty())
+				continue;
+			try {
+				InputStream is = client.getExternalDocument(
+						source.getUUID(), fileName);
+				File target = App.store.getExternalDocument(ref);
+				Files.copy(is, target.toPath(),
+						StandardCopyOption.REPLACE_EXISTING);
+			} catch (Exception e) {
+				status.add(RefStatus.error(Ref.of(source),
+						"#Failed to get external doc.: " + fileName));
+			}
+		}
 	}
 
 	private IDataSet get(Ref ref) {
@@ -68,7 +97,8 @@ class Download implements IRunnableWithProgress {
 			}
 			return client.get(type, ref.uuid);
 		} catch (Exception e) {
-			status.add(RefStatus.error(ref, "#Download failed: " + e.getMessage()));
+			status.add(RefStatus.error(ref,
+					"#Download failed: " + e.getMessage()));
 			return null;
 		}
 	}
@@ -80,7 +110,8 @@ class Download implements IRunnableWithProgress {
 			App.index.add(ds);
 			status.add(RefStatus.ok(ref, "Downloaded"));
 		} catch (Exception e) {
-			status.add(RefStatus.error(ref, "#Download failed: " + e.getMessage()));
+			status.add(RefStatus.error(ref,
+					"#Download failed: " + e.getMessage()));
 		}
 	}
 }

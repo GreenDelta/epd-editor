@@ -30,6 +30,7 @@ import app.navi.Navigator;
 import app.navi.TypeElement;
 import app.navi.actions.NewDataSetAction;
 import app.store.CleanUp;
+import app.store.ZipExport;
 import app.store.ZipImport;
 import app.util.Actions;
 import app.util.FileChooser;
@@ -60,6 +61,8 @@ public class ActionBar extends ActionBarAdvisor {
 		addNewMenu(fileMenu);
 		fileMenu.add(Actions.create("#Import Data Package",
 				Icon.IMPORT.des(), this::importZip));
+		fileMenu.add(Actions.create("#Export Data Package",
+				Icon.EXPORT.des(), this::exportZip));
 		menuBar.add(fileMenu);
 		MenuManager editMenu = new MenuManager("#Edit",
 				IWorkbenchActionConstants.M_EDIT);
@@ -128,8 +131,23 @@ public class ActionBar extends ActionBarAdvisor {
 			progress.run(true, true, new ZipImport(zip));
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
-			log.error("failed to delete data sets", e);
+			log.error("failed to import data sets", e);
+			MsgBox.error("#Data export failed: " + e.getMessage());
 		}
 	}
 
+	private void exportZip() {
+		File zipFile = FileChooser.save("ILCD_package", "*.zip");
+		if (zipFile == null)
+			return;
+		IProgressService progress = PlatformUI.getWorkbench()
+				.getProgressService();
+		try {
+			progress.run(true, true, new ZipExport(zipFile));
+		} catch (Exception e) {
+			Logger log = LoggerFactory.getLogger(getClass());
+			log.error("failed to export data sets", e);
+			MsgBox.error("#Data export failed: " + e.getMessage());
+		}
+	}
 }

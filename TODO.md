@@ -1,10 +1,5 @@
 ## TODO
 
-
-* remove empty categories from navigation tree (on Sync)
-* export function
-
-
 * Use status view in import (check Navi-Updates ...)
 
 * flows: allow flow type change... -> no just allow to create products but only
@@ -19,11 +14,11 @@
 * Application settings: data set language, application language, RAM
 * fetch also categories from elementary flows in indexing etc.
 * cross platform builds and tests; + default data package
-* Data set export with dependencies as zip package
 * externalize strings
 * cleanup: re-index on failor or cancellation 
 * allow editing of indicator mappings (best would be probably a simple wizard)
 * LCIA editor: show fields + editing (first remove getters and setters in core API)
+* Data set export with dependencies as zip package
 
 
 bug: catch error: open data set that does not exist

@@ -36,6 +36,7 @@ public class Sync implements Runnable {
 				continue;
 			sync(node, elem);
 		}
+		Navigator.refreshFolders();
 		Navigator.refresh();
 	}
 

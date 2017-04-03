@@ -87,6 +87,21 @@ public class Navigator extends CommonNavigator {
 		}
 	}
 
+	public static void refreshFolders() {
+		try {
+			NavigationRoot root = Navigator.getInstance().root;
+			if (root.childs == null)
+				return;
+			for (NavigationElement e : root.childs) {
+				if (e instanceof FolderElement)
+					refresh(e);
+			}
+		} catch (Exception e) {
+			Logger log = LoggerFactory.getLogger(Navigator.class);
+			log.error("failed to refresh folders", e);
+		}
+	}
+
 	public static void refresh() {
 		CommonViewer viewer = getNavigationViewer();
 		if (viewer != null) {

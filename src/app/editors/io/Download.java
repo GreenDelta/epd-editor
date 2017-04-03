@@ -92,7 +92,7 @@ class Download implements IRunnableWithProgress {
 		Class<? extends IDataSet> type = ref.getDataSetClass();
 		try {
 			if (!overwriteExisting && App.store.contains(type, ref.uuid)) {
-				status.add(RefStatus.cancel(ref, "#Already exisits locally"));
+				status.add(RefStatus.info(ref, "#Already exisits locally"));
 				return null;
 			}
 			return client.get(type, ref.uuid);

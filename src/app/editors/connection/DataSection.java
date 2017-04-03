@@ -62,6 +62,10 @@ class DataSection {
 		Controls.onSelect(button, e -> {
 			runSearch(typeCombo.selectedType, searchText.getText());
 		});
+		searchText.addTraverseListener(e -> {
+			if (e.detail == SWT.TRAVERSE_RETURN)
+				runSearch(typeCombo.selectedType, searchText.getText());
+		});
 		table = Tables.createViewer(parent, M.Name, M.UUID, M.Version,
 				M.Comment);
 		Tables.bindColumnWidths(table, 0.3, 0.2, 0.2, 0.3);

@@ -1,7 +1,6 @@
 package app.navi;
 
 import java.io.File;
-import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 import org.openlca.ilcd.io.FileStore;
@@ -13,7 +12,6 @@ public class FolderElement extends NavigationElement {
 
 	public final FolderType type;
 	private final NavigationElement parent;
-	private List<NavigationElement> childs;
 
 	public FolderElement(NavigationElement parent, FolderType type) {
 		this.parent = parent;

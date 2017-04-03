@@ -57,6 +57,14 @@ public class Index {
 		root.remove(ref);
 	}
 
+	public void removeEmptyCategories() {
+		for (TypeNode node : nodes.values()) {
+			if (node == null)
+				continue;
+			node.removeEmptyCategories();
+		}
+	}
+
 	/** Get the reference with the same type and UUID from the tree. */
 	public Ref find(Ref ref) {
 		if (ref == null)

@@ -48,4 +48,19 @@ public abstract class Node {
 		}
 		return false;
 	}
+
+	public boolean isEmpty() {
+		return refs.isEmpty() && categories.isEmpty();
+	}
+
+	protected void removeEmptyCategories() {
+		List<CategoryNode> removals = new ArrayList<>();
+		for (CategoryNode n : categories) {
+			n.removeEmptyCategories();
+			if (n.isEmpty()) {
+				removals.add(n);
+			}
+		}
+		categories.removeAll(removals);
+	}
 }

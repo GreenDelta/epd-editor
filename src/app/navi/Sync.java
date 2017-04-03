@@ -27,6 +27,7 @@ public class Sync implements Runnable {
 	public void run() {
 		if (index == null)
 			return;
+		index.removeEmptyCategories();
 		for (DataSetType type : DataSetType.values()) {
 			TypeElement elem = Navigator.getTypeRoot(type);
 			if (elem == null)

@@ -1,6 +1,7 @@
 package app.editors.epd;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,7 +18,10 @@ import app.util.tables.ModifySupport;
 import app.util.tables.TextCellModifier;
 import epd.model.Amount;
 import epd.model.EpdDataSet;
+import epd.model.Indicator;
 import epd.model.IndicatorResult;
+import epd.model.Module;
+import epd.util.Strings;
 
 class ModuleResultTable {
 
@@ -36,8 +40,8 @@ class ModuleResultTable {
 				M.Indicator, M.Value, M.Unit };
 		viewer = Tables.createViewer(composite, columns);
 		Tables.bindColumnWidths(viewer, 0.1, 0.2, 0.3, 0.2, 0.2);
-		ModifySupport<ResultRow> modifySupport = new ModifySupport<>(viewer);
-		modifySupport.bind(M.Value, new AmountModifier());
+		ModifySupport<ResultRow> modifier = new ModifySupport<>(viewer);
+		modifier.bind(M.Value, new AmountModifier());
 		ResultLabel label = new ResultLabel();
 		viewer.setLabelProvider(label);
 		Tables.addSorter(viewer, 0, (ResultRow r) -> r.amount.module);
@@ -58,12 +62,45 @@ class ModuleResultTable {
 				rows.add(row);
 			}
 		}
+		Collections.sort(rows);
 		viewer.setInput(rows);
 	}
 
-	private class ResultRow {
+	private class ResultRow implements Comparable<ResultRow> {
 		IndicatorResult result;
 		Amount amount;
+
+		@Override
+		public int compareTo(ResultRow other) {
+			if (other == null)
+				return 1;
+			if (this.amount == null || other.amount == null)
+				return 0;
+
+			// compare by modules
+			Module m1 = this.amount.module;
+			Module m2 = other.amount.module;
+			if (m1 == null || m2 == null)
+				return 0;
+			if (m1 != m2)
+				return m1.compareTo(m2);
+
+			// compare by scenarios
+			String s1 = this.amount.scenario;
+			String s2 = other.amount.scenario;
+			int c = Strings.compare(s1, s2);
+			if (c != 0)
+				return c;
+
+			// compare by indicators
+			if (this.result == null || other.result == null)
+				return 0;
+			Indicator i1 = this.result.indicator;
+			Indicator i2 = other.result.indicator;
+			if (i1 == null || i2 == null)
+				return 0;
+			return i1.compareTo(i2);
+		}
 	}
 
 	private class ResultLabel extends LabelProvider implements

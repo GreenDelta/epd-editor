@@ -1,15 +1,16 @@
 ## TODO
 
 
-* Download (including references from extensions)
-* Status view
+* sources: open external files on double click
+* remove empty categories from navigation tree (on Sync)
+* export function
+
+
 * Use status view in import (check Navi-Updates ...)
-* better result sorting in result page -> 1. Module 2. Indicator
 
 * flows: allow flow type change... -> no just allow to create products but only
   show product information when type is PRODUCT?
 
-* remove empty categories from navigation tree
 
 * create Categories class in store package that manages access to category files
 * re-index function
@@ -22,7 +23,6 @@
 * Data set export with dependencies as zip package
 * externalize strings
 * cleanup: re-index on failor or cancellation 
-* sources: open external files on double click
 * allow editing of indicator mappings (best would be probably a simple wizard)
 * LCIA editor: show fields + editing (first remove getters and setters in core API)
 
@@ -35,7 +35,6 @@ bug: catch error: open data set that does not exist
 * delete complete categories and data sets from navigation tree
 
 * proxy settings
-* support multiple versions 
 
 ---
 doc:

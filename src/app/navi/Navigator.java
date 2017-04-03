@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import app.editors.Editors;
 import app.editors.connection.ConnectionEditor;
+import app.util.UI;
 import app.util.Viewers;
 
 public class Navigator extends CommonNavigator {
@@ -50,6 +51,11 @@ public class Navigator extends CommonNavigator {
 			} else if (obj instanceof ConnectionElement) {
 				ConnectionElement conEl = (ConnectionElement) obj;
 				ConnectionEditor.open(conEl.con);
+			} else if (obj instanceof FileElement) {
+				FileElement fe = (FileElement) obj;
+				if (fe.getType() == FolderType.DOC) {
+					UI.open(fe.file);
+				}
 			}
 		});
 	}

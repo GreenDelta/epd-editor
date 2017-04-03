@@ -1,7 +1,6 @@
 ## TODO
 
 
-* sources: open external files on double click
 * remove empty categories from navigation tree (on Sync)
 * export function
 

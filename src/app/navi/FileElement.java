@@ -10,9 +10,9 @@ import epd.util.Strings;
 public class FileElement extends NavigationElement {
 
 	public final File file;
-	private final NavigationElement parent;
+	private final FolderElement parent;
 
-	public FileElement(NavigationElement parent, File file) {
+	public FileElement(FolderElement parent, File file) {
 		this.file = file;
 		this.parent = parent;
 	}
@@ -42,6 +42,10 @@ public class FileElement extends NavigationElement {
 
 	@Override
 	public void update() {
+	}
+
+	public FolderType getType() {
+		return parent == null ? null : parent.type;
 	}
 
 }

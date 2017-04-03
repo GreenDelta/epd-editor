@@ -1,5 +1,8 @@
 package app.util;
 
+import java.awt.Desktop;
+import java.io.File;
+
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
@@ -24,10 +27,23 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UI {
 
 	private UI() {
+	}
+
+	public static void open(File file) {
+		if (file == null || !file.exists())
+			return;
+		try {
+			Desktop.getDesktop().open(file);
+		} catch (Exception e) {
+			Logger log = LoggerFactory.getLogger(UI.class);
+			log.error("failed to open file natively: " + file, e);
+		}
 	}
 
 	public static Shell shell() {

@@ -19,7 +19,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.App;
-import app.navi.Navigator;
+import app.editors.Editors;
+import app.navi.Sync;
 import app.util.MsgBox;
 import epd.index.Index;
 
@@ -98,7 +99,8 @@ public class CleanUp implements IRunnableWithProgress {
 
 	private void refreshUI() {
 		// TODO: close editors
-		Navigator.refresh();
+		new Sync(App.index).run();
+		Editors.closeAll();
 		MsgBox.info("#Deleted data sets",
 				deleted + " data sets removed. " + failors + " errors");
 		// TODO: re-index if there where errors

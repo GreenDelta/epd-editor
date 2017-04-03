@@ -98,6 +98,10 @@ public class Editors {
 		});
 	}
 
+	public static void closeAll() {
+		close(input -> true);
+	}
+
 	private static void close(Predicate<IEditorInput> fn) {
 		try {
 			IWorkbenchPage page = getActivePage();

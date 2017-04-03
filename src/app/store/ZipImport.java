@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.App;
-import app.navi.Navigator;
+import app.navi.Sync;
 
 public class ZipImport implements IRunnableWithProgress {
 
@@ -54,7 +54,7 @@ public class ZipImport implements IRunnableWithProgress {
 			zip.close();
 			App.dumpIndex();
 			monitor.done();
-			App.runInUI("Refresh...", () -> Navigator.refresh());
+			App.runInUI("Refresh...", () -> new Sync(App.index).run());
 		} catch (Exception e) {
 			throw new InvocationTargetException(e, e.getMessage());
 		}
@@ -98,8 +98,7 @@ public class ZipImport implements IRunnableWithProgress {
 
 	private void extDocs(IProgressMonitor monitor) throws Exception {
 		monitor.subTask("external_docs");
-		File targetDir = new File(App.store.getRootFolder(),
-				"external_docs");
+		File targetDir = new File(App.store.getRootFolder(), "external_docs");
 		if (!targetDir.exists())
 			targetDir.mkdirs();
 		for (Path doc : zip.getEntries("external_docs")) {
@@ -114,11 +113,9 @@ public class ZipImport implements IRunnableWithProgress {
 	}
 
 	private Class<?>[] classes() {
-		return new Class<?>[] {
-				Contact.class, Source.class,
-				UnitGroup.class, FlowProperty.class,
-				Flow.class, LCIAMethod.class, Process.class
-		};
+		return new Class<?>[] { Contact.class, Source.class, UnitGroup.class,
+				FlowProperty.class, Flow.class,
+				LCIAMethod.class, Process.class };
 	}
 
 	private String getFileName(Ref ref) {

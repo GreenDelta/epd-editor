@@ -13,16 +13,15 @@ import org.eclipse.swt.widgets.Composite;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.io.SodaClient;
 import org.openlca.ilcd.io.SodaConnection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import app.App;
+import app.navi.Sync;
 import app.util.MsgBox;
 import app.util.Tables;
 import app.util.UI;
 
 public class DownloadDialog extends Wizard {
 
-	private Logger log = LoggerFactory.getLogger(getClass());
 	private final SodaConnection con;
 	private final List<Ref> refs;
 
@@ -50,9 +49,11 @@ public class DownloadDialog extends Wizard {
 		if (client == null)
 			return false;
 		try {
-			getContainer().run(true, false, monitor -> {
-
-			});
+			Download download = new Download(client, refs);
+			download.withDependencies = page.dependencyCheck.getSelection();
+			download.overwriteExisting = page.overwriteCheck.getSelection();
+			getContainer().run(true, false, download);
+			new Sync(App.index).run();
 			return true;
 		} catch (Exception e) {
 			MsgBox.error("#Download failed", e.getMessage());
@@ -70,7 +71,8 @@ public class DownloadDialog extends Wizard {
 
 		private ConnectionCombo conCombo;
 		private TableViewer table;
-		private Button check;
+		private Button dependencyCheck;
+		private Button overwriteCheck;
 
 		private Page() {
 			super("DownloadDialogPage", "#Download data sets", null);
@@ -87,16 +89,23 @@ public class DownloadDialog extends Wizard {
 			UI.gridData(comp, true, false);
 			conCombo = ConnectionCombo.create(comp);
 			conCombo.select(con);
-			UI.filler(comp);
-			check = new Button(comp, SWT.CHECK);
-			check.setText("#Download dependencies");
-			check.setSelection(true);
+			createChecks(comp);
 			createTable(parent);
 		}
 
+		private void createChecks(Composite comp) {
+			UI.filler(comp);
+			dependencyCheck = new Button(comp, SWT.CHECK);
+			dependencyCheck.setText("#Download dependencies");
+			dependencyCheck.setSelection(true);
+			UI.filler(comp);
+			overwriteCheck = new Button(comp, SWT.CHECK);
+			overwriteCheck.setText("#Overwrite existing data sets");
+			overwriteCheck.setSelection(false);
+		}
+
 		private void createTable(Composite comp) {
-			table = Tables.createViewer(comp, "#Data set", "UUID",
-					"Version");
+			table = Tables.createViewer(comp, "#Data set", "UUID", "Version");
 			table.setLabelProvider(new TableLabel());
 			Tables.bindColumnWidths(table, 0.6, 0.2, 0.2);
 			table.setInput(refs);

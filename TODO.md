@@ -2,7 +2,9 @@
 
 
 * Download (including references from extensions)
-
+* Status view
+* Use status view in import (check Navi-Updates ...)
+* better result sorting in result page -> 1. Module 2. Indicator
 
 * flows: allow flow type change... -> no just allow to create products but only
   show product information when type is PRODUCT?

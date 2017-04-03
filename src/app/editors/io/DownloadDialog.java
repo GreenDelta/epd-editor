@@ -15,6 +15,7 @@ import org.openlca.ilcd.io.SodaClient;
 import org.openlca.ilcd.io.SodaConnection;
 
 import app.App;
+import app.StatusView;
 import app.navi.Sync;
 import app.util.MsgBox;
 import app.util.Tables;
@@ -54,6 +55,7 @@ public class DownloadDialog extends Wizard {
 			download.overwriteExisting = page.overwriteCheck.getSelection();
 			getContainer().run(true, false, download);
 			new Sync(App.index).run();
+			StatusView.open("Download", download.status);
 			return true;
 		} catch (Exception e) {
 			MsgBox.error("#Download failed", e.getMessage());

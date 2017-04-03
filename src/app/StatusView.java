@@ -28,7 +28,7 @@ import app.rcp.Icon;
 import app.util.Tables;
 import app.util.UI;
 import app.util.Viewers;
-import epd.io.RefStatus;
+import epd.model.RefStatus;
 import epd.util.Strings;
 
 public class StatusView extends BaseEditor {
@@ -126,7 +126,7 @@ public class StatusView extends BaseEditor {
 				return Icon.img(rs.ref.type);
 			if (col != 3)
 				return null;
-			switch (rs.severity) {
+			switch (rs.value) {
 			case RefStatus.CANCEL:
 				return Icon.CANCELED.img();
 			case RefStatus.ERROR:

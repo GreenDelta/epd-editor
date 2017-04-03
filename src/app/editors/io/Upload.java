@@ -12,7 +12,7 @@ import org.openlca.ilcd.sources.Source;
 import org.openlca.ilcd.util.Sources;
 
 import app.App;
-import epd.io.RefStatus;
+import epd.model.RefStatus;
 
 class Upload {
 
@@ -25,24 +25,21 @@ class Upload {
 
 	RefStatus next(Ref ref) {
 		if (cancelAll)
-			return new RefStatus(RefStatus.CANCEL, ref, "#Canceled");
+			return RefStatus.cancel(ref, "#Canceled");
 		try {
 			if (client.contains(ref))
-				return new RefStatus(RefStatus.INFO, ref,
-						"#Already on the server");
+				return RefStatus.info(ref, "#Already on the server");
 			IDataSet ds = App.store.get(ref.getDataSetClass(), ref.uuid);
 			if (ds == null)
-				return new RefStatus(RefStatus.ERROR, ref,
-						"#Data set does not exist");
+				return RefStatus.error(ref, "#Data set does not exist");
 			if (ds instanceof Source)
 				uploadSource((Source) ds);
 			else
 				client.put(ds);
-			return new RefStatus(RefStatus.OK, ref, "#Uploaded");
+			return RefStatus.ok(ref, "#Uploaded");
 		} catch (Exception e) {
 			cancelAll = true;
-			return new RefStatus(RefStatus.ERROR, ref,
-					"#Upload failed: " + e.getMessage());
+			return RefStatus.error(ref, "#Upload failed: " + e.getMessage());
 		}
 	}
 

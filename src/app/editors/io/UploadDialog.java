@@ -25,7 +25,7 @@ import app.util.Controls;
 import app.util.MsgBox;
 import app.util.Tables;
 import app.util.UI;
-import epd.io.RefStatus;
+import epd.model.RefStatus;
 
 public class UploadDialog extends Wizard {
 

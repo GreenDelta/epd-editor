@@ -14,12 +14,12 @@ installed:
 When you have these tools installed you can build the application from source
 via the following steps:
 
-#### Install the openLCA core modules
+#### Install the openLCA core modules and ILCD validation API
 The EPD Editor uses the current version of the 
 [openLCA core modules](https://github.com/GreenDelta/olca-modules) for reading
-and writing ILCD data sets. These modules are plain Maven projects and can be
-installed via `mvn install`. See the 
-[olca-modules](https://github.com/GreenDelta/olca-modules) repository for a
+and writing ILCD data sets and the [ILCD validation API](https://bitbucket.org/okusche/ilcdvalidation)
+for validating them. These modules are plain Maven projects and can be
+installed via `mvn install`. See the documentation of both projects for a
 more information.
 
 #### Get the source code of the application

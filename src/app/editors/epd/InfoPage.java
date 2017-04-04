@@ -12,6 +12,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.commons.Time;
 import org.openlca.ilcd.processes.DataSetInfo;
 import org.openlca.ilcd.processes.Exchange;
@@ -28,6 +29,7 @@ import app.editors.RefLink;
 import app.editors.RefTable;
 import app.rcp.Icon;
 import app.util.Colors;
+import app.util.Controls;
 import app.util.TextBuilder;
 import app.util.UI;
 import epd.model.EpdDataSet;
@@ -115,9 +117,8 @@ class InfoPage extends FormPage {
 		DataSetInfo info = Processes.dataSetInfo(process);
 		String uuid = info.uuid;
 		link.setText("../processes/" + uuid + ".xml");
-		// TODO:
-		// Controls.onClick(link, e -> Browser.openFile(dataSet,
-		// Plugin.getEpdStore()));
+		Controls.onClick(link,
+				e -> UI.open(App.store.getFile(Ref.of(process))));
 	}
 
 	private void qRefSection(Composite parent) {
@@ -127,10 +128,6 @@ class InfoPage extends FormPage {
 		RefLink refText = new RefLink(comp, toolkit, DataSetType.FLOW);
 		Exchange exchange = dataSet.productExchange();
 		refText.setRef(exchange.flow);
-		refText.onChange(ref -> {
-			exchange.flow = ref;
-			editor.setDirty();
-		});
 		Text amountText = UI.formText(comp, toolkit, M.Amount);
 		amountText.setText(Double.toString(exchange.meanAmount));
 		amountText.addModifyListener(e -> {
@@ -143,7 +140,14 @@ class InfoPage extends FormPage {
 				amountText.setBackground(Colors.errorColor());
 			}
 		});
-		// TODO: show unit
+		Text unitText = UI.formText(comp, toolkit, M.Unit);
+		unitText.setText(RefUnit.get(process));
+		unitText.setEditable(false);
+		refText.onChange(ref -> {
+			exchange.flow = ref;
+			unitText.setText(RefUnit.get(process));
+			editor.setDirty();
+		});
 	}
 
 	private void createSafetyMarginsSection(Composite parent) {

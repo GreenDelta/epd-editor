@@ -30,6 +30,7 @@ import app.navi.Navigator;
 import app.navi.TypeElement;
 import app.navi.actions.NewDataSetAction;
 import app.store.CleanUp;
+import app.store.Validation;
 import app.store.ZipExport;
 import app.store.ZipImport;
 import app.util.Actions;
@@ -59,9 +60,11 @@ public class ActionBar extends ActionBarAdvisor {
 		MenuManager fileMenu = new MenuManager("#File",
 				IWorkbenchActionConstants.M_FILE);
 		addNewMenu(fileMenu);
-		fileMenu.add(Actions.create("#Import Data Package",
+		fileMenu.add(Actions.create("#Validate data sets",
+				Icon.OK.des(), this::validateStore));
+		fileMenu.add(Actions.create("#Import data package",
 				Icon.IMPORT.des(), this::importZip));
-		fileMenu.add(Actions.create("#Export Data Package",
+		fileMenu.add(Actions.create("#Export data package",
 				Icon.EXPORT.des(), this::exportZip));
 		menuBar.add(fileMenu);
 		MenuManager editMenu = new MenuManager("#Edit",
@@ -150,4 +153,17 @@ public class ActionBar extends ActionBarAdvisor {
 			MsgBox.error("#Data export failed: " + e.getMessage());
 		}
 	}
+
+	private void validateStore() {
+		IProgressService progress = PlatformUI.getWorkbench()
+				.getProgressService();
+		try {
+			progress.run(true, true, new Validation());
+		} catch (Exception e) {
+			Logger log = LoggerFactory.getLogger(getClass());
+			log.error("failed to validate data sets", e);
+			MsgBox.error("#Data validation failed: " + e.getMessage());
+		}
+	}
+
 }

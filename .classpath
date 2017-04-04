@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="libs/bcprov-jdk15on-1.51.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/commons-compress-1.9.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/scala-library-2.11.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/truecommons-key-spec-2.5.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/truevfs-comp-zip-0.11.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/truevfs-comp-zipdriver-0.11.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/truevfs-driver-zip-0.11.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/truevfs-kernel-impl-0.11.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/annotations-3.0.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/commons-io-2.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/commons-lang3-3.4.jar"/>

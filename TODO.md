@@ -1,6 +1,8 @@
 ## TODO
 
+* show product unit in quantitative reference of EPD
 * Use status view in import (check Navi-Updates ...)
+* editors: admin section -> on version change: set editor dirty
 
 * flows: allow flow type change... -> no just allow to create products but only
   show product information when type is PRODUCT?
@@ -8,7 +10,6 @@
 
 * create Categories class in store package that manages access to category files
 * re-index function
-* show product unit in quantitative reference of EPD
 * Source type combo in SourcePage
 * Local search
 * Application settings: data set language, application language, RAM
@@ -17,7 +18,6 @@
 * externalize strings
 * cleanup: re-index on failor or cancellation 
 * allow editing of indicator mappings (best would be probably a simple wizard)
-* LCIA editor: show fields + editing (first remove getters and setters in core API)
 * Data set export with dependencies as zip package
 
 

@@ -24,6 +24,7 @@ import org.openlca.ilcd.io.ZipStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import app.StatusView;
 import app.editors.indicators.IndicatorMappingEditor;
 import app.editors.matprops.MaterialPropertyEditor;
 import app.navi.Navigator;
@@ -158,7 +159,9 @@ public class ActionBar extends ActionBarAdvisor {
 		IProgressService progress = PlatformUI.getWorkbench()
 				.getProgressService();
 		try {
-			progress.run(true, true, new Validation());
+			Validation v = new Validation();
+			progress.run(true, true, v);
+			StatusView.open("Validation", v.getStatus());
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to validate data sets", e);

@@ -4,6 +4,7 @@
 * Use status view in import (check Navi-Updates ...)
 * editors: admin section -> on version change: set editor dirty
 
+* validation with EPD profile ...
 * flows: allow flow type change... -> no just allow to create products but only
   show product information when type is PRODUCT?
 

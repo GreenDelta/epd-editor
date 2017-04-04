@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="libs/truevfs-driver-file-0.11.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/bcprov-jdk15on-1.51.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/commons-compress-1.9.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/scala-library-2.11.6.jar"/>

@@ -57,4 +57,5 @@ Bundle-ClassPath: .,
  libs/truevfs-comp-zip-0.11.0.jar,
  libs/truevfs-comp-zipdriver-0.11.0.jar,
  libs/truevfs-driver-zip-0.11.0.jar,
- libs/truevfs-kernel-impl-0.11.0.jar
+ libs/truevfs-kernel-impl-0.11.0.jar,
+ libs/truevfs-driver-file-0.11.0.jar

@@ -28,6 +28,7 @@ import app.editors.CategorySection;
 import app.editors.RefLink;
 import app.editors.RefTable;
 import app.rcp.Icon;
+import app.store.RefUnits;
 import app.util.Colors;
 import app.util.Controls;
 import app.util.TextBuilder;
@@ -141,11 +142,11 @@ class InfoPage extends FormPage {
 			}
 		});
 		Text unitText = UI.formText(comp, toolkit, M.Unit);
-		unitText.setText(RefUnit.get(process));
+		unitText.setText(RefUnits.get(process));
 		unitText.setEditable(false);
 		refText.onChange(ref -> {
 			exchange.flow = ref;
-			unitText.setText(RefUnit.get(process));
+			unitText.setText(RefUnits.get(process));
 			editor.setDirty();
 		});
 	}

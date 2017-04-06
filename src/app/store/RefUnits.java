@@ -1,5 +1,6 @@
-package app.editors.epd;
+package app.store;
 
+import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.flowproperties.FlowProperty;
 import org.openlca.ilcd.flows.Flow;
@@ -18,23 +19,43 @@ import org.slf4j.LoggerFactory;
 
 import app.App;
 
-class RefUnit {
+public class RefUnits {
 
-	private RefUnit() {
+	private RefUnits() {
 	}
 
-	static String get(Process p) {
-		try {
-			Exchange e = refExchange(p);
-			if (e == null || e.flow == null || !e.flow.isValid())
-				return "";
-			Unit unit = getUnit(e.flow);
-			return unit == null ? "" : unit.name;
-		} catch (Exception ex) {
-			Logger log = LoggerFactory.getLogger(RefUnit.class);
-			log.error("failed to get reference unit for " + p, p);
+	public static String get(Ref ref) {
+		if (ref == null || !ref.isValid())
+			return "";
+		switch (ref.type) {
+		case FLOW:
+			return get(load(Flow.class, ref));
+		case FLOW_PROPERTY:
+			return get(load(FlowProperty.class, ref));
+		case PROCESS:
+			return get(load(Process.class, ref));
+		case UNIT_GROUP:
+			return get(load(UnitGroup.class, ref));
+		default:
 			return "";
 		}
+	}
+
+	private static <T extends IDataSet> T load(Class<T> type, Ref ref) {
+		try {
+			return App.store.get(type, ref.uuid);
+		} catch (Exception e) {
+			Logger log = LoggerFactory.getLogger(RefUnits.class);
+			log.error("failed load data set " + ref, e);
+			return null;
+		}
+	}
+
+	public static String get(Process p) {
+		if (p == null)
+			return "";
+		Exchange e = refExchange(p);
+		return get(e.flow);
 	}
 
 	private static Exchange refExchange(Process p) {
@@ -48,19 +69,11 @@ class RefUnit {
 		return null;
 	}
 
-	private static Unit getUnit(Ref flowRef) throws Exception {
-		Flow flow = App.store.get(Flow.class, flowRef.uuid);
+	public static String get(Flow flow) {
+		if (flow == null)
+			return "";
 		Ref propertyRef = propertyRef(flow);
-		if (propertyRef == null)
-			return null;
-		FlowProperty prop = App.store.get(FlowProperty.class, propertyRef.uuid);
-		if (prop == null)
-			return null;
-		Ref unitGroupRef = FlowProperties.getUnitGroupRef(prop);
-		if (unitGroupRef == null)
-			return null;
-		UnitGroup group = App.store.get(UnitGroup.class, unitGroupRef.uuid);
-		return UnitGroups.getReferenceUnit(group);
+		return get(propertyRef);
 	}
 
 	private static Ref propertyRef(Flow flow) {
@@ -75,6 +88,18 @@ class RefUnit {
 				return propRef.flowProperty;
 		}
 		return null;
+	}
+
+	public static String get(FlowProperty prop) {
+		if (prop == null)
+			return "";
+		Ref unitGroupRef = FlowProperties.getUnitGroupRef(prop);
+		return get(unitGroupRef);
+	}
+
+	public static String get(UnitGroup group) {
+		Unit unit = UnitGroups.getReferenceUnit(group);
+		return unit == null ? "" : unit.name;
 	}
 
 }

@@ -14,8 +14,10 @@ import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.flows.FlowPropertyRef;
 
 import app.App;
+import app.M;
 import app.editors.IEditor;
 import app.rcp.Icon;
+import app.store.RefUnits;
 import app.util.Tables;
 import app.util.UI;
 
@@ -36,7 +38,7 @@ class FlowPropertySection {
 		TableViewer viewer = Tables.createViewer(comp,
 				"#Flow property",
 				"#Conversion factor",
-				"#Unit");
+				M.Unit);
 		viewer.setLabelProvider(new Label());
 		viewer.setInput(flows);
 		Tables.bindColumnWidths(viewer, 0.4, 0.3, 0.3);
@@ -66,7 +68,7 @@ class FlowPropertySection {
 			case 1:
 				return Double.toString(ref.meanValue);
 			case 2:
-				return null; // TODO: return unit
+				return RefUnits.get(ref.flowProperty);
 			default:
 				return null;
 			}

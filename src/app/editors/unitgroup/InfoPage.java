@@ -45,7 +45,7 @@ class InfoPage extends FormPage {
 		TextBuilder tb = new TextBuilder(editor, this, tk);
 		infoSection(body, tb);
 		categorySection(body);
-		new UnitSection(unitGroup).render(body, tk);
+		new UnitSection(editor, unitGroup).render(body, tk);
 		adminSection(body);
 		form.reflow(true);
 	}

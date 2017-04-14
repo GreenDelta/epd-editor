@@ -22,6 +22,7 @@ import org.openlca.ilcd.util.Flows;
 
 import app.App;
 import app.M;
+import app.editors.Editors;
 import app.editors.IEditor;
 import app.editors.RefSelectionDialog;
 import app.rcp.Icon;
@@ -61,6 +62,11 @@ class FlowPropertySection {
 					propRef.meanValue = value;
 					editor.setDirty();
 				});
+		Tables.onDoubleClick(table, e -> {
+			FlowPropertyRef ref = Viewers.getFirstSelected(table);
+			if (ref != null)
+				Editors.open(ref.flowProperty);
+		});
 	}
 
 	private void bindActions(Section section) {
@@ -81,9 +87,9 @@ class FlowPropertySection {
 				.map(pr -> pr.dataSetInternalID)
 				.collect(Collectors.toList());
 		propRef.dataSetInternalID = 0;
-		do {
+		while (existingIDs.contains(propRef.dataSetInternalID)) {
 			propRef.dataSetInternalID = propRef.dataSetInternalID + 1;
-		} while (existingIDs.contains(propRef.dataSetInternalID));
+		}
 		propRef.flowProperty = ref;
 		propRef.meanValue = 1.0;
 		flow.flowProperties.add(propRef);

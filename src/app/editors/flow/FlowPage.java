@@ -79,7 +79,7 @@ class FlowPage extends FormPage {
 
 	private void propertySections(Composite body) {
 		FlowPropertySection section = new FlowPropertySection(editor,
-				DataSetType.FLOW, product.flow.flowProperties);
+				product.flow);
 		section.render(body, tk);
 		Section s = UI.section(body, tk, M.MaterialProperties);
 		UI.gridData(s, true, false);

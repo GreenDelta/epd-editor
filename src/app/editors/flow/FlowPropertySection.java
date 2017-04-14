@@ -30,6 +30,7 @@ import app.util.Actions;
 import app.util.Tables;
 import app.util.UI;
 import app.util.Viewers;
+import app.util.tables.ModifySupport;
 
 class FlowPropertySection {
 
@@ -53,6 +54,16 @@ class FlowPropertySection {
 		table.setLabelProvider(new Label());
 		table.setInput(flow.flowProperties);
 		Tables.bindColumnWidths(table, 0.4, 0.3, 0.3);
+		bindActions(section);
+		ModifySupport<FlowPropertyRef> modifier = new ModifySupport<>(table);
+		modifier.onDouble("#Conversion factor", propRef -> propRef.meanValue,
+				(propRef, value) -> {
+					propRef.meanValue = value;
+					editor.setDirty();
+				});
+	}
+
+	private void bindActions(Section section) {
 		Action add = Actions.create("#Add", Icon.ADD.des(), this::add);
 		Action rem = Actions.create("#Remove", Icon.DELETE.des(), this::remove);
 		Action ref = Actions.create("#Set as reference",

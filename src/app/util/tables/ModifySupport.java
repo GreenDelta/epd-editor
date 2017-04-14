@@ -3,6 +3,10 @@ package app.util.tables;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+import java.util.function.ObjDoubleConsumer;
+import java.util.function.ToDoubleFunction;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
@@ -18,6 +22,9 @@ import org.eclipse.swt.widgets.Item;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Strings;
+
+import app.util.MsgBox;
 import app.util.tables.ICellModifier.CellEditingType;
 
 /**
@@ -66,13 +73,14 @@ public class ModifySupport<T> {
 	 * values for the getter are allowed. The setter is only called if text was
 	 * changed.
 	 */
-	public void bind(String property, Getter<T> getter, Setter<T> setter) {
+	public void bind(String property, Function<T, String> getter,
+			BiConsumer<T, String> setter) {
 		TextCellModifier<T> modifier = new TextCellModifier<T>() {
 			@Override
 			protected String getText(T element) {
 				if (getter == null)
 					return "";
-				String val = getter.getText(element);
+				String val = getter.apply(element);
 				return val == null ? "" : val;
 			}
 
@@ -80,10 +88,49 @@ public class ModifySupport<T> {
 			protected void setText(T element, String text) {
 				if (getter == null || setter == null)
 					return;
-				String oldVal = getter.getText(element);
+				String oldVal = getter.apply(element);
 				if (Objects.equals(oldVal, text))
 					return;
-				setter.setText(element, text);
+				setter.accept(element, text);
+			}
+		};
+		bind(property, modifier);
+	}
+
+	/**
+	 * Binds the given getter and setter for double values. An error message is
+	 * shown if the number format is not correct. No values are passed in this
+	 * case to the setter.
+	 */
+	public void onDouble(String property, ToDoubleFunction<T> getter,
+			ObjDoubleConsumer<T> setter) {
+		TextCellModifier<T> modifier = new TextCellModifier<T>() {
+			@Override
+			protected String getText(T elem) {
+				if (getter == null)
+					return "";
+				double val = getter.applyAsDouble(elem);
+				return Double.toString(val);
+			}
+
+			@Override
+			protected void setText(T elem, String text) {
+				if (getter == null || setter == null || elem == null)
+					return;
+				String oldVal = getText(elem);
+				if (Objects.equals(oldVal, text))
+					return;
+				if (Strings.isNullOrEmpty(text)) {
+					setter.accept(elem, 0);
+					return;
+				}
+				try {
+					double val = Double.parseDouble(text.trim());
+					setter.accept(elem, val);
+				} catch (Exception e) {
+					MsgBox.error("#Invalid number format",
+							"#Invalid number format: " + text);
+				}
 			}
 		};
 		bind(property, modifier);

@@ -80,7 +80,10 @@ class InfoPage extends FormPage {
 			uuidT.setText(method.getUUID());
 		VersionField vf = new VersionField(comp, tk);
 		vf.setVersion(method.getVersion());
-		vf.onChange(v -> Methods.publication(method).version = v);
+		vf.onChange(v -> {
+			Methods.publication(method).version = v;
+			editor.setDirty();
+		});
 		editor.onSaved(() -> {
 			vf.setVersion(method.getVersion());
 			timeT.setText(Xml.toString(Methods.dataEntry(method).timeStamp));

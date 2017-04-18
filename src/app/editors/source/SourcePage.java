@@ -49,6 +49,7 @@ class SourcePage extends FormPage {
 		contacts(body);
 		new FileTable(editor).render(body, tk);
 		adminSection(body);
+		form.reflow(true);
 	}
 
 	private void infoSection(Composite body, TextBuilder tb) {
@@ -93,7 +94,10 @@ class SourcePage extends FormPage {
 			uuidT.setText(source.getUUID());
 		VersionField vf = new VersionField(comp, tk);
 		vf.setVersion(source.getVersion());
-		vf.onChange(v -> info.publication.version = v);
+		vf.onChange(v -> {
+			info.publication.version = v;
+			editor.setDirty();
+		});
 		editor.onSaved(() -> {
 			vf.setVersion(info.publication.version);
 			timeT.setText(Xml.toString(info.dataEntry.timeStamp));

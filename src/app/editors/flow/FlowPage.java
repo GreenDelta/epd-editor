@@ -97,7 +97,10 @@ class FlowPage extends FormPage {
 			uuidT.setText(f.getUUID());
 		VersionField vf = new VersionField(comp, tk);
 		vf.setVersion(f.getVersion());
-		vf.onChange(v -> Flows.publication(f).version = v);
+		vf.onChange(v -> {
+			Flows.publication(f).version = v;
+			editor.setDirty();
+		});
 		editor.onSaved(() -> {
 			vf.setVersion(f.getVersion());
 			timeT.setText(Xml.toString(Flows.dataEntry(f).timeStamp));

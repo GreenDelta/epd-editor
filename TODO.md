@@ -1,8 +1,5 @@
 ## TODO
 
-* show product unit in quantitative reference of EPD
-
-* Use status view in import (check Navi-Updates ...)
 * editors: admin section -> on version change: set editor dirty
 
 * validation with EPD profile ...
@@ -18,7 +15,7 @@
 * fetch also categories from elementary flows in indexing etc.
 * cross platform builds and tests; + default data package
 * externalize strings
-* cleanup: re-index on failor or cancellation 
+* cleanup: re-index on errors or cancellation 
 * allow editing of indicator mappings (best would be probably a simple wizard)
 * Data set export with dependencies as zip package
 

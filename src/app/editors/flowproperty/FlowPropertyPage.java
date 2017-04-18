@@ -87,7 +87,10 @@ class FlowPropertyPage extends FormPage {
 			uuidT.setText(property.getUUID());
 		VersionField vf = new VersionField(comp, tk);
 		vf.setVersion(property.getVersion());
-		vf.onChange(v -> info.publication.version = v);
+		vf.onChange(v -> {
+			info.publication.version = v;
+			editor.setDirty();
+		});
 		editor.onSaved(() -> {
 			vf.setVersion(info.publication.version);
 			timeT.setText(Xml.toString(info.dataEntry.timeStamp));

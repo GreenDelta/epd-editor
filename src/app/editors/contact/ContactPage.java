@@ -87,7 +87,10 @@ class ContactPage extends FormPage {
 			uuidT.setText(contact.getUUID());
 		VersionField vf = new VersionField(comp, tk);
 		vf.setVersion(contact.getVersion());
-		vf.onChange(v -> pub.version = v);
+		vf.onChange(v -> {
+			pub.version = v;
+			editor.setDirty();
+		});
 		editor.onSaved(() -> {
 			vf.setVersion(pub.version);
 			timeT.setText(Xml.toString(entry.timeStamp));

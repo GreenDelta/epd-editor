@@ -1,14 +1,10 @@
 package app.editors;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-
-import javax.xml.bind.JAXB;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -29,27 +25,25 @@ import org.openlca.ilcd.lists.Category;
 import org.openlca.ilcd.lists.CategoryList;
 import org.openlca.ilcd.lists.CategorySystem;
 import org.openlca.ilcd.lists.ContentType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import app.App;
 import app.M;
 import app.rcp.Icon;
+import app.store.CategorySystems;
 import app.util.UI;
 import app.util.Viewers;
 
 public class CategoryDialog extends FormDialog {
 
 	private final ContentType type;
+	private final List<CategorySystem> systems;
 
-	private Logger log = LoggerFactory.getLogger(getClass());
-	private List<CategorySystem> systems = new ArrayList<>();
 	private TreeViewer treeViewer;
 	private CategorySystem selectedSystem;
 	private Category selectedCategory;
 
 	public CategoryDialog(DataSetType type) {
 		super(UI.shell());
+		this.systems = CategorySystems.get();
 		this.type = mapType(type);
 	}
 
@@ -125,7 +119,6 @@ public class CategoryDialog extends FormDialog {
 
 	@Override
 	protected void createFormContent(IManagedForm mform) {
-		readSystems();
 		getShell().setText(M.SelectACategory);
 		FormToolkit toolkit = mform.getToolkit();
 		Composite body = UI.formBody(mform.getForm(), toolkit);
@@ -164,32 +157,6 @@ public class CategoryDialog extends FormDialog {
 		treeViewer.addSelectionChangedListener((e) -> {
 			selectedCategory = Viewers.getFirstSelected(treeViewer);
 		});
-	}
-
-	private void readSystems() {
-		File dir = getClassificationDir();
-		if (dir == null || !dir.exists())
-			return;
-		for (File file : dir.listFiles()) {
-			try {
-				CategorySystem system = JAXB.unmarshal(file,
-						CategorySystem.class);
-				systems.add(system);
-			} catch (Exception e) {
-				log.error("failed to parse category file " + file, e);
-			}
-		}
-	}
-
-	private File getClassificationDir() {
-		try {
-			File rootDir = App.store.getRootFolder();
-			if (!rootDir.exists())
-				return null;
-			return new File(rootDir, "classifications");
-		} catch (Exception e) {
-			return null;
-		}
 	}
 
 	private List<Category> getRootCategories(CategorySystem system) {

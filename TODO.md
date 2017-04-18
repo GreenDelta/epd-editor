@@ -29,6 +29,22 @@ bug: catch error: open data set that does not exist
 
 * proxy settings
 
+## Classification synchronization
+It is possible to update the classification system from a server. However,
+the update URL is currently a fix string:
+
+```java
+public class ClassificationSync {
+    ...
+    String urlSpec = con.url + "/categorySystems/OEKOBAU.DAT";
+    ...
+}
+```
+
+There is currently no function in soda4LCA available for getting all
+classification systems (it would be also nice to have similar functionalities
+for locations). 
+
 ---
 doc:
 

@@ -114,6 +114,16 @@
 		</image>
 	</extension>
 	
+	<extension
+         point="org.eclipse.ui.views">
+      <view
+            allowMultiple="false"
+            class="app.editors.TranslationView"
+            id="TranslationView"
+            name="#Translations"
+            restorable="true">
+      </view>
+   </extension>
 	
  <extension
        point="org.eclipse.ui.editors">

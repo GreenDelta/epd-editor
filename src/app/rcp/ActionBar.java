@@ -68,8 +68,21 @@ public class ActionBar extends ActionBarAdvisor {
 		fileMenu.add(Actions.create("#Export data package",
 				Icon.EXPORT.des(), this::exportZip));
 		menuBar.add(fileMenu);
+		menuBar.add(editMenu());
+	}
+
+	private MenuManager editMenu() {
 		MenuManager editMenu = new MenuManager("#Edit",
 				IWorkbenchActionConstants.M_EDIT);
+		editMenu.add(Actions.create("#Show translations", () -> {
+			try {
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+						.getActivePage().showView("TranslationView");
+			} catch (Exception e) {
+				LoggerFactory.getLogger(getClass())
+						.error("failed to open translations", e);
+			}
+		}));
 		editMenu.add(Actions.create("#Material properties",
 				Icon.QUANTITY.des(),
 				() -> MaterialPropertyEditor.open()));
@@ -79,7 +92,7 @@ public class ActionBar extends ActionBarAdvisor {
 		editMenu.add(new Separator());
 		editMenu.add(Actions.create("#Delete all data sets",
 				Icon.DELETE.des(), this::cleanUp));
-		menuBar.add(editMenu);
+		return editMenu;
 	}
 
 	private void addNewMenu(MenuManager fileMenu) {

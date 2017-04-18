@@ -1,13 +1,13 @@
 ## TODO
 
-* editors: admin section -> on version change: set editor dirty
-
 * validation with EPD profile ...
+* view for classification systems and locations
+* display translations
+
 * flows: allow flow type change... -> no just allow to create products but only
   show product information when type is PRODUCT?
 
 
-* create Categories class in store package that manages access to category files
 * re-index function
 * Source type combo in SourcePage
 * Local search

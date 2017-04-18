@@ -12,6 +12,8 @@ import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 
 import com.okworx.ilcd.validation.SchemaValidator;
+import com.okworx.ilcd.validation.ValidatorChain;
+import com.okworx.ilcd.validation.XSLTStylesheetValidator;
 import com.okworx.ilcd.validation.common.DatasetType;
 import com.okworx.ilcd.validation.events.EventsList;
 import com.okworx.ilcd.validation.events.IValidationEvent;
@@ -29,8 +31,16 @@ public class Validation implements IRunnableWithProgress, IUpdateEventListener {
 	@Override
 	public void run(IProgressMonitor monitor)
 			throws InvocationTargetException, InterruptedException {
+
 		// TODO: register EPD profile
+		ValidatorChain chain = new ValidatorChain();
 		SchemaValidator sv = new SchemaValidator();
+		chain.add(sv);
+		XSLTStylesheetValidator xslt = new XSLTStylesheetValidator();
+		chain.add(xslt);
+		// CategoryValidator
+		// chain.setProfile(profile);
+
 		sv.setObjectsToValidate(App.store.getRootFolder());
 		sv.setReportSuccesses(true);
 		sv.setUpdateEventListener(this);

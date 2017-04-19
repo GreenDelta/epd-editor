@@ -196,11 +196,13 @@ public class UI {
 
 	public static GridLayout gridLayout(Composite composite, int columns,
 			int spacing, int margin) {
-		final GridLayout layout = new GridLayout(columns, false);
+		GridLayout layout = new GridLayout(columns, false);
 		layout.verticalSpacing = spacing;
 		layout.marginWidth = margin;
 		layout.marginHeight = margin;
 		layout.horizontalSpacing = spacing;
+		if (composite == null)
+			return layout;
 		composite.setLayout(layout);
 		return layout;
 	}
@@ -269,9 +271,14 @@ public class UI {
 		return formMultiText(parent, null, label);
 	}
 
+	public static Text formMultiText(Composite parent, FormToolkit toolkit) {
+		return formMultiText(parent, toolkit, null);
+	}
+
 	public static Text formMultiText(Composite parent, FormToolkit toolkit,
 			String label) {
-		formLabel(parent, toolkit, label);
+		if (label != null)
+			formLabel(parent, toolkit, label);
 		Text text = null;
 		if (toolkit != null)
 			text = toolkit.createText(parent, null, SWT.BORDER | SWT.V_SCROLL

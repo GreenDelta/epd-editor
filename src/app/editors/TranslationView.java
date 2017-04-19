@@ -1,40 +1,46 @@
 package app.editors;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.part.WorkbenchPart;
 import org.openlca.ilcd.commons.LangString;
 
-import epd.io.EpdStore;
-import javafx.embed.swt.FXCanvas;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
+import app.App;
+import app.util.Colors;
+import app.util.UI;
+import epd.util.Strings;
 
 public class TranslationView extends ViewPart implements ISelectionListener {
 
-	private AnchorPane pane;
+	private FormToolkit toolkit;
+	private ScrolledForm form;
+	private Composite composite;
+	private final List<Control> controls = new ArrayList<>();
 
 	@Override
 	public void createPartControl(Composite parent) {
-		FXCanvas canvas = new FXCanvas(parent, SWT.NONE);
-		canvas.setLayout(new FillLayout());
-		pane = new AnchorPane();
-		Scene scene = new Scene(pane);
-		canvas.setScene(scene);
+		toolkit = new FormToolkit(parent.getDisplay());
+		parent.addDisposeListener(e -> toolkit.dispose());
+		form = toolkit.createScrolledForm(parent);
+		form.setText("#Select a multi-language text ...");
+		form.getForm().setForeground(Colors.get(70, 70, 70));
+		composite = form.getBody();
+		UI.gridLayout(composite, 2);
 		ISelectionService service = getSite().getWorkbenchWindow()
 				.getSelectionService();
 		if (service != null)
@@ -45,38 +51,29 @@ public class TranslationView extends ViewPart implements ISelectionListener {
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		if (!(selection instanceof Selection))
 			return;
-		pane.getChildren().clear();
+		controls.forEach(c -> c.dispose());
+		controls.clear();
 		Selection s = (Selection) selection;
-		if (s.isEmpty())
+		if (s.isEmpty()) {
+			form.setText("#Select a multi-language text ...");
 			return;
-		Label label = new Label();
-		label.setStyle("-fx-font-size: 14;-fx-font-weight: bold");
-		pane.getChildren().add(label);
-		AnchorPane.setLeftAnchor(label, 15d);
-		AnchorPane.setTopAnchor(label, 15d);
-		label.setText(s.title);
-
-		int i = 1;
+		}
+		if (s.title != null)
+			form.setText(s.title);
+		s.strings.sort((s1, s2) -> Strings.compare(s1.lang, s2.lang));
 		for (LangString ls : s.strings) {
-			Label l = new Label();
-			AnchorPane.setLeftAnchor(l, 15d);
-			AnchorPane.setTopAnchor(l, 18d + i * 35);
-			l.setText("@" + ls.lang);
-			pane.getChildren().add(l);
-			if (Objects.equals(ls.lang, EpdStore.lang))
-				l.setStyle("-fx-font-weight: bold");
-
-			TextField text = new TextField();
+			String lang = ls.lang == null ? "none" : ls.lang;
+			Label label = UI.formLabel(composite, toolkit, lang + ":");
+			controls.add(label);
+			if (Objects.equals(ls.lang, App.lang))
+				label.setFont(UI.boldFont());
+			Text text = UI.formMultiText(composite, toolkit);
+			controls.add(text);
 			text.setEditable(false);
-			AnchorPane.setLeftAnchor(text, 60d);
-			AnchorPane.setTopAnchor(text, 15d + i * 35);
-			AnchorPane.setRightAnchor(text, 15d);
 			if (ls.value != null)
 				text.setText(ls.value);
-			pane.getChildren().add(text);
-
-			i++;
 		}
+		form.reflow(true);
 	}
 
 	@Override
@@ -96,9 +93,7 @@ public class TranslationView extends ViewPart implements ISelectionListener {
 			List<LangString> strings) {
 		if (text == null)
 			return;
-		text.addModifyListener(e -> {
-			Selection.set(part, title, strings);
-		});
+		text.addModifyListener(e -> Selection.set(part, title, strings));
 		text.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {

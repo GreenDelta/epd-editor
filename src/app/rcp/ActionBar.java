@@ -25,10 +25,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.StatusView;
-import app.editors.SettingsPage;
 import app.editors.TranslationView;
 import app.editors.indicators.IndicatorMappingEditor;
 import app.editors.matprops.MaterialPropertyEditor;
+import app.editors.settings.SettingsPage;
 import app.navi.Navigator;
 import app.navi.TypeElement;
 import app.navi.actions.NewDataSetAction;

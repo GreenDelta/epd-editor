@@ -14,11 +14,13 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.part.WorkbenchPart;
 import org.openlca.ilcd.commons.LangString;
+import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.util.Colors;
@@ -31,6 +33,16 @@ public class TranslationView extends ViewPart implements ISelectionListener {
 	private ScrolledForm form;
 	private Composite composite;
 	private final List<Control> controls = new ArrayList<>();
+
+	public static void open() {
+		try {
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+					.getActivePage().showView("TranslationView");
+		} catch (Exception e) {
+			LoggerFactory.getLogger(TranslationView.class)
+					.error("failed to open translations", e);
+		}
+	}
 
 	@Override
 	public void createPartControl(Composite parent) {

@@ -44,6 +44,8 @@ public enum Icon {
 
 	INFO("info.png"),
 
+	MESSAGE("message.png"),
+
 	METHOD("method.png"),
 
 	OK("ok.png"),
@@ -53,6 +55,8 @@ public enum Icon {
 	PRODUCT("product.png"),
 
 	QUANTITY("quantity.png"),
+
+	SETTINGS("settings.png"),
 
 	SOURCE("source.png"),
 

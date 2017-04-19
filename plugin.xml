@@ -121,7 +121,8 @@
             class="app.editors.TranslationView"
             id="TranslationView"
             name="#Translations"
-            restorable="true">
+            restorable="true"
+            icon="icons/message.png">
       </view>
    </extension>
 	
@@ -223,6 +224,13 @@
           id="status.view"
           name="Status"
           class="app.StatusView">
+    </editor>
+    <editor
+    	  default="false"
+    	  icon="icons/settings.png"
+          id="app.Settings"
+          name="#Settings"
+          class="app.editors.SettingsPage">
     </editor>
  </extension>
 

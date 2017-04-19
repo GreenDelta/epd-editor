@@ -25,6 +25,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.StatusView;
+import app.editors.SettingsPage;
+import app.editors.TranslationView;
 import app.editors.indicators.IndicatorMappingEditor;
 import app.editors.matprops.MaterialPropertyEditor;
 import app.navi.Navigator;
@@ -74,21 +76,14 @@ public class ActionBar extends ActionBarAdvisor {
 	private MenuManager editMenu() {
 		MenuManager editMenu = new MenuManager("#Edit",
 				IWorkbenchActionConstants.M_EDIT);
-		editMenu.add(Actions.create("#Show translations", () -> {
-			try {
-				PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-						.getActivePage().showView("TranslationView");
-			} catch (Exception e) {
-				LoggerFactory.getLogger(getClass())
-						.error("failed to open translations", e);
-			}
-		}));
+		editMenu.add(Actions.create("#Settings",
+				Icon.SETTINGS.des(), SettingsPage::open));
+		editMenu.add(Actions.create("#Show translations",
+				Icon.MESSAGE.des(), TranslationView::open));
 		editMenu.add(Actions.create("#Material properties",
-				Icon.QUANTITY.des(),
-				() -> MaterialPropertyEditor.open()));
+				Icon.QUANTITY.des(), MaterialPropertyEditor::open));
 		editMenu.add(Actions.create("#Indicator mappings",
-				Icon.QUANTITY.des(),
-				() -> IndicatorMappingEditor.open()));
+				Icon.QUANTITY.des(), IndicatorMappingEditor::open));
 		editMenu.add(new Separator());
 		editMenu.add(Actions.create("#Delete all data sets",
 				Icon.DELETE.des(), this::cleanUp));

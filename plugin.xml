@@ -125,6 +125,19 @@
       </view>
    </extension>
 	
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="app.perspective">            
+            <view id="TranslationView" 
+            	relative="org.eclipse.ui.editorss" 
+            	relationship="right" 
+            	ratio="0.75"
+            	visible="false">            	
+            </view>
+      </perspectiveExtension>
+   </extension>
+   
  <extension
        point="org.eclipse.ui.editors">
     <editor

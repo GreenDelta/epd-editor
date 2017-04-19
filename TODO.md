@@ -2,7 +2,6 @@
 
 * validation with EPD profile ...
 * view for classification systems and locations
-* display translations
 
 * flows: allow flow type change... -> no just allow to create products but only
   show product information when type is PRODUCT?

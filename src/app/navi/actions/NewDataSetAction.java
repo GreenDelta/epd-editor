@@ -132,7 +132,7 @@ public class NewDataSetAction extends Action {
 		Contact c = new Contact();
 		with(Contacts.dataSetInfo(c), info -> {
 			info.uuid = UUID.randomUUID().toString();
-			LangString.set(info.name, "New contact", App.lang);
+			LangString.set(info.name, "New contact", App.lang());
 			Classification category = getClassification();
 			if (category != null)
 				info.classifications.add(category);
@@ -148,7 +148,7 @@ public class NewDataSetAction extends Action {
 		Classification category = getClassification();
 		if (category != null)
 			Flows.classifications(f).add(category);
-		LangString.set(Flows.flowName(f).baseName, "New flow", App.lang);
+		LangString.set(Flows.flowName(f).baseName, "New flow", App.lang());
 		Flows.dataEntry(f).timeStamp = Xml.now();
 		Flows.publication(f).version = "00.00.000";
 		return f;
@@ -158,7 +158,7 @@ public class NewDataSetAction extends Action {
 		FlowProperty fp = new FlowProperty();
 		with(FlowProperties.dataSetInfo(fp), info -> {
 			info.uuid = UUID.randomUUID().toString();
-			LangString.set(info.name, "New flow property", App.lang);
+			LangString.set(info.name, "New flow property", App.lang());
 			Classification category = getClassification();
 			if (category != null)
 				info.classifications.add(category);
@@ -172,7 +172,7 @@ public class NewDataSetAction extends Action {
 		LCIAMethod m = new LCIAMethod();
 		with(Methods.dataSetInfo(m), info -> {
 			info.uuid = UUID.randomUUID().toString();
-			LangString.set(info.name, "New LCIA method", App.lang);
+			LangString.set(info.name, "New LCIA method", App.lang());
 			Classification category = getClassification();
 			if (category != null)
 				info.classifications.add(category);
@@ -191,7 +191,7 @@ public class NewDataSetAction extends Action {
 				info.classifications.add(category);
 		});
 		Processes.method(p).processType = ProcessType.EPD;
-		LangString.set(Processes.processName(p).name, "New EPD", App.lang);
+		LangString.set(Processes.processName(p).name, "New EPD", App.lang());
 		Processes.dataEntry(p).timeStamp = Xml.now();
 		Processes.publication(p).version = "00.00.000";
 		return p;
@@ -201,7 +201,7 @@ public class NewDataSetAction extends Action {
 		Source s = new Source();
 		with(Sources.dataSetInfo(s), info -> {
 			info.uuid = UUID.randomUUID().toString();
-			LangString.set(info.name, "New source", App.lang);
+			LangString.set(info.name, "New source", App.lang());
 			Classification category = getClassification();
 			if (category != null)
 				info.classifications.add(category);
@@ -215,7 +215,7 @@ public class NewDataSetAction extends Action {
 		UnitGroup g = new UnitGroup();
 		with(UnitGroups.dataSetInfo(g), info -> {
 			info.uuid = UUID.randomUUID().toString();
-			LangString.set(info.name, "New unit group", App.lang);
+			LangString.set(info.name, "New unit group", App.lang());
 			Classification category = getClassification();
 			if (category != null)
 				info.classifications.add(category);

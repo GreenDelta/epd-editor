@@ -164,7 +164,7 @@ class ResultConverter {
 		ref.uri = "../" + path + "/" + mapping.indicatorRefId;
 		ref.type = forFlow ? DataSetType.FLOW
 				: DataSetType.LCIA_METHOD;
-		LangString.set(ref.name, mapping.indicatorLabel, App.lang);
+		LangString.set(ref.name, mapping.indicatorLabel, App.lang());
 		return ref;
 	}
 

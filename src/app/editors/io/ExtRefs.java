@@ -55,7 +55,7 @@ final class ExtRefs {
 		Ref ref = new Ref();
 		ref.uuid = im.indicatorRefId;
 		ref.type = DataSetType.LCIA_METHOD;
-		LangString.set(ref.name, im.indicatorLabel, App.lang);
+		LangString.set(ref.name, im.indicatorLabel, App.lang());
 		if (!ref.isValid() || refs.contains(ref))
 			return;
 		refs.add(ref);
@@ -65,7 +65,7 @@ final class ExtRefs {
 		Ref ref = new Ref();
 		ref.uuid = im.unitRefId;
 		ref.type = DataSetType.UNIT_GROUP;
-		LangString.set(ref.name, im.unitLabel, App.lang);
+		LangString.set(ref.name, im.unitLabel, App.lang());
 		if (!ref.isValid() || refs.contains(ref))
 			return;
 		refs.add(ref);

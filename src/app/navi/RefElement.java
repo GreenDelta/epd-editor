@@ -32,7 +32,7 @@ public class RefElement extends NavigationElement {
 
 	@Override
 	public String getLabel() {
-		return LangString.getFirst(ref.name, App.lang);
+		return LangString.getFirst(ref.name, App.lang());
 	}
 
 	@Override

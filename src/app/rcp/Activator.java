@@ -24,7 +24,7 @@ public class Activator extends AbstractUIPlugin {
 		LoggerConfig.setUp();
 		Logger log = LoggerFactory.getLogger(getClass());
 		log.info("Using workspace {}", App.workspace);
-		log.info("Data set language {}", App.lang);
+		log.info("Data set language {}", App.lang());
 	}
 
 	public void stop(BundleContext context) throws Exception {

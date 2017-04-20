@@ -73,7 +73,7 @@ public class Validation implements IRunnableWithProgress, IUpdateEventListener {
 	private RefStatus status(IValidationEvent e) {
 		IDatasetReference iRef = e.getReference();
 		Ref ref = new Ref();
-		LangString.set(ref.name, iRef.getName(), App.lang);
+		LangString.set(ref.name, iRef.getName(), App.lang());
 		ref.type = type(iRef.getType());
 		ref.uri = iRef.getUri();
 		ref.uuid = iRef.getUuid();

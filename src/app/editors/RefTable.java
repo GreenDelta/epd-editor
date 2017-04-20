@@ -34,7 +34,7 @@ public class RefTable {
 	private RefTable(DataSetType type, List<Ref> refs) {
 		this.type = type;
 		this.refs = refs;
-		this.lang = App.lang;
+		this.lang = App.lang();
 	}
 
 	public static RefTable create(DataSetType type, List<Ref> refs) {

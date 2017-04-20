@@ -27,7 +27,7 @@ class TableLabel extends LabelProvider
 		Ref ref = (Ref) obj;
 		switch (col) {
 		case 0:
-			return LangString.getFirst(ref.name, App.lang);
+			return LangString.getFirst(ref.name, App.lang());
 		case 1:
 			return ref.uuid;
 		case 2:

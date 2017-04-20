@@ -141,7 +141,7 @@ public class DependencyPage extends FormPage {
 				return null;
 			switch (col) {
 			case 1:
-				return LangString.getFirst(node.ref.name, App.lang);
+				return LangString.getFirst(node.ref.name, App.lang());
 			case 2:
 				return node.ref.uuid;
 			case 3:

@@ -13,12 +13,12 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 
-class Json {
+public final class Json {
 
 	private Json() {
 	}
 
-	static void write(Object obj, File file) {
+	public static void write(Object obj, File file) {
 		try (FileOutputStream fos = new FileOutputStream(file);
 				OutputStreamWriter writer = new OutputStreamWriter(fos,
 						"utf-8");
@@ -32,7 +32,7 @@ class Json {
 		}
 	}
 
-	static <T> T read(File file, Class<T> clazz) {
+	public static <T> T read(File file, Class<T> clazz) {
 		try (FileInputStream fis = new FileInputStream(file)) {
 			return read(fis, clazz);
 		} catch (Exception e) {
@@ -42,7 +42,7 @@ class Json {
 		}
 	}
 
-	static <T> T read(InputStream stream, Class<T> clazz) {
+	public static <T> T read(InputStream stream, Class<T> clazz) {
 		try (InputStreamReader reader = new InputStreamReader(stream,
 				"utf-8")) {
 			Gson gson = new Gson();

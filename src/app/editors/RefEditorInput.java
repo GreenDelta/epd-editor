@@ -39,7 +39,7 @@ public class RefEditorInput implements IEditorInput {
 	public String getName() {
 		if (ref == null)
 			return "??";
-		String name = LangString.getFirst(ref.name, App.lang);
+		String name = LangString.getFirst(ref.name, App.lang());
 		return name == null ? "??" : name;
 	}
 

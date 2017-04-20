@@ -86,7 +86,7 @@ public class RefLink extends Composite {
 			return;
 		String t = "#none";
 		if (ref != null) {
-			String s = LangString.getFirst(ref.name, App.lang);
+			String s = LangString.getFirst(ref.name, App.lang());
 			if (s != null)
 				t = s;
 		}

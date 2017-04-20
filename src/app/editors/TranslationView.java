@@ -77,7 +77,7 @@ public class TranslationView extends ViewPart implements ISelectionListener {
 			String lang = ls.lang == null ? "none" : ls.lang;
 			Label label = UI.formLabel(composite, toolkit, lang + ":");
 			controls.add(label);
-			if (Objects.equals(ls.lang, App.lang))
+			if (Objects.equals(ls.lang, App.lang()))
 				label.setFont(UI.boldFont());
 			Text text = UI.formMultiText(composite, toolkit);
 			controls.add(text);

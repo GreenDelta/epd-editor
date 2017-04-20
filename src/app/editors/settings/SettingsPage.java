@@ -1,9 +1,6 @@
 package app.editors.settings;
 
-import java.util.TreeSet;
-
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.IManagedForm;
@@ -20,6 +17,8 @@ import app.editors.SimpleEditorInput;
 import app.util.UI;
 
 public class SettingsPage extends BaseEditor {
+
+	private String dataSetLang = App.lang();
 
 	public static void open() {
 		SimpleEditorInput input = new SimpleEditorInput("app.Settings");
@@ -38,6 +37,10 @@ public class SettingsPage extends BaseEditor {
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
+		App.settings().lang = dataSetLang;
+		App.settings().save();
+		dirty = false;
+		editorDirtyStateChanged();
 	}
 
 	private class Page extends FormPage {
@@ -53,9 +56,12 @@ public class SettingsPage extends BaseEditor {
 			Composite body = UI.formBody(form, mform.getToolkit());
 			Composite comp = UI.formSection(body, tk, "#Data sets");
 
-			String selected = App.lang;
-			TreeSet<String> langs = new TreeSet<>();
-			Combo combo = UI.formCombo(comp, tk, "#Language");
+			LangCombo langCombo = new LangCombo(dataSetLang);
+			langCombo.render(comp, tk);
+			langCombo.onChange(lang -> {
+				dataSetLang = lang;
+				SettingsPage.this.setDirty();
+			});
 
 			form.reflow(true);
 		}

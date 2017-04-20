@@ -153,7 +153,7 @@ public class StatusView extends BaseEditor {
 				return null;
 			switch (col) {
 			case 0:
-				return LangString.getFirst(rs.ref.name, App.lang);
+				return LangString.getFirst(rs.ref.name, App.lang());
 			case 1:
 				return rs.ref.uuid;
 			case 2:

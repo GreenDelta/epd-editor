@@ -20,7 +20,8 @@ import epd.util.Strings;
 
 public class App {
 
-	public static String lang;
+	private static AppSettings settings;
+
 	public static FileStore store;
 	public static File workspace;
 	public static Index index;
@@ -35,12 +36,21 @@ public class App {
 			Platform.getInstanceLocation().set(workspaceUrl, true);
 			workspace = dir;
 			store = new FileStore(dir);
-			lang = "de"; // TODO: config
 			index = Index.load(new File(dir, "index.json"));
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(App.class);
 			log.error("failed to init App", e);
 		}
+	}
+
+	public static AppSettings settings() {
+		if (settings == null)
+			settings = AppSettings.load();
+		return settings;
+	}
+
+	public static String lang() {
+		return settings().lang;
 	}
 
 	public static void dumpIndex() {
@@ -52,12 +62,12 @@ public class App {
 	public static String s(List<LangString> strings) {
 		if (strings == null)
 			return "";
-		String s = LangString.getVal(strings, lang);
+		String s = LangString.getVal(strings, lang());
 		return s == null ? "" : s;
 	}
 
 	public static String header(List<LangString> strings, int length) {
-		String s = LangString.getFirst(strings, lang);
+		String s = LangString.getFirst(strings, lang());
 		return s == null ? "" : Strings.cut(s, length);
 	}
 

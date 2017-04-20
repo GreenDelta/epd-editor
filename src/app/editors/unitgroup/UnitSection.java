@@ -64,7 +64,7 @@ class UnitSection {
 			editor.setDirty();
 		});
 		modifier.bind(M.Comment, u -> App.s(u.comment), (u, comment) -> {
-			LangString.set(u.comment, comment, App.lang);
+			LangString.set(u.comment, comment, App.lang());
 			editor.setDirty();
 		});
 	}

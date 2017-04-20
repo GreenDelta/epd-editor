@@ -35,7 +35,7 @@ class ModelingPage extends FormPage {
 		super(editor, "EpdInfoPage", M.ModellingAndValidation);
 		this.editor = editor;
 		process = editor.dataSet.process;
-		lang = App.lang;
+		lang = App.lang();
 	}
 
 	@Override

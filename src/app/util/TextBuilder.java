@@ -49,7 +49,7 @@ public class TextBuilder {
 	private void make(String label, List<LangString> list, Text t) {
 		t.setText(App.s(list));
 		t.addModifyListener(e -> {
-			LangString.set(list, t.getText(), App.lang);
+			LangString.set(list, t.getText(), App.lang());
 			editor.setDirty();
 		});
 		TranslationView.register(page, label, t, list);

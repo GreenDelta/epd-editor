@@ -4,6 +4,8 @@ import java.io.File;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
@@ -89,8 +91,13 @@ public class ClassificationEditor extends BaseEditor {
 					+ system.name);
 			FormToolkit tk = mform.getToolkit();
 			Composite body = UI.formBody(form, tk);
-
+			body.setLayout(new FillLayout());
+			TreeViewer tree = new TreeViewer(body);
+			tree.setContentProvider(new TreeContent());
+			tree.setLabelProvider(new TreeLabel());
 			form.reflow(true);
+			tree.setInput(system);
+			tree.expandToLevel(2);
 		}
 	}
 }

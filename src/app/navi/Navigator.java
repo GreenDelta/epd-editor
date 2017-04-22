@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.editors.Editors;
+import app.editors.classifications.ClassificationEditor;
 import app.editors.connection.ConnectionEditor;
 import app.util.UI;
 import app.util.Viewers;
@@ -52,12 +53,24 @@ public class Navigator extends CommonNavigator {
 				ConnectionElement conEl = (ConnectionElement) obj;
 				ConnectionEditor.open(conEl.con);
 			} else if (obj instanceof FileElement) {
-				FileElement fe = (FileElement) obj;
-				if (fe.getType() == FolderType.DOC) {
-					UI.open(fe.file);
-				}
+				open((FileElement) obj);
 			}
 		});
+	}
+
+	private void open(FileElement e) {
+		if (e.getType() == null)
+			return;
+		switch (e.getType()) {
+		case DOC:
+			UI.open(e.file);
+			break;
+		case CLASSIFICATION:
+			ClassificationEditor.open(e.file);
+			break;
+		default:
+			break;
+		}
 	}
 
 	public NavigationRoot getRoot() {

@@ -44,7 +44,7 @@ public class LocationEditor extends BaseEditor {
 			EditorInput ei = (EditorInput) input;
 			file = ei.file;
 			list = Locations.getList(ei.file);
-			setPartName("#Locations - " + ei.file.getName());
+			setPartName(M.Locations + ": " + ei.file.getName());
 		} catch (Exception e) {
 			throw new PartInitException("Failed to open editor", e);
 		}
@@ -69,7 +69,7 @@ public class LocationEditor extends BaseEditor {
 		final File file;
 
 		EditorInput(File file) {
-			super("#Locations - " + file.getName());
+			super(M.Locations + ": " + file.getName());
 			this.file = file;
 		}
 	}
@@ -77,17 +77,16 @@ public class LocationEditor extends BaseEditor {
 	private class Page extends FormPage {
 
 		private Page() {
-			super(LocationEditor.this, "LocationPage",
-					"#Locations");
+			super(LocationEditor.this, "LocationPage", M.Locations);
 		}
 
 		@Override
 		protected void createFormContent(IManagedForm mform) {
-			ScrolledForm form = UI.formHeader(mform, "#Locations - "
+			ScrolledForm form = UI.formHeader(mform, M.Locations + ": "
 					+ file.getName());
 			FormToolkit tk = mform.getToolkit();
 			Composite body = UI.formBody(form, tk);
-			TableViewer table = Tables.createViewer(body, "#Code", M.Name);
+			TableViewer table = Tables.createViewer(body, M.Code, M.Name);
 			Tables.bindColumnWidths(table, 0.4, 0.6);
 			table.setLabelProvider(new TableLable());
 			form.reflow(true);

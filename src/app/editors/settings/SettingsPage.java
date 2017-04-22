@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.AppSettings;
+import app.M;
 import app.editors.BaseEditor;
 import app.editors.Editors;
 import app.editors.SimpleEditorInput;
@@ -51,15 +52,15 @@ public class SettingsPage extends BaseEditor {
 		private FormToolkit toolkit;
 
 		public Page() {
-			super(SettingsPage.this, "SettingsPage", "#Settings");
+			super(SettingsPage.this, "SettingsPage", M.Settings);
 		}
 
 		@Override
 		protected void createFormContent(IManagedForm mform) {
 			toolkit = mform.getToolkit();
-			ScrolledForm form = UI.formHeader(mform, "#Settings");
+			ScrolledForm form = UI.formHeader(mform, M.Settings);
 			Composite body = UI.formBody(form, mform.getToolkit());
-			Composite comp = UI.formSection(body, toolkit, "#Data sets");
+			Composite comp = UI.formSection(body, toolkit, M.DataSets);
 			LangCombo langCombo = new LangCombo(settings.lang);
 			langCombo.render(comp, toolkit);
 			langCombo.onChange(lang -> {

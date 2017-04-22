@@ -91,7 +91,7 @@ public class RefSelectionDialog extends FormDialog {
 		case FLOW_PROPERTY:
 			return M.FlowProperty;
 		case LCIA_METHOD:
-			return "#LCIA Method";
+			return M.LCIAMethod;
 		case PROCESS:
 			return M.EPD;
 		case SOURCE:

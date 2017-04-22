@@ -3,6 +3,7 @@ package app.navi;
 import org.eclipse.swt.graphics.Image;
 import org.openlca.ilcd.io.SodaConnection;
 
+import app.M;
 import app.rcp.Icon;
 import app.store.Connections;
 
@@ -26,7 +27,7 @@ public class ConnectionFolder extends NavigationElement {
 
 	@Override
 	public String getLabel() {
-		return "#Connections";
+		return M.ServerConnections;
 	}
 
 	@Override

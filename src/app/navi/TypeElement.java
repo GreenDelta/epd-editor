@@ -5,6 +5,7 @@ import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.Ref;
 
 import app.App;
+import app.M;
 import app.rcp.Icon;
 import epd.index.CategoryNode;
 import epd.index.TypeNode;
@@ -50,23 +51,23 @@ public class TypeElement extends NavigationElement {
 			return "";
 		switch (type) {
 		case CONTACT:
-			return "#Contacts";
+			return M.Contacts;
 		case EXTERNAL_FILE:
-			return "#External Files";
+			return M.ExternalFiles;
 		case FLOW:
-			return "#Products";
+			return M.Flows;
 		case FLOW_PROPERTY:
-			return "#Flow Properties";
+			return M.FlowProperties;
 		case LCIA_METHOD:
-			return "#LCIA Methods";
+			return M.LCIAMethods;
 		case PROCESS:
-			return "#EPD Data Sets";
+			return M.EPDs;
 		case SOURCE:
-			return "#Sources";
+			return M.Sources;
 		case UNIT_GROUP:
-			return "#Unit Groups";
+			return M.UnitGroups;
 		default:
-			return "#Unknown";
+			return M.None;
 		}
 	}
 

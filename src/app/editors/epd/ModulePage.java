@@ -183,7 +183,7 @@ class ModulePage extends FormPage {
 			if (export.isDoneWithSuccess())
 				return;
 			String message = "#Export failed. Is the file already opened?";
-			MsgBox.error("#Export failed", message);
+			MsgBox.error(M.ExportFailed, message);
 		});
 	}
 

@@ -1,6 +1,8 @@
 package app.rcp;
 
 import org.openlca.ilcd.commons.DataSetType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import app.M;
 import epd.model.Indicator;
@@ -60,9 +62,15 @@ public class Labels {
 		if (indicator == null)
 			return "unknown";
 		String name = indicator.name();
-		String key = "Indicator_" + name;
-		String val = M.getMap().get(key);
-		return val == null ? "unknown" : val;
+		String field = "Indicator_" + name;
+		try {
+			Object val = M.class.getField(field).get(null);
+			return val != null ? val.toString() : "unknown";
+		} catch (Exception e) {
+			Logger log = LoggerFactory.getLogger(Labels.class);
+			log.error("failed to get indicator label: " + field, e);
+			return "unknown";
+		}
 	}
 
 	public static String get(IndicatorGroup group) {

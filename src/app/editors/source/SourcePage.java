@@ -32,14 +32,15 @@ class SourcePage extends FormPage {
 	private FormToolkit tk;
 
 	SourcePage(SourceEditor editor) {
-		super(editor, "SourcePage", "#Source Data Set");
+		super(editor, "SourcePage", M.Source);
 		this.editor = editor;
 		source = editor.source;
 	}
 
 	@Override
 	protected void createFormContent(IManagedForm mform) {
-		Supplier<String> title = () -> "#Source: " + App.s(source.getName());
+		Supplier<String> title = () -> M.Source + ": "
+				+ App.s(source.getName());
 		ScrolledForm form = UI.formHeader(mform, title.get());
 		editor.onSaved(() -> form.setText(title.get()));
 		tk = mform.getToolkit();
@@ -54,13 +55,13 @@ class SourcePage extends FormPage {
 	}
 
 	private void infoSection(Composite body, TextBuilder tb) {
-		Composite comp = UI.formSection(body, tk, "#Contact information");
+		Composite comp = UI.formSection(body, tk, M.GeneralInformation);
 		DataSetInfo info = source.sourceInfo.dataSetInfo;
-		tb.text(comp, "#Short name", info.name);
-		tb.text(comp, "#Citation", info.citation, t -> info.citation = t);
-		tb.text(comp, "#Comment", info.description);
+		tb.text(comp, M.ShortName, info.name);
+		tb.text(comp, M.Citation, info.citation, t -> info.citation = t);
+		tb.text(comp, M.Description, info.description);
 		// TODO: source type combo
-		UI.formLabel(comp, tk, "#Logo");
+		UI.formLabel(comp, tk, M.Logo);
 		RefLink logo = new RefLink(comp, tk, DataSetType.SOURCE);
 		logo.setRef(info.logo);
 		logo.onChange(ref -> {

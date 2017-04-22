@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import app.M;
 import app.util.Controls;
 import app.util.UI;
 import epd.util.Strings;
@@ -42,7 +43,7 @@ class LangCombo {
 	}
 
 	void render(Composite comp, FormToolkit tk) {
-		combo = UI.formCombo(comp, tk, "#Language");
+		combo = UI.formCombo(comp, tk, M.Language);
 		UI.gridData(combo, false, false).widthHint = 300;
 		String[] items = new String[codes.length];
 		int selected = -1;
@@ -67,7 +68,7 @@ class LangCombo {
 			if (Strings.nullOrEqual(code, loc.getLanguage()))
 				return loc.getDisplayLanguage(); // TODO local language
 		}
-		return "#Unknown";
+		return M.Unknown;
 	}
 
 }

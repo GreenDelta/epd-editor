@@ -15,6 +15,7 @@ import org.openlca.ilcd.io.SodaClient;
 import org.openlca.ilcd.io.SodaConnection;
 
 import app.App;
+import app.M;
 import app.StatusView;
 import app.navi.Sync;
 import app.util.MsgBox;
@@ -77,7 +78,7 @@ public class DownloadDialog extends Wizard {
 		private Button overwriteCheck;
 
 		private Page() {
-			super("DownloadDialogPage", "#Download data sets", null);
+			super("DownloadDialogPage", M.DownloadDataSets, null);
 			setPageComplete(true);
 		}
 

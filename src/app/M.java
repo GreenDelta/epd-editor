@@ -1,16 +1,6 @@
 package app;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-
 import org.eclipse.osgi.util.NLS;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.gson.Gson;
 
 public class M extends NLS {
 
@@ -24,6 +14,7 @@ public class M extends NLS {
 	public static String AddReview;
 	public static String Address;
 	public static String AdministrativeInformation;
+	public static String AlreadyExists;
 	public static String Amount;
 	public static String Average;
 
@@ -31,8 +22,10 @@ public class M extends NLS {
 	public static String Category;
 	public static String CategoryPath;
 	public static String ChangeProduct;
+	public static String Citation;
 	public static String Classification;
 	public static String ClassificationSystem;
+	public static String Code;
 	public static String Comment;
 	public static String CompleteReviewReport;
 	public static String ComponentsForReuse;
@@ -49,8 +42,10 @@ public class M extends NLS {
 	public static String Data;
 	public static String DataEntry;
 	public static String DataSetInformation;
+	public static String DataSetReference;
 	public static String DataSetUploaded;
 	public static String DataSetUploadedMessage;
+	public static String DataSets;
 	public static String DataSources;
 	public static String DataStock;
 	public static String DataStocks;
@@ -63,6 +58,8 @@ public class M extends NLS {
 	public static String Documentation;
 	public static String Documentor;
 	public static String Download;
+	public static String DownloadDataSets;
+	public static String DownloadFailed;
 
 	public static String EPD;
 	public static String EPDEditor;
@@ -73,7 +70,9 @@ public class M extends NLS {
 	public static String Eutrophication;
 	public static String Export;
 	public static String ExportEnergy;
+	public static String ExportFailed;
 	public static String ExternalDocumentationSources;
+	public static String ExternalFiles;
 
 	public static String FailedToGetDataStocks;
 	public static String File;
@@ -105,6 +104,7 @@ public class M extends NLS {
 	public static String Indicator;
 	public static String IndicatorMapping;
 	public static String IndicatorMapping_Description;
+	public static String IndicatorMappings;
 	public static String Indicator_ABIOTIC_RESOURCE_DEPLETION_ELEMENTS;
 	public static String Indicator_ABIOTIC_RESOURCE_DEPLETION_FOSSIL_FUELS;
 	public static String Indicator_ACIDIFICATION;
@@ -131,13 +131,16 @@ public class M extends NLS {
 	public static String Indicator_TOTAL_NON_RENEWABLE_PRIMARY_ENERGY;
 	public static String Indicator_TOTAL_RENEWABLE_PRIMARY_ENERGY;
 	public static String InvalidName;
+	public static String InvalidReference;
 	public static String IsVendorSpecific;
 
 	public static String LCAMethodDetails;
 	public static String LCIAMethod;
 	public static String LCIAMethods;
+	public static String Language;
 	public static String LastUpdate;
 	public static String Location;
+	public static String Locations;
 	public static String Logo;
 
 	public static String MaterialProperties;
@@ -156,6 +159,7 @@ public class M extends NLS {
 	public static String NewFlowProperty;
 	public static String NewLCIAMethod;
 	public static String NewProduct;
+	public static String NewServerConnection;
 	public static String NewSource;
 	public static String NewUnitGroup;
 	public static String NoSearchPossible;
@@ -182,6 +186,7 @@ public class M extends NLS {
 	public static String Processes;
 	public static String Product;
 	public static String ProductSystem;
+	public static String Products;
 	public static String Property;
 	public static String PublicationAndOwnership;
 
@@ -222,6 +227,7 @@ public class M extends NLS {
 	public static String ServerConnection;
 	public static String ServerConnections;
 	public static String SetAsReference;
+	public static String Settings;
 	public static String ShortName;
 	public static String Source;
 	public static String Sources;
@@ -246,6 +252,8 @@ public class M extends NLS {
 	public static String UnitDescription;
 	public static String UnitGroup;
 	public static String UnitGroups;
+	public static String Units;
+	public static String Unknown;
 	public static String UpdateMajorVersion;
 	public static String UpdateMinorVersion;
 	public static String UploadDataSet;
@@ -263,44 +271,10 @@ public class M extends NLS {
 	public static String WasteParameters;
 	public static String Website;
 
-	private static Map<String, String> map;
-
 	static {
 		NLS.initializeMessages("app.messages", M.class);
 	}
 
 	private M() {
-	}
-
-	public static Map<String, String> getMap() {
-		if (map == null)
-			map = new HashMap<>();
-		try {
-			for (Field field : M.class.getDeclaredFields()) {
-				if (!Objects.equals(field.getType(), String.class))
-					continue;
-				if (!Modifier.isStatic(field.getModifiers()))
-					continue;
-				if (!Modifier.isPublic(field.getModifiers()))
-					continue;
-				String val = (String) field.get(null);
-				map.put(field.getName(), val);
-			}
-		} catch (Exception e) {
-			Logger log = LoggerFactory.getLogger(M.class);
-			log.error("failed to get messages as map", e);
-		}
-		return map;
-	}
-
-	public static String asJson() {
-		try {
-			Gson gson = new Gson();
-			return gson.toJson(getMap());
-		} catch (Exception e) {
-			Logger log = LoggerFactory.getLogger(M.class);
-			log.error("failed to get messages as JSON string", e);
-			return "{}";
-		}
 	}
 }

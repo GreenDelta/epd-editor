@@ -12,6 +12,7 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 
+import app.M;
 import app.rcp.Labels;
 import app.util.Tables;
 import app.util.UI;
@@ -23,15 +24,14 @@ class Page extends FormPage {
 	private IndicatorMappingEditor editor;
 
 	Page(IndicatorMappingEditor editor) {
-		super(editor, "Page", "#Indicator mappings");
+		super(editor, "Page", M.IndicatorMappings);
 		this.editor = editor;
 	}
 
 	@Override
 	protected void createFormContent(IManagedForm mform) {
 		FormToolkit tk = mform.getToolkit();
-		ScrolledForm form = UI.formHeader(mform,
-				"#Indicator mappings");
+		ScrolledForm form = UI.formHeader(mform, M.IndicatorMappings);
 		Composite body = UI.formBody(form, mform.getToolkit());
 		for (IndicatorGroup group : IndicatorGroup.values()) {
 			createSection(group, body, tk);
@@ -43,8 +43,8 @@ class Page extends FormPage {
 			FormToolkit tk) {
 		Composite comp = UI.formSection(parent, tk, Labels.get(group));
 		UI.gridLayout(comp, 1);
-		TableViewer table = Tables.createViewer(comp, "Indicator",
-				"Data set reference", "Unit reference");
+		TableViewer table = Tables.createViewer(comp, M.Indicator,
+				M.DataSetReference, "#Unit reference");
 		Tables.bindColumnWidths(table, 0.4, 0.3, 0.3);
 		table.setLabelProvider(new Label());
 		List<IndicatorMapping> list = editor.getGroup(group);

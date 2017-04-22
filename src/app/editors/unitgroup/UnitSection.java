@@ -42,7 +42,7 @@ class UnitSection {
 	}
 
 	void render(Composite parent, FormToolkit tk) {
-		Section section = UI.section(parent, tk, "#Units");
+		Section section = UI.section(parent, tk, M.Units);
 		Composite composite = UI.sectionClient(section, tk);
 		UI.gridLayout(composite, 1);
 		table = Tables.createViewer(composite, M.Unit, M.ConversionFactor,

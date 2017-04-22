@@ -23,6 +23,7 @@ import org.openlca.ilcd.util.RefTree;
 import org.openlca.ilcd.util.Sources;
 
 import app.App;
+import app.M;
 import epd.model.RefStatus;
 
 class Download implements IRunnableWithProgress {
@@ -86,19 +87,19 @@ class Download implements IRunnableWithProgress {
 
 	private IDataSet get(Ref ref) {
 		if (!ref.isValid()) {
-			status.add(RefStatus.error(ref, "#Invalid reference"));
+			status.add(RefStatus.error(ref, M.InvalidReference));
 			return null;
 		}
 		Class<? extends IDataSet> type = ref.getDataSetClass();
 		try {
 			if (!overwriteExisting && App.store.contains(type, ref.uuid)) {
-				status.add(RefStatus.info(ref, "#Already exisits locally"));
+				status.add(RefStatus.info(ref, M.AlreadyExists));
 				return null;
 			}
 			return client.get(type, ref.uuid);
 		} catch (Exception e) {
 			status.add(RefStatus.error(ref,
-					"#Download failed: " + e.getMessage()));
+					M.DownloadFailed + ": " + e.getMessage()));
 			return null;
 		}
 	}
@@ -111,7 +112,7 @@ class Download implements IRunnableWithProgress {
 			status.add(RefStatus.ok(ref, "Downloaded"));
 		} catch (Exception e) {
 			status.add(RefStatus.error(ref,
-					"#Download failed: " + e.getMessage()));
+					M.DownloadFailed + ": " + e.getMessage()));
 		}
 	}
 }

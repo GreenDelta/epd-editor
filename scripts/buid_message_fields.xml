@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="make_messages" default="default">
+    <target name="default" description="description">
+        <exec executable="python">
+        	<arg file="${basedir}/make_message_fields.py"/>
+        </exec>
+    	<eclipse.refreshLocal resource="epd-editor" depth="infinite"/>
+    </target>
+</project>

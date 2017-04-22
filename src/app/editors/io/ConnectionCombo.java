@@ -7,6 +7,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.openlca.ilcd.io.SodaClient;
 import org.openlca.ilcd.io.SodaConnection;
 
+import app.M;
 import app.store.Connections;
 import app.util.Controls;
 import app.util.MsgBox;
@@ -30,7 +31,7 @@ class ConnectionCombo {
 	}
 
 	private void render(Composite comp) {
-		combo = UI.formCombo(comp, "#Connection");
+		combo = UI.formCombo(comp, M.ServerConnection);
 		for (SodaConnection con : cons) {
 			combo.add(con.toString());
 		}

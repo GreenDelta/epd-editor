@@ -29,14 +29,14 @@ class InfoPage extends FormPage {
 	private FormToolkit tk;
 
 	InfoPage(MethodEditor editor) {
-		super(editor, "#MethodInfoPage", "LCIA Method");
+		super(editor, "#MethodInfoPage", M.LCIAMethod);
 		this.editor = editor;
 		this.method = editor.method;
 	}
 
 	@Override
 	protected void createFormContent(IManagedForm mform) {
-		Supplier<String> title = () -> "#LCIA Method: "
+		Supplier<String> title = () -> M.LCIAMethod + ": "
 				+ App.s(method.getName());
 		ScrolledForm form = UI.formHeader(mform, title.get());
 		editor.onSaved(() -> form.setText(title.get()));
@@ -51,7 +51,7 @@ class InfoPage extends FormPage {
 
 	private void infoSection(Composite body, TextBuilder tb) {
 		DataSetInfo info = Methods.dataSetInfo(method);
-		Composite comp = UI.formSection(body, tk, "#LCIA Method information");
+		Composite comp = UI.formSection(body, tk, M.GeneralInformation);
 		tb.text(comp, M.Name, info.name);
 		UI.formLabel(comp, "#Methodologies");
 		new StringTable(editor, "#Methodology", info.methods).render(comp, tk);
@@ -62,7 +62,7 @@ class InfoPage extends FormPage {
 			info.indicator = val;
 			editor.setDirty();
 		});
-		tb.text(comp, "#Comment", info.comment);
+		tb.text(comp, M.Description, info.comment);
 	}
 
 	private void categorySection(Composite body) {

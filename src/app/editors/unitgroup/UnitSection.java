@@ -45,7 +45,8 @@ class UnitSection {
 		Section section = UI.section(parent, tk, "#Units");
 		Composite composite = UI.sectionClient(section, tk);
 		UI.gridLayout(composite, 1);
-		table = Tables.createViewer(composite, M.Unit, "#Factor", M.Comment);
+		table = Tables.createViewer(composite, M.Unit, M.ConversionFactor,
+				M.Comment);
 		table.setLabelProvider(new Label());
 		table.setInput(UnitGroups.getUnits(group));
 		Tables.bindColumnWidths(table, 0.2, 0.3, 0.5);
@@ -59,7 +60,7 @@ class UnitSection {
 			u.name = name;
 			editor.setDirty();
 		});
-		modifier.onDouble("#Factor", u -> u.factor, (u, factor) -> {
+		modifier.onDouble(M.ConversionFactor, u -> u.factor, (u, factor) -> {
 			u.factor = factor;
 			editor.setDirty();
 		});
@@ -72,7 +73,7 @@ class UnitSection {
 	private void bindActions(Section section) {
 		Action add = Actions.create(M.Add, Icon.ADD.des(), this::add);
 		Action rem = Actions.create(M.Remove, Icon.DELETE.des(), this::remove);
-		Action ref = Actions.create("#Set as reference",
+		Action ref = Actions.create(M.SetAsReference,
 				Icon.des(DataSetType.FLOW_PROPERTY), this::setRef);
 		Actions.bind(section, add, rem);
 		Actions.bind(table, ref, add, rem);

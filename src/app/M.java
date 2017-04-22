@@ -41,6 +41,7 @@ public class M extends NLS {
 	public static String Contact;
 	public static String ContactInformation;
 	public static String Contacts;
+	public static String ConversionFactor;
 	public static String Copyright;
 	public static String CreateANewEPD;
 	public static String CreateANewEPD_Description;
@@ -79,7 +80,9 @@ public class M extends NLS {
 	public static String Filter;
 	public static String Flow;
 	public static String FlowDiagramsOrPictures;
+	public static String FlowInformation;
 	public static String FlowProperties;
+	public static String FlowProperty;
 	public static String Flows;
 	public static String FreshWaterNetUse;
 
@@ -131,6 +134,7 @@ public class M extends NLS {
 	public static String IsVendorSpecific;
 
 	public static String LCAMethodDetails;
+	public static String LCIAMethod;
 	public static String LCIAMethods;
 	public static String LastUpdate;
 	public static String Location;
@@ -147,7 +151,13 @@ public class M extends NLS {
 
 	public static String Name;
 	public static String NetworkConnectionFailed;
+	public static String NewContact;
 	public static String NewEPD;
+	public static String NewFlowProperty;
+	public static String NewLCIAMethod;
+	public static String NewProduct;
+	public static String NewSource;
+	public static String NewUnitGroup;
 	public static String NoSearchPossible;
 	public static String NonHazardousWaste;
 	public static String None;
@@ -176,6 +186,7 @@ public class M extends NLS {
 	public static String PublicationAndOwnership;
 
 	public static String QuantitativeProperties;
+	public static String QuantitativeReference;
 
 	public static String RadioactiveWasteDisposed;
 	public static String ReferenceYear;
@@ -210,6 +221,7 @@ public class M extends NLS {
 	public static String ServerConfiguration_Description;
 	public static String ServerConnection;
 	public static String ServerConnections;
+	public static String SetAsReference;
 	public static String ShortName;
 	public static String Source;
 	public static String Sources;
@@ -232,6 +244,7 @@ public class M extends NLS {
 	public static String UUID;
 	public static String Unit;
 	public static String UnitDescription;
+	public static String UnitGroup;
 	public static String UnitGroups;
 	public static String UpdateMajorVersion;
 	public static String UpdateMinorVersion;

@@ -12,6 +12,7 @@ import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 
 import app.App;
+import app.M;
 import app.rcp.Icon;
 import app.util.Colors;
 import app.util.Controls;
@@ -84,7 +85,7 @@ public class RefLink extends Composite {
 	private void setLinkText() {
 		if (link == null)
 			return;
-		String t = "#none";
+		String t = M.None;
 		if (ref != null) {
 			String s = LangString.getFirst(ref.name, App.lang());
 			if (s != null)

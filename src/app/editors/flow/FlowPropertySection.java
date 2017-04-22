@@ -45,19 +45,17 @@ class FlowPropertySection {
 	}
 
 	void render(Composite parent, FormToolkit tk) {
-		Section section = UI.section(parent, tk, "#Flow properties");
+		Section section = UI.section(parent, tk, M.FlowProperties);
 		Composite comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
-		table = Tables.createViewer(comp,
-				"#Flow property",
-				"#Conversion factor",
+		table = Tables.createViewer(comp, M.FlowProperty, M.ConversionFactor,
 				M.Unit);
 		table.setLabelProvider(new Label());
 		table.setInput(flow.flowProperties);
 		Tables.bindColumnWidths(table, 0.4, 0.3, 0.3);
 		bindActions(section);
 		ModifySupport<FlowPropertyRef> modifier = new ModifySupport<>(table);
-		modifier.onDouble("#Conversion factor", propRef -> propRef.meanValue,
+		modifier.onDouble(M.ConversionFactor, propRef -> propRef.meanValue,
 				(propRef, value) -> {
 					propRef.meanValue = value;
 					editor.setDirty();
@@ -72,7 +70,7 @@ class FlowPropertySection {
 	private void bindActions(Section section) {
 		Action add = Actions.create(M.Add, Icon.ADD.des(), this::add);
 		Action rem = Actions.create(M.Remove, Icon.DELETE.des(), this::remove);
-		Action ref = Actions.create("#Set as reference",
+		Action ref = Actions.create(M.SetAsReference,
 				Icon.des(DataSetType.FLOW_PROPERTY), this::setRef);
 		Actions.bind(section, add, rem);
 		Actions.bind(table, ref, add, rem);

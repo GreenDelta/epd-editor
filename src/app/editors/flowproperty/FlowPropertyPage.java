@@ -30,14 +30,14 @@ class FlowPropertyPage extends FormPage {
 	private FormToolkit tk;
 
 	FlowPropertyPage(FlowPropertyEditor editor) {
-		super(editor, "FlowPropertyPage", "#Flow Property Data Set");
+		super(editor, "FlowPropertyPage", M.FlowProperty);
 		this.editor = editor;
 		this.property = editor.property;
 	}
 
 	@Override
 	protected void createFormContent(IManagedForm mform) {
-		Supplier<String> title = () -> "#Flow property: "
+		Supplier<String> title = () -> M.FlowProperty + ": "
 				+ App.s(property.getName());
 		ScrolledForm form = UI.formHeader(mform, title.get());
 		editor.onSaved(() -> form.setText(title.get()));
@@ -51,7 +51,7 @@ class FlowPropertyPage extends FormPage {
 	}
 
 	private void infoSection(Composite body, TextBuilder tb) {
-		Composite comp = UI.formSection(body, tk, "#Contact information");
+		Composite comp = UI.formSection(body, tk, M.ContactInformation);
 		DataSetInfo info = property.flowPropertyInfo.dataSetInfo;
 		tb.text(comp, M.Name, info.name);
 		tb.text(comp, M.Synonyms, info.synonyms);
@@ -66,9 +66,9 @@ class FlowPropertyPage extends FormPage {
 	}
 
 	private void unitGroupSection(Composite body) {
-		Composite comp = UI.formSection(body, tk, "#Quantitative reference");
+		Composite comp = UI.formSection(body, tk, M.QuantitativeReference);
 		QuantitativeReference qRef = property.flowPropertyInfo.quantitativeReference;
-		UI.formLabel(comp, tk, "#Unit group");
+		UI.formLabel(comp, tk, M.UnitGroup);
 		RefLink refText = new RefLink(comp, tk, DataSetType.UNIT_GROUP);
 		refText.setRef(qRef.unitGroup);
 		refText.onChange(ref -> {

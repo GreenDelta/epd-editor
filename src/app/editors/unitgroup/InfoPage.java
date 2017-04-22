@@ -30,14 +30,14 @@ class InfoPage extends FormPage {
 	private FormToolkit tk;
 
 	InfoPage(UnitGroupEditor editor) {
-		super(editor, "#UnitGroupPage", "#Unit group");
+		super(editor, "UnitGroupPage", M.UnitGroup);
 		this.editor = editor;
 		this.unitGroup = editor.unitGroup;
 	}
 
 	@Override
 	protected void createFormContent(IManagedForm mform) {
-		Supplier<String> title = () -> "#Unit Group: "
+		Supplier<String> title = () -> M.UnitGroup + ": "
 				+ App.s(unitGroup.getName());
 		ScrolledForm form = UI.formHeader(mform, title.get());
 		editor.onSaved(() -> form.setText(title.get()));
@@ -52,7 +52,7 @@ class InfoPage extends FormPage {
 	}
 
 	private void infoSection(Composite body, TextBuilder tb) {
-		Composite comp = UI.formSection(body, tk, "#Contact information");
+		Composite comp = UI.formSection(body, tk, M.GeneralInformation);
 		DataSetInfo info = UnitGroups.dataSetInfo(unitGroup);
 		tb.text(comp, M.Name, info.name);
 		tb.text(comp, M.Description, info.generalComment);

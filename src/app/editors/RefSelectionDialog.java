@@ -85,19 +85,19 @@ public class RefSelectionDialog extends FormDialog {
 			return "unknown?";
 		switch (modelType) {
 		case CONTACT:
-			return "#Contact";
+			return M.Contact;
 		case FLOW:
-			return "#Flow";
+			return M.Flow;
 		case FLOW_PROPERTY:
-			return "#Flow Property";
+			return M.FlowProperty;
 		case LCIA_METHOD:
 			return "#LCIA Method";
 		case PROCESS:
-			return "#Process";
+			return M.EPD;
 		case SOURCE:
-			return "#Source";
+			return M.Source;
 		case UNIT_GROUP:
-			return "#Unit Group";
+			return M.UnitGroup;
 		default:
 			return "unknown?";
 		}

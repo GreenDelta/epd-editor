@@ -30,6 +30,7 @@ import org.openlca.ilcd.util.Sources;
 import org.openlca.ilcd.util.UnitGroups;
 
 import app.App;
+import app.M;
 import app.editors.Editors;
 import app.navi.CategoryElement;
 import app.navi.NavigationElement;
@@ -71,24 +72,24 @@ public class NewDataSetAction extends Action {
 
 	private String getLabel() {
 		if (type == null)
-			return "#No type";
+			return M.None;
 		switch (type) {
 		case CONTACT:
-			return "#New contact";
+			return M.NewContact;
 		case FLOW:
-			return "#New flow";
+			return M.NewProduct;
 		case FLOW_PROPERTY:
-			return "#New flow property";
+			return M.NewFlowProperty;
 		case LCIA_METHOD:
-			return "#New LCIA method";
+			return M.NewLCIAMethod;
 		case PROCESS:
-			return "#New EPD";
+			return M.NewEPD;
 		case SOURCE:
-			return "#New source";
+			return M.NewSource;
 		case UNIT_GROUP:
-			return "#New unit group";
+			return M.NewUnitGroup;
 		default:
-			return "#No type";
+			return M.None;
 		}
 	}
 

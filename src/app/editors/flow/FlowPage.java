@@ -55,7 +55,7 @@ class FlowPage extends FormPage {
 	}
 
 	private void infoSection(Composite body, TextBuilder tb) {
-		Composite comp = UI.formSection(body, tk, "#Flow information");
+		Composite comp = UI.formSection(body, tk, M.FlowInformation);
 		FlowName fName = Flows.flowName(product.flow);
 		tb.text(comp, M.Name, fName.baseName);
 		DataSetInfo info = Flows.dataSetInfo(product.flow);

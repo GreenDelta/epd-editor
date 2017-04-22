@@ -11,6 +11,7 @@ import org.openlca.ilcd.io.SodaConnection;
 
 import app.editors.Editors;
 import app.editors.classifications.ClassificationEditor;
+import app.editors.locations.LocationEditor;
 import app.navi.actions.ClassificationSync;
 import app.navi.actions.ConnectionDeleteAction;
 import app.navi.actions.FileDeletion;
@@ -21,6 +22,7 @@ import app.navi.actions.RefDeleteAction;
 import app.rcp.Icon;
 import app.store.Connections;
 import app.util.Actions;
+import app.util.UI;
 import app.util.Viewers;
 
 public class NavigationMenu extends CommonActionProvider {
@@ -90,6 +92,12 @@ public class NavigationMenu extends CommonActionProvider {
 		switch (e.getType()) {
 		case CLASSIFICATION:
 			fn = () -> ClassificationEditor.open(e.file);
+			break;
+		case LOCATION:
+			fn = () -> LocationEditor.open(e.file);
+			break;
+		case DOC:
+			fn = () -> UI.open(e.file);
 			break;
 		default:
 			break;

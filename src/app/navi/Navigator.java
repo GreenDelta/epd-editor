@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import app.editors.Editors;
 import app.editors.classifications.ClassificationEditor;
 import app.editors.connection.ConnectionEditor;
+import app.editors.locations.LocationEditor;
 import app.util.UI;
 import app.util.Viewers;
 
@@ -67,6 +68,9 @@ public class Navigator extends CommonNavigator {
 			break;
 		case CLASSIFICATION:
 			ClassificationEditor.open(e.file);
+			break;
+		case LOCATION:
+			LocationEditor.open(e.file);
 			break;
 		default:
 			break;

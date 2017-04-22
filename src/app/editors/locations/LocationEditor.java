@@ -1,11 +1,9 @@
-package app.editors.classifications;
+package app.editors.locations;
 
 import java.io.File;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
@@ -14,26 +12,27 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
-import org.openlca.ilcd.lists.CategorySystem;
+import org.openlca.ilcd.lists.LocationList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.editors.BaseEditor;
 import app.editors.Editors;
 import app.editors.SimpleEditorInput;
-import app.rcp.Icon;
-import app.store.CategorySystems;
+import app.store.Locations;
+import app.util.Tables;
 import app.util.UI;
 
-public class ClassificationEditor extends BaseEditor {
+public class LocationEditor extends BaseEditor {
 
-	private CategorySystem system;
+	private File file;
+	private LocationList list;
 
 	public static void open(File file) {
 		if (file == null || !file.exists())
 			return;
 		EditorInput input = new EditorInput(file);
-		Editors.open(input, "classification.editor");
+		Editors.open(input, "location.editor");
 	}
 
 	@Override
@@ -42,8 +41,9 @@ public class ClassificationEditor extends BaseEditor {
 		super.init(site, input);
 		try {
 			EditorInput ei = (EditorInput) input;
-			system = CategorySystems.get(ei.file);
-			setPartName("#Classifications - " + system.name);
+			file = ei.file;
+			list = Locations.getList(ei.file);
+			setPartName("#Locations - " + ei.file.getName());
 		} catch (Exception e) {
 			throw new PartInitException("Failed to open editor", e);
 		}
@@ -68,36 +68,30 @@ public class ClassificationEditor extends BaseEditor {
 		final File file;
 
 		EditorInput(File file) {
-			super("#Classifications - " + file.getName());
+			super("#Locations - " + file.getName());
 			this.file = file;
-		}
-
-		@Override
-		public ImageDescriptor getImageDescriptor() {
-			return Icon.FOLDER.des();
 		}
 	}
 
 	private class Page extends FormPage {
 
 		private Page() {
-			super(ClassificationEditor.this, "ClassificationPage",
-					"#Classifications");
+			super(LocationEditor.this, "LocationPage",
+					"#Locations");
 		}
 
 		@Override
 		protected void createFormContent(IManagedForm mform) {
-			ScrolledForm form = UI.formHeader(mform, "#Classifications - "
-					+ system.name);
+			ScrolledForm form = UI.formHeader(mform, "#Locations - "
+					+ file.getName());
 			FormToolkit tk = mform.getToolkit();
 			Composite body = UI.formBody(form, tk);
-			body.setLayout(new FillLayout());
-			TreeViewer tree = new TreeViewer(body);
-			tree.setContentProvider(new TreeContent());
-			tree.setLabelProvider(new TreeLabel());
+			TableViewer table = Tables.createViewer(body, "#Code", "#Name");
+			Tables.bindColumnWidths(table, 0.4, 0.6);
+			table.setLabelProvider(new TableLable());
 			form.reflow(true);
-			tree.setInput(system);
-			tree.expandToLevel(2);
+			table.setInput(list.locations);
 		}
 	}
+
 }

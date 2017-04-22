@@ -26,16 +26,27 @@ public final class Locations {
 		if (!folder.exists())
 			return Collections.emptySet();
 		HashSet<Location> set = new HashSet<>();
-		try {
-			for (File file : folder.listFiles()) {
-				LocationList list = JAXB.unmarshal(file, LocationList.class);
-				for (Location loc : list.locations)
-					set.add(loc);
+		for (File file : folder.listFiles()) {
+			LocationList list = getList(file);
+			if (list == null)
+				continue;
+			for (Location loc : list.locations) {
+				set.add(loc);
 			}
-		} catch (Exception e) {
-			Logger log = LoggerFactory.getLogger(Locations.class);
-			log.error("failed read location files from " + folder, e);
 		}
 		return set;
 	}
+
+	public static LocationList getList(File file) {
+		if (file == null || !file.exists())
+			return null;
+		try {
+			return JAXB.unmarshal(file, LocationList.class);
+		} catch (Exception e) {
+			Logger log = LoggerFactory.getLogger(Locations.class);
+			log.error("failed read locations from " + file, e);
+			return null;
+		}
+	}
+
 }

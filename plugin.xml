@@ -222,8 +222,14 @@
           default="false"
           icon="icons/folder.png"
           id="classification.editor"
-          name="Classification"
+          name="Classifications"
           class="app.editors.classifications.ClassificationEditor">
+    </editor>
+    <editor
+          default="false"
+          id="location.editor"
+          name="Locations"
+          class="app.editors.locations.LocationEditor">
     </editor>
     <editor
           default="false"

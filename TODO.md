@@ -10,7 +10,7 @@
 * re-index function
 * Source type combo in SourcePage
 * Local search
-* Application settings: data set language, application language, RAM
+* Application settings: application language, RAM
 * fetch also categories from elementary flows in indexing etc.
 * cross platform builds and tests; + default data package
 * externalize strings

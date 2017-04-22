@@ -20,6 +20,18 @@ public final class CategorySystems {
 	private CategorySystems() {
 	}
 
+	public static CategorySystem get(File file) {
+		if (file == null)
+			return null;
+		try {
+			return JAXB.unmarshal(file, CategorySystem.class);
+		} catch (Exception e) {
+			Logger log = LoggerFactory.getLogger(CategorySystems.class);
+			log.error("Failed to get category system from file " + file, e);
+			return null;
+		}
+	}
+
 	public static List<CategorySystem> get() {
 		File dir = getDir();
 		List<CategorySystem> list = new ArrayList<>();

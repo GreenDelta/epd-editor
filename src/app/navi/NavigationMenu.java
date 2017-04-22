@@ -9,6 +9,7 @@ import org.eclipse.ui.actions.ActionContext;
 import org.eclipse.ui.navigator.CommonActionProvider;
 import org.openlca.ilcd.io.SodaConnection;
 
+import app.editors.classifications.ClassificationEditor;
 import app.navi.actions.ClassificationSync;
 import app.navi.actions.ConnectionDeleteAction;
 import app.navi.actions.FileDeletion;
@@ -18,6 +19,7 @@ import app.navi.actions.NewDataSetAction;
 import app.navi.actions.RefDeleteAction;
 import app.rcp.Icon;
 import app.store.Connections;
+import app.util.Actions;
 import app.util.Viewers;
 
 public class NavigationMenu extends CommonActionProvider {
@@ -51,6 +53,7 @@ public class NavigationMenu extends CommonActionProvider {
 		}
 		if (first instanceof FileElement) {
 			FileElement e = (FileElement) first;
+			open(e, menu);
 			menu.add(new FileDeletion(e));
 		}
 		if (first instanceof ConnectionFolder) {
@@ -72,6 +75,23 @@ public class NavigationMenu extends CommonActionProvider {
 		for (SodaConnection con : Connections.get()) {
 			syncMenu.add(new ClassificationSync(con));
 		}
+	}
+
+	private void open(FileElement e, IMenuManager menu) {
+		if (e == null || e.getType() == null || e.file == null)
+			return;
+		Runnable fn = null;
+		switch (e.getType()) {
+		case CLASSIFICATION:
+			fn = () -> ClassificationEditor.open(e.file);
+			break;
+		default:
+			break;
+		}
+		if (fn == null)
+			return;
+		// TODO: icon.OPEN
+		menu.add(Actions.create("#Open", fn));
 	}
 
 }

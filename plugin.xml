@@ -220,6 +220,13 @@
     </editor>
     <editor
           default="false"
+          icon="icons/folder.png"
+          id="classification.editor"
+          name="Classification"
+          class="app.editors.classifications.ClassificationEditor">
+    </editor>
+    <editor
+          default="false"
           icon="icons/info.png"
           id="status.view"
           name="Status"

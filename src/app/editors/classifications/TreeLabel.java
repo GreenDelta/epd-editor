@@ -6,6 +6,7 @@ import org.openlca.ilcd.lists.Category;
 import org.openlca.ilcd.lists.CategoryList;
 import org.openlca.ilcd.lists.ContentType;
 
+import app.M;
 import app.rcp.Icon;
 
 class TreeLabel extends LabelProvider {
@@ -33,19 +34,19 @@ class TreeLabel extends LabelProvider {
 			return null;
 		switch (t) {
 		case CONTACT:
-			return "#Contacts";
+			return M.Contacts;
 		case FLOW:
-			return "#Flows";
+			return M.Flows;
 		case FLOW_PROPERTY:
-			return "#Flow properties";
+			return M.FlowProperties;
 		case LCIA_METHOD:
-			return "#LCIA methods";
+			return M.LCIAMethods;
 		case PROCESS:
-			return "#Processes";
+			return M.EPDs;
 		case SOURCE:
-			return "#Sources";
+			return M.Sources;
 		case UNIT_GROUP:
-			return "#Unit groups";
+			return M.UnitGroups;
 		default:
 			return null;
 		}

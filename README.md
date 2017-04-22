@@ -61,6 +61,17 @@ of your workspace and thus may take a bit of time. After this, the project shoul
 have no compile errors and you should be able to open the `app.product` file
 and launch the application (click on `Launch an Eclipse application`).
 
+#### Labels and translations
+Labels and translations are externalized in the `src/app/messages*.properties`
+files. The keys in these files map to a static field in the class `app.M` which
+are then used in the Java code. It is recommended to use 
+[JLokalize](http://jlokalize.sourceforge.net) to edit the `messages*.properties`
+files. Labels that are not externalized yet start with a hash mark `#`. Thus,
+searching the Java source code for `"#` should give a list of strings that need
+to be externalized (if there are any). The script `scripts/make_messages_fields.py`
+generates the list of fields for the class `app.M` from the `messages.properties`
+file.
+
 ## License
 Unless stated otherwise, all source code of the openLCA project is licensed
 under the [Mozilla Public License, v. 2.0](http://mozilla.org/MPL/2.0/). Please

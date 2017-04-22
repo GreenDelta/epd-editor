@@ -18,6 +18,7 @@ import org.openlca.ilcd.lists.CategorySystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import app.M;
 import app.editors.BaseEditor;
 import app.editors.Editors;
 import app.editors.SimpleEditorInput;
@@ -43,7 +44,7 @@ public class ClassificationEditor extends BaseEditor {
 		try {
 			EditorInput ei = (EditorInput) input;
 			system = CategorySystems.get(ei.file);
-			setPartName("#Classifications - " + system.name);
+			setPartName(M.ClassificationSystem + ": " + system.name);
 		} catch (Exception e) {
 			throw new PartInitException("Failed to open editor", e);
 		}
@@ -68,7 +69,7 @@ public class ClassificationEditor extends BaseEditor {
 		final File file;
 
 		EditorInput(File file) {
-			super("#Classifications - " + file.getName());
+			super(M.ClassificationSystem + ": " + file.getName());
 			this.file = file;
 		}
 
@@ -82,13 +83,13 @@ public class ClassificationEditor extends BaseEditor {
 
 		private Page() {
 			super(ClassificationEditor.this, "ClassificationPage",
-					"#Classifications");
+					M.ClassificationSystem);
 		}
 
 		@Override
 		protected void createFormContent(IManagedForm mform) {
-			ScrolledForm form = UI.formHeader(mform, "#Classifications - "
-					+ system.name);
+			ScrolledForm form = UI.formHeader(mform,
+					M.ClassificationSystem + ": " + system.name);
 			FormToolkit tk = mform.getToolkit();
 			Composite body = UI.formBody(form, tk);
 			body.setLayout(new FillLayout());

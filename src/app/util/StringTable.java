@@ -49,7 +49,7 @@ public class StringTable {
 
 	private void bindActions(TableViewer table) {
 		Action add = Actions.create(M.Add, Icon.ADD.des(), () -> {
-			values.add("#New: " + property);
+			values.add(property);
 			viewer.setInput(values);
 			editor.setDirty();
 		});

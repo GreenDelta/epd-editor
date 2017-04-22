@@ -78,7 +78,7 @@ public class StatusView extends BaseEditor {
 	private class Page extends FormPage {
 
 		Page() {
-			super(StatusView.this, "StatusViewPage", "#Status");
+			super(StatusView.this, "StatusViewPage", M.Status);
 		}
 
 		@Override
@@ -87,7 +87,7 @@ public class StatusView extends BaseEditor {
 			ScrolledForm form = UI.formHeader(mform, title);
 			Composite body = UI.formBody(form, tk);
 			TableViewer table = Tables.createViewer(body, M.Name, M.UUID,
-					M.Version, "#Status");
+					M.Version, M.Status);
 			Tables.bindColumnWidths(table, 0.3, 0.2, 0.2, 0.3);
 			table.setLabelProvider(new Label());
 			table.setInput(stats);

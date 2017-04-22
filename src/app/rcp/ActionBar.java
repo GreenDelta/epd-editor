@@ -24,6 +24,7 @@ import org.openlca.ilcd.io.ZipStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import app.M;
 import app.StatusView;
 import app.editors.TranslationView;
 import app.editors.indicators.IndicatorMappingEditor;
@@ -60,29 +61,29 @@ public class ActionBar extends ActionBarAdvisor {
 	@Override
 	protected void fillMenuBar(IMenuManager menuBar) {
 		super.fillMenuBar(menuBar);
-		MenuManager fileMenu = new MenuManager("#File",
+		MenuManager fileMenu = new MenuManager(M.File,
 				IWorkbenchActionConstants.M_FILE);
 		addNewMenu(fileMenu);
-		fileMenu.add(Actions.create("#Validate data sets",
+		fileMenu.add(Actions.create(M.ValidateDataSets,
 				Icon.OK.des(), this::validateStore));
-		fileMenu.add(Actions.create("#Import data package",
+		fileMenu.add(Actions.create(M.ImportDataPackage,
 				Icon.IMPORT.des(), this::importZip));
-		fileMenu.add(Actions.create("#Export data package",
+		fileMenu.add(Actions.create(M.ExportDataPackage,
 				Icon.EXPORT.des(), this::exportZip));
 		menuBar.add(fileMenu);
 		menuBar.add(editMenu());
 	}
 
 	private MenuManager editMenu() {
-		MenuManager editMenu = new MenuManager("#Edit",
+		MenuManager editMenu = new MenuManager(M.Edit,
 				IWorkbenchActionConstants.M_EDIT);
-		editMenu.add(Actions.create("#Settings",
+		editMenu.add(Actions.create(M.Settings,
 				Icon.SETTINGS.des(), SettingsPage::open));
 		editMenu.add(Actions.create("#Show translations",
 				Icon.MESSAGE.des(), TranslationView::open));
-		editMenu.add(Actions.create("#Material properties",
+		editMenu.add(Actions.create(M.MaterialProperties,
 				Icon.QUANTITY.des(), MaterialPropertyEditor::open));
-		editMenu.add(Actions.create("#Indicator mappings",
+		editMenu.add(Actions.create(M.IndicatorMappings,
 				Icon.QUANTITY.des(), IndicatorMappingEditor::open));
 		editMenu.add(new Separator());
 		editMenu.add(Actions.create("#Delete all data sets",
@@ -91,7 +92,7 @@ public class ActionBar extends ActionBarAdvisor {
 	}
 
 	private void addNewMenu(MenuManager fileMenu) {
-		MenuManager mm = new MenuManager("#New...");
+		MenuManager mm = new MenuManager(M.New);
 		fileMenu.add(mm);
 		DataSetType[] types = { DataSetType.PROCESS, DataSetType.CONTACT,
 				DataSetType.SOURCE, DataSetType.FLOW, DataSetType.FLOW_PROPERTY,

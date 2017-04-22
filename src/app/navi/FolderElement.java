@@ -6,6 +6,7 @@ import org.eclipse.swt.graphics.Image;
 import org.openlca.ilcd.io.FileStore;
 
 import app.App;
+import app.M;
 import app.rcp.Icon;
 
 public class FolderElement extends NavigationElement {
@@ -34,11 +35,11 @@ public class FolderElement extends NavigationElement {
 			return "?";
 		switch (type) {
 		case CLASSIFICATION:
-			return "#Classifications";
+			return M.Classifications;
 		case LOCATION:
-			return "#Locations";
+			return M.Locations;
 		case DOC:
-			return "#Documents";
+			return M.Documents;
 		default:
 			return "?";
 		}

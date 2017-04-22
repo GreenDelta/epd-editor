@@ -34,7 +34,7 @@ public class DependencyPage extends FormPage {
 	private HashMap<String, Ref> indexRefs = new HashMap<>();
 
 	public DependencyPage(BaseEditor editor, IDataSet dataSet) {
-		super(editor, "DependencyPage", "#Dependencies");
+		super(editor, "DependencyPage", M.DataSetReferences);
 		this.editor = editor;
 		this.dataSet = dataSet;
 	}
@@ -42,10 +42,10 @@ public class DependencyPage extends FormPage {
 	@Override
 	protected void createFormContent(IManagedForm mform) {
 		FormToolkit tk = mform.getToolkit();
-		ScrolledForm form = UI.formHeader(mform, "#Dependencies");
+		ScrolledForm form = UI.formHeader(mform, M.DataSetReferences);
 		Composite body = UI.formBody(form, tk);
-		TreeViewer tree = Trees.createViewer(body, "#XML Field", "#Reference",
-				M.UUID, M.Version);
+		TreeViewer tree = Trees.createViewer(body, M.XMLField,
+				M.DataSetReference, M.UUID, M.Version);
 		tree.getTree().setLinesVisible(false);
 		tree.setContentProvider(new ContentProvider());
 		tree.setLabelProvider(new Label());

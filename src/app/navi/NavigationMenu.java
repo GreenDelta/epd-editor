@@ -9,6 +9,7 @@ import org.eclipse.ui.actions.ActionContext;
 import org.eclipse.ui.navigator.CommonActionProvider;
 import org.openlca.ilcd.io.SodaConnection;
 
+import app.M;
 import app.editors.Editors;
 import app.editors.classifications.ClassificationEditor;
 import app.editors.locations.LocationEditor;
@@ -69,7 +70,7 @@ public class NavigationMenu extends CommonActionProvider {
 
 	private void forRef(RefElement e, IMenuManager menu) {
 		// TODO: icon.OPEN
-		menu.add(Actions.create("#Open", () -> Editors.open(e.ref)));
+		menu.add(Actions.create(M.Open, () -> Editors.open(e.ref)));
 		menu.add(new NewDataSetAction(e));
 		menu.add(new RefDeleteAction(e));
 	}
@@ -105,7 +106,7 @@ public class NavigationMenu extends CommonActionProvider {
 		if (fn == null)
 			return;
 		// TODO: icon.OPEN
-		menu.add(Actions.create("#Open", fn));
+		menu.add(Actions.create(M.Open, fn));
 	}
 
 }

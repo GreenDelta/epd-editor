@@ -8,6 +8,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.progress.UIJob;
 
+import app.M;
+
 public class MsgBox {
 
 	private static final int ERROR = 0;
@@ -46,13 +48,13 @@ public class MsgBox {
 		String title = null;
 		switch (type) {
 		case ERROR:
-			title = "#Fehler";
+			title = M.Error;
 			break;
 		case WARNING:
-			title = "#Warnung";
+			title = M.Warning;
 			break;
 		case INFO:
-			title = "#Information";
+			title = M.Information;
 			break;
 		default:
 			break;

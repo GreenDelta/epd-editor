@@ -25,6 +25,7 @@ public class M extends NLS {
 	public static String Citation;
 	public static String Classification;
 	public static String ClassificationSystem;
+	public static String Classifications;
 	public static String Code;
 	public static String Comment;
 	public static String CompleteReviewReport;
@@ -43,6 +44,7 @@ public class M extends NLS {
 	public static String DataEntry;
 	public static String DataSetInformation;
 	public static String DataSetReference;
+	public static String DataSetReferences;
 	public static String DataSetUploaded;
 	public static String DataSetUploadedMessage;
 	public static String DataSets;
@@ -57,6 +59,7 @@ public class M extends NLS {
 	public static String Description;
 	public static String Documentation;
 	public static String Documentor;
+	public static String Documents;
 	public static String Download;
 	public static String DownloadDataSets;
 	public static String DownloadFailed;
@@ -65,13 +68,17 @@ public class M extends NLS {
 	public static String EPDEditor;
 	public static String EPD_DOWNLOAD_FAILED;
 	public static String EPDs;
+	public static String Edit;
 	public static String EnvironmentalIndicators;
 	public static String EnvironmentalParameters;
+	public static String Error;
 	public static String Eutrophication;
 	public static String Export;
+	public static String ExportDataPackage;
 	public static String ExportEnergy;
 	public static String ExportFailed;
 	public static String ExternalDocumentationSources;
+	public static String ExternalFile;
 	public static String ExternalFiles;
 
 	public static String FailedToGetDataStocks;
@@ -98,6 +105,7 @@ public class M extends NLS {
 
 	public static String Import;
 	public static String ImportClassificationFile;
+	public static String ImportDataPackage;
 	public static String IndependentExternalReview;
 	public static String IndependentInternalReview;
 	public static String IndependentReviewPanel;
@@ -130,6 +138,7 @@ public class M extends NLS {
 	public static String Indicator_SECONDARY_MATERIAL;
 	public static String Indicator_TOTAL_NON_RENEWABLE_PRIMARY_ENERGY;
 	public static String Indicator_TOTAL_RENEWABLE_PRIMARY_ENERGY;
+	public static String Information;
 	public static String InvalidName;
 	public static String InvalidReference;
 	public static String IsVendorSpecific;
@@ -154,6 +163,7 @@ public class M extends NLS {
 
 	public static String Name;
 	public static String NetworkConnectionFailed;
+	public static String New;
 	public static String NewContact;
 	public static String NewEPD;
 	public static String NewFlowProperty;
@@ -173,6 +183,7 @@ public class M extends NLS {
 	public static String OekobaudatWebsite;
 	public static String OekobaudatWebsite_Description;
 	public static String OnlineSearch;
+	public static String Open;
 	public static String OpenEditor;
 	public static String OpenInBrowser;
 	public static String OutputParameters;
@@ -233,6 +244,7 @@ public class M extends NLS {
 	public static String Sources;
 	public static String Specific;
 	public static String StartPage;
+	public static String Status;
 	public static String Subtype;
 	public static String SynchronizeWithModules;
 	public static String Synonyms;
@@ -263,13 +275,17 @@ public class M extends NLS {
 	public static String User;
 
 	public static String ValidUntil;
+	public static String ValidateDataSets;
 	public static String Value;
 	public static String Vendor;
 	public static String VendorInformation;
 	public static String Version;
 
+	public static String Warning;
 	public static String WasteParameters;
 	public static String Website;
+
+	public static String XMLField;
 
 	static {
 		NLS.initializeMessages("app.messages", M.class);

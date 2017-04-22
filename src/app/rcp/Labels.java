@@ -19,23 +19,23 @@ public class Labels {
 			return "";
 		switch (type) {
 		case CONTACT:
-			return "#Contact";
+			return M.Contact;
 		case EXTERNAL_FILE:
-			return "#External File";
+			return M.ExternalFile;
 		case FLOW:
-			return "#Flow";
+			return M.Flow;
 		case FLOW_PROPERTY:
-			return "#Flow Property";
+			return M.FlowProperty;
 		case LCIA_METHOD:
-			return "#LCIA Method";
+			return M.LCIAMethod;
 		case PROCESS:
-			return "#EPD Data Set";
+			return M.EPD;
 		case SOURCE:
-			return "#Source";
+			return M.Source;
 		case UNIT_GROUP:
-			return "#Unit Group";
+			return M.UnitGroup;
 		default:
-			return "#Unknown";
+			return M.Unknown;
 		}
 	}
 
@@ -84,7 +84,7 @@ public class Labels {
 		case WASTE_DISPOSAL:
 			return M.WasteParameters;
 		default:
-			return "#unknown";
+			return M.Unknown;
 		}
 	}
 }

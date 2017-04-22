@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.App;
+import app.M;
 import app.navi.Navigator;
 import app.rcp.Icon;
 import app.util.Actions;
@@ -57,9 +58,9 @@ class FileTable {
 
 	private Action[] createActions(TableViewer table) {
 		Action[] actions = new Action[2];
-		actions[0] = Actions.create("#Add",
+		actions[0] = Actions.create(M.Add,
 				Icon.ADD.des(), this::add);
-		actions[1] = Actions.create("#Remove",
+		actions[1] = Actions.create(M.Remove,
 				Icon.DELETE.des(), this::remove);
 		return actions;
 	}

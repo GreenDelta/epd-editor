@@ -57,8 +57,8 @@ class ScenarioTable {
 	}
 
 	private void bindActions(Section section) {
-		Action add = Actions.create("#Add", Icon.ADD.des(), this::onCreate);
-		Action rem = Actions.create("#Remove", Icon.DELETE.des(),
+		Action add = Actions.create(M.Add, Icon.ADD.des(), this::onCreate);
+		Action rem = Actions.create(M.Remove, Icon.DELETE.des(),
 				this::onRemove);
 		Actions.bind(section, add, rem);
 		Actions.bind(table, add, rem);

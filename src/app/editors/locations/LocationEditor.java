@@ -16,6 +16,7 @@ import org.openlca.ilcd.lists.LocationList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import app.M;
 import app.editors.BaseEditor;
 import app.editors.Editors;
 import app.editors.SimpleEditorInput;
@@ -86,7 +87,7 @@ public class LocationEditor extends BaseEditor {
 					+ file.getName());
 			FormToolkit tk = mform.getToolkit();
 			Composite body = UI.formBody(form, tk);
-			TableViewer table = Tables.createViewer(body, "#Code", "#Name");
+			TableViewer table = Tables.createViewer(body, "#Code", M.Name);
 			Tables.bindColumnWidths(table, 0.4, 0.6);
 			table.setLabelProvider(new TableLable());
 			form.reflow(true);

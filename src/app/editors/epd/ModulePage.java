@@ -107,9 +107,9 @@ class ModulePage extends FormPage {
 
 	private Action[] createModuleActions() {
 		Action[] actions = new Action[2];
-		actions[0] = Actions.create("#Add", Icon.ADD.des(),
+		actions[0] = Actions.create(M.Add, Icon.ADD.des(),
 				() -> createModule());
-		actions[1] = Actions.create("#Remove", Icon.DELETE.des(),
+		actions[1] = Actions.create(M.Remove, Icon.DELETE.des(),
 				() -> removeModule());
 		return actions;
 	}

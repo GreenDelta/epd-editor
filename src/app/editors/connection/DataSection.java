@@ -48,7 +48,7 @@ class DataSection {
 	}
 
 	void create(Composite body, FormToolkit tk) {
-		Section section = UI.section(body, tk, "#Data");
+		Section section = UI.section(body, tk, M.Data);
 		UI.gridData(section, true, true);
 		Composite parent = UI.sectionClient(section, tk);
 		UI.gridLayout(parent, 1);
@@ -79,7 +79,7 @@ class DataSection {
 			return;
 		String[] error = new String[1];
 		List<Descriptor> result = new ArrayList<>();
-		App.run("#Search online", () -> {
+		App.run(M.SearchOnline, () -> {
 			try (SodaClient client = new SodaClient(con)) {
 				client.connect();
 				DescriptorList list = client.search(clazz, name);
@@ -91,7 +91,7 @@ class DataSection {
 			if (error[0] == null)
 				table.setInput(result);
 			else
-				MsgBox.error("#Search failed", error[0]);
+				MsgBox.error(M.SearchFailed, error[0]);
 		});
 	}
 
@@ -119,7 +119,7 @@ class DataSection {
 	}
 
 	private void bindDownload() {
-		Action action = Actions.create("#Download", Icon.DOWNLOAD.des(), () -> {
+		Action action = Actions.create(M.Download, Icon.DOWNLOAD.des(), () -> {
 			List<Descriptor> selected = Viewers.getAllSelected(table);
 			if (selected.isEmpty())
 				return;

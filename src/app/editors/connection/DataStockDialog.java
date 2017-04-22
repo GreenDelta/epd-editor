@@ -40,7 +40,7 @@ class DataStockDialog extends FormDialog {
 	@Override
 	protected void createFormContent(IManagedForm mform) {
 		FormToolkit tk = mform.getToolkit();
-		UI.formHeader(mform, "#Data stocks");
+		UI.formHeader(mform, M.DataStocks);
 		Composite body = UI.formBody(mform.getForm(), tk);
 		UI.gridLayout(body, 1);
 		TableViewer table = Tables.createViewer(body, M.Name, M.UUID,

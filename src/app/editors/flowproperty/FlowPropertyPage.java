@@ -15,6 +15,7 @@ import org.openlca.ilcd.flowproperties.FlowProperty;
 import org.openlca.ilcd.flowproperties.QuantitativeReference;
 
 import app.App;
+import app.M;
 import app.editors.CategorySection;
 import app.editors.RefLink;
 import app.editors.VersionField;
@@ -52,9 +53,9 @@ class FlowPropertyPage extends FormPage {
 	private void infoSection(Composite body, TextBuilder tb) {
 		Composite comp = UI.formSection(body, tk, "#Contact information");
 		DataSetInfo info = property.flowPropertyInfo.dataSetInfo;
-		tb.text(comp, "#Name", info.name);
-		tb.text(comp, "#Synonyms", info.synonyms);
-		tb.text(comp, "#Description", info.generalComment);
+		tb.text(comp, M.Name, info.name);
+		tb.text(comp, M.Synonyms, info.synonyms);
+		tb.text(comp, M.Description, info.generalComment);
 	}
 
 	private void categorySection(Composite body) {
@@ -77,12 +78,11 @@ class FlowPropertyPage extends FormPage {
 	}
 
 	private void adminSection(Composite body) {
-		Composite comp = UI.formSection(body, tk,
-				"#Administrative information");
+		Composite comp = UI.formSection(body, tk, M.AdministrativeInformation);
 		AdminInfo info = property.adminInfo;
-		Text timeT = UI.formText(comp, tk, "#Last change");
+		Text timeT = UI.formText(comp, tk, M.LastUpdate);
 		timeT.setText(Xml.toString(info.dataEntry.timeStamp));
-		Text uuidT = UI.formText(comp, tk, "#UUID");
+		Text uuidT = UI.formText(comp, tk, M.UUID);
 		if (property.getUUID() != null)
 			uuidT.setText(property.getUUID());
 		VersionField vf = new VersionField(comp, tk);

@@ -49,9 +49,9 @@ class MaterialPropertyTable {
 	}
 
 	private void bindActions(TableViewer table, Section section) {
-		Action add = Actions.create("#Add", Icon.ADD.des(),
+		Action add = Actions.create(M.Add, Icon.ADD.des(),
 				this::onCreate);
-		Action remove = Actions.create("#Remove", Icon.DELETE.des(),
+		Action remove = Actions.create(M.Remove, Icon.DELETE.des(),
 				this::onRemove);
 		Actions.bind(section, add, remove);
 		Actions.bind(table, add, remove);

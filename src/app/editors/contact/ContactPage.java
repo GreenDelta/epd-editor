@@ -16,6 +16,7 @@ import org.openlca.ilcd.contacts.DataSetInfo;
 import org.openlca.ilcd.util.Contacts;
 
 import app.App;
+import app.M;
 import app.editors.CategorySection;
 import app.editors.RefLink;
 import app.editors.VersionField;
@@ -30,14 +31,15 @@ class ContactPage extends FormPage {
 	private FormToolkit tk;
 
 	ContactPage(ContactEditor editor) {
-		super(editor, "ContactPage", "#Contact Data Set");
+		super(editor, "ContactPage", M.Contact);
 		this.editor = editor;
 		contact = editor.contact;
 	}
 
 	@Override
 	protected void createFormContent(IManagedForm mform) {
-		Supplier<String> title = () -> "#Contact: " + App.s(contact.getName());
+		Supplier<String> title = () -> M.Contact + ": "
+				+ App.s(contact.getName());
 		ScrolledForm form = UI.formHeader(mform, title.get());
 		editor.onSaved(() -> form.setText(title.get()));
 		tk = mform.getToolkit();
@@ -50,16 +52,16 @@ class ContactPage extends FormPage {
 	}
 
 	private void infoSection(Composite body, TextBuilder tb) {
-		Composite comp = UI.formSection(body, tk, "#Contact information");
+		Composite comp = UI.formSection(body, tk, M.ContactInformation);
 		DataSetInfo info = Contacts.dataSetInfo(contact);
-		tb.text(comp, "#Short name", info.shortName);
-		tb.text(comp, "#Name", info.name);
-		tb.text(comp, "#Address", info.contactAddress);
-		tb.text(comp, "#Telephone", info.telephone, t -> info.telephone = t);
-		tb.text(comp, "#Telefax", info.telefax, t -> info.telefax = t);
-		tb.text(comp, "#WWW-Address", info.wwwAddress,
+		tb.text(comp, M.ShortName, info.shortName);
+		tb.text(comp, M.Name, info.name);
+		tb.text(comp, M.Address, info.contactAddress);
+		tb.text(comp, M.Telephone, info.telephone, t -> info.telephone = t);
+		tb.text(comp, M.Telefax, info.telefax, t -> info.telefax = t);
+		tb.text(comp, M.Website, info.wwwAddress,
 				t -> info.wwwAddress = t);
-		UI.formLabel(comp, tk, "#Logo");
+		UI.formLabel(comp, tk, M.Logo);
 		RefLink logo = new RefLink(comp, tk, DataSetType.SOURCE);
 		logo.setRef(info.logo);
 		logo.onChange(ref -> {
@@ -79,10 +81,10 @@ class ContactPage extends FormPage {
 		DataEntry entry = Contacts.dataEntry(contact);
 		Publication pub = Contacts.publication(contact);
 		Composite comp = UI.formSection(body, tk,
-				"#Administrative information");
-		Text timeT = UI.formText(comp, tk, "#Last change");
+				M.AdministrativeInformation);
+		Text timeT = UI.formText(comp, tk, M.LastUpdate);
 		timeT.setText(Xml.toString(entry.timeStamp));
-		Text uuidT = UI.formText(comp, tk, "#UUID");
+		Text uuidT = UI.formText(comp, tk, M.UUID);
 		if (contact.getUUID() != null)
 			uuidT.setText(contact.getUUID());
 		VersionField vf = new VersionField(comp, tk);

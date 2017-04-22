@@ -19,8 +19,10 @@ public class M extends NLS {
 	public static String AccessRestrictions;
 	public static String AccreditedThirdPartyReview;
 	public static String Acidification;
+	public static String Add;
 	public static String AddAMaterialProperty;
 	public static String AddReview;
+	public static String Address;
 	public static String AdministrativeInformation;
 	public static String Amount;
 	public static String Average;
@@ -35,17 +37,22 @@ public class M extends NLS {
 	public static String CompleteReviewReport;
 	public static String ComponentsForReuse;
 	public static String ConnectToSoda4LCA;
+	public static String ConnectionData;
+	public static String Contact;
+	public static String ContactInformation;
 	public static String Contacts;
 	public static String Copyright;
 	public static String CreateANewEPD;
 	public static String CreateANewEPD_Description;
 
+	public static String Data;
 	public static String DataEntry;
 	public static String DataSetInformation;
 	public static String DataSetUploaded;
 	public static String DataSetUploadedMessage;
 	public static String DataSources;
 	public static String DataStock;
+	public static String DataStocks;
 	public static String DeclaredProduct;
 	public static String DeclaredUnit;
 	public static String Default;
@@ -54,11 +61,12 @@ public class M extends NLS {
 	public static String Description;
 	public static String Documentation;
 	public static String Documentor;
+	public static String Download;
 
 	public static String EPD;
-	public static String EPDs;
 	public static String EPDEditor;
 	public static String EPD_DOWNLOAD_FAILED;
+	public static String EPDs;
 	public static String EnvironmentalIndicators;
 	public static String EnvironmentalParameters;
 	public static String Eutrophication;
@@ -66,6 +74,7 @@ public class M extends NLS {
 	public static String ExportEnergy;
 	public static String ExternalDocumentationSources;
 
+	public static String FailedToGetDataStocks;
 	public static String File;
 	public static String Filter;
 	public static String Flow;
@@ -125,6 +134,7 @@ public class M extends NLS {
 	public static String LCIAMethods;
 	public static String LastUpdate;
 	public static String Location;
+	public static String Logo;
 
 	public static String MaterialProperties;
 	public static String MaterialProperties_Description;
@@ -169,6 +179,7 @@ public class M extends NLS {
 
 	public static String RadioactiveWasteDisposed;
 	public static String ReferenceYear;
+	public static String Remove;
 	public static String Representative;
 	public static String ResourceParameters;
 	public static String ResultValueMustBeANumber;
@@ -190,11 +201,16 @@ public class M extends NLS {
 	public static String SearchAndDownloads;
 	public static String SearchEPDs;
 	public static String SearchEPDs_Description;
+	public static String SearchFailed;
+	public static String SearchOnline;
 	public static String SelectACategory;
 	public static String SelectAMaterialProperty;
 	public static String SelectAProductSystem;
 	public static String ServerConfiguration;
 	public static String ServerConfiguration_Description;
+	public static String ServerConnection;
+	public static String ServerConnections;
+	public static String ShortName;
 	public static String Source;
 	public static String Sources;
 	public static String Specific;
@@ -206,6 +222,8 @@ public class M extends NLS {
 	public static String TechnologicalApplicability;
 	public static String Technology;
 	public static String TechnologyDescription;
+	public static String Telefax;
+	public static String Telephone;
 	public static String Template;
 	public static String TestConnection;
 	public static String Time;
@@ -230,6 +248,7 @@ public class M extends NLS {
 	public static String Version;
 
 	public static String WasteParameters;
+	public static String Website;
 
 	private static Map<String, String> map;
 

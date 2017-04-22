@@ -14,6 +14,7 @@ import org.openlca.ilcd.methods.LCIAMethod;
 import org.openlca.ilcd.util.Methods;
 
 import app.App;
+import app.M;
 import app.editors.CategorySection;
 import app.editors.VersionField;
 import app.util.StringTable;
@@ -51,7 +52,7 @@ class InfoPage extends FormPage {
 	private void infoSection(Composite body, TextBuilder tb) {
 		DataSetInfo info = Methods.dataSetInfo(method);
 		Composite comp = UI.formSection(body, tk, "#LCIA Method information");
-		tb.text(comp, "#Name", info.name);
+		tb.text(comp, M.Name, info.name);
 		UI.formLabel(comp, "#Methodologies");
 		new StringTable(editor, "#Methodology", info.methods).render(comp, tk);
 		UI.formLabel(comp, "#Impact Categories");
@@ -71,11 +72,10 @@ class InfoPage extends FormPage {
 	}
 
 	private void adminSection(Composite body) {
-		Composite comp = UI.formSection(body, tk,
-				"#Administrative information");
-		Text timeT = UI.formText(comp, tk, "#Last change");
+		Composite comp = UI.formSection(body, tk, M.AdministrativeInformation);
+		Text timeT = UI.formText(comp, tk, M.LastUpdate);
 		timeT.setText(Xml.toString(Methods.dataEntry(method).timeStamp));
-		Text uuidT = UI.formText(comp, tk, "#UUID");
+		Text uuidT = UI.formText(comp, tk, M.UUID);
 		if (method.getUUID() != null)
 			uuidT.setText(method.getUUID());
 		VersionField vf = new VersionField(comp, tk);

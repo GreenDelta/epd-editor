@@ -70,8 +70,8 @@ class UnitSection {
 	}
 
 	private void bindActions(Section section) {
-		Action add = Actions.create("#Add", Icon.ADD.des(), this::add);
-		Action rem = Actions.create("#Remove", Icon.DELETE.des(), this::remove);
+		Action add = Actions.create(M.Add, Icon.ADD.des(), this::add);
+		Action rem = Actions.create(M.Remove, Icon.DELETE.des(), this::remove);
 		Action ref = Actions.create("#Set as reference",
 				Icon.des(DataSetType.FLOW_PROPERTY), this::setRef);
 		Actions.bind(section, add, rem);

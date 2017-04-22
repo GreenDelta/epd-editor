@@ -15,6 +15,7 @@ import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 
 import app.App;
+import app.M;
 import app.rcp.Icon;
 import app.rcp.Labels;
 import app.util.Actions;
@@ -66,7 +67,7 @@ public class RefTable {
 
 	private Action[] createActions(TableViewer table) {
 		Action[] actions = new Action[2];
-		actions[0] = Actions.create("#Add", Icon.ADD.des(), () -> {
+		actions[0] = Actions.create(M.Add, Icon.ADD.des(), () -> {
 			Ref ref = RefSelectionDialog.select(type);
 			if (ref == null || refs.contains(ref))
 				return;
@@ -75,7 +76,7 @@ public class RefTable {
 			if (editor != null)
 				editor.setDirty();
 		});
-		actions[1] = Actions.create("#Remove", Icon.DELETE.des(), () -> {
+		actions[1] = Actions.create(M.Remove, Icon.DELETE.des(), () -> {
 			Ref ref = Viewers.getFirstSelected(table);
 			if (ref == null)
 				return;

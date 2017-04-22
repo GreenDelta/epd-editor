@@ -16,6 +16,7 @@ import org.openlca.ilcd.sources.DataSetInfo;
 import org.openlca.ilcd.sources.Source;
 
 import app.App;
+import app.M;
 import app.editors.CategorySection;
 import app.editors.RefLink;
 import app.editors.RefTable;
@@ -84,12 +85,11 @@ class SourcePage extends FormPage {
 	}
 
 	private void adminSection(Composite body) {
-		Composite comp = UI.formSection(body, tk,
-				"#Administrative information");
+		Composite comp = UI.formSection(body, tk, M.AdministrativeInformation);
 		AdminInfo info = source.adminInfo;
-		Text timeT = UI.formText(comp, tk, "#Last change");
+		Text timeT = UI.formText(comp, tk, M.LastUpdate);
 		timeT.setText(Xml.toString(info.dataEntry.timeStamp));
-		Text uuidT = UI.formText(comp, tk, "#UUID");
+		Text uuidT = UI.formText(comp, tk, M.UUID);
 		if (source.getUUID() != null)
 			uuidT.setText(source.getUUID());
 		VersionField vf = new VersionField(comp, tk);

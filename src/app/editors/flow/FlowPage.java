@@ -32,14 +32,14 @@ class FlowPage extends FormPage {
 	private FormToolkit tk;
 
 	FlowPage(FlowEditor editor) {
-		super(editor, "#FlowPage", "#Flow");
+		super(editor, "FlowPage", M.Flow);
 		this.editor = editor;
 		this.product = editor.product;
 	}
 
 	@Override
 	protected void createFormContent(IManagedForm mform) {
-		Supplier<String> title = () -> "#Flow: "
+		Supplier<String> title = () -> M.Flow + ": "
 				+ App.s(product.flow.getName());
 		ScrolledForm form = UI.formHeader(mform, title.get());
 		editor.onSaved(() -> form.setText(title.get()));
@@ -57,10 +57,10 @@ class FlowPage extends FormPage {
 	private void infoSection(Composite body, TextBuilder tb) {
 		Composite comp = UI.formSection(body, tk, "#Flow information");
 		FlowName fName = Flows.flowName(product.flow);
-		tb.text(comp, "#Name", fName.baseName);
+		tb.text(comp, M.Name, fName.baseName);
 		DataSetInfo info = Flows.dataSetInfo(product.flow);
-		tb.text(comp, "#Synonyms", info.synonyms);
-		tb.text(comp, "#Description", info.generalComment);
+		tb.text(comp, M.Synonyms, info.synonyms);
+		tb.text(comp, M.Description, info.generalComment);
 
 		UI.formLabel(comp, tk, M.GenericProduct);
 		RefLink rt = new RefLink(comp, tk, DataSetType.FLOW);
@@ -89,10 +89,10 @@ class FlowPage extends FormPage {
 	private void adminSection(Composite body) {
 		Flow f = product.flow;
 		Composite comp = UI.formSection(body, tk,
-				"#Administrative information");
-		Text timeT = UI.formText(comp, tk, "#Last change");
+				M.AdministrativeInformation);
+		Text timeT = UI.formText(comp, tk, M.LastUpdate);
 		timeT.setText(Xml.toString(Flows.dataEntry(f).timeStamp));
-		Text uuidT = UI.formText(comp, tk, "#UUID");
+		Text uuidT = UI.formText(comp, tk, M.UUID);
 		if (f.getUUID() != null)
 			uuidT.setText(f.getUUID());
 		VersionField vf = new VersionField(comp, tk);

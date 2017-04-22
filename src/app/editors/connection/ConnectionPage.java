@@ -20,17 +20,17 @@ class ConnectionPage extends FormPage {
 	private FormToolkit tk;
 
 	ConnectionPage(ConnectionEditor editor) {
-		super(editor, "ConnectionPage", "#Connection");
+		super(editor, "ConnectionPage", M.ServerConnection);
 		this.editor = editor;
 		this.con = editor.con;
 	}
 
 	@Override
 	protected void createFormContent(IManagedForm mform) {
-		ScrolledForm form = UI.formHeader(mform, "#Connection");
+		ScrolledForm form = UI.formHeader(mform, M.ServerConnection);
 		tk = mform.getToolkit();
 		Composite body = UI.formBody(form, tk);
-		Composite comp = UI.formSection(body, tk, "#Connection data");
+		Composite comp = UI.formSection(body, tk, M.ConnectionData);
 		text(comp, "URL", con.url, t -> con.url = t);
 		text(comp, M.User, con.user, t -> con.user = t);
 		text(comp, M.Password, con.password, t -> con.password = t);

@@ -62,9 +62,9 @@ public class CategorySection {
 				M.ImportClassificationFile,
 				Icon.IMPORT.des(),
 				() -> importFile());
-		Action add = Actions.create("#Add", Icon.ADD.des(),
+		Action add = Actions.create(M.Add, Icon.ADD.des(),
 				() -> addRow(viewer));
-		Action delete = Actions.create("#Delete", Icon.DELETE.des(),
+		Action delete = Actions.create(M.Remove, Icon.DELETE.des(),
 				() -> deleteRow(viewer));
 		Actions.bind(section, importAction, add, delete);
 		Actions.bind(viewer, add, delete);

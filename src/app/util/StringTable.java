@@ -8,6 +8,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import app.M;
 import app.editors.BaseEditor;
 import app.rcp.Icon;
 import app.util.tables.ModifySupport;
@@ -47,12 +48,12 @@ public class StringTable {
 	}
 
 	private void bindActions(TableViewer table) {
-		Action add = Actions.create("#Add", Icon.ADD.des(), () -> {
+		Action add = Actions.create(M.Add, Icon.ADD.des(), () -> {
 			values.add("#New: " + property);
 			viewer.setInput(values);
 			editor.setDirty();
 		});
-		Action remove = Actions.create("#Remove", Icon.DELETE.des(), () -> {
+		Action remove = Actions.create(M.Remove, Icon.DELETE.des(), () -> {
 			String v = Viewers.getFirstSelected(viewer);
 			if (v == null)
 				return;

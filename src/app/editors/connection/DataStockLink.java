@@ -58,7 +58,7 @@ class DataStockLink {
 
 	private void afterFetch(List<DataStock> list, String[] error) {
 		if (error[0] != null) {
-			MsgBox.error("#Failed to get data stocks", error[0]);
+			MsgBox.error(M.FailedToGetDataStocks, error[0]);
 			return;
 		}
 		DataStockDialog dialog = new DataStockDialog(list);
@@ -73,7 +73,7 @@ class DataStockLink {
 	private void setLinkText() {
 		if (link == null)
 			return;
-		String t = "#none";
+		String t = M.None;
 		if (con.dataStockId != null) {
 			t = con.dataStockName + " | " + con.dataStockId;
 		}

@@ -13,10 +13,8 @@ import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.editors.BaseEditor;
-import app.editors.DependencyPage;
 import app.editors.Editors;
 import app.editors.RefEditorInput;
-import app.editors.XmlPage;
 import app.store.Data;
 import epd.io.conversion.FlowExtensions;
 import epd.model.EpdProduct;
@@ -79,8 +77,7 @@ public class FlowEditor extends BaseEditor {
 	protected void addPages() {
 		try {
 			addPage(new FlowPage(this));
-			addPage(new DependencyPage(this, product.flow));
-			addPage(new XmlPage(this, product.flow));
+			Editors.addInfoPages(this, product.flow);
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to add page", e);

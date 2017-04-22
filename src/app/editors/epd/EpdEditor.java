@@ -21,10 +21,8 @@ import org.slf4j.LoggerFactory;
 import app.App;
 import app.M;
 import app.editors.BaseEditor;
-import app.editors.DependencyPage;
 import app.editors.Editors;
 import app.editors.RefEditorInput;
-import app.editors.XmlPage;
 import app.store.Data;
 import app.util.UI;
 import epd.model.EpdDataSet;
@@ -67,8 +65,7 @@ public class EpdEditor extends BaseEditor {
 			addPage(new ModelingPage(this));
 			addPage(new AdminPage(this));
 			addPage(new ModulePage(this));
-			addPage(new DependencyPage(this, dataSet.process));
-			addPage(new XmlPage(this, dataSet.process));
+			Editors.addInfoPages(this, dataSet.process);
 		} catch (Exception e) {
 			log.error("failed to add editor page", e);
 		}

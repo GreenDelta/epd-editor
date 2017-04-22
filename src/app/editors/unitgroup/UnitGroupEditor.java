@@ -14,10 +14,8 @@ import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.editors.BaseEditor;
-import app.editors.DependencyPage;
 import app.editors.Editors;
 import app.editors.RefEditorInput;
-import app.editors.XmlPage;
 import app.store.Data;
 import epd.model.Version;
 import epd.model.Xml;
@@ -79,8 +77,7 @@ public class UnitGroupEditor extends BaseEditor {
 	protected void addPages() {
 		try {
 			addPage(new InfoPage(this));
-			addPage(new DependencyPage(this, unitGroup));
-			addPage(new XmlPage(this, unitGroup));
+			Editors.addInfoPages(this, unitGroup);
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to add page", e);

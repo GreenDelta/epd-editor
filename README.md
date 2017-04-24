@@ -72,6 +72,17 @@ to be externalized (if there are any). The script `scripts/make_messages_fields.
 generates the list of fields for the class `app.M` from the `messages.properties`
 file.
 
+#### Validation profile
+The EPD-Editor uses the EPD profile from the 
+[ILCD Validation API](https://bitbucket.org/okusche/ilcdvalidation). This
+profile needs to be located under `validation_profile/EPD_validation_profile.jar`
+and is not added to this repository. Thus, you need to copy the EPD profile
+from the validation API to this location before testing the validation feature
+or running a build.
+
+#### Building the distribution packages
+...
+
 ## License
 Unless stated otherwise, all source code of the openLCA project is licensed
 under the [Mozilla Public License, v. 2.0](http://mozilla.org/MPL/2.0/). Please

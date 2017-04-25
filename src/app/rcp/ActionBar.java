@@ -92,7 +92,7 @@ public class ActionBar extends ActionBarAdvisor {
 	}
 
 	private void addNewMenu(MenuManager fileMenu) {
-		MenuManager mm = new MenuManager(M.New);
+		MenuManager mm = new MenuManager(M.New, Icon.NEW_DATA_SET.des(), M.New);
 		fileMenu.add(mm);
 		DataSetType[] types = { DataSetType.PROCESS, DataSetType.CONTACT,
 				DataSetType.SOURCE, DataSetType.FLOW, DataSetType.FLOW_PROPERTY,

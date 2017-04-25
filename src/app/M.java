@@ -54,6 +54,7 @@ public class M extends NLS {
 	public static String DeclaredProduct;
 	public static String DeclaredUnit;
 	public static String Default;
+	public static String Delete;
 	public static String DeleteReview;
 	public static String DependentInternalReview;
 	public static String Description;
@@ -266,6 +267,7 @@ public class M extends NLS {
 	public static String UnitGroups;
 	public static String Units;
 	public static String Unknown;
+	public static String Update;
 	public static String UpdateMajorVersion;
 	public static String UpdateMinorVersion;
 	public static String UploadDataSet;
@@ -275,6 +277,7 @@ public class M extends NLS {
 	public static String User;
 
 	public static String ValidUntil;
+	public static String Validate;
 	public static String ValidateDataSets;
 	public static String Value;
 	public static String Vendor;

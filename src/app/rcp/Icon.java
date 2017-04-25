@@ -44,11 +44,17 @@ public enum Icon {
 
 	INFO("info.png"),
 
+	LOCATION("location.png"),
+
 	MESSAGE("message.png"),
 
 	METHOD("method.png"),
 
+	NEW_DATA_SET("new_data_set.png"),
+
 	OK("ok.png"),
+
+	OPEN("open.png"),
 
 	PASTE("paste.png"),
 
@@ -127,6 +133,10 @@ public enum Icon {
 			return QUANTITY.des();
 		case UNIT_GROUP:
 			return UNIT.des();
+		case LCIA_METHOD:
+			return METHOD.des();
+		case EXTERNAL_FILE:
+			return DOCUMENT.des();
 		default:
 			return null;
 		}

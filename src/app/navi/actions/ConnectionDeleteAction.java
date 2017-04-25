@@ -2,6 +2,7 @@ package app.navi.actions;
 
 import org.eclipse.jface.action.Action;
 
+import app.M;
 import app.navi.ConnectionElement;
 import app.rcp.Icon;
 import app.store.Connections;
@@ -13,7 +14,7 @@ public class ConnectionDeleteAction extends Action {
 
 	public ConnectionDeleteAction(ConnectionElement e) {
 		this.e = e;
-		setText("#Delete connection");
+		setText(M.Delete);
 		setImageDescriptor(Icon.DELETE.des());
 	}
 

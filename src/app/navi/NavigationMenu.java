@@ -12,6 +12,7 @@ import org.openlca.ilcd.io.SodaConnection;
 import app.M;
 import app.editors.Editors;
 import app.editors.classifications.ClassificationEditor;
+import app.editors.connection.ConnectionEditor;
 import app.editors.locations.LocationEditor;
 import app.navi.actions.ClassificationSync;
 import app.navi.actions.ConnectionDeleteAction;
@@ -22,6 +23,7 @@ import app.navi.actions.NewDataSetAction;
 import app.navi.actions.RefDeleteAction;
 import app.rcp.Icon;
 import app.store.Connections;
+import app.store.validation.ValidationDialog;
 import app.util.Actions;
 import app.util.UI;
 import app.util.Viewers;
@@ -64,21 +66,24 @@ public class NavigationMenu extends CommonActionProvider {
 		}
 		if (first instanceof ConnectionElement) {
 			ConnectionElement e = (ConnectionElement) first;
+			menu.add(Actions.create(M.Open, Icon.OPEN.des(),
+					() -> ConnectionEditor.open(e.con)));
 			menu.add(new ConnectionDeleteAction(e));
 		}
 	}
 
 	private void forRef(RefElement e, IMenuManager menu) {
-		// TODO: icon.OPEN
-		menu.add(Actions.create(M.Open, () -> Editors.open(e.ref)));
-		menu.add(new NewDataSetAction(e));
+		menu.add(Actions.create(M.Open, Icon.OPEN.des(),
+				() -> Editors.open(e.ref)));
+		menu.add(Actions.create(M.Validate, Icon.OK.des(),
+				() -> ValidationDialog.open(e.ref)));
 		menu.add(new RefDeleteAction(e));
 	}
 
 	private void catSync(FolderElement e, IMenuManager menu) {
 		if (e == null || e.type != FolderType.CLASSIFICATION)
 			return;
-		MenuManager syncMenu = new MenuManager("#Update classifications",
+		MenuManager syncMenu = new MenuManager(M.Update,
 				Icon.DOWNLOAD.des(), "UpdateClassifications");
 		menu.add(syncMenu);
 		for (SodaConnection con : Connections.get()) {
@@ -105,8 +110,7 @@ public class NavigationMenu extends CommonActionProvider {
 		}
 		if (fn == null)
 			return;
-		// TODO: icon.OPEN
-		menu.add(Actions.create(M.Open, fn));
+		menu.add(Actions.create(M.Open, Icon.OPEN.des(), fn));
 	}
 
 }

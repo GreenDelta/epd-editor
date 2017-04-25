@@ -7,7 +7,7 @@
    </configIni>
 
    <launcherArgs>
-      <programArgs>-nl en
+      <programArgs>-nl de
 -data @noDefault
       </programArgs>
       <vmArgs>-Dorg.osgi.framework.bundle.parent=ext

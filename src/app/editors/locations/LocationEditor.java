@@ -88,7 +88,7 @@ public class LocationEditor extends BaseEditor {
 			Composite body = UI.formBody(form, tk);
 			TableViewer table = Tables.createViewer(body, M.Code, M.Name);
 			Tables.bindColumnWidths(table, 0.4, 0.6);
-			table.setLabelProvider(new TableLable());
+			table.setLabelProvider(new TableLabel());
 			form.reflow(true);
 			table.setInput(list.locations);
 		}

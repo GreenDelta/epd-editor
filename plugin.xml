@@ -227,6 +227,7 @@
     </editor>
     <editor
           default="false"
+          icon="icons/location.png"
           id="location.editor"
           name="Locations"
           class="app.editors.locations.LocationEditor">

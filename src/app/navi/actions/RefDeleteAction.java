@@ -3,6 +3,7 @@ package app.navi.actions;
 import org.eclipse.jface.action.Action;
 import org.openlca.ilcd.commons.Ref;
 
+import app.M;
 import app.editors.Editors;
 import app.navi.RefElement;
 import app.rcp.Icon;
@@ -15,7 +16,7 @@ public class RefDeleteAction extends Action {
 
 	public RefDeleteAction(RefElement e) {
 		this.e = e;
-		setText("#Delete Data Set");
+		setText(M.Delete);
 		setImageDescriptor(Icon.DELETE.des());
 	}
 

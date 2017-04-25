@@ -1,4 +1,4 @@
-package app.editors.io;
+package app.store.validation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.openlca.ilcd.commons.Ref;
-import org.openlca.ilcd.io.SodaClient;
 import org.openlca.ilcd.util.DependencyTraversal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,19 +25,18 @@ import app.util.Controls;
 import app.util.MsgBox;
 import app.util.Tables;
 import app.util.UI;
-import epd.model.RefStatus;
 import epd.util.ExtensionRefs;
 
-public class UploadDialog extends Wizard {
+public class ValidationDialog extends Wizard {
 
 	private Logger log = LoggerFactory.getLogger(getClass());
+
 	private final Ref ref;
 	private final List<Ref> allRefs = new ArrayList<>();
 
-	private ConnectionCombo conCombo;
 	private Page page;
 
-	private UploadDialog(Ref ref) {
+	private ValidationDialog(Ref ref) {
 		this.ref = ref;
 		allRefs.add(ref);
 		setNeedsProgressMonitor(true);
@@ -47,8 +45,7 @@ public class UploadDialog extends Wizard {
 	public static int open(Ref ref) {
 		if (ref == null)
 			return Window.CANCEL;
-		UploadDialog d = new UploadDialog(ref);
-		d.setWindowTitle(M.UploadDataSet);
+		ValidationDialog d = new ValidationDialog(ref);
 		WizardDialog dialog = new WizardDialog(UI.shell(), d);
 		dialog.setPageSize(150, 300);
 		return dialog.open();
@@ -56,25 +53,14 @@ public class UploadDialog extends Wizard {
 
 	@Override
 	public boolean performFinish() {
-		SodaClient client = conCombo.makeClient();
-		if (client == null)
-			return false;
 		try {
-			Upload upload = new Upload(client);
-			getContainer().run(true, false, monitor -> {
-				monitor.beginTask("Upload", allRefs.size());
-				List<RefStatus> stats = new ArrayList<>();
-				for (Ref ref : allRefs) {
-					monitor.subTask(App.header(ref.name, 50));
-					stats.add(upload.next(ref));
-					monitor.worked(1);
-				}
-				monitor.done();
-				StatusView.open("#Upload result", stats);
-			});
+			Validation v = new Validation(allRefs);
+			getContainer().run(true, false, v);
+			StatusView.open("Validation", v.getStatus());
 			return true;
 		} catch (Exception e) {
-			MsgBox.error("#Upload failed", e.getMessage());
+			MsgBox.error("#Error in validation", e.getMessage());
+			log.error("validation failed", e);
 			return false;
 		}
 	}
@@ -90,28 +76,23 @@ public class UploadDialog extends Wizard {
 		private TableViewer table;
 
 		private Page() {
-			super("UploadDialogPage", M.UploadDataSet + ": " +
+			super("ValidationDialogPage", "#Validate data set" + ": " +
 					App.header(ref.name, 50), null);
 			setPageComplete(true);
 		}
 
 		@Override
 		public void createControl(Composite root) {
-			Composite parent = new Composite(root, SWT.NONE);
-			setControl(parent);
-			UI.gridLayout(parent, 1);
-			Composite comp = new Composite(parent, SWT.NONE);
-			UI.innerGrid(comp, 2).verticalSpacing = 10;
-			UI.gridData(comp, true, false);
-			conCombo = ConnectionCombo.create(comp);
-			UI.filler(comp);
+			Composite comp = new Composite(root, SWT.NONE);
+			setControl(comp);
+			UI.gridLayout(comp, 1);
 			createCheck(comp);
-			createTable(parent);
+			createTable(comp);
 		}
 
 		private void createCheck(Composite comp) {
 			Button check = new Button(comp, SWT.CHECK);
-			check.setText("#Synchronize dependencies");
+			check.setText("#Include dependencies");
 			Controls.onSelect(check, e -> {
 				if (check.getSelection()) {
 					collectRefs();
@@ -150,5 +131,7 @@ public class UploadDialog extends Wizard {
 				log.error("failed to collect references", e);
 			}
 		}
+
 	}
+
 }

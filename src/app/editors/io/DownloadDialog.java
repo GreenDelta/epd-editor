@@ -17,6 +17,7 @@ import org.openlca.ilcd.io.SodaConnection;
 import app.App;
 import app.M;
 import app.StatusView;
+import app.editors.RefTableLabel;
 import app.navi.Sync;
 import app.util.MsgBox;
 import app.util.Tables;
@@ -109,7 +110,7 @@ public class DownloadDialog extends Wizard {
 
 		private void createTable(Composite comp) {
 			table = Tables.createViewer(comp, "#Data set", "UUID", "Version");
-			table.setLabelProvider(new TableLabel());
+			table.setLabelProvider(new RefTableLabel());
 			Tables.bindColumnWidths(table, 0.6, 0.2, 0.2);
 			table.setInput(refs);
 		}

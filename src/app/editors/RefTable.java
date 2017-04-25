@@ -3,18 +3,13 @@ package app.editors;
 import java.util.List;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 
-import app.App;
 import app.M;
 import app.rcp.Icon;
 import app.rcp.Labels;
@@ -26,7 +21,6 @@ import app.util.Viewers;
 public class RefTable {
 
 	private final DataSetType type;
-	private final String lang;
 	private final List<Ref> refs;
 
 	private IEditor editor;
@@ -35,7 +29,6 @@ public class RefTable {
 	private RefTable(DataSetType type, List<Ref> refs) {
 		this.type = type;
 		this.refs = refs;
-		this.lang = App.lang();
 	}
 
 	public static RefTable create(DataSetType type, List<Ref> refs) {
@@ -57,7 +50,7 @@ public class RefTable {
 		Composite comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
 		TableViewer table = Tables.createViewer(comp, Labels.get(type));
-		table.setLabelProvider(new Label());
+		table.setLabelProvider(new RefTableLabel());
 		Action[] actions = createActions(table);
 		Actions.bind(section, actions);
 		Actions.bind(table, actions);
@@ -86,24 +79,6 @@ public class RefTable {
 				editor.setDirty();
 		});
 		return actions;
-	}
-
-	private class Label extends LabelProvider implements ITableLabelProvider {
-
-		@Override
-		public Image getColumnImage(Object obj, int col) {
-			if (!(obj instanceof Ref))
-				return null;
-			return Icon.img(type);
-		}
-
-		@Override
-		public String getColumnText(Object obj, int col) {
-			if (!(obj instanceof Ref))
-				return null;
-			Ref ref = (Ref) obj;
-			return LangString.getFirst(ref.name, lang);
-		}
 	}
 
 }

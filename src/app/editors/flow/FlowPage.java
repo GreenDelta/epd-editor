@@ -69,6 +69,7 @@ class FlowPage extends FormPage {
 			product.genericFlow = ref;
 			editor.setDirty();
 		});
+		UI.fileLink(product.flow, comp, tk);
 	}
 
 	private void categorySection(Composite body) {

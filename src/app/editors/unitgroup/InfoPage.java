@@ -56,6 +56,7 @@ class InfoPage extends FormPage {
 		DataSetInfo info = UnitGroups.dataSetInfo(unitGroup);
 		tb.text(comp, M.Name, info.name);
 		tb.text(comp, M.Description, info.generalComment);
+		UI.fileLink(unitGroup, comp, tk);
 	}
 
 	private void categorySection(Composite body) {

@@ -63,6 +63,7 @@ class InfoPage extends FormPage {
 			editor.setDirty();
 		});
 		tb.text(comp, M.Description, info.comment);
+		UI.fileLink(method, comp, tk);
 	}
 
 	private void categorySection(Composite body) {

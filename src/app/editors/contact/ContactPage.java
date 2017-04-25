@@ -68,6 +68,7 @@ class ContactPage extends FormPage {
 			info.logo = ref;
 			editor.setDirty();
 		});
+		UI.fileLink(contact, comp, tk);
 	}
 
 	private void categorySection(Composite body) {

@@ -3,16 +3,13 @@ package app.editors.epd;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.ImageHyperlink;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.commons.Time;
 import org.openlca.ilcd.processes.DataSetInfo;
 import org.openlca.ilcd.processes.Exchange;
@@ -27,10 +24,8 @@ import app.M;
 import app.editors.CategorySection;
 import app.editors.RefLink;
 import app.editors.RefTable;
-import app.rcp.Icon;
 import app.store.RefUnits;
 import app.util.Colors;
-import app.util.Controls;
 import app.util.TextBuilder;
 import app.util.UI;
 import epd.model.EpdDataSet;
@@ -92,7 +87,7 @@ class InfoPage extends FormPage {
 		DataSetInfo info = Processes.dataSetInfo(process);
 		tb.text(comp, M.Synonyms, info.synonyms);
 		tb.multiText(comp, M.Comment, info.comment);
-		createFileLink(comp);
+		UI.fileLink(process, comp, toolkit);
 	}
 
 	private void categorySection(Composite body) {
@@ -108,18 +103,6 @@ class InfoPage extends FormPage {
 		DataSetInfo info = Processes.dataSetInfo(process);
 		if (info.uuid != null)
 			text.setText(info.uuid);
-	}
-
-	private void createFileLink(Composite comp) {
-		UI.formLabel(comp, toolkit, M.File);
-		ImageHyperlink link = toolkit.createImageHyperlink(comp, SWT.NONE);
-		link.setForeground(Colors.linkBlue());
-		link.setImage(Icon.DOCUMENT.img());
-		DataSetInfo info = Processes.dataSetInfo(process);
-		String uuid = info.uuid;
-		link.setText("../processes/" + uuid + ".xml");
-		Controls.onClick(link,
-				e -> UI.open(App.store.getFile(Ref.of(process))));
 	}
 
 	private void qRefSection(Composite parent) {

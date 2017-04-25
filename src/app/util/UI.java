@@ -25,14 +25,39 @@ import org.eclipse.ui.forms.HyperlinkSettings;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.ImageHyperlink;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
+import org.openlca.ilcd.commons.IDataSet;
+import org.openlca.ilcd.commons.Ref;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import app.App;
+import app.M;
+import app.rcp.Icon;
 
 public class UI {
 
 	private UI() {
+	}
+
+	public static void fileLink(IDataSet ds, Composite comp, FormToolkit tk) {
+		if (ds == null || comp == null || tk == null)
+			return;
+		UI.formLabel(comp, tk, M.File);
+		ImageHyperlink link = tk.createImageHyperlink(comp, SWT.NONE);
+		link.setForeground(Colors.linkBlue());
+		link.setImage(Icon.DOCUMENT.img());
+		Ref ref = Ref.of(ds);
+		File f = App.store.getFile(ref);
+		if (f == null || !f.exists())
+			return;
+		String path = f.getAbsolutePath();
+		if (path.length() > 80)
+			path = "..." + path.substring(path.length() - 75);
+		link.setText(path);
+		Controls.onClick(link, e -> UI.open(f));
 	}
 
 	public static void open(File file) {

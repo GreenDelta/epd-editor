@@ -68,6 +68,7 @@ class SourcePage extends FormPage {
 			info.logo = ref;
 			editor.setDirty();
 		});
+		UI.fileLink(source, comp, tk);
 	}
 
 	private void categorySection(Composite body) {

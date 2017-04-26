@@ -1,18 +1,12 @@
 ## TODO
 
-* validation with EPD profile ...
-
-* flows: allow flow type change... -> no just allow to create products but only
-  show product information when type is PRODUCT?
-
-
 * re-index function
 * Source type combo in SourcePage
 * Local search
 * Application settings: application language, RAM
 * fetch also categories from elementary flows in indexing etc.
 * cross platform builds and tests; + default data package
-* externalize strings
+* externalize more strings
 * cleanup: re-index on errors or cancellation 
 * allow editing of indicator mappings (best would be probably a simple wizard)
 * Data set export with dependencies as zip package

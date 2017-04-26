@@ -41,9 +41,13 @@ public class RefLink extends Composite {
 		link = toolkit.createImageHyperlink(this, SWT.TOP);
 		link.setForeground(Colors.linkBlue());
 		Controls.onClick(link, e -> {
-			if (ref == null)
-				return;
-			Editors.open(ref);
+			if (ref != null)
+				Editors.open(ref);
+			else {
+				Ref ref = RefSelectionDialog.select(type);
+				if (ref != null)
+					setRef(ref);
+			}
 		});
 		setLinkText();
 		createRemoveLink();
@@ -51,7 +55,7 @@ public class RefLink extends Composite {
 
 	private void createAddButton() {
 		Button btn = toolkit.createButton(this, "", SWT.PUSH);
-		btn.setToolTipText("#Select data set");
+		btn.setToolTipText(M.SelectDataSet);
 		btn.setImage(Icon.img(type));
 		Controls.onSelect(btn, e -> {
 			Ref ref = RefSelectionDialog.select(type);
@@ -62,7 +66,7 @@ public class RefLink extends Composite {
 
 	private void createRemoveLink() {
 		ImageHyperlink l = toolkit.createImageHyperlink(this, SWT.BOTTOM);
-		l.setToolTipText("#Remove data set link");
+		l.setToolTipText(M.Remove);
 		l.setHoverImage(Icon.DELETE.img());
 		l.setImage(Icon.DELETE_DIS.img());
 		Controls.onClick(l, e -> {

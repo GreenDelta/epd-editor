@@ -235,6 +235,7 @@ public class M extends NLS {
 	public static String SelectACategory;
 	public static String SelectAMaterialProperty;
 	public static String SelectAProductSystem;
+	public static String SelectDataSet;
 	public static String ServerConfiguration;
 	public static String ServerConfiguration_Description;
 	public static String ServerConnection;

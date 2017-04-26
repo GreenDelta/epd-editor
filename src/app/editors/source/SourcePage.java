@@ -14,6 +14,7 @@ import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.sources.AdminInfo;
 import org.openlca.ilcd.sources.DataSetInfo;
 import org.openlca.ilcd.sources.Source;
+import org.openlca.ilcd.util.Sources;
 
 import app.App;
 import app.M;
@@ -55,8 +56,8 @@ class SourcePage extends FormPage {
 	}
 
 	private void infoSection(Composite body, TextBuilder tb) {
-		Composite comp = UI.formSection(body, tk, M.GeneralInformation);
-		DataSetInfo info = source.sourceInfo.dataSetInfo;
+		Composite comp = UI.infoSection(source, body, tk);
+		DataSetInfo info = Sources.dataSetInfo(source);
 		tb.text(comp, M.ShortName, info.name);
 		tb.text(comp, M.Citation, info.citation, t -> info.citation = t);
 		tb.text(comp, M.Description, info.description);
@@ -72,14 +73,14 @@ class SourcePage extends FormPage {
 	}
 
 	private void categorySection(Composite body) {
-		DataSetInfo info = source.sourceInfo.dataSetInfo;
+		DataSetInfo info = Sources.dataSetInfo(source);
 		CategorySection section = new CategorySection(editor,
 				DataSetType.SOURCE, info.classifications);
 		section.render(body, tk);
 	}
 
 	private void contacts(Composite body) {
-		List<Ref> contacts = source.sourceInfo.dataSetInfo.contacts;
+		List<Ref> contacts = Sources.dataSetInfo(source).contacts;
 		RefTable.create(DataSetType.CONTACT, contacts)
 				.withEditor(editor)
 				.withTitle("#Belongs to")

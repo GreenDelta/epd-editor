@@ -52,7 +52,7 @@ class ContactPage extends FormPage {
 	}
 
 	private void infoSection(Composite body, TextBuilder tb) {
-		Composite comp = UI.formSection(body, tk, M.ContactInformation);
+		Composite comp = UI.infoSection(contact, body, tk);
 		DataSetInfo info = Contacts.dataSetInfo(contact);
 		tb.text(comp, M.ShortName, info.shortName);
 		tb.text(comp, M.Name, info.name);

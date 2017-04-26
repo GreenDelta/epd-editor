@@ -77,9 +77,7 @@ class InfoPage extends FormPage {
 	}
 
 	private void infoSection(Composite parent, TextBuilder tb) {
-		Composite comp = UI.formSection(parent, toolkit,
-				M.GeneralInformation);
-		uuid(comp);
+		Composite comp = UI.infoSection(process, parent, toolkit);
 		ProcessName pName = Processes.processName(process);
 		tb.text(comp, M.Name, pName.name);
 		tb.text(comp, M.QuantitativeProperties,
@@ -95,14 +93,6 @@ class InfoPage extends FormPage {
 		CategorySection section = new CategorySection(editor,
 				DataSetType.PROCESS, info.classifications);
 		section.render(body, toolkit);
-	}
-
-	private void uuid(Composite comp) {
-		Text text = UI.formText(comp, toolkit, M.UUID);
-		text.setEditable(false);
-		DataSetInfo info = Processes.dataSetInfo(process);
-		if (info.uuid != null)
-			text.setText(info.uuid);
 	}
 
 	private void qRefSection(Composite parent) {

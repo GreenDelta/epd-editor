@@ -51,7 +51,7 @@ class FlowPropertyPage extends FormPage {
 	}
 
 	private void infoSection(Composite body, TextBuilder tb) {
-		Composite comp = UI.formSection(body, tk, M.GeneralInformation);
+		Composite comp = UI.infoSection(property, body, tk);
 		DataSetInfo info = property.flowPropertyInfo.dataSetInfo;
 		tb.text(comp, M.Name, info.name);
 		tb.text(comp, M.Synonyms, info.synonyms);

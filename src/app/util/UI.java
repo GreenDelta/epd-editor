@@ -42,6 +42,17 @@ public class UI {
 	private UI() {
 	}
 
+	public static Composite infoSection(IDataSet ds, Composite parent,
+			FormToolkit tk) {
+		Composite comp = UI.formSection(parent, tk, M.GeneralInformation);
+		Text text = UI.formText(comp, tk, M.UUID);
+		text.setEditable(false);
+		String uuid = ds != null ? ds.getUUID() : null;
+		if (uuid != null)
+			text.setText(uuid);
+		return comp;
+	}
+
 	public static void fileLink(IDataSet ds, Composite comp, FormToolkit tk) {
 		if (ds == null || comp == null || tk == null)
 			return;

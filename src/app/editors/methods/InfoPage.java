@@ -51,7 +51,7 @@ class InfoPage extends FormPage {
 
 	private void infoSection(Composite body, TextBuilder tb) {
 		DataSetInfo info = Methods.dataSetInfo(method);
-		Composite comp = UI.formSection(body, tk, M.GeneralInformation);
+		Composite comp = UI.infoSection(method, body, tk);
 		tb.text(comp, M.Name, info.name);
 		UI.formLabel(comp, "#Methodologies");
 		new StringTable(editor, "#Methodology", info.methods).render(comp, tk);

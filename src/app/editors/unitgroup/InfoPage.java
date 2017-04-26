@@ -52,7 +52,7 @@ class InfoPage extends FormPage {
 	}
 
 	private void infoSection(Composite body, TextBuilder tb) {
-		Composite comp = UI.formSection(body, tk, M.GeneralInformation);
+		Composite comp = UI.infoSection(unitGroup, body, tk);
 		DataSetInfo info = UnitGroups.dataSetInfo(unitGroup);
 		tb.text(comp, M.Name, info.name);
 		tb.text(comp, M.Description, info.generalComment);

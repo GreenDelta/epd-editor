@@ -132,6 +132,7 @@ public class NewDataSetAction extends Action {
 
 	private Contact makeContact() {
 		Contact c = new Contact();
+		c.version = "1.1";
 		with(Contacts.dataSetInfo(c), info -> {
 			info.uuid = UUID.randomUUID().toString();
 			LangString.set(info.name, M.NewContact, App.lang());
@@ -146,6 +147,7 @@ public class NewDataSetAction extends Action {
 
 	private Flow makeFlow() {
 		Flow f = new Flow();
+		f.version = "1.1";
 		Flows.dataSetInfo(f).uuid = UUID.randomUUID().toString();
 		Classification category = getClassification();
 		if (category != null)
@@ -159,6 +161,7 @@ public class NewDataSetAction extends Action {
 
 	private FlowProperty makeFlowProperty() {
 		FlowProperty fp = new FlowProperty();
+		fp.version = "1.1";
 		with(FlowProperties.dataSetInfo(fp), info -> {
 			info.uuid = UUID.randomUUID().toString();
 			LangString.set(info.name, M.NewFlowProperty, App.lang());
@@ -173,6 +176,7 @@ public class NewDataSetAction extends Action {
 
 	private LCIAMethod makeMethod() {
 		LCIAMethod m = new LCIAMethod();
+		m.version = "1.1";
 		with(Methods.dataSetInfo(m), info -> {
 			info.uuid = UUID.randomUUID().toString();
 			LangString.set(info.name, M.NewLCIAMethod, App.lang());
@@ -187,6 +191,7 @@ public class NewDataSetAction extends Action {
 
 	private Process makeEpd() {
 		Process p = new Process();
+		p.version = "1.1";
 		with(Processes.dataSetInfo(p), info -> {
 			info.uuid = UUID.randomUUID().toString();
 			Classification category = getClassification();
@@ -202,6 +207,7 @@ public class NewDataSetAction extends Action {
 
 	private Source makeSource() {
 		Source s = new Source();
+		s.version = "1.1";
 		with(Sources.dataSetInfo(s), info -> {
 			info.uuid = UUID.randomUUID().toString();
 			LangString.set(info.name, M.NewSource, App.lang());
@@ -216,6 +222,7 @@ public class NewDataSetAction extends Action {
 
 	private UnitGroup makeUnitGroup() {
 		UnitGroup g = new UnitGroup();
+		g.version = "1.1";
 		with(UnitGroups.dataSetInfo(g), info -> {
 			info.uuid = UUID.randomUUID().toString();
 			LangString.set(info.name, M.NewUnitGroup, App.lang());

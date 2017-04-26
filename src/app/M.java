@@ -107,6 +107,7 @@ public class M extends NLS {
 	public static String Import;
 	public static String ImportClassificationFile;
 	public static String ImportDataPackage;
+	public static String Imported;
 	public static String IndependentExternalReview;
 	public static String IndependentInternalReview;
 	public static String IndependentReviewPanel;
@@ -259,6 +260,8 @@ public class M extends NLS {
 	public static String TestConnection;
 	public static String Time;
 	public static String TimeDescription;
+	public static String TranslationView;
+	public static String Translations;
 
 	public static String UUID;
 	public static String Unit;
@@ -279,6 +282,7 @@ public class M extends NLS {
 	public static String ValidUntil;
 	public static String Validate;
 	public static String ValidateDataSets;
+	public static String Validation;
 	public static String Value;
 	public static String Vendor;
 	public static String VendorInformation;

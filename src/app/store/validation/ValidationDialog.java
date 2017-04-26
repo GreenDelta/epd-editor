@@ -56,7 +56,7 @@ public class ValidationDialog extends Wizard {
 		try {
 			Validation v = new Validation(allRefs);
 			getContainer().run(true, false, v);
-			StatusView.open("Validation", v.getStatus());
+			StatusView.open(M.Validation, v.getStatus());
 			return true;
 		} catch (Exception e) {
 			MsgBox.error("#Error in validation", e.getMessage());

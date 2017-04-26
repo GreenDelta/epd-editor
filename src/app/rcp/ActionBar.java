@@ -79,7 +79,7 @@ public class ActionBar extends ActionBarAdvisor {
 				IWorkbenchActionConstants.M_EDIT);
 		editMenu.add(Actions.create(M.Settings,
 				Icon.SETTINGS.des(), SettingsPage::open));
-		editMenu.add(Actions.create("#Show translations",
+		editMenu.add(Actions.create(M.TranslationView,
 				Icon.MESSAGE.des(), TranslationView::open));
 		editMenu.add(Actions.create(M.MaterialProperties,
 				Icon.QUANTITY.des(), MaterialPropertyEditor::open));
@@ -170,7 +170,7 @@ public class ActionBar extends ActionBarAdvisor {
 		try {
 			Validation v = new Validation();
 			progress.run(true, true, v);
-			StatusView.open("Validation", v.getStatus());
+			StatusView.open(M.Validation, v.getStatus());
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to validate data sets", e);

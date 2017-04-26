@@ -10,6 +10,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.commons.FlowType;
 import org.openlca.ilcd.flows.DataSetInfo;
 import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.flows.FlowName;
@@ -48,7 +49,8 @@ class FlowPage extends FormPage {
 		TextBuilder tb = new TextBuilder(editor, this, tk);
 		infoSection(body, tb);
 		categorySection(body);
-		VendorSection.create(body, tk, editor);
+		if (Flows.getType(product.flow) == FlowType.PRODUCT_FLOW)
+			VendorSection.create(body, tk, editor);
 		propertySections(body);
 		adminSection(body);
 		form.reflow(true);
@@ -61,7 +63,12 @@ class FlowPage extends FormPage {
 		DataSetInfo info = Flows.dataSetInfo(product.flow);
 		tb.text(comp, M.Synonyms, info.synonyms);
 		tb.text(comp, M.Description, info.generalComment);
+		if (Flows.getType(product.flow) == FlowType.PRODUCT_FLOW)
+			genericProductLink(comp);
+		UI.fileLink(product.flow, comp, tk);
+	}
 
+	private void genericProductLink(Composite comp) {
 		UI.formLabel(comp, tk, M.GenericProduct);
 		RefLink rt = new RefLink(comp, tk, DataSetType.FLOW);
 		rt.setRef(product.genericFlow);
@@ -69,7 +76,6 @@ class FlowPage extends FormPage {
 			product.genericFlow = ref;
 			editor.setDirty();
 		});
-		UI.fileLink(product.flow, comp, tk);
 	}
 
 	private void categorySection(Composite body) {
@@ -82,6 +88,8 @@ class FlowPage extends FormPage {
 		FlowPropertySection section = new FlowPropertySection(editor,
 				product.flow);
 		section.render(body, tk);
+		if (Flows.getType(product.flow) != FlowType.PRODUCT_FLOW)
+			return;
 		Section s = UI.section(body, tk, M.MaterialProperties);
 		UI.gridData(s, true, false);
 		new MaterialPropertyTable(editor, s, tk);

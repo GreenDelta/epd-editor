@@ -11,9 +11,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IMemento;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISelectionService;
+import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
@@ -23,6 +26,7 @@ import org.openlca.ilcd.commons.LangString;
 import org.slf4j.LoggerFactory;
 
 import app.App;
+import app.M;
 import app.util.Colors;
 import app.util.UI;
 import epd.util.Strings;
@@ -42,6 +46,13 @@ public class TranslationView extends ViewPart implements ISelectionListener {
 			LoggerFactory.getLogger(TranslationView.class)
 					.error("failed to open translations", e);
 		}
+	}
+
+	@Override
+	public void init(IViewSite site, IMemento memento)
+			throws PartInitException {
+		super.init(site, memento);
+		setPartName(M.Translations);
 	}
 
 	@Override

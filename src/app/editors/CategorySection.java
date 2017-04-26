@@ -1,8 +1,5 @@
 package app.editors;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 import org.eclipse.jface.action.Action;
@@ -17,21 +14,15 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.openlca.ilcd.commons.Category;
 import org.openlca.ilcd.commons.Classification;
 import org.openlca.ilcd.commons.DataSetType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import app.App;
 import app.M;
 import app.rcp.Icon;
 import app.util.Actions;
-import app.util.FileChooser;
 import app.util.Tables;
 import app.util.UI;
 import app.util.Viewers;
 
 public class CategorySection {
-
-	private Logger log = LoggerFactory.getLogger(getClass());
 
 	private final IEditor editor;
 	private final DataSetType type;
@@ -58,15 +49,11 @@ public class CategorySection {
 	}
 
 	private void bindActions(Section section, TableViewer viewer) {
-		Action importAction = Actions.create(
-				M.ImportClassificationFile,
-				Icon.IMPORT.des(),
-				() -> importFile());
 		Action add = Actions.create(M.Add, Icon.ADD.des(),
 				() -> addRow(viewer));
 		Action delete = Actions.create(M.Remove, Icon.DELETE.des(),
 				() -> deleteRow(viewer));
-		Actions.bind(section, importAction, add, delete);
+		Actions.bind(section, add, delete);
 		Actions.bind(viewer, add, delete);
 	}
 
@@ -89,25 +76,6 @@ public class CategorySection {
 		classifications.remove(classification);
 		viewer.setInput(classifications);
 		editor.setDirty();
-	}
-
-	private void importFile() {
-		File file = FileChooser.open("*.xml");
-		if (file == null)
-			return;
-		try {
-			File rootDir = App.store.getRootFolder();
-			if (!rootDir.exists())
-				return;
-			File dir = new File(rootDir, "classifications");
-			if (!dir.exists())
-				dir.mkdirs();
-			File localFile = new File(dir, file.getName());
-			Files.copy(file.toPath(), localFile.toPath(),
-					StandardCopyOption.REPLACE_EXISTING);
-		} catch (Exception e) {
-			log.error("failed to import classification file", e);
-		}
 	}
 
 	private class RowLabel extends LabelProvider implements

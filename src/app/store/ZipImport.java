@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -28,12 +29,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.App;
+import app.M;
+import app.StatusView;
 import app.navi.Sync;
+import epd.model.RefStatus;
 
 public class ZipImport implements IRunnableWithProgress {
 
 	private Logger log = LoggerFactory.getLogger(getClass());
 	private final ZipStore zip;
+	private final List<RefStatus> status = new ArrayList<>();
 
 	public ZipImport(ZipStore zip) {
 		this.zip = zip;
@@ -55,6 +60,7 @@ public class ZipImport implements IRunnableWithProgress {
 			App.dumpIndex();
 			monitor.done();
 			App.runInUI("Refresh...", () -> new Sync(App.index).run());
+			StatusView.open(M.Import, status);
 		} catch (Exception e) {
 			throw new InvocationTargetException(e, e.getMessage());
 		}
@@ -92,6 +98,7 @@ public class ZipImport implements IRunnableWithProgress {
 			Files.write(f.toPath(), data, StandardOpenOption.CREATE,
 					StandardOpenOption.TRUNCATE_EXISTING);
 			App.index.add(ref, classes);
+			status.add(RefStatus.ok(ref, M.Imported));
 			monitor.worked(1);
 		}
 	}

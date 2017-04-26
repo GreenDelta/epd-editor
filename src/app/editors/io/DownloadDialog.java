@@ -57,7 +57,7 @@ public class DownloadDialog extends Wizard {
 			download.overwriteExisting = page.overwriteCheck.getSelection();
 			getContainer().run(true, false, download);
 			new Sync(App.index).run();
-			StatusView.open("Download", download.status);
+			StatusView.open(M.Download, download.status);
 			return true;
 		} catch (Exception e) {
 			MsgBox.error("#Download failed", e.getMessage());

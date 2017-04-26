@@ -83,7 +83,7 @@ public class RefUnits {
 				.getQuantitativeReference(flow);
 		if (qRef == null || qRef.referenceFlowProperty == null)
 			return null;
-		for (FlowPropertyRef propRef : flow.flowProperties) {
+		for (FlowPropertyRef propRef : Flows.getFlowProperties(flow)) {
 			if (propRef.dataSetInternalID == qRef.referenceFlowProperty)
 				return propRef.flowProperty;
 		}

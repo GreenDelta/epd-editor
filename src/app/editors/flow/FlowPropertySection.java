@@ -51,7 +51,7 @@ class FlowPropertySection {
 		table = Tables.createViewer(comp, M.FlowProperty, M.ConversionFactor,
 				M.Unit);
 		table.setLabelProvider(new Label());
-		table.setInput(flow.flowProperties);
+		table.setInput(Flows.getFlowProperties(flow));
 		Tables.bindColumnWidths(table, 0.4, 0.3, 0.3);
 		bindActions(section);
 		ModifySupport<FlowPropertyRef> modifier = new ModifySupport<>(table);
@@ -81,7 +81,7 @@ class FlowPropertySection {
 		if (ref == null)
 			return;
 		FlowPropertyRef propRef = new FlowPropertyRef();
-		List<Integer> existingIDs = flow.flowProperties.stream()
+		List<Integer> existingIDs = Flows.getFlowProperties(flow).stream()
 				.map(pr -> pr.dataSetInternalID)
 				.collect(Collectors.toList());
 		propRef.dataSetInternalID = 0;
@@ -90,8 +90,8 @@ class FlowPropertySection {
 		}
 		propRef.flowProperty = ref;
 		propRef.meanValue = 1.0;
-		flow.flowProperties.add(propRef);
-		table.setInput(flow.flowProperties);
+		Flows.flowProperties(flow).add(propRef);
+		table.setInput(Flows.getFlowProperties(flow));
 		editor.setDirty();
 	}
 
@@ -99,13 +99,16 @@ class FlowPropertySection {
 		FlowPropertyRef propRef = Viewers.getFirstSelected(table);
 		if (propRef == null)
 			return;
-		flow.flowProperties.remove(propRef);
+		List<FlowPropertyRef> list = Flows.flowProperties(flow);
+		list.remove(propRef);
+		if (list.isEmpty())
+			flow.flowPropertyList = null;
 		QuantitativeReference qRef = Flows.getQuantitativeReference(flow);
 		if (qRef != null) {
 			if (propRef.dataSetInternalID == qRef.referenceFlowProperty)
 				qRef.referenceFlowProperty = null;
 		}
-		table.setInput(flow.flowProperties);
+		table.setInput(Flows.getFlowProperties(flow));
 		editor.setDirty();
 	}
 

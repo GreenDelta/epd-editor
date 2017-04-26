@@ -3,6 +3,8 @@ package app.editors.settings;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
@@ -27,6 +29,13 @@ public class SettingsPage extends BaseEditor {
 	public static void open() {
 		SimpleEditorInput input = new SimpleEditorInput("app.Settings");
 		Editors.open(input, "app.Settings");
+	}
+
+	@Override
+	public void init(IEditorSite site, IEditorInput input)
+			throws PartInitException {
+		super.init(site, input);
+		setPartName(M.Settings);
 	}
 
 	@Override

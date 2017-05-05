@@ -78,6 +78,7 @@ public class SettingsPage extends BaseEditor {
 			});
 			xmlCheck(comp);
 			dependencyCheck(comp);
+			new ProfileSecion(SettingsPage.this).render(body, toolkit);
 			form.reflow(true);
 		}
 

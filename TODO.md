@@ -1,11 +1,7 @@
 ## TODO
 
-* validation of empty workspace throws error
 * translation view: show `(no contents yet) | (noch kein Inhalt)` for empty fields.
-* support multiple validation profiles (add, set default etc.)
-* zip-export in old EPD plugin -> support data exchange
-* add default material properties
-
+* add default validation profile in build process
 
 * re-index function
 * Source type combo in SourcePage

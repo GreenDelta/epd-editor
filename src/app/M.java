@@ -175,6 +175,8 @@ public class M extends NLS {
 	public static String NewSource;
 	public static String NewUnitGroup;
 	public static String NoSearchPossible;
+	public static String NoValidationProfile;
+	public static String NoValidationProfile_Error;
 	public static String NonHazardousWaste;
 	public static String None;
 	public static String NotANumber;

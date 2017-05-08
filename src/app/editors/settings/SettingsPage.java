@@ -24,7 +24,7 @@ import app.util.UI;
 
 public class SettingsPage extends BaseEditor {
 
-	private AppSettings settings = App.settings().clone();
+	AppSettings settings = App.settings().clone();
 
 	public static void open() {
 		SimpleEditorInput input = new SimpleEditorInput("app.Settings");

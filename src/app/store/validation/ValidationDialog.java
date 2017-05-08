@@ -53,6 +53,10 @@ public class ValidationDialog extends Wizard {
 
 	@Override
 	public boolean performFinish() {
+		if (App.settings().validationProfile == null) {
+			MsgBox.error(M.NoValidationProfile, M.NoValidationProfile_Error);
+			return false;
+		}
 		try {
 			Validation v = new Validation(allRefs);
 			getContainer().run(true, false, v);

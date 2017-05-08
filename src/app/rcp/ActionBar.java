@@ -24,6 +24,7 @@ import org.openlca.ilcd.io.ZipStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import app.App;
 import app.M;
 import app.StatusView;
 import app.editors.TranslationView;
@@ -165,6 +166,10 @@ public class ActionBar extends ActionBarAdvisor {
 	}
 
 	private void validateStore() {
+		if (App.settings().validationProfile == null) {
+			MsgBox.error(M.NoValidationProfile, M.NoValidationProfile_Error);
+			return;
+		}
 		IProgressService progress = PlatformUI.getWorkbench()
 				.getProgressService();
 		try {

@@ -87,7 +87,7 @@ public class StatusView extends BaseEditor {
 			ScrolledForm form = UI.formHeader(mform, title);
 			Composite body = UI.formBody(form, tk);
 			TableViewer table = Tables.createViewer(body, M.Name, M.UUID,
-					M.Version, M.Status);
+					M.DataSetVersion, M.Status);
 			Tables.bindColumnWidths(table, 0.3, 0.2, 0.2, 0.3);
 			table.setLabelProvider(new Label());
 			table.setInput(stats);

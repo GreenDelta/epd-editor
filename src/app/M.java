@@ -47,6 +47,7 @@ public class M extends NLS {
 	public static String DataSetReferences;
 	public static String DataSetUploaded;
 	public static String DataSetUploadedMessage;
+	public static String DataSetVersion;
 	public static String DataSets;
 	public static String DataSources;
 	public static String DataStock;
@@ -242,6 +243,7 @@ public class M extends NLS {
 	public static String ServerConfiguration_Description;
 	public static String ServerConnection;
 	public static String ServerConnections;
+	public static String SetAsActiveProfile;
 	public static String SetAsReference;
 	public static String Settings;
 	public static String ShortName;
@@ -286,6 +288,7 @@ public class M extends NLS {
 	public static String Validate;
 	public static String ValidateDataSets;
 	public static String Validation;
+	public static String ValidationProfiles;
 	public static String Value;
 	public static String Vendor;
 	public static String VendorInformation;

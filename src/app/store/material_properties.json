@@ -1,14 +1,38 @@
 [
 	{
-		"id":"pr1",
-		"name":"average mass per unit area",
-		"unit":"kg/m^2",
-		"unitDescription":"kilograms per square metre"
+		"id": "pr1",
+		"name": "bulk density",
+		"unit": "kg/m^3",
+		"unitDescription": "kilograms per cubic metre"
 	},
 	{
-		"id":"pr2",
-		"name":"raw density",
-		"unit":"kg/m^3",
-		"unitDescription":"kilograms per cubic metre"
+		"id": "pr2",
+		"name": "grammage",
+		"unit": "kg/m^2",
+		"unitDescription": "kilograms per square metre"
+	},
+	{
+		"id": "pr3",
+		"name": "gross density",
+		"unit": "kg/m^3",
+		"unitDescription": "kilograms per cubic metre"
+	},
+	{
+		"id": "pr4",
+		"name": "layer thickness",
+		"unit": "m",
+		"unitDescription": "metres"
+	},
+	{
+		"id": "pr5",
+		"name": "productiveness",
+		"unit": "m^2",
+		"unitDescription": "square metres"
+	},
+	{
+		"id": "pr6",
+		"name": "linear density",
+		"unit": "kg/m",
+		"unitDescription": "kilograms per metre"
 	}
 ]

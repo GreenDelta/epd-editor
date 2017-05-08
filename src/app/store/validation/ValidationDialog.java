@@ -110,7 +110,7 @@ public class ValidationDialog extends Wizard {
 
 		private void createTable(Composite parent) {
 			table = Tables.createViewer(parent, "#Data set", M.UUID,
-					M.Version);
+					M.DataSetVersion);
 			table.setLabelProvider(new RefTableLabel());
 			Tables.bindColumnWidths(table, 0.6, 0.2, 0.2);
 			table.setInput(allRefs);

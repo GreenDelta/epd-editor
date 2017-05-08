@@ -66,7 +66,7 @@ class DataSection {
 			if (e.detail == SWT.TRAVERSE_RETURN)
 				runSearch(typeCombo.selectedType, searchText.getText());
 		});
-		table = Tables.createViewer(parent, M.Name, M.UUID, M.Version,
+		table = Tables.createViewer(parent, M.Name, M.UUID, M.DataSetVersion,
 				M.Comment);
 		Tables.bindColumnWidths(table, 0.3, 0.2, 0.2, 0.3);
 		table.setLabelProvider(new TableLabel());

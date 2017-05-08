@@ -45,7 +45,7 @@ public class DependencyPage extends FormPage {
 		ScrolledForm form = UI.formHeader(mform, M.DataSetReferences);
 		Composite body = UI.formBody(form, tk);
 		TreeViewer tree = Trees.createViewer(body, M.XMLField,
-				M.DataSetReference, M.UUID, M.Version);
+				M.DataSetReference, M.UUID, M.DataSetVersion);
 		tree.getTree().setLinesVisible(false);
 		tree.setContentProvider(new ContentProvider());
 		tree.setLabelProvider(new Label());

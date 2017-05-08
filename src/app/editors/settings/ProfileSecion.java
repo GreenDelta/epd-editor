@@ -51,7 +51,7 @@ class ProfileSecion {
 	}
 
 	void render(Composite body, FormToolkit tk) {
-		Section section = UI.section(body, tk, "#Validation profiles");
+		Section section = UI.section(body, tk, M.ValidationProfiles);
 		Composite comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
 		table = Tables.createViewer(comp, M.Name, M.Version, M.File);
@@ -62,7 +62,7 @@ class ProfileSecion {
 	}
 
 	private void bindActions(Section section) {
-		Action ref = Actions.create("#Select as active profile", Icon.OK.des(),
+		Action ref = Actions.create(M.SetAsActiveProfile, Icon.OK.des(),
 				this::selectActive);
 		Action add = Actions.create(M.Add, Icon.ADD.des(), this::add);
 		Action del = Actions.create(M.Remove, Icon.DELETE.des(), this::remove);
@@ -75,7 +75,7 @@ class ProfileSecion {
 		if (file == null)
 			return;
 		if (ValidationProfiles.contains(file)) {
-			MsgBox.error("#Already exists",
+			MsgBox.error(M.AlreadyExists,
 					"#A profile with this name already exists.");
 			return;
 		}
@@ -90,7 +90,7 @@ class ProfileSecion {
 		ProfileInfo info = Viewers.getFirstSelected(table);
 		if (info == null)
 			return;
-		boolean b = MsgBox.ask("#Delete profile",
+		boolean b = MsgBox.ask(M.Delete,
 				"#Delete selected validation profile?");
 		if (!b)
 			return;

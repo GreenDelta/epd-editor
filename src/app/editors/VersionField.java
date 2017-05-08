@@ -29,7 +29,7 @@ public class VersionField {
 	}
 
 	private void render(Composite parent, FormToolkit toolkit) {
-		UI.formLabel(parent, toolkit, M.Version);
+		UI.formLabel(parent, toolkit, M.DataSetVersion);
 		Composite composite = toolkit.createComposite(parent);
 		GridLayout layout = UI.gridLayout(composite, 3);
 		layout.marginWidth = 0;

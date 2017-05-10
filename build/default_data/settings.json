@@ -1,5 +1,6 @@
 {
     "lang": "de",
     "showDataSetXML": false,
-    "showDataSetDependencies": false
+    "showDataSetDependencies": false,
+    "validationProfile":"EPD_1.1_profile_1.0.7.jar"
 }

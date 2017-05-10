@@ -1,6 +1,6 @@
 @echo off
 
-SET vdate=v2.0_2017_04_26
+SET vdate=v2.0_2017_05_10
 
 rmdir dist /s /q
 mkdir dist

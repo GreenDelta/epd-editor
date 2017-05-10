@@ -1,5 +1,0 @@
-# the current validation profile for EPD data sets
-# see the ILCD Validation API for more information: 
-# https://bitbucket.org/okusche/ilcdvalidation
-
-EPD_validation_profile.jar

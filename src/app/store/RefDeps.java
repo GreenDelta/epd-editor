@@ -19,46 +19,50 @@ import org.slf4j.LoggerFactory;
 
 import app.App;
 
-public class RefUnits {
+/**
+ * An utility class for loading references and dependencies. from the local data
+ * store.
+ */
+public class RefDeps {
 
-	private RefUnits() {
+	private RefDeps() {
 	}
 
-	public static String get(Ref ref) {
+	public static String getRefUnit(Ref ref) {
 		if (ref == null || !ref.isValid())
 			return "";
 		switch (ref.type) {
 		case FLOW:
-			return get(load(Flow.class, ref));
+			return getRefUnit(load(Flow.class, ref));
 		case FLOW_PROPERTY:
-			return get(load(FlowProperty.class, ref));
+			return getRefUnit(load(FlowProperty.class, ref));
 		case PROCESS:
-			return get(load(Process.class, ref));
+			return getRefUnit(load(Process.class, ref));
 		case UNIT_GROUP:
-			return get(load(UnitGroup.class, ref));
+			return getRefUnit(load(UnitGroup.class, ref));
 		default:
 			return "";
 		}
 	}
 
-	private static <T extends IDataSet> T load(Class<T> type, Ref ref) {
+	public static <T extends IDataSet> T load(Class<T> type, Ref ref) {
 		try {
 			return App.store.get(type, ref.uuid);
 		} catch (Exception e) {
-			Logger log = LoggerFactory.getLogger(RefUnits.class);
+			Logger log = LoggerFactory.getLogger(RefDeps.class);
 			log.error("failed load data set " + ref, e);
 			return null;
 		}
 	}
 
-	public static String get(Process p) {
+	public static String getRefUnit(Process p) {
 		if (p == null)
 			return "";
-		Exchange e = refExchange(p);
-		return get(e.flow);
+		Exchange e = getRefExchange(p);
+		return getRefUnit(e.flow);
 	}
 
-	private static Exchange refExchange(Process p) {
+	public static Exchange getRefExchange(Process p) {
 		QuantitativeReference qRef = Processes.getQuantitativeReference(p);
 		if (qRef == null)
 			return null;
@@ -69,11 +73,11 @@ public class RefUnits {
 		return null;
 	}
 
-	public static String get(Flow flow) {
+	public static String getRefUnit(Flow flow) {
 		if (flow == null)
 			return "";
 		Ref propertyRef = propertyRef(flow);
-		return get(propertyRef);
+		return getRefUnit(propertyRef);
 	}
 
 	private static Ref propertyRef(Flow flow) {
@@ -90,14 +94,14 @@ public class RefUnits {
 		return null;
 	}
 
-	public static String get(FlowProperty prop) {
+	public static String getRefUnit(FlowProperty prop) {
 		if (prop == null)
 			return "";
 		Ref unitGroupRef = FlowProperties.getUnitGroupRef(prop);
-		return get(unitGroupRef);
+		return getRefUnit(unitGroupRef);
 	}
 
-	public static String get(UnitGroup group) {
+	public static String getRefUnit(UnitGroup group) {
 		Unit unit = UnitGroups.getReferenceUnit(group);
 		return unit == null ? "" : unit.name;
 	}

@@ -12,7 +12,10 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.processes.Exchange;
+import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.DependencyTraversal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +24,7 @@ import app.App;
 import app.M;
 import app.StatusView;
 import app.editors.RefTableLabel;
+import app.store.RefDeps;
 import app.util.Controls;
 import app.util.MsgBox;
 import app.util.Tables;
@@ -38,7 +42,7 @@ public class ValidationDialog extends Wizard {
 
 	private ValidationDialog(Ref ref) {
 		this.ref = ref;
-		allRefs.add(ref);
+		addBaseRefs();
 		setNeedsProgressMonitor(true);
 	}
 
@@ -49,6 +53,29 @@ public class ValidationDialog extends Wizard {
 		WizardDialog dialog = new WizardDialog(UI.shell(), d);
 		dialog.setPageSize(150, 300);
 		return dialog.open();
+	}
+
+	/**
+	 * Adds the references of the data sets to the list that need to validated.
+	 * This is typically just the reference that was selected when opening the
+	 * validation dialog. However, for EPD data sets also the product flow is
+	 * added as it is required to validate this product together with the EPD
+	 * data set.
+	 */
+	private void addBaseRefs() {
+		allRefs.clear();
+		if (ref == null)
+			return;
+		allRefs.add(ref);
+		if (ref.type != DataSetType.PROCESS)
+			return;
+		Process p = RefDeps.load(Process.class, ref);
+		if (p == null)
+			return;
+		Exchange e = RefDeps.getRefExchange(p);
+		if (e == null || e.flow == null)
+			return;
+		allRefs.add(e.flow);
 	}
 
 	@Override
@@ -101,8 +128,7 @@ public class ValidationDialog extends Wizard {
 				if (check.getSelection()) {
 					collectRefs();
 				} else {
-					allRefs.clear();
-					allRefs.add(ref);
+					addBaseRefs();
 					table.setInput(allRefs);
 				}
 			});
@@ -135,7 +161,5 @@ public class ValidationDialog extends Wizard {
 				log.error("failed to collect references", e);
 			}
 		}
-
 	}
-
 }

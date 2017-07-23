@@ -26,7 +26,7 @@ import app.editors.Editors;
 import app.editors.IEditor;
 import app.editors.RefSelectionDialog;
 import app.rcp.Icon;
-import app.store.RefUnits;
+import app.store.RefDeps;
 import app.util.Actions;
 import app.util.Tables;
 import app.util.UI;
@@ -146,7 +146,7 @@ class FlowPropertySection {
 			case 1:
 				return Double.toString(ref.meanValue);
 			case 2:
-				return RefUnits.get(ref.flowProperty);
+				return RefDeps.getRefUnit(ref.flowProperty);
 			default:
 				return null;
 			}

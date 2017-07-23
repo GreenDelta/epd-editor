@@ -1,7 +1,6 @@
 package app.editors.settings;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
@@ -19,7 +18,6 @@ import app.M;
 import app.editors.BaseEditor;
 import app.editors.Editors;
 import app.editors.SimpleEditorInput;
-import app.util.Controls;
 import app.util.UI;
 
 public class SettingsPage extends BaseEditor {
@@ -58,49 +56,18 @@ public class SettingsPage extends BaseEditor {
 
 	private class Page extends FormPage {
 
-		private FormToolkit toolkit;
-
 		public Page() {
 			super(SettingsPage.this, "SettingsPage", M.Settings);
 		}
 
 		@Override
 		protected void createFormContent(IManagedForm mform) {
-			toolkit = mform.getToolkit();
+			FormToolkit tk = mform.getToolkit();
 			ScrolledForm form = UI.formHeader(mform, M.Settings);
 			Composite body = UI.formBody(form, mform.getToolkit());
-			Composite comp = UI.formSection(body, toolkit, M.DataSets);
-			LangCombo langCombo = new LangCombo(settings.lang);
-			langCombo.render(comp, toolkit);
-			langCombo.onChange(lang -> {
-				settings.lang = lang;
-				SettingsPage.this.setDirty();
-			});
-			xmlCheck(comp);
-			dependencyCheck(comp);
-			new ProfileSecion(SettingsPage.this).render(body, toolkit);
+			new DataSetSection(SettingsPage.this).render(body, tk);
+			new ProfileSecion(SettingsPage.this).render(body, tk);
 			form.reflow(true);
-		}
-
-		private void dependencyCheck(Composite comp) {
-			Button depCheck = UI.formCheckBox(comp, toolkit,
-					"#Show dependencies in editors");
-			depCheck.setSelection(settings.showDataSetDependencies);
-			Controls.onSelect(depCheck, e -> {
-				settings.showDataSetDependencies = depCheck
-						.getSelection();
-				SettingsPage.this.setDirty();
-			});
-		}
-
-		private void xmlCheck(Composite comp) {
-			Button xmlCheck = UI.formCheckBox(comp, toolkit,
-					"#Show XML pages in editors");
-			xmlCheck.setSelection(settings.showDataSetXML);
-			Controls.onSelect(xmlCheck, e -> {
-				settings.showDataSetXML = xmlCheck.getSelection();
-				SettingsPage.this.setDirty();
-			});
 		}
 	}
 }

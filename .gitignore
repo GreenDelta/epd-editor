@@ -1,2 +1,4 @@
-/bin/
-/libs/
+bin/
+libs/
+.idea/
+*.iml

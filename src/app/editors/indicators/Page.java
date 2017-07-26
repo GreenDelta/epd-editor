@@ -44,7 +44,7 @@ class Page extends FormPage {
 		Composite comp = UI.formSection(parent, tk, Labels.get(group));
 		UI.gridLayout(comp, 1);
 		TableViewer table = Tables.createViewer(comp, M.Indicator,
-				M.DataSetReference, "#Unit reference");
+				M.DataSetReference, M.UnitReference);
 		Tables.bindColumnWidths(table, 0.4, 0.3, 0.3);
 		table.setLabelProvider(new Label());
 		List<IndicatorMapping> list = editor.getGroup(group);
@@ -69,9 +69,9 @@ class Page extends FormPage {
 			case 0:
 				return Labels.get(im.indicator);
 			case 1:
-				String pref = im.indicator.isInventoryIndicator() ? "Flow: "
-						: "LCIA Method: ";
-				return pref + im.indicatorRefId;
+				String pref = im.indicator.isInventoryIndicator() ? M.Flow
+						: M.LCIAMethod;
+				return pref + ": " + im.indicatorRefId;
 			case 2:
 				return im.unitLabel + ": " + im.unitRefId;
 			default:

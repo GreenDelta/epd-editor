@@ -87,7 +87,7 @@ public class ActionBar extends ActionBarAdvisor {
 		editMenu.add(Actions.create(M.IndicatorMappings,
 				Icon.QUANTITY.des(), IndicatorMappingEditor::open));
 		editMenu.add(new Separator());
-		editMenu.add(Actions.create("#Delete all data sets",
+		editMenu.add(Actions.create(M.DeleteAllDataSets,
 				Icon.DELETE.des(), this::cleanUp));
 		return editMenu;
 	}

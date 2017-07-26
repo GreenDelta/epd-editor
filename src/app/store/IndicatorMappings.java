@@ -55,8 +55,10 @@ public final class IndicatorMappings {
 				.getResourceAsStream(NAME)) {
 			IndicatorMapping[] mappings = Json.read(is,
 					IndicatorMapping[].class);
-			cached = asList(mappings);
-			return cached;
+			list = asList(mappings);
+			save(list);
+			cached = list;
+			return list;
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(IndicatorMappings.class);
 			log.error("failed to read " + NAME, e);
@@ -89,7 +91,7 @@ public final class IndicatorMappings {
 	}
 
 	private static File file() {
-		File dir = App.store.getRootFolder();
+		File dir = App.workspace;
 		return new File(dir, NAME);
 	}
 }

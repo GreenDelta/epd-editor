@@ -57,6 +57,7 @@ public class M extends NLS {
 	public static String DeclaredUnit;
 	public static String Default;
 	public static String Delete;
+	public static String DeleteAllDataSets;
 	public static String DeleteDataSet;
 	public static String DeleteDataSetQuestion;
 	public static String DeleteFile;
@@ -279,6 +280,7 @@ public class M extends NLS {
 	public static String UnitDescription;
 	public static String UnitGroup;
 	public static String UnitGroups;
+	public static String UnitReference;
 	public static String Units;
 	public static String Unknown;
 	public static String Update;

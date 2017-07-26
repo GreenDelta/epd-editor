@@ -81,6 +81,39 @@ from the validation API to this location before testing the validation feature
 or running a build.
 
 #### Building the distribution packages
+We currently build the application via the Eclipse export: right-click on the
+project and select `Export > Eclipse product`. In the wizard select the
+following settings:
+
+* Configuration: `epd-editor/app-product` (should be the default)
+* Root directory: `epd-editor`
+* Synchronize before exporting: yes [x]
+* Destination directory: choose the `build` folder of this project
+* Generate p2 repository: no [ ] (would be just overhead)
+* Export for multiple platforms: yes [x]
+* (take the defaults for the others)
+
+In the next page, select the platforms for which you want to build the product.
+However, only the Windows `x86_64` version is currently fully supported when
+building the distribution package and also the build is written for Windows.
+The `make.bat` script packages then the application (and the `clean.bat`
+removes all the build artifacts again). In order to run the script, you need to
+add the following things to the build folder:
+
+##### Java Runtime Environment (JRE)
+We package a JRE together with the application. Just download the
+[current package](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html)
+for Windows 64 bit (e.g. `jre-8u141-windows-x64.tar.gz`), extract it, and
+copy the content into the folder `build/jre/win64`.
+
+##### 7zip
+For packaging the applications we use [7zip](http://www.7-zip.org/download.html).
+Just download the non-installer version and copy the (64bit) `7za.exe`
+directly into the build folder.
+
+#### Validation profile
+... 
+
 ...
 
 ## License

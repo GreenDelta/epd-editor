@@ -183,6 +183,7 @@ public class M extends NLS {
 	public static String NewServerConnection;
 	public static String NewSource;
 	public static String NewUnitGroup;
+	public static String Translation_NoContentsYet;
 	public static String NoSearchPossible;
 	public static String NoValidationProfile;
 	public static String NoValidationProfile_Error;

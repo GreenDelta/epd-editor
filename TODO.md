@@ -1,45 +1,5 @@
 ## TODO
 
-* translation view: show `(no contents yet) | (noch kein Inhalt)` for empty fields.
-* add default validation profile in build process
-
-* re-index function
-* Source type combo in SourcePage
-* Local search
-* Application settings: application language, RAM
-* fetch also categories from elementary flows in indexing etc.
-* cross platform builds and tests; + default data package
-* externalize more strings
-* cleanup: re-index on errors or cancellation 
-* allow editing of indicator mappings (best would be probably a simple wizard)
-* Data set export with dependencies as zip package
-
-
-bug: catch error: open data set that does not exist
-
-* type of data set currently not added
-* collect & update data set references when opening a data set
-* synchronize categories from server
-* delete complete categories and data sets from navigation tree
-
-* proxy settings
-
-## Classification synchronization
-It is possible to update the classification system from a server. However,
-the update URL is currently a fix string:
-
-```java
-public class ClassificationSync {
-    ...
-    String urlSpec = con.url + "/categorySystems/OEKOBAU.DAT";
-    ...
-}
-```
-
-There is currently no function in soda4LCA available for getting all
-classification systems (it would be also nice to have similar functionalities
-for locations). 
-
 ---
 doc:
 

@@ -60,7 +60,7 @@ public class TranslationView extends ViewPart implements ISelectionListener {
 		toolkit = new FormToolkit(parent.getDisplay());
 		parent.addDisposeListener(e -> toolkit.dispose());
 		form = toolkit.createScrolledForm(parent);
-		form.setText("#Select a multi-language text ...");
+		form.setText(M.Translation_NoContentsYet);
 		form.getForm().setForeground(Colors.get(70, 70, 70));
 		composite = form.getBody();
 		UI.gridLayout(composite, 2);
@@ -78,14 +78,14 @@ public class TranslationView extends ViewPart implements ISelectionListener {
 		controls.clear();
 		Selection s = (Selection) selection;
 		if (s.isEmpty()) {
-			form.setText("#Select a multi-language text ...");
+			form.setText(M.Translation_NoContentsYet);
 			return;
 		}
 		if (s.title != null)
 			form.setText(s.title);
 		s.strings.sort((s1, s2) -> Strings.compare(s1.lang, s2.lang));
 		for (LangString ls : s.strings) {
-			String lang = ls.lang == null ? "none" : ls.lang;
+			String lang = ls.lang == null ? M.None : ls.lang;
 			Label label = UI.formLabel(composite, toolkit, lang + ":");
 			controls.add(label);
 			if (Objects.equals(ls.lang, App.lang()))

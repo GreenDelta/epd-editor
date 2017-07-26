@@ -16,6 +16,7 @@ public class M extends NLS {
 	public static String AdministrativeInformation;
 	public static String AlreadyExists;
 	public static String Amount;
+	public static String ApplicationSettings;
 	public static String Average;
 
 	public static String CalculateResults;
@@ -254,6 +255,8 @@ public class M extends NLS {
 	public static String SetAsReference;
 	public static String Settings;
 	public static String ShortName;
+	public static String ShowDependenciesInEditors;
+	public static String ShowXMLInEditors;
 	public static String Source;
 	public static String Sources;
 	public static String Specific;

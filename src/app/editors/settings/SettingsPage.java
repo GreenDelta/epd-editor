@@ -18,11 +18,14 @@ import app.M;
 import app.editors.BaseEditor;
 import app.editors.Editors;
 import app.editors.SimpleEditorInput;
+import app.rcp.IniFile;
 import app.util.UI;
 
 public class SettingsPage extends BaseEditor {
 
 	AppSettings settings = App.settings().clone();
+	IniFile ini = IniFile.read();
+	private IniFile originalIni = ini.clone();
 
 	public static void open() {
 		SimpleEditorInput input = new SimpleEditorInput("app.Settings");
@@ -51,6 +54,8 @@ public class SettingsPage extends BaseEditor {
 		App.settings().setValues(settings);
 		App.settings().save();
 		dirty = false;
+		if (!ini.equals(originalIni))
+			ini.write();
 		editorDirtyStateChanged();
 	}
 
@@ -66,7 +71,8 @@ public class SettingsPage extends BaseEditor {
 			ScrolledForm form = UI.formHeader(mform, M.Settings);
 			Composite body = UI.formBody(form, mform.getToolkit());
 			new DataSetSection(SettingsPage.this).render(body, tk);
-			new ProfileSecion(SettingsPage.this).render(body, tk);
+			new ProfileSection(SettingsPage.this).render(body, tk);
+			new AppSection(SettingsPage.this).render(body, tk);
 			form.reflow(true);
 		}
 	}

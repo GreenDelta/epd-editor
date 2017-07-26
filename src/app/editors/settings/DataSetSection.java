@@ -35,7 +35,7 @@ class DataSetSection {
 
 	private void dependencyCheck(Composite comp, FormToolkit tk) {
 		Button depCheck = UI.formCheckBox(comp, tk,
-				"#Show dependencies in editors");
+				M.ShowDependenciesInEditors);
 		depCheck.setSelection(settings().showDataSetDependencies);
 		Controls.onSelect(depCheck, e -> {
 			settings().showDataSetDependencies = depCheck
@@ -46,7 +46,7 @@ class DataSetSection {
 
 	private void xmlCheck(Composite comp, FormToolkit tk) {
 		Button xmlCheck = UI.formCheckBox(comp, tk,
-				"#Show XML pages in editors");
+				M.ShowXMLInEditors);
 		xmlCheck.setSelection(settings().showDataSetXML);
 		Controls.onSelect(xmlCheck, e -> {
 			settings().showDataSetXML = xmlCheck.getSelection();

@@ -8,6 +8,7 @@ import org.eclipse.jface.action.Action;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import app.M;
 import app.navi.FolderElement;
 import app.navi.Navigator;
 import app.rcp.Icon;
@@ -19,7 +20,7 @@ public class FileImport extends Action {
 
 	public FileImport(FolderElement e) {
 		this.e = e;
-		setText("#Import File");
+		setText(M.ImportFile);
 		setImageDescriptor(Icon.IMPORT.des());
 	}
 

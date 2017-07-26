@@ -49,16 +49,15 @@ public class NavigationMenu extends CommonActionProvider {
 		}
 		if (first instanceof FolderElement) {
 			FolderElement e = (FolderElement) first;
-			catSync(e, menu);
+			if (e.type == FolderType.CLASSIFICATION)
+				categorySync(menu, null);
 			menu.add(new FileImport(e));
 		}
 		if (first instanceof RefElement) {
 			forRef((RefElement) first, menu);
 		}
 		if (first instanceof FileElement) {
-			FileElement e = (FileElement) first;
-			open(e, menu);
-			menu.add(new FileDeletion(e));
+			forFile((FileElement) first, menu);
 		}
 		if (first instanceof ConnectionFolder) {
 			ConnectionFolder cf = (ConnectionFolder) first;
@@ -80,14 +79,24 @@ public class NavigationMenu extends CommonActionProvider {
 		menu.add(new RefDeleteAction(e));
 	}
 
-	private void catSync(FolderElement e, IMenuManager menu) {
-		if (e == null || e.type != FolderType.CLASSIFICATION)
-			return;
+	private void forFile(FileElement e, IMenuManager menu) {
+		open(e, menu);
+		menu.add(new FileDeletion(e));
+		if (e.getType() == FolderType.CLASSIFICATION) {
+			String name = e.file.getName();
+			if (name.toLowerCase().endsWith(".xml")) {
+				name = name.substring(0, name.length() - 4);
+			}
+			categorySync(menu, name);
+		}
+	}
+
+	private void categorySync(IMenuManager menu, String systemName) {
 		MenuManager syncMenu = new MenuManager(M.Update,
 				Icon.DOWNLOAD.des(), "UpdateClassifications");
 		menu.add(syncMenu);
 		for (SodaConnection con : Connections.get()) {
-			syncMenu.add(new ClassificationSync(con));
+			syncMenu.add(new ClassificationSync(con, systemName));
 		}
 	}
 

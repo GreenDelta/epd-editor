@@ -6,6 +6,7 @@ import org.eclipse.jface.action.Action;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import app.M;
 import app.navi.FileElement;
 import app.navi.Navigator;
 import app.rcp.Icon;
@@ -17,7 +18,7 @@ public class FileDeletion extends Action {
 
 	public FileDeletion(FileElement e) {
 		this.e = e;
-		setText("#Delete file");
+		setText(M.DeleteFile);
 		setImageDescriptor(Icon.DELETE.des());
 	}
 
@@ -25,8 +26,7 @@ public class FileDeletion extends Action {
 	public void run() {
 		if (e == null || e.file == null || !e.file.exists())
 			return;
-		boolean b = MsgBox.ask("#Delete file?",
-				"Do you really want to delete the selected file?");
+		boolean b = MsgBox.ask(M.DeleteFile, M.DeleteFileQuestion);
 		if (!b)
 			return;
 		try {

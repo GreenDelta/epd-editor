@@ -56,6 +56,8 @@ public class M extends NLS {
 	public static String DeclaredUnit;
 	public static String Default;
 	public static String Delete;
+	public static String DeleteFile;
+	public static String DeleteFileQuestion;
 	public static String DeleteReview;
 	public static String DependentInternalReview;
 	public static String Description;
@@ -109,6 +111,7 @@ public class M extends NLS {
 	public static String ImportClassificationFile;
 	public static String ImportDataPackage;
 	public static String Imported;
+	public static String ImportFile;
 	public static String IndependentExternalReview;
 	public static String IndependentInternalReview;
 	public static String IndependentReviewPanel;
@@ -276,6 +279,8 @@ public class M extends NLS {
 	public static String Units;
 	public static String Unknown;
 	public static String Update;
+	public static String UpdateClassifications;
+	public static String UpdateClassificationsQuestion;
 	public static String UpdateMajorVersion;
 	public static String UpdateMinorVersion;
 	public static String UploadDataSet;

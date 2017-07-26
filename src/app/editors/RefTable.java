@@ -1,6 +1,7 @@
 package app.editors;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TableViewer;
@@ -26,6 +27,9 @@ public class RefTable {
 	private IEditor editor;
 	private String title = "?";
 
+	private Consumer<Ref> onAdd;
+	private Consumer<Ref> onRemove;
+
 	private RefTable(DataSetType type, List<Ref> refs) {
 		this.type = type;
 		this.refs = refs;
@@ -45,6 +49,16 @@ public class RefTable {
 		return this;
 	}
 
+	public RefTable onAdd(Consumer<Ref> fn) {
+		this.onAdd = fn;
+		return this;
+	}
+
+	public RefTable onRemove(Consumer<Ref> fn) {
+		this.onRemove = fn;
+		return this;
+	}
+
 	public void render(Composite parent, FormToolkit tk) {
 		Section section = UI.section(parent, tk, title);
 		Composite comp = UI.sectionClient(section, tk);
@@ -60,25 +74,34 @@ public class RefTable {
 
 	private Action[] createActions(TableViewer table) {
 		Action[] actions = new Action[2];
-		actions[0] = Actions.create(M.Add, Icon.ADD.des(), () -> {
-			Ref ref = RefSelectionDialog.select(type);
-			if (ref == null || refs.contains(ref))
-				return;
-			refs.add(ref);
-			table.setInput(refs);
-			if (editor != null)
-				editor.setDirty();
-		});
-		actions[1] = Actions.create(M.Remove, Icon.DELETE.des(), () -> {
-			Ref ref = Viewers.getFirstSelected(table);
-			if (ref == null)
-				return;
-			refs.remove(ref);
-			table.setInput(refs);
-			if (editor != null)
-				editor.setDirty();
-		});
+		actions[0] = Actions.create(M.Add, Icon.ADD.des(), () -> add(table));
+		actions[1] = Actions.create(M.Remove, Icon.DELETE.des(),
+				() -> remove(table));
 		return actions;
+	}
+
+	private void add(TableViewer table) {
+		Ref ref = RefSelectionDialog.select(type);
+		if (ref == null || refs.contains(ref))
+			return;
+		refs.add(ref);
+		table.setInput(refs);
+		if (onAdd != null)
+			onAdd.accept(ref);
+		if (editor != null)
+			editor.setDirty();
+	}
+
+	private void remove(TableViewer table) {
+		Ref ref = Viewers.getFirstSelected(table);
+		if (ref == null)
+			return;
+		refs.remove(ref);
+		table.setInput(refs);
+		if (onRemove != null)
+			onRemove.accept(ref);
+		if (editor != null)
+			editor.setDirty();
 	}
 
 }

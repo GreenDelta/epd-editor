@@ -1,5 +1,8 @@
 package app.editors.epd;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -11,10 +14,11 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.processes.ComplianceDeclaration;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.Processes;
 
-import app.App;
 import app.M;
 import app.editors.RefTable;
 import app.rcp.Labels;
@@ -27,7 +31,6 @@ class ModelingPage extends FormPage {
 
 	private FormToolkit toolkit;
 
-	private final String lang;
 	private EpdEditor editor;
 	private Process process;
 
@@ -35,7 +38,6 @@ class ModelingPage extends FormPage {
 		super(editor, "EpdInfoPage", M.ModellingAndValidation);
 		this.editor = editor;
 		process = editor.dataSet.process;
-		lang = App.lang();
 	}
 
 	@Override
@@ -55,6 +57,7 @@ class ModelingPage extends FormPage {
 				.withEditor(editor)
 				.withTitle(M.DataSources)
 				.render(body, toolkit);
+		createComplianceSection(body);
 		new ReviewSection(editor, this)
 				.render(body, toolkit, form);
 		form.reflow(true);
@@ -100,5 +103,34 @@ class ModelingPage extends FormPage {
 		StructuredSelection s = new StructuredSelection(
 				editor.dataSet.subType);
 		combo.setSelection(s);
+	}
+
+	private void createComplianceSection(Composite body) {
+		List<Ref> systems = new ArrayList<>();
+		Processes.getComplianceDeclarations(process).forEach(s -> {
+			if (s.system != null)
+				systems.add(s.system);
+		});
+		RefTable table = RefTable.create(DataSetType.SOURCE, systems)
+				.withTitle(M.ComplianceDeclarations);
+		table.render(body, toolkit);
+		table.onAdd(system -> {
+			ComplianceDeclaration decl = Processes.getComplianceDeclaration(
+					process, system);
+			if (decl != null)
+				return;
+			Processes.complianceDeclaration(process).system = system;
+			editor.setDirty();
+		});
+		table.onRemove(system -> {
+			ComplianceDeclaration decl = Processes.getComplianceDeclaration(
+					process, system);
+			if (decl == null)
+				return;
+			Processes.getComplianceDeclarations(process).remove(decl);
+			if (process.modelling.complianceDeclarations.entries.isEmpty())
+				process.modelling.complianceDeclarations = null;
+			editor.setDirty();
+		});
 	}
 }

@@ -29,6 +29,7 @@ public class M extends NLS {
 	public static String Code;
 	public static String Comment;
 	public static String CompleteReviewReport;
+	public static String ComplianceDeclarations;
 	public static String ComponentsForReuse;
 	public static String ConnectToSoda4LCA;
 	public static String ConnectionData;

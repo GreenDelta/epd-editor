@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="http://iai-uiserv1.iai.kit.edu/EPD/stylesheets/flow2html.xsl"?><flowDataSet xmlns="http://lca.jrc.it/ILCD/Flow" xmlns:common="http://lca.jrc.it/ILCD/Common"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://lca.jrc.it/ILCD/Flow ../../schemas/ILCD_FlowDataSet.xsd"
+             version="1.1"
+             locations="../ILCDLocations.xml">
+   <flowInformation>
+      <dataSetInformation>
+         <common:UUID>3cf952c8-f3a4-461d-8c96-96456ca62246</common:UUID>
+         <name>
+             <baseName xml:lang="en">Use of net fresh water (FW)</baseName>
+             <baseName xml:lang="de">Einsatz von Süßwasserressourcen (FW)</baseName>
+             <baseName xml:lang="es">Uso neto de recursos de agua dulce (FW)</baseName>
+         </name>
+         <classificationInformation>
+            <common:classification xmlns="http://lca.jrc.it/ILCD/FlowProperty" name="GaBiCategories"
+                                   classes="../GaBiCategories.xml">
+               <common:class level="0" classId="f9ec79e6-9fdd-4691-9c05-04e9fa45fb14">Größen</common:class>
+               <common:class level="1" classId="34390d09-b09f-4f90-9b44-f5967461e18c">Umweltliche Größen</common:class>
+               <common:class level="2" classId="66999bad-2002-445f-bc89-8230780f539a">EPD EN 15804</common:class>
+               <common:class level="3" classId="c3bb7da8-448e-496f-8185-7e1c5ce9908d">LCI Indikatoren</common:class>
+            </common:classification>
+         </classificationInformation>
+          <common:generalComment xml:lang="en">according to EN 15804</common:generalComment>
+          <common:generalComment xml:lang="de">Größe nach EN 15804</common:generalComment>
+          <common:generalComment xml:lang="es">conforme a EN 15804</common:generalComment>
+      </dataSetInformation>
+   </flowInformation>
+    <modellingAndValidation>
+        <LCIMethod>
+            <typeOfDataSet>Other flow</typeOfDataSet>
+        </LCIMethod>
+    </modellingAndValidation>
+    <administrativeInformation>
+        <dataEntryBy>
+            <common:timeStamp>2017-02-09T10:28:42.656+02:00</common:timeStamp>
+        </dataEntryBy>
+        <publicationAndOwnership>
+            <common:dataSetVersion>30.00.000</common:dataSetVersion>
+        </publicationAndOwnership>
+    </administrativeInformation>
+</flowDataSet>

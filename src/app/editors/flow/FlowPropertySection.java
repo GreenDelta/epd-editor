@@ -91,6 +91,11 @@ class FlowPropertySection {
 		propRef.flowProperty = ref;
 		propRef.meanValue = 1.0;
 		Flows.flowProperties(flow).add(propRef);
+		if (Flows.getFlowProperties(flow).size() == 1) {
+			// set it as reference flow property if it is the only one
+			QuantitativeReference qRef = Flows.quantitativeReference(flow);
+			qRef.referenceFlowProperty = propRef.dataSetInternalID;
+		}
 		table.setInput(Flows.getFlowProperties(flow));
 		editor.setDirty();
 	}

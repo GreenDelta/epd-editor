@@ -24,9 +24,7 @@ public class RefDeleteAction extends Action {
 	public void run() {
 		if (e == null || e.ref == null)
 			return;
-		boolean b = MsgBox.ask("#Delete Data Set?",
-				"#Do you really want to delete the data "
-						+ "set permanently?");
+		boolean b = MsgBox.ask(M.DeleteDataSet, M.DeleteDataSetQuestion);
 		if (!b)
 			return;
 		Ref ref = e.ref;

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="http://iai-uiserv1.iai.kit.edu/EPD/stylesheets/flowproperty2html.xsl"?><flowPropertyDataSet xmlns="http://lca.jrc.it/ILCD/FlowProperty"
+                     xmlns:common="http://lca.jrc.it/ILCD/Common"
+                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:schemaLocation="http://lca.jrc.it/ILCD/FlowProperty ../../schemas/ILCD_FlowPropertyDataSet.xsd"
+                     version="1.1">
+   <flowPropertiesInformation>
+      <dataSetInformation>
+         <common:UUID>93a60a56-a3c8-21da-a746-0800200c9a66</common:UUID>
+	     <common:name xml:lang="de">Fläche*Zeit</common:name>
+         <common:name xml:lang="en">Area*time</common:name>
+         <common:synonyms xml:lang="en">Surface*time</common:synonyms>
+         <classificationInformation>
+            <common:classification>
+               <common:class level="0">Technical flow properties</common:class>
+            </common:classification>
+         </classificationInformation>
+         <common:generalComment xml:lang="en">Reference Flow Property Data Set of the International Reference Life Cycle Data System (ILCD).</common:generalComment>
+      </dataSetInformation>
+      <quantitativeReference>
+         <referenceToReferenceUnitGroup type="unit group data set"
+                                        uri="../unitgroups/93a60a57-a3c8-20da-a746-0800200c9a66.xml"
+                                        refObjectId="93a60a57-a3c8-20da-a746-0800200c9a66">
+            <common:shortDescription xml:lang="en">Units of area*time</common:shortDescription>
+         </referenceToReferenceUnitGroup>
+      </quantitativeReference>
+   </flowPropertiesInformation>
+   <modellingAndValidation/>
+   <administrativeInformation>
+      <dataEntryBy>
+         <common:timeStamp>2014-07-24T14:02:23.057+02:00</common:timeStamp>
+         <common:referenceToDataSetFormat refObjectId="a97a0155-0234-4b87-b4ce-a45da52f2a40" type="source data set"
+                                          uri="../sources/ILCD_Format_a97a0155-0234-4b87-b4ce-a45da52f2a40.xml">
+            <common:shortDescription xml:lang="de">ILCD format 1.1</common:shortDescription>
+         </common:referenceToDataSetFormat>
+      </dataEntryBy>
+      <publicationAndOwnership>
+         <common:dataSetVersion>03.00.000</common:dataSetVersion>
+         <common:referenceToPrecedingDataSetVersion type="flow property data set"
+                                                    refObjectId="93a60a56-a3c8-21da-a746-0800200c9a66"
+                                                    uri="http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/flowproperties/Area_time_93a60a56-a3c8-21da-a746-0800200c9a66_02.00.000.xml">
+            <common:shortDescription xml:lang="en">Area*time</common:shortDescription>
+         </common:referenceToPrecedingDataSetVersion>
+         <common:permanentDataSetURI>http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/flowproperties/93a60a56-a3c8-21da-a746-0800200c9a66.xml</common:permanentDataSetURI>
+      </publicationAndOwnership>
+   </administrativeInformation>
+</flowPropertyDataSet>

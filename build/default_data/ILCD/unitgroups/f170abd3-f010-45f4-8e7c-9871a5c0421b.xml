@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="http://iai-uiserv1.iai.kit.edu/EPD/stylesheets/unitgroup2html.xsl"?><unitGroupDataSet xmlns="http://lca.jrc.it/ILCD/UnitGroup"
+                  xmlns:common="http://lca.jrc.it/ILCD/Common"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  version="1.1"
+                  xsi:schemaLocation="http://lca.jrc.it/ILCD/UnitGroup ../../schemas/ILCD_UnitGroupDataSet.xsd">
+   <unitGroupInformation>
+      <dataSetInformation>
+         <common:UUID>f170abd3-f010-45f4-8e7c-9871a5c0421b</common:UUID>
+         <common:name xml:lang="en">Units of mole</common:name>
+		     <common:name xml:lang="de">Moleinheiten</common:name>
+         <classificationInformation>
+            <common:classification>
+               <common:class level="0">Technical unit groups</common:class>
+            </common:classification>
+         </classificationInformation>
+         <common:generalComment xml:lang="en">Reference Unit Group Data Set of the International Reference Life Cycle Data System (ILCD).</common:generalComment>
+      </dataSetInformation>
+      <quantitativeReference>
+         <referenceToReferenceUnit>0</referenceToReferenceUnit>
+      </quantitativeReference>
+   </unitGroupInformation>
+   <modellingAndValidation/>
+   <administrativeInformation>
+      <dataEntryBy>
+         <common:timeStamp>2014-07-24T14:02:25.046+02:00</common:timeStamp>
+         <common:referenceToDataSetFormat refObjectId="a97a0155-0234-4b87-b4ce-a45da52f2a40" type="source data set"
+                                          uri="../sources/ILCD_Format_a97a0155-0234-4b87-b4ce-a45da52f2a40.xml">
+            <common:shortDescription xml:lang="de">ILCD format 1.1</common:shortDescription>
+         </common:referenceToDataSetFormat>
+      </dataEntryBy>
+      <publicationAndOwnership>
+         <common:dataSetVersion>03.00.000</common:dataSetVersion>
+         <common:permanentDataSetURI>http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/f170abd3-f010-45f4-8e7c-9871a5c0421b.xml</common:permanentDataSetURI>
+      </publicationAndOwnership>
+   </administrativeInformation>
+   <units>
+      <unit dataSetInternalID="0">
+         <name>mol</name>
+         <meanValue>1.0</meanValue>
+         <generalComment xml:lang="en">moles of substance / chemical</generalComment>
+      </unit>
+   </units>
+</unitGroupDataSet>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="http://iai-uiserv1.iai.kit.edu/EPD/stylesheets/flowproperty2html.xsl"?><flowPropertyDataSet xmlns="http://lca.jrc.it/ILCD/FlowProperty"
+                     xmlns:common="http://lca.jrc.it/ILCD/Common"
+                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:schemaLocation="http://lca.jrc.it/ILCD/FlowProperty ../../schemas/ILCD_FlowPropertyDataSet.xsd"
+                     version="1.1">
+   <flowPropertiesInformation>
+      <dataSetInformation>
+         <common:UUID>f403679a-8f0c-4945-85ca-15c5d6d9cadf</common:UUID>
+         <common:name xml:lang="de">Erneuerbare Primärenergie als Energieträger (PERE)</common:name>
+         <classificationInformation>
+            <common:classification name="GaBiCategories" classes="../GaBiCategories.xml">
+               <common:class level="0" classId="34390d09-b09f-4f90-9b44-f5967461e18c">Umweltliche Größen</common:class>
+               <common:class level="1" classId="66999bad-2002-445f-bc89-8230780f539a">EPD EN 15804</common:class>
+               <common:class level="2" classId="c3bb7da8-448e-496f-8185-7e1c5ce9908d">LCI Indikatoren</common:class>
+            </common:classification>
+         </classificationInformation>
+         <common:generalComment xml:lang="de">Einsatz der als Rohstoff verwendeten, nicht erneuerbaren Primärenergieträger (stoffliche Nutzung)
+Größe aus EN 15804
+MJ, unterer Heizwert
+Heizwert des Produktes</common:generalComment>
+      </dataSetInformation>
+      <quantitativeReference>
+         <referenceToReferenceUnitGroup refObjectId="de5104d8-3de0-4218-a29d-b7123ce9ca3c" type="unit group data set"
+                                        uri="../unitgroups/de5104d8-3de0-4218-a29d-b7123ce9ca3c.xml">
+            <common:shortDescription xml:lang="de">Energieeinheit</common:shortDescription>
+         </referenceToReferenceUnitGroup>
+      </quantitativeReference>
+   </flowPropertiesInformation>
+   <modellingAndValidation>
+      <dataSourcesTreatmentAndRepresentativeness/>
+   </modellingAndValidation>
+   <administrativeInformation>
+      <dataEntryBy>
+         <common:timeStamp>2014-07-24T14:02:23.108+02:00</common:timeStamp>
+         <common:referenceToDataSetFormat refObjectId="a97a0155-0234-4b87-b4ce-a45da52f2a40" type="source data set"
+                                          uri="../sources/ILCD_Format_a97a0155-0234-4b87-b4ce-a45da52f2a40.xml">
+            <common:shortDescription xml:lang="de">ILCD format 1.1</common:shortDescription>
+         </common:referenceToDataSetFormat>
+      </dataEntryBy>
+      <publicationAndOwnership>
+         <common:dataSetVersion>25.00.000</common:dataSetVersion>
+      </publicationAndOwnership>
+   </administrativeInformation>
+</flowPropertyDataSet>

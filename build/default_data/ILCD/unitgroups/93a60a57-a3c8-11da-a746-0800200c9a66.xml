@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="http://iai-uiserv1.iai.kit.edu/EPD/stylesheets/unitgroup2html.xsl"?><unitGroupDataSet xmlns="http://lca.jrc.it/ILCD/UnitGroup"
+                  xmlns:common="http://lca.jrc.it/ILCD/Common"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://lca.jrc.it/ILCD/UnitGroup ../../schemas/ILCD_UnitGroupDataSet.xsd"
+                  version="1.1">
+   <unitGroupInformation>
+      <dataSetInformation>
+         <common:UUID>93a60a57-a3c8-11da-a746-0800200c9a66</common:UUID>
+         <common:name xml:lang="en">Units of energy</common:name>
+		     <common:name xml:lang="de">Energieeinheiten</common:name>
+         <classificationInformation>
+            <common:classification>
+               <common:class level="0">Technical unit groups</common:class>
+            </common:classification>
+         </classificationInformation>
+         <common:generalComment xml:lang="en">Reference Unit Group Data Set of the International Reference Life Cycle Data System (ILCD).</common:generalComment>
+      </dataSetInformation>
+      <quantitativeReference>
+         <referenceToReferenceUnit>0</referenceToReferenceUnit>
+      </quantitativeReference>
+   </unitGroupInformation>
+   <modellingAndValidation/>
+   <administrativeInformation>
+      <dataEntryBy>
+         <common:timeStamp>2014-07-24T14:02:24.984+02:00</common:timeStamp>
+         <common:referenceToDataSetFormat refObjectId="a97a0155-0234-4b87-b4ce-a45da52f2a40" type="source data set"
+                                          uri="../sources/ILCD_Format_a97a0155-0234-4b87-b4ce-a45da52f2a40.xml">
+            <common:shortDescription xml:lang="de">ILCD format 1.1</common:shortDescription>
+         </common:referenceToDataSetFormat>
+      </dataEntryBy>
+      <publicationAndOwnership>
+         <common:dataSetVersion>03.00.000</common:dataSetVersion>
+         <common:referenceToPrecedingDataSetVersion type="unit group data set" refObjectId="93a60a57-a3c8-11da-a746-0800200c9a66"
+                                                    uri="http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/Units_of_energy_93a60a57-a3c8-11da-a746-0800200c9a66_02.00.000.xml">
+            <common:shortDescription xml:lang="en">Units of energy</common:shortDescription>
+         </common:referenceToPrecedingDataSetVersion>
+         <common:permanentDataSetURI>http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/93a60a57-a3c8-11da-a746-0800200c9a66.xml</common:permanentDataSetURI>
+      </publicationAndOwnership>
+   </administrativeInformation>
+   <units>
+      <unit dataSetInternalID="0">
+         <name>MJ</name>
+         <meanValue>1.0</meanValue>
+         <generalComment xml:lang="en">Megajoule</generalComment>
+      </unit>
+      <unit dataSetInternalID="1">
+         <name>kWh</name>
+         <meanValue>3.6</meanValue>
+         <generalComment xml:lang="en">Kilowatt times hour</generalComment>
+      </unit>
+      <unit dataSetInternalID="2">
+         <name>TOE</name>
+         <meanValue>41868.0</meanValue>
+         <generalComment xml:lang="en">Ton oil equivalent</generalComment>
+      </unit>
+      <unit dataSetInternalID="3">
+         <name>J</name>
+         <meanValue>1.0E-6</meanValue>
+         <generalComment xml:lang="en">Joule</generalComment>
+      </unit>
+      <unit dataSetInternalID="4">
+         <name>kcal</name>
+         <meanValue>0.0041867</meanValue>
+         <generalComment xml:lang="en">Kilocalorie (International table)</generalComment>
+      </unit>
+      <unit dataSetInternalID="5">
+         <name>btu</name>
+         <meanValue>0.001055056</meanValue>
+         <generalComment xml:lang="en">British thermal unit (International table)</generalComment>
+      </unit>
+      <unit dataSetInternalID="6">
+         <name>MWh</name>
+         <meanValue>3600.0</meanValue>
+         <generalComment xml:lang="en">Megawatt times hour</generalComment>
+      </unit>
+      <unit dataSetInternalID="7">
+         <name>TCE</name>
+         <meanValue>29307.6</meanValue>
+         <generalComment xml:lang="en">Ton coal equivalent</generalComment>
+      </unit>
+      <unit dataSetInternalID="8">
+         <name>GJ</name>
+         <meanValue>1000.0</meanValue>
+         <generalComment xml:lang="en">Gigajoule</generalComment>
+      </unit>
+   </units>
+</unitGroupDataSet>

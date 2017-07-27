@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="http://iai-uiserv1.iai.kit.edu/EPD/stylesheets/unitgroup2html.xsl"?><unitGroupDataSet xmlns="http://lca.jrc.it/ILCD/UnitGroup"
+                  xmlns:common="http://lca.jrc.it/ILCD/Common"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://lca.jrc.it/ILCD/UnitGroup ../../schemas/ILCD_UnitGroupDataSet.xsd"
+                  version="1.1">
+   <unitGroupInformation>
+      <dataSetInformation>
+         <common:UUID>de5104d8-3de0-4218-a29d-b7123ce9ca3c</common:UUID>
+         <common:name xml:lang="de">Energieeinheit</common:name>
+         <classificationInformation>
+            <common:classification name="GaBiCategories" classes="../GaBiCategories.xml">
+               <common:class level="0" classId="30c118c5-1fb2-4c6d-93e3-5450c9698f1e">Technische Einheiten</common:class>
+            </common:classification>
+         </classificationInformation>
+      </dataSetInformation>
+      <quantitativeReference>
+         <referenceToReferenceUnit>0</referenceToReferenceUnit>
+      </quantitativeReference>
+   </unitGroupInformation>
+   <modellingAndValidation/>
+   <administrativeInformation>
+      <dataEntryBy>
+         <common:timeStamp>2014-07-24T14:02:25.042+02:00</common:timeStamp>
+         <common:referenceToDataSetFormat refObjectId="a97a0155-0234-4b87-b4ce-a45da52f2a40" type="source data set"
+                                          uri="../sources/ILCD_Format_a97a0155-0234-4b87-b4ce-a45da52f2a40.xml">
+            <common:shortDescription xml:lang="de">ILCD format 1.1</common:shortDescription>
+         </common:referenceToDataSetFormat>
+      </dataEntryBy>
+      <publicationAndOwnership>
+         <common:dataSetVersion>25.00.000</common:dataSetVersion>
+      </publicationAndOwnership>
+   </administrativeInformation>
+   <units>
+      <unit dataSetInternalID="0">
+         <name>MJ</name>
+         <meanValue>1</meanValue>
+      </unit>
+      <unit dataSetInternalID="1">
+         <name>Btu</name>
+         <meanValue>0.00105509717444977</meanValue>
+      </unit>
+      <unit dataSetInternalID="2">
+         <name>cal</name>
+         <meanValue>4.18672807201172E-6</meanValue>
+      </unit>
+      <unit dataSetInternalID="3">
+         <name>erg</name>
+         <meanValue>1E-13</meanValue>
+      </unit>
+      <unit dataSetInternalID="4">
+         <name>eV</name>
+         <meanValue>1.6022046335758E-25</meanValue>
+      </unit>
+      <unit dataSetInternalID="5">
+         <name>GJ</name>
+         <meanValue>1000</meanValue>
+      </unit>
+      <unit dataSetInternalID="6">
+         <name>GWh</name>
+         <meanValue>3600000</meanValue>
+      </unit>
+      <unit dataSetInternalID="7">
+         <name>J</name>
+         <meanValue>1E-6</meanValue>
+      </unit>
+      <unit dataSetInternalID="8">
+         <name>kJ</name>
+         <meanValue>0.001</meanValue>
+      </unit>
+      <unit dataSetInternalID="9">
+         <name>kpm</name>
+         <meanValue>9.80680592331078E-6</meanValue>
+      </unit>
+      <unit dataSetInternalID="10">
+         <name>kWh</name>
+         <meanValue>3.6</meanValue>
+      </unit>
+      <unit dataSetInternalID="11">
+         <name>MWh</name>
+         <meanValue>3600</meanValue>
+      </unit>
+      <unit dataSetInternalID="12">
+         <name>Nm</name>
+         <meanValue>1E-6</meanValue>
+      </unit>
+      <unit dataSetInternalID="13">
+         <name>PJ</name>
+         <meanValue>1000000000</meanValue>
+      </unit>
+      <unit dataSetInternalID="14">
+         <name>PSh</name>
+         <meanValue>2.64781422935367E-6</meanValue>
+      </unit>
+      <unit dataSetInternalID="15">
+         <name>TJ</name>
+         <meanValue>1000000</meanValue>
+      </unit>
+      <unit dataSetInternalID="16">
+         <name>TOE</name>
+         <meanValue>41867.2807201172</meanValue>
+      </unit>
+      <unit dataSetInternalID="17">
+         <name>TWh</name>
+         <meanValue>3600000000</meanValue>
+      </unit>
+      <unit dataSetInternalID="18">
+         <name>MMBtu</name>
+         <meanValue>1055</meanValue>
+      </unit>
+   </units>
+</unitGroupDataSet>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="http://iai-uiserv1.iai.kit.edu/EPD/stylesheets/flowproperty2html.xsl"?><flowPropertyDataSet xmlns="http://lca.jrc.it/ILCD/FlowProperty"
+                     xmlns:common="http://lca.jrc.it/ILCD/Common"
+                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:schemaLocation="http://lca.jrc.it/ILCD/FlowProperty ../../schemas/ILCD_FlowPropertyDataSet.xsd"
+                     version="1.1">
+   <flowPropertiesInformation>
+      <dataSetInformation>
+         <common:UUID>67cbf02a-2a4e-4668-941a-b4209c30b3c6</common:UUID>
+         <common:name xml:lang="de">Erneuerbare Primärenergie zur stofflichen Nutzung</common:name>
+         <common:synonyms xml:lang="de">EPD-XML-Export</common:synonyms>
+         <classificationInformation>
+            <common:classification name="GaBiCategories" classes="../GaBiCategories.xml">
+               <common:class level="0" classId="34390d09-b09f-4f90-9b44-f5967461e18c">Umweltliche Größen</common:class>
+               <common:class level="1" classId="66999bad-2002-445f-bc89-8230780f539a">EPD EN 15804</common:class>
+               <common:class level="2" classId="c3bb7da8-448e-496f-8185-7e1c5ce9908d">LCI Indikatoren</common:class>
+            </common:classification>
+         </classificationInformation>
+         <common:generalComment xml:lang="de">EPD-XML-Export</common:generalComment>
+      </dataSetInformation>
+      <quantitativeReference>
+         <referenceToReferenceUnitGroup refObjectId="93a60a57-a3c8-11da-a746-0800200c9a66" type="unit group data set"
+                                        uri="../unitgroups/93a60a57-a3c8-11da-a746-0800200c9a66.xml">
+            <common:shortDescription xml:lang="de">Energieeinheit</common:shortDescription>
+         </referenceToReferenceUnitGroup>
+      </quantitativeReference>
+   </flowPropertiesInformation>
+   <modellingAndValidation>
+      <dataSourcesTreatmentAndRepresentativeness/>
+   </modellingAndValidation>
+   <administrativeInformation>
+      <dataEntryBy>
+         <common:timeStamp>2014-07-24T14:02:03.204+02:00</common:timeStamp>
+         <common:referenceToDataSetFormat refObjectId="a97a0155-0234-4b87-b4ce-a45da52f2a40" type="source data set"
+                                          uri="../sources/ILCD_Format_a97a0155-0234-4b87-b4ce-a45da52f2a40.xml">
+            <common:shortDescription xml:lang="de">ILCD format 1.1</common:shortDescription>
+         </common:referenceToDataSetFormat>
+      </dataEntryBy>
+      <publicationAndOwnership>
+         <common:dataSetVersion>20.00.000</common:dataSetVersion>
+      </publicationAndOwnership>
+   </administrativeInformation>
+</flowPropertyDataSet>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="http://iai-uiserv1.iai.kit.edu/EPD/stylesheets/unitgroup2html.xsl"?><unitGroupDataSet xmlns="http://lca.jrc.it/ILCD/UnitGroup"
+                  xmlns:common="http://lca.jrc.it/ILCD/Common"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://lca.jrc.it/ILCD/UnitGroup ../../schemas/ILCD_UnitGroupDataSet.xsd"
+                  version="1.1">
+   <unitGroupInformation>
+      <dataSetInformation>
+         <common:UUID>67b5401d-873c-485f-bcf3-6ae83b918822</common:UUID>
+         <common:name xml:lang="de">Eutrophierungspotential-Einheit</common:name>
+         <classificationInformation>
+            <common:classification name="GaBiCategories" classes="../GaBiCategories.xml">
+               <common:class level="0" classId="2d993f37-0fcf-49bb-abf5-36c4f39ba66e">Umweltliche Einheiten</common:class>
+            </common:classification>
+         </classificationInformation>
+      </dataSetInformation>
+      <quantitativeReference>
+         <referenceToReferenceUnit>0</referenceToReferenceUnit>
+      </quantitativeReference>
+   </unitGroupInformation>
+   <modellingAndValidation/>
+   <administrativeInformation>
+      <dataEntryBy>
+         <common:timeStamp>2014-07-24T14:02:24.966+02:00</common:timeStamp>
+         <common:referenceToDataSetFormat refObjectId="a97a0155-0234-4b87-b4ce-a45da52f2a40" type="source data set"
+                                          uri="../sources/ILCD_Format_a97a0155-0234-4b87-b4ce-a45da52f2a40.xml">
+            <common:shortDescription xml:lang="de">ILCD format 1.1</common:shortDescription>
+         </common:referenceToDataSetFormat>
+      </dataEntryBy>
+      <publicationAndOwnership>
+         <common:dataSetVersion>25.00.000</common:dataSetVersion>
+      </publicationAndOwnership>
+   </administrativeInformation>
+   <units>
+      <unit dataSetInternalID="0">
+         <name>kg Phosphat-Äqv.</name>
+         <meanValue>1</meanValue>
+      </unit>
+   </units>
+</unitGroupDataSet>

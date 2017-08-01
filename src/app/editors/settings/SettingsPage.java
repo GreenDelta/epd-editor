@@ -18,8 +18,10 @@ import app.M;
 import app.editors.BaseEditor;
 import app.editors.Editors;
 import app.editors.SimpleEditorInput;
+import app.navi.Navigator;
 import app.rcp.IniFile;
 import app.util.UI;
+import epd.util.Strings;
 
 public class SettingsPage extends BaseEditor {
 
@@ -51,12 +53,17 @@ public class SettingsPage extends BaseEditor {
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
+		boolean langChange = !Strings.nullOrEqual(App.settings().lang,
+				settings.lang);
 		App.settings().setValues(settings);
 		App.settings().save();
 		dirty = false;
 		if (!ini.equals(originalIni))
 			ini.write();
 		editorDirtyStateChanged();
+		if (langChange) {
+			Navigator.refresh();
+		}
 	}
 
 	private class Page extends FormPage {

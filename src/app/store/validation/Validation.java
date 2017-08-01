@@ -4,6 +4,7 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,7 +26,7 @@ import epd.model.RefStatus;
 
 public class Validation implements IRunnableWithProgress {
 
-	private final HashMap<String, RefStatus> status = new HashMap<>();
+	private final HashMap<String, List<RefStatus>> messages = new HashMap<>();
 
 	private final List<File> files = new ArrayList<>();
 
@@ -37,8 +38,10 @@ public class Validation implements IRunnableWithProgress {
 		for (Ref ref : refs) {
 			File f = App.store.getFile(ref);
 			if (f == null || !f.exists()) {
-				status.put(ref.uuid, RefStatus.error(ref,
-						"#Invalid reference"));
+				RefStatus message = RefStatus.error(ref,
+						"#Invalid reference");
+				messages.put(ref.uuid,
+						Collections.singletonList(message));
 				continue;
 			}
 			files.add(f);
@@ -54,11 +57,19 @@ public class Validation implements IRunnableWithProgress {
 		for (IValidationEvent e : events.getEvents()) {
 			if (e == null || e.getReference() == null)
 				continue;
-			IDatasetReference iRef = e.getReference();
-			RefStatus s = status.get(iRef.getUuid());
-			if (s == null || s.value < Event.statusValue(e.getSeverity()))
-				status.put(iRef.getUuid(), Event.toStatus(e));
+			add(Event.toStatus(e));
 		}
+	}
+
+	private void add(RefStatus m) {
+		if (m.ref == null || m.ref.uuid == null)
+			return;
+		List<RefStatus> list = messages.get(m.ref.uuid);
+		if (list == null) {
+			list = new ArrayList<>();
+			messages.put(m.ref.uuid, list);
+		}
+		list.add(m);
 	}
 
 	private ValidatorChain getValidator() throws InvocationTargetException {
@@ -86,7 +97,28 @@ public class Validation implements IRunnableWithProgress {
 	}
 
 	public List<RefStatus> getStatus() {
-		return new ArrayList<>(status.values());
+		List<RefStatus> all = new ArrayList<>();
+		for (List<RefStatus> list : messages.values()) {
+			boolean filterInfos = hasIssues(list);
+			for (RefStatus s : list) {
+				boolean isInfo = s.value == RefStatus.OK ||
+						s.value == RefStatus.INFO;
+				if (isInfo && filterInfos)
+					continue;
+				all.add(s);
+			}
+		}
+		return all;
+	}
+
+	private boolean hasIssues(List<RefStatus> list) {
+		for (RefStatus s : list) {
+			if (s.value == RefStatus.ERROR
+					|| s.value == RefStatus.WARNING) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

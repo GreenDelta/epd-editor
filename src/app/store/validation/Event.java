@@ -28,7 +28,7 @@ final class Event {
 		ref.uuid = iRef.getUuid();
 		ref.version = iRef.getVersion();
 		return new RefStatus(statusValue(e.getSeverity()),
-				ref, e.getMessage());
+				ref, e.getAspect() + ": " + e.getMessage());
 	}
 
 	static int statusValue(Severity s) {

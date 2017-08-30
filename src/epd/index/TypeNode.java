@@ -3,11 +3,12 @@ package epd.index;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import org.openlca.ilcd.commons.Category;
 import org.openlca.ilcd.commons.Classification;
 import org.openlca.ilcd.commons.DataSetType;
+
+import epd.util.Strings;
 
 public class TypeNode extends Node {
 
@@ -37,7 +38,10 @@ public class TypeNode extends Node {
 
 	private CategoryNode sync(Category category, List<CategoryNode> nodes) {
 		for (CategoryNode node : nodes) {
-			if (Objects.equals(category, node.category))
+			Category other = node.category;
+			if (other == null)
+				continue;
+			if (Strings.nullOrEqual(category.value, other.value))
 				return node;
 		}
 		CategoryNode node = new CategoryNode();

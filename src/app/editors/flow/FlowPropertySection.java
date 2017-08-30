@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.flows.FlowPropertyRef;
@@ -147,7 +148,7 @@ class FlowPropertySection {
 				Ref propRef = ref.flowProperty;
 				if (propRef == null)
 					return null;
-				return App.s(propRef.name);
+				return LangString.getFirst(propRef.name, App.lang());
 			case 1:
 				return Double.toString(ref.meanValue);
 			case 2:

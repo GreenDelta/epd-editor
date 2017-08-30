@@ -64,6 +64,8 @@ public enum Icon {
 
 	RELOAD("reload.png"),
 
+	SEARCH("search.png"),
+
 	SETTINGS("settings.png"),
 
 	SOURCE("source.png"),

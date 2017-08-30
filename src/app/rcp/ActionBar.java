@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.M;
+import app.SearchPage;
 import app.StatusView;
 import app.editors.TranslationView;
 import app.editors.indicators.IndicatorMappingEditor;
@@ -113,9 +114,12 @@ public class ActionBar extends ActionBarAdvisor {
 		super.fillCoolBar(coolBar);
 		IToolBarManager toolbar = new ToolBarManager(SWT.FLAT | SWT.LEFT);
 		coolBar.add(new ToolBarContributionItem(toolbar, "main"));
+		toolbar.add(Actions.create(M.Search, Icon.SEARCH.des(),
+				SearchPage::open));
 		toolbar.add(save);
 		toolbar.add(saveAs);
 		toolbar.add(saveAll);
+
 	}
 
 	private void cleanUp() {

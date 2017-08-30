@@ -3,8 +3,12 @@ package epd.index;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayDeque;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Queue;
+import java.util.Set;
 
 import org.openlca.ilcd.commons.Classification;
 import org.openlca.ilcd.commons.DataSetType;
@@ -73,6 +77,23 @@ public class Index {
 		if (root == null)
 			return null;
 		return root.find(ref);
+	}
+
+	/**
+	 * Collects all data set references from the index.
+	 */
+	public Set<Ref> getRefs() {
+		Set<Ref> refs = new HashSet<>();
+		Queue<Node> queue = new ArrayDeque<>();
+		for (TypeNode node : nodes.values()) {
+			queue.add(node);
+		}
+		while (!queue.isEmpty()) {
+			Node n = queue.poll();
+			refs.addAll(n.refs);
+			queue.addAll(n.categories);
+		}
+		return refs;
 	}
 
 	public void dump(File file) {

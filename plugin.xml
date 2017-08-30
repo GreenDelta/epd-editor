@@ -246,6 +246,13 @@
           name="#Settings"
           class="app.editors.settings.SettingsPage">
     </editor>
+    <editor
+    	  default="false"
+    	  icon="icons/search.png"
+          id="app.SearchPage"
+          name="Search"
+          class="app.SearchPage">
+    </editor>
  </extension>
 
 </plugin>

@@ -62,6 +62,8 @@ public enum Icon {
 
 	QUANTITY("quantity.png"),
 
+	RELOAD("reload.png"),
+
 	SETTINGS("settings.png"),
 
 	SOURCE("source.png"),

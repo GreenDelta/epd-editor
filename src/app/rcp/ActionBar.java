@@ -35,6 +35,7 @@ import app.navi.Navigator;
 import app.navi.TypeElement;
 import app.navi.actions.NewDataSetAction;
 import app.store.CleanUp;
+import app.store.IndexBuilder;
 import app.store.ZipExport;
 import app.store.ZipImport;
 import app.store.validation.Validation;
@@ -76,20 +77,22 @@ public class ActionBar extends ActionBarAdvisor {
 	}
 
 	private MenuManager editMenu() {
-		MenuManager editMenu = new MenuManager(M.Edit,
+		MenuManager m = new MenuManager(M.Edit,
 				IWorkbenchActionConstants.M_EDIT);
-		editMenu.add(Actions.create(M.Settings,
+		m.add(Actions.create(M.Settings,
 				Icon.SETTINGS.des(), SettingsPage::open));
-		editMenu.add(Actions.create(M.TranslationView,
+		m.add(Actions.create(M.TranslationView,
 				Icon.MESSAGE.des(), TranslationView::open));
-		editMenu.add(Actions.create(M.MaterialProperties,
+		m.add(Actions.create(M.MaterialProperties,
 				Icon.QUANTITY.des(), MaterialPropertyEditor::open));
-		editMenu.add(Actions.create(M.IndicatorMappings,
+		m.add(Actions.create(M.IndicatorMappings,
 				Icon.QUANTITY.des(), IndicatorMappingEditor::open));
-		editMenu.add(new Separator());
-		editMenu.add(Actions.create(M.DeleteAllDataSets,
+		m.add(new Separator());
+		m.add(Actions.create(M.ReloadNavigation,
+				Icon.RELOAD.des(), () -> App.run(new IndexBuilder())));
+		m.add(Actions.create(M.DeleteAllDataSets,
 				Icon.DELETE.des(), this::cleanUp));
-		return editMenu;
+		return m;
 	}
 
 	private void addNewMenu(MenuManager fileMenu) {
@@ -120,14 +123,7 @@ public class ActionBar extends ActionBarAdvisor {
 				"#Do you really want to delete all data sets?");
 		if (!b)
 			return;
-		IProgressService progress = PlatformUI.getWorkbench()
-				.getProgressService();
-		try {
-			progress.run(true, true, new CleanUp());
-		} catch (Exception e) {
-			Logger log = LoggerFactory.getLogger(getClass());
-			log.error("failed to delete data sets", e);
-		}
+		App.run(new CleanUp());
 	}
 
 	private void importZip() {
@@ -182,5 +178,4 @@ public class ActionBar extends ActionBarAdvisor {
 			MsgBox.error("#Data validation failed: " + e.getMessage());
 		}
 	}
-
 }

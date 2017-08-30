@@ -3,11 +3,10 @@ package app;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
-import java.util.function.Consumer;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
 import org.openlca.ilcd.commons.LangString;
@@ -100,18 +99,16 @@ public class App {
 		return job;
 	}
 
-	public static void runWithProgress(String name,
-			Consumer<IProgressMonitor> fn) {
+	public static void run(IRunnableWithProgress p) {
+		if (p == null)
+			return;
+		IProgressService progress = PlatformUI.getWorkbench()
+				.getProgressService();
 		try {
-			IProgressService progress = PlatformUI.getWorkbench()
-					.getProgressService();
-			progress.run(true, false, monitor -> {
-				fn.accept(monitor);
-			});
+			progress.run(true, true, p);
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(App.class);
-			log.error("Error while running progress " + name, e);
+			log.error("failed to run " + p.getClass(), e);
 		}
 	}
-
 }

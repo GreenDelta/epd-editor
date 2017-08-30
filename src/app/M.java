@@ -220,6 +220,7 @@ public class M extends NLS {
 
 	public static String RadioactiveWasteDisposed;
 	public static String ReferenceYear;
+	public static String ReloadNavigation;
 	public static String Remove;
 	public static String Representative;
 	public static String ResourceParameters;

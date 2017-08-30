@@ -19,14 +19,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.App;
+import app.M;
 import app.editors.Editors;
-import app.navi.Sync;
-import app.util.MsgBox;
-import epd.index.Index;
 
 /**
  * Deletes all data sets and external documents from the editors
- *
  */
 public class CleanUp implements IRunnableWithProgress {
 
@@ -55,13 +52,8 @@ public class CleanUp implements IRunnableWithProgress {
 					monitor.worked(1);
 				}
 			}
-			monitor.subTask("re-index");
-			if (failors == 0) {
-				App.index = new Index();
-				App.dumpIndex();
-			}
 			monitor.done();
-			App.runInUI("Refresh...", this::refreshUI);
+			App.runInUI(M.ReloadNavigation, this::refreshUI);
 		} catch (Exception e) {
 			throw new InvocationTargetException(e, e.getMessage());
 		}
@@ -98,11 +90,7 @@ public class CleanUp implements IRunnableWithProgress {
 	}
 
 	private void refreshUI() {
-		// TODO: close editors
-		new Sync(App.index).run();
 		Editors.closeAll();
-		MsgBox.info("#Deleted data sets",
-				deleted + " data sets removed. " + failors + " errors");
-		// TODO: re-index if there where errors
+		App.run(new IndexBuilder());
 	}
 }

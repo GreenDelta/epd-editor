@@ -17,6 +17,7 @@ import org.openlca.ilcd.util.Processes;
 
 import app.M;
 import app.editors.RefLink;
+import app.editors.RefTable;
 import app.editors.VersionField;
 import app.util.Controls;
 import app.util.TextBuilder;
@@ -43,6 +44,11 @@ class AdminPage extends FormPage {
 				M.AdministrativeInformation);
 		Composite body = UI.formBody(form, mform.getToolkit());
 		createDataEntrySection(body);
+		RefTable.create(DataSetType.SOURCE,
+				Processes.dataEntry(process).formats)
+				.withEditor(editor)
+				.withTitle(M.DataFormats)
+				.render(body, toolkit);
 		createPublicationSection(body);
 		form.reflow(true);
 	}

@@ -44,6 +44,7 @@ public class M extends NLS {
 
 	public static String Data;
 	public static String DataEntry;
+	public static String DataFormats;
 	public static String DataSetInformation;
 	public static String DataSetReference;
 	public static String DataSetReferences;

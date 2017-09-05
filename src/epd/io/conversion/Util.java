@@ -47,7 +47,8 @@ class Util {
 		Document doc = createDocument();
 		if (extension == null || doc == null)
 			return null;
-		return doc.createElementNS(ProcessExtensions.NAMESPACE, "epd:" + tagName);
+		return doc.createElementNS(ProcessExtensions.NAMESPACE,
+				"epd:" + tagName);
 	}
 
 	static Double getDoubleContent(NodeList nodeList) {
@@ -102,6 +103,19 @@ class Util {
 				matches.add(e);
 		}
 		extension.any.removeAll(matches);
+	}
+
+	/** Returns true if the given extension element is null or empty. */
+	static boolean isEmpty(Other ext) {
+		if (ext == null || ext.any == null)
+			return true;
+		if (ext.any.isEmpty())
+			return true;
+		for (Object o : ext.any) {
+			if (o != null)
+				return false;
+		}
+		return true;
 	}
 
 	static Element getChild(Element root, String... path) {

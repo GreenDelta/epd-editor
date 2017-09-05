@@ -61,15 +61,20 @@ class EpdConverter {
 		ScenarioConverter.writeScenarios(dataSet, other, doc);
 		SafetyMarginsConverter.write(dataSet, other, doc);
 		writeSubType();
+		if (Util.isEmpty(other))
+			info.other = null;
 	}
 
 	private void writeSubType() {
-		Method method = Processes.method(dataSet.process);
-		if (method.other == null)
-			method.other = new Other();
-		Util.clear(method.other, "subType");
-		if (dataSet.subType == null)
+		if (dataSet.subType == null) {
+			Method m = Processes.getMethod(dataSet.process);
+			if (m == null)
+				return;
+			m.other = null;
 			return;
+		}
+		Method method = Processes.method(dataSet.process);
+		method.other = new Other();
 		Element e = Util.createElement(method.other, "subType");
 		e.setTextContent(dataSet.subType.getLabel());
 		method.other.any.add(e);

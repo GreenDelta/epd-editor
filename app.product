@@ -3,6 +3,17 @@
 
 <product name="EPD Editor" uid="epd.editor" id="epd-editor.product" application="epd-editor.application" version="1.0.0.qualifier" useFeatures="false" includeLaunchers="true">
 
+   <aboutInfo>
+      <text>
+         EPD Editor 2.0
+Copyright (c) 2017 GreenDelta. All rights reserved.
+
+This product includes software developed in the EPD Editor
+project and other open source software.
+Visit https://github.com/GreenDelta/epd-editor
+      </text>
+   </aboutInfo>
+
    <configIni use="default">
    </configIni>
 
@@ -24,6 +35,7 @@
          <bmp/>
       </win>
    </launcher>
+
 
    <vm>
    </vm>

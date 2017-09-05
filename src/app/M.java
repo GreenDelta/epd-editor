@@ -6,6 +6,7 @@ public class M extends NLS {
 
 	public static String AbioticResourceDepletionElements;
 	public static String AbioticResourceDepletionFossilFuels;
+	public static String AboutEPDEditor;
 	public static String AccessRestrictions;
 	public static String AccreditedThirdPartyReview;
 	public static String Acidification;
@@ -112,6 +113,7 @@ public class M extends NLS {
 	public static String Group;
 
 	public static String HazardousWaste;
+	public static String Help;
 
 	public static String Import;
 	public static String ImportClassificationFile;

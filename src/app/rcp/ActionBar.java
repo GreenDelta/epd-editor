@@ -49,6 +49,7 @@ public class ActionBar extends ActionBarAdvisor {
 	private IWorkbenchAction save;
 	private IWorkbenchAction saveAs;
 	private IWorkbenchAction saveAll;
+	private IWorkbenchAction about;
 
 	public ActionBar(IActionBarConfigurer conf) {
 		super(conf);
@@ -59,6 +60,8 @@ public class ActionBar extends ActionBarAdvisor {
 		save = ActionFactory.SAVE.create(window);
 		saveAs = ActionFactory.SAVE_AS.create(window);
 		saveAll = ActionFactory.SAVE_ALL.create(window);
+		about = ActionFactory.ABOUT.create(window);
+		about.setText(M.AboutEPDEditor);
 	}
 
 	@Override
@@ -75,6 +78,11 @@ public class ActionBar extends ActionBarAdvisor {
 				Icon.EXPORT.des(), this::exportZip));
 		menuBar.add(fileMenu);
 		menuBar.add(editMenu());
+		MenuManager helpMenu = new MenuManager(M.Help,
+				IWorkbenchActionConstants.M_HELP);
+		helpMenu.add(about);
+		menuBar.add(helpMenu);
+
 	}
 
 	private MenuManager editMenu() {

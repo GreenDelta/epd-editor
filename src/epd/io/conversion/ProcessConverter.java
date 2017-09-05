@@ -42,6 +42,7 @@ class ProcessConverter {
 	}
 
 	private void readExtensions(EpdDataSet dataSet) {
+		readSubType(dataSet);
 		ProcessInfo processInfo = process.processInfo;
 		if (processInfo == null)
 			return;
@@ -54,7 +55,6 @@ class ProcessConverter {
 		List<ModuleEntry> modules = ModuleConverter.readModules(other);
 		dataSet.moduleEntries.addAll(modules);
 		dataSet.safetyMargins = SafetyMarginsConverter.read(other);
-		readSubType(dataSet);
 	}
 
 	private void readSubType(EpdDataSet dataSet) {

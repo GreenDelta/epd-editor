@@ -79,7 +79,7 @@ public class M extends NLS {
 	public static String EPDEditor;
 	public static String EPD_DOWNLOAD_FAILED;
 	public static String EPDs;
-	public static String Edit;
+	public static String Extras;
 	public static String EnvironmentalIndicators;
 	public static String EnvironmentalParameters;
 	public static String Error;

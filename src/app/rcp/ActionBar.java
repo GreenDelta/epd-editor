@@ -77,7 +77,7 @@ public class ActionBar extends ActionBarAdvisor {
 		fileMenu.add(Actions.create(M.ExportDataPackage,
 				Icon.EXPORT.des(), this::exportZip));
 		menuBar.add(fileMenu);
-		menuBar.add(editMenu());
+		menuBar.add(extrasMenu());
 		MenuManager helpMenu = new MenuManager(M.Help,
 				IWorkbenchActionConstants.M_HELP);
 		helpMenu.add(about);
@@ -85,8 +85,8 @@ public class ActionBar extends ActionBarAdvisor {
 
 	}
 
-	private MenuManager editMenu() {
-		MenuManager m = new MenuManager(M.Edit,
+	private MenuManager extrasMenu() {
+		MenuManager m = new MenuManager(M.Extras,
 				IWorkbenchActionConstants.M_EDIT);
 		m.add(Actions.create(M.Settings,
 				Icon.SETTINGS.des(), SettingsPage::open));

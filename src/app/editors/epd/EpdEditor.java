@@ -9,8 +9,11 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.openlca.ilcd.commons.LangString;
+import org.openlca.ilcd.commons.ProcessType;
 import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.processes.AdminInfo;
 import org.openlca.ilcd.processes.DataEntry;
+import org.openlca.ilcd.processes.Method;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.ProcessName;
 import org.openlca.ilcd.processes.Publication;
@@ -75,6 +78,7 @@ public class EpdEditor extends BaseEditor {
 	public void doSave(IProgressMonitor monitor) {
 		try {
 			updateVersion();
+			cleanUpXml();
 			Data.save(dataSet);
 			for (Runnable handler : saveHandlers) {
 				handler.run();
@@ -94,6 +98,17 @@ public class EpdEditor extends BaseEditor {
 		pub.version = v.toString();
 		DataEntry entry = Processes.dataEntry(dataSet.process);
 		entry.timeStamp = Xml.now();
+	}
+
+	private void cleanUpXml() {
+		Method m = Processes.getMethod(dataSet.process);
+		ProcessType type = Processes.getMethod(dataSet.process).processType;
+		if (m != null && type == ProcessType.EPD) {
+			AdminInfo info = Processes.getAdminInfo(dataSet.process);
+			// the dataGenerator element is not allowed in EPD data sets
+			if (info != null)
+				info.dataGenerator = null;
+		}
 	}
 
 	@Override

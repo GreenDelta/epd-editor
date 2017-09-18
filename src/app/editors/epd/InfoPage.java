@@ -64,7 +64,7 @@ class InfoPage extends FormPage {
 				.withEditor(editor)
 				.withTitle(M.ExternalDocumentationSources)
 				.render(body, toolkit);
-		createSafetyMarginsSection(body);
+		createSafetyMarginsSection(body, tb);
 		createTimeSection(body, tb);
 		createGeographySection(body, tb);
 		createTechnologySection(body, tb);
@@ -124,7 +124,7 @@ class InfoPage extends FormPage {
 		});
 	}
 
-	private void createSafetyMarginsSection(Composite parent) {
+	private void createSafetyMarginsSection(Composite parent, TextBuilder tb) {
 		Composite composite = UI.formSection(parent, toolkit,
 				M.SafetyMargins);
 		SafetyMargins margins = dataSet.safetyMargins;
@@ -137,13 +137,7 @@ class InfoPage extends FormPage {
 			marginsText.setText(margins.margins.toString());
 		}
 		marginsText.addModifyListener(e -> modifyMargins(marginsText));
-		Text text = UI.formMultiText(composite, toolkit, M.Description);
-		if (margins.description != null)
-			text.setText(margins.description);
-		text.addModifyListener(e -> {
-			dataSet.safetyMargins.description = text.getText();
-			editor.setDirty();
-		});
+		tb.multiText(composite, M.Description, margins.description);
 	}
 
 	private void modifyMargins(Text text) {

@@ -47,7 +47,7 @@ class Util {
 		Document doc = createDocument();
 		if (extension == null || doc == null)
 			return null;
-		return doc.createElementNS(ProcessExtensions.NAMESPACE,
+		return doc.createElementNS(Extensions.NS_EPD,
 				"epd:" + tagName);
 	}
 

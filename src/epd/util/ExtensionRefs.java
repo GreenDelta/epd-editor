@@ -15,7 +15,7 @@ import org.openlca.ilcd.util.Flows;
 import app.App;
 import app.store.IndicatorMappings;
 import epd.io.conversion.FlowExtensions;
-import epd.io.conversion.ProcessExtensions;
+import epd.io.conversion.Extensions;
 import epd.model.EpdDataSet;
 import epd.model.EpdProduct;
 import epd.model.IndicatorMapping;
@@ -41,7 +41,7 @@ public final class ExtensionRefs {
 
 	private static void add(Process p, List<Ref> refs) {
 		List<IndicatorMapping> indicators = IndicatorMappings.get();
-		EpdDataSet epd = ProcessExtensions.read(p, indicators);
+		EpdDataSet epd = Extensions.read(p, indicators);
 		for (IndicatorResult r : epd.results) {
 			IndicatorMapping im = IndicatorMappings.get(r.indicator);
 			if (im == null)

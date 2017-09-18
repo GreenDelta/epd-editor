@@ -172,7 +172,7 @@ class ResultConverter {
 			Document doc) {
 		if (other == null || mapping == null)
 			return;
-		Element root = doc.createElementNS(ProcessExtensions.NAMESPACE,
+		Element root = doc.createElementNS(Extensions.NS_EPD,
 				"epd:referenceToUnitGroupDataSet");
 		root.setAttribute("type", "unit group data set");
 		root.setAttribute("refObjectId", mapping.unitRefId);

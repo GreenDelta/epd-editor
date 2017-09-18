@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import app.App;
 import app.navi.Sync;
 import epd.io.conversion.FlowExtensions;
-import epd.io.conversion.ProcessExtensions;
+import epd.io.conversion.Extensions;
 import epd.model.EpdDataSet;
 import epd.model.EpdProduct;
 
@@ -21,7 +21,7 @@ public final class Data {
 	public static EpdDataSet getEPD(Ref ref) {
 		try {
 			Process process = App.store.get(Process.class, ref.uuid);
-			EpdDataSet dataSet = ProcessExtensions.read(process,
+			EpdDataSet dataSet = Extensions.read(process,
 					IndicatorMappings.get());
 			return dataSet;
 		} catch (Exception e) {
@@ -35,7 +35,7 @@ public final class Data {
 		if (epd == null)
 			return;
 		try {
-			ProcessExtensions.write(epd, IndicatorMappings.get());
+			Extensions.write(epd, IndicatorMappings.get());
 			save(epd.process);
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Data.class);

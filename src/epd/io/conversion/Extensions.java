@@ -7,12 +7,13 @@ import org.openlca.ilcd.processes.Process;
 import epd.model.EpdDataSet;
 import epd.model.IndicatorMapping;
 
-public class ProcessExtensions {
+public class Extensions {
 
-	static String NAMESPACE = "http://www.iai.kit.edu/EPD/2013";
-	static String NAMESPACE_OLCA = "http://openlca.org/epd_ilcd";
+	static final String NS_EPD = "http://www.iai.kit.edu/EPD/2013";
+	static final String NS_OLCA = "http://openlca.org/epd_ilcd";
+	static final String NS_XML = "http://www.w3.org/XML/1998/namespace";
 
-	private ProcessExtensions() {
+	private Extensions() {
 	}
 
 	public static EpdDataSet read(Process process,

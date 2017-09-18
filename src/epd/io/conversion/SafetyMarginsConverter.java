@@ -2,15 +2,19 @@ package epd.io.conversion;
 
 import java.util.Objects;
 
+import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Other;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import app.App;
 import epd.model.EpdDataSet;
 import epd.model.SafetyMargins;
+import epd.util.Strings;
 
 class SafetyMarginsConverter {
 
@@ -32,19 +36,34 @@ class SafetyMarginsConverter {
 		if (element == null)
 			return false;
 		String nsUri = element.getNamespaceURI();
-		return Objects.equals(nsUri, ProcessExtensions.NAMESPACE)
+		return Objects.equals(nsUri, Extensions.NS_EPD)
 				&& Objects.equals(element.getLocalName(), "safetyMargins");
 	}
 
-	private static SafetyMargins fromElement(Element element) {
+	private static SafetyMargins fromElement(Element e) {
 		SafetyMargins margins = new SafetyMargins();
-		NodeList nodeList = element.getElementsByTagNameNS(
-				ProcessExtensions.NAMESPACE, "margins");
-		Double val = Util.getDoubleContent(nodeList);
+		NodeList nodes = e.getElementsByTagNameNS(
+				Extensions.NS_EPD, "margins");
+		Double val = Util.getDoubleContent(nodes);
 		margins.margins = val;
-		nodeList = element.getElementsByTagNameNS(ProcessExtensions.NAMESPACE,
+		nodes = e.getElementsByTagNameNS(Extensions.NS_EPD,
 				"description");
-		margins.description = Util.getTextContent(nodeList);
+		if (nodes == null)
+			return margins;
+		for (int i = 0; i < nodes.getLength(); i++) {
+			Node n = nodes.item(i);
+			if (!(n instanceof Element))
+				continue;
+			String text = n.getTextContent();
+			if (Strings.nullOrEmpty(text))
+				continue;
+			String lang = ((Element) n).getAttributeNS(
+					Extensions.NS_XML, "lang");
+			if (Strings.nullOrEmpty(lang)) {
+				lang = App.lang();
+			}
+			margins.description.add(LangString.of(text, lang));
+		}
 		return margins;
 	}
 
@@ -61,16 +80,21 @@ class SafetyMarginsConverter {
 
 	private static Element toElement(SafetyMargins margins, Document doc) {
 		try {
-			String nsUri = ProcessExtensions.NAMESPACE;
+			String nsUri = Extensions.NS_EPD;
 			Element root = doc.createElementNS(nsUri, "epd:safetyMargins");
 			if (margins.margins != null) {
 				Element e = doc.createElementNS(nsUri, "epd:margins");
 				root.appendChild(e);
 				e.setTextContent(margins.margins.toString());
 			}
-			if (margins.description != null) {
-				Element e = doc.createElementNS(nsUri, "description");
-				e.setTextContent(margins.description);
+			for (LangString d : margins.description) {
+				if (Strings.nullOrEmpty(d.value))
+					continue;
+				Element e = doc.createElementNS(nsUri, "epd:description");
+				e.setTextContent(d.value);
+				if (!Strings.nullOrEmpty(d.lang)) {
+					e.setAttributeNS(Extensions.NS_XML, "xml:lang", d.lang);
+				}
 				root.appendChild(e);
 			}
 			return root;

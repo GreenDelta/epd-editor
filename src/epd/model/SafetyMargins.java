@@ -1,15 +1,23 @@
 package epd.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.openlca.ilcd.commons.LangString;
+
 public class SafetyMargins {
 
 	public Double margins;
-	public String description;
+	public final List<LangString> description = new ArrayList<>();
 
 	@Override
 	public SafetyMargins clone() {
 		SafetyMargins clone = new SafetyMargins();
 		clone.margins = margins;
-		clone.description = description;
+		for (LangString d : description) {
+			if (d != null)
+				clone.description.add(d.clone());
+		}
 		return clone;
 	}
 }

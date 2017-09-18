@@ -10,23 +10,27 @@ set "DD=%dt:~6,2%"
 
 SET vdate="%version%_%YYYY%_%MM%_%DD%"
 
-IF NOT EXIST win32.win32.x86_64 (
-	ECHO ERROR: Run the PDE - Export first
-	GOTO DONE 
-)
-
-
 if exist dist rmdir dist /s /q
 mkdir dist
 
-REM Copy the Java Runtime
-robocopy jre\win64 win32.win32.x86_64\epd-editor\jre /e
-robocopy default_data win32.win32.x86_64\epd-editor\data /e
+IF EXIST win32.win32.x86_64 (
+	REM Build Windows 64-bit version
+	robocopy jre\win64 win32.win32.x86_64\epd-editor\jre /e
+	robocopy default_data win32.win32.x86_64\epd-editor\data /e
+	cd win32.win32.x86_64
+	..\7za a ..\dist\epd-editor_%vdate%_win64.zip epd-editor
+	cd ..
+)
 
-REM Create the zip packages
-cd win32.win32.x86_64
-..\7za a ..\dist\epd-editor_%vdate%_win64.zip epd-editor
-cd ..
+IF EXIST win32.win32.x86 (
+	REM Build Windows 32-bit version
+	robocopy jre\win32 win32.win32.x86\epd-editor\jre /e
+	robocopy default_data win32.win32.x86\epd-editor\data /e
+	cd win32.win32.x86
+	..\7za a ..\dist\epd-editor_%vdate%_win32.zip epd-editor
+	cd ..
+)
+
 
 REM cd macosx.cocoa.x86_64
 REM ..\7za a ..\dist\epd-editor_%vdate%_macosx.zip epd-editor

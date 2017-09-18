@@ -62,7 +62,7 @@ class ModuleResultExport implements Runnable {
 	private void createHeaders(Workbook workbook, Sheet sheet) {
 		CellStyle style = workbook.createCellStyle();
 		Font font = workbook.createFont();
-		font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+		font.setBold(true);
 		style.setFont(font);
 		Row row = sheet.createRow(0);
 		String[] columns = new String[] { M.Module, M.Scenario,

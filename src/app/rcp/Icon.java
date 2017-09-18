@@ -34,6 +34,8 @@ public enum Icon {
 
 	ERROR("error.png"),
 
+	EXCEL("excel.png"),
+
 	EXPAND("expand.png"),
 
 	EXPORT("export.png"),

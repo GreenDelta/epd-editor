@@ -107,7 +107,7 @@ public class ValidationDialog extends Wizard {
 		private TableViewer table;
 
 		private Page() {
-			super("ValidationDialogPage", "#Validate data set" + ": " +
+			super("ValidationDialogPage", M.ValidateDataSet + ": " +
 					App.header(ref.name, 50), null);
 			setPageComplete(true);
 		}
@@ -123,7 +123,7 @@ public class ValidationDialog extends Wizard {
 
 		private void createCheck(Composite comp) {
 			Button check = new Button(comp, SWT.CHECK);
-			check.setText("#Include dependencies");
+			check.setText(M.IncludeDependentDataSets);
 			Controls.onSelect(check, e -> {
 				if (check.getSelection()) {
 					collectRefs();
@@ -135,7 +135,7 @@ public class ValidationDialog extends Wizard {
 		}
 
 		private void createTable(Composite parent) {
-			table = Tables.createViewer(parent, "#Data set", M.UUID,
+			table = Tables.createViewer(parent, M.DataSet, M.UUID,
 					M.DataSetVersion);
 			table.setLabelProvider(new RefTableLabel());
 			Tables.bindColumnWidths(table, 0.6, 0.2, 0.2);
@@ -145,7 +145,7 @@ public class ValidationDialog extends Wizard {
 		private void collectRefs() {
 			try {
 				getContainer().run(true, false, monitor -> {
-					monitor.beginTask("#Collect references:",
+					monitor.beginTask(M.SearchDependentDataSets,
 							IProgressMonitor.UNKNOWN);
 					allRefs.clear();
 					new DependencyTraversal(App.store).on(ref, ds -> {

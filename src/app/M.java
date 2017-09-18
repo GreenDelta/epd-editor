@@ -121,6 +121,8 @@ public class M extends NLS {
 	public static String ImportDataPackage;
 	public static String Imported;
 	public static String ImportFile;
+
+	public static String IncludeDependentDataSets;
 	public static String IndependentExternalReview;
 	public static String IndependentInternalReview;
 	public static String IndependentReviewPanel;
@@ -307,6 +309,7 @@ public class M extends NLS {
 
 	public static String ValidUntil;
 	public static String Validate;
+	public static String ValidateDataSet;
 	public static String ValidateDataSets;
 	public static String Validation;
 	public static String ValidationProfiles;

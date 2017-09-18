@@ -25,6 +25,7 @@ import app.editors.BaseEditor;
 import app.editors.Editors;
 import app.editors.SimpleEditorInput;
 import app.rcp.Icon;
+import app.util.Actions;
 import app.util.Tables;
 import app.util.UI;
 import app.util.Viewers;
@@ -85,6 +86,9 @@ public class StatusView extends BaseEditor {
 		protected void createFormContent(IManagedForm mform) {
 			FormToolkit tk = mform.getToolkit();
 			ScrolledForm form = UI.formHeader(mform, title);
+			form.getToolBarManager().add(Actions.create(M.Export,
+					Icon.EXCEL.des(), () -> StatusExport.run(stats, title)));
+			form.updateToolBar();
 			Composite body = UI.formBody(form, tk);
 			TableViewer table = Tables.createViewer(body, M.Name, M.UUID,
 					M.DataSetVersion, M.Status);

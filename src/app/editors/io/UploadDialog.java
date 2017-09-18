@@ -107,11 +107,13 @@ public class UploadDialog extends Wizard {
 			UI.filler(comp);
 			createCheck(comp);
 			createTable(parent);
+			App.runInUI(M.SearchDependentDataSets, this::collectRefs);
 		}
 
 		private void createCheck(Composite comp) {
 			Button check = new Button(comp, SWT.CHECK);
-			check.setText("#Synchronize dependencies");
+			check.setText(M.SynchronizeDependentDataSets);
+			check.setSelection(true);
 			Controls.onSelect(check, e -> {
 				if (check.getSelection()) {
 					collectRefs();
@@ -124,7 +126,7 @@ public class UploadDialog extends Wizard {
 		}
 
 		private void createTable(Composite parent) {
-			table = Tables.createViewer(parent, "#Data set", M.UUID,
+			table = Tables.createViewer(parent, M.DataSet, M.UUID,
 					M.DataSetVersion);
 			table.setLabelProvider(new RefTableLabel());
 			Tables.bindColumnWidths(table, 0.6, 0.2, 0.2);
@@ -134,7 +136,7 @@ public class UploadDialog extends Wizard {
 		private void collectRefs() {
 			try {
 				getContainer().run(true, false, monitor -> {
-					monitor.beginTask("#Collect references:",
+					monitor.beginTask(M.SearchDependentDataSets,
 							IProgressMonitor.UNKNOWN);
 					allRefs.clear();
 					new DependencyTraversal(App.store).on(ref, ds -> {

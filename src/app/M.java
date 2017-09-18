@@ -52,6 +52,7 @@ public class M extends NLS {
 	public static String DataSetUploaded;
 	public static String DataSetUploadedMessage;
 	public static String DataSetVersion;
+	public static String DataSet;
 	public static String DataSets;
 	public static String DataSources;
 	public static String DataStock;
@@ -244,6 +245,7 @@ public class M extends NLS {
 	public static String Scenarios;
 	public static String Search;
 	public static String SearchAndDownloads;
+	public static String SearchDependentDataSets;
 	public static String SearchEPDs;
 	public static String SearchEPDs_Description;
 	public static String SearchFailed;
@@ -268,6 +270,7 @@ public class M extends NLS {
 	public static String StartPage;
 	public static String Status;
 	public static String Subtype;
+	public static String SynchronizeDependentDataSets;
 	public static String SynchronizeWithModules;
 	public static String Synonyms;
 

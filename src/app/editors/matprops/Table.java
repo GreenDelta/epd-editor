@@ -62,10 +62,10 @@ class Table {
 	private void onCreate() {
 		if (properties == null)
 			return;
-		MaterialProperty property = new MaterialProperty();
-		property.id = UUID.randomUUID().toString().replace("", "");
-		property.name = "new property";
-		properties.add(property);
+		MaterialProperty p = new MaterialProperty();
+		p.id = "prop" + UUID.randomUUID().toString().replace("-", "");
+		p.name = "new property";
+		properties.add(p);
 		viewer.setInput(properties);
 		editor.setDirty();
 	}

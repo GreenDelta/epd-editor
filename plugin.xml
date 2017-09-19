@@ -27,7 +27,7 @@
          </property>
          <property
                name="aboutText"
-               value="EPD Editor 2.0&#x0A;Copyright (c) 2017 GreenDelta. All rights reserved.&#x0A;&#x0A;This product includes software developed in the EPD Editor&#x0A;project and other open source software.&#x0A;Visit https://github.com/GreenDelta/epd-editor">
+               value="EPD Editor 2.0.1&#x0A;Copyright (c) 2017 GreenDelta. All rights reserved.&#x0A;&#x0A;This product includes software developed in the EPD Editor&#x0A;project and other open source software.&#x0A;Visit https://github.com/GreenDelta/epd-editor">
          </property>
       </product>
    </extension>

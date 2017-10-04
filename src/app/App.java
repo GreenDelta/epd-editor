@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -27,9 +28,13 @@ public class App {
 
 	public static void init() {
 		try {
-			File dir = new File("data");
-			if (!dir.exists())
+			String prop = System.getProperty("user.home");
+			File userDir = new File(prop);
+			File dir = new File(userDir, ".epd-editor");
+			if (!dir.exists()) {
 				dir.mkdirs();
+				initData(dir);
+			}
 			Platform.getInstanceLocation().release();
 			URL workspaceUrl = new URL("file", null, dir.getAbsolutePath());
 			Platform.getInstanceLocation().set(workspaceUrl, true);
@@ -39,6 +44,24 @@ public class App {
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(App.class);
 			log.error("failed to init App", e);
+		}
+	}
+
+	private static void initData(File workspace) {
+		File dataDir = new File("data");
+		if (!dataDir.exists() || !workspace.exists())
+			return;
+		try {
+			for (File f : dataDir.listFiles()) {
+				if (f.isFile()) {
+					FileUtils.copyFileToDirectory(f, workspace);
+				} else {
+					FileUtils.copyDirectoryToDirectory(f, workspace);
+				}
+			}
+		} catch (Exception e) {
+			Logger log = LoggerFactory.getLogger(App.class);
+			log.error("failed to init data folder @" + workspace, e);
 		}
 	}
 

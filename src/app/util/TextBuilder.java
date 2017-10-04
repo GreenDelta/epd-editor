@@ -12,6 +12,7 @@ import org.openlca.ilcd.commons.LangString;
 import app.App;
 import app.editors.IEditor;
 import app.editors.TranslationView;
+import epd.util.Strings;
 
 public class TextBuilder {
 
@@ -49,7 +50,15 @@ public class TextBuilder {
 	private void make(String label, List<LangString> list, Text t) {
 		t.setText(App.s(list));
 		t.addModifyListener(e -> {
-			LangString.set(list, t.getText(), App.lang());
+			String value = t.getText();
+			if (!Strings.nullOrEmpty(value)) {
+				LangString.set(list, value, App.lang());
+			} else {
+				LangString ls = LangString.get(list, App.lang());
+				if (ls != null) {
+					list.remove(ls);
+				}
+			}
 			editor.setDirty();
 		});
 		TranslationView.register(page, label, t, list);

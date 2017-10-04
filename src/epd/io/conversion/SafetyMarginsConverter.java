@@ -72,7 +72,7 @@ class SafetyMarginsConverter {
 			return;
 		Util.clear(other, "safetyMargins");
 		SafetyMargins m = ds.safetyMargins;
-		if (m == null || (m.margins == null && m.description == null))
+		if (m == null || (m.margins == null && m.description.isEmpty()))
 			return;
 		Element element = toElement(m, doc);
 		other.any.add(element);

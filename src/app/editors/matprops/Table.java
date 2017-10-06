@@ -136,13 +136,38 @@ class Table {
 		protected void setText(MaterialProperty p, String text) {
 			if (Objects.equals(p.id, text))
 				return;
-			if (idExists(text)) {
+			if (Strings.nullOrEmpty(text)) {
+				MsgBox.error("#Invalid ID", "The ID cannot be empty.");
+				return;
+			}
+			String id = text.trim();
+			if (idExists(id)) {
 				MsgBox.error("#ID already exists",
 						"#A material property with the given ID already exists.");
 				return;
 			}
-			p.id = text;
+			if (!isValid(id)) {
+				MsgBox.error("#Invalid ID",
+						"#It must start with a letter followed by letters and digits only.");
+				return;
+			}
+			p.id = id;
 			editor.setDirty();
+		}
+
+		private boolean isValid(String id) {
+			char[] chars = id.toCharArray();
+			for (int i = 0; i < chars.length; i++) {
+				char c = chars[i];
+				if (i == 0) {
+					if (!Character.isLetter(c))
+						return false;
+					continue;
+				}
+				if (!Character.isLetterOrDigit(c))
+					return false;
+			}
+			return true;
 		}
 	}
 

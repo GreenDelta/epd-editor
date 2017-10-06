@@ -150,18 +150,18 @@ class MatML {
 			Node node = list.item(i);
 			if (!(node instanceof Element))
 				continue;
-			MaterialProperty property = new MaterialProperty();
-			Element element = (Element) node;
-			property.id = element.getAttribute("id");
-			String name = Util.getTextContent(element.getElementsByTagNameNS(
+			MaterialProperty p = new MaterialProperty();
+			Element e = (Element) node;
+			p.id = e.getAttribute("id");
+			String name = Util.getTextContent(e.getElementsByTagNameNS(
 					NS, "Name"));
-			property.name = name;
-			Element unitElement = Util.getChild(element, "Units");
-			if (unitElement == null)
+			p.name = name;
+			Element unit = Util.getChild(e, "Units");
+			if (unit == null)
 				continue;
-			property.unit = unitElement.getAttribute("name");
-			property.unitDescription = unitElement.getAttribute("description");
-			properties.add(property);
+			p.unit = unit.getAttribute("name");
+			p.unitDescription = unit.getAttribute("description");
+			properties.add(p);
 		}
 		return properties;
 	}

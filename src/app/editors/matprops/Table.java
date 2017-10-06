@@ -2,7 +2,6 @@ package app.editors.matprops;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.BaseLabelProvider;
@@ -16,12 +15,14 @@ import org.eclipse.ui.forms.widgets.Section;
 import app.M;
 import app.rcp.Icon;
 import app.util.Actions;
+import app.util.MsgBox;
 import app.util.Tables;
 import app.util.UI;
 import app.util.Viewers;
 import app.util.tables.ModifySupport;
 import app.util.tables.TextCellModifier;
 import epd.model.MaterialProperty;
+import epd.util.Strings;
 
 class Table {
 
@@ -39,10 +40,11 @@ class Table {
 		this.properties = editor.properties;
 		Composite comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
-		viewer = Tables.createViewer(comp, NAME, UNIT, DESCRIPTION);
+		viewer = Tables.createViewer(comp, "ID", NAME, UNIT, DESCRIPTION);
 		viewer.setLabelProvider(new Label());
-		Tables.bindColumnWidths(viewer, 0.35, 0.25, 0.40);
+		Tables.bindColumnWidths(viewer, 0.1, 0.25, 0.25, 0.40);
 		ModifySupport<MaterialProperty> mf = new ModifySupport<>(viewer);
+		mf.bind("ID", new IdModifier());
 		mf.bind(NAME, new NameModifier());
 		mf.bind(UNIT, new UnitModifier());
 		mf.bind(DESCRIPTION, new DescriptionModifier());
@@ -63,7 +65,15 @@ class Table {
 		if (properties == null)
 			return;
 		MaterialProperty p = new MaterialProperty();
-		p.id = "prop" + UUID.randomUUID().toString().replace("-", "");
+		int i = properties.size() + 1;
+		while (true) {
+			String id = "pr" + i;
+			if (!idExists(id)) {
+				p.id = id;
+				break;
+			}
+			i++;
+		}
 		p.name = "new property";
 		properties.add(p);
 		viewer.setInput(properties);
@@ -79,44 +89,75 @@ class Table {
 		editor.setDirty();
 	}
 
+	private boolean idExists(String id) {
+		for (MaterialProperty p : properties) {
+			if (Strings.nullOrEqual(id, p.id))
+				return true;
+		}
+		return false;
+	}
+
 	private class Label extends BaseLabelProvider implements
 			ITableLabelProvider {
 
 		@Override
-		public Image getColumnImage(Object element, int columnIndex) {
+		public Image getColumnImage(Object obj, int col) {
 			return null;
 		}
 
 		@Override
-		public String getColumnText(Object element, int columnIndex) {
-			if (!(element instanceof MaterialProperty))
+		public String getColumnText(Object obj, int col) {
+			if (!(obj instanceof MaterialProperty))
 				return null;
-			MaterialProperty property = (MaterialProperty) element;
-			switch (columnIndex) {
+			MaterialProperty p = (MaterialProperty) obj;
+			switch (col) {
 			case 0:
-				return property.name;
+				return p.id;
 			case 1:
-				return property.unit;
+				return p.name;
 			case 2:
-				return property.unitDescription;
+				return p.unit;
+			case 3:
+				return p.unitDescription;
 			default:
 				return null;
 			}
 		}
 	}
 
-	private class NameModifier extends TextCellModifier<MaterialProperty> {
+	private class IdModifier extends TextCellModifier<MaterialProperty> {
 
 		@Override
-		protected String getText(MaterialProperty property) {
-			return property.name;
+		protected String getText(MaterialProperty p) {
+			return p.id;
 		}
 
 		@Override
-		protected void setText(MaterialProperty property, String text) {
-			if (Objects.equals(property.name, text))
+		protected void setText(MaterialProperty p, String text) {
+			if (Objects.equals(p.id, text))
 				return;
-			property.name = text;
+			if (idExists(text)) {
+				MsgBox.error("#ID already exists",
+						"#A material property with the given ID already exists.");
+				return;
+			}
+			p.id = text;
+			editor.setDirty();
+		}
+	}
+
+	private class NameModifier extends TextCellModifier<MaterialProperty> {
+
+		@Override
+		protected String getText(MaterialProperty p) {
+			return p.name;
+		}
+
+		@Override
+		protected void setText(MaterialProperty p, String text) {
+			if (Objects.equals(p.name, text))
+				return;
+			p.name = text;
 			editor.setDirty();
 		}
 	}
@@ -124,15 +165,15 @@ class Table {
 	private class UnitModifier extends TextCellModifier<MaterialProperty> {
 
 		@Override
-		protected String getText(MaterialProperty property) {
-			return property.unit;
+		protected String getText(MaterialProperty p) {
+			return p.unit;
 		}
 
 		@Override
-		protected void setText(MaterialProperty property, String text) {
-			if (Objects.equals(property.unit, text))
+		protected void setText(MaterialProperty p, String text) {
+			if (Objects.equals(p.unit, text))
 				return;
-			property.unit = text;
+			p.unit = text;
 			editor.setDirty();
 		}
 	}
@@ -141,15 +182,15 @@ class Table {
 			TextCellModifier<MaterialProperty> {
 
 		@Override
-		protected String getText(MaterialProperty property) {
-			return property.unitDescription;
+		protected String getText(MaterialProperty p) {
+			return p.unitDescription;
 		}
 
 		@Override
-		protected void setText(MaterialProperty property, String text) {
-			if (Objects.equals(property.unitDescription, text))
+		protected void setText(MaterialProperty p, String text) {
+			if (Objects.equals(p.unitDescription, text))
 				return;
-			property.unitDescription = text;
+			p.unitDescription = text;
 			editor.setDirty();
 		}
 	}

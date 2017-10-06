@@ -205,8 +205,14 @@ class InfoPage extends FormPage {
 		if (initial != null)
 			text.setText(initial.toString());
 		text.addModifyListener(e -> {
+			String s = text.getText();
+			if (Strings.nullOrEmpty(s)) {
+				fn.accept(null);
+				editor.setDirty();
+				return;
+			}
 			try {
-				int i = Integer.parseInt(text.getText().trim());
+				int i = Integer.parseInt(s.trim());
 				fn.accept(i);
 				text.setBackground(Colors.white());
 			} catch (Exception ex) {

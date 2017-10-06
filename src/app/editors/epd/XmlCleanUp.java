@@ -3,8 +3,13 @@ package app.editors.epd;
 import org.openlca.ilcd.commons.ProcessType;
 import org.openlca.ilcd.commons.Time;
 import org.openlca.ilcd.processes.AdminInfo;
+import org.openlca.ilcd.processes.Geography;
+import org.openlca.ilcd.processes.Location;
 import org.openlca.ilcd.processes.Method;
+import org.openlca.ilcd.processes.Technology;
 import org.openlca.ilcd.util.Processes;
+
+import com.google.common.base.Strings;
 
 import epd.model.EpdDataSet;
 
@@ -29,6 +34,8 @@ class XmlCleanUp {
 	private void doIt() {
 		removeDataGenerator();
 		checkTime();
+		checkLocation();
+		checkTechnology();
 	}
 
 	private void removeDataGenerator() {
@@ -55,4 +62,36 @@ class XmlCleanUp {
 		ds.process.processInfo.time = null;
 	}
 
+	private void checkLocation() {
+		Geography geo = Processes.getGeography(ds.process);
+		if (geo == null)
+			return;
+		Location loc = geo.location;
+		if (loc == null) {
+			ds.process.processInfo.geography = null;
+			return;
+		}
+		if (!Strings.isNullOrEmpty(loc.code))
+			return;
+		if (!loc.description.isEmpty())
+			return;
+		ds.process.processInfo.geography = null;
+	}
+
+	private void checkTechnology() {
+		Technology tech = Processes.getTechnology(ds.process);
+		if (tech == null)
+			return;
+		if (!tech.applicability.isEmpty())
+			return;
+		if (!tech.description.isEmpty())
+			return;
+		if (!tech.includedProcesses.isEmpty())
+			return;
+		if (!tech.pictures.isEmpty())
+			return;
+		if (tech.pictogram != null)
+			return;
+		ds.process.processInfo.technology = null;
+	}
 }

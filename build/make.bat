@@ -1,6 +1,6 @@
 @echo off
 
-SET version=2.0.1
+SET version=2.0.2
 
 REM see https://stackoverflow.com/questions/19131029/how-to-get-date-in-bat-file
 FOR /f "tokens=2 delims==" %%a IN ('wmic OS Get localdatetime /value') DO SET "dt=%%a"

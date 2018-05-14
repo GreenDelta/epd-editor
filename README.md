@@ -61,6 +61,11 @@ of your workspace and thus may take a bit of time. After this, the project shoul
 have no compile errors and you should be able to open the `app.product` file
 and launch the application (click on `Launch an Eclipse application`).
 
+The target platform is configured for multi-platform builds as described
+[here](https://stackoverflow.com/questions/4261866/eclipse-rcp-how-to-download-delta-pack-from-software-site-in-the-target-definit).
+Additionally, it contains translations from the [Eclipse Babel](https://www.eclipse.org/babel/downloads.php) project.
+You may have to update the target platform when setting up the development environment.
+
 #### Labels and translations
 Labels and translations are externalized in the `src/app/messages*.properties`
 files. The keys in these files map to a static field in the class `app.M` which

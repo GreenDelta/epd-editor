@@ -66,6 +66,20 @@ The target platform is configured for multi-platform builds as described
 Additionally, it contains translations from the [Eclipse Babel](https://www.eclipse.org/babel/downloads.php) project.
 You may have to update the target platform when setting up the development environment.
 
+Also, when updating the target platform it is probably required to update the product
+configuration in `app.product`. Just remove and re-add all required plugins. It is
+important to set the start levels for the following plugings to these values:
+
+```xml
+<configurations>
+  <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
+  <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
+  <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="2" />
+  <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="2" />
+  <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
+</configurations>
+``` 
+
 #### Labels and translations
 Labels and translations are externalized in the `src/app/messages*.properties`
 files. The keys in these files map to a static field in the class `app.M` which

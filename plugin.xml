@@ -211,9 +211,9 @@
     <editor
           default="false"
           icon="icons/quantity.png"
-          id="indicator.mapping.editor"
+          id="epd.profile.editor"
           name="Indicator mappings"
-          class="app.editors.indicators.IndicatorMappingEditor">
+          class="app.editors.indicators.ProfileEditor">
     </editor>
     <editor
           default="false"

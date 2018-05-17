@@ -1,7 +1,5 @@
 package app.editors.indicators;
 
-import java.util.List;
-
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -13,19 +11,16 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 
 import app.M;
-import app.rcp.Labels;
+import app.store.EpdProfiles;
 import app.util.Tables;
 import app.util.UI;
-import epd.model.IndicatorGroup;
-import epd.model.IndicatorMapping;
+import epd.model.Indicator;
+import epd.model.Indicator.Type;
 
 class Page extends FormPage {
 
-	private IndicatorMappingEditor editor;
-
-	Page(IndicatorMappingEditor editor) {
+	Page(ProfileEditor editor) {
 		super(editor, "Page", M.IndicatorMappings);
-		this.editor = editor;
 	}
 
 	@Override
@@ -33,22 +28,18 @@ class Page extends FormPage {
 		FormToolkit tk = mform.getToolkit();
 		ScrolledForm form = UI.formHeader(mform, M.IndicatorMappings);
 		Composite body = UI.formBody(form, mform.getToolkit());
-		for (IndicatorGroup group : IndicatorGroup.values()) {
-			createSection(group, body, tk);
-		}
+		indicatorTable(body, tk);
 		form.reflow(true);
 	}
 
-	private void createSection(IndicatorGroup group, Composite parent,
-			FormToolkit tk) {
-		Composite comp = UI.formSection(parent, tk, Labels.get(group));
+	private void indicatorTable(Composite body, FormToolkit tk) {
+		Composite comp = UI.formSection(body, tk, M.EnvironmentalIndicators);
 		UI.gridLayout(comp, 1);
 		TableViewer table = Tables.createViewer(comp, M.Indicator,
 				M.DataSetReference, M.UnitReference);
 		Tables.bindColumnWidths(table, 0.4, 0.3, 0.3);
 		table.setLabelProvider(new Label());
-		List<IndicatorMapping> list = editor.getGroup(group);
-		table.setInput(list);
+		table.setInput(EpdProfiles.indicators());
 	}
 
 	private class Label extends LabelProvider implements ITableLabelProvider {
@@ -60,20 +51,18 @@ class Page extends FormPage {
 
 		@Override
 		public String getColumnText(Object obj, int col) {
-			if (!(obj instanceof IndicatorMapping))
+			if (!(obj instanceof Indicator))
 				return null;
-			IndicatorMapping im = (IndicatorMapping) obj;
-			if (im.indicator == null)
-				return null;
+			Indicator indicator = (Indicator) obj;
 			switch (col) {
 			case 0:
-				return Labels.get(im.indicator);
+				return indicator.name;
 			case 1:
-				String pref = im.indicator.isInventoryIndicator() ? M.Flow
+				String pref = indicator.type == Type.LCI ? M.Flow
 						: M.LCIAMethod;
-				return pref + ": " + im.indicatorRefId;
+				return pref + ": " + indicator.uuid;
 			case 2:
-				return im.unitLabel + ": " + im.unitRefId;
+				return indicator.unit + ": " + indicator.unitGroupUUID;
 			default:
 				return null;
 			}

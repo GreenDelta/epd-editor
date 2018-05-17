@@ -71,7 +71,8 @@ class ResultConverter {
 			return null;
 		IndicatorResult result = new IndicatorResult();
 		result.indicator = indicator;
-		List<Amount> amounts = AmountConverter.readAmounts(extension);
+		List<Amount> amounts = AmountConverter.readAmounts(
+				extension, profile);
 		result.amounts.addAll(amounts);
 		return result;
 	}

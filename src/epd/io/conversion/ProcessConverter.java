@@ -51,7 +51,7 @@ class ProcessConverter {
 		Other other = dataSetInfo.other;
 		List<Scenario> scenarios = ScenarioConverter.readScenarios(other);
 		dataSet.scenarios.addAll(scenarios);
-		List<ModuleEntry> modules = ModuleConverter.readModules(other);
+		List<ModuleEntry> modules = ModuleConverter.readModules(other, profile);
 		dataSet.moduleEntries.addAll(modules);
 		dataSet.safetyMargins = SafetyMarginsConverter.read(other);
 	}

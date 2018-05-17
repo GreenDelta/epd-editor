@@ -15,13 +15,13 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import epd.model.EpdDataSet;
-import epd.model.Module;
+import epd.model.EpdProfile;
 import epd.model.ModuleEntry;
 import epd.util.Strings;
 
 class ModuleConverter {
 
-	static List<ModuleEntry> readModules(Other other) {
+	static List<ModuleEntry> readModules(Other other, EpdProfile profile) {
 		if (other == null)
 			return Collections.emptyList();
 		for (Object any : other.any) {
@@ -30,7 +30,7 @@ class ModuleConverter {
 			Element element = (Element) any;
 			if (!isValid(element))
 				continue;
-			return fromElement(element);
+			return fromElement(element, profile);
 		}
 		return Collections.emptyList();
 	}
@@ -43,7 +43,8 @@ class ModuleConverter {
 				&& Objects.equals(element.getLocalName(), "modules");
 	}
 
-	private static List<ModuleEntry> fromElement(Element element) {
+	private static List<ModuleEntry> fromElement(Element element,
+			EpdProfile profile) {
 		List<ModuleEntry> modules = new ArrayList<>();
 		NodeList moduleList = element.getElementsByTagNameNS(
 				Extensions.NS_OLCA, "module");
@@ -56,20 +57,20 @@ class ModuleConverter {
 			for (int m = 0; m < attributes.getLength(); m++) {
 				String attribute = attributes.item(m).getLocalName();
 				String value = attributes.item(m).getNodeValue();
-				setAttributeValue(module, attribute, value);
+				setAttributeValue(module, attribute, value, profile);
 			}
 		}
 		return modules;
 	}
 
-	private static void setAttributeValue(ModuleEntry module, String attribute,
-			String value) {
+	private static void setAttributeValue(ModuleEntry e,
+			String attribute, String value, EpdProfile profile) {
 		switch (attribute) {
 		case "name":
-			module.module = Module.fromLabel(value);
+			e.module = profile.module(value);
 			break;
 		case "scenario":
-			module.scenario = value;
+			e.scenario = value;
 			break;
 		}
 	}
@@ -104,7 +105,7 @@ class ModuleConverter {
 			String nsUri = Extensions.NS_OLCA;
 			Element element = document.createElementNS(nsUri, "olca:module");
 			if (module.module != null)
-				element.setAttribute("olca:name", module.module.getLabel());
+				element.setAttribute("olca:name", module.module.name);
 			if (module.scenario != null)
 				element.setAttribute("olca:scenario", module.scenario);
 			if (module.description != null)

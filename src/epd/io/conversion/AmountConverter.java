@@ -13,11 +13,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 
 import epd.model.Amount;
-import epd.model.Module;
+import epd.model.EpdProfile;
 
 class AmountConverter {
 
-	static List<Amount> readAmounts(Other other) {
+	static List<Amount> readAmounts(Other other, EpdProfile profile) {
 		if (other == null)
 			return Collections.emptyList();
 		List<Amount> amounts = new ArrayList<>();
@@ -28,7 +28,7 @@ class AmountConverter {
 			Element element = (Element) any;
 			if (!isValid(element))
 				continue;
-			amounts.add(fromElement(element));
+			amounts.add(fromElement(element, profile));
 		}
 		return amounts;
 	}
@@ -45,7 +45,7 @@ class AmountConverter {
 			return true;
 	}
 
-	static Amount fromElement(Element element) {
+	static Amount fromElement(Element element, EpdProfile profile) {
 		Amount amount = new Amount();
 		amount.value = getValue(element);
 		NamedNodeMap attributes = element.getAttributes();
@@ -54,7 +54,7 @@ class AmountConverter {
 			String attVal = attributes.item(m).getNodeValue();
 			switch (attName) {
 			case "module":
-				amount.module = Module.fromLabel(attVal);
+				amount.module = profile.module(attVal);
 				break;
 			case "scenario":
 				amount.scenario = attVal;
@@ -95,7 +95,7 @@ class AmountConverter {
 			Element element = doc.createElementNS(nsUri, "epd:amount");
 			if (amount.module != null)
 				element.setAttributeNS(nsUri, "epd:module",
-						amount.module.getLabel());
+						amount.module.name);
 			if (amount.scenario != null)
 				element.setAttributeNS(nsUri, "epd:scenario",
 						amount.scenario);

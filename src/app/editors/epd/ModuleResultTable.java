@@ -80,13 +80,14 @@ class ModuleResultTable {
 			Module m2 = other.amount.module;
 			if (m1 == null || m2 == null)
 				return 0;
-			if (m1 != m2)
-				return m1.compareTo(m2);
+			int c = m1.compareTo(m2);
+			if (c != 0)
+				return c;
 
 			// compare by scenarios
 			String s1 = this.amount.scenario;
 			String s2 = other.amount.scenario;
-			int c = Strings.compare(s1, s2);
+			c = Strings.compare(s1, s2);
 			if (c != 0)
 				return c;
 
@@ -117,7 +118,7 @@ class ModuleResultTable {
 			Amount a = row.amount;
 			switch (col) {
 			case 0:
-				return a.module == null ? null : a.module.getLabel();
+				return a.module == null ? null : a.module.name;
 			case 1:
 				return a.scenario;
 			case 2:

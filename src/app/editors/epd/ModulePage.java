@@ -21,6 +21,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import app.App;
 import app.M;
 import app.rcp.Icon;
+import app.store.EpdProfiles;
 import app.util.Actions;
 import app.util.FileChooser;
 import app.util.MsgBox;
@@ -57,7 +58,7 @@ class ModulePage extends FormPage {
 			Module m2 = e2.module;
 			if (m1 == null || m2 == null || m1 == m2)
 				return Strings.compare(e1.scenario, e2.scenario);
-			return m1.ordinal() - m2.ordinal();
+			return m1.index - m2.index;
 		});
 	}
 
@@ -91,7 +92,7 @@ class ModulePage extends FormPage {
 				M.ProductSystem, M.Description };
 		TableViewer table = Tables.createViewer(comp, columns);
 		table.setLabelProvider(new ModuleLabel());
-		Tables.addSorter(table, 0, (ModuleEntry e) -> e.module);
+		Tables.addSorter(table, 0, (ModuleEntry e) -> e.module.name);
 		Tables.addSorter(table, 1, (ModuleEntry e) -> e.scenario);
 		Tables.addSorter(table, 3, (ModuleEntry e) -> e.description);
 		Tables.bindColumnWidths(table, 0.25, 0.25, 0.25, 0.25);
@@ -123,19 +124,23 @@ class ModulePage extends FormPage {
 	}
 
 	private Module nextModule() {
-		Module[] mods = Module.values();
+		Module[] mods = modules();
+		if (mods.length == 0)
+			return null;
 		int selected = 0;
 		for (ModuleEntry e : modules) {
 			for (int i = 0; i < mods.length; i++) {
-				if (e.module != mods[i])
+				if (!Objects.equals(e.module, mods[i]))
 					continue;
-				if (i < selected)
-					break;
-				selected = i + 1;
+				if (i >= selected) {
+					selected = i + 1;
+				}
+				break;
 			}
 		}
-		if (selected < mods.length)
+		if (selected < mods.length) {
 			return mods[selected];
+		}
 		return mods[0];
 	}
 
@@ -200,6 +205,12 @@ class ModulePage extends FormPage {
 		});
 	}
 
+	private Module[] modules() {
+		List<Module> modules = EpdProfiles.modules();
+		modules.sort((m1, m2) -> m1.index - m2.index);
+		return modules.toArray(new Module[modules.size()]);
+	}
+
 	private class ModuleLabel extends LabelProvider implements
 			ITableLabelProvider {
 
@@ -216,7 +227,7 @@ class ModulePage extends FormPage {
 			Module module = entry.module;
 			switch (col) {
 			case 0:
-				return module != null ? module.getLabel() : null;
+				return module != null ? module.name : null;
 			case 1:
 				return entry.scenario;
 			case 2:
@@ -240,14 +251,14 @@ class ModulePage extends FormPage {
 
 		@Override
 		protected Module[] getItems(ModuleEntry element) {
-			return Module.values();
+			return modules();
 		}
 
 		@Override
-		protected String getText(Module type) {
-			if (type == null)
+		protected String getText(Module module) {
+			if (module == null)
 				return "";
-			return type.getLabel();
+			return module.name;
 		}
 
 		@Override

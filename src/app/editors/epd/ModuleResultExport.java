@@ -83,7 +83,7 @@ class ModuleResultExport implements Runnable {
 				if (module == null || indicator == null)
 					continue;
 				Row row = sheet.createRow(rowNumber++);
-				row.createCell(0).setCellValue(module.getLabel());
+				row.createCell(0).setCellValue(module.name);
 				row.createCell(1).setCellValue(amount.scenario);
 				row.createCell(2).setCellValue(indicator.name);
 				if (amount.value != null)

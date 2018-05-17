@@ -96,7 +96,7 @@ class ModuleResultImport implements Runnable {
 
 	private Amount getAmount(Row row) {
 		String moduleName = getString(row.getCell(0));
-		Module module = Module.fromLabel(moduleName);
+		Module module = EpdProfiles.get().module(moduleName);
 		if (module == null)
 			return null;
 		Amount amount = new Amount();

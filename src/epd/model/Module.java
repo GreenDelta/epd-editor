@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import epd.util.Strings;
 
-public class Module {
+public class Module implements Comparable<Module> {
 
 	public int index;
 	public String name;
@@ -17,6 +17,13 @@ public class Module {
 	@Override
 	public int hashCode() {
 		return Objects.hash(name);
+	}
+
+	@Override
+	public int compareTo(Module other) {
+		if (other == null)
+			return 1;
+		return this.index - other.index;
 	}
 
 	@Override

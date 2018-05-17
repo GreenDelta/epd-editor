@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import app.App;
 import epd.model.EpdProfile;
 import epd.model.Indicator;
+import epd.model.Module;
 
 public final class EpdProfiles {
 
@@ -66,6 +67,10 @@ public final class EpdProfiles {
 	/** Get the indicators from the default profile. */
 	public static List<Indicator> indicators() {
 		return get().indicators;
+	}
+
+	public static List<Module> modules() {
+		return get().modules;
 	}
 
 	/** Save the given profile in the workspace. */

@@ -12,6 +12,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 
+import com.google.common.base.Strings;
+
 import epd.model.Amount;
 import epd.model.EpdProfile;
 
@@ -66,7 +68,7 @@ class AmountConverter {
 
 	private static Double getValue(Element element) {
 		String text = element.getTextContent();
-		if (text == null)
+		if (Strings.isNullOrEmpty(text))
 			return null;
 		try {
 			return Double.parseDouble(text);

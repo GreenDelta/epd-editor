@@ -14,11 +14,12 @@ import org.openlca.ilcd.util.Flows;
 
 import app.App;
 import app.store.EpdProfiles;
-import epd.io.conversion.FlowExtensions;
 import epd.io.conversion.Extensions;
+import epd.io.conversion.FlowExtensions;
 import epd.model.EpdDataSet;
 import epd.model.EpdProduct;
-import epd.model.IndicatorMapping;
+import epd.model.Indicator;
+import epd.model.Indicator.Type;
 import epd.model.IndicatorResult;
 
 public final class ExtensionRefs {
@@ -40,37 +41,35 @@ public final class ExtensionRefs {
 	}
 
 	private static void add(Process p, List<Ref> refs) {
-		List<IndicatorMapping> indicators = EpdProfiles.get();
-		EpdDataSet epd = Extensions.read(p, indicators);
+		EpdDataSet epd = Extensions.read(p, EpdProfiles.get());
 		for (IndicatorResult r : epd.results) {
-			IndicatorMapping im = EpdProfiles.get(r.indicator);
-			if (im == null)
+			if (r.indicator == null)
 				continue;
-			indicatorRef(im, refs);
-			unitGroupRef(im, refs);
+			indicatorRef(r.indicator, refs);
+			unitGroupRef(r.indicator, refs);
 		}
 	}
 
-	private static void indicatorRef(IndicatorMapping im, List<Ref> refs) {
-		if (im == null || im.indicator == null)
+	private static void indicatorRef(Indicator indicator, List<Ref> refs) {
+		if (indicator == null)
 			return;
 		Ref ref = new Ref();
-		ref.uuid = im.indicatorRefId;
-		if (im.indicator.isInventoryIndicator())
+		ref.uuid = indicator.uuid;
+		if (indicator.type == Type.LCI)
 			ref.type = DataSetType.FLOW;
 		else
 			ref.type = DataSetType.LCIA_METHOD;
-		LangString.set(ref.name, im.indicatorLabel, App.lang());
+		LangString.set(ref.name, indicator.name, App.lang());
 		if (!ref.isValid() || refs.contains(ref))
 			return;
 		refs.add(ref);
 	}
 
-	private static void unitGroupRef(IndicatorMapping im, List<Ref> refs) {
+	private static void unitGroupRef(Indicator indicator, List<Ref> refs) {
 		Ref ref = new Ref();
-		ref.uuid = im.unitRefId;
+		ref.uuid = indicator.unitGroupUUID;
 		ref.type = DataSetType.UNIT_GROUP;
-		LangString.set(ref.name, im.unitLabel, App.lang());
+		LangString.set(ref.name, indicator.unit, App.lang());
 		if (!ref.isValid() || refs.contains(ref))
 			return;
 		refs.add(ref);

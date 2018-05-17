@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.navi.Sync;
-import epd.io.conversion.FlowExtensions;
 import epd.io.conversion.Extensions;
+import epd.io.conversion.FlowExtensions;
 import epd.model.EpdDataSet;
 import epd.model.EpdProduct;
 
@@ -35,7 +35,7 @@ public final class Data {
 		if (epd == null)
 			return;
 		try {
-			Extensions.write(epd, EpdProfiles.get());
+			Extensions.write(epd);
 			save(epd.process);
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Data.class);

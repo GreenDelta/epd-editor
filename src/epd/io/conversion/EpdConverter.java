@@ -13,7 +13,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import epd.model.EpdDataSet;
-import epd.model.EpdProfile;
 
 /**
  * Converts an EPD to an ILCD process data set
@@ -21,11 +20,9 @@ import epd.model.EpdProfile;
 class EpdConverter {
 
 	private final EpdDataSet dataSet;
-	private final EpdProfile profile;
 
-	public EpdConverter(EpdDataSet dataSet, EpdProfile profile) {
+	public EpdConverter(EpdDataSet dataSet) {
 		this.dataSet = dataSet;
-		this.profile = profile;
 	}
 
 	public void convert() {
@@ -34,7 +31,7 @@ class EpdConverter {
 		if (dataSet.process == null)
 			dataSet.process = new Process();
 		clearResults(dataSet.process);
-		ResultConverter.writeResults(dataSet, profile);
+		ResultConverter.writeResults(dataSet);
 		writeExtensions();
 	}
 

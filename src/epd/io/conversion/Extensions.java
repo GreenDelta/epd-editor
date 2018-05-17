@@ -1,12 +1,9 @@
 package epd.io.conversion;
 
-import java.util.List;
-
 import org.openlca.ilcd.processes.Process;
 
 import epd.model.EpdDataSet;
 import epd.model.EpdProfile;
-import epd.model.IndicatorMapping;
 
 public class Extensions {
 
@@ -17,14 +14,12 @@ public class Extensions {
 	private Extensions() {
 	}
 
-	public static EpdDataSet read(Process process,
-			List<IndicatorMapping> indicators) {
-		return new ProcessConverter(process, indicators).convert();
+	public static EpdDataSet read(Process process, EpdProfile profile) {
+		return new ProcessConverter(process, profile).convert();
 	}
 
-	public static void write(EpdDataSet dataSet,
-			EpdProfile profile) {
-		new EpdConverter(dataSet, indicators).convert();
+	public static void write(EpdDataSet dataSet) {
+		new EpdConverter(dataSet).convert();
 	}
 
 }

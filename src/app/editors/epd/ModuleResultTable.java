@@ -12,7 +12,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
 import app.M;
-import app.rcp.Labels;
 import app.util.Tables;
 import app.util.tables.ModifySupport;
 import app.util.tables.TextCellModifier;
@@ -46,10 +45,9 @@ class ModuleResultTable {
 		viewer.setLabelProvider(label);
 		Tables.addSorter(viewer, 0, (ResultRow r) -> r.amount.module);
 		Tables.addSorter(viewer, 1, (ResultRow r) -> r.amount.scenario);
-		Tables.addSorter(viewer, 2, (ResultRow r) -> r.result.indicator);
+		Tables.addSorter(viewer, 2, (ResultRow r) -> r.result.indicator.name);
 		Tables.addSorter(viewer, 3, (ResultRow r) -> r.amount.value);
-		Tables.addSorter(viewer, 4,
-				(ResultRow r) -> r.result.indicator.getUnit());
+		Tables.addSorter(viewer, 4, (ResultRow r) -> r.result.indicator.unit);
 	}
 
 	public void refresh() {
@@ -99,7 +97,7 @@ class ModuleResultTable {
 			Indicator i2 = other.result.indicator;
 			if (i1 == null || i2 == null)
 				return 0;
-			return i1.compareTo(i2);
+			return Strings.compare(i1.name, i2.name);
 		}
 	}
 
@@ -123,11 +121,11 @@ class ModuleResultTable {
 			case 1:
 				return a.scenario;
 			case 2:
-				return Labels.get(row.result.indicator);
+				return row.result.indicator.name;
 			case 3:
 				return a.value == null ? " - " : a.value.toString();
 			case 4:
-				return row.result.indicator.getUnit();
+				return row.result.indicator.unit;
 			default:
 				return null;
 			}

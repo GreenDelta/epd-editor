@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import app.editors.BaseEditor;
 import app.editors.Editors;
 import app.editors.SimpleEditorInput;
-import app.store.IndicatorMappings;
+import app.store.EpdProfiles;
 import epd.model.IndicatorGroup;
 import epd.model.IndicatorMapping;
 
@@ -29,7 +29,7 @@ public class IndicatorMappingEditor extends BaseEditor {
 	@Override
 	protected void addPages() {
 		try {
-			mappings = IndicatorMappings.get();
+			mappings = EpdProfiles.get();
 			addPage(new Page(this));
 		} catch (Exception e) {
 			log.error("failed to add editor page", e);

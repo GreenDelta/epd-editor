@@ -22,7 +22,7 @@ public final class Data {
 		try {
 			Process process = App.store.get(Process.class, ref.uuid);
 			EpdDataSet dataSet = Extensions.read(process,
-					IndicatorMappings.get());
+					EpdProfiles.get());
 			return dataSet;
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Data.class);
@@ -35,7 +35,7 @@ public final class Data {
 		if (epd == null)
 			return;
 		try {
-			Extensions.write(epd, IndicatorMappings.get());
+			Extensions.write(epd, EpdProfiles.get());
 			save(epd.process);
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Data.class);

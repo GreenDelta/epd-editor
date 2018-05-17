@@ -89,7 +89,7 @@ class ModuleResultExport implements Runnable {
 				row.createCell(2).setCellValue(Labels.get(indicator));
 				if (amount.value != null)
 					row.createCell(3).setCellValue(amount.value);
-				row.createCell(4).setCellValue(indicator.getUnit());
+				row.createCell(4).setCellValue(indicator.unit);
 			}
 		}
 	}

@@ -6,6 +6,9 @@ import app.store.Json;
 
 public class AppSettings {
 
+	/** The ID of the EPD profile that should be used in the application. */
+	public String profile = "EN_15804";
+
 	public String lang = "en";
 	public boolean showDataSetXML = false;
 	public boolean showDataSetDependencies = false;

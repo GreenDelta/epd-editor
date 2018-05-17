@@ -86,15 +86,12 @@ class ResultConverter {
 		return null;
 	}
 
-	static void writeResults(EpdDataSet ds, List<IndicatorMapping> indicators) {
+	static void writeResults(EpdDataSet ds, List<Indicator> indicators) {
 		if (Util.hasNull(ds, ds.process, indicators))
 			return;
 		Document doc = Util.createDocument();
 		for (IndicatorResult result : ds.results) {
 			Indicator indicator = result.indicator;
-			IndicatorMapping mapping = get(indicators, indicator);
-			if (mapping == null)
-				continue;
 			Other other = null;
 			if (indicator.isInventoryIndicator())
 				other = createLciResult(ds.process, mapping);
@@ -116,7 +113,7 @@ class ResultConverter {
 		return null;
 	}
 
-	private static Other createLciResult(Process p, IndicatorMapping mapping) {
+	private static Other createLciResult(Process p, Indicator indicator) {
 		int nextId = 1;
 		for (Exchange e : p.exchanges) {
 			if (e.id >= nextId)

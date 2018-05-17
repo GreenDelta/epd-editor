@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+import app.store.EpdProfiles;
 import epd.model.Amount;
 import epd.model.EpdDataSet;
 import epd.model.Indicator;
@@ -60,7 +61,7 @@ class ModuleResultSync implements Runnable {
 	}
 
 	private void syncResults(ModuleEntry entry) {
-		for (Indicator indicator : Indicator.values()) {
+		for (Indicator indicator : EpdProfiles.indicators()) {
 			IndicatorResult result = dataSet.getResult(indicator);
 			if (result == null) {
 				result = new IndicatorResult();

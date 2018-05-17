@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.M;
-import app.rcp.Labels;
 import epd.model.Amount;
 import epd.model.EpdDataSet;
 import epd.model.Indicator;
@@ -86,7 +85,7 @@ class ModuleResultExport implements Runnable {
 				Row row = sheet.createRow(rowNumber++);
 				row.createCell(0).setCellValue(module.getLabel());
 				row.createCell(1).setCellValue(amount.scenario);
-				row.createCell(2).setCellValue(Labels.get(indicator));
+				row.createCell(2).setCellValue(indicator.name);
 				if (amount.value != null)
 					row.createCell(3).setCellValue(amount.value);
 				row.createCell(4).setCellValue(indicator.unit);

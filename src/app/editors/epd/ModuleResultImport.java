@@ -15,7 +15,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import app.rcp.Labels;
+import app.store.EpdProfiles;
 import epd.model.Amount;
 import epd.model.EpdDataSet;
 import epd.model.Indicator;
@@ -87,9 +87,8 @@ class ModuleResultImport implements Runnable {
 		if (name == null)
 			return null;
 		name = name.trim();
-		for (Indicator indicator : Indicator.values()) {
-			String label = Labels.get(indicator);
-			if (Objects.equals(label, name))
+		for (Indicator indicator : EpdProfiles.indicators()) {
+			if (Objects.equals(indicator.name, name))
 				return indicator;
 		}
 		return null;

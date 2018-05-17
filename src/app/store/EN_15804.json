@@ -8,8 +8,8 @@
 			"group": "RESOURCE_USE",
 			"code": "ADPE",
 			"unit": "kg Sb eq.",
-			"indicatorRef": "f7c73bb9-ab1a-4249-9c6d-379a0de6f67e",
-			"unitRef": "54ccd2d9-a32a-4fc2-923d-f2c8c93e89d4"
+			"uuid": "f7c73bb9-ab1a-4249-9c6d-379a0de6f67e",
+			"unitGroupUUID": "54ccd2d9-a32a-4fc2-923d-f2c8c93e89d4"
 		},
 		{
 			"name": "Abiotic depletion potential for fossil resources",
@@ -17,8 +17,8 @@
 			"group": "RESOURCE_USE",
 			"code": "ADPF",
 			"unit": "MJ",
-			"indicatorRef": "804ebcdf-309d-4098-8ed8-fdaf2f389981",
-			"unitRef": "93a60a57-a3c8-11da-a746-0800200c9a66"
+			"uuid": "804ebcdf-309d-4098-8ed8-fdaf2f389981",
+			"unitGroupUUID": "93a60a57-a3c8-11da-a746-0800200c9a66"
 		},
 		{
 			"name": "Acidification potential of soil and water",
@@ -26,8 +26,8 @@
 			"group": "ENVIRONMENTAL",
 			"code": "AP",
 			"unit": "kg SO2 eq.",
-			"indicatorRef": "b4274add-93b7-4905-a5e4-2e878c4e4216",
-			"unitRef": "bc50c624-a9bc-45b1-a9b0-e6b10d00476f"
+			"uuid": "b4274add-93b7-4905-a5e4-2e878c4e4216",
+			"unitGroupUUID": "bc50c624-a9bc-45b1-a9b0-e6b10d00476f"
 		},
 		{
 			"name": "Components for re-use",
@@ -35,8 +35,8 @@
 			"group": "OUTPUT_FLOWS",
 			"code": "CRU",
 			"unit": "kg",
-			"indicatorRef": "a2b32f97-3fc7-4af2-b209-525bc6426f33",
-			"unitRef": "ad38d542-3fe9-439d-9b95-2f5f7752acaf"
+			"uuid": "a2b32f97-3fc7-4af2-b209-525bc6426f33",
+			"unitGroupUUID": "ad38d542-3fe9-439d-9b95-2f5f7752acaf"
 		},
 		{
 			"name": "Eutrophication potential",
@@ -44,8 +44,8 @@
 			"group": "ENVIRONMENTAL",
 			"code": "EP",
 			"unit": "kg (PO4)3- eq.",
-			"indicatorRef": "f58827d0-b407-4ec6-be75-8b69efb98a0f",
-			"unitRef": "67b5401d-873c-485f-bcf3-6ae83b918822"
+			"uuid": "f58827d0-b407-4ec6-be75-8b69efb98a0f",
+			"unitGroupUUID": "67b5401d-873c-485f-bcf3-6ae83b918822"
 		},
 		{
 			"name": "Exported electrical energy",
@@ -53,8 +53,8 @@
 			"group": "OUTPUT_FLOWS",
 			"code": "EEE",
 			"unit": "MJ",
-			"indicatorRef": "4da0c987-2b76-40d6-9e9e-82a017aaaf29",
-			"unitRef": "93a60a57-a3c8-11da-a746-0800200c9a66"
+			"uuid": "4da0c987-2b76-40d6-9e9e-82a017aaaf29",
+			"unitGroupUUID": "93a60a57-a3c8-11da-a746-0800200c9a66"
 		},
 		{
 			"name": "Exported thermal energy",
@@ -62,8 +62,8 @@
 			"group": "OUTPUT_FLOWS",
 			"code": "EET",
 			"unit": "MJ",
-			"indicatorRef": "98daf38a-7a79-46d3-9a37-2b7bd0955810",
-			"unitRef": "93a60a57-a3c8-11da-a746-0800200c9a66"
+			"uuid": "98daf38a-7a79-46d3-9a37-2b7bd0955810",
+			"unitGroupUUID": "93a60a57-a3c8-11da-a746-0800200c9a66"
 		},
 		{
 			"name": "Global warming potential",
@@ -71,8 +71,8 @@
 			"group": "ENVIRONMENTAL",
 			"code": "GWP",
 			"unit": "kg CO2 eq.",
-			"indicatorRef": "77e416eb-a363-4258-a04e-171d843a6460",
-			"unitRef": "1ebf3012-d0db-4de2-aefd-ef30cedb0be1"
+			"uuid": "77e416eb-a363-4258-a04e-171d843a6460",
+			"unitGroupUUID": "1ebf3012-d0db-4de2-aefd-ef30cedb0be1"
 		},
 		{
 			"name": "Hazardous waste disposed",
@@ -80,8 +80,8 @@
 			"group": "WASTE_DISPOSAL",
 			"code": "HWD",
 			"unit": "kg",
-			"indicatorRef": "430f9e0f-59b2-46a0-8e0d-55e0e84948fc",
-			"unitRef": "ad38d542-3fe9-439d-9b95-2f5f7752acaf"
+			"uuid": "430f9e0f-59b2-46a0-8e0d-55e0e84948fc",
+			"unitGroupUUID": "ad38d542-3fe9-439d-9b95-2f5f7752acaf"
 		},
 		{
 			"name": "Materials for energy recovery",
@@ -89,8 +89,8 @@
 			"group": "OUTPUT_FLOWS",
 			"code": "MER",
 			"unit": "kg",
-			"indicatorRef": "59a9181c-3aaf-46ee-8b13-2b3723b6e447",
-			"unitRef": "ad38d542-3fe9-439d-9b95-2f5f7752acaf"
+			"uuid": "59a9181c-3aaf-46ee-8b13-2b3723b6e447",
+			"unitGroupUUID": "ad38d542-3fe9-439d-9b95-2f5f7752acaf"
 		},
 		{
 			"name": "Materials for recycling",
@@ -98,17 +98,18 @@
 			"group": "OUTPUT_FLOWS",
 			"code": "MFR",
 			"unit": "kg",
-			"indicatorRef": "d7fe48a5-4103-49c8-9aae-b0b5dfdbd6ae",
-			"unitRef": "ad38d542-3fe9-439d-9b95-2f5f7752acaf"
+			"uuid": "d7fe48a5-4103-49c8-9aae-b0b5dfdbd6ae",
+			"unitGroupUUID": "ad38d542-3fe9-439d-9b95-2f5f7752acaf"
 		},
 		{
 			"name": "Use of net fresh water",
 			"type": "LCI",
 			"group": "RESOURCE_USE",
+			"isInput": true,
 			"code": "FW",
 			"unit": "m3",
-			"indicatorRef": "3cf952c8-f3a4-461d-8c96-96456ca62246",
-			"unitRef": "cd950537-0a98-4044-9ba7-9f9a68d0a504"
+			"uuid": "3cf952c8-f3a4-461d-8c96-96456ca62246",
+			"unitGroupUUID": "cd950537-0a98-4044-9ba7-9f9a68d0a504"
 		},
 		{
 			"name": "Non hazardous waste dispose",
@@ -116,35 +117,38 @@
 			"group": "WASTE_DISPOSAL",
 			"code": "NHWD",
 			"unit": "kg",
-			"indicatorRef": "b29ef66b-e286-4afa-949f-62f1a7b4d7fa",
-			"unitRef": "ad38d542-3fe9-439d-9b95-2f5f7752acaf"
+			"uuid": "b29ef66b-e286-4afa-949f-62f1a7b4d7fa",
+			"unitGroupUUID": "ad38d542-3fe9-439d-9b95-2f5f7752acaf"
 		},
 		{
 			"name": "Use of non renewable primary energy",
 			"type": "LCI",
 			"group": "RESOURCE_USE",
+			"isInput": true,
 			"code": "PENRE",
 			"unit": "MJ",
-			"indicatorRef": "ac857178-2b45-46ec-892a-a9a4332f0372",
-			"unitRef": "93a60a57-a3c8-11da-a746-0800200c9a66"
+			"uuid": "ac857178-2b45-46ec-892a-a9a4332f0372",
+			"unitGroupUUID": "93a60a57-a3c8-11da-a746-0800200c9a66"
 		},
 		{
 			"name": "Use of non renewable primary energy resources used as raw materials",
 			"type": "LCI",
 			"group": "RESOURCE_USE",
+			"isInput": true,
 			"code": "PENRM",
 			"unit": "MJ",
-			"indicatorRef": "1421caa0-679d-4bf4-b282-0eb850ccae27",
-			"unitRef": "93a60a57-a3c8-11da-a746-0800200c9a66"
+			"uuid": "1421caa0-679d-4bf4-b282-0eb850ccae27",
+			"unitGroupUUID": "93a60a57-a3c8-11da-a746-0800200c9a66"
 		},
 		{
 			"name": "Use of non renewable secondary fuels",
 			"type": "LCI",
 			"group": "RESOURCE_USE",
+			"isInput": true,
 			"code": "NRSF",
 			"unit": "MJ",
-			"indicatorRef": "89def144-d39a-4287-b86f-efde453ddcb2",
-			"unitRef": "93a60a57-a3c8-11da-a746-0800200c9a66"
+			"uuid": "89def144-d39a-4287-b86f-efde453ddcb2",
+			"unitGroupUUID": "93a60a57-a3c8-11da-a746-0800200c9a66"
 		},
 		{
 			"name": "Depletion potential of the stratospheric ozone layer",
@@ -152,8 +156,8 @@
 			"group": "ENVIRONMENTAL",
 			"code": "ODP",
 			"unit": "kg CFC 11 eq.",
-			"indicatorRef": "06dcd26f-025f-401a-a7c1-5e457eb54637",
-			"unitRef": "88054749-b0a6-47ea-a82b-dc5b29326512"
+			"uuid": "06dcd26f-025f-401a-a7c1-5e457eb54637",
+			"unitGroupUUID": "88054749-b0a6-47ea-a82b-dc5b29326512"
 		},
 		{
 			"name": "Formation potential of tropospheric ozone",
@@ -161,8 +165,8 @@
 			"group": "ENVIRONMENTAL",
 			"code": "POCP",
 			"unit": "kg C2H2 eq.",
-			"indicatorRef": "1e84a202-dae6-42aa-9e9d-71ea48b8be00",
-			"unitRef": "01c26c17-9a76-406e-8295-f17b55fd909e"
+			"uuid": "1e84a202-dae6-42aa-9e9d-71ea48b8be00",
+			"unitGroupUUID": "01c26c17-9a76-406e-8295-f17b55fd909e"
 		},
 		{
 			"name": "Radioactive waste disposed",
@@ -170,62 +174,68 @@
 			"group": "WASTE_DISPOSAL",
 			"code": "RWD",
 			"unit": "kg",
-			"indicatorRef": "3449546e-52ad-4b39-b809-9fb77cea8ff6",
-			"unitRef": "ad38d542-3fe9-439d-9b95-2f5f7752acaf"
+			"uuid": "3449546e-52ad-4b39-b809-9fb77cea8ff6",
+			"unitGroupUUID": "ad38d542-3fe9-439d-9b95-2f5f7752acaf"
 		},
 		{
 			"name": "Use of renewable primary energy",
 			"type": "LCI",
 			"group": "RESOURCE_USE",
+			"isInput": true,
 			"code": "PERE",
 			"unit": "MJ",
-			"indicatorRef": "20f32be5-0398-4288-9b6d-accddd195317",
-			"unitRef": "93a60a57-a3c8-11da-a746-0800200c9a66"
+			"uuid": "20f32be5-0398-4288-9b6d-accddd195317",
+			"unitGroupUUID": "93a60a57-a3c8-11da-a746-0800200c9a66"
 		},
 		{
 			"name": "Use of renewable primary energy resources used as raw materials",
 			"type": "LCI",
 			"group": "RESOURCE_USE",
+			"isInput": true,
 			"code": "PERM",
 			"unit": "MJ",
-			"indicatorRef": "fb3ec0de-548d-4508-aea5-00b73bf6f702",
-			"unitRef": "93a60a57-a3c8-11da-a746-0800200c9a66"
+			"uuid": "fb3ec0de-548d-4508-aea5-00b73bf6f702",
+			"unitGroupUUID": "93a60a57-a3c8-11da-a746-0800200c9a66"
 		},
 		{
 			"name": "Use of renewable secondary fuels",
 			"type": "LCI",
 			"group": "RESOURCE_USE",
+			"isInput": true,
 			"code": "RSF",
 			"unit": "MJ",
-			"indicatorRef": "64333088-a55f-4aa2-9a31-c10b07816787",
-			"unitRef": "93a60a57-a3c8-11da-a746-0800200c9a66"
+			"uuid": "64333088-a55f-4aa2-9a31-c10b07816787",
+			"unitGroupUUID": "93a60a57-a3c8-11da-a746-0800200c9a66"
 		},
 		{
 			"name": "Use of secondary material",
 			"type": "LCI",
 			"group": "RESOURCE_USE",
+			"isInput": true,
 			"code": "SM",
 			"unit": "kg",
-			"indicatorRef": "c6a1f35f-2d09-4f54-8dfb-97e502e1ce92",
-			"unitRef": "ad38d542-3fe9-439d-9b95-2f5f7752acaf"
+			"uuid": "c6a1f35f-2d09-4f54-8dfb-97e502e1ce92",
+			"unitGroupUUID": "ad38d542-3fe9-439d-9b95-2f5f7752acaf"
 		},
 		{
 			"name": "Total use of non renewable primary energy resource",
 			"type": "LCI",
 			"group": "RESOURCE_USE",
+			"isInput": true,
 			"code": "PENRT",
 			"unit": "MJ",
-			"indicatorRef": "06159210-646b-4c8d-8583-da9b3b95a6c1",
-			"unitRef": "93a60a57-a3c8-11da-a746-0800200c9a66"
+			"uuid": "06159210-646b-4c8d-8583-da9b3b95a6c1",
+			"unitGroupUUID": "93a60a57-a3c8-11da-a746-0800200c9a66"
 		},
 		{
 			"name": "Total use of renewable primary energy resources",
 			"type": "LCI",
 			"group": "RESOURCE_USE",
+			"isInput": true,
 			"code": "PERT",
 			"unit": "MJ",
-			"indicatorRef": "53f97275-fa8a-4cdd-9024-65936002acd0",
-			"unitRef": "93a60a57-a3c8-11da-a746-0800200c9a66"
+			"uuid": "53f97275-fa8a-4cdd-9024-65936002acd0",
+			"unitGroupUUID": "93a60a57-a3c8-11da-a746-0800200c9a66"
 		}
 	]
 }

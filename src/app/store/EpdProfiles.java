@@ -2,6 +2,7 @@ package app.store;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Objects;
 
 import org.slf4j.Logger;
@@ -62,14 +63,20 @@ public final class EpdProfiles {
 		return profile;
 	}
 
-	public static Indicator getIndicator(String indicatorID) {
-		if (indicatorID == null)
+	/** Get the indicator with the given ID from the default profile. */
+	public static Indicator indicator(String uuid) {
+		if (uuid == null)
 			return null;
 		for (Indicator i : get().indicators) {
-			if (Objects.equals(indicatorID, i.indicatorRef))
+			if (Objects.equals(uuid, i.uuid))
 				return i;
 		}
 		return null;
+	}
+
+	/** Get the indicators from the default profile. */
+	public static List<Indicator> indicators() {
+		return get().indicators;
 	}
 
 	/** Save the given profile in the workspace. */

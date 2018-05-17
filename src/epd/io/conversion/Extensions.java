@@ -5,6 +5,7 @@ import java.util.List;
 import org.openlca.ilcd.processes.Process;
 
 import epd.model.EpdDataSet;
+import epd.model.EpdProfile;
 import epd.model.IndicatorMapping;
 
 public class Extensions {
@@ -22,7 +23,7 @@ public class Extensions {
 	}
 
 	public static void write(EpdDataSet dataSet,
-			List<IndicatorMapping> indicators) {
+			EpdProfile profile) {
 		new EpdConverter(dataSet, indicators).convert();
 	}
 

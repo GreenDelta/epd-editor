@@ -21,17 +21,24 @@ public class Indicator {
 
 	public Type type;
 
+	/**
+	 * This is only relevant for LCI indicators which are exported as exchanges
+	 * in the ILCD format. An LCI indicator is an input indicator if and only if
+	 * this field has the value `true`.
+	 */
+	public Boolean isInput;
+
 	public String group;
 
 	public String unit;
 
 	/** The UUID of the ILCD indicator data set. */
-	public String indicatorRef;
+	public String uuid;
 
 	/**
 	 * The UUID of the ILCD unit group data set. The reference unit of this unit
 	 * group data set is the unit in which is indicator is quantified.
 	 */
-	public String unitRef;
+	public String unitGroupUUID;
 
 }

@@ -13,7 +13,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import epd.model.EpdDataSet;
-import epd.model.IndicatorMapping;
+import epd.model.EpdProfile;
 
 /**
  * Converts an EPD to an ILCD process data set
@@ -21,11 +21,11 @@ import epd.model.IndicatorMapping;
 class EpdConverter {
 
 	private final EpdDataSet dataSet;
-	private final List<IndicatorMapping> indicators;
+	private final EpdProfile profile;
 
-	public EpdConverter(EpdDataSet dataSet, List<IndicatorMapping> indicators) {
+	public EpdConverter(EpdDataSet dataSet, EpdProfile profile) {
 		this.dataSet = dataSet;
-		this.indicators = indicators;
+		this.profile = profile;
 	}
 
 	public void convert() {
@@ -34,7 +34,7 @@ class EpdConverter {
 		if (dataSet.process == null)
 			dataSet.process = new Process();
 		clearResults(dataSet.process);
-		ResultConverter.writeResults(dataSet, indicators);
+		ResultConverter.writeResults(dataSet, profile);
 		writeExtensions();
 	}
 

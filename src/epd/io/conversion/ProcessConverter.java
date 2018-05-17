@@ -11,7 +11,7 @@ import org.w3c.dom.Element;
 
 import epd.model.Amount;
 import epd.model.EpdDataSet;
-import epd.model.IndicatorMapping;
+import epd.model.EpdProfile;
 import epd.model.IndicatorResult;
 import epd.model.ModuleEntry;
 import epd.model.Scenario;
@@ -23,12 +23,11 @@ import epd.model.SubType;
 class ProcessConverter {
 
 	private final Process process;
-	private final List<IndicatorMapping> indicators;
+	private final EpdProfile profile;
 
-	public ProcessConverter(Process process,
-			List<IndicatorMapping> indicators) {
+	public ProcessConverter(Process process, EpdProfile profile) {
 		this.process = process;
-		this.indicators = indicators;
+		this.profile = profile;
 	}
 
 	public EpdDataSet convert() {
@@ -71,8 +70,8 @@ class ProcessConverter {
 	}
 
 	private void mapResults(EpdDataSet dataSet) {
-		List<IndicatorResult> results = ResultConverter.readResults(process,
-				indicators);
+		List<IndicatorResult> results = ResultConverter.readResults(
+				process, profile);
 		dataSet.results.addAll(results);
 		// data sets may not have the module-entry extension, thus we have to
 		// find the module entries for such data sets from the results

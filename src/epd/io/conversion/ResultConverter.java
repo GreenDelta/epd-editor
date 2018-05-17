@@ -3,7 +3,6 @@ package epd.io.conversion;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.ExchangeDirection;
@@ -20,29 +19,29 @@ import org.w3c.dom.Element;
 import app.App;
 import epd.model.Amount;
 import epd.model.EpdDataSet;
+import epd.model.EpdProfile;
 import epd.model.Indicator;
-import epd.model.IndicatorGroup;
-import epd.model.IndicatorMapping;
+import epd.model.Indicator.Type;
 import epd.model.IndicatorResult;
 
 class ResultConverter {
 
 	static List<IndicatorResult> readResults(Process process,
-			List<IndicatorMapping> config) {
-		if (process == null || config == null)
+			EpdProfile profile) {
+		if (process == null || profile == null)
 			return Collections.emptyList();
 		List<IndicatorResult> results = new ArrayList<>();
-		results.addAll(readLciResults(process, config));
-		results.addAll(readLciaResults(process, config));
+		results.addAll(readLciResults(process, profile));
+		results.addAll(readLciaResults(process, profile));
 		return results;
 	}
 
 	private static List<IndicatorResult> readLciResults(Process process,
-			List<IndicatorMapping> config) {
+			EpdProfile profile) {
 		List<IndicatorResult> results = new ArrayList<>();
 		for (Exchange exchange : process.exchanges) {
 			IndicatorResult result = readResult(exchange.flow,
-					exchange.other, config);
+					exchange.other, profile);
 			if (result != null)
 				results.add(result);
 		}
@@ -50,13 +49,13 @@ class ResultConverter {
 	}
 
 	private static List<IndicatorResult> readLciaResults(Process process,
-			List<IndicatorMapping> config) {
+			EpdProfile profile) {
 		List<IndicatorResult> results = new ArrayList<>();
 		if (process.lciaResults == null)
 			return results;
 		for (LCIAResult element : process.lciaResults) {
 			IndicatorResult result = readResult(element.method,
-					element.other, config);
+					element.other, profile);
 			if (result != null)
 				results.add(result);
 		}
@@ -64,10 +63,10 @@ class ResultConverter {
 	}
 
 	private static IndicatorResult readResult(Ref ref,
-			Other extension, List<IndicatorMapping> indicators) {
+			Other extension, EpdProfile profile) {
 		if (ref == null)
 			return null;
-		Indicator indicator = get(indicators, ref.uuid);
+		Indicator indicator = profile.indicator(ref.uuid);
 		if (indicator == null)
 			return null;
 		IndicatorResult result = new IndicatorResult();
@@ -77,40 +76,24 @@ class ResultConverter {
 		return result;
 	}
 
-	private static Indicator get(List<IndicatorMapping> indicators,
-			String uuid) {
-		for (IndicatorMapping i : indicators) {
-			if (Objects.equals(i.indicatorRefId, uuid))
-				return i.indicator;
-		}
-		return null;
-	}
-
-	static void writeResults(EpdDataSet ds, List<Indicator> indicators) {
-		if (Util.hasNull(ds, ds.process, indicators))
+	static void writeResults(EpdDataSet ds) {
+		if (ds == null || ds.process == null)
 			return;
 		Document doc = Util.createDocument();
 		for (IndicatorResult result : ds.results) {
 			Indicator indicator = result.indicator;
+			if (indicator == null)
+				continue;
 			Other other = null;
-			if (indicator.isInventoryIndicator())
-				other = createLciResult(ds.process, mapping);
+			if (indicator.type == Type.LCI)
+				other = createLciResult(ds.process, indicator);
 			else
-				other = createLciaResult(ds.process, mapping);
+				other = createLciaResult(ds.process, indicator);
 			if (other != null) {
 				AmountConverter.writeAmounts(result.amounts, other, doc);
-				addUnitRef(other, mapping, doc);
+				addUnitRef(other, indicator, doc);
 			}
 		}
-	}
-
-	private static IndicatorMapping get(List<IndicatorMapping> indicators,
-			Indicator indicator) {
-		for (IndicatorMapping i : indicators) {
-			if (i.indicator == indicator)
-				return i;
-		}
-		return null;
 	}
 
 	private static Other createLciResult(Process p, Indicator indicator) {
@@ -122,62 +105,61 @@ class ResultConverter {
 		Exchange e = new Exchange();
 		e.id = nextId;
 		p.exchanges.add(e);
-		e.flow = createRef(mapping, true);
-		setExchangeAttributes(mapping, e);
+		e.flow = createRef(indicator, true);
+		setExchangeAttributes(indicator, e);
 		Other other = new Other();
 		e.other = other;
 		return other;
 	}
 
-	private static void setExchangeAttributes(IndicatorMapping mapping,
+	private static void setExchangeAttributes(Indicator indicator,
 			Exchange exchange) {
-		exchange.exchangeFunction = ExchangeFunction.GENERAL_REMINDER_FLOW;
-		Indicator indicator = mapping.indicator;
 		if (indicator == null)
 			return;
-		if (indicator.getGroup() == IndicatorGroup.RESOURCE_USE)
+		exchange.exchangeFunction = ExchangeFunction.GENERAL_REMINDER_FLOW;
+		if (indicator.isInput != null && indicator.isInput)
 			exchange.direction = ExchangeDirection.INPUT;
 		else
 			exchange.direction = ExchangeDirection.OUTPUT;
 	}
 
 	private static Other createLciaResult(Process process,
-			IndicatorMapping mapping) {
+			Indicator indicator) {
 		LCIAResult r = new LCIAResult();
 		process.add(r);
-		r.method = createRef(mapping, false);
+		r.method = createRef(indicator, false);
 		Other other = new Other();
 		r.other = other;
 		return other;
 	}
 
-	private static Ref createRef(IndicatorMapping mapping,
+	private static Ref createRef(Indicator indicator,
 			boolean forFlow) {
-		if (mapping == null)
+		if (indicator == null)
 			return null;
 		Ref ref = new Ref();
-		ref.uuid = mapping.indicatorRefId;
+		ref.uuid = indicator.uuid;
 		String path = forFlow ? "flows" : "lciamethods";
-		ref.uri = "../" + path + "/" + mapping.indicatorRefId;
+		ref.uri = "../" + path + "/" + indicator.uuid;
 		ref.type = forFlow ? DataSetType.FLOW
 				: DataSetType.LCIA_METHOD;
-		LangString.set(ref.name, mapping.indicatorLabel, App.lang());
+		LangString.set(ref.name, indicator.name, App.lang());
 		return ref;
 	}
 
-	private static void addUnitRef(Other other, IndicatorMapping mapping,
+	private static void addUnitRef(Other other, Indicator indicator,
 			Document doc) {
-		if (other == null || mapping == null)
+		if (other == null || indicator == null)
 			return;
 		Element root = doc.createElementNS(Extensions.NS_EPD,
 				"epd:referenceToUnitGroupDataSet");
 		root.setAttribute("type", "unit group data set");
-		root.setAttribute("refObjectId", mapping.unitRefId);
-		String uri = "../unitgroups/" + mapping.unitRefId;
+		root.setAttribute("refObjectId", indicator.unitGroupUUID);
+		String uri = "../unitgroups/" + indicator.unitGroupUUID;
 		root.setAttribute("uri", uri);
 		Element description = doc.createElementNS(
 				"http://lca.jrc.it/ILCD/Common", "common:shortDescription");
-		description.setTextContent(mapping.unitLabel);
+		description.setTextContent(indicator.unit);
 		root.appendChild(description);
 		other.any.add(root);
 	}

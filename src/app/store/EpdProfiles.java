@@ -63,17 +63,6 @@ public final class EpdProfiles {
 		return profile;
 	}
 
-	/** Get the indicator with the given ID from the default profile. */
-	public static Indicator indicator(String uuid) {
-		if (uuid == null)
-			return null;
-		for (Indicator i : get().indicators) {
-			if (Objects.equals(uuid, i.uuid))
-				return i;
-		}
-		return null;
-	}
-
 	/** Get the indicators from the default profile. */
 	public static List<Indicator> indicators() {
 		return get().indicators;

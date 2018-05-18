@@ -61,9 +61,10 @@ class Page extends FormPage {
 			case 0:
 				return indicator.name;
 			case 1:
-				String pref = indicator.type == Type.LCI ? M.Flow
+				String type = indicator.type == Type.LCI
+						? M.Flow
 						: M.LCIAMethod;
-				return pref + ": " + indicator.uuid;
+				return type + ": " + indicator.uuid;
 			case 2:
 				return indicator.unit + ": " + indicator.unitGroupUUID;
 			default:

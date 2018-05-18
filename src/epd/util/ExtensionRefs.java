@@ -19,7 +19,6 @@ import epd.io.conversion.FlowExtensions;
 import epd.model.EpdDataSet;
 import epd.model.EpdProduct;
 import epd.model.Indicator;
-import epd.model.Indicator.Type;
 import epd.model.IndicatorResult;
 
 public final class ExtensionRefs {
@@ -45,34 +44,15 @@ public final class ExtensionRefs {
 		for (IndicatorResult r : epd.results) {
 			if (r.indicator == null)
 				continue;
-			indicatorRef(r.indicator, refs);
-			unitGroupRef(r.indicator, refs);
+			Ref iRef = r.indicator.getRef(App.lang());
+			if (iRef.isValid() && !refs.contains(iRef)) {
+				refs.add(iRef);
+			}
+			Ref uRef = r.indicator.getUnitGroupRef(App.lang());
+			if (uRef.isValid() && !refs.contains(uRef)) {
+				refs.add(iRef);
+			}
 		}
-	}
-
-	private static void indicatorRef(Indicator indicator, List<Ref> refs) {
-		if (indicator == null)
-			return;
-		Ref ref = new Ref();
-		ref.uuid = indicator.uuid;
-		if (indicator.type == Type.LCI)
-			ref.type = DataSetType.FLOW;
-		else
-			ref.type = DataSetType.LCIA_METHOD;
-		LangString.set(ref.name, indicator.name, App.lang());
-		if (!ref.isValid() || refs.contains(ref))
-			return;
-		refs.add(ref);
-	}
-
-	private static void unitGroupRef(Indicator indicator, List<Ref> refs) {
-		Ref ref = new Ref();
-		ref.uuid = indicator.unitGroupUUID;
-		ref.type = DataSetType.UNIT_GROUP;
-		LangString.set(ref.name, indicator.unit, App.lang());
-		if (!ref.isValid() || refs.contains(ref))
-			return;
-		refs.add(ref);
 	}
 
 	private static void add(Flow f, List<Ref> refs) {

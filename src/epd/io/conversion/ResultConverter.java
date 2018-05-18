@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.ExchangeDirection;
 import org.openlca.ilcd.commons.ExchangeFunction;
-import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Other;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.processes.Exchange;
@@ -87,9 +85,9 @@ class ResultConverter {
 				continue;
 			Other other = null;
 			if (indicator.type == Type.LCI)
-				other = createLciResult(ds.process, indicator);
+				other = flowResult(ds.process, indicator);
 			else
-				other = createLciaResult(ds.process, indicator);
+				other = impactResult(ds.process, indicator);
 			if (other != null) {
 				AmountConverter.writeAmounts(result.amounts, other, doc);
 				addUnitRef(other, indicator, doc);
@@ -97,7 +95,7 @@ class ResultConverter {
 		}
 	}
 
-	private static Other createLciResult(Process p, Indicator indicator) {
+	private static Other flowResult(Process p, Indicator indicator) {
 		int nextId = 1;
 		for (Exchange e : p.exchanges) {
 			if (e.id >= nextId)
@@ -106,7 +104,7 @@ class ResultConverter {
 		Exchange e = new Exchange();
 		e.id = nextId;
 		p.exchanges.add(e);
-		e.flow = createRef(indicator, true);
+		e.flow = indicator.getRef(App.lang());
 		setExchangeAttributes(indicator, e);
 		Other other = new Other();
 		e.other = other;
@@ -124,28 +122,14 @@ class ResultConverter {
 			exchange.direction = ExchangeDirection.OUTPUT;
 	}
 
-	private static Other createLciaResult(Process process,
+	private static Other impactResult(Process process,
 			Indicator indicator) {
 		LCIAResult r = new LCIAResult();
 		process.add(r);
-		r.method = createRef(indicator, false);
+		r.method = indicator.getRef(App.lang());
 		Other other = new Other();
 		r.other = other;
 		return other;
-	}
-
-	private static Ref createRef(Indicator indicator,
-			boolean forFlow) {
-		if (indicator == null)
-			return null;
-		Ref ref = new Ref();
-		ref.uuid = indicator.uuid;
-		String path = forFlow ? "flows" : "lciamethods";
-		ref.uri = "../" + path + "/" + indicator.uuid;
-		ref.type = forFlow ? DataSetType.FLOW
-				: DataSetType.LCIA_METHOD;
-		LangString.set(ref.name, indicator.name, App.lang());
-		return ref;
 	}
 
 	private static void addUnitRef(Other other, Indicator indicator,

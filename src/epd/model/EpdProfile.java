@@ -9,11 +9,9 @@ import epd.util.Strings;
 public class EpdProfile {
 
 	public String id;
-
 	public String name;
-
+	public String description;
 	public final List<Indicator> indicators = new ArrayList<>();
-
 	public final List<Module> modules = new ArrayList<>();
 
 	/** Get the indicator with the given ID from the this profile. */

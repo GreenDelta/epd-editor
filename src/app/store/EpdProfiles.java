@@ -2,6 +2,8 @@ package app.store;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -62,6 +64,21 @@ public final class EpdProfiles {
 		// TODO: sync with indicator data sets
 
 		return profile;
+	}
+
+	/** Get all EPD profiles from the workspace. */
+	public static List<EpdProfile> getAll() {
+		File dir = new File(App.workspace, "epd_profiles");
+		if (!dir.exists())
+			return Collections.emptyList();
+		List<EpdProfile> profiles = new ArrayList<>();
+		for (File f : dir.listFiles()) {
+			EpdProfile p = Json.read(f, EpdProfile.class);
+			if (p != null) {
+				profiles.add(p);
+			}
+		}
+		return profiles;
 	}
 
 	/** Get the indicators from the default profile. */

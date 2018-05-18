@@ -35,13 +35,13 @@ import app.util.UI;
 import app.util.Viewers;
 import epd.util.Strings;
 
-class ProfileSection {
+class ValidationSection {
 
 	private final SettingsPage page;
 	private TableViewer table;
 	private final List<ProfileInfo> infos = new ArrayList<>();
 
-	ProfileSection(SettingsPage page) {
+	ValidationSection(SettingsPage page) {
 		this.page = page;
 		for (File file : ValidationProfiles.getFiles()) {
 			infos.add(new ProfileInfo(file));

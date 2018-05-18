@@ -7,6 +7,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.methods.LCIAMethod;
+import org.openlca.ilcd.units.UnitGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +17,7 @@ import app.App;
 import epd.model.EpdProfile;
 import epd.model.Indicator;
 import epd.model.Module;
+import epd.model.RefStatus;
 import epd.util.Strings;
 
 public final class EpdProfiles {
@@ -74,9 +78,6 @@ public final class EpdProfiles {
 			Logger log = LoggerFactory.getLogger(EpdProfiles.class);
 			log.error("failed to load an EPD profile; even the default");
 		}
-
-		// TODO: sync with indicator data sets
-
 		return profile;
 	}
 
@@ -139,6 +140,52 @@ public final class EpdProfiles {
 			dir.mkdirs();
 		}
 		return new File(dir, id + ".json");
+	}
+
+	/**
+	 * Synchronizes the indicator and unit group references of the given profile
+	 * with the data store of this application.
+	 */
+	public static List<RefStatus> sync(EpdProfile p) {
+		if (p == null)
+			return Collections.emptyList();
+		List<RefStatus> stats = new ArrayList<>();
+		for (Indicator i : p.indicators) {
+			try {
+				syncRefs(i, stats);
+			} catch (Exception e) {
+				stats.add(RefStatus.error(i.getRef(App.lang()),
+						"Failed to lead refs.: " + e.getMessage()));
+			}
+		}
+		return stats;
+	}
+
+	private static void syncRefs(Indicator i, List<RefStatus> stats)
+			throws Exception {
+		LCIAMethod m = App.store.get(LCIAMethod.class, i.uuid);
+		if (m == null) {
+			stats.add(RefStatus.error(i.getRef(App.lang()),
+					"Not found in local store"));
+		} else {
+			i.name = App.s(m.getName());
+			stats.add(RefStatus.info(i.getRef(App.lang()),
+					"Updated"));
+		}
+		UnitGroup ug = App.store.get(UnitGroup.class, i.unitGroupUUID);
+		if (ug == null) {
+			stats.add(RefStatus.error(i.getUnitGroupRef(App.lang()),
+					"Not found in local store"));
+			return;
+		}
+		Ref uRef = Ref.of(ug);
+		String unit = RefDeps.getRefUnit(ug);
+		if (Strings.nullOrEmpty(unit)) {
+			stats.add(RefStatus.error(uRef, "No reference unit found"));
+			return;
+		}
+		i.unit = unit;
+		stats.add(RefStatus.info(uRef, "Found"));
 	}
 
 }

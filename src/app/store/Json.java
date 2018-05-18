@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public final class Json {
 
@@ -23,7 +24,7 @@ public final class Json {
 				OutputStreamWriter writer = new OutputStreamWriter(fos,
 						"utf-8");
 				BufferedWriter buffer = new BufferedWriter(writer)) {
-			Gson gson = new Gson();
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
 			String string = gson.toJson(obj);
 			buffer.write(string);
 		} catch (Exception e) {

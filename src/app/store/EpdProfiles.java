@@ -25,6 +25,19 @@ public final class EpdProfiles {
 	private EpdProfiles() {
 	}
 
+	/**
+	 * Set the given profile as the default profile of the application.
+	 */
+	public static void set(EpdProfile p) {
+		profile = p;
+		if (p == null)
+			return;
+		if (!Strings.nullOrEqual(p.id, App.settings().profile)) {
+			App.settings().profile = p.id;
+			App.settings().save();
+		}
+	}
+
 	/** Get the active profile of the application. */
 	public static EpdProfile get() {
 		if (profile != null)
@@ -72,7 +85,10 @@ public final class EpdProfiles {
 			return null;
 		if (Strings.nullOrEqual(id, App.settings().profile))
 			return get();
-		return Json.read(file(id), EpdProfile.class);
+		File f = file(id);
+		if (f == null || !f.exists())
+			return null;
+		return Json.read(f, EpdProfile.class);
 	}
 
 	/** Get all EPD profiles from the workspace. */

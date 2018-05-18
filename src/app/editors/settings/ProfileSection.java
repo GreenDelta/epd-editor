@@ -1,5 +1,6 @@
 package app.editors.settings;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,10 @@ import app.M;
 import app.editors.indicators.ProfileEditor;
 import app.rcp.Icon;
 import app.store.EpdProfiles;
+import app.store.Json;
 import app.util.Actions;
+import app.util.FileChooser;
+import app.util.MsgBox;
 import app.util.Tables;
 import app.util.UI;
 import app.util.Viewers;
@@ -53,8 +57,54 @@ class ProfileSection {
 	private void bindActions(Section section) {
 		Action open = Actions.create(M.Open, Icon.OPEN.des(),
 				() -> ProfileEditor.open(Viewers.getFirstSelected(table)));
-		Actions.bind(table, open);
+		Action exp = Actions.create(M.Export, Icon.EXPORT.des(),
+				this::onExport);
+		Action imp = Actions.create(M.Import, Icon.IMPORT.des(),
+				this::onImport);
+		Actions.bind(table, open, exp, imp);
+		Actions.bind(section, exp, imp);
 		Tables.onDoubleClick(table, e -> open.run());
+	}
+
+	private void onImport() {
+		File file = FileChooser.open("*.json");
+		if (file == null)
+			return;
+		EpdProfile profile = Json.read(file, EpdProfile.class);
+		if (profile == null) {
+			MsgBox.error("#Could not read EPD profile from " + file.getName());
+			return;
+		}
+		if (profile.id == null || profile.name == null) {
+			MsgBox.error("#An EPD profile must have an ID or name");
+			return;
+		}
+		EpdProfile other = EpdProfiles.get(profile.id);
+		if (other != null) {
+			boolean b = MsgBox.ask("#Overwrite profile?",
+					"A profile with this ID already exists. "
+							+ "Do you want to overwrite it?");
+			if (!b)
+				return;
+		}
+		EpdProfiles.save(profile);
+		if (Strings.nullOrEqual(profile.id, App.settings().profile)) {
+			EpdProfiles.set(profile);
+		}
+		profiles.clear();
+		profiles.addAll(EpdProfiles.getAll());
+		profiles.sort((p1, p2) -> Strings.compare(p1.name, p2.name));
+		table.setInput(profiles);
+	}
+
+	private void onExport() {
+		EpdProfile profile = Viewers.getFirstSelected(table);
+		if (profile == null)
+			return;
+		File file = FileChooser.save(profile.id + ".json", "*.json");
+		if (file == null)
+			return;
+		Json.write(profile, file);
 	}
 
 	private class Label extends LabelProvider

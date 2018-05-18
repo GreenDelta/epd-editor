@@ -127,9 +127,6 @@ public class M extends NLS {
 	public static String IndependentInternalReview;
 	public static String IndependentReviewPanel;
 	public static String Indicator;
-	public static String IndicatorMapping;
-	public static String IndicatorMapping_Description;
-	public static String IndicatorMappings;
 	public static String Indicator_ABIOTIC_RESOURCE_DEPLETION_ELEMENTS;
 	public static String Indicator_ABIOTIC_RESOURCE_DEPLETION_FOSSIL_FUELS;
 	public static String Indicator_ACIDIFICATION;

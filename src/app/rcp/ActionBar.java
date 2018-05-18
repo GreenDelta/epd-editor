@@ -29,7 +29,6 @@ import app.M;
 import app.SearchPage;
 import app.StatusView;
 import app.editors.TranslationView;
-import app.editors.indicators.ProfileEditor;
 import app.editors.matprops.MaterialPropertyEditor;
 import app.editors.settings.SettingsPage;
 import app.navi.Navigator;
@@ -94,8 +93,6 @@ public class ActionBar extends ActionBarAdvisor {
 				Icon.MESSAGE.des(), TranslationView::open));
 		m.add(Actions.create(M.MaterialProperties,
 				Icon.QUANTITY.des(), MaterialPropertyEditor::open));
-		m.add(Actions.create(M.IndicatorMappings,
-				Icon.QUANTITY.des(), ProfileEditor::open));
 		m.add(new Separator());
 		m.add(Actions.create(M.ReloadNavigation,
 				Icon.RELOAD.des(), () -> App.run(new IndexBuilder())));

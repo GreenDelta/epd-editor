@@ -8,10 +8,16 @@ import org.eclipse.ui.IPersistableElement;
 
 public class SimpleEditorInput implements IEditorInput {
 
-	private String name;
+	private final String name;
+	public final String id;
 
 	public SimpleEditorInput(String name) {
+		this(name, null);
+	}
+
+	public SimpleEditorInput(String name, String id) {
 		this.name = name;
+		this.id = id;
 	}
 
 	@Override
@@ -54,7 +60,18 @@ public class SimpleEditorInput implements IEditorInput {
 		if (!(obj instanceof SimpleEditorInput))
 			return false;
 		SimpleEditorInput other = (SimpleEditorInput) obj;
+		if (id != null || other.id != null)
+			Objects.equals(this.id, other.id);
 		return Objects.equals(this.getName(), other.getName());
+	}
+
+	@Override
+	public int hashCode() {
+		if (name == null)
+			return super.hashCode();
+		if (id == null)
+			return Objects.hash(name);
+		return Objects.hash(id);
 	}
 
 }

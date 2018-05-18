@@ -11,22 +11,25 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 
 import app.M;
-import app.store.EpdProfiles;
 import app.util.Tables;
 import app.util.UI;
+import epd.model.EpdProfile;
 import epd.model.Indicator;
 import epd.model.Indicator.Type;
 
 class Page extends FormPage {
 
-	Page(ProfileEditor editor) {
-		super(editor, "Page", M.IndicatorMappings);
+	private final EpdProfile profile;
+
+	Page(ProfileEditor editor, EpdProfile profile) {
+		super(editor, "Page", profile.name);
+		this.profile = profile;
 	}
 
 	@Override
 	protected void createFormContent(IManagedForm mform) {
 		FormToolkit tk = mform.getToolkit();
-		ScrolledForm form = UI.formHeader(mform, M.IndicatorMappings);
+		ScrolledForm form = UI.formHeader(mform, profile.name);
 		Composite body = UI.formBody(form, mform.getToolkit());
 		indicatorTable(body, tk);
 		form.reflow(true);
@@ -39,7 +42,7 @@ class Page extends FormPage {
 				M.DataSetReference, M.UnitReference);
 		Tables.bindColumnWidths(table, 0.4, 0.3, 0.3);
 		table.setLabelProvider(new Label());
-		table.setInput(EpdProfiles.indicators());
+		table.setInput(profile.indicators);
 	}
 
 	private class Label extends LabelProvider implements ITableLabelProvider {

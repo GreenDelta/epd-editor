@@ -14,6 +14,7 @@ import app.App;
 import epd.model.EpdProfile;
 import epd.model.Indicator;
 import epd.model.Module;
+import epd.util.Strings;
 
 public final class EpdProfiles {
 
@@ -64,6 +65,14 @@ public final class EpdProfiles {
 		// TODO: sync with indicator data sets
 
 		return profile;
+	}
+
+	public static EpdProfile get(String id) {
+		if (id == null)
+			return null;
+		if (Strings.nullOrEqual(id, App.settings().profile))
+			return get();
+		return Json.read(file(id), EpdProfile.class);
 	}
 
 	/** Get all EPD profiles from the workspace. */

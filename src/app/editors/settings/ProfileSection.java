@@ -3,6 +3,7 @@ package app.editors.settings;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ITableFontProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -15,10 +16,13 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import app.App;
 import app.M;
+import app.editors.indicators.ProfileEditor;
 import app.rcp.Icon;
 import app.store.EpdProfiles;
+import app.util.Actions;
 import app.util.Tables;
 import app.util.UI;
+import app.util.Viewers;
 import epd.model.EpdProfile;
 import epd.util.Strings;
 
@@ -35,14 +39,22 @@ class ProfileSection {
 	}
 
 	void render(Composite body, FormToolkit tk) {
-		Section section = UI.section(body, tk, "EPD Profiles");
+		Section section = UI.section(body, tk, "#EPD Profiles");
 		Composite comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
 		table = Tables.createViewer(comp,
 				M.Name, M.Description, M.Default);
 		table.setLabelProvider(new Label());
 		Tables.bindColumnWidths(table, 0.2, 0.6, 0.2);
+		bindActions(section);
 		table.setInput(profiles);
+	}
+
+	private void bindActions(Section section) {
+		Action open = Actions.create(M.Open, Icon.OPEN.des(),
+				() -> ProfileEditor.open(Viewers.getFirstSelected(table)));
+		Actions.bind(table, open);
+		Tables.onDoubleClick(table, e -> open.run());
 	}
 
 	private class Label extends LabelProvider

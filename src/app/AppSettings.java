@@ -35,6 +35,7 @@ public class AppSettings {
 	@Override
 	public AppSettings clone() {
 		AppSettings clone = new AppSettings();
+		clone.profile = profile;
 		clone.lang = lang;
 		clone.showDataSetXML = showDataSetXML;
 		clone.showDataSetDependencies = showDataSetDependencies;
@@ -45,6 +46,7 @@ public class AppSettings {
 	public void setValues(AppSettings from) {
 		if (from == null)
 			return;
+		profile = from.profile;
 		lang = from.lang;
 		showDataSetXML = from.showDataSetXML;
 		showDataSetDependencies = from.showDataSetDependencies;

@@ -34,12 +34,6 @@ public final class EpdProfiles {
 	 */
 	public static void set(EpdProfile p) {
 		profile = p;
-		if (p == null)
-			return;
-		if (!Strings.nullOrEqual(p.id, App.settings().profile)) {
-			App.settings().profile = p.id;
-			App.settings().save();
-		}
 	}
 
 	/** Get the active profile of the application. */
@@ -94,6 +88,7 @@ public final class EpdProfiles {
 
 	/** Get all EPD profiles from the workspace. */
 	public static List<EpdProfile> getAll() {
+		get(); // make sure that the default profile is loaded.
 		File dir = new File(App.workspace, "epd_profiles");
 		if (!dir.exists())
 			return Collections.emptyList();

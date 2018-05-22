@@ -61,7 +61,9 @@ class ProfileSection {
 				this::onExport);
 		Action imp = Actions.create(M.Import, Icon.IMPORT.des(),
 				this::onImport);
-		Actions.bind(table, open, exp, imp);
+		Action ref = Actions.create("#Set as active", Icon.OK.des(),
+				this::onActivate);
+		Actions.bind(table, ref, open, exp, imp);
 		Actions.bind(section, exp, imp);
 		Tables.onDoubleClick(table, e -> open.run());
 	}
@@ -107,6 +109,15 @@ class ProfileSection {
 		Json.write(profile, file);
 	}
 
+	private void onActivate() {
+		EpdProfile profile = Viewers.getFirstSelected(table);
+		if (profile == null)
+			return;
+		page.settings.profile = profile.id;
+		page.setDirty();
+		table.refresh();
+	}
+
 	private class Label extends LabelProvider
 			implements ITableLabelProvider, ITableFontProvider {
 
@@ -145,7 +156,7 @@ class ProfileSection {
 				return null;
 			EpdProfile profile = (EpdProfile) obj;
 			if (Strings.nullOrEqual(profile.id,
-					App.settings().profile)) {
+					page.settings.profile)) {
 				return UI.boldFont();
 			}
 			return null;

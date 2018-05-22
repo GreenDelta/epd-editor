@@ -17,7 +17,7 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import app.App;
 import app.M;
-import app.editors.indicators.ProfileEditor;
+import app.editors.profiles.ProfileEditor;
 import app.rcp.Icon;
 import app.store.EpdProfiles;
 import app.store.Json;

@@ -8,6 +8,7 @@ public class Module implements Comparable<Module> {
 
 	public int index;
 	public String name;
+	public String description;
 
 	@Override
 	public String toString() {

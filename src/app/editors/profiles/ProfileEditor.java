@@ -1,4 +1,4 @@
-package app.editors.indicators;
+package app.editors.profiles;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IEditorInput;
@@ -30,6 +30,7 @@ public class ProfileEditor extends BaseEditor {
 	public void init(IEditorSite site, IEditorInput input)
 			throws PartInitException {
 		super.init(site, input);
+		Editors.setTabTitle(input, this);
 		SimpleEditorInput in = (SimpleEditorInput) input;
 		profile = EpdProfiles.get(in.id);
 	}

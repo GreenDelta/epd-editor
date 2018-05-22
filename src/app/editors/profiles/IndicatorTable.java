@@ -1,4 +1,4 @@
-package app.editors.indicators;
+package app.editors.profiles;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,10 +9,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.IManagedForm;
-import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 
 import app.App;
@@ -28,37 +25,31 @@ import epd.model.Indicator;
 import epd.model.Indicator.Type;
 import epd.model.RefStatus;
 
-class Page extends FormPage {
+class IndicatorTable {
 
 	private final EpdProfile profile;
-	private TableViewer indicatorTable;
+	private TableViewer table;
 
-	Page(ProfileEditor editor, EpdProfile profile) {
-		super(editor, "Page", profile.name);
+	private IndicatorTable(EpdProfile profile) {
 		this.profile = profile;
 	}
 
-	@Override
-	protected void createFormContent(IManagedForm mform) {
-		FormToolkit tk = mform.getToolkit();
-		ScrolledForm form = UI.formHeader(mform, profile.name);
-		Composite body = UI.formBody(form, mform.getToolkit());
-		indicatorTable(body, tk);
-		form.reflow(true);
+	static IndicatorTable of(EpdProfile profile) {
+		return new IndicatorTable(profile);
 	}
 
-	private void indicatorTable(Composite body, FormToolkit tk) {
+	void render(Composite body, FormToolkit tk) {
 		Section section = UI.section(body, tk, M.EnvironmentalIndicators);
 		Composite comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
-		indicatorTable = Tables.createViewer(comp, M.Indicator,
+		table = Tables.createViewer(comp, M.Indicator,
 				M.DataSetReference, M.UnitReference);
-		Tables.bindColumnWidths(indicatorTable, 0.4, 0.3, 0.3);
-		indicatorTable.setLabelProvider(new Label());
-		indicatorTable.setInput(profile.indicators);
+		Tables.bindColumnWidths(table, 0.4, 0.3, 0.3);
+		table.setLabelProvider(new Label());
+		table.setInput(profile.indicators);
 		Sync sync = new Sync();
 		Actions.bind(section, sync);
-		Actions.bind(indicatorTable, sync);
+		Actions.bind(table, sync);
 	}
 
 	private class Sync extends Action {
@@ -78,7 +69,7 @@ class Page extends FormPage {
 						.forEach(stat -> errors.add(stat));
 				EpdProfiles.save(profile);
 			}, () -> {
-				indicatorTable.setInput(profile.indicators);
+				table.setInput(profile.indicators);
 				if (!errors.isEmpty()) {
 					StatusView.open("#Sync Errors for "
 							+ profile.name, errors);
@@ -115,4 +106,5 @@ class Page extends FormPage {
 		}
 
 	}
+
 }

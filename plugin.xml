@@ -212,8 +212,8 @@
           default="false"
           icon="icons/quantity.png"
           id="epd.profile.editor"
-          name="Indicator mappings"
-          class="app.editors.indicators.ProfileEditor">
+          name="EPD Profile"
+          class="app.editors.profiles.ProfileEditor">
     </editor>
     <editor
           default="false"

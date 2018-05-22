@@ -119,6 +119,14 @@ public final class EpdProfiles {
 		Json.write(profile, file);
 	}
 
+	/** Delete the profile with the given ID. */
+	public static void delete(String id) {
+		File file = file(id);
+		if (file == null || !file.exists())
+			return;
+		file.delete();
+	}
+
 	private static EpdProfile fromFile(String id) {
 		File file = file(id);
 		if (file.exists()) {

@@ -38,8 +38,7 @@ class ProfileSection {
 
 	ProfileSection(SettingsPage page) {
 		this.page = page;
-		profiles.addAll(EpdProfiles.getAll());
-		profiles.sort((p1, p2) -> Strings.compare(p1.name, p2.name));
+		reload();
 	}
 
 	void render(Composite body, FormToolkit tk) {
@@ -63,7 +62,9 @@ class ProfileSection {
 				this::onImport);
 		Action ref = Actions.create("#Set as active", Icon.OK.des(),
 				this::onActivate);
-		Actions.bind(table, ref, open, exp, imp);
+		Action del = Actions.create(M.Delete, Icon.DELETE.des(),
+				this::onDelete);
+		Actions.bind(table, ref, open, exp, imp, del);
 		Actions.bind(section, exp, imp);
 		Tables.onDoubleClick(table, e -> open.run());
 	}
@@ -93,10 +94,7 @@ class ProfileSection {
 		if (Strings.nullOrEqual(profile.id, App.settings().profile)) {
 			EpdProfiles.set(profile);
 		}
-		profiles.clear();
-		profiles.addAll(EpdProfiles.getAll());
-		profiles.sort((p1, p2) -> Strings.compare(p1.name, p2.name));
-		table.setInput(profiles);
+		reload();
 	}
 
 	private void onExport() {
@@ -118,6 +116,34 @@ class ProfileSection {
 		table.refresh();
 	}
 
+	private void reload() {
+		profiles.clear();
+		profiles.addAll(EpdProfiles.getAll());
+		profiles.sort((p1, p2) -> Strings.compare(p1.name, p2.name));
+		if (table != null) {
+			table.setInput(profiles);
+		}
+	}
+
+	private void onDelete() {
+		EpdProfile profile = Viewers.getFirstSelected(table);
+		if (profile == null)
+			return;
+		if (Strings.nullOrEqual(profile.id, page.settings.profile)
+				|| Strings.nullOrEqual(profile.id, App.settings().profile)) {
+			MsgBox.error("#The selected profile is currently a "
+					+ "default profile and therefore cannot be deleted.");
+			return;
+		}
+		boolean b = MsgBox.ask("#Delete profile",
+				"#Do you really want to delete the selected profile?");
+		if (!b)
+			return;
+		EpdProfiles.delete(profile.id);
+		reload();
+
+	}
+
 	private class Label extends LabelProvider
 			implements ITableLabelProvider, ITableFontProvider {
 
@@ -128,8 +154,9 @@ class ProfileSection {
 			if (col != 2)
 				return null;
 			EpdProfile profile = (EpdProfile) obj;
-			if (Strings.nullOrEqual(profile.id,
-					App.settings().profile)) {
+			if (Strings.nullOrEqual(
+					profile.id,
+					page.settings.profile)) {
 				return Icon.CHECK_TRUE.img();
 			}
 			return Icon.CHECK_FALSE.img();

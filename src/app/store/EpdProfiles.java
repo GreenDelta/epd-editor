@@ -8,14 +8,18 @@ import java.util.List;
 import java.util.Objects;
 
 import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.flows.Flow;
+import org.openlca.ilcd.flows.FlowName;
 import org.openlca.ilcd.methods.LCIAMethod;
 import org.openlca.ilcd.units.UnitGroup;
+import org.openlca.ilcd.util.Flows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.App;
 import epd.model.EpdProfile;
 import epd.model.Indicator;
+import epd.model.Indicator.Type;
 import epd.model.Module;
 import epd.model.RefStatus;
 import epd.util.Strings;
@@ -166,14 +170,12 @@ public final class EpdProfiles {
 
 	private static void syncRefs(Indicator i, List<RefStatus> stats)
 			throws Exception {
-		LCIAMethod m = App.store.get(LCIAMethod.class, i.uuid);
-		if (m == null) {
-			stats.add(RefStatus.error(i.getRef(App.lang()),
-					"Not found in local store"));
+		if (i == null)
+			return;
+		if (i.type == Type.LCI) {
+			stats.add(syncFlow(i));
 		} else {
-			i.name = App.s(m.getName());
-			stats.add(RefStatus.info(i.getRef(App.lang()),
-					"Updated"));
+			stats.add(syncMethod(i));
 		}
 		UnitGroup ug = App.store.get(UnitGroup.class, i.unitGroupUUID);
 		if (ug == null) {
@@ -191,4 +193,28 @@ public final class EpdProfiles {
 		stats.add(RefStatus.info(uRef, "Found"));
 	}
 
+	private static RefStatus syncMethod(Indicator i) throws Exception {
+		LCIAMethod m = App.store.get(LCIAMethod.class, i.uuid);
+		if (m == null) {
+			return RefStatus.error(i.getRef(App.lang()),
+					"Not found in local store");
+		} else {
+			i.name = App.s(m.getName());
+			return RefStatus.info(i.getRef(App.lang()), "Updated");
+		}
+	}
+
+	private static RefStatus syncFlow(Indicator i) throws Exception {
+		Flow flow = App.store.get(Flow.class, i.uuid);
+		if (flow == null) {
+			return RefStatus.error(i.getRef(App.lang()),
+					"Not found in local store");
+		} else {
+			FlowName flowName = Flows.getFlowName(flow);
+			if (flowName != null) {
+				i.name = App.s(flowName.baseName);
+			}
+			return RefStatus.info(i.getRef(App.lang()), "Updated");
+		}
+	}
 }

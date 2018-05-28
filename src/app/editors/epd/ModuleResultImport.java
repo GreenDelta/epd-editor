@@ -112,7 +112,7 @@ class ModuleResultImport implements Runnable {
 		Module module = amount.module;
 		String scenario = amount.scenario;
 		for (ModuleEntry e : dataSet.moduleEntries) {
-			if (e.module == module && eq(e.scenario, scenario))
+			if (Objects.equals(e.module, module) && eq(e.scenario, scenario))
 				return;
 		}
 		ModuleEntry e = new ModuleEntry();
@@ -138,7 +138,7 @@ class ModuleResultImport implements Runnable {
 			Amount amount) {
 		IndicatorResult result = null;
 		for (IndicatorResult r : results) {
-			if (r.indicator == indicator) {
+			if (Objects.equals(r.indicator, indicator)) {
 				result = r;
 				break;
 			}

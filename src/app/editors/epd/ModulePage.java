@@ -56,7 +56,7 @@ class ModulePage extends FormPage {
 		Collections.sort(modules, (e1, e2) -> {
 			Module m1 = e1.module;
 			Module m2 = e2.module;
-			if (m1 == null || m2 == null || m1 == m2)
+			if (Objects.equals(m1, m2))
 				return Strings.compare(e1.scenario, e2.scenario);
 			return m1.index - m2.index;
 		});
@@ -263,7 +263,7 @@ class ModulePage extends FormPage {
 
 		@Override
 		protected void setItem(ModuleEntry entry, Module module) {
-			if (entry.module == module)
+			if (Objects.equals(entry.module, module))
 				return;
 			entry.module = module;
 			editor.setDirty();

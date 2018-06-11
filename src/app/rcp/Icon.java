@@ -66,6 +66,8 @@ public enum Icon {
 
 	RELOAD("reload.png"),
 
+	SAVE_AS("save_as.png"),
+
 	SEARCH("search.png"),
 
 	SETTINGS("settings.png"),

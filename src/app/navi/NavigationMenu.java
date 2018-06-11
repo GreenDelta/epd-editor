@@ -21,6 +21,7 @@ import app.navi.actions.FileImport;
 import app.navi.actions.NewConnectionAction;
 import app.navi.actions.NewDataSetAction;
 import app.navi.actions.RefDeleteAction;
+import app.navi.actions.DuplicateAction;
 import app.rcp.Icon;
 import app.store.Connections;
 import app.store.validation.ValidationDialog;
@@ -76,6 +77,7 @@ public class NavigationMenu extends CommonActionProvider {
 				() -> Editors.open(e.ref)));
 		menu.add(Actions.create(M.Validate, Icon.OK.des(),
 				() -> ValidationDialog.open(e.ref)));
+		menu.add(new DuplicateAction(e));
 		menu.add(new RefDeleteAction(e));
 	}
 

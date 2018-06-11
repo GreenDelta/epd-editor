@@ -7,7 +7,7 @@ The EPD editor is an [Eclipse RCP](https://wiki.eclipse.org/Rich_Client_Platform
 application. To compile it from source you need to have the following tools
 installed:
 
-* a [Java Development Kit 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+* a [Java Development Kit >= v10](http://www.oracle.com/technetwork/java/javase/downloads/jdk10-downloads-4416644.html)
 * [Maven](http://maven.apache.org/)
 * the [Eclipse package for RCP developers](https://www.eclipse.org/downloads/)
 
@@ -78,7 +78,7 @@ important to set the start levels for the following plugings to these values:
   <plugin id="org.eclipse.equinox.event" autoStart="true" startLevel="2" />
   <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
 </configurations>
-``` 
+```
 
 #### Labels and translations
 Labels and translations are externalized in the `src/app/messages*.properties`

@@ -115,6 +115,18 @@ following settings:
 In the next page, select the platforms for which you want to build the product.
 However, only the Windows `x86_64` version is currently fully supported when
 building the distribution package and also the build is written for Windows.
+
+Unfortunately, with Java 10 the export currently produces the following error in
+Exlipse Oxygen and Photon:
+
+>  option -bootclasspath not supported at compliance level 9 and above
+
+This is related to [this bug in Eclipse](https://bugs.eclipse.org/bugs/show_bug.cgi?id=525280).
+As also a Maven Tycho build currently fails with Java 10 due to 
+[this bug](https://bugs.eclipse.org/bugs/show_bug.cgi?id=525522) (which is marked as fixed
+but still appears in our EPD-Editor build), we need to set the Java compliance level
+to Java 8 in Eclipse and the project configuration in order to have a working build.
+
 The `make.bat` script packages then the application (and the `clean.bat`
 removes all the build artifacts again). In order to run the script, you need to
 add the following things to the build folder:

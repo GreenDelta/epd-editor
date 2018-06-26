@@ -14,7 +14,7 @@ import org.openlca.ilcd.util.Processes;
 public class EpdDataSet {
 
 	public Process process;
-
+	public String profile;
 	public SubType subType;
 	public SafetyMargins safetyMargins;
 	public final List<IndicatorResult> results = new ArrayList<>();
@@ -42,6 +42,7 @@ public class EpdDataSet {
 	@Override
 	public EpdDataSet clone() {
 		EpdDataSet clone = new EpdDataSet();
+		clone.profile = profile;
 		clone.subType = subType;
 		if (process != null)
 			clone.process = process.clone();

@@ -3,6 +3,8 @@ package epd.io.conversion;
 import java.util.List;
 import java.util.Objects;
 
+import javax.xml.namespace.QName;
+
 import org.openlca.ilcd.commons.Other;
 import org.openlca.ilcd.processes.Method;
 import org.openlca.ilcd.processes.Process;
@@ -41,6 +43,7 @@ class ProcessConverter {
 	}
 
 	private void readExtensions(EpdDataSet dataSet) {
+		readProfile(dataSet);
 		readSubType(dataSet);
 		ProcessInfo processInfo = process.processInfo;
 		if (processInfo == null)
@@ -67,6 +70,13 @@ class ProcessConverter {
 			SubType type = SubType.fromLabel(e.getTextContent());
 			dataSet.subType = type;
 		}
+	}
+
+	private void readProfile(EpdDataSet ds) {
+		QName qname = new QName(
+				"http://www.okworx.com/ILCD+EPD/Extensions/2018/Profile",
+				"epdProfile");
+		ds.profile = process.otherAttributes.get(qname);
 	}
 
 	private void mapResults(EpdDataSet dataSet) {

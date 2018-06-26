@@ -3,6 +3,8 @@ package epd.io.conversion;
 import java.util.Collections;
 import java.util.List;
 
+import javax.xml.namespace.QName;
+
 import org.openlca.ilcd.commons.Other;
 import org.openlca.ilcd.processes.DataSetInfo;
 import org.openlca.ilcd.processes.Method;
@@ -57,6 +59,7 @@ class EpdConverter {
 		ModuleConverter.writeModules(dataSet, other, doc);
 		ScenarioConverter.writeScenarios(dataSet, other, doc);
 		SafetyMarginsConverter.write(dataSet, other, doc);
+		writeProfile();
 		writeSubType();
 		if (Util.isEmpty(other))
 			info.other = null;
@@ -75,5 +78,16 @@ class EpdConverter {
 		Element e = Util.createElement(method.other, "subType");
 		e.setTextContent(dataSet.subType.getLabel());
 		method.other.any.add(e);
+	}
+
+	private void writeProfile() {
+		QName qname = new QName(
+				"http://www.okworx.com/ILCD+EPD/Extensions/2018/Profile",
+				"epdProfile");
+		if (dataSet.profile != null) {
+			dataSet.process.otherAttributes.put(qname, dataSet.profile);
+		} else {
+			dataSet.process.otherAttributes.remove(qname);
+		}
 	}
 }

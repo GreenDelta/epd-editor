@@ -18,6 +18,7 @@ import app.editors.Editors;
 import app.editors.classifications.ClassificationEditor;
 import app.editors.connection.ConnectionEditor;
 import app.editors.locations.LocationEditor;
+import app.editors.profiles.ProfileEditor;
 import app.util.UI;
 import app.util.Viewers;
 
@@ -55,6 +56,9 @@ public class Navigator extends CommonNavigator {
 				ConnectionEditor.open(conEl.con);
 			} else if (obj instanceof FileElement) {
 				open((FileElement) obj);
+			} else if (obj instanceof ProfileElement) {
+				ProfileElement pe = (ProfileElement) obj;
+				ProfileEditor.open(pe.profile);
 			}
 		});
 	}

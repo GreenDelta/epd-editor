@@ -47,6 +47,9 @@ public class ProfileEditor extends BaseEditor {
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
+		EpdProfiles.save(profile);
+		dirty = false;
+		editorDirtyStateChanged();
 	}
 
 }

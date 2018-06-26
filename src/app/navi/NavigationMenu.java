@@ -14,14 +14,15 @@ import app.editors.Editors;
 import app.editors.classifications.ClassificationEditor;
 import app.editors.connection.ConnectionEditor;
 import app.editors.locations.LocationEditor;
+import app.editors.profiles.ProfileEditor;
 import app.navi.actions.ClassificationSync;
 import app.navi.actions.ConnectionDeleteAction;
+import app.navi.actions.DuplicateAction;
 import app.navi.actions.FileDeletion;
 import app.navi.actions.FileImport;
 import app.navi.actions.NewConnectionAction;
 import app.navi.actions.NewDataSetAction;
 import app.navi.actions.RefDeleteAction;
-import app.navi.actions.DuplicateAction;
 import app.rcp.Icon;
 import app.store.Connections;
 import app.store.validation.ValidationDialog;
@@ -60,10 +61,18 @@ public class NavigationMenu extends CommonActionProvider {
 		if (first instanceof FileElement) {
 			forFile((FileElement) first, menu);
 		}
+
+		if (first instanceof ProfileElement) {
+			ProfileElement pe = (ProfileElement) first;
+			menu.add(Actions.create(M.Open, Icon.OPEN.des(),
+					() -> ProfileEditor.open(pe.profile)));
+		}
+
 		if (first instanceof ConnectionFolder) {
 			ConnectionFolder cf = (ConnectionFolder) first;
 			menu.add(new NewConnectionAction(cf));
 		}
+
 		if (first instanceof ConnectionElement) {
 			ConnectionElement e = (ConnectionElement) first;
 			menu.add(Actions.create(M.Open, Icon.OPEN.des(),

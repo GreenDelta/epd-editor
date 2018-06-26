@@ -9,7 +9,7 @@ import epd.util.Strings;
 public class ProfileElement extends NavigationElement {
 
 	private final ProfileFolder parent;
-	private final EpdProfile profile;
+	final EpdProfile profile;
 
 	public ProfileElement(ProfileFolder parent, EpdProfile profile) {
 		this.parent = parent;

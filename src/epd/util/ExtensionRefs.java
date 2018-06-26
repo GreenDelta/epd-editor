@@ -3,10 +3,8 @@ package epd.util;
 import java.util.Arrays;
 import java.util.List;
 
-import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.FlowType;
 import org.openlca.ilcd.commons.IDataSet;
-import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.processes.Process;
@@ -18,7 +16,6 @@ import epd.io.conversion.Extensions;
 import epd.io.conversion.FlowExtensions;
 import epd.model.EpdDataSet;
 import epd.model.EpdProduct;
-import epd.model.Indicator;
 import epd.model.IndicatorResult;
 
 public final class ExtensionRefs {
@@ -40,7 +37,7 @@ public final class ExtensionRefs {
 	}
 
 	private static void add(Process p, List<Ref> refs) {
-		EpdDataSet epd = Extensions.read(p, EpdProfiles.get());
+		EpdDataSet epd = Extensions.read(p, EpdProfiles.get(p));
 		for (IndicatorResult r : epd.results) {
 			if (r.indicator == null)
 				continue;

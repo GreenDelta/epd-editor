@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import app.store.EpdProfiles;
 import epd.model.Amount;
 import epd.model.EpdDataSet;
+import epd.model.EpdProfile;
 import epd.model.Indicator;
 import epd.model.IndicatorResult;
 import epd.model.Module;
@@ -64,6 +65,7 @@ class ModuleResultImport implements Runnable {
 	private List<IndicatorResult> readRows(Sheet sheet) {
 		if (sheet == null)
 			return Collections.emptyList();
+		EpdProfile profile = EpdProfiles.get(dataSet);
 		List<IndicatorResult> results = new ArrayList<>();
 		int rowNumber = 1;
 		while (true) {
@@ -71,8 +73,8 @@ class ModuleResultImport implements Runnable {
 			rowNumber++;
 			if (row == null)
 				break;
-			Amount amount = getAmount(row);
-			Indicator indicator = getIndicator(row);
+			Amount amount = getAmount(row, profile);
+			Indicator indicator = getIndicator(row, profile);
 			if (amount == null || indicator == null)
 				break;
 			syncModule(amount);
@@ -82,21 +84,21 @@ class ModuleResultImport implements Runnable {
 		return results;
 	}
 
-	private Indicator getIndicator(Row row) {
+	private Indicator getIndicator(Row row, EpdProfile profile) {
 		String name = getString(row.getCell(2));
 		if (name == null)
 			return null;
 		name = name.trim();
-		for (Indicator indicator : EpdProfiles.indicators()) {
+		for (Indicator indicator : profile.indicators) {
 			if (Objects.equals(indicator.name, name))
 				return indicator;
 		}
 		return null;
 	}
 
-	private Amount getAmount(Row row) {
+	private Amount getAmount(Row row, EpdProfile profile) {
 		String moduleName = getString(row.getCell(0));
-		Module module = EpdProfiles.get().module(moduleName);
+		Module module = profile.module(moduleName);
 		if (module == null)
 			return null;
 		Amount amount = new Amount();

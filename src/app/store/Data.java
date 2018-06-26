@@ -12,6 +12,7 @@ import epd.io.conversion.Extensions;
 import epd.io.conversion.FlowExtensions;
 import epd.model.EpdDataSet;
 import epd.model.EpdProduct;
+import epd.model.EpdProfile;
 
 public final class Data {
 
@@ -21,8 +22,8 @@ public final class Data {
 	public static EpdDataSet getEPD(Ref ref) {
 		try {
 			Process process = App.store.get(Process.class, ref.uuid);
-			EpdDataSet dataSet = Extensions.read(process,
-					EpdProfiles.get());
+			EpdProfile profile = EpdProfiles.get(process);
+			EpdDataSet dataSet = Extensions.read(process, profile);
 			return dataSet;
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Data.class);

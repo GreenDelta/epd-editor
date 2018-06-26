@@ -2,6 +2,7 @@ package epd.io.conversion;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.namespace.QName;
 
@@ -81,13 +82,11 @@ class EpdConverter {
 	}
 
 	private void writeProfile() {
-		QName qname = new QName(
-				"http://www.okworx.com/ILCD+EPD/Extensions/2018/Profile",
-				"epdProfile");
+		Map<QName, String> atts = dataSet.process.otherAttributes;
 		if (dataSet.profile != null) {
-			dataSet.process.otherAttributes.put(qname, dataSet.profile);
+			atts.put(Vocab.PROFILE_ATTR, dataSet.profile);
 		} else {
-			dataSet.process.otherAttributes.remove(qname);
+			atts.remove(Vocab.PROFILE_ATTR);
 		}
 	}
 }

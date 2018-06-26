@@ -238,7 +238,8 @@ class ModulePage extends FormPage {
 	}
 
 	private Module[] modules() {
-		List<Module> modules = EpdProfiles.modules();
+		EpdProfile profile = EpdProfiles.get(dataSet);
+		List<Module> modules = profile.modules;
 		modules.sort((m1, m2) -> m1.index - m2.index);
 		return modules.toArray(new Module[modules.size()]);
 	}

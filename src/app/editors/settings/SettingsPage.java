@@ -61,7 +61,7 @@ public class SettingsPage extends BaseEditor {
 				App.settings().profile, settings.profile);
 		if (profileChanged) {
 			EpdProfile profile = EpdProfiles.get(settings.profile);
-			EpdProfiles.set(profile);
+			EpdProfiles.setDefault(profile);
 		}
 		App.settings().setValues(settings);
 		App.settings().save();
@@ -73,7 +73,7 @@ public class SettingsPage extends BaseEditor {
 			Navigator.refresh();
 		}
 		if (langChange || profileChanged) {
-			EpdProfile profile = EpdProfiles.get();
+			EpdProfile profile = EpdProfiles.getDefault();
 			EpdProfiles.sync(profile);
 			EpdProfiles.save(profile);
 		}

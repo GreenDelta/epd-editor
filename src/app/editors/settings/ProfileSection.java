@@ -18,6 +18,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import app.App;
 import app.M;
 import app.editors.profiles.ProfileEditor;
+import app.navi.Navigator;
 import app.rcp.Icon;
 import app.store.EpdProfiles;
 import app.store.Json;
@@ -92,8 +93,9 @@ class ProfileSection {
 		}
 		EpdProfiles.save(profile);
 		if (Strings.nullOrEqual(profile.id, App.settings().profile)) {
-			EpdProfiles.set(profile);
+			EpdProfiles.setDefault(profile);
 		}
+		Navigator.refreshProfiles();
 		reload();
 	}
 

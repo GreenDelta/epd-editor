@@ -8,6 +8,7 @@ import java.util.Objects;
 import app.store.EpdProfiles;
 import epd.model.Amount;
 import epd.model.EpdDataSet;
+import epd.model.EpdProfile;
 import epd.model.Indicator;
 import epd.model.IndicatorResult;
 import epd.model.ModuleEntry;
@@ -52,16 +53,17 @@ class ModuleResultSync implements Runnable {
 	}
 
 	private void syncNew(HashMap<String, ModuleEntry> index) {
+		EpdProfile profile = EpdProfiles.get(dataSet);
 		for (String key : index.keySet()) {
 			ModuleEntry entry = index.get(key);
 			if (entry == null)
 				continue;
-			syncResults(entry);
+			syncResults(entry, profile);
 		}
 	}
 
-	private void syncResults(ModuleEntry entry) {
-		for (Indicator indicator : EpdProfiles.indicators()) {
+	private void syncResults(ModuleEntry entry, EpdProfile profile) {
+		for (Indicator indicator : profile.indicators) {
 			IndicatorResult result = dataSet.getResult(indicator);
 			if (result == null) {
 				result = new IndicatorResult();

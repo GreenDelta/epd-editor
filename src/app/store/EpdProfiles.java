@@ -17,6 +17,7 @@ import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.flows.FlowName;
 import org.openlca.ilcd.methods.LCIAMethod;
+import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.units.UnitGroup;
 import org.openlca.ilcd.util.Flows;
 import org.slf4j.Logger;
@@ -27,10 +28,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import app.App;
+import epd.io.conversion.Vocab;
+import epd.model.EpdDataSet;
 import epd.model.EpdProfile;
 import epd.model.Indicator;
 import epd.model.Indicator.Type;
-import epd.model.Module;
 import epd.model.RefStatus;
 import epd.util.Strings;
 
@@ -46,7 +48,7 @@ public final class EpdProfiles {
 	/**
 	 * Set the given profile as the default profile of the application.
 	 */
-	public static void set(EpdProfile p) {
+	public static void setDefault(EpdProfile p) {
 		profile = p;
 	}
 
@@ -55,7 +57,7 @@ public final class EpdProfiles {
 	}
 
 	/** Get the active profile of the application. */
-	public static EpdProfile get() {
+	public static EpdProfile getDefault() {
 		if (profile != null)
 			return profile;
 		String id = App.settings().profile;
@@ -97,16 +99,30 @@ public final class EpdProfiles {
 		if (id == null)
 			return null;
 		if (Strings.nullOrEqual(id, App.settings().profile))
-			return get();
+			return getDefault();
 		File f = file(id);
 		if (f == null || !f.exists())
 			return null;
 		return Json.read(f, EpdProfile.class);
 	}
 
+	public static EpdProfile get(EpdDataSet ds) {
+		if (ds == null)
+			return getDefault();
+		return get(ds.process);
+	}
+
+	public static EpdProfile get(Process p) {
+		if (p == null)
+			return getDefault();
+		String profileID = p.otherAttributes.get(Vocab.PROFILE_ATTR);
+		EpdProfile profile = EpdProfiles.get(profileID);
+		return profile != null ? profile : getDefault();
+	}
+
 	/** Get all EPD profiles from the workspace. */
 	public static List<EpdProfile> getAll() {
-		get(); // make sure that the default profile is loaded.
+		getDefault(); // make sure that the default profile is loaded.
 		File dir = new File(App.workspace, "epd_profiles");
 		if (!dir.exists())
 			return Collections.emptyList();
@@ -118,15 +134,6 @@ public final class EpdProfiles {
 			}
 		}
 		return profiles;
-	}
-
-	/** Get the indicators from the default profile. */
-	public static List<Indicator> indicators() {
-		return get().indicators;
-	}
-
-	public static List<Module> modules() {
-		return get().modules;
 	}
 
 	/** Save the given profile in the workspace. */

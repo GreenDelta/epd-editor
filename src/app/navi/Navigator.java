@@ -1,5 +1,7 @@
 package app.navi;
 
+import java.util.function.Consumer;
+
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
@@ -100,32 +102,40 @@ public class Navigator extends CommonNavigator {
 	}
 
 	public static void refreshConnections() {
-		try {
-			NavigationRoot root = Navigator.getInstance().root;
-			if (root.childs == null)
-				return;
-			for (NavigationElement e : root.childs) {
-				if (e instanceof ConnectionFolder)
-					refresh(e);
+		eachRoot(e -> {
+			if (e instanceof ConnectionFolder) {
+				refresh(e);
 			}
-		} catch (Exception e) {
-			Logger log = LoggerFactory.getLogger(Navigator.class);
-			log.error("failed to refresh connections", e);
-		}
+		});
+	}
+
+	public static void refreshProfiles() {
+		eachRoot(e -> {
+			if (e instanceof ProfileFolder) {
+				refresh(e);
+			}
+		});
 	}
 
 	public static void refreshFolders() {
+		eachRoot(e -> {
+			if (e instanceof FolderElement) {
+				refresh(e);
+			}
+		});
+	}
+
+	private static void eachRoot(Consumer<NavigationElement> fn) {
 		try {
 			NavigationRoot root = Navigator.getInstance().root;
 			if (root.childs == null)
 				return;
 			for (NavigationElement e : root.childs) {
-				if (e instanceof FolderElement)
-					refresh(e);
+				fn.accept(e);
 			}
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Navigator.class);
-			log.error("failed to refresh folders", e);
+			log.error("eachRoot failed", e);
 		}
 	}
 

@@ -2,6 +2,11 @@ package app.store;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,6 +20,10 @@ import org.openlca.ilcd.units.UnitGroup;
 import org.openlca.ilcd.util.Flows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import app.App;
 import epd.model.EpdProfile;
@@ -38,6 +47,12 @@ public final class EpdProfiles {
 	 */
 	public static void set(EpdProfile p) {
 		profile = p;
+	}
+
+	public static boolean isDefault(EpdProfile p) {
+		if (p == null || profile == null)
+			return false;
+		return Strings.nullOrEqual(p.id, profile.id);
 	}
 
 	/** Get the active profile of the application. */
@@ -215,6 +230,90 @@ public final class EpdProfiles {
 				i.name = App.s(flowName.baseName);
 			}
 			return RefStatus.info(i.getRef(App.lang()), "Updated");
+		}
+	}
+
+	/**
+	 * Download all EPD-Profiles from the given base URL. EPD-Profiles are
+	 * located under the /resource/profiles path of a soda4LCA server.
+	 */
+	public static void downloadAll(String baseURL) {
+		if (baseURL == null)
+			return;
+		Logger log = LoggerFactory.getLogger(EpdProfiles.class);
+		String url = baseURL.split("/resource")[0] + "/resource/profiles/";
+		log.info("Try to download profiles from {}", url);
+		try {
+			URLConnection con = new URL(url).openConnection();
+			if (!(con instanceof HttpURLConnection)) {
+				log.warn("No HTTP connection");
+				return;
+			}
+			HttpURLConnection http = (HttpURLConnection) con;
+			http.setRequestMethod("GET");
+			http.connect();
+			if (http.getResponseCode() >= 400) {
+				log.warn("Response code = {}", http.getResponseCode());
+				return;
+			}
+			try (InputStream in = con.getInputStream();
+					Reader reader = new InputStreamReader(in, "utf-8")) {
+				JsonObject obj = new Gson().fromJson(reader, JsonObject.class);
+				for (JsonElement elem : obj.getAsJsonArray("profiles")) {
+					if (!elem.isJsonObject())
+						continue;
+					JsonElement idElem = elem.getAsJsonObject().get("id");
+					if (idElem == null)
+						continue;
+					String id = idElem.getAsString();
+					String profileUrl = url + id;
+					download(profileUrl);
+				}
+			}
+		} catch (Exception e) {
+			log.error("Failed to download profiles", e);
+		}
+	}
+
+	/**
+	 * Download an EPD profile and store it locally. Returns null if the
+	 * download failed. Details are written to the log.
+	 */
+	public static EpdProfile download(String url) {
+		if (url == null)
+			return null;
+		Logger log = LoggerFactory.getLogger(EpdProfiles.class);
+		log.info("Download profile from {}", url);
+		try {
+			URLConnection con = new URL(url).openConnection();
+			if (!(con instanceof HttpURLConnection)) {
+				log.warn("No HTTP connection");
+				return null;
+			}
+			HttpURLConnection http = (HttpURLConnection) con;
+			http.setRequestMethod("GET");
+			http.connect();
+			if (http.getResponseCode() >= 400) {
+				log.warn("Response code = {}", http.getResponseCode());
+				return null;
+			}
+			try (InputStream in = con.getInputStream()) {
+				EpdProfile p = Json.read(in, EpdProfile.class);
+				if (p == null || p.id == null) {
+					log.warn("Could not read profile");
+					return null;
+				}
+				save(p);
+				log.info("Saved profile {}", p.id);
+				if (isDefault(p)) {
+					profile = p;
+					log.info("Updated default profile");
+				}
+				return p;
+			}
+		} catch (Exception e) {
+			log.error("Failed to download profiles", e);
+			return null;
 		}
 	}
 }

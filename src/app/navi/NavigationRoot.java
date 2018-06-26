@@ -20,6 +20,7 @@ public class NavigationRoot extends NavigationElement {
 				new FolderElement(this, FolderType.LOCATION),
 				new FolderElement(this, FolderType.CLASSIFICATION),
 				new FolderElement(this, FolderType.DOC),
+				new ProfileFolder(this),
 				new ConnectionFolder(this)));
 		for (NavigationElement child : getChilds()) {
 			child.getChilds();

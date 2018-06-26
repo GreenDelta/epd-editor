@@ -11,6 +11,7 @@ public class EpdProfile {
 	public String id;
 	public String name;
 	public String description;
+	public String referenceDataUrl;
 	public final List<Indicator> indicators = new ArrayList<>();
 	public final List<Module> modules = new ArrayList<>();
 

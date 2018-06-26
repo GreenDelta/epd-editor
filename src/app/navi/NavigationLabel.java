@@ -59,7 +59,8 @@ public class NavigationLabel extends ColumnLabelProvider implements
 	public Font getFont(Object obj) {
 		if (obj instanceof TypeElement
 				|| obj instanceof FolderElement
-				|| obj instanceof ConnectionFolder)
+				|| obj instanceof ConnectionFolder
+				|| obj instanceof ProfileFolder)
 			return boldFont;
 		return null;
 	}

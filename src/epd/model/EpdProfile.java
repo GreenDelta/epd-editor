@@ -36,4 +36,23 @@ public class EpdProfile {
 		}
 		return null;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+		if (obj == this)
+			return true;
+		if (!(obj instanceof EpdProfile))
+			return false;
+		EpdProfile other = (EpdProfile) obj;
+		return Objects.equals(this.id, other.id);
+	}
+
+	@Override
+	public int hashCode() {
+		if (id == null)
+			return super.hashCode();
+		return id.hashCode();
+	}
 }

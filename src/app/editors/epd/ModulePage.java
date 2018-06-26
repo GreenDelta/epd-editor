@@ -11,6 +11,7 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
@@ -23,6 +24,7 @@ import app.M;
 import app.rcp.Icon;
 import app.store.EpdProfiles;
 import app.util.Actions;
+import app.util.Controls;
 import app.util.FileChooser;
 import app.util.MsgBox;
 import app.util.Tables;
@@ -32,6 +34,7 @@ import app.util.tables.ComboBoxCellModifier;
 import app.util.tables.ModifySupport;
 import app.util.tables.TextCellModifier;
 import epd.model.EpdDataSet;
+import epd.model.EpdProfile;
 import epd.model.Module;
 import epd.model.ModuleEntry;
 import epd.model.Scenario;
@@ -68,12 +71,41 @@ class ModulePage extends FormPage {
 		ScrolledForm form = UI.formHeader(managedForm,
 				M.EnvironmentalIndicators);
 		Composite body = UI.formBody(form, managedForm.getToolkit());
+		createProfileSection(body);
 		createScenarioSection(body);
 		moduleTable = createModuleSection(body);
 		moduleTable.setInput(modules);
 		resultTable = createResultSection(body);
 		resultTable.refresh();
 		form.reflow(true);
+	}
+
+	private void createProfileSection(Composite body) {
+		Composite comp = UI.formSection(body, toolkit, "#EPD Profile");
+		Combo combo = UI.formCombo(comp, toolkit, "#EPD Profile");
+		int selected = -1;
+		List<EpdProfile> profiles = EpdProfiles.getAll();
+		profiles.sort((p1, p2) -> Strings.compare(p1.name, p2.name));
+		String[] items = new String[profiles.size()];
+		for (int i = 0; i < profiles.size(); i++) {
+			EpdProfile p = profiles.get(i);
+			items[i] = p.name != null ? p.name : "?";
+			if (Objects.equals(p.id, dataSet.profile)) {
+				selected = i;
+			}
+		}
+		combo.setItems(items);
+		if (selected >= 0) {
+			combo.select(selected);
+		}
+		Controls.onSelect(combo, e -> {
+			int i = combo.getSelectionIndex();
+			EpdProfile p = profiles.get(i);
+			if (p != null) {
+				dataSet.profile = p.id;
+				editor.setDirty();
+			}
+		});
 	}
 
 	private void createScenarioSection(Composite parent) {

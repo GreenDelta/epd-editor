@@ -51,9 +51,7 @@ public final class EpdProfiles {
 	}
 
 	public static boolean isDefault(EpdProfile p) {
-		if (p == null || profile == null)
-			return false;
-		return Strings.nullOrEqual(p.id, profile.id);
+		return Objects.equals(p, profile);
 	}
 
 	/** Get the active profile of the application. */

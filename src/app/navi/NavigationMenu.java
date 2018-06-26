@@ -5,8 +5,6 @@ import java.util.List;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.custom.BusyIndicator;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.actions.ActionContext;
 import org.eclipse.ui.navigator.CommonActionProvider;
 import org.openlca.ilcd.io.SodaConnection;
@@ -15,6 +13,7 @@ import app.M;
 import app.editors.Editors;
 import app.editors.classifications.ClassificationEditor;
 import app.editors.connection.ConnectionEditor;
+import app.editors.connection.EpdProfileDownload;
 import app.editors.locations.LocationEditor;
 import app.editors.profiles.ProfileEditor;
 import app.navi.actions.ClassificationSync;
@@ -27,7 +26,6 @@ import app.navi.actions.NewDataSetAction;
 import app.navi.actions.RefDeleteAction;
 import app.rcp.Icon;
 import app.store.Connections;
-import app.store.EpdProfiles;
 import app.store.validation.ValidationDialog;
 import app.util.Actions;
 import app.util.UI;
@@ -82,10 +80,7 @@ public class NavigationMenu extends CommonActionProvider {
 					() -> ConnectionEditor.open(e.con)));
 			menu.add(Actions.create("#Download EPD Profiles",
 					Icon.DOWNLOAD.des(), () -> {
-						BusyIndicator.showWhile(Display.getDefault(), () -> {
-							EpdProfiles.downloadAll(e.con.url);
-							Navigator.refreshProfiles();
-						});
+						EpdProfileDownload.runInUI(e.con.url);
 					}));
 			menu.add(new ConnectionDeleteAction(e));
 		}

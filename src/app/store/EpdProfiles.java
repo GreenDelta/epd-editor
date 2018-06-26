@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.flows.Flow;
@@ -235,9 +236,11 @@ public final class EpdProfiles {
 
 	/**
 	 * Download all EPD-Profiles from the given base URL. EPD-Profiles are
-	 * located under the /resource/profiles path of a soda4LCA server.
+	 * located under the /resource/profiles path of a soda4LCA server. These
+	 * profiles are stored/updated locally. The given callback function is
+	 * called for each EPD profile that was downloaded.
 	 */
-	public static void downloadAll(String baseURL) {
+	public static void downloadAll(String baseURL, Consumer<EpdProfile> fn) {
 		if (baseURL == null)
 			return;
 		Logger log = LoggerFactory.getLogger(EpdProfiles.class);
@@ -267,7 +270,10 @@ public final class EpdProfiles {
 						continue;
 					String id = idElem.getAsString();
 					String profileUrl = url + id;
-					download(profileUrl);
+					EpdProfile p = download(profileUrl);
+					if (p != null && fn != null) {
+						fn.accept(p);
+					}
 				}
 			}
 		} catch (Exception e) {

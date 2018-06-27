@@ -92,9 +92,6 @@ class ProfileSection {
 				return;
 		}
 		EpdProfiles.save(profile);
-		if (Strings.nullOrEqual(profile.id, App.settings().profile)) {
-			EpdProfiles.setDefault(profile);
-		}
 		Navigator.refreshProfiles();
 		reload();
 	}

@@ -22,7 +22,6 @@ import app.navi.Navigator;
 import app.rcp.IniFile;
 import app.store.EpdProfiles;
 import app.util.UI;
-import epd.model.EpdProfile;
 import epd.util.Strings;
 
 public class SettingsPage extends BaseEditor {
@@ -57,12 +56,6 @@ public class SettingsPage extends BaseEditor {
 	public void doSave(IProgressMonitor monitor) {
 		boolean langChange = !Strings.nullOrEqual(
 				App.settings().lang, settings.lang);
-		boolean profileChanged = !Strings.nullOrEqual(
-				App.settings().profile, settings.profile);
-		if (profileChanged) {
-			EpdProfile profile = EpdProfiles.get(settings.profile);
-			EpdProfiles.setDefault(profile);
-		}
 		App.settings().setValues(settings);
 		App.settings().save();
 		dirty = false;
@@ -70,12 +63,9 @@ public class SettingsPage extends BaseEditor {
 			ini.write();
 		editorDirtyStateChanged();
 		if (langChange) {
+			// order is important
+			EpdProfiles.evictCache();
 			Navigator.refresh();
-		}
-		if (langChange || profileChanged) {
-			EpdProfile profile = EpdProfiles.getDefault();
-			EpdProfiles.sync(profile);
-			EpdProfiles.save(profile);
 		}
 	}
 

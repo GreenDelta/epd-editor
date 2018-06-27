@@ -65,7 +65,7 @@ class ModuleResultImport implements Runnable {
 	private List<IndicatorResult> readRows(Sheet sheet) {
 		if (sheet == null)
 			return Collections.emptyList();
-		EpdProfile profile = EpdProfiles.get(dataSet);
+		EpdProfile profile = EpdProfiles.get(dataSet.profile);
 		List<IndicatorResult> results = new ArrayList<>();
 		int rowNumber = 1;
 		while (true) {

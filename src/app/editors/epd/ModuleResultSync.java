@@ -53,7 +53,7 @@ class ModuleResultSync implements Runnable {
 	}
 
 	private void syncNew(HashMap<String, ModuleEntry> index) {
-		EpdProfile profile = EpdProfiles.get(dataSet);
+		EpdProfile profile = EpdProfiles.get(dataSet.profile);
 		for (String key : index.keySet()) {
 			ModuleEntry entry = index.get(key);
 			if (entry == null)

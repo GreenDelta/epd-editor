@@ -9,8 +9,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import org.openlca.ilcd.commons.Ref;
@@ -29,7 +30,6 @@ import com.google.gson.JsonObject;
 
 import app.App;
 import epd.io.conversion.Vocab;
-import epd.model.EpdDataSet;
 import epd.model.EpdProfile;
 import epd.model.Indicator;
 import epd.model.Indicator.Type;
@@ -40,76 +40,73 @@ public final class EpdProfiles {
 
 	private static final String DEFAULT = "EN_15804";
 
-	private static EpdProfile profile;
+	private static Map<String, EpdProfile> cache = new HashMap<>();
 
 	private EpdProfiles() {
 	}
 
-	/**
-	 * Set the given profile as the default profile of the application.
-	 */
-	public static void setDefault(EpdProfile p) {
-		profile = p;
+	public static void evictCache() {
+		cache.clear();
 	}
 
 	public static boolean isDefault(EpdProfile p) {
-		return Objects.equals(p, profile);
+		if (p == null || p.id == null)
+			return false;
+		String settingsID = App.settings().profile;
+		if (settingsID == null)
+			return p.id.equals(DEFAULT);
+		return p.id.equals(settingsID);
 	}
 
 	/** Get the active profile of the application. */
 	public static EpdProfile getDefault() {
-		if (profile != null)
-			return profile;
 		String id = App.settings().profile;
 		if (id == null) {
 			id = DEFAULT;
 		}
-		profile = fromFile(id);
-		if (profile != null)
-			return profile;
+		EpdProfile p = get(id);
+		if (p != null)
+			return p;
 
-		// loading from file failed; load default profile
-		File defaultFile = file(DEFAULT);
-		if (defaultFile.exists()) {
-			profile = fromFile(DEFAULT);
-		}
-		if (profile == null) {
-			InputStream stream = EpdProfiles.class
-					.getResourceAsStream(DEFAULT + ".json");
-			profile = Json.read(stream, EpdProfile.class);
-			save(profile);
-		}
-		if (!Objects.equals(DEFAULT, App.settings().profile)) {
+		// id != DEFAULT and does not exist -> switch to default
+		if (!id.equals(DEFAULT)) {
 			App.settings().profile = DEFAULT;
 			App.settings().save();
+			p = get(DEFAULT);
+			if (p != null)
+				return p;
 		}
 
-		if (profile == null) {
-			// this should never happen
-			profile = new EpdProfile();
-			profile.id = DEFAULT;
-			profile.name = DEFAULT;
+		// no DEFAULT profile in storage -> extract it
+		InputStream stream = EpdProfiles.class
+				.getResourceAsStream(DEFAULT + ".json");
+		p = Json.read(stream, EpdProfile.class);
+		save(p);
+
+		if (p == null) {
+			// this should never happen, but who knows
+			p = new EpdProfile();
+			p.id = DEFAULT;
+			p.name = DEFAULT;
 			Logger log = LoggerFactory.getLogger(EpdProfiles.class);
 			log.error("failed to load an EPD profile; even the default");
 		}
-		return profile;
+		return p;
 	}
 
 	public static EpdProfile get(String id) {
 		if (id == null)
 			return null;
-		if (Strings.nullOrEqual(id, App.settings().profile))
-			return getDefault();
+		EpdProfile p = cache.get(id);
+		if (p != null)
+			return p;
 		File f = file(id);
 		if (f == null || !f.exists())
 			return null;
-		return Json.read(f, EpdProfile.class);
-	}
-
-	public static EpdProfile get(EpdDataSet ds) {
-		if (ds == null)
-			return getDefault();
-		return get(ds.process);
+		p = Json.read(f, EpdProfile.class);
+		sync(p);
+		cache.put(id, p);
+		return p;
 	}
 
 	public static EpdProfile get(Process p) {
@@ -136,12 +133,17 @@ public final class EpdProfiles {
 		return profiles;
 	}
 
-	/** Save the given profile in the workspace. */
+	/**
+	 * Save the given profile in the workspace. The profile is synchronized
+	 * before it is saved.
+	 */
 	public static void save(EpdProfile profile) {
 		if (profile == null || profile.id == null)
 			return;
+		sync(profile);
 		File file = file(profile.id);
 		Json.write(profile, file);
+		cache.put(profile.id, profile);
 	}
 
 	/** Delete the profile with the given ID. */
@@ -150,16 +152,7 @@ public final class EpdProfiles {
 		if (file == null || !file.exists())
 			return;
 		file.delete();
-	}
-
-	private static EpdProfile fromFile(String id) {
-		File file = file(id);
-		if (file.exists()) {
-			profile = Json.read(file, EpdProfile.class);
-			if (profile != null)
-				return profile;
-		}
-		return null;
+		cache.remove(id);
 	}
 
 	private static File file(String id) {
@@ -316,10 +309,6 @@ public final class EpdProfiles {
 				}
 				save(p);
 				log.info("Saved profile {}", p.id);
-				if (isDefault(p)) {
-					profile = p;
-					log.info("Updated default profile");
-				}
 				return p;
 			}
 		} catch (Exception e) {

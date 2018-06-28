@@ -8,7 +8,6 @@ public class Vocab {
 	}
 
 	public static final QName PROFILE_ATTR = new QName(
-			"http://www.okworx.com/ILCD+EPD/Extensions/2018/Profile",
-			"epdProfile");
+			"http://www.okworx.com/ILCD/Extensions/2018/Profile", "profile");
 
 }

@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.StatusView;
+import app.editors.io.Download;
 import app.util.MsgBox;
 import epd.model.RefStatus;
 import epd.model.Version;
@@ -98,11 +99,10 @@ class RefDataDownload implements Runnable {
 					continue;
 				}
 				IDataSet ds = (IDataSet) obj;
-				App.store.put(ds);
-				// TODO: ext docs from sources
-				App.index.remove(oldRef);
-				App.index.add(ds);
-				stats.add(RefStatus.ok(newRef, "Downloaded/Updated data set"));
+				Download.save(newRef, ds, stats);
+				if (ds instanceof Source) {
+					Download.extDocs((Source) ds, client, stats);
+				}
 			} catch (Exception e) {
 				stats.add(RefStatus.error(newRef,
 						"Download failed: " + e.getMessage()));

@@ -26,7 +26,7 @@ import app.App;
 import app.M;
 import epd.model.RefStatus;
 
-class Download implements IRunnableWithProgress {
+public class Download implements IRunnableWithProgress {
 
 	private final SodaClient client;
 	boolean withDependencies = false;
@@ -52,9 +52,9 @@ class Download implements IRunnableWithProgress {
 			if (ds == null)
 				continue;
 			monitor.subTask("#Save data set " + App.s(ds.getName()));
-			save(ref, ds);
+			save(ref, ds, status);
 			if (ds instanceof Source) {
-				extDocs((Source) ds);
+				extDocs((Source) ds, client, status);
 			}
 			if (!withDependencies)
 				continue;
@@ -67,7 +67,13 @@ class Download implements IRunnableWithProgress {
 		App.dumpIndex();
 	}
 
-	private void extDocs(Source source) {
+	/**
+	 * Download the external documents of the given source from the soda4LCA
+	 * server. For each file where the download failed, an error message is
+	 * written to the status log.
+	 */
+	public static void extDocs(Source source, SodaClient client,
+			List<RefStatus> stats) {
 		for (FileRef ref : Sources.getFileRefs(source)) {
 			String fileName = Sources.getFileName(ref);
 			if (fileName == null || fileName.isEmpty())
@@ -79,9 +85,24 @@ class Download implements IRunnableWithProgress {
 				Files.copy(is, target.toPath(),
 						StandardCopyOption.REPLACE_EXISTING);
 			} catch (Exception e) {
-				status.add(RefStatus.error(Ref.of(source),
+				stats.add(RefStatus.error(Ref.of(source),
 						"#Failed to get external doc.: " + fileName));
 			}
+		}
+	}
+
+	/**
+	 * Saves the given data set locally and updates the application index.
+	 */
+	public static void save(Ref ref, IDataSet ds, List<RefStatus> stats) {
+		try {
+			App.store.put(ds);
+			App.index.remove(ref);
+			App.index.add(ds);
+			stats.add(RefStatus.ok(ref, "Downloaded/Updated"));
+		} catch (Exception e) {
+			stats.add(RefStatus.error(ref,
+					"Failed to store data set: " + e.getMessage()));
 		}
 	}
 
@@ -101,18 +122,6 @@ class Download implements IRunnableWithProgress {
 			status.add(RefStatus.error(ref,
 					M.DownloadFailed + ": " + e.getMessage()));
 			return null;
-		}
-	}
-
-	private void save(Ref ref, IDataSet ds) {
-		try {
-			App.store.put(ds);
-			App.index.remove(ref);
-			App.index.add(ds);
-			status.add(RefStatus.ok(ref, "Downloaded"));
-		} catch (Exception e) {
-			status.add(RefStatus.error(ref,
-					M.DownloadFailed + ": " + e.getMessage()));
 		}
 	}
 }

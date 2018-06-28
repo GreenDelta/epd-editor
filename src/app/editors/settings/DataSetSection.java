@@ -1,13 +1,19 @@
 package app.editors.settings;
 
+import java.util.List;
+
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import app.AppSettings;
 import app.M;
+import app.store.EpdProfiles;
 import app.util.Controls;
 import app.util.UI;
+import epd.model.EpdProfile;
+import epd.util.Strings;
 
 class DataSetSection {
 
@@ -29,6 +35,7 @@ class DataSetSection {
 			settings().lang = lang;
 			page.setDirty();
 		});
+		profileCombo(comp, tk);
 		xmlCheck(comp, tk);
 		dependencyCheck(comp, tk);
 	}
@@ -50,6 +57,33 @@ class DataSetSection {
 		xmlCheck.setSelection(settings().showDataSetXML);
 		Controls.onSelect(xmlCheck, e -> {
 			settings().showDataSetXML = xmlCheck.getSelection();
+			page.setDirty();
+		});
+	}
+
+	private void profileCombo(Composite comp, FormToolkit tk) {
+		Combo combo = UI.formCombo(comp, tk, "#Default EPD profile");
+		UI.gridData(combo, false, false).widthHint = 300;
+		List<EpdProfile> profiles = EpdProfiles.getAll();
+		profiles.sort((p1, p2) -> Strings.compare(p1.name, p2.name));
+		String[] items = new String[profiles.size()];
+		int selected = -1;
+		for (int i = 0; i < items.length; i++) {
+			EpdProfile p = profiles.get(i);
+			if (EpdProfiles.isDefault(p)) {
+				selected = i;
+			}
+			items[i] = p.name;
+		}
+		combo.setItems(items);
+		if (selected >= 0) {
+			combo.select(selected);
+		}
+		Controls.onSelect(combo, e -> {
+			int idx = combo.getSelectionIndex();
+			if (idx < 0)
+				return;
+			settings().profile = profiles.get(idx).id;
 			page.setDirty();
 		});
 	}

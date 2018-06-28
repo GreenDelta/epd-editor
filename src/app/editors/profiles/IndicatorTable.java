@@ -27,15 +27,13 @@ import epd.model.RefStatus;
 
 class IndicatorTable {
 
+	private final ProfileEditor editor;
 	private final EpdProfile profile;
 	private TableViewer table;
 
-	private IndicatorTable(EpdProfile profile) {
+	IndicatorTable(ProfileEditor editor, EpdProfile profile) {
+		this.editor = editor;
 		this.profile = profile;
-	}
-
-	static IndicatorTable of(EpdProfile profile) {
-		return new IndicatorTable(profile);
 	}
 
 	void render(Composite body, FormToolkit tk) {
@@ -67,9 +65,9 @@ class IndicatorTable {
 				stats.stream()
 						.filter(stat -> stat.value == RefStatus.ERROR)
 						.forEach(stat -> errors.add(stat));
-				EpdProfiles.save(profile);
 			}, () -> {
 				table.setInput(profile.indicators);
+				editor.setDirty();
 				if (!errors.isEmpty()) {
 					StatusView.open("#Sync Errors for "
 							+ profile.name, errors);

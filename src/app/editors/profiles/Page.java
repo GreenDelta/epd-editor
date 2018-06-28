@@ -32,7 +32,7 @@ class Page extends FormPage {
 		ScrolledForm form = UI.formHeader(mform, profile.name);
 		Composite body = UI.formBody(form, mform.getToolkit());
 		infoSection(tk, body);
-		IndicatorTable.of(profile).render(body, tk);
+		new IndicatorTable(editor, profile).render(body, tk);
 		ModuleTable.of(profile).render(body, tk);
 		form.reflow(true);
 	}

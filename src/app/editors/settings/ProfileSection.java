@@ -31,6 +31,8 @@ import app.util.Viewers;
 import epd.model.EpdProfile;
 import epd.util.Strings;
 
+// TODO: this is not used anymore and should be removed
+@Deprecated
 class ProfileSection {
 
 	private final SettingsPage page;

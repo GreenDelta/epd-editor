@@ -81,7 +81,6 @@ public class SettingsPage extends BaseEditor {
 			ScrolledForm form = UI.formHeader(mform, M.Settings);
 			Composite body = UI.formBody(form, mform.getToolkit());
 			new DataSetSection(SettingsPage.this).render(body, tk);
-			new ProfileSection(SettingsPage.this).render(body, tk);
 			new ValidationSection(SettingsPage.this).render(body, tk);
 			new AppSection(SettingsPage.this).render(body, tk);
 			form.reflow(true);

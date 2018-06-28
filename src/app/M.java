@@ -4,12 +4,9 @@ import org.eclipse.osgi.util.NLS;
 
 public class M extends NLS {
 
-	public static String AbioticResourceDepletionElements;
-	public static String AbioticResourceDepletionFossilFuels;
 	public static String AboutEPDEditor;
 	public static String AccessRestrictions;
 	public static String AccreditedThirdPartyReview;
-	public static String Acidification;
 	public static String Add;
 	public static String AddAMaterialProperty;
 	public static String AddReview;
@@ -20,7 +17,6 @@ public class M extends NLS {
 	public static String ApplicationSettings;
 	public static String Average;
 
-	public static String CalculateResults;
 	public static String Category;
 	public static String CategoryPath;
 	public static String ChangeProduct;
@@ -33,7 +29,6 @@ public class M extends NLS {
 	public static String CompleteReviewReport;
 	public static String ComplianceDeclarations;
 	public static String ComponentsForReuse;
-	public static String ConnectToSoda4LCA;
 	public static String ConnectionData;
 	public static String Contact;
 	public static String ContactInformation;
@@ -78,16 +73,12 @@ public class M extends NLS {
 
 	public static String EPD;
 	public static String EPDEditor;
-	public static String EPD_DOWNLOAD_FAILED;
 	public static String EPDs;
 	public static String Extras;
 	public static String EnvironmentalIndicators;
-	public static String EnvironmentalParameters;
 	public static String Error;
-	public static String Eutrophication;
 	public static String Export;
 	public static String ExportDataPackage;
-	public static String ExportEnergy;
 	public static String ExportFailed;
 	public static String ExternalDocumentationSources;
 	public static String ExternalFile;
@@ -102,7 +93,6 @@ public class M extends NLS {
 	public static String FlowProperties;
 	public static String FlowProperty;
 	public static String Flows;
-	public static String FreshWaterNetUse;
 
 	public static String GeneralInformation;
 	public static String Generic;
@@ -110,10 +100,8 @@ public class M extends NLS {
 	public static String Geography;
 	public static String GeographyDescription;
 	public static String GetFromServer;
-	public static String GlobalWarming;
 	public static String Group;
 
-	public static String HazardousWaste;
 	public static String Help;
 
 	public static String Import;
@@ -143,8 +131,6 @@ public class M extends NLS {
 
 	public static String MaterialProperties;
 	public static String MaterialProperties_Description;
-	public static String MaterialsForEnergyRecovery;
-	public static String MaterialsForRecycling;
 	public static String ModellingAndValidation;
 	public static String Module;
 	public static String Modules;
@@ -161,28 +147,17 @@ public class M extends NLS {
 	public static String NewSource;
 	public static String NewUnitGroup;
 	public static String Translation_NoContentsYet;
-	public static String NoSearchPossible;
 	public static String NoValidationProfile;
 	public static String NoValidationProfile_Error;
-	public static String NonHazardousWaste;
 	public static String None;
-	public static String NotANumber;
-	public static String NotAProduct;
-	public static String NotAProduct_Info;
 	public static String NotReviewed;
 
-	public static String OekobaudatWebsite;
-	public static String OekobaudatWebsite_Description;
-	public static String OnlineSearch;
 	public static String Open;
 	public static String OpenEditor;
-	public static String OpenInBrowser;
 	public static String OutputParameters;
 	public static String Owner;
-	public static String OzoneDepletion;
 
 	public static String Password;
-	public static String PhotochemicalOzoneCreation;
 	public static String Pictogram;
 	public static String ProcessInformation;
 	public static String Processes;
@@ -195,7 +170,6 @@ public class M extends NLS {
 	public static String QuantitativeProperties;
 	public static String QuantitativeReference;
 
-	public static String RadioactiveWasteDisposed;
 	public static String ReferenceYear;
 	public static String ReloadNavigation;
 	public static String Remove;
@@ -212,8 +186,6 @@ public class M extends NLS {
 	public static String SafetyMargin;
 	public static String SafetyMargins;
 	public static String SaveAs;
-	public static String SaveWithNewProduct;
-	public static String SaveWithNewProduct_Question;
 	public static String Scenario;
 	public static String Scenarios;
 	public static String Search;
@@ -227,8 +199,6 @@ public class M extends NLS {
 	public static String SelectAMaterialProperty;
 	public static String SelectAProductSystem;
 	public static String SelectDataSet;
-	public static String ServerConfiguration;
-	public static String ServerConfiguration_Description;
 	public static String ServerConnection;
 	public static String ServerConnections;
 	public static String SetAsActiveProfile;
@@ -253,7 +223,6 @@ public class M extends NLS {
 	public static String Telefax;
 	public static String Telephone;
 	public static String Template;
-	public static String TestConnection;
 	public static String Time;
 	public static String TimeDescription;
 	public static String TranslationView;

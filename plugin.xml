@@ -210,7 +210,7 @@
     </editor>
     <editor
           default="false"
-          icon="icons/quantity.png"
+          icon="icons/settings.png"
           id="epd.profile.editor"
           name="EPD Profile"
           class="app.editors.profiles.ProfileEditor">

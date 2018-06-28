@@ -23,6 +23,8 @@ import app.navi.actions.FileDeletion;
 import app.navi.actions.FileImport;
 import app.navi.actions.NewConnectionAction;
 import app.navi.actions.NewDataSetAction;
+import app.navi.actions.ProfileExportAction;
+import app.navi.actions.ProfileImportAction;
 import app.navi.actions.RefDeleteAction;
 import app.rcp.Icon;
 import app.store.Connections;
@@ -63,10 +65,15 @@ public class NavigationMenu extends CommonActionProvider {
 			forFile((FileElement) first, menu);
 		}
 
+		if (first instanceof ProfileFolder) {
+			menu.add(new ProfileImportAction());
+		}
+
 		if (first instanceof ProfileElement) {
 			ProfileElement pe = (ProfileElement) first;
 			menu.add(Actions.create(M.Open, Icon.OPEN.des(),
 					() -> ProfileEditor.open(pe.profile)));
+			menu.add(new ProfileExportAction(pe.profile));
 		}
 
 		if (first instanceof ConnectionFolder) {

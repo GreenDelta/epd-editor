@@ -81,8 +81,8 @@ class ModulePage extends FormPage {
 	}
 
 	private void createProfileSection(Composite body) {
-		Composite comp = UI.formSection(body, toolkit, "#EPD Profile");
-		Combo combo = UI.formCombo(comp, toolkit, "#EPD Profile");
+		Composite comp = UI.formSection(body, toolkit, M.EPDProfile);
+		Combo combo = UI.formCombo(comp, toolkit, M.EPDProfile);
 		int selected = -1;
 		List<EpdProfile> profiles = EpdProfiles.getAll();
 		profiles.sort((p1, p2) -> Strings.compare(p1.name, p2.name));

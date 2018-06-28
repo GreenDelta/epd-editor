@@ -2,6 +2,7 @@ package app.navi;
 
 import org.eclipse.swt.graphics.Image;
 
+import app.M;
 import app.rcp.Icon;
 import app.store.EpdProfiles;
 import epd.model.EpdProfile;
@@ -26,7 +27,7 @@ public class ProfileFolder extends NavigationElement {
 
 	@Override
 	public String getLabel() {
-		return "#EPD Profiles";
+		return M.EPDProfiles;
 	}
 
 	@Override

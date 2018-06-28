@@ -101,7 +101,7 @@ public class EpdEditor extends BaseEditor {
 	@Override
 	public void doSaveAs() {
 		InputDialog d = new InputDialog(UI.shell(), M.SaveAs,
-				"#Save EPD as a new data set with the following name:",
+				M.SaveEPDAs_Message + ": ",
 				M.EPD + " " + M.Name, null);
 		if (d.open() != Window.OK)
 			return;

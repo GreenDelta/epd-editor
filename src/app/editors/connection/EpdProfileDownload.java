@@ -6,6 +6,7 @@ import java.util.List;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Display;
 
+import app.M;
 import app.navi.Navigator;
 import app.store.EpdProfiles;
 import app.util.MsgBox;
@@ -23,17 +24,17 @@ public class EpdProfileDownload {
 			Navigator.refreshProfiles();
 		});
 		if (results.isEmpty()) {
-			MsgBox.info("#Could not find profiles on the server.");
+			MsgBox.info(M.NoEPDProfilesOnServer_Message);
 			return;
 		}
-		String text = "#Downloaded/updated the following profiles: ";
+		String text = M.DownloadedEPDProfiles_Message + ": ";
 		for (int i = 0; i < results.size(); i++) {
 			text += results.get(i).name;
 			if (i < results.size() - 1) {
 				text += ", ";
 			}
 		}
-		MsgBox.info("#Downloaded profiles", text);
+		MsgBox.info(M.DownloadedEPDProfiles, text);
 	}
 
 }

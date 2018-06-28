@@ -40,7 +40,7 @@ public class DownloadDialog extends Wizard {
 		if (refs == null)
 			return Window.CANCEL;
 		DownloadDialog d = new DownloadDialog(con, refs);
-		d.setWindowTitle("#Download data sets");
+		d.setWindowTitle(M.DownloadDataSets);
 		WizardDialog dialog = new WizardDialog(UI.shell(), d);
 		dialog.setPageSize(150, 300);
 		return dialog.open();
@@ -60,7 +60,7 @@ public class DownloadDialog extends Wizard {
 			StatusView.open(M.Download, download.status);
 			return true;
 		} catch (Exception e) {
-			MsgBox.error("#Download failed", e.getMessage());
+			MsgBox.error(M.DownloadFailed, e.getMessage());
 			return false;
 		}
 	}
@@ -100,16 +100,16 @@ public class DownloadDialog extends Wizard {
 		private void createChecks(Composite comp) {
 			UI.filler(comp);
 			dependencyCheck = new Button(comp, SWT.CHECK);
-			dependencyCheck.setText("#Download dependencies");
+			dependencyCheck.setText(M.DownloadDependentDataSets);
 			dependencyCheck.setSelection(true);
 			UI.filler(comp);
 			overwriteCheck = new Button(comp, SWT.CHECK);
-			overwriteCheck.setText("#Overwrite existing data sets");
+			overwriteCheck.setText(M.OverwriteExistingDataSets);
 			overwriteCheck.setSelection(false);
 		}
 
 		private void createTable(Composite comp) {
-			table = Tables.createViewer(comp, "#Data set", "UUID", "Version");
+			table = Tables.createViewer(comp, M.DataSet, "UUID", M.Version);
 			table.setLabelProvider(new RefTableLabel());
 			Tables.bindColumnWidths(table, 0.6, 0.2, 0.2);
 			table.setInput(refs);

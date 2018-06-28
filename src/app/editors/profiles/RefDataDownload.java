@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.App;
+import app.M;
 import app.StatusView;
 import app.editors.io.Download;
 import app.util.MsgBox;
@@ -49,16 +50,15 @@ class RefDataDownload implements Runnable {
 			baseUrl = parts[0];
 			dataStock = parts[1].replace("/", "");
 		}
-		boolean b = MsgBox.ask("#Download reference data",
-				"#Do you want to download / update the "
-						+ "reference data of this profile?");
+		boolean b = MsgBox.ask(M.DownloadReferenceData,
+				M.DownloadReferenceData_Message);
 		if (!b)
 			return;
 		SodaConnection con = new SodaConnection();
 		con.dataStockId = dataStock;
 		con.url = baseUrl;
 		RefDataDownload download = new RefDataDownload(con);
-		App.run("#Download reference data", download, download::doAfter);
+		App.run(M.DownloadReferenceData, download, download::doAfter);
 	}
 
 	@Override
@@ -128,10 +128,10 @@ class RefDataDownload implements Runnable {
 		if (error != null) {
 			MsgBox.error(error);
 		} else if (stats.size() == 0) {
-			MsgBox.info("#No data found on server");
+			MsgBox.info(M.NoDataFoundOnServer);
 		}
 		if (stats.size() > 0) {
-			StatusView.open("#Synchronized data sets from " + con.url, stats);
+			StatusView.open(M.DataSets + " @" + con.url, stats);
 		}
 	}
 

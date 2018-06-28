@@ -51,7 +51,7 @@ public class Download implements IRunnableWithProgress {
 			IDataSet ds = get(ref);
 			if (ds == null)
 				continue;
-			monitor.subTask("#Save data set " + App.s(ds.getName()));
+			monitor.subTask(M.SaveDataSet + ": " + App.s(ds.getName()));
 			save(ref, ds, status);
 			if (ds instanceof Source) {
 				extDocs((Source) ds, client, status);

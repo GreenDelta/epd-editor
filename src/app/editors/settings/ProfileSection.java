@@ -45,7 +45,7 @@ class ProfileSection {
 	}
 
 	void render(Composite body, FormToolkit tk) {
-		Section section = UI.section(body, tk, "#EPD Profiles");
+		Section section = UI.section(body, tk, M.EPDProfiles);
 		Composite comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
 		table = Tables.createViewer(comp,

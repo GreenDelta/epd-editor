@@ -30,7 +30,7 @@ class ModuleTable {
 		Section section = UI.section(body, tk, M.Modules);
 		Composite comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
-		table = Tables.createViewer(comp, "#Index",
+		table = Tables.createViewer(comp, M.Index,
 				M.Name, M.Description);
 		Tables.bindColumnWidths(table, 0.2, 0.3, 0.5);
 		table.setLabelProvider(new Label());

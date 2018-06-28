@@ -41,13 +41,13 @@ public class M extends NLS {
 	public static String Data;
 	public static String DataEntry;
 	public static String DataFormats;
+	public static String DataSet;
 	public static String DataSetInformation;
 	public static String DataSetReference;
 	public static String DataSetReferences;
 	public static String DataSetUploaded;
 	public static String DataSetUploadedMessage;
 	public static String DataSetVersion;
-	public static String DataSet;
 	public static String DataSets;
 	public static String DataSources;
 	public static String DataStock;
@@ -55,6 +55,7 @@ public class M extends NLS {
 	public static String DeclaredProduct;
 	public static String DeclaredUnit;
 	public static String Default;
+	public static String DefaultEPDProfile;
 	public static String Delete;
 	public static String DeleteAllDataSets;
 	public static String DeleteDataSet;
@@ -69,12 +70,19 @@ public class M extends NLS {
 	public static String Documents;
 	public static String Download;
 	public static String DownloadDataSets;
+	public static String DownloadDependentDataSets;
+	public static String DownloadEPDProfiles;
 	public static String DownloadFailed;
+	public static String DownloadReferenceData;
+	public static String DownloadReferenceData_Message;
+	public static String DownloadedEPDProfiles;
+	public static String DownloadedEPDProfiles_Message;
 
 	public static String EPD;
 	public static String EPDEditor;
+	public static String EPDProfile;
+	public static String EPDProfiles;
 	public static String EPDs;
-	public static String Extras;
 	public static String EnvironmentalIndicators;
 	public static String Error;
 	public static String Export;
@@ -83,6 +91,7 @@ public class M extends NLS {
 	public static String ExternalDocumentationSources;
 	public static String ExternalFile;
 	public static String ExternalFiles;
+	public static String Extras;
 
 	public static String FailedToGetDataStocks;
 	public static String File;
@@ -107,13 +116,13 @@ public class M extends NLS {
 	public static String Import;
 	public static String ImportClassificationFile;
 	public static String ImportDataPackage;
-	public static String Imported;
 	public static String ImportFile;
-
+	public static String Imported;
 	public static String IncludeDependentDataSets;
 	public static String IndependentExternalReview;
 	public static String IndependentInternalReview;
 	public static String IndependentReviewPanel;
+	public static String Index;
 	public static String Indicator;
 	public static String Information;
 	public static String InvalidName;
@@ -146,7 +155,8 @@ public class M extends NLS {
 	public static String NewServerConnection;
 	public static String NewSource;
 	public static String NewUnitGroup;
-	public static String Translation_NoContentsYet;
+	public static String NoDataFoundOnServer;
+	public static String NoEPDProfilesOnServer_Message;
 	public static String NoValidationProfile;
 	public static String NoValidationProfile_Error;
 	public static String None;
@@ -155,6 +165,7 @@ public class M extends NLS {
 	public static String Open;
 	public static String OpenEditor;
 	public static String OutputParameters;
+	public static String OverwriteExistingDataSets;
 	public static String Owner;
 
 	public static String Password;
@@ -170,6 +181,7 @@ public class M extends NLS {
 	public static String QuantitativeProperties;
 	public static String QuantitativeReference;
 
+	public static String ReferenceDataURL;
 	public static String ReferenceYear;
 	public static String ReloadNavigation;
 	public static String Remove;
@@ -186,10 +198,11 @@ public class M extends NLS {
 	public static String SafetyMargin;
 	public static String SafetyMargins;
 	public static String SaveAs;
+	public static String SaveDataSet;
+	public static String SaveEPDAs_Message;
 	public static String Scenario;
 	public static String Scenarios;
 	public static String Search;
-	public static String SearchAndDownloads;
 	public static String SearchDependentDataSets;
 	public static String SearchEPDs;
 	public static String SearchEPDs_Description;
@@ -213,6 +226,7 @@ public class M extends NLS {
 	public static String StartPage;
 	public static String Status;
 	public static String Subtype;
+	public static String Synchronize;
 	public static String SynchronizeDependentDataSets;
 	public static String SynchronizeWithModules;
 	public static String Synonyms;
@@ -226,6 +240,7 @@ public class M extends NLS {
 	public static String Time;
 	public static String TimeDescription;
 	public static String TranslationView;
+	public static String Translation_NoContentsYet;
 	public static String Translations;
 
 	public static String UUID;

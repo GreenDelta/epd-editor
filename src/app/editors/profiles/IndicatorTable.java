@@ -53,14 +53,14 @@ class IndicatorTable {
 	private class Sync extends Action {
 
 		public Sync() {
-			setText("#Sync");
+			setText(M.Synchronize);
 			setImageDescriptor(Icon.RELOAD.des());
 		}
 
 		@Override
 		public void run() {
 			List<RefStatus> errors = new ArrayList<>();
-			App.run("#Sync", () -> {
+			App.run(M.Synchronize, () -> {
 				List<RefStatus> stats = EpdProfiles.sync(profile);
 				stats.stream()
 						.filter(stat -> stat.value == RefStatus.ERROR)
@@ -69,7 +69,7 @@ class IndicatorTable {
 				table.setInput(profile.indicators);
 				editor.setDirty();
 				if (!errors.isEmpty()) {
-					StatusView.open("#Sync Errors for "
+					StatusView.open(M.Error + ": "
 							+ profile.name, errors);
 				}
 			});

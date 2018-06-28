@@ -49,7 +49,7 @@ class Page extends FormPage {
 		Texts.set(descrText, profile.description).setEditable(false);
 		UI.filler(comp);
 		// reference data URL
-		Text urlText = UI.formText(comp, tk, "#Reference data URL");
+		Text urlText = UI.formText(comp, tk, M.ReferenceDataURL);
 		Texts.set(urlText, profile.referenceDataUrl);
 		urlText.addModifyListener(e -> {
 			profile.referenceDataUrl = urlText.getText();

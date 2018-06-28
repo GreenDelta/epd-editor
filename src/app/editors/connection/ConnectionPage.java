@@ -41,7 +41,7 @@ class ConnectionPage extends FormPage {
 		new DataSection(con).create(body, tk);
 		UI.filler(comp);
 		Button profileBtn = tk.createButton(comp,
-				"#Download EPD profiles", SWT.NONE);
+				M.DownloadEPDProfiles, SWT.NONE);
 		Controls.onSelect(profileBtn, e -> {
 			EpdProfileDownload.runInUI(con.url);
 		});

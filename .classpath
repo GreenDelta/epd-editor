@@ -1,5 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="libs/bcprov-jdk15on-1.51.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/commons-compress-1.9.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/commons-logging-1.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/httpclient-4.4.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/httpcore-4.4.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jcl-over-slf4j-1.7.12.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jna-4.1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/scala-library-2.11.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/truecommons-key-console-2.5.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/truecommons-key-default-2.5.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/truecommons-key-macosx-2.5.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/truecommons-key-spec-2.5.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/truecommons-key-swing-2.5.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/truevfs-comp-ibm437-0.11.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/truevfs-comp-tardriver-0.11.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/truevfs-comp-zip-0.11.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/truevfs-comp-zipdriver-0.11.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/truevfs-driver-file-0.11.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/truevfs-driver-http-0.11.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/truevfs-driver-jar-0.11.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/truevfs-driver-odf-0.11.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/truevfs-driver-tar-0.11.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/truevfs-driver-tar-bzip2-0.11.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/truevfs-driver-tar-gzip-0.11.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/truevfs-driver-tar-xz-0.11.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/truevfs-driver-zip-0.11.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/truevfs-driver-zip-raes-0.11.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/truevfs-kernel-impl-0.11.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/xz-1.5.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/gson-2.8.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/poi-3.17.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/poi-ooxml-3.17.jar"/>

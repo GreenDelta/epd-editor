@@ -86,7 +86,7 @@
 						</goals>
 						<configuration>
 							<outputDirectory>${basedir}/libs</outputDirectory>
-							<includeScope>compile</includeScope>
+							<includeScope>runtime</includeScope>
 						</configuration>
 					</execution>
 				</executions>

@@ -57,9 +57,7 @@ class Page extends FormPage {
 		});
 
 		Button button = tk.createButton(comp, M.DownloadDataSets, SWT.NONE);
-		Controls.onSelect(button, e -> {
-			// TODO: download reference data
-		});
+		Controls.onSelect(button, e -> RefDataDownload.run(urlText.getText()));
 	}
 
 }

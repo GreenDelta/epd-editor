@@ -77,6 +77,7 @@ public class M extends NLS {
 	public static String DownloadReferenceData_Message;
 	public static String DownloadedEPDProfiles;
 	public static String DownloadedEPDProfiles_Message;
+	public static String Duplicate;
 
 	public static String EPD;
 	public static String EPDEditor;
@@ -198,8 +199,8 @@ public class M extends NLS {
 	public static String SafetyMargin;
 	public static String SafetyMargins;
 	public static String SaveAs;
+	public static String SaveAs_Message;
 	public static String SaveDataSet;
-	public static String SaveEPDAs_Message;
 	public static String Scenario;
 	public static String Scenarios;
 	public static String Search;

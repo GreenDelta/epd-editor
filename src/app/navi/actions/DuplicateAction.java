@@ -43,7 +43,7 @@ public class DuplicateAction extends Action {
 
 	public DuplicateAction(RefElement e) {
 		this.e = e;
-		setText("#Duplicate");
+		setText(M.Duplicate);
 		setImageDescriptor(Icon.SAVE_AS.des());
 	}
 
@@ -52,8 +52,7 @@ public class DuplicateAction extends Action {
 		if (e == null || e.ref == null || !e.ref.isValid())
 			return;
 		InputDialog d = new InputDialog(UI.shell(), M.SaveAs,
-				"#Save as new data set with the following name:",
-				"#Copy of " + App.s(e.ref.name), null);
+				M.SaveAs_Message + ":", App.s(e.ref.name), null);
 		if (d.open() != Window.OK)
 			return;
 		String name = d.getValue();

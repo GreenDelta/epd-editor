@@ -87,7 +87,7 @@ public class NavigationMenu extends CommonActionProvider {
 			ConnectionElement e = (ConnectionElement) first;
 			menu.add(Actions.create(M.Open, Icon.OPEN.des(),
 					() -> ConnectionEditor.open(e.con)));
-			menu.add(Actions.create("#Download EPD Profiles",
+			menu.add(Actions.create(M.DownloadEPDProfiles,
 					Icon.DOWNLOAD.des(), () -> {
 						EpdProfileDownload.runInUI(e.con.url);
 					}));

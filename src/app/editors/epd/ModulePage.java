@@ -92,6 +92,9 @@ class ModulePage extends FormPage {
 			items[i] = p.name != null ? p.name : "?";
 			if (Objects.equals(p.id, dataSet.profile)) {
 				selected = i;
+			} else if (dataSet.profile == null && EpdProfiles.isDefault(p)) {
+				selected = i;
+				dataSet.profile = p.id;
 			}
 		}
 		combo.setItems(items);
@@ -239,6 +242,8 @@ class ModulePage extends FormPage {
 
 	private Module[] modules() {
 		EpdProfile profile = EpdProfiles.get(dataSet.profile);
+		if (profile == null)
+			profile = EpdProfiles.getDefault();
 		List<Module> modules = profile.modules;
 		modules.sort((m1, m2) -> m1.index - m2.index);
 		return modules.toArray(new Module[modules.size()]);

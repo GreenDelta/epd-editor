@@ -25,8 +25,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
 import app.App;
 import epd.io.conversion.Vocab;
@@ -259,8 +259,8 @@ public final class EpdProfiles {
 			}
 			try (InputStream in = con.getInputStream();
 					Reader reader = new InputStreamReader(in, "utf-8")) {
-				JsonObject obj = new Gson().fromJson(reader, JsonObject.class);
-				for (JsonElement elem : obj.getAsJsonArray("profiles")) {
+				JsonArray array = new Gson().fromJson(reader, JsonArray.class);
+				for (JsonElement elem : array) {
 					if (!elem.isJsonObject())
 						continue;
 					JsonElement idElem = elem.getAsJsonObject().get("id");

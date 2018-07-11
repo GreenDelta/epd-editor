@@ -226,13 +226,13 @@
                         {
                             "name": [
                                 {
-                                    "value": "DIN EN 15804",
+                                    "value": "EN 15804",
                                     "lang": "de"
                                 }
                             ],
                             "type": "SOURCE",
                             "uuid": "b00f9ec0-7874-11e3-981f-0800200c9a66",
-                            "version": "00.01.000"
+                            "version": "00.02.000"
                         }
                     ],
                     "categories": []

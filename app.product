@@ -18,7 +18,7 @@ Visit https://github.com/GreenDelta/epd-editor
    </configIni>
 
    <launcherArgs>
-      <programArgs>-nl de
+      <programArgs>-nl en
 -data @noDefault
       </programArgs>
       <vmArgs>-Dorg.osgi.framework.bundle.parent=ext
@@ -30,17 +30,14 @@ Visit https://github.com/GreenDelta/epd-editor
 
    <windowImages i16="icons/eclipse16.png" i32="icons/eclipse32.png" i48="icons/eclipse48.png" i64="icons/eclipse64.png" i128=" icons/eclipse128.png" i256="icons/eclipse256.png"/>
 
-
    <launcher name="epd-editor">
       <win useIco="false">
          <bmp/>
       </win>
    </launcher>
 
-
    <vm>
    </vm>
-
 
    <plugins>
       <plugin id="com.ibm.icu"/>

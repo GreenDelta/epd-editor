@@ -38,6 +38,7 @@ class DataSetSection {
 		profileCombo(comp, tk);
 		xmlCheck(comp, tk);
 		dependencyCheck(comp, tk);
+		syncCheck(comp, tk);
 	}
 
 	private void dependencyCheck(Composite comp, FormToolkit tk) {
@@ -57,6 +58,16 @@ class DataSetSection {
 		xmlCheck.setSelection(settings().showDataSetXML);
 		Controls.onSelect(xmlCheck, e -> {
 			settings().showDataSetXML = xmlCheck.getSelection();
+			page.setDirty();
+		});
+	}
+
+	private void syncCheck(Composite comp, FormToolkit tk) {
+		Button check = UI.formCheckBox(comp, tk,
+				"#Synchronize reference data on startup");
+		check.setSelection(settings().syncRefDataOnStartup);
+		Controls.onSelect(check, e -> {
+			settings().syncRefDataOnStartup = check.getSelection();
 			page.setDirty();
 		});
 	}

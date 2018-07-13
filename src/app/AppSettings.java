@@ -9,6 +9,12 @@ public class AppSettings {
 	/** The ID of the EPD profile that should be used in the application. */
 	public String profile = "EN_15804";
 
+	/**
+	 * If true, synchronize the reference data (defined as data stock URLs in
+	 * the EPD profiles) when the application starts.
+	 */
+	public boolean syncRefDataOnStartup = false;
+
 	public String lang = "en";
 	public boolean showDataSetXML = false;
 	public boolean showDataSetDependencies = false;
@@ -40,6 +46,7 @@ public class AppSettings {
 		clone.showDataSetXML = showDataSetXML;
 		clone.showDataSetDependencies = showDataSetDependencies;
 		clone.validationProfile = validationProfile;
+		clone.syncRefDataOnStartup = syncRefDataOnStartup;
 		return clone;
 	}
 
@@ -51,5 +58,6 @@ public class AppSettings {
 		showDataSetXML = from.showDataSetXML;
 		showDataSetDependencies = from.showDataSetDependencies;
 		validationProfile = from.validationProfile;
+		syncRefDataOnStartup = from.syncRefDataOnStartup;
 	}
 }

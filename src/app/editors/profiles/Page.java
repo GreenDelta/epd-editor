@@ -9,11 +9,17 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 
+import app.App;
 import app.M;
+import app.StatusView;
+import app.navi.Navigator;
 import app.rcp.Texts;
+import app.store.RefDataSync;
 import app.util.Controls;
+import app.util.MsgBox;
 import app.util.UI;
 import epd.model.EpdProfile;
+import epd.util.Strings;
 
 class Page extends FormPage {
 
@@ -57,7 +63,26 @@ class Page extends FormPage {
 		});
 
 		Button button = tk.createButton(comp, M.DownloadDataSets, SWT.NONE);
-		Controls.onSelect(button, e -> RefDataDownload.run(urlText.getText()));
+		Controls.onSelect(button, e -> syncRefData(urlText.getText()));
 	}
 
+	private void syncRefData(String url) {
+		if (Strings.nullOrEmpty(url)) {
+			MsgBox.error("No URL given.");
+			return;
+		}
+		RefDataSync sync = new RefDataSync(url);
+		App.run("Synchronize reference data ...", sync, () -> {
+			if (!sync.errors.isEmpty()) {
+				MsgBox.error(sync.errors.get(0));
+			} else if (sync.stats.size() == 0) {
+				MsgBox.info(M.NoDataFoundOnServer);
+			}
+			// show statistics + update navi, even if there was an error
+			if (sync.stats.size() > 0) {
+				Navigator.refresh();
+				StatusView.open(M.DataSets + " @" + url, sync.stats);
+			}
+		});
+	}
 }

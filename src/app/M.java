@@ -220,6 +220,7 @@ public class M extends NLS {
 	public static String Settings;
 	public static String ShortName;
 	public static String ShowDependenciesInEditors;
+	public static String ShowDetails;
 	public static String ShowXMLInEditors;
 	public static String Source;
 	public static String Sources;
@@ -255,6 +256,7 @@ public class M extends NLS {
 	public static String Update;
 	public static String UpdateClassifications;
 	public static String UpdateClassificationsQuestion;
+	public static String UpdatedReferenceData;
 	public static String UpdateMajorVersion;
 	public static String UpdateMinorVersion;
 	public static String UploadDataSet;

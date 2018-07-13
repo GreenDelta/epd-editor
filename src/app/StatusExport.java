@@ -110,6 +110,8 @@ class StatusExport implements Runnable {
 			return "OK";
 		case RefStatus.WARNING:
 			return "WARNING";
+		case RefStatus.DOWNLOADED:
+			return "DOWNLOADED";
 		default:
 			return "?";
 		}

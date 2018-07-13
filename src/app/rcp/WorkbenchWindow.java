@@ -73,10 +73,10 @@ public class WorkbenchWindow extends WorkbenchWindowAdvisor {
 			if (didUpdates) {
 				int code = MessageDialog.open(
 						MessageDialog.INFORMATION, UI.shell(),
-						M.Information, "#Updated reference data", SWT.NONE,
-						"OK", "#Show details");
+						M.Information, M.UpdatedReferenceData, SWT.NONE,
+						"OK", M.ShowDetails);
 				if (code == 1) {
-					StatusView.open("#Updated reference data", sync.stats);
+					StatusView.open(M.UpdatedReferenceData, sync.stats);
 				}
 			}
 		});

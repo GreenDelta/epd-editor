@@ -3,6 +3,8 @@ package app.rcp;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
@@ -10,10 +12,14 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 
 import app.App;
+import app.M;
+import app.StatusView;
 import app.navi.Sync;
 import app.store.EpdProfiles;
 import app.store.RefDataSync;
+import app.util.UI;
 import epd.model.EpdProfile;
+import epd.model.RefStatus;
 import epd.util.Strings;
 
 public class WorkbenchWindow extends WorkbenchWindowAdvisor {
@@ -57,6 +63,22 @@ public class WorkbenchWindow extends WorkbenchWindowAdvisor {
 			if (sync.stats.isEmpty())
 				return;
 			new Sync(App.index).run();
+			boolean didUpdates = false;
+			for (RefStatus stat : sync.stats) {
+				if (stat.value == RefStatus.DOWNLOADED) {
+					didUpdates = true;
+					break;
+				}
+			}
+			if (didUpdates) {
+				int code = MessageDialog.open(
+						MessageDialog.INFORMATION, UI.shell(),
+						M.Information, "#Updated reference data", SWT.NONE,
+						"OK", "#Show details");
+				if (code == 1) {
+					StatusView.open("#Updated reference data", sync.stats);
+				}
+			}
 		});
 	}
 

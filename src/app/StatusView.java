@@ -141,6 +141,8 @@ public class StatusView extends BaseEditor {
 				return Icon.OK.img();
 			case RefStatus.WARNING:
 				return Icon.WARNING.img();
+			case RefStatus.DOWNLOADED:
+				return Icon.DOWNLOAD.img();
 			default:
 				return null;
 			}

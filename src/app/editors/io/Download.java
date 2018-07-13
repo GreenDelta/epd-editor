@@ -99,7 +99,7 @@ public class Download implements IRunnableWithProgress {
 			App.store.put(ds);
 			App.index.remove(ref);
 			App.index.add(ds);
-			stats.add(RefStatus.ok(ref, "Downloaded/Updated"));
+			stats.add(RefStatus.downloaded(ref, "Downloaded/Updated"));
 		} catch (Exception e) {
 			stats.add(RefStatus.error(ref,
 					"Failed to store data set: " + e.getMessage()));

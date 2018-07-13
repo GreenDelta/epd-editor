@@ -12,7 +12,7 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import app.App;
 import app.M;
 import app.StatusView;
-import app.navi.Navigator;
+import app.navi.Sync;
 import app.rcp.Texts;
 import app.store.RefDataSync;
 import app.util.Controls;
@@ -80,7 +80,7 @@ class Page extends FormPage {
 			}
 			// show statistics + update navi, even if there was an error
 			if (sync.stats.size() > 0) {
-				Navigator.refresh();
+				new Sync(App.index).run();
 				StatusView.open(M.DataSets + " @" + url, sync.stats);
 			}
 		});

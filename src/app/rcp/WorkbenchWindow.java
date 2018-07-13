@@ -10,7 +10,7 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 
 import app.App;
-import app.navi.Navigator;
+import app.navi.Sync;
 import app.store.EpdProfiles;
 import app.store.RefDataSync;
 import epd.model.EpdProfile;
@@ -56,7 +56,7 @@ public class WorkbenchWindow extends WorkbenchWindowAdvisor {
 		App.run("Synchronize reference data ...", sync, () -> {
 			if (sync.stats.isEmpty())
 				return;
-			Navigator.refresh();
+			new Sync(App.index).run();
 		});
 	}
 

@@ -141,6 +141,7 @@ public class M extends NLS {
 
 	public static String MaterialProperties;
 	public static String MaterialProperties_Description;
+	public static String Memory;
 	public static String ModellingAndValidation;
 	public static String Module;
 	public static String Modules;
@@ -229,6 +230,7 @@ public class M extends NLS {
 	public static String Status;
 	public static String Subtype;
 	public static String Synchronize;
+	public static String SynchronizeReferenceDataOnStartup;
 	public static String SynchronizeDependentDataSets;
 	public static String SynchronizeWithModules;
 	public static String Synonyms;

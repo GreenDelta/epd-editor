@@ -64,7 +64,7 @@ class DataSetSection {
 
 	private void syncCheck(Composite comp, FormToolkit tk) {
 		Button check = UI.formCheckBox(comp, tk,
-				"#Synchronize reference data on startup");
+				M.SynchronizeReferenceDataOnStartup);
 		check.setSelection(settings().syncRefDataOnStartup);
 		Controls.onSelect(check, e -> {
 			settings().syncRefDataOnStartup = check.getSelection();

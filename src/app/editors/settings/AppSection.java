@@ -25,7 +25,7 @@ class AppSection {
 			page.ini.lang = lang;
 			page.setDirty();
 		});
-		Text memText = UI.formText(comp, tk, "Memory [MB]");
+		Text memText = UI.formText(comp, tk, M.Memory + " [MB]");
 		memText.setText(Integer.toString(page.ini.maxMemory));
 		UI.gridData(memText, false, false).widthHint = 315;
 		memText.addModifyListener(e -> {

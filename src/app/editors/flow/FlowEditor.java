@@ -57,6 +57,7 @@ public class FlowEditor extends BaseEditor {
 			dirty = false;
 			editorDirtyStateChanged();
 			Editors.setTabTitle(product.flow, this);
+			FlowUpdateCheck.with(product.flow);
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to save flow data set", e);

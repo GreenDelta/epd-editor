@@ -127,8 +127,11 @@ public class Navigator extends CommonNavigator {
 
 	private static void eachRoot(Consumer<NavigationElement> fn) {
 		try {
-			NavigationRoot root = Navigator.getInstance().root;
-			if (root.childs == null)
+			Navigator navi = Navigator.getInstance();
+			if (navi == null)
+				return;
+			NavigationRoot root = navi.root;
+			if (root == null || root.childs == null)
 				return;
 			for (NavigationElement e : root.childs) {
 				fn.accept(e);

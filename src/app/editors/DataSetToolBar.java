@@ -28,10 +28,30 @@ public class DataSetToolBar extends EditorActionBarContributor {
 
 	@Override
 	public void contributeToToolBar(IToolBarManager manager) {
+		manager.add(Actions.create("#Reload",
+				Icon.RELOAD.des(), this::reload));
 		manager.add(Actions.create(M.UploadDataSet,
 				Icon.UPLOAD.des(), this::tryUpload));
 		manager.add(Actions.create("#Validate data set",
 				Icon.OK.des(), this::tryValidate));
+	}
+
+	private void reload() {
+		IEditorPart p = Editors.getActive();
+		IDataSet ds = getDataSet(p);
+		if (ds == null)
+			return;
+		if (p.isDirty()) {
+			boolean b = MsgBox.ask("#Unsaved changes",
+					"#There are unsaved changes which "
+							+ "get lost when you reload the editor. "
+							+ "Reload anyway?");
+			if (!b)
+				return;
+		}
+		Ref ref = Ref.of(ds);
+		Editors.close(ref);
+		Editors.open(ref);
 	}
 
 	private void tryUpload() {

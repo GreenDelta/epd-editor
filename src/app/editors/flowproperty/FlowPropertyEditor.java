@@ -18,10 +18,9 @@ import org.slf4j.LoggerFactory;
 import app.App;
 import app.editors.BaseEditor;
 import app.editors.Editors;
+import app.editors.RefCheck;
 import app.editors.RefEditorInput;
 import app.store.Data;
-import epd.model.Version;
-import epd.model.Xml;
 
 public class FlowPropertyEditor extends BaseEditor {
 
@@ -44,6 +43,7 @@ public class FlowPropertyEditor extends BaseEditor {
 		try {
 			RefEditorInput in = (RefEditorInput) input;
 			property = App.store.get(FlowProperty.class, in.ref.uuid);
+			RefCheck.on(property);
 			initStructs();
 		} catch (Exception e) {
 			throw new PartInitException(
@@ -71,7 +71,7 @@ public class FlowPropertyEditor extends BaseEditor {
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		try {
-			updateVersion();
+			Data.updateVersion(property);
 			Data.save(property);
 			for (Runnable handler : saveHandlers) {
 				handler.run();
@@ -83,14 +83,6 @@ public class FlowPropertyEditor extends BaseEditor {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to save contact data set", e);
 		}
-	}
-
-	private void updateVersion() {
-		AdminInfo info = property.adminInfo;
-		Version v = Version.fromString(info.publication.version);
-		v.incUpdate();
-		info.publication.version = v.toString();
-		info.dataEntry.timeStamp = Xml.now();
 	}
 
 	@Override

@@ -17,10 +17,9 @@ import org.slf4j.LoggerFactory;
 import app.App;
 import app.editors.BaseEditor;
 import app.editors.Editors;
+import app.editors.RefCheck;
 import app.editors.RefEditorInput;
 import app.store.Data;
-import epd.model.Version;
-import epd.model.Xml;
 
 public class SourceEditor extends BaseEditor {
 
@@ -43,6 +42,7 @@ public class SourceEditor extends BaseEditor {
 		try {
 			RefEditorInput in = (RefEditorInput) input;
 			source = App.store.get(Source.class, in.ref.uuid);
+			RefCheck.on(source);
 			initStructs();
 		} catch (Exception e) {
 			throw new PartInitException(
@@ -50,6 +50,8 @@ public class SourceEditor extends BaseEditor {
 		}
 	}
 
+	// TODO: remove this and use factory methods from
+	// org.openlca.ilcd.util.Sources
 	private void initStructs() {
 		if (source == null)
 			source = new Source();
@@ -68,7 +70,7 @@ public class SourceEditor extends BaseEditor {
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		try {
-			updateVersion();
+			Data.updateVersion(source);
 			Data.save(source);
 			for (Runnable handler : saveHandlers) {
 				handler.run();
@@ -80,14 +82,6 @@ public class SourceEditor extends BaseEditor {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to save contact data set");
 		}
-	}
-
-	private void updateVersion() {
-		AdminInfo info = source.adminInfo;
-		Version v = Version.fromString(info.publication.version);
-		v.incUpdate();
-		info.publication.version = v.toString();
-		info.dataEntry.timeStamp = Xml.now();
 	}
 
 	@Override

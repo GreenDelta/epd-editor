@@ -4,22 +4,19 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
-import org.openlca.ilcd.commons.Publication;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.flows.Flow;
-import org.openlca.ilcd.util.Flows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.editors.BaseEditor;
 import app.editors.Editors;
+import app.editors.RefCheck;
 import app.editors.RefEditorInput;
 import app.store.Data;
 import epd.io.conversion.FlowExtensions;
 import epd.model.EpdProduct;
-import epd.model.Version;
-import epd.model.Xml;
 
 public class FlowEditor extends BaseEditor {
 
@@ -42,6 +39,7 @@ public class FlowEditor extends BaseEditor {
 		try {
 			RefEditorInput in = (RefEditorInput) input;
 			Flow flow = App.store.get(Flow.class, in.ref.uuid);
+			RefCheck.on(flow);
 			product = FlowExtensions.read(flow);
 		} catch (Exception e) {
 			throw new PartInitException("Failed to open flow editor", e);
@@ -51,7 +49,7 @@ public class FlowEditor extends BaseEditor {
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		try {
-			updateVersion();
+			Data.updateVersion(product.flow);
 			Data.save(product);
 			for (Runnable handler : saveHandlers) {
 				handler.run();
@@ -63,14 +61,6 @@ public class FlowEditor extends BaseEditor {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to save flow data set", e);
 		}
-	}
-
-	private void updateVersion() {
-		Publication pub = Flows.publication(product.flow);
-		Version v = Version.fromString(pub.version);
-		v.incUpdate();
-		pub.version = v.toString();
-		Flows.dataEntry(product.flow).timeStamp = Xml.now();
 	}
 
 	@Override

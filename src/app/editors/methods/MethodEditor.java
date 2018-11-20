@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import app.App;
 import app.editors.BaseEditor;
 import app.editors.Editors;
+import app.editors.RefCheck;
 import app.editors.RefEditorInput;
 import app.store.Data;
 
@@ -36,6 +37,7 @@ public class MethodEditor extends BaseEditor {
 		try {
 			RefEditorInput in = (RefEditorInput) input;
 			method = App.store.get(LCIAMethod.class, in.ref.uuid);
+			RefCheck.on(method);
 		} catch (Exception e) {
 			throw new PartInitException("Failed to open method editor", e);
 		}
@@ -55,7 +57,7 @@ public class MethodEditor extends BaseEditor {
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		try {
-			// TODO update version
+			Data.updateVersion(method);
 			Data.save(method);
 			for (Runnable handler : saveHandlers) {
 				handler.run();

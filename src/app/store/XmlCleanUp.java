@@ -1,4 +1,4 @@
-package app.editors.epd;
+package app.store;
 
 import org.openlca.ilcd.commons.ProcessType;
 import org.openlca.ilcd.commons.Time;

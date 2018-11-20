@@ -10,10 +10,8 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
-import org.openlca.ilcd.processes.DataEntry;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.ProcessName;
-import org.openlca.ilcd.processes.Publication;
 import org.openlca.ilcd.util.Processes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +20,7 @@ import app.App;
 import app.M;
 import app.editors.BaseEditor;
 import app.editors.Editors;
+import app.editors.RefCheck;
 import app.editors.RefEditorInput;
 import app.store.Data;
 import app.util.UI;
@@ -52,6 +51,7 @@ public class EpdEditor extends BaseEditor {
 		try {
 			RefEditorInput in = (RefEditorInput) input;
 			dataSet = Data.getEPD(in.ref);
+			RefCheck.on(dataSet.process);
 		} catch (Exception e) {
 			throw new PartInitException(
 					"Failed to open editor: no correct input", e);
@@ -74,9 +74,8 @@ public class EpdEditor extends BaseEditor {
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		try {
-			updateVersion();
+			Data.updateVersion(dataSet);
 			EpdDataSet ds = dataSet.clone();
-			XmlCleanUp.on(ds);
 			Data.save(ds);
 			for (Runnable handler : saveHandlers) {
 				handler.run();
@@ -87,15 +86,6 @@ public class EpdEditor extends BaseEditor {
 		} catch (Exception e) {
 			log.error("failed to save EPD data set", e);
 		}
-	}
-
-	private void updateVersion() {
-		Publication pub = Processes.publication(dataSet.process);
-		Version v = Version.fromString(pub.version);
-		v.incUpdate();
-		pub.version = v.toString();
-		DataEntry entry = Processes.dataEntry(dataSet.process);
-		entry.timeStamp = Xml.now();
 	}
 
 	@Override

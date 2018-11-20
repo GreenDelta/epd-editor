@@ -1,8 +1,23 @@
 package app.store;
 
+import java.util.function.Consumer;
+
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.contacts.Contact;
+import org.openlca.ilcd.flowproperties.FlowProperty;
+import org.openlca.ilcd.flows.Flow;
+import org.openlca.ilcd.methods.LCIAMethod;
 import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.sources.Source;
+import org.openlca.ilcd.units.UnitGroup;
+import org.openlca.ilcd.util.Contacts;
+import org.openlca.ilcd.util.FlowProperties;
+import org.openlca.ilcd.util.Flows;
+import org.openlca.ilcd.util.Methods;
+import org.openlca.ilcd.util.Processes;
+import org.openlca.ilcd.util.Sources;
+import org.openlca.ilcd.util.UnitGroups;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +28,8 @@ import epd.io.conversion.FlowExtensions;
 import epd.model.EpdDataSet;
 import epd.model.EpdProduct;
 import epd.model.EpdProfile;
+import epd.model.Version;
+import epd.model.Xml;
 
 public final class Data {
 
@@ -36,6 +53,7 @@ public final class Data {
 		if (epd == null)
 			return;
 		try {
+			XmlCleanUp.on(epd);
 			Extensions.write(epd);
 			save(epd.process);
 		} catch (Exception e) {
@@ -83,6 +101,84 @@ public final class Data {
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Data.class);
 			log.error("failed to delete data set " + ref, e);
+		}
+	}
+
+	public static void updateVersion(EpdDataSet ds) {
+		if (ds == null || ds.process == null)
+			return;
+		updateVersion(ds.process);
+	}
+
+	public static void updateVersion(IDataSet ds) {
+		if (ds instanceof Process) {
+			Process p = (Process) ds;
+			with(Processes.publication(p), pub -> {
+				pub.version = Version.fromString(pub.version)
+						.incUpdate().toString();
+			});
+			Processes.dataEntry(p).timeStamp = Xml.now();
+		}
+
+		if (ds instanceof Flow) {
+			Flow f = (Flow) ds;
+			with(Flows.publication(f), pub -> {
+				pub.version = Version.fromString(pub.version)
+						.incUpdate().toString();
+			});
+			Flows.dataEntry(f).timeStamp = Xml.now();
+		}
+
+		if (ds instanceof FlowProperty) {
+			FlowProperty fp = (FlowProperty) ds;
+			with(FlowProperties.publication(fp), pub -> {
+				pub.version = Version.fromString(pub.version)
+						.incUpdate().toString();
+			});
+			FlowProperties.dataEntry(fp).timeStamp = Xml.now();
+		}
+
+		if (ds instanceof UnitGroup) {
+			UnitGroup ug = (UnitGroup) ds;
+			with(UnitGroups.publication(ug), pub -> {
+				pub.version = Version.fromString(pub.version)
+						.incUpdate().toString();
+			});
+			UnitGroups.dataEntry(ug).timeStamp = Xml.now();
+		}
+
+		if (ds instanceof Contact) {
+			Contact c = (Contact) ds;
+			with(Contacts.publication(c), pub -> {
+				pub.version = Version.fromString(pub.version)
+						.incUpdate().toString();
+			});
+			Contacts.dataEntry(c).timeStamp = Xml.now();
+		}
+
+		if (ds instanceof Source) {
+			Source s = (Source) ds;
+			with(Sources.publication(s), pub -> {
+				pub.version = Version.fromString(pub.version)
+						.incUpdate().toString();
+			});
+			Sources.dataEntry(s).timeStamp = Xml.now();
+		}
+
+		if (ds instanceof LCIAMethod) {
+			LCIAMethod l = (LCIAMethod) ds;
+			with(Methods.publication(l), pub -> {
+				pub.version = Version.fromString(pub.version)
+						.incUpdate().toString();
+			});
+			Methods.dataEntry(l).timeStamp = Xml.now();
+		}
+	}
+
+	/** Just a trick to avoid type declarations. */
+	private static <T> void with(T obj, Consumer<T> fn) {
+		if (obj != null) {
+			fn.accept(obj);
 		}
 	}
 }

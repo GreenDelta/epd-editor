@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
  * However, we use integers in the public methods of this class to avoid
  * casting.
  */
-public class Version {
+public class Version implements Comparable<Version> {
 
 	private long value;
 
@@ -87,8 +87,9 @@ public class Version {
 	 * Increments the update part of the version. Normally this is automatically
 	 * done by the persistence unit.
 	 */
-	public void incUpdate() {
+	public Version incUpdate() {
 		setParts(getMajor(), getMinor(), (getUpdate() + 1));
+		return this;
 	}
 
 	private void setParts(int major, int minor, int update) {
@@ -181,4 +182,10 @@ public class Version {
 		return major + "." + minor + "." + update;
 	}
 
+	@Override
+	public int compareTo(Version o) {
+		if (o == null)
+			return -1;
+		return Long.compare(this.value, o.value);
+	}
 }

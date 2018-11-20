@@ -28,11 +28,11 @@ public class DataSetToolBar extends EditorActionBarContributor {
 
 	@Override
 	public void contributeToToolBar(IToolBarManager manager) {
-		manager.add(Actions.create("#Reload",
+		manager.add(Actions.create(M.Reload,
 				Icon.RELOAD.des(), this::reload));
 		manager.add(Actions.create(M.UploadDataSet,
 				Icon.UPLOAD.des(), this::tryUpload));
-		manager.add(Actions.create("#Validate data set",
+		manager.add(Actions.create(M.ValidateDataSet,
 				Icon.OK.des(), this::tryValidate));
 	}
 
@@ -42,10 +42,7 @@ public class DataSetToolBar extends EditorActionBarContributor {
 		if (ds == null)
 			return;
 		if (p.isDirty()) {
-			boolean b = MsgBox.ask("#Unsaved changes",
-					"#There are unsaved changes which "
-							+ "get lost when you reload the editor. "
-							+ "Reload anyway?");
+			boolean b = MsgBox.ask(M.UnsavedChanges, M.ReloadUnsaved_Message);
 			if (!b)
 				return;
 		}
@@ -57,8 +54,7 @@ public class DataSetToolBar extends EditorActionBarContributor {
 	private void tryUpload() {
 		IEditorPart p = Editors.getActive();
 		if (p.isDirty()) {
-			MsgBox.error("#Unsaved changes",
-					"#Please save the data set first.");
+			MsgBox.error(M.UnsavedChanges, M.UnsavedChanges_Message);
 			return;
 		}
 		IDataSet ds = getDataSet(p);
@@ -72,8 +68,7 @@ public class DataSetToolBar extends EditorActionBarContributor {
 	private void tryValidate() {
 		IEditorPart p = Editors.getActive();
 		if (p.isDirty()) {
-			MsgBox.error("#Unsaved changes",
-					"#Please save the data set first.");
+			MsgBox.error(M.UnsavedChanges, M.UnsavedChanges_Message);
 			return;
 		}
 		IDataSet ds = getDataSet(p);

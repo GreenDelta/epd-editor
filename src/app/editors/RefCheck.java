@@ -4,6 +4,7 @@ import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
 
 import app.App;
+import app.M;
 import app.store.Data;
 import app.util.MsgBox;
 import epd.index.RefSync;
@@ -16,9 +17,8 @@ public class RefCheck {
 				return;
 			if (!RefSync.hasOutdatedRefs(ds, App.index))
 				return;
-			boolean b = MsgBox.ask("#Update references?",
-					"The data set has outdated references to other data sets."
-							+ " Do you want to update these?");
+			boolean b = MsgBox.ask(M.UpdateReferences + "?",
+					M.UpdateDataSetRefs_Question);
 			if (!b)
 				return;
 			RefSync.updateRefs(ds, App.index);

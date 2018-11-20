@@ -185,7 +185,9 @@ public class M extends NLS {
 
 	public static String ReferenceDataURL;
 	public static String ReferenceYear;
+	public static String Reload;
 	public static String ReloadNavigation;
+	public static String ReloadUnsaved_Message;
 	public static String Remove;
 	public static String Representative;
 	public static String ResourceParameters;
@@ -255,10 +257,14 @@ public class M extends NLS {
 	public static String UnitReference;
 	public static String Units;
 	public static String Unknown;
+	public static String UnsavedChanges;
+	public static String UnsavedChanges_Message;
 	public static String Update;
 	public static String UpdateClassifications;
 	public static String UpdateClassificationsQuestion;
+	public static String UpdateDataSetRefs_Question;
 	public static String UpdatedReferenceData;
+	public static String UpdateReferences;
 	public static String UpdateMajorVersion;
 	public static String UpdateMinorVersion;
 	public static String UploadDataSet;

@@ -83,6 +83,7 @@ public final class Data {
 			App.index.remove(ref);
 			App.index.add(ds);
 			App.dumpIndex();
+			RefTrees.cache(ds);
 			new Sync(App.index).run();
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Data.class);
@@ -101,6 +102,18 @@ public final class Data {
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Data.class);
 			log.error("failed to delete data set " + ref, e);
+		}
+	}
+
+	public static IDataSet load(Ref ref) {
+		if (ref == null || !ref.isValid())
+			return null;
+		try {
+			return App.store.get(ref.getDataSetClass(), ref.uuid);
+		} catch (Exception e) {
+			Logger log = LoggerFactory.getLogger(Data.class);
+			log.error("failed to load data set " + ref, e);
+			return null;
 		}
 	}
 

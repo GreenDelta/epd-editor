@@ -97,6 +97,7 @@ public class ZipImport implements IRunnableWithProgress {
 			File f = new File(dir, getFileName(ref));
 			Files.write(f.toPath(), data, StandardOpenOption.CREATE,
 					StandardOpenOption.TRUNCATE_EXISTING);
+			RefTrees.remove(ref);
 			App.index.add(ref, classes);
 			status.add(RefStatus.ok(ref, M.Imported));
 			monitor.worked(1);

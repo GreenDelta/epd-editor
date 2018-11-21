@@ -24,6 +24,7 @@ import org.openlca.ilcd.util.Sources;
 
 import app.App;
 import app.M;
+import app.store.RefTrees;
 import epd.model.RefStatus;
 
 public class Download implements IRunnableWithProgress {
@@ -99,6 +100,7 @@ public class Download implements IRunnableWithProgress {
 			App.store.put(ds);
 			App.index.remove(ref);
 			App.index.add(ds);
+			RefTrees.cache(ds);
 			stats.add(RefStatus.downloaded(ref, "Downloaded/Updated"));
 		} catch (Exception e) {
 			stats.add(RefStatus.error(ref,

@@ -19,7 +19,6 @@ import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.processes.Process;
-import org.openlca.ilcd.util.RefTree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +27,7 @@ import app.M;
 import app.editors.RefTableLabel;
 import app.rcp.Icon;
 import app.store.Data;
+import app.store.RefTrees;
 import app.util.MsgBox;
 import app.util.Tables;
 import app.util.UI;
@@ -59,9 +59,8 @@ class FlowUpdateCheck {
 				.filter(ref -> ref.type == DataSetType.PROCESS)
 				.forEach(ref -> {
 					try {
-						Process p = App.store.get(Process.class, ref.uuid);
 						AtomicBoolean b = new AtomicBoolean(false);
-						RefTree.create(p).eachRef(pRef -> {
+						RefTrees.get(ref).eachRef(pRef -> {
 							if (b.get())
 								return;
 							if (pRef.type == DataSetType.FLOW

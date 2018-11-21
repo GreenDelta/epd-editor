@@ -40,6 +40,8 @@ class FlowUpdateCheck {
 	static void with(Flow flow) {
 		if (flow == null)
 			return;
+		if (!App.settings().checkEPDsOnProductUpdates)
+			return;
 		List<Ref> usages = new ArrayList<>();
 		App.run("Check flow usage ...",
 				() -> findUsages(flow, usages),

@@ -1,15 +1,21 @@
 package app.editors.settings;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.commons.Ref;
 
+import app.App;
 import app.AppSettings;
 import app.M;
 import app.store.EpdProfiles;
+import app.store.RefTrees;
 import app.util.Controls;
 import app.util.UI;
 import epd.model.EpdProfile;
@@ -39,6 +45,7 @@ class DataSetSection {
 		xmlCheck(comp, tk);
 		dependencyCheck(comp, tk);
 		syncCheck(comp, tk);
+		productUpdateCheck(comp, tk);
 	}
 
 	private void dependencyCheck(Composite comp, FormToolkit tk) {
@@ -69,6 +76,44 @@ class DataSetSection {
 		Controls.onSelect(check, e -> {
 			settings().syncRefDataOnStartup = check.getSelection();
 			page.setDirty();
+		});
+	}
+
+	private void productUpdateCheck(Composite comp, FormToolkit tk) {
+		Button check = UI.formCheckBox(comp, tk,
+				"#Check EPDs on product updates");
+		check.setSelection(settings().checkEPDsOnProductUpdates);
+		Controls.onSelect(check, e -> {
+			boolean b = check.getSelection();
+			if (!b) {
+				check.setSelection(b);
+				settings().checkEPDsOnProductUpdates = b;
+				page.setDirty();
+				return;
+			}
+			AtomicBoolean allIndexed = new AtomicBoolean(false);
+			// index the data sets
+			App.run(monitor -> {
+				List<Ref> refs = App.index.getRefs()
+						.stream()
+						.filter(ref -> ref.type == DataSetType.PROCESS)
+						.collect(Collectors.toList());
+				monitor.beginTask("#Index product relations", refs.size());
+				for (int i = 0; i < refs.size(); i++) {
+					if (monitor.isCanceled())
+						break;
+					Ref ref = refs.get(i);
+					RefTrees.get(ref);
+					monitor.worked(1);
+					if (i == (refs.size() - 1)) {
+						allIndexed.set(true);
+					}
+				}
+			}, () -> {
+				settings().checkEPDsOnProductUpdates = allIndexed.get();
+				check.setSelection(allIndexed.get());
+				page.setDirty();
+			});
 		});
 	}
 

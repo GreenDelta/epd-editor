@@ -123,12 +123,19 @@ public class App {
 	}
 
 	public static void run(IRunnableWithProgress p) {
+		run(p, null);
+	}
+
+	public static void run(IRunnableWithProgress p, Runnable uiFn) {
 		if (p == null)
 			return;
 		IProgressService progress = PlatformUI.getWorkbench()
 				.getProgressService();
 		try {
 			progress.run(true, true, p);
+			if (uiFn != null) {
+				new WrappedUIJob("Update UI ...", uiFn).schedule();
+			}
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(App.class);
 			log.error("failed to run " + p.getClass(), e);

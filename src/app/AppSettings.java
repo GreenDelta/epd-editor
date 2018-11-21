@@ -20,6 +20,12 @@ public class AppSettings {
 	public boolean showDataSetDependencies = false;
 
 	/**
+	 * If true, it searches for EPDs where a product is used and asks if these
+	 * EPDs should be also updated when the respective product is updated.
+	 */
+	public boolean checkEPDsOnProductUpdates = false;
+
+	/**
 	 * The name of the validation profile that is used when validating the data
 	 * sets. It is the name of the respective file that is stored in the
 	 * 'validation_profiles' folder of the workspace directory.
@@ -47,6 +53,7 @@ public class AppSettings {
 		clone.showDataSetDependencies = showDataSetDependencies;
 		clone.validationProfile = validationProfile;
 		clone.syncRefDataOnStartup = syncRefDataOnStartup;
+		clone.checkEPDsOnProductUpdates = checkEPDsOnProductUpdates;
 		return clone;
 	}
 
@@ -59,5 +66,6 @@ public class AppSettings {
 		showDataSetDependencies = from.showDataSetDependencies;
 		validationProfile = from.validationProfile;
 		syncRefDataOnStartup = from.syncRefDataOnStartup;
+		checkEPDsOnProductUpdates = from.checkEPDsOnProductUpdates;
 	}
 }

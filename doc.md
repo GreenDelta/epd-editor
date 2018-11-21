@@ -10,7 +10,9 @@ database we also store a data set index with the meta-data of the data sets in
 an `index.json` file. This is then mapped to the navigation tree and supports
 quick data set access and searching.
 
-
+For searching the usage of products in EPD data sets (and maybe later also
+other things), we also cache the data set references in the
+`~/.epd-editor/cache/refs` folder. 
 
 ## EPD Extensions
 The EPD format adds some extensions to the process and flow data sets of the

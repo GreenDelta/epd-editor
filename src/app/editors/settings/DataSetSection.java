@@ -81,7 +81,7 @@ class DataSetSection {
 
 	private void productUpdateCheck(Composite comp, FormToolkit tk) {
 		Button check = UI.formCheckBox(comp, tk,
-				"#Check EPDs on product updates");
+				M.CheckEPDsOnProductUpdates);
 		check.setSelection(settings().checkEPDsOnProductUpdates);
 		Controls.onSelect(check, e -> {
 			boolean b = check.getSelection();
@@ -98,7 +98,7 @@ class DataSetSection {
 						.stream()
 						.filter(ref -> ref.type == DataSetType.PROCESS)
 						.collect(Collectors.toList());
-				monitor.beginTask("#Index product relations", refs.size());
+				monitor.beginTask(M.IndexProductRelations, refs.size());
 				for (int i = 0; i < refs.size(); i++) {
 					if (monitor.isCanceled())
 						break;

@@ -20,6 +20,7 @@ public class M extends NLS {
 	public static String Category;
 	public static String CategoryPath;
 	public static String ChangeProduct;
+	public static String CheckEPDsOnProductUpdates;
 	public static String Citation;
 	public static String Classification;
 	public static String ClassificationSystem;
@@ -124,6 +125,7 @@ public class M extends NLS {
 	public static String IndependentInternalReview;
 	public static String IndependentReviewPanel;
 	public static String Index;
+	public static String IndexProductRelations;
 	public static String Indicator;
 	public static String Information;
 	public static String InvalidName;

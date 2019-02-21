@@ -127,20 +127,40 @@ As also a Maven Tycho build currently fails with Java 10 due to
 but still appears in our EPD-Editor build), we need to set the Java compliance level
 to Java 8 in Eclipse and the project configuration in order to have a working build.
 
+##### Windows 
+
 The `make.bat` script packages then the application (and the `clean.bat`
 removes all the build artifacts again). In order to run the script, you need to
 add the following things to the build folder:
 
-##### Java Runtime Environment (JRE)
+###### Java Runtime Environment (JRE)
+
 We package a JRE together with the application. Just download the
 [current package](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html)
 for Windows 64 bit (e.g. `jre-8u141-windows-x64.tar.gz`), extract it, and
 copy the content into the folder `build/jre/win64`.
 
-##### 7zip
+###### 7zip
 For packaging the applications we use [7zip](http://www.7-zip.org/download.html).
 Just download the non-installer version and copy the (64bit) `7za.exe`
 directly into the build folder.
+
+##### macOS
+
+To build on macOS, it is necessary to create a build path variable `SWT_LIB` and 
+point it to 
+`Eclipse.app/Contents/Eclipse/plugins/org.eclipse.swt.cocoa.macosx.x86_64_3.106.3.v20180329-0507.jar`
+in order for the application to run.
+
+To create an application bundle for distribution, run the export wizard with the above
+settings. The result will be written to a folder `eclipse` in the selected export folder 
+and will not run on macOS out of the box. In order to repair the build, run the
+`repair4mac.sh` script giving the full or relative path to the `eclipse` folder above as 
+an argument.
+
+In order for the application to run under macOS, currently the Java 8 JDK needs to be 
+installed on the target system.
+
 
 #### Validation profile
 ... 

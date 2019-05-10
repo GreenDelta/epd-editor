@@ -95,12 +95,12 @@ public class FlowExtensions {
 				"referenceToSource", extension);
 	}
 
-	private static void writeVendorSpecificTag(EpdProduct p, Other extension) {
+	private static void writeVendorSpecificTag(EpdProduct p, Other ext) {
 		String tagName = "vendorSpecificProduct";
-		Element e = Util.getElement(extension, tagName);
+		Element e = Util.getElement(ext, tagName);
 		if (e == null) {
-			e = Util.createElement(extension, tagName);
-			extension.any.add(e);
+			e = Util.createElement(tagName);
+			ext.any.add(e);
 		}
 		e.setTextContent(Boolean.toString(p.vendorSpecific));
 	}

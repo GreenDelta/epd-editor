@@ -1,24 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="RCP Platform" sequenceNumber="10">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><?pde version="3.8"?><target name="platform" sequenceNumber="6">
 <locations>
-<location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.equinox.sdk.feature.group" version="3.13.4.v20180322-2228"/>
-<unit id="org.eclipse.rcp.feature.group" version="4.7.3.v20180330-0640"/>
-<repository location="http://download.eclipse.org/eclipse/updates/4.7"/>
-</location>
-<location path="${eclipse_home}" type="Profile"/>
-<location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.babel.nls_eclipse_de.feature.group" version="4.7.0.v20171231020002"/>
-<repository location="http://download.eclipse.org/technology/babel/update-site/R0.15.1/oxygen"/>
-</location>
+  <location path="${eclipse_home}" type="Profile"/>
+	<location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+		<unit id="org.eclipse.equinox.sdk.feature.group" version="3.17.0.v20190305-2225"/>
+		<unit id="org.eclipse.rcp.feature.group" version="4.11.0.v20190307-0500"/>
+		<unit id="org.eclipse.rcp.source.feature.group" version="4.11.0.v20190307-0500"/>
+		<repository location="http://download.eclipse.org/eclipse/updates/4.11"/>
+	</location>	
 </locations>
-<environment>
-<os>win32</os>
-<ws>win32</ws>
-<arch>x86_64</arch>
-<nl>en_US</nl>
-</environment>
-<launcherArgs>
-<vmArgs>-Dosgi.requiredJavaVersion=1.8 -XX:+UseG1GC -XX:+UseStringDeduplication -Dosgi.requiredJavaVersion=1.8 -Xms256m -Xmx1024m</vmArgs>
-</launcherArgs>
 </target>

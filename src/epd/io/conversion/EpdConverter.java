@@ -76,7 +76,7 @@ class EpdConverter {
 		}
 		Method method = Processes.method(dataSet.process);
 		method.other = new Other();
-		Element e = Util.createElement(method.other, "subType");
+		Element e = Util.createElement("subType");
 		e.setTextContent(dataSet.subType.getLabel());
 		method.other.any.add(e);
 	}

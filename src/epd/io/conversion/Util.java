@@ -43,12 +43,12 @@ class Util {
 		}
 	}
 
-	static Element createElement(Other extension, String tagName) {
+	static Element createElement(String tagName) {
 		Document doc = createDocument();
-		if (extension == null || doc == null)
+		if (doc == null)
 			return null;
-		return doc.createElementNS(Extensions.NS_EPD,
-				"epd:" + tagName);
+		return doc.createElementNS(
+				Extensions.NS_EPD, "epd:" + tagName);
 	}
 
 	static Double getDoubleContent(NodeList nodeList) {

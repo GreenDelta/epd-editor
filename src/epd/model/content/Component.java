@@ -25,4 +25,16 @@ public class Component extends ContentElement {
 		});
 		return this;
 	}
+
+	@Override
+	public Component clone() {
+		Component clone = new Component();
+		copyTo(clone);
+		for (ContentElement e : content) {
+			if (e != null) {
+				clone.content.add(e.clone());
+			}
+		}
+		return clone;
+	}
 }

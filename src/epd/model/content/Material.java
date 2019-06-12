@@ -28,4 +28,16 @@ public class Material extends Substance {
 		});
 		return this;
 	}
+
+	@Override
+	public Material clone() {
+		Material clone = new Material();
+		copyTo(clone);
+		for (Substance s : substances) {
+			if (s != null) {
+				clone.substances.add(s.clone());
+			}
+		}
+		return clone;
+	}
 }

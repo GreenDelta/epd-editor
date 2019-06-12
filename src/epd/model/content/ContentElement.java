@@ -53,4 +53,23 @@ public abstract class ContentElement {
 		return this;
 	}
 
+	void copyTo(ContentElement other) {
+		if (other == null)
+			return;
+		for (LangString n : name) {
+			other.name.add(n.clone());
+		}
+		if (massPerc != null) {
+			other.massPerc = massPerc.clone();
+		}
+		if (mass != null) {
+			other.mass = mass.clone();
+		}
+		for (LangString c : comment) {
+			other.comment.add(c.clone());
+		}
+	}
+
+	@Override
+	public abstract ContentElement clone();
 }

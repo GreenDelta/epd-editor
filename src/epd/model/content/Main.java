@@ -1,6 +1,7 @@
 package epd.model.content;
 
 import java.io.File;
+import java.io.StringWriter;
 import java.util.ArrayDeque;
 import java.util.Collections;
 import java.util.List;
@@ -30,6 +31,12 @@ public class Main {
 					elem.getClass() + ": " + elem.name + ":: " + elem.massPerc);
 			queue.addAll(childs(elem));
 		}
+
+		StringWriter w = new StringWriter();
+		ds = ds.clone();
+		Extensions.write(ds);
+		binder.toWriter(ds.process, w);
+		System.out.println(w.toString());
 	}
 
 	private static List<? extends ContentElement> childs(ContentElement elem) {

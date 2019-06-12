@@ -70,4 +70,15 @@ public class ContentDeclaration {
 			return null;
 		}
 	}
+
+	@Override
+	public ContentDeclaration clone() {
+		ContentDeclaration clone = new ContentDeclaration();
+		for (ContentElement elem : content) {
+			if (elem != null) {
+				clone.content.add(elem.clone());
+			}
+		}
+		return clone;
+	}
 }

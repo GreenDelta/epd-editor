@@ -60,4 +60,13 @@ public class ContentAmount {
 			return "> " + Double.toString(lowerValue);
 		return "?";
 	}
+
+	@Override
+	public ContentAmount clone() {
+		ContentAmount clone = new ContentAmount();
+		clone.value = value;
+		clone.lowerValue = lowerValue;
+		clone.upperValue = upperValue;
+		return clone;
+	}
 }

@@ -66,4 +66,27 @@ public class Substance extends ContentElement {
 		});
 		return this;
 	}
+
+	@Override
+	void copyTo(ContentElement other) {
+		super.copyTo(other);
+		if (other instanceof Substance) {
+			Substance s = (Substance) other;
+			s.guid = guid;
+			s.casNumber = casNumber;
+			s.ecNumber = ecNumber;
+			s.renewable = renewable;
+			s.recycled = recycled;
+			s.recyclable = recyclable;
+			s.packaging = packaging;
+		}
+	}
+
+	@Override
+	public Substance clone() {
+		Substance clone = new Substance();
+		copyTo(clone);
+		return clone;
+	}
+
 }

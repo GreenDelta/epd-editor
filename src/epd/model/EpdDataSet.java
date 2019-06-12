@@ -57,6 +57,9 @@ public class EpdDataSet {
 			clone.moduleEntries.add(e.clone());
 		for (Scenario s : scenarios)
 			clone.scenarios.add(s.clone());
+		if (contentDeclaration != null) {
+			clone.contentDeclaration = contentDeclaration.clone();
+		}
 		return clone;
 	}
 

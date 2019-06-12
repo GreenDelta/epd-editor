@@ -125,7 +125,7 @@ class MatML {
 
 	private Map<String, Double> readDataValues(Element root) {
 		Map<String, Double> map = new HashMap<>();
-		Element bulkDetails = Dom.getChild(root, "Material", "BulkDetails");
+		Element bulkDetails = Dom.findChild(root, "Material", "BulkDetails");
 		if (bulkDetails == null)
 			return map;
 		NodeList list = bulkDetails.getElementsByTagNameNS(NS, "PropertyData");
@@ -134,8 +134,7 @@ class MatML {
 			if (!(node instanceof Element))
 				continue;
 			Element dataElement = (Element) node;
-			Double val = Dom.getDoubleContent(dataElement
-					.getElementsByTagNameNS(NS, "Data"));
+			Double val = Dom.getDouble(Dom.getChild(dataElement, "Data", NS));
 			String propertyId = dataElement.getAttribute("property");
 			map.put(propertyId, val);
 		}
@@ -144,7 +143,7 @@ class MatML {
 
 	private List<MaterialProperty> readProperties(Element root) {
 		List<MaterialProperty> properties = new ArrayList<>();
-		Element metadata = Dom.getChild(root, "Metadata");
+		Element metadata = Dom.findChild(root, "Metadata");
 		NodeList list = metadata.getElementsByTagNameNS(NS, "PropertyDetails");
 		for (int i = 0; i < list.getLength(); i++) {
 			Node node = list.item(i);
@@ -153,10 +152,9 @@ class MatML {
 			MaterialProperty p = new MaterialProperty();
 			Element e = (Element) node;
 			p.id = e.getAttribute("id");
-			String name = Dom.getTextContent(e.getElementsByTagNameNS(
-					NS, "Name"));
+			String name = Dom.getText(Dom.getChild(e, "Name", NS));
 			p.name = name;
-			Element unit = Dom.getChild(e, "Units");
+			Element unit = Dom.findChild(e, "Units");
 			if (unit == null)
 				continue;
 			p.unit = unit.getAttribute("name");

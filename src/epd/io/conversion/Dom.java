@@ -1,13 +1,16 @@
 package epd.io.conversion;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Other;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +18,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import epd.util.Strings;
 
 /**
  * Utility methods for reading and writing data using the W3C DOM API.
@@ -44,24 +49,89 @@ public final class Dom {
 				Vocab.NS_EPD, "epd:" + tagName);
 	}
 
-	static Double getDoubleContent(NodeList nodeList) {
-		String text = getTextContent(nodeList);
+	/**
+	 * Get all child elements with the given name and namespace from the parent
+	 * element.
+	 */
+	public static List<Element> getChilds(Element parent, String name,
+			String ns) {
+		if (parent == null || name == null)
+			return Collections.emptyList();
+		List<Element> elems = new ArrayList<>();
+		eachChild(parent, e -> {
+			if (!Objects.equals(ns, e.getNamespaceURI()))
+				return;
+			if (Objects.equals(name, e.getLocalName())) {
+				elems.add(e);
+			}
+		});
+		return elems;
+	}
+
+	public static String getAttribute(Element elem, String name) {
+		if (elem == null)
+			return null;
+		return elem.getAttribute(name);
+	}
+
+	public static LangString getLangString(Element elem) {
+		String text = getText(elem);
+		if (text == null)
+			return null;
+		String lang = getAttribute(elem, "lang");
+		if (Strings.nullOrEmpty(lang)) {
+			lang = "en";
+		}
+		return LangString.of(text, lang);
+	}
+
+	/**
+	 * Get the first child element with the given name and namespace from the
+	 * parent element.
+	 */
+	public static Element getChild(Element parent, String name, String ns) {
+		if (parent == null || name == null)
+			return null;
+		AtomicReference<Element> ar = new AtomicReference<Element>();
+		eachChild(parent, e -> {
+			if (ar.get() != null)
+				return;
+			if (!Objects.equals(ns, e.getNamespaceURI()))
+				return;
+			if (Objects.equals(name, e.getLocalName())) {
+				ar.set(e);
+			}
+		});
+		return ar.get();
+	}
+
+	static Double getDouble(Element e) {
+		String text = getText(e);
 		if (text == null)
 			return null;
 		try {
 			return Double.parseDouble(text);
-		} catch (Exception e) {
+		} catch (Exception _e) {
 			Logger log = LoggerFactory.getLogger(Dom.class);
-			log.error("content of {} is not numeric", nodeList);
+			log.error("content of {} is not numeric", e);
 			return null;
 		}
 	}
 
-	static String getTextContent(NodeList nodeList) {
-		Node node = getFirstNode(nodeList);
-		if (node == null)
+	public static String getText(Element e) {
+		if (e == null)
 			return null;
-		return node.getTextContent();
+		NodeList nl = e.getChildNodes();
+		if (nl == null || nl.getLength() == 0)
+			return null;
+		StringBuilder s = new StringBuilder();
+		for (int i = 0; i < nl.getLength(); i++) {
+			Node n = nl.item(i);
+			if (n == null)
+				continue;
+			s.append(n.getTextContent());
+		}
+		return s.toString();
 	}
 
 	static Node getFirstNode(NodeList nodeList) {
@@ -111,7 +181,7 @@ public final class Dom {
 		return true;
 	}
 
-	static Element getChild(Element root, String... path) {
+	static Element findChild(Element root, String... path) {
 		if (root == null || path.length == 0)
 			return null;
 		Element element = root;

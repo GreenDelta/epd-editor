@@ -42,12 +42,10 @@ class SafetyMarginsConverter {
 
 	private static SafetyMargins fromElement(Element e) {
 		SafetyMargins margins = new SafetyMargins();
+		margins.margins = Dom.getDouble(Dom.getChild(
+				e, "margins", Vocab.NS_EPD));
 		NodeList nodes = e.getElementsByTagNameNS(
-				Vocab.NS_EPD, "margins");
-		Double val = Dom.getDoubleContent(nodes);
-		margins.margins = val;
-		nodes = e.getElementsByTagNameNS(Vocab.NS_EPD,
-				"description");
+				Vocab.NS_EPD, "description");
 		if (nodes == null)
 			return margins;
 		for (int i = 0; i < nodes.getLength(); i++) {

@@ -104,7 +104,7 @@ class DataSetRefExtension {
 			Ref ref = new Ref();
 			ref.type = type;
 			ref.uuid = element.getAttribute("refObjectId");
-			Element nameElement = Dom.getChild(element,
+			Element nameElement = Dom.findChild(element,
 					"shortDescription");
 			if (nameElement != null) {
 				// TODO: support multiple languages here

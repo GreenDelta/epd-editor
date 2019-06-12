@@ -1,9 +1,19 @@
 package epd.model.content;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.openlca.ilcd.commons.LangString;
+import org.w3c.dom.Element;
+
+import epd.io.conversion.Dom;
+import epd.io.conversion.Vocab;
+
 public abstract class ContentElement {
 
 	/** Name of the component, material, or substance. */
-	public String name;
+	public final List<LangString> name = new ArrayList<>();
 
 	/**
 	 * Mass percentage: either a discrete value or a range of values has to be
@@ -18,6 +28,20 @@ public abstract class ContentElement {
 	public ContentAmount mass;
 
 	/** Some comment about the component, material, or substance. */
-	public String comment;
+	public final List<LangString> comment = new ArrayList<>();
+
+	ContentElement read(Element e) {
+		if (e == null)
+			return this;
+		name.addAll(Dom.getChilds(e, "name", Vocab.NS_EPDv2)
+				.stream().map(Dom::getLangString)
+				.filter(n -> n != null)
+				.collect(Collectors.toList()));
+		comment.addAll(Dom.getChilds(e, "comment", Vocab.NS_EPDv2)
+				.stream().map(Dom::getLangString)
+				.filter(n -> n != null)
+				.collect(Collectors.toList()));
+		return this;
+	}
 
 }

@@ -61,7 +61,7 @@ class ScenarioConverter {
 				String attVal = atts.item(m).getNodeValue();
 				setField(scenario, attName, attVal);
 			}
-			Element e = Dom.getChild((Element) node, "description");
+			Element e = Dom.findChild((Element) node, "description");
 			if (e != null)
 				scenario.description = Strings.trim(e.getTextContent());
 		}

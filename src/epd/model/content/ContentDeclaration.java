@@ -44,9 +44,30 @@ public class ContentDeclaration {
 			return null;
 
 		Dom.eachChild(root, e -> {
-			System.out.println(e.getLocalName());
+			ContentElement ce = makeElement(e);
+			if (ce == null)
+				return;
+
+			System.out.println(ce.name);
 		});
 
 		return null;
+	}
+
+	static ContentElement makeElement(Element elem) {
+		if (elem == null)
+			return null;
+		if (!Objects.equals(Vocab.NS_EPDv2, elem.getNamespaceURI()))
+			return null;
+		switch (elem.getLocalName()) {
+		case "component":
+			return new Component().read(elem);
+		case "material":
+			return new Material().read(elem);
+		case "substance":
+			return new Substance().read(elem);
+		default:
+			return null;
+		}
 	}
 }

@@ -1,5 +1,12 @@
 package epd.model.content;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Element;
+
+import epd.io.conversion.Vocab;
+import epd.util.Strings;
+
 public class ContentAmount {
 
 	/** For specifying a discrete value: the value. */
@@ -15,4 +22,42 @@ public class ContentAmount {
 	 */
 	public Double upperValue;
 
+	static ContentAmount from(Element e) {
+		ContentAmount a = new ContentAmount();
+		if (e == null)
+			return a;
+		try {
+			String vStr = e.getAttributeNS(Vocab.NS_EPDv2, "value");
+			if (!Strings.nullOrEmpty(vStr)) {
+				a.value = Double.parseDouble(vStr);
+			}
+			String lStr = e.getAttributeNS(Vocab.NS_EPDv2, "lowerValue");
+			if (!Strings.nullOrEmpty(lStr)) {
+				a.lowerValue = Double.parseDouble(lStr);
+			}
+			String uStr = e.getAttributeNS(Vocab.NS_EPDv2, "upperValue");
+			if (!Strings.nullOrEmpty(uStr)) {
+				a.upperValue = Double.parseDouble(uStr);
+			}
+		} catch (Exception ex) {
+			Logger log = LoggerFactory.getLogger(ContentAmount.class);
+			log.error("failed to read contect amount", ex);
+		}
+		return a;
+	}
+
+	@Override
+	public String toString() {
+		if (value != null)
+			return Double.toString(value);
+		if (lowerValue != null && upperValue != null) {
+			return Double.toString(lowerValue) + " - "
+					+ Double.toString(upperValue);
+		}
+		if (upperValue != null)
+			return "< " + Double.toString(upperValue);
+		if (lowerValue != null)
+			return "> " + Double.toString(lowerValue);
+		return "?";
+	}
 }

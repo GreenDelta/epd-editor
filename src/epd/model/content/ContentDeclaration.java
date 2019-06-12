@@ -48,7 +48,7 @@ public class ContentDeclaration {
 			if (ce == null)
 				return;
 
-			System.out.println(ce.name);
+			System.out.println(ce.massPerc);
 		});
 
 		return null;

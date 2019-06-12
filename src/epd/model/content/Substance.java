@@ -2,6 +2,9 @@ package epd.model.content;
 
 public class Substance extends ContentElement {
 
+	/** The optional data dictionary GUID (whatever this is). */
+	public String guid;
+
 	/** CAS Number of the material or substance. */
 	public String casNumber;
 

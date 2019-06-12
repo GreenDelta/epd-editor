@@ -41,6 +41,16 @@ public abstract class ContentElement {
 				.stream().map(Dom::getLangString)
 				.filter(n -> n != null)
 				.collect(Collectors.toList()));
+
+		Element massPercElem = Dom.getChild(e, "weightPerc", Vocab.NS_EPDv2);
+		if (massPercElem != null) {
+			massPerc = ContentAmount.from(massPercElem);
+		}
+		Element massElem = Dom.getChild(e, "mass", Vocab.NS_EPDv2);
+		if (massElem != null) {
+			mass = ContentAmount.from(massElem);
+		}
+
 		return this;
 	}
 

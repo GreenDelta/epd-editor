@@ -50,7 +50,6 @@ public abstract class ContentElement {
 		if (massElem != null) {
 			mass = ContentAmount.from(massElem);
 		}
-
 		return this;
 	}
 

@@ -43,15 +43,15 @@ public class ContentDeclaration {
 		if (root == null)
 			return null;
 
+		// add the content elements
+		ContentDeclaration decl = new ContentDeclaration();
 		Dom.eachChild(root, e -> {
 			ContentElement ce = makeElement(e);
 			if (ce == null)
 				return;
-
-			System.out.println(ce.massPerc);
+			decl.content.add(ce);
 		});
-
-		return null;
+		return decl;
 	}
 
 	static ContentElement makeElement(Element elem) {

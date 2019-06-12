@@ -34,9 +34,9 @@ public class ContentDeclarationPage extends FormPage {
 		FormToolkit tk = mform.getToolkit();
 		ScrolledForm form = UI.formHeader(mform, "#Content declaration");
 		Composite body = UI.formBody(form, mform.getToolkit());
-		ContentTable contTable = new ContentTable(editor, decl);
+		ContentTree contTable = new ContentTree(editor, decl);
 		contTable.render(tk, body);
-		ContentTable packTable = new ContentTable(editor, decl);
+		ContentTree packTable = new ContentTree(editor, decl);
 		packTable.forPackaging = true;
 		packTable.render(tk, body);
 		form.reflow(true);

@@ -24,7 +24,8 @@ class ContentDialog extends FormDialog {
 		// TODO: copy values
 
 		Content.remove(decl, elem);
-
+		// TODO: check parent
+		decl.content.add(elem);
 		return OK;
 	}
 

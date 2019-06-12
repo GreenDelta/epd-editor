@@ -48,7 +48,7 @@ class Util {
 		if (doc == null)
 			return null;
 		return doc.createElementNS(
-				Extensions.NS_EPD, "epd:" + tagName);
+				Vocab.NS_EPD, "epd:" + tagName);
 	}
 
 	static Double getDoubleContent(NodeList nodeList) {

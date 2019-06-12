@@ -39,7 +39,7 @@ class ModuleConverter {
 		if (element == null)
 			return false;
 		String nsUri = element.getNamespaceURI();
-		return Objects.equals(nsUri, Extensions.NS_OLCA)
+		return Objects.equals(nsUri, Vocab.NS_OLCA)
 				&& Objects.equals(element.getLocalName(), "modules");
 	}
 
@@ -47,7 +47,7 @@ class ModuleConverter {
 			EpdProfile profile) {
 		List<ModuleEntry> modules = new ArrayList<>();
 		NodeList moduleList = element.getElementsByTagNameNS(
-				Extensions.NS_OLCA, "module");
+				Vocab.NS_OLCA, "module");
 		for (int i = 0; i < moduleList.getLength(); i++) {
 			Node node = moduleList.item(i);
 			NamedNodeMap attributes = node.getAttributes();
@@ -78,7 +78,7 @@ class ModuleConverter {
 	static void writeModules(EpdDataSet dataSet, Other other, Document doc) {
 		if (other == null || doc == null || !shouldWriteEntries(dataSet))
 			return;
-		Element root = doc.createElementNS(Extensions.NS_OLCA,
+		Element root = doc.createElementNS(Vocab.NS_OLCA,
 				"olca:modules");
 		for (ModuleEntry module : dataSet.moduleEntries) {
 			Element element = toElement(module, doc);
@@ -102,7 +102,7 @@ class ModuleConverter {
 		if (document == null)
 			return null;
 		try {
-			String nsUri = Extensions.NS_OLCA;
+			String nsUri = Vocab.NS_OLCA;
 			Element element = document.createElementNS(nsUri, "olca:module");
 			if (module.module != null)
 				element.setAttribute("olca:name", module.module.name);

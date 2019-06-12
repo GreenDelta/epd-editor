@@ -136,7 +136,7 @@ class DataSetRefExtension {
 		Document doc = Util.createDocument();
 		if (doc == null || d == null)
 			return null;
-		Element e = doc.createElementNS(Extensions.NS_EPD, "epd:" + tagName);
+		Element e = doc.createElementNS(Vocab.NS_EPD, "epd:" + tagName);
 		e.setAttribute("type", type);
 		e.setAttribute("refObjectId", d.uuid);
 		e.setAttribute("uri", "../" + path + "/" + d.uuid);

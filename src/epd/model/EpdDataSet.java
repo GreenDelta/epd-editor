@@ -11,6 +11,8 @@ import org.openlca.ilcd.processes.ProcessName;
 import org.openlca.ilcd.processes.QuantitativeReference;
 import org.openlca.ilcd.util.Processes;
 
+import epd.model.content.ContentDeclaration;
+
 public class EpdDataSet {
 
 	public Process process;
@@ -20,6 +22,7 @@ public class EpdDataSet {
 	public final List<IndicatorResult> results = new ArrayList<>();
 	public final List<ModuleEntry> moduleEntries = new ArrayList<>();
 	public final List<Scenario> scenarios = new ArrayList<>();
+	public ContentDeclaration contentDeclaration;
 
 	public IndicatorResult getResult(Indicator indicator) {
 		for (IndicatorResult result : results)

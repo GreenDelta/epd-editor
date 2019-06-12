@@ -27,8 +27,8 @@ public class Main {
 
 		while (!queue.isEmpty()) {
 			ContentElement elem = queue.poll();
-			System.out.println(
-					elem.getClass() + ": " + elem.name + ":: " + elem.massPerc);
+			// System.out.println(
+			// elem.getClass() + ": " + elem.name + ":: " + elem.massPerc);
 			queue.addAll(childs(elem));
 		}
 
@@ -36,7 +36,8 @@ public class Main {
 		ds = ds.clone();
 		Extensions.write(ds);
 		binder.toWriter(ds.process, w);
-		System.out.println(w.toString());
+		System.out.println(w.toString().split("</epd:safetyMargins>")[1]
+				.split("<quantitativeReference>")[0]);
 	}
 
 	private static List<? extends ContentElement> childs(ContentElement elem) {

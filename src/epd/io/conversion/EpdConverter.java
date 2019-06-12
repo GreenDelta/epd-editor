@@ -60,6 +60,9 @@ class EpdConverter {
 		ModuleConverter.writeModules(dataSet, other, doc);
 		ScenarioConverter.writeScenarios(dataSet, other, doc);
 		SafetyMarginsConverter.write(dataSet, other, doc);
+		if (dataSet.contentDeclaration != null) {
+			dataSet.contentDeclaration.write(other, doc);
+		}
 		writeProfile();
 		writeSubType();
 		if (Dom.isEmpty(other))

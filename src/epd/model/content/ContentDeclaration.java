@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.openlca.ilcd.commons.Other;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import epd.io.conversion.Dom;
@@ -24,7 +25,11 @@ public class ContentDeclaration {
 	 */
 	public final List<ContentElement> content = new ArrayList<>();
 
-	public static ContentDeclaration fromXml(Other other) {
+	/**
+	 * Read a content declaration from the given extension element. May return
+	 * null when the extension is null or when it has no content declaration.
+	 */
+	public static ContentDeclaration read(Other other) {
 		if (other == null)
 			return null;
 
@@ -46,7 +51,7 @@ public class ContentDeclaration {
 		// add the content elements
 		ContentDeclaration decl = new ContentDeclaration();
 		Dom.eachChild(root, e -> {
-			ContentElement ce = makeElement(e);
+			ContentElement ce = readElement(e);
 			if (ce == null)
 				return;
 			decl.content.add(ce);
@@ -54,7 +59,23 @@ public class ContentDeclaration {
 		return decl;
 	}
 
-	static ContentElement makeElement(Element elem) {
+	/**
+	 * Write this content declaration to the given extension element deleting an
+	 * old declaration if it already exists.
+	 */
+	public void write(Other other, Document doc) {
+		if (other == null || doc == null)
+			return;
+		Dom.clear(other, "contentDeclaration");
+		Element root = doc.createElementNS(
+				Vocab.NS_EPDv2, "epd2:contentDeclaration");
+		other.any.add(root);
+		for (ContentElement e : content) {
+			writeElement(root, e);
+		}
+	}
+
+	static ContentElement readElement(Element elem) {
 		if (elem == null)
 			return null;
 		if (!Objects.equals(Vocab.NS_EPDv2, elem.getNamespaceURI()))
@@ -69,6 +90,23 @@ public class ContentDeclaration {
 		default:
 			return null;
 		}
+	}
+
+	static void writeElement(Element parent, ContentElement celem) {
+		if (celem == null)
+			return;
+		String tag = null;
+		if (celem instanceof Component) {
+			tag = "component";
+		} else if (celem instanceof Material) {
+			tag = "material";
+		} else if (celem instanceof Substance) {
+			tag = "substance";
+		}
+		if (tag == null)
+			return;
+		Element elem = Dom.addChild(parent, "epd2:" + tag, Vocab.NS_EPDv2);
+		celem.write(elem);
 	}
 
 	@Override

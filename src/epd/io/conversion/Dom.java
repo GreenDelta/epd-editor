@@ -105,6 +105,18 @@ public final class Dom {
 		return ar.get();
 	}
 
+	/**
+	 * Creates a new element with the given name and namespace and appends it to
+	 * the given parent element.
+	 */
+	public static Element addChild(Element parent, String name, String ns) {
+		if (parent == null || name == null)
+			return null;
+		Element elem = parent.getOwnerDocument().createElementNS(ns, name);
+		parent.appendChild(elem);
+		return elem;
+	}
+
 	static Double getDouble(Element e) {
 		String text = getText(e);
 		if (text == null)
@@ -154,7 +166,7 @@ public final class Dom {
 	}
 
 	/** Removes all elements with the given tag-name from the extensions. */
-	static void clear(Other extension, String tagName) {
+	public static void clear(Other extension, String tagName) {
 		if (extension == null || tagName == null)
 			return;
 		List<Element> matches = new ArrayList<>();

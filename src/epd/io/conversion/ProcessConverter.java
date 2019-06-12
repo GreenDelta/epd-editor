@@ -56,7 +56,7 @@ class ProcessConverter {
 		List<ModuleEntry> modules = ModuleConverter.readModules(other, profile);
 		dataSet.moduleEntries.addAll(modules);
 		dataSet.safetyMargins = SafetyMarginsConverter.read(other);
-		dataSet.contentDeclaration = ContentDeclaration.fromXml(other);
+		dataSet.contentDeclaration = ContentDeclaration.read(other);
 	}
 
 	private void readSubType(EpdDataSet dataSet) {

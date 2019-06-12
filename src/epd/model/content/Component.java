@@ -18,7 +18,7 @@ public class Component extends ContentElement {
 			return this;
 		super.read(e);
 		Dom.eachChild(e, child -> {
-			ContentElement ce = ContentDeclaration.makeElement(child);
+			ContentElement ce = ContentDeclaration.readElement(child);
 			if ((ce instanceof Material) || (ce instanceof Substance)) {
 				content.add(ce);
 			}

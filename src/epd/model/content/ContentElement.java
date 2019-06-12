@@ -53,6 +53,12 @@ public abstract class ContentElement {
 		return this;
 	}
 
+	void write(Element elem) {
+		if (elem == null)
+			return;
+		// TODO
+	}
+
 	void copyTo(ContentElement other) {
 		if (other == null)
 			return;

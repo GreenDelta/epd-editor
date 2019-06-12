@@ -21,7 +21,7 @@ public class Material extends Substance {
 			return this;
 		super.read(e);
 		Dom.eachChild(e, child -> {
-			ContentElement ce = ContentDeclaration.makeElement(child);
+			ContentElement ce = ContentDeclaration.readElement(child);
 			if (ce instanceof Substance) {
 				substances.add((Substance) ce);
 			}

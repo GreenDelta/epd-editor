@@ -16,6 +16,7 @@ import epd.model.IndicatorResult;
 import epd.model.ModuleEntry;
 import epd.model.Scenario;
 import epd.model.SubType;
+import epd.model.content.ContentDeclaration;
 
 /**
  * Converts an ILCD process data set to an EPD data set.
@@ -55,6 +56,7 @@ class ProcessConverter {
 		List<ModuleEntry> modules = ModuleConverter.readModules(other, profile);
 		dataSet.moduleEntries.addAll(modules);
 		dataSet.safetyMargins = SafetyMarginsConverter.read(other);
+		dataSet.contentDeclaration = ContentDeclaration.fromXml(other);
 	}
 
 	private void readSubType(EpdDataSet dataSet) {
@@ -63,7 +65,7 @@ class ProcessConverter {
 		Method method = process.modelling.method;
 		if (method == null || method.other == null)
 			return;
-		Element e = Util.getElement(method.other, "subType");
+		Element e = Dom.getElement(method.other, "subType");
 		if (e != null) {
 			SubType type = SubType.fromLabel(e.getTextContent());
 			dataSet.subType = type;

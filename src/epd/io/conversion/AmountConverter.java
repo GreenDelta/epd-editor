@@ -81,7 +81,7 @@ class AmountConverter {
 
 	static void writeAmounts(List<Amount> amounts, Other extension,
 			Document doc) {
-		if (Util.hasNull(amounts, extension, doc))
+		if (amounts == null || extension == null || doc == null)
 			return;
 		for (Amount amount : amounts) {
 			Element element = toElement(amount, doc);

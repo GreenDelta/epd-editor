@@ -3,6 +3,7 @@ package epd.io.conversion;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -16,19 +17,11 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * Utility methods for data set conversions.
+ * Utility methods for reading and writing data using the W3C DOM API.
  */
-class Util {
+public final class Dom {
 
-	private Util() {
-	}
-
-	static boolean hasNull(Object... vals) {
-		for (Object val : vals) {
-			if (val == null)
-				return true;
-		}
-		return false;
+	private Dom() {
 	}
 
 	static Document createDocument() {
@@ -37,7 +30,7 @@ class Util {
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			return db.newDocument();
 		} catch (Exception e) {
-			Logger log = LoggerFactory.getLogger(Util.class);
+			Logger log = LoggerFactory.getLogger(Dom.class);
 			log.error("failed to init DOM doc", e);
 			return null;
 		}
@@ -58,7 +51,7 @@ class Util {
 		try {
 			return Double.parseDouble(text);
 		} catch (Exception e) {
-			Logger log = LoggerFactory.getLogger(Util.class);
+			Logger log = LoggerFactory.getLogger(Dom.class);
 			log.error("content of {} is not numeric", nodeList);
 			return null;
 		}
@@ -141,6 +134,20 @@ class Util {
 			}
 		}
 		return element;
+	}
+
+	public static void eachChild(Element parent, Consumer<Element> fn) {
+		if (parent == null || fn == null)
+			return;
+		NodeList childs = parent.getChildNodes();
+		if (childs == null || childs.getLength() == 0)
+			return;
+		for (int i = 0; i < childs.getLength(); i++) {
+			Node node = childs.item(i);
+			if (!(node instanceof Element))
+				continue;
+			fn.accept((Element) node);
+		}
 	}
 
 }

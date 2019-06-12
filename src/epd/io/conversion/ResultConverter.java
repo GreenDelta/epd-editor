@@ -78,7 +78,7 @@ class ResultConverter {
 	static void writeResults(EpdDataSet ds) {
 		if (ds == null || ds.process == null)
 			return;
-		Document doc = Util.createDocument();
+		Document doc = Dom.createDocument();
 		for (IndicatorResult result : ds.results) {
 			Indicator indicator = result.indicator;
 			if (indicator == null)

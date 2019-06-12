@@ -56,13 +56,13 @@ class EpdConverter {
 			other = new Other();
 			info.other = other;
 		}
-		Document doc = Util.createDocument();
+		Document doc = Dom.createDocument();
 		ModuleConverter.writeModules(dataSet, other, doc);
 		ScenarioConverter.writeScenarios(dataSet, other, doc);
 		SafetyMarginsConverter.write(dataSet, other, doc);
 		writeProfile();
 		writeSubType();
-		if (Util.isEmpty(other))
+		if (Dom.isEmpty(other))
 			info.other = null;
 	}
 
@@ -76,7 +76,7 @@ class EpdConverter {
 		}
 		Method method = Processes.method(dataSet.process);
 		method.other = new Other();
-		Element e = Util.createElement("subType");
+		Element e = Dom.createElement("subType");
 		e.setTextContent(dataSet.subType.getLabel());
 		method.other.any.add(e);
 	}

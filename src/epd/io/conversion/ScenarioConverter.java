@@ -61,7 +61,7 @@ class ScenarioConverter {
 				String attVal = atts.item(m).getNodeValue();
 				setField(scenario, attName, attVal);
 			}
-			Element e = Util.getChild((Element) node, "description");
+			Element e = Dom.getChild((Element) node, "description");
 			if (e != null)
 				scenario.description = Strings.trim(e.getTextContent());
 		}
@@ -87,10 +87,10 @@ class ScenarioConverter {
 	}
 
 	static void writeScenarios(EpdDataSet dataSet, Other other, Document doc) {
-		if (Util.hasNull(dataSet, other, doc)
+		if (dataSet == null || other == null || doc == null
 				|| dataSet.scenarios.isEmpty())
 			return;
-		Util.clear(other, "scenarios");
+		Dom.clear(other, "scenarios");
 		Element root = doc.createElementNS(Vocab.NS_EPD,
 				"epd:scenarios");
 		for (Scenario scenario : dataSet.scenarios) {

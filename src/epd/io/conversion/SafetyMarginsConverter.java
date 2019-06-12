@@ -44,7 +44,7 @@ class SafetyMarginsConverter {
 		SafetyMargins margins = new SafetyMargins();
 		NodeList nodes = e.getElementsByTagNameNS(
 				Vocab.NS_EPD, "margins");
-		Double val = Util.getDoubleContent(nodes);
+		Double val = Dom.getDoubleContent(nodes);
 		margins.margins = val;
 		nodes = e.getElementsByTagNameNS(Vocab.NS_EPD,
 				"description");
@@ -68,9 +68,9 @@ class SafetyMarginsConverter {
 	}
 
 	static void write(EpdDataSet ds, Other other, Document doc) {
-		if (Util.hasNull(ds, other, doc))
+		if (ds == null || other == null || doc == null)
 			return;
-		Util.clear(other, "safetyMargins");
+		Dom.clear(other, "safetyMargins");
 		SafetyMargins m = ds.safetyMargins;
 		if (m == null || (m.margins == null && m.description.isEmpty()))
 			return;

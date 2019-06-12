@@ -9,16 +9,24 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import app.editors.epd.EpdEditor;
 import app.util.UI;
 import epd.model.EpdDataSet;
+import epd.model.content.ContentDeclaration;
 
 public class ContentDeclarationPage extends FormPage {
 
+	private final ContentDeclaration decl;
+
 	private final EpdEditor editor;
-	private final EpdDataSet dataSet;
 
 	public ContentDeclarationPage(EpdEditor editor) {
 		super(editor, "ContentDeclarationPage", "#Content declaration");
 		this.editor = editor;
-		dataSet = editor.dataSet;
+		EpdDataSet ds = editor.dataSet;
+		if (ds.contentDeclaration != null) {
+			decl = ds.contentDeclaration;
+		} else {
+			decl = new ContentDeclaration();
+			ds.contentDeclaration = decl;
+		}
 	}
 
 	@Override
@@ -26,14 +34,11 @@ public class ContentDeclarationPage extends FormPage {
 		FormToolkit tk = mform.getToolkit();
 		ScrolledForm form = UI.formHeader(mform, "#Content declaration");
 		Composite body = UI.formBody(form, mform.getToolkit());
-
-		ContentTable contTable = new ContentTable();
+		ContentTable contTable = new ContentTable(editor, decl);
 		contTable.render(tk, body);
-		ContentTable packTable = new ContentTable();
+		ContentTable packTable = new ContentTable(editor, decl);
 		packTable.forPackaging = true;
 		packTable.render(tk, body);
-
 		form.reflow(true);
 	}
-
 }

@@ -83,22 +83,32 @@ public class UI {
 	}
 
 	public static Shell shell() {
-		IWorkbenchWindow ww = PlatformUI.getWorkbench()
-				.getActiveWorkbenchWindow();
-		if (ww != null && ww.getShell() != null)
-			return ww.getShell();
+		// first, we try to get the shell from the active workbench window
 		Shell shell = null;
+		try {
+			IWorkbenchWindow wb = PlatformUI.getWorkbench()
+					.getActiveWorkbenchWindow();
+			if (wb != null) {
+				shell = wb.getShell();
+			}
+			if (shell != null)
+				return shell;
+		} catch (Exception e) {
+		}
+
+		// then, try to get it from the display
 		Display display = Display.getCurrent();
-		if (display == null)
+		if (display == null) {
 			display = Display.getDefault();
-		if (display != null)
+		}
+		if (display != null) {
 			shell = display.getActiveShell();
-		if (shell == null)
-			if (display != null)
-				shell = new Shell(display);
-			else
-				shell = new Shell();
-		return shell;
+		}
+		if (shell != null)
+			return shell;
+		return display != null
+				? new Shell(display)
+				: new Shell();
 	}
 
 	public static Font boldFont() {

@@ -7,16 +7,30 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import app.M;
 import app.util.UI;
+import epd.model.content.ContentDeclaration;
+import epd.model.content.ContentElement;
 
 class ContentDialog extends FormDialog {
 
-	static int open(Object obj) {
-		ContentDialog cd = new ContentDialog();
-		return cd.open();
+	private final ContentElement elem;
+
+	static int open(ContentDeclaration decl, ContentElement elem) {
+		if (elem == null)
+			return CANCEL;
+		ContentDialog cd = new ContentDialog(elem);
+		int code = cd.open();
+		if (code != OK)
+			return code;
+		// TODO: copy values
+
+		Content.remove(decl, elem);
+
+		return OK;
 	}
 
-	ContentDialog() {
+	ContentDialog(ContentElement elem) {
 		super(UI.shell());
+		this.elem = elem;
 	}
 
 	@Override

@@ -67,6 +67,8 @@ public class ContentDeclaration {
 		if (other == null || doc == null)
 			return;
 		Dom.clear(other, "contentDeclaration");
+		if (content.isEmpty())
+			return;
 		Element root = doc.createElementNS(
 				Vocab.NS_EPDv2, "epd2:contentDeclaration");
 		other.any.add(root);

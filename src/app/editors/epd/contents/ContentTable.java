@@ -1,21 +1,33 @@
 package app.editors.epd.contents;
 
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import app.M;
+import app.editors.epd.EpdEditor;
 import app.util.Actions;
 import app.util.Tables;
 import app.util.UI;
+import epd.model.content.ContentDeclaration;
+import epd.model.content.ContentElement;
 import epd.util.Fn;
 
 class ContentTable {
 
+	private final EpdEditor editor;
+	private final ContentDeclaration decl;
+
 	boolean forPackaging;
 	private TableViewer table;
+
+	public ContentTable(EpdEditor editor, ContentDeclaration decl) {
+		this.editor = editor;
+		this.decl = decl;
+	}
 
 	void render(FormToolkit tk, Composite body) {
 		String title = forPackaging
@@ -73,19 +85,20 @@ class ContentTable {
 	private void onAdd(ContentType type) {
 		if (type == null)
 			return;
-		// create an instance and open the dialog
-		// if possible set the parent from the selection.
-		ContentDialog.open(null);
+		ContentElement elem = type.newInstance();
+		if (ContentDialog.open(decl, elem) != Dialog.OK)
+			return;
+		editor.setDirty();
 	}
 
 	private void onEdit() {
 		// TODO
-		ContentDialog.open(null);
+		// ContentDialog.open(null);
 	}
 
 	private void onDelete() {
 		// TODO
-		ContentDialog.open(null);
+		// ContentDialog.open(null);
 	}
 
 }

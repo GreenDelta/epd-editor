@@ -56,7 +56,22 @@ public abstract class ContentElement {
 	void write(Element elem) {
 		if (elem == null)
 			return;
-		// TODO
+		for (LangString n : name) {
+			Element e = Dom.addChild(elem, "epd2:name", Vocab.NS_EPDv2);
+			Dom.setLangString(e, n);
+		}
+		if (massPerc != null) {
+			Element e = Dom.addChild(elem, "epd2:weightPerc", Vocab.NS_EPDv2);
+			massPerc.write(e);
+		}
+		if (mass != null) {
+			Element e = Dom.addChild(elem, "epd2:mass", Vocab.NS_EPDv2);
+			mass.write(e);
+		}
+		for (LangString c : comment) {
+			Element e = Dom.addChild(elem, "epd2:comment", Vocab.NS_EPDv2);
+			Dom.setLangString(e, c);
+		}
 	}
 
 	void copyTo(ContentElement other) {

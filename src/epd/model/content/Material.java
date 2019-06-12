@@ -30,6 +30,16 @@ public class Material extends Substance {
 	}
 
 	@Override
+	void write(Element elem) {
+		if (elem == null)
+			return;
+		super.write(elem);
+		for (Substance substance : substances) {
+			ContentDeclaration.writeElement(elem, substance);
+		}
+	}
+
+	@Override
 	public Material clone() {
 		Material clone = new Material();
 		copyTo(clone);

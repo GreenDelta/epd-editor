@@ -37,4 +37,12 @@ public class Component extends ContentElement {
 		}
 		return clone;
 	}
+
+	@Override
+	void write(Element elem) {
+		super.write(elem);
+		for (ContentElement ce : content) {
+			ContentDeclaration.writeElement(elem, ce);
+		}
+	}
 }

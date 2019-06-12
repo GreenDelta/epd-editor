@@ -85,6 +85,15 @@ public final class Dom {
 		return LangString.of(text, lang);
 	}
 
+	public static void setLangString(Element elem, LangString s) {
+		if (elem == null || s == null)
+			return;
+		elem.setTextContent(s.value);
+		if (!Strings.nullOrEmpty(s.lang)) {
+			elem.setAttributeNS(Vocab.NS_XML, "lang", s.lang);
+		}
+	}
+
 	/**
 	 * Get the first child element with the given name and namespace from the
 	 * parent element.

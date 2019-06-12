@@ -68,6 +68,38 @@ public class Substance extends ContentElement {
 	}
 
 	@Override
+	void write(Element elem) {
+		if (elem == null)
+			return;
+		super.write(elem);
+		if (!Strings.nullOrEmpty(guid)) {
+			elem.setAttributeNS(Vocab.NS_EPDv2, "epd2:ddGUID", guid);
+		}
+		if (!Strings.nullOrEmpty(casNumber)) {
+			elem.setAttributeNS(Vocab.NS_EPDv2, "epd2:CASNumber", casNumber);
+		}
+		if (!Strings.nullOrEmpty(ecNumber)) {
+			elem.setAttributeNS(Vocab.NS_EPDv2, "epd2:ECNumber", ecNumber);
+		}
+		if (renewable != null) {
+			elem.setAttributeNS(
+					Vocab.NS_EPDv2, "epd2:renewable", renewable.toString());
+		}
+		if (recycled != null) {
+			elem.setAttributeNS(
+					Vocab.NS_EPDv2, "epd2:recycled", recycled.toString());
+		}
+		if (recyclable != null) {
+			elem.setAttributeNS(
+					Vocab.NS_EPDv2, "epd2:recyclable", recyclable.toString());
+		}
+		if (packaging != null) {
+			elem.setAttributeNS(
+					Vocab.NS_EPDv2, "epd2:packaging", packaging.toString());
+		}
+	}
+
+	@Override
 	void copyTo(ContentElement other) {
 		super.copyTo(other);
 		if (other instanceof Substance) {

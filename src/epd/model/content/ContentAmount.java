@@ -46,6 +46,23 @@ public class ContentAmount {
 		return a;
 	}
 
+	void write(Element e) {
+		if (e == null)
+			return;
+		if (value != null) {
+			e.setAttributeNS(
+					Vocab.NS_EPDv2, "epd2:value", value.toString());
+		}
+		if (lowerValue != null) {
+			e.setAttributeNS(
+					Vocab.NS_EPDv2, "epd2:lowerValue", lowerValue.toString());
+		}
+		if (upperValue != null) {
+			e.setAttributeNS(
+					Vocab.NS_EPDv2, "epd2:upperValue", upperValue.toString());
+		}
+	}
+
 	@Override
 	public String toString() {
 		if (value != null)

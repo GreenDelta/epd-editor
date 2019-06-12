@@ -14,6 +14,11 @@ import epd.model.dom.NS;
 @Elem(qname = "epd2:contentDeclaration", namespace = NS.EPDv2)
 public class ContentDeclaration {
 
-	public final List<Component> components = new ArrayList<>();
+	/**
+	 * A content declaration can contain components, materials, and substances.
+	 * Components can in turn contain materials and substances; materials can
+	 * contain substances.
+	 */
+	public final List<ContentElement> content = new ArrayList<>();
 
 }

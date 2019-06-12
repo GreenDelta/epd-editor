@@ -3,7 +3,7 @@ package epd.model.content;
 import epd.model.dom.Attr;
 import epd.model.dom.NS;
 
-public class ContentValue {
+public class ContentAmount {
 
 	/** For specifying a discrete value: the value. */
 	@Attr(qname = "epd2:value", namespace = NS.EPDv2)

@@ -75,14 +75,17 @@ class ContentTable {
 			return;
 		// create an instance and open the dialog
 		// if possible set the parent from the selection.
+		ContentDialog.open(null);
 	}
 
 	private void onEdit() {
 		// TODO
+		ContentDialog.open(null);
 	}
 
 	private void onDelete() {
 		// TODO
+		ContentDialog.open(null);
 	}
 
 }

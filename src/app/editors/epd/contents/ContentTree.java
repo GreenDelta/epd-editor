@@ -80,12 +80,10 @@ class ContentTree {
 
 			@Override
 			public boolean select(Viewer viewer, Object parent, Object obj) {
-				if (obj instanceof Substance) {
-					Substance subst = (Substance) obj;
-					boolean pack = subst.packaging != null && subst.packaging;
-					return pack == forPackaging;
-				}
-				return !forPackaging;
+				if (!(obj instanceof ContentElement))
+					return false;
+				ContentElement elem = (ContentElement) obj;
+				return forPackaging == Content.isPackaging(elem);
 			}
 		});
 

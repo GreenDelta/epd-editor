@@ -68,29 +68,13 @@ final class Content {
 			return false;
 		if (elem instanceof Component)
 			return false;
-
-		if (elem instanceof Material) {
-			Material mat = (Material) elem;
-			if (mat.packaging != null && mat.packaging)
-				return false;
+		if (isPackaging(elem) != isPackaging(candidate))
+			return false;
+		if (elem instanceof Material)
 			return candidate instanceof Component;
-		}
-
-		if (elem instanceof Substance) {
-
-			// substance of packaging materials
-			Substance subst = (Substance) elem;
-			if (subst.packaging != null && subst.packaging) {
-				if (!(candidate instanceof Material))
-					return false;
-				Material mat = (Material) candidate;
-				return mat.packaging != null && mat.packaging;
-			}
-
-			// some other substances
+		if (elem instanceof Substance)
 			return candidate instanceof Component
 					|| candidate instanceof Material;
-		}
 		return false;
 	}
 
@@ -127,5 +111,12 @@ final class Content {
 			queue.addAll(childs(p));
 		}
 		return null;
+	}
+
+	static boolean isPackaging(ContentElement elem) {
+		if (!(elem instanceof Substance))
+			return false;
+		Substance subst = (Substance) elem;
+		return subst.packaging != null && subst.packaging;
 	}
 }

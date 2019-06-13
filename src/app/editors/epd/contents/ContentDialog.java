@@ -26,6 +26,8 @@ class ContentDialog extends FormDialog {
 
 	// UI components
 	private Text nameText;
+	private AmountWidget massPercWidget;
+	private AmountWidget massWidget;
 	private Text casText;
 	private Text ecText;
 	private Text guuidText;
@@ -84,10 +86,16 @@ class ContentDialog extends FormDialog {
 		UI.gridData(nameText, true, false).widthHint = 350;
 		UI.filler(comp, tk);
 
-		UI.formText(comp, tk, "Weight percentage");
+		// weight percentage
+		UI.formLabel(comp, tk, "Weight percentage");
+		massPercWidget = new AmountWidget(comp, tk);
+		massPercWidget.setAmount(elem.massPerc);
 		UI.formLabel(comp, tk, "%");
 
-		UI.formText(comp, tk, "Absolute mass");
+		// mass
+		UI.formLabel(comp, tk, "Absolute mass");
+		massWidget = new AmountWidget(comp, tk);
+		massWidget.setAmount(elem.mass);
 		UI.formLabel(comp, tk, "kg");
 
 		if (elem instanceof Substance) {
@@ -140,7 +148,8 @@ class ContentDialog extends FormDialog {
 	@Override
 	protected void okPressed() {
 		LangString.set(elem.name, nameText.getText(), App.lang());
-		// TODO bind mass fields
+		elem.massPerc = massPercWidget.getAmount();
+		elem.mass = massWidget.getAmount();
 		LangString.set(elem.comment, commentText.getText(), App.lang());
 		if (elem instanceof Substance) {
 			Substance subst = (Substance) elem;

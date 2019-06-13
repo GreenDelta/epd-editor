@@ -2,6 +2,7 @@ package app.editors.epd.contents;
 
 import java.util.Arrays;
 
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.FormDialog;
@@ -19,7 +20,9 @@ import epd.model.content.Substance;
 
 class ContentDialog extends FormDialog {
 
+	private final ContentDeclaration decl;
 	private final ContentElement elem;
+	private ContentElement parent;
 
 	// UI components
 	private Text nameText;
@@ -34,18 +37,24 @@ class ContentDialog extends FormDialog {
 	static int open(ContentDeclaration decl, ContentElement elem) {
 		if (elem == null)
 			return CANCEL;
-		ContentDialog cd = new ContentDialog(elem);
-		int code = cd.open();
+		ContentDialog d = new ContentDialog(decl, elem);
+		int code = d.open();
 		if (code != OK)
 			return code;
 		Content.remove(decl, elem);
-		// TODO: check parent
-		decl.content.add(elem);
+		boolean added = false;
+		if (d.parent != null) {
+			added = Content.addChild(d.parent, elem);
+		}
+		if (!added) {
+			decl.content.add(elem);
+		}
 		return OK;
 	}
 
-	ContentDialog(ContentElement elem) {
+	ContentDialog(ContentDeclaration decl, ContentElement elem) {
 		super(UI.shell());
+		this.decl = decl;
 		this.elem = elem;
 	}
 
@@ -58,6 +67,13 @@ class ContentDialog extends FormDialog {
 		Composite comp = UI.formComposite(body, tk);
 		UI.gridData(comp, true, false);
 		UI.gridLayout(comp, 3);
+
+		// the parent combo
+		if (Content.canHaveParent(elem, decl)) {
+			Combo combo = UI.formCombo(comp, tk, "Parent element");
+			UI.gridData(combo, true, false);
+			UI.filler(comp, tk);
+		}
 
 		// name
 		nameText = UI.formText(comp, tk, M.Name);

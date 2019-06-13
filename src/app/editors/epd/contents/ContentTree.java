@@ -8,6 +8,8 @@ import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
@@ -20,8 +22,10 @@ import app.editors.epd.EpdEditor;
 import app.util.Actions;
 import app.util.Trees;
 import app.util.UI;
+import app.util.Viewers;
 import epd.model.content.ContentDeclaration;
 import epd.model.content.ContentElement;
+import epd.model.content.Substance;
 import epd.util.Fn;
 
 class ContentTree {
@@ -55,18 +59,33 @@ class ContentTree {
 	private void createTree(Composite comp) {
 		tree = Trees.createViewer(comp,
 				"Component/material",
-				"weight-%",
-				"kg",
-				"CAS No",
-				"EC No",
-				"GUUID",
-				"Renewable resource",
+				"Weight percentage",
+				"Absolute mass",
+				"CAS number",
+				"EC number",
+				"Data dictionary GUUID",
+				"Renewable resources",
 				"Recycled content",
 				"Recyclable content",
 				"Comment");
 		ViewerModel vm = new ViewerModel();
 		tree.setContentProvider(vm);
 		tree.setLabelProvider(vm);
+
+		// filter packaging materials
+		tree.setFilters(new ViewerFilter() {
+
+			@Override
+			public boolean select(Viewer viewer, Object parent, Object obj) {
+				if (obj instanceof Substance) {
+					Substance subst = (Substance) obj;
+					boolean pack = subst.packaging != null && subst.packaging;
+					return pack == forPackaging;
+				}
+				return true;
+			}
+		});
+
 		Tree t = tree.getTree();
 		t.getColumn(5).setToolTipText(
 				"Data dictionary GUUID");
@@ -76,6 +95,7 @@ class ContentTree {
 				"Material recyclable content");
 		double w = 0.8 / 9;
 		Trees.bindColumnWidths(t, 0.2, w, w, w, w, w, w, w, w, w);
+		Trees.onDoubleClick(tree, _e -> onEdit());
 	}
 
 	private void createMenu() {
@@ -101,6 +121,9 @@ class ContentTree {
 		if (type == null)
 			return;
 		ContentElement elem = type.newInstance();
+		if (elem instanceof Substance) {
+			((Substance) elem).packaging = forPackaging;
+		}
 		if (ContentDialog.open(decl, elem) != Dialog.OK)
 			return;
 		tree.setInput(decl);
@@ -108,13 +131,22 @@ class ContentTree {
 	}
 
 	private void onEdit() {
-		// TODO
-		// ContentDialog.open(null);
+		ContentElement elem = Viewers.getFirstSelected(tree);
+		if (elem == null)
+			return;
+		if (ContentDialog.open(decl, elem) != Dialog.OK)
+			return;
+		tree.setInput(decl);
+		editor.setDirty();
 	}
 
 	private void onDelete() {
-		// TODO
-		// ContentDialog.open(null);
+		ContentElement elem = Viewers.getFirstSelected(tree);
+		if (elem == null)
+			return;
+		Content.remove(decl, elem);
+		tree.setInput(decl);
+		editor.setDirty();
 	}
 
 	private class ViewerModel extends BaseLabelProvider

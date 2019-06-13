@@ -126,8 +126,8 @@ class ContentTree {
 		if (ContentDialog.open(decl, elem) != Dialog.OK)
 			return;
 		tree.setInput(decl);
-		tree.expandToLevel(elem, 2);
 		editor.setDirty();
+		tree.expandToLevel(elem, TreeViewer.ALL_LEVELS);
 	}
 
 	private void onEdit() {
@@ -144,8 +144,10 @@ class ContentTree {
 		ContentElement elem = Viewers.getFirstSelected(tree);
 		if (elem == null)
 			return;
+		Object[] expanded = tree.getExpandedElements();
 		Content.remove(decl, elem);
 		tree.setInput(decl);
+		tree.setExpandedElements(expanded);
 		editor.setDirty();
 	}
 
@@ -171,7 +173,10 @@ class ContentTree {
 
 		@Override
 		public Object getParent(Object obj) {
-			return null;
+			if (!(obj instanceof ContentElement))
+				return false;
+			ContentElement elem = (ContentElement) obj;
+			return Content.getParent(elem, decl);
 		}
 
 		@Override

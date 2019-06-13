@@ -75,6 +75,7 @@ class ContentDialog extends FormDialog {
 			UI.filler(comp, tk);
 			new ParentCombo(decl, elem).bind(combo).onChange(
 					p -> this.parent = p);
+			this.parent = Content.getParent(elem, decl);
 		}
 
 		// name

@@ -1,7 +1,9 @@
 package app.editors.epd.contents;
 
+import java.util.ArrayDeque;
 import java.util.Collections;
 import java.util.List;
+import java.util.Queue;
 
 import epd.model.content.Component;
 import epd.model.content.ContentDeclaration;
@@ -106,5 +108,24 @@ final class Content {
 			return true;
 		}
 		return false;
+	}
+
+	static ContentElement getParent(ContentElement elem,
+			ContentDeclaration decl) {
+		if (elem == null || decl == null)
+			return null;
+		if (elem instanceof Component)
+			return null;
+		Queue<ContentElement> queue = new ArrayDeque<>();
+		queue.addAll(decl.content);
+		while (!queue.isEmpty()) {
+			ContentElement p = queue.poll();
+			if (p == elem)
+				continue;
+			if (childs(p).contains(elem))
+				return p;
+			queue.addAll(childs(p));
+		}
+		return null;
 	}
 }

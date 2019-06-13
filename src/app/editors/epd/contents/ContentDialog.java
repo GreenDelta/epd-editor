@@ -73,6 +73,8 @@ class ContentDialog extends FormDialog {
 			Combo combo = UI.formCombo(comp, tk, "Parent element");
 			UI.gridData(combo, true, false);
 			UI.filler(comp, tk);
+			new ParentCombo(decl, elem).bind(combo).onChange(
+					p -> this.parent = p);
 		}
 
 		// name
@@ -85,7 +87,7 @@ class ContentDialog extends FormDialog {
 		UI.formLabel(comp, tk, "%");
 
 		UI.formText(comp, tk, "Absolute mass");
-		UI.formLabel(comp, tk, "%");
+		UI.formLabel(comp, tk, "kg");
 
 		if (elem instanceof Substance) {
 			Substance subst = (Substance) elem;

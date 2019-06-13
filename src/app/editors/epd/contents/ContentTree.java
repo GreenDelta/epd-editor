@@ -56,6 +56,7 @@ class ContentTree {
 
 		// TODO: initially sort the content
 		tree.setInput(decl);
+		tree.expandAll();
 	}
 
 	private void createTree(Composite comp) {
@@ -125,6 +126,7 @@ class ContentTree {
 		if (ContentDialog.open(decl, elem) != Dialog.OK)
 			return;
 		tree.setInput(decl);
+		tree.expandToLevel(elem, 2);
 		editor.setDirty();
 	}
 
@@ -201,11 +203,11 @@ class ContentTree {
 				return App.s(elem.name);
 			case 1:
 				return elem.massPerc != null
-						? elem.massPerc.toString()
+						? elem.massPerc.toString() + " %"
 						: null;
 			case 2:
 				return elem.mass != null
-						? elem.mass.toString()
+						? elem.mass.toString() + " kg"
 						: null;
 			case 3:
 				return subst != null ? subst.casNumber : null;

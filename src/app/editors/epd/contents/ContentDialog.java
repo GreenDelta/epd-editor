@@ -11,12 +11,11 @@ import org.openlca.ilcd.commons.LangString;
 
 import app.App;
 import app.M;
-import app.util.Colors;
+import app.rcp.Texts;
 import app.util.UI;
 import epd.model.content.ContentDeclaration;
 import epd.model.content.ContentElement;
 import epd.model.content.Substance;
-import epd.util.Strings;
 
 class ContentDialog extends FormDialog {
 
@@ -60,8 +59,10 @@ class ContentDialog extends FormDialog {
 		UI.gridData(comp, true, false);
 		UI.gridLayout(comp, 3);
 
+		// name
 		nameText = UI.formText(comp, tk, M.Name);
-		UI.gridData(nameText, true, false).minimumWidth = 250;
+		Texts.set(nameText, App.s(elem.name));
+		UI.gridData(nameText, true, false).widthHint = 350;
 		UI.filler(comp, tk);
 
 		UI.formText(comp, tk, "Weight percentage");
@@ -71,30 +72,49 @@ class ContentDialog extends FormDialog {
 		UI.formLabel(comp, tk, "%");
 
 		if (elem instanceof Substance) {
+			Substance subst = (Substance) elem;
+
+			// CAS
 			casText = UI.formText(comp, tk, "CAS number");
+			Texts.set(casText, subst.casNumber);
 			UI.filler(comp, tk);
+
+			// EC number
 			ecText = UI.formText(comp, tk, "EC number");
+			Texts.set(ecText, subst.ecNumber);
 			UI.filler(comp, tk);
+
+			// GUUID
 			guuidText = UI.formText(comp, tk,
 					"Data dictionary GUUID");
+			Texts.set(guuidText, subst.guid);
 			UI.filler(comp, tk);
 
+			// renewable resource
 			renewableText = UI.formText(comp, tk,
 					"Percentage of renewable resources");
+			Texts.set(renewableText, subst.renewable);
 			UI.formLabel(comp, tk, "%");
+
+			// recycled content
 			recycledText = UI.formText(comp, tk,
 					"Percentage of recycled content");
+			Texts.set(recycledText, subst.recycled);
 			UI.formLabel(comp, tk, "%");
+
+			// recyclable content
 			recycableText = UI.formText(comp, tk,
 					"Percentage of recyclable content");
-
-			Arrays.asList(renewableText, recycledText, recycableText)
-					.forEach(t -> validateNumber(t));
-
+			Texts.set(recycableText, subst.recyclable);
 			UI.formLabel(comp, tk, "%");
+
+			// add validation
+			Arrays.asList(renewableText, recycledText, recycableText)
+					.forEach(t -> Texts.validateNumber(t));
 		}
 
 		commentText = UI.formMultiText(comp, tk, "Comment");
+		Texts.set(commentText, App.s(elem.comment));
 		UI.filler(comp, tk);
 	}
 
@@ -105,52 +125,14 @@ class ContentDialog extends FormDialog {
 		LangString.set(elem.comment, commentText.getText(), App.lang());
 		if (elem instanceof Substance) {
 			Substance subst = (Substance) elem;
-			subst.casNumber = str(casText);
-			subst.ecNumber = str(ecText);
-			subst.guid = str(guuidText);
-			subst.renewable = f64(renewableText);
-			subst.recycled = f64(recycledText);
-			subst.recyclable = f64(recycableText);
+			subst.casNumber = Texts.getString(casText);
+			subst.ecNumber = Texts.getString(ecText);
+			subst.guid = Texts.getString(guuidText);
+			subst.renewable = Texts.getDouble(renewableText);
+			subst.recycled = Texts.getDouble(recycledText);
+			subst.recyclable = Texts.getDouble(recycableText);
 		}
 		super.okPressed();
 	}
 
-	private String str(Text text) {
-		if (text == null)
-			return null;
-		String s = text.getText();
-		return Strings.nullOrEmpty(s) ? null : s.trim();
-	}
-
-	private Double f64(Text text) {
-		String s = str(text);
-		if (s == null)
-			return null;
-		try {
-			return Double.parseDouble(s);
-		} catch (Exception e) {
-			return null;
-		}
-	}
-
-	private void validateNumber(Text t) {
-		if (t == null)
-			return;
-		t.addModifyListener(_e -> {
-			String s = t.getText();
-			if (Strings.nullOrEmpty(s)) {
-				t.setBackground(Colors.white());
-				t.setToolTipText(null);
-				return;
-			}
-			try {
-				Double.parseDouble(s);
-				t.setBackground(Colors.white());
-				t.setToolTipText(null);
-			} catch (Exception e) {
-				t.setBackground(Colors.errorColor());
-				t.setToolTipText(s + "is not a number");
-			}
-		});
-	}
 }

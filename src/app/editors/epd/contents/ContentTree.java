@@ -1,6 +1,7 @@
 package app.editors.epd.contents;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.Dialog;
@@ -10,6 +11,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
@@ -82,17 +84,13 @@ class ContentTree {
 					boolean pack = subst.packaging != null && subst.packaging;
 					return pack == forPackaging;
 				}
-				return true;
+				return !forPackaging;
 			}
 		});
 
 		Tree t = tree.getTree();
-		t.getColumn(5).setToolTipText(
-				"Data dictionary GUUID");
-		t.getColumn(7).setToolTipText(
-				"Post cosumer material recycled content");
-		t.getColumn(8).setToolTipText(
-				"Material recyclable content");
+		IntStream.of(1, 2, 6, 7, 8)
+				.forEach(i -> t.getColumn(i).setAlignment(SWT.RIGHT));
 		double w = 0.8 / 9;
 		Trees.bindColumnWidths(t, 0.2, w, w, w, w, w, w, w, w, w);
 		Trees.onDoubleClick(tree, _e -> onEdit());
@@ -191,7 +189,13 @@ class ContentTree {
 		public String getColumnText(Object obj, int col) {
 			if (!(obj instanceof ContentElement))
 				return null;
+
 			ContentElement elem = (ContentElement) obj;
+			Substance subst = null;
+			if (elem instanceof Substance) {
+				subst = (Substance) elem;
+			}
+
 			switch (col) {
 			case 0:
 				return App.s(elem.name);
@@ -203,7 +207,27 @@ class ContentTree {
 				return elem.mass != null
 						? elem.mass.toString()
 						: null;
-			// TODO more fields
+			case 3:
+				return subst != null ? subst.casNumber : null;
+			case 4:
+				return subst != null ? subst.ecNumber : null;
+			case 5:
+				return subst != null ? subst.guid : null;
+			case 6:
+				return subst == null ? null
+						: subst.renewable == null
+								? null
+								: subst.renewable.toString() + " %";
+			case 7:
+				return subst == null ? null
+						: subst.recycled == null
+								? null
+								: subst.recycled.toString() + " %";
+			case 8:
+				return subst == null ? null
+						: subst.recyclable == null
+								? null
+								: subst.recyclable.toString() + " %";
 			default:
 				return null;
 			}

@@ -66,7 +66,7 @@ class LangCombo {
 	private String getDisplayLanguage(String code) {
 		for (Locale loc : Locale.getAvailableLocales()) {
 			if (Strings.nullOrEqual(code, loc.getLanguage()))
-				return loc.getDisplayLanguage(); // TODO local language
+				return loc.getDisplayLanguage();
 		}
 		return M.Unknown;
 	}

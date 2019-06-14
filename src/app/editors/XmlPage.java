@@ -75,7 +75,7 @@ public class XmlPage extends FormPage {
 
 	private Color color(TokenType type) {
 		if (type == null)
-			return Colors.darkGray(); // TODO: red ..
+			return Colors.darkGray();
 		switch (type) {
 		case INSTRUCTION:
 			return Colors.get(217, 217, 217);

@@ -107,7 +107,6 @@ class DataSetRefExtension {
 			Element nameElement = Dom.findChild(element,
 					"shortDescription");
 			if (nameElement != null) {
-				// TODO: support multiple languages here
 				String lang = nameElement.getAttribute("xml:lang");
 				String val = nameElement.getTextContent();
 				LangString.set(ref.name, val, lang);

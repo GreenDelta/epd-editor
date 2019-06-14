@@ -5,11 +5,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
 
+import app.App;
 import epd.model.content.Component;
 import epd.model.content.ContentDeclaration;
 import epd.model.content.ContentElement;
 import epd.model.content.Material;
 import epd.model.content.Substance;
+import epd.util.Strings;
 
 final class Content {
 
@@ -118,5 +120,19 @@ final class Content {
 			return false;
 		Substance subst = (Substance) elem;
 		return subst.packaging != null && subst.packaging;
+	}
+
+	/**
+	 * Sort the given list of elements by name recursively (so also the child
+	 * elements etc.).
+	 */
+	static void sort(List<? extends ContentElement> elems) {
+		if (elems == null || elems.isEmpty())
+			return;
+		Collections.sort(elems,
+				(e1, e2) -> Strings.compare(App.s(e1.name), App.s(e2.name)));
+		for (ContentElement e : elems) {
+			sort(childs(e));
+		}
 	}
 }

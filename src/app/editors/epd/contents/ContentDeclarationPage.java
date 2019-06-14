@@ -34,6 +34,7 @@ public class ContentDeclarationPage extends FormPage {
 		FormToolkit tk = mform.getToolkit();
 		ScrolledForm form = UI.formHeader(mform, "#Content declaration");
 		Composite body = UI.formBody(form, mform.getToolkit());
+		Content.sort(decl.content);
 		ContentTree contTable = new ContentTree(editor, decl);
 		contTable.render(tk, body);
 		ContentTree packTable = new ContentTree(editor, decl);

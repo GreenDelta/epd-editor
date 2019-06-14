@@ -53,8 +53,6 @@ class ContentTree {
 		UI.gridLayout(comp, 1);
 		createTree(comp);
 		createMenu();
-
-		// TODO: initially sort the content
 		tree.setInput(decl);
 		tree.expandAll();
 	}

@@ -7,7 +7,7 @@ The EPD editor is an [Eclipse RCP](https://wiki.eclipse.org/Rich_Client_Platform
 application. To compile it from source you need to have the following tools
 installed:
 
-* a [Java Development Kit >= v10](http://www.oracle.com/technetwork/java/javase/downloads/jdk10-downloads-4416644.html)
+* a [Java Development Kit v8](http://www.oracle.com/technetwork/java/javase/downloads/jdk10-downloads-4416644.html)
 * [Maven](http://maven.apache.org/)
 * the [Eclipse package for RCP developers](https://www.eclipse.org/downloads/)
 

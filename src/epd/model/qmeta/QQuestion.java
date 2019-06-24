@@ -1,6 +1,6 @@
 package epd.model.qmeta;
 
-public class Question {
+public class QQuestion {
 
 	public String id;
 	public String group;

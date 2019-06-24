@@ -18,7 +18,7 @@ public class ContentDeclarationPage extends FormPage {
 	private final EpdEditor editor;
 
 	public ContentDeclarationPage(EpdEditor editor) {
-		super(editor, "ContentDeclarationPage", "#Content declaration");
+		super(editor, "ContentDeclarationPage", "Content declaration");
 		this.editor = editor;
 		EpdDataSet ds = editor.dataSet;
 		if (ds.contentDeclaration != null) {
@@ -32,7 +32,7 @@ public class ContentDeclarationPage extends FormPage {
 	@Override
 	protected void createFormContent(IManagedForm mform) {
 		FormToolkit tk = mform.getToolkit();
-		ScrolledForm form = UI.formHeader(mform, "#Content declaration");
+		ScrolledForm form = UI.formHeader(mform, "Content declaration");
 		Composite body = UI.formBody(form, mform.getToolkit());
 		Content.sort(decl.content);
 		ContentTree contTable = new ContentTree(editor, decl);

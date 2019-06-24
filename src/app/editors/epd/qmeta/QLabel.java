@@ -37,6 +37,7 @@ public class QLabel extends NLS {
 	public static String Q56;
 	public static String Q57;
 	public static String Q58;
+	public static String Q59;
 
 	public static String Q6;
 	public static String Q61;

@@ -17,6 +17,7 @@ import epd.model.ModuleEntry;
 import epd.model.Scenario;
 import epd.model.SubType;
 import epd.model.content.ContentDeclaration;
+import epd.model.qmeta.QMetaData;
 
 /**
  * Converts an ILCD process data set to an EPD data set.
@@ -57,6 +58,7 @@ class ProcessConverter {
 		dataSet.moduleEntries.addAll(modules);
 		dataSet.safetyMargins = SafetyMarginsConverter.read(other);
 		dataSet.contentDeclaration = ContentDeclaration.read(other);
+		dataSet.qMetaData = QMetaData.read(other);
 	}
 
 	private void readSubType(EpdDataSet dataSet) {

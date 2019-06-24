@@ -12,6 +12,7 @@ import org.openlca.ilcd.processes.QuantitativeReference;
 import org.openlca.ilcd.util.Processes;
 
 import epd.model.content.ContentDeclaration;
+import epd.model.qmeta.QMetaData;
 
 public class EpdDataSet {
 
@@ -23,6 +24,7 @@ public class EpdDataSet {
 	public final List<ModuleEntry> moduleEntries = new ArrayList<>();
 	public final List<Scenario> scenarios = new ArrayList<>();
 	public ContentDeclaration contentDeclaration;
+	public QMetaData qMetaData;
 
 	public IndicatorResult getResult(Indicator indicator) {
 		for (IndicatorResult result : results)

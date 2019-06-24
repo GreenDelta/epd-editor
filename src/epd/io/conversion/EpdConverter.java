@@ -63,6 +63,9 @@ class EpdConverter {
 		if (dataSet.contentDeclaration != null) {
 			dataSet.contentDeclaration.write(other, doc);
 		}
+		if (dataSet.qMetaData != null) {
+			dataSet.qMetaData.write(other, doc);
+		}
 		writeProfile();
 		writeSubType();
 		if (Dom.isEmpty(other))

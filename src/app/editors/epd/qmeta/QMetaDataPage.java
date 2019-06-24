@@ -14,7 +14,6 @@ import app.editors.epd.EpdEditor;
 import app.util.Controls;
 import app.util.UI;
 import epd.model.qmeta.QAnswer;
-import epd.model.qmeta.QBoolean;
 import epd.model.qmeta.QMetaData;
 import epd.model.qmeta.QQuestion;
 import epd.util.Strings;
@@ -27,8 +26,10 @@ public class QMetaDataPage extends FormPage {
 	public QMetaDataPage(EpdEditor editor) {
 		super(editor, "QMetaDataPage", "Q metadata");
 		this.editor = editor;
-		// TODO select Q data from EPD data set
-		this.qdata = new QMetaData();
+		if (editor.dataSet.qMetaData == null) {
+			editor.dataSet.qMetaData = new QMetaData();
+		}
+		this.qdata = editor.dataSet.qMetaData;
 	}
 
 	@Override
@@ -79,9 +80,9 @@ public class QMetaDataPage extends FormPage {
 		Runnable onChange = () -> {
 			for (int i = 0; i < buttons.length; i++) {
 				if (buttons[i].getSelection()) {
-					questions[i].answer.yesNo = QBoolean.Yes;
+					questions[i].answer.yesNo = true;
 				} else {
-					questions[i].answer.yesNo = QBoolean.No;
+					questions[i].answer.yesNo = false;
 				}
 			}
 			editor.setDirty();
@@ -93,12 +94,13 @@ public class QMetaDataPage extends FormPage {
 				question.answer = new QAnswer();
 			}
 			if (question.answer.yesNo == null) {
-				question.answer.yesNo = QBoolean.None;
+				question.answer.yesNo = false;
 			}
 			Button button = tk.createButton(comp, "", SWT.RADIO);
 			button.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
 			tk.createLabel(comp, Strings.wrap(QLabel.get(ids[i]), 120));
-			button.setSelection(question.answer.yesNo == QBoolean.Yes);
+			button.setSelection(question.answer.yesNo != null
+					&& question.answer.yesNo);
 			Controls.onSelect(button, _e -> onChange.run());
 			questions[i] = question;
 			buttons[i] = button;
@@ -114,18 +116,19 @@ public class QMetaDataPage extends FormPage {
 				question.answer = new QAnswer();
 			}
 			if (question.answer.yesNo == null) {
-				question.answer.yesNo = QBoolean.None;
+				question.answer.yesNo = false;
 			}
 
 			Button button = tk.createButton(comp, "", SWT.CHECK);
 			button.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
 			tk.createLabel(comp, Strings.wrap(QLabel.get(ids[i]), 120));
-			button.setSelection(question.answer.yesNo == QBoolean.Yes);
+			button.setSelection(question.answer.yesNo != null
+					&& question.answer.yesNo);
 			Controls.onSelect(button, _e -> {
 				if (button.getSelection()) {
-					question.answer.yesNo = QBoolean.Yes;
+					question.answer.yesNo = true;
 				} else {
-					question.answer.yesNo = QBoolean.No;
+					question.answer.yesNo = false;
 				}
 				editor.setDirty();
 			});

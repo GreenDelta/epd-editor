@@ -3,6 +3,7 @@ package app.editors.epd.qmeta;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -34,28 +35,27 @@ public class QMetaDataPage extends FormPage {
 		ScrolledForm form = UI.formHeader(mform, "Q metadata");
 		Composite body = UI.formBody(form, mform.getToolkit());
 
-		QQuestion q1 = qdata.getQuestion("Criteria 1: Product comparability");
-		Composite comp = UI.formSection(body, tk, q1.id);
+		QQuestion q1 = qdata.getQuestion("1");
+		Composite comp = UI.formSection(body, tk, QLabel.Q1);
 		UI.gridLayout(comp, 1);
-		multiChoice(comp, tk,
-				"1.1 Valid for a single product",
-				"1.2 Valid for several products with variation below 10%",
-				"1.3 Valid for products with variation above 10%",
-				"1.4 Valid for a product or several products where variation is not defined");
+		multiChoice(comp, tk, "1.1", "1.2", "1.3", "1.4");
 		Composite c = tk.createComposite(comp);
 		UI.gridData(c, true, false);
 		UI.innerGrid(c, 2);
-		UI.formText(c, tk, "Comment:");
+		Text text = UI.formText(c, tk, "Comment:");
+		text.addModifyListener(e -> {
+			q1.comment = text.getText();
+		});
 
 	}
 
 	private void multiChoice(Composite root, FormToolkit tk,
-			String... choices) {
+			String... ids) {
 		Composite comp = tk.createComposite(root);
 		UI.innerGrid(comp, 2);
 
-		QQuestion[] questions = new QQuestion[choices.length];
-		Button[] buttons = new Button[choices.length];
+		QQuestion[] questions = new QQuestion[ids.length];
+		Button[] buttons = new Button[ids.length];
 		Runnable onChange = () -> {
 			for (int i = 0; i < buttons.length; i++) {
 				if (buttons[i].getSelection()) {
@@ -64,11 +64,11 @@ public class QMetaDataPage extends FormPage {
 					questions[i].answer.yesNo = QBoolean.No;
 				}
 			}
+			editor.setDirty();
 		};
 
-		for (int i = 0; i < choices.length; i++) {
-			String choice = choices[i];
-			QQuestion question = qdata.getQuestion(choice);
+		for (int i = 0; i < ids.length; i++) {
+			QQuestion question = qdata.getQuestion(ids[i]);
 			if (question.answer == null) {
 				question.answer = new QAnswer();
 			}
@@ -76,7 +76,7 @@ public class QMetaDataPage extends FormPage {
 				question.answer.yesNo = QBoolean.None;
 			}
 			Button button = tk.createButton(comp, "", SWT.RADIO);
-			tk.createLabel(comp, choice);
+			tk.createLabel(comp, QLabel.get(ids[i]));
 			button.setSelection(question.answer.yesNo == QBoolean.Yes);
 			Controls.onSelect(button, _e -> onChange.run());
 			questions[i] = question;

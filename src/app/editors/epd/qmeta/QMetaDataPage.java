@@ -35,24 +35,27 @@ public class QMetaDataPage extends FormPage {
 		ScrolledForm form = UI.formHeader(mform, "Q metadata");
 		Composite body = UI.formBody(form, mform.getToolkit());
 
-		QQuestion q1 = qdata.getQuestion("1");
-		Composite comp = UI.formSection(body, tk, QLabel.Q1);
-		UI.gridLayout(comp, 1);
-		multiChoice(comp, tk, "1.1", "1.2", "1.3", "1.4");
-		Composite c = tk.createComposite(comp);
-		UI.gridData(c, true, false);
-		UI.innerGrid(c, 2);
-		Text text = UI.formText(c, tk, "Comment:");
-		text.addModifyListener(e -> {
-			q1.comment = text.getText();
-		});
+		Composite comp1 = UI.formSection(body, tk, QLabel.Q1);
+		UI.gridLayout(comp1, 1);
+		multiChoice(comp1, tk, "1.1", "1.2", "1.3", "1.4");
+		comment(comp1, tk, qdata.getQuestion("1"));
+
+		Composite comp2 = UI.formSection(body, tk, QLabel.Q2);
+		UI.gridLayout(comp2, 1);
+		multiChoice(comp2, tk, "2.1", "2.2", "2.3", "2.4");
+		comment(comp2, tk, qdata.getQuestion("2"));
+
+		Composite comp3 = UI.formSection(body, tk, QLabel.Q3);
+		UI.gridLayout(comp3, 1);
+		multiChoice(comp3, tk, "3.1", "3.2", "3.3", "3.4");
+		comment(comp3, tk, qdata.getQuestion("3"));
 
 	}
 
 	private void multiChoice(Composite root, FormToolkit tk,
 			String... ids) {
 		Composite comp = tk.createComposite(root);
-		UI.innerGrid(comp, 2);
+		UI.gridLayout(comp, 2, 10, 0);
 
 		QQuestion[] questions = new QQuestion[ids.length];
 		Button[] buttons = new Button[ids.length];
@@ -82,6 +85,16 @@ public class QMetaDataPage extends FormPage {
 			questions[i] = question;
 			buttons[i] = button;
 		}
+	}
+
+	private void comment(Composite comp, FormToolkit tk, QQuestion q1) {
+		Composite c = tk.createComposite(comp);
+		UI.gridData(c, true, false);
+		UI.gridLayout(c, 2, 10, 0);
+		Text text = UI.formText(c, tk, "Comment:");
+		text.addModifyListener(e -> {
+			q1.comment = text.getText();
+		});
 	}
 
 }

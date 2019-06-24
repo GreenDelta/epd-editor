@@ -60,7 +60,7 @@ public class QMetaDataPage extends FormPage {
 
 		Composite comp5 = UI.formSection(body, tk, QLabel.Q5);
 		multiChecks(comp5, tk, "5.1", "5.2", "5.3", "5.4",
-				"5.5", "5.6", "5.7", "5.8");
+				"5.5", "5.6", "5.7", "5.8", "5.9");
 
 		Composite comp6 = UI.formSection(body, tk, QLabel.Q6);
 		UI.gridLayout(comp6, 1);
@@ -138,12 +138,15 @@ public class QMetaDataPage extends FormPage {
 
 	}
 
-	private void comment(Composite comp, FormToolkit tk, QQuestion q1) {
+	private void comment(Composite comp, FormToolkit tk, QQuestion q) {
 		Composite c = tk.createComposite(comp);
 		UI.gridLayout(c, 2, 10, 0);
 		Text text = UI.formMultiText(c, tk, "Comment:");
+		if (q.comment != null) {
+			text.setText(q.comment);
+		}
 		text.addModifyListener(e -> {
-			q1.comment = text.getText();
+			q.comment = text.getText();
 			editor.setDirty();
 		});
 		GridData gd = UI.gridData(text, true, false);

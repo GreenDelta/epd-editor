@@ -119,6 +119,8 @@ public class QLabel extends NLS {
 			return Q57;
 		case "5.8":
 			return Q58;
+		case "5.9":
+			return Q59;
 
 		case "6":
 			return Q6;

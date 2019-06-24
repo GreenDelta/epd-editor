@@ -62,6 +62,9 @@ public class EpdDataSet {
 		if (contentDeclaration != null) {
 			clone.contentDeclaration = contentDeclaration.clone();
 		}
+		if (qMetaData != null) {
+			clone.qMetaData = qMetaData.clone();
+		}
 		return clone;
 	}
 

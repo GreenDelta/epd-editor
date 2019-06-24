@@ -47,9 +47,13 @@ public class QMetaData {
 		if (root == null)
 			return null;
 
+		// add the questions
 		QMetaData qdata = new QMetaData();
 		Dom.eachChild(root, e -> {
-			// TODO: read questions
+			QQuestion q = QQuestion.read(e);
+			if (q != null) {
+				qdata.questions.add(q);
+			}
 		});
 		return qdata;
 	}
@@ -61,11 +65,24 @@ public class QMetaData {
 		if (questions.isEmpty())
 			return;
 		Element root = doc.createElementNS(
-				Vocab.NS_EPDv2, "epd2:contentDeclaration");
+				Vocab.NS_EPDv2, "epd2:Q-Metadata");
 		other.any.add(root);
 		for (QQuestion q : questions) {
-			// TODO: write questions
+			if (q != null) {
+				q.write(root);
+			}
 		}
+	}
+
+	@Override
+	public QMetaData clone() {
+		QMetaData clone = new QMetaData();
+		for (QQuestion q : questions) {
+			if (q != null) {
+				clone.questions.add(q.clone());
+			}
+		}
+		return clone;
 	}
 
 }

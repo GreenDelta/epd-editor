@@ -1,6 +1,7 @@
 package app.editors.epd.qmeta;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
@@ -16,6 +17,7 @@ import epd.model.qmeta.QAnswer;
 import epd.model.qmeta.QBoolean;
 import epd.model.qmeta.QMetaData;
 import epd.model.qmeta.QQuestion;
+import epd.util.Strings;
 
 public class QMetaDataPage extends FormPage {
 
@@ -50,6 +52,12 @@ public class QMetaDataPage extends FormPage {
 		multiChoice(comp3, tk, "3.1", "3.2", "3.3", "3.4");
 		comment(comp3, tk, qdata.getQuestion("3"));
 
+		Composite comp4 = UI.formSection(body, tk, QLabel.Q4);
+		UI.gridLayout(comp4, 1);
+		multiChoice(comp4, tk, "4.1", "4.2", "4.3", "4.4");
+		comment(comp4, tk, qdata.getQuestion("4"));
+
+		form.reflow(true);
 	}
 
 	private void multiChoice(Composite root, FormToolkit tk,
@@ -79,7 +87,8 @@ public class QMetaDataPage extends FormPage {
 				question.answer.yesNo = QBoolean.None;
 			}
 			Button button = tk.createButton(comp, "", SWT.RADIO);
-			tk.createLabel(comp, QLabel.get(ids[i]));
+			button.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
+			tk.createLabel(comp, Strings.wrap(QLabel.get(ids[i]), 120));
 			button.setSelection(question.answer.yesNo == QBoolean.Yes);
 			Controls.onSelect(button, _e -> onChange.run());
 			questions[i] = question;
@@ -89,12 +98,15 @@ public class QMetaDataPage extends FormPage {
 
 	private void comment(Composite comp, FormToolkit tk, QQuestion q1) {
 		Composite c = tk.createComposite(comp);
-		UI.gridData(c, true, false);
+		// UI.gridData(c, true, false);
 		UI.gridLayout(c, 2, 10, 0);
-		Text text = UI.formText(c, tk, "Comment:");
+		Text text = UI.formMultiText(c, tk, "Comment:");
 		text.addModifyListener(e -> {
 			q1.comment = text.getText();
 		});
+		GridData gd = UI.gridData(text, true, false);
+		gd.widthHint = 500;
+		gd.heightHint = 50;
 	}
 
 }

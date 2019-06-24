@@ -22,6 +22,12 @@ public class QLabel extends NLS {
 	public static String Q33;
 	public static String Q34;
 
+	public static String Q4;
+	public static String Q41;
+	public static String Q42;
+	public static String Q43;
+	public static String Q44;
+
 	static {
 		NLS.initializeMessages("app.editors.epd.qmeta.qlabels", QLabel.class);
 	}
@@ -66,6 +72,17 @@ public class QLabel extends NLS {
 			return Q33;
 		case "3.4":
 			return Q34;
+
+		case "4":
+			return Q4;
+		case "4.1":
+			return Q41;
+		case "4.2":
+			return Q42;
+		case "4.3":
+			return Q43;
+		case "4.4":
+			return Q44;
 
 		default:
 			return "?";

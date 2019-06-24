@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2018 (x64) (http://www.altova.com) by Jan-Anders Jönsson (ÅKEJ AB) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" xmlns:ilcd="http://lca.jrc.it/ILCD/Common"
+   elementFormDefault="qualified" attributeFormDefault="unqualified" vc:minVersion="1.1">
+   <xs:import namespace="http://lca.jrc.it/ILCD/Common" schemaLocation="./include/ILCD_Common_Groups.xsd"/>
+   <xs:attribute name="SupervisorRef" type="xs:int">
+      <xs:annotation>
+         <xs:documentation>internal ID referens för den som är ansvarig för informationen.</xs:documentation>
+      </xs:annotation>
+   </xs:attribute>
+   <xs:attribute name="refObjectId" type="xs:token"/>
+   <xs:attribute name="questiondataset" type="xs:token"/>
+   <xs:attribute name="UUIDReference" type="ilcd:UUID"/>
+   <xs:simpleType name="ProductPhase">
+      <xs:annotation>
+         <xs:documentation>Från e-BVD2015</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="Delivery"/>
+         <xs:enumeration value="DeliveryAndMounted"/>
+         <xs:enumeration value="Mounted"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="WeightComparisonOperator">
+      <xs:annotation>
+         <xs:documentation>Från e-BVD2015</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="Equal"/>
+         <xs:enumeration value="GreaterOrEqualThen"/>
+         <xs:enumeration value="GreaterOrEqualThenMinLessOrEqualThenMax"/>
+         <xs:enumeration value="GreaterOrEqualThenMinLessThenMax"/>
+         <xs:enumeration value="GreaterThen"/>
+         <xs:enumeration value="GreaterThenMinLessOrEqualThenMax"/>
+         <xs:enumeration value="GreaterThenMinLessThenMax"/>
+         <xs:enumeration value="LessOrEqualThen"/>
+         <xs:enumeration value="LessThen"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="WeightUnit">
+      <xs:annotation>
+         <xs:documentation>Från e-BVD2015</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="kg"/>
+         <xs:enumeration value="kg_m"/>
+         <xs:enumeration value="kg_m2"/>
+         <xs:enumeration value="kg_m3"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="BooleanType">
+      <xs:annotation>
+         <xs:documentation>Från e-BVD2015</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="None"/>
+         <xs:enumeration value="Yes"/>
+         <xs:enumeration value="No"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="ConcentrationBasedOnType">
+      <xs:annotation>
+         <xs:documentation>Från e-BVD2015</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="EntireProduct"/>
+         <xs:enumeration value="Component"/>
+         <xs:enumeration value="NotRelevant"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:complexType name="NumType">
+      <xs:annotation>
+         <xs:documentation>Numeriskt svar och annat innehåller enhet för att definiera detta om det behövs</xs:documentation>
+      </xs:annotation>
+      <xs:simpleContent>
+         <xs:extension base="xs:decimal">
+            <xs:attribute name="Unit" type="xs:string" use="optional"/>
+         </xs:extension>
+      </xs:simpleContent>
+   </xs:complexType>
+   <xs:complexType name="QuestionsType">
+      <xs:sequence>
+         <xs:element name="Question" type="QuestionType" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="QuestionType">
+      <xs:annotation>
+         <xs:documentation>Generisk frågetyp</xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="QuestionID">
+            <xs:complexType>
+               <xs:simpleContent>
+                  <xs:extension base="xs:token"/>
+               </xs:simpleContent>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="QuestionGroup" type="xs:string" minOccurs="0"/>
+         <xs:element name="QuestionAnswer">
+            <xs:complexType>
+               <xs:choice maxOccurs="unbounded">
+                  <xs:element name="YesNo" type="xs:boolean"/>
+                  <xs:element ref="AnswerText"/>
+                  <xs:element ref="Num"/>
+                  <xs:element name="Url" type="xs:anyURI"/>
+                  <xs:element name="Range">
+                     <xs:complexType>
+                        <xs:sequence>
+                           <xs:element name="Min">
+                              <xs:complexType>
+                                 <xs:choice>
+                                    <xs:element ref="AnswerText"/>
+                                    <xs:element ref="Num"/>
+                                 </xs:choice>
+                              </xs:complexType>
+                           </xs:element>
+                           <xs:element name="Max">
+                              <xs:complexType>
+                                 <xs:choice>
+                                    <xs:element ref="AnswerText"/>
+                                    <xs:element ref="Num"/>
+                                 </xs:choice>
+                              </xs:complexType>
+                           </xs:element>
+                        </xs:sequence>
+                     </xs:complexType>
+                  </xs:element>
+                  <xs:element name="DiscreetValues">
+                     <xs:complexType>
+                        <xs:choice>
+                           <xs:element ref="AnswerText" maxOccurs="unbounded"/>
+                           <xs:element ref="Num" maxOccurs="unbounded"/>
+                        </xs:choice>
+                     </xs:complexType>
+                  </xs:element>
+               </xs:choice>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="Comment" minOccurs="0"/>
+         <xs:element name="RelatedDocument" minOccurs="0">
+            <xs:complexType>
+               <xs:choice>
+                  <xs:element name="Document" type="xs:base64Binary"/>
+                  <xs:element name="Url" type="xs:anyURI"/>
+               </xs:choice>
+            </xs:complexType>
+         </xs:element>
+      </xs:sequence>
+      <xs:attribute ref="UUIDReference"/>
+      <xs:attribute ref="SupervisorRef"/>
+      <xs:attribute ref="refObjectId"/>
+      <xs:attribute ref="questiondataset"/>
+   </xs:complexType>
+   <xs:element name="AnswerText" type="xs:string"/>
+   <xs:element name="Num" type="NumType"/>
+   <xs:element name="Q-Metadata" type="QuestionsType">
+      <xs:annotation>
+         <xs:documentation>Den metadata som definierar ILCD-datans kvalitet.</xs:documentation>
+      </xs:annotation>
+   </xs:element>
+   <xs:element name="UUIDReference" type="ilcd:UUID">
+      <xs:annotation>
+         <xs:documentation>To link to administrative data in ILCD_ILCD</xs:documentation>
+      </xs:annotation>
+   </xs:element>
+</xs:schema>

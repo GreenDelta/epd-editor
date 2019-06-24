@@ -57,6 +57,15 @@ public class QMetaDataPage extends FormPage {
 		multiChoice(comp4, tk, "4.1", "4.2", "4.3", "4.4");
 		comment(comp4, tk, qdata.getQuestion("4"));
 
+		Composite comp5 = UI.formSection(body, tk, QLabel.Q5);
+		multiChecks(comp5, tk, "5.1", "5.2", "5.3", "5.4",
+				"5.5", "5.6", "5.7", "5.8");
+
+		Composite comp6 = UI.formSection(body, tk, QLabel.Q6);
+		UI.gridLayout(comp6, 1);
+		multiChoice(comp6, tk, "6.1", "6.2", "6.3", "6.4");
+		comment(comp6, tk, qdata.getQuestion("6"));
+
 		form.reflow(true);
 	}
 
@@ -96,13 +105,43 @@ public class QMetaDataPage extends FormPage {
 		}
 	}
 
+	private void multiChecks(Composite comp, FormToolkit tk,
+			String... ids) {
+
+		for (int i = 0; i < ids.length; i++) {
+			QQuestion question = qdata.getQuestion(ids[i]);
+			if (question.answer == null) {
+				question.answer = new QAnswer();
+			}
+			if (question.answer.yesNo == null) {
+				question.answer.yesNo = QBoolean.None;
+			}
+
+			Button button = tk.createButton(comp, "", SWT.CHECK);
+			button.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
+			tk.createLabel(comp, Strings.wrap(QLabel.get(ids[i]), 120));
+			button.setSelection(question.answer.yesNo == QBoolean.Yes);
+			Controls.onSelect(button, _e -> {
+				if (button.getSelection()) {
+					question.answer.yesNo = QBoolean.Yes;
+				} else {
+					question.answer.yesNo = QBoolean.No;
+				}
+				editor.setDirty();
+			});
+			UI.filler(comp);
+			comment(comp, tk, question);
+		}
+
+	}
+
 	private void comment(Composite comp, FormToolkit tk, QQuestion q1) {
 		Composite c = tk.createComposite(comp);
-		// UI.gridData(c, true, false);
 		UI.gridLayout(c, 2, 10, 0);
 		Text text = UI.formMultiText(c, tk, "Comment:");
 		text.addModifyListener(e -> {
 			q1.comment = text.getText();
+			editor.setDirty();
 		});
 		GridData gd = UI.gridData(text, true, false);
 		gd.widthHint = 500;

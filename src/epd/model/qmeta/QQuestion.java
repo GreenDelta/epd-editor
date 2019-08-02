@@ -10,6 +10,8 @@ public class QQuestion {
 	public String id;
 	public QAnswer answer;
 	public String comment;
+	public QQuestionType type;
+	public String text;
 
 	void write(Element parent) {
 		if (parent == null)

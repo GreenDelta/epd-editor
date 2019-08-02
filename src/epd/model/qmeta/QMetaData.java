@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Objects;
 
 import org.openlca.ilcd.commons.Other;
+import org.openlca.ilcd.processes.AdminInfo;
+import org.openlca.ilcd.processes.Modelling;
+import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.util.Processes;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -28,7 +32,27 @@ public class QMetaData {
 		return q;
 	}
 
-	public static QMetaData read(Other other) {
+	/**
+	 * Read the Q-Meta data extension from the given ILCD process data set. The
+	 * extension can be located under the `modellingAndValidation/other` or
+	 * `administrativeInformation/other` elements.
+	 */
+	public static QMetaData read(Process p) {
+		if (p == null)
+			return null;
+		Modelling mod = Processes.getModelling(p);
+		if (mod != null) {
+			QMetaData qmeta = read(mod.other);
+			if (qmeta != null)
+				return qmeta;
+		}
+		AdminInfo adm = Processes.getAdminInfo(p);
+		if (adm == null)
+			return null;
+		return read(adm.other);
+	}
+
+	private static QMetaData read(Other other) {
 		if (other == null)
 			return null;
 
@@ -58,6 +82,9 @@ public class QMetaData {
 		return qdata;
 	}
 
+	/**
+	 * Write this Q-Meta data object to the given extension.
+	 */
 	public void write(Other other, Document doc) {
 		if (other == null || doc == null)
 			return;

@@ -4,9 +4,10 @@ import java.util.List;
 import java.util.Objects;
 
 import org.openlca.ilcd.commons.Other;
+import org.openlca.ilcd.processes.DataSetInfo;
 import org.openlca.ilcd.processes.Method;
 import org.openlca.ilcd.processes.Process;
-import org.openlca.ilcd.processes.ProcessInfo;
+import org.openlca.ilcd.util.Processes;
 import org.w3c.dom.Element;
 
 import epd.model.Amount;
@@ -45,20 +46,19 @@ class ProcessConverter {
 	private void readExtensions(EpdDataSet dataSet) {
 		dataSet.profile = process.otherAttributes.get(Vocab.PROFILE_ATTR);
 		readSubType(dataSet);
-		ProcessInfo processInfo = process.processInfo;
-		if (processInfo == null)
+		dataSet.qMetaData = QMetaData.read(process);
+
+		// read the extensions that are stored under `dataSetInformation`
+		DataSetInfo info = Processes.getDataSetInfo(process);
+		if (info == null || info.other == null)
 			return;
-		org.openlca.ilcd.processes.DataSetInfo dataSetInfo = processInfo.dataSetInfo;
-		if (dataSetInfo == null || dataSetInfo.other == null)
-			return;
-		Other other = dataSetInfo.other;
+		Other other = info.other;
 		List<Scenario> scenarios = ScenarioConverter.readScenarios(other);
 		dataSet.scenarios.addAll(scenarios);
 		List<ModuleEntry> modules = ModuleConverter.readModules(other, profile);
 		dataSet.moduleEntries.addAll(modules);
 		dataSet.safetyMargins = SafetyMarginsConverter.read(other);
 		dataSet.contentDeclaration = ContentDeclaration.read(other);
-		dataSet.qMetaData = QMetaData.read(other);
 	}
 
 	private void readSubType(EpdDataSet dataSet) {

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2019 sp1 (x64) (http://www.altova.com) by Jan-Anders Jönsson (ÅKEJ AB) -->
+<Questions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="ILCDSBE_NORREQ_Questions.xsd">
+	<Question Comment="required" RelatedDocument="optional">
+		<QuestionID>QM0101</QuestionID>
+		<QuestionGroup>Criteria 1:  Product accuracy</QuestionGroup>
+		<QuestionAnswerText>1.1 Valid for a single product</QuestionAnswerText>
+		<QuestionAnswerType>OneInList</QuestionAnswerType>
+	</Question>
+	<Question Comment="required" RelatedDocument="optional">
+		<QuestionID>QM0102</QuestionID>
+		<QuestionGroup>Criteria 1:  Product accuracy</QuestionGroup>
+		<QuestionAnswerText>1.2 Valid for several products with variation below 10%</QuestionAnswerText>
+		<QuestionAnswerType>OneInList</QuestionAnswerType>
+	</Question>
+	<Question Comment="required" RelatedDocument="optional">
+		<QuestionID>QM0103</QuestionID>
+		<QuestionGroup>Criteria 1:  Product accuracy</QuestionGroup>
+		<QuestionAnswerText>1.3 Valid for products with variation above 10%</QuestionAnswerText>
+		<QuestionAnswerType>OneInList</QuestionAnswerType>
+	</Question>
+	<Question Comment="required" RelatedDocument="optional">
+		<QuestionID>QM0104</QuestionID>
+		<QuestionGroup>Criteria 1:  Product accuracy</QuestionGroup>
+		<QuestionAnswerText>1.4 Valid for a product or several products where variation is not defined</QuestionAnswerText>
+		<QuestionAnswerType>OneInList</QuestionAnswerType>
+	</Question>
+	<Question Comment="required" RelatedDocument="optional">
+		<QuestionID>QM0201</QuestionID>
+		<QuestionGroup>Criteria 2: Manufacturing accuracy</QuestionGroup>
+		<QuestionAnswerText>2.1 Valid for a single manufacturing site</QuestionAnswerText>
+		<QuestionAnswerType>OneInList</QuestionAnswerType>
+	</Question>
+	<Question Comment="required" RelatedDocument="optional">
+		<QuestionID>QM0202</QuestionID>
+		<QuestionGroup>Criteria 2: Manufacturing accuracy</QuestionGroup>
+		<QuestionAnswerText>2.2 Valid for several manufacturing sites from the same company with variation below 10%</QuestionAnswerText>
+		<QuestionAnswerType>OneInList</QuestionAnswerType>
+	</Question>
+	<Question Comment="required" RelatedDocument="optional">
+		<QuestionID>QM0203</QuestionID>
+		<QuestionGroup>Criteria 2: Manufacturing accuracy</QuestionGroup>
+		<QuestionAnswerText>2.3 Valid for several manufacturing sites from several companies with variation below 10%</QuestionAnswerText>
+		<QuestionAnswerType>OneInList</QuestionAnswerType>
+	</Question>
+	<Question Comment="required" RelatedDocument="optional">
+		<QuestionID>QM0204</QuestionID>
+		<QuestionGroup>Criteria 2: Manufacturing accuracy</QuestionGroup>
+		<QuestionAnswerText>2.4 Valid for several manufacturing sites from the same company with variation above 10%</QuestionAnswerText>
+		<QuestionAnswerType>OneInList</QuestionAnswerType>
+	</Question>
+	<Question Comment="required" RelatedDocument="optional">
+		<QuestionID>QM0301</QuestionID>
+		<QuestionGroup>Criteria 3 Specific data</QuestionGroup>
+		<QuestionAnswerText>3.1 Specific data for > 90%</QuestionAnswerText>
+		<QuestionAnswerType>OneInList</QuestionAnswerType>
+	</Question>
+	<Question Comment="required" RelatedDocument="optional">
+		<QuestionID>QM0302</QuestionID>
+		<QuestionGroup>Criteria 3 Specific data</QuestionGroup>
+		<QuestionAnswerText>3.2 Specific data for > 80%</QuestionAnswerText>
+		<QuestionAnswerType>OneInList</QuestionAnswerType>
+	</Question>
+	<Question Comment="required" RelatedDocument="optional">
+		<QuestionID>QM0303</QuestionID>
+		<QuestionGroup>Criteria 3 Specific data</QuestionGroup>
+		<QuestionAnswerText>3.3 Specific data for > 60%</QuestionAnswerText>
+		<QuestionAnswerType>OneInList</QuestionAnswerType>
+	</Question>
+	<Question Comment="required" RelatedDocument="optional">
+		<QuestionID>QM0304</QuestionID>
+		<QuestionGroup>Criteria 3 Specific data</QuestionGroup>
+		<QuestionAnswerText>3.4 Specific data not defined</QuestionAnswerText>
+		<QuestionAnswerType>OneInList</QuestionAnswerType>
+	</Question>
+	<Question Comment="required" RelatedDocument="optional">
+		<QuestionID>QM0401</QuestionID>
+		<QuestionGroup>Criteria 4: Third party review type</QuestionGroup>
+		<QuestionAnswerText>4.1 Certified EPD according to EN 15804 and ISO 14025</QuestionAnswerText>
+		<QuestionAnswerType>OneInList</QuestionAnswerType>
+	</Question>
+	<Question Comment="required" RelatedDocument="optional">
+		<QuestionID>QM0402</QuestionID>
+		<QuestionGroup>Criteria 4: Third party review type</QuestionGroup>
+		<QuestionAnswerText>4.2 Self-declared environmental declaration based on certified EPD:s according to EN 15804 (i.e. categorised as 4.1) that contributes to at least 90% of the GWP100 indicator result A1-3, or an environmental declaration made as copy of an already published EPD made from an LCA tool that is verified and the only possible change by the end user is the product recipe.</QuestionAnswerText>
+		<QuestionAnswerType>OneInList</QuestionAnswerType>
+	</Question>
+	<Question Comment="required" RelatedDocument="optional">
+		<QuestionID>QM0403</QuestionID>
+		<QuestionGroup>Criteria 4: Third party review type</QuestionGroup>
+		<QuestionAnswerText>4.3 Third part verified LCA that complies with EN 15804 and ISO 14021 and made transparent via a public available LCA report and Q metadata report</QuestionAnswerText>
+		<QuestionAnswerType>OneInList</QuestionAnswerType>
+	</Question>
+	<Question Comment="required" RelatedDocument="optional">
+		<QuestionID>QM0404</QuestionID>
+		<QuestionGroup>Criteria 4: Third party review type</QuestionGroup>
+		<QuestionAnswerText>4.4 Any other third party verified EPD according to ISO 14025 but not according to EN 15804, or any other self-declared LCA result not published by a program operator but following EN 15804 and not made transparent via an LCA report. Q metadata has to reported for this category</QuestionAnswerText>
+		<QuestionAnswerType>OneInList</QuestionAnswerType>
+	</Question>
+	<Question Comment="optional" RelatedDocument="optional">
+		<QuestionID>QM0501</QuestionID>
+		<QuestionGroup>5. Methodology transparency</QuestionGroup>
+		<QuestionAnswerText>5.1 Allocation procedure applied where a by-product is not attributed to any impact?</QuestionAnswerText>
+		<QuestionAnswerType>Boolean</QuestionAnswerType>
+	</Question>
+	<Question Comment="optional" RelatedDocument="optional">
+		<QuestionID>QM0502</QuestionID>
+		<QuestionGroup>5. Methodology transparency</QuestionGroup>
+		<QuestionAnswerText>5.2 Inherent properties are allocated away and do not reflect the physical flows?</QuestionAnswerText>
+		<QuestionAnswerType>Boolean</QuestionAnswerType>
+	</Question>
+	<Question Comment="optional" RelatedDocument="optional">
+		<QuestionID>QM0503</QuestionID>
+		<QuestionGroup>5. Methodology transparency</QuestionGroup>
+		<QuestionAnswerText>5.3 System expansion applied?</QuestionAnswerText>
+		<QuestionAnswerType>Boolean</QuestionAnswerType>
+	</Question>
+	<Question Comment="optional" RelatedDocument="optional">
+		<QuestionID>QM0504</QuestionID>
+		<QuestionGroup>5. Methodology transparency</QuestionGroup>
+		<QuestionAnswerText>5.4 Recycling of a technosphere flow is handled with non-symmetry</QuestionAnswerText>
+		<QuestionAnswerType>Boolean</QuestionAnswerType>
+	</Question>
+	<Question Comment="optional" RelatedDocument="optional">
+		<QuestionID>QM0505</QuestionID>
+		<QuestionGroup>5. Methodology transparency</QuestionGroup>
+		<QuestionAnswerText>5.5 EPD is not based on core process data from the actual manufacturing site</QuestionAnswerText>
+		<QuestionAnswerType>Boolean</QuestionAnswerType>
+	</Question>
+	<Question Comment="optional" RelatedDocument="optional">
+		<QuestionID>QM0506</QuestionID>
+		<QuestionGroup>5. Methodology transparency</QuestionGroup>
+		<QuestionAnswerText>5.6 The inventory for the core process is less than 1 year</QuestionAnswerText>
+		<QuestionAnswerType>Boolean</QuestionAnswerType>
+	</Question>
+	<Question Comment="optional" RelatedDocument="optional">
+		<QuestionID>QM0507</QuestionID>
+		<QuestionGroup>5. Methodology transparency</QuestionGroup>
+		<QuestionAnswerText>5.7 Impact on climate change (GWP result) includes biogenic carbon dioxide emissions that are not reported separately, or it is not possible with information in the EPD to separate GWPGHG and GWPbio.(biogenic CO2 emission and uptake and stored carbon in the product)</QuestionAnswerText>
+		<QuestionAnswerType>Boolean</QuestionAnswerType>
+	</Question>
+	<Question Comment="optional" RelatedDocument="optional">
+		<QuestionID>QM0508</QuestionID>
+		<QuestionGroup>5. Methodology transparency</QuestionGroup>
+		<QuestionAnswerText>5.8 Not all mandatory environmental indicators are reported?</QuestionAnswerText>
+		<QuestionAnswerType>Boolean</QuestionAnswerType>
+	</Question>
+	<Question Comment="optional" RelatedDocument="optional">
+		<QuestionID>QM0509</QuestionID>
+		<QuestionGroup>5. Methodology transparency</QuestionGroup>
+		<QuestionAnswerText>5.9 Any other assumption made?</QuestionAnswerText>
+		<QuestionAnswerType>Boolean</QuestionAnswerType>
+	</Question>
+	<Question Comment="optional" RelatedDocument="optional">
+		<QuestionID>QM0601</QuestionID>
+		<QuestionGroup>Criteria 6 Q metadata validation</QuestionGroup>
+		<QuestionAnswerText>6.1 The same verifier as for the EPD and part of the verification procedure</QuestionAnswerText>
+		<QuestionAnswerType>OneInList</QuestionAnswerType>
+	</Question>
+	<Question Comment="optional" RelatedDocument="optional">
+		<QuestionID>QM0602</QuestionID>
+		<QuestionGroup>Criteria 6 Q metadata validation</QuestionGroup>
+		<QuestionAnswerText>6.2 Any other third party verifier with access to underlying information</QuestionAnswerText>
+		<QuestionAnswerType>OneInList</QuestionAnswerType>
+	</Question>
+	<Question Comment="optional" RelatedDocument="optional">
+		<QuestionID>QM0603</QuestionID>
+		<QuestionGroup>Criteria 6 Q metadata validation</QuestionGroup>
+		<QuestionAnswerText>6.3 Self claim by the company responsible for the EPD</QuestionAnswerText>
+		<QuestionAnswerType>OneInList</QuestionAnswerType>
+	</Question>
+	<Question Comment="optional" RelatedDocument="optional">
+		<QuestionID>QM0604</QuestionID>
+		<QuestionGroup>Criteria 6 Q metadata validation</QuestionGroup>
+		<QuestionAnswerText>6.4 Any other external LCA-expert without access to to underlying information</QuestionAnswerText>
+		<QuestionAnswerType>OneInList</QuestionAnswerType>
+	</Question>
+</Questions>

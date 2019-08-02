@@ -1,0 +1,176 @@
+[
+  {
+    "id": "QM0101",
+    "group": "Criteria 1:  Product accuracy",
+    "answer": "1.1 Valid for a single product",
+    "type": "OneInList"
+  },
+  {
+    "id": "QM0102",
+    "group": "Criteria 1:  Product accuracy",
+    "answer": "1.2 Valid for several products with variation below 10%",
+    "type": "OneInList"
+  },
+  {
+    "id": "QM0103",
+    "group": "Criteria 1:  Product accuracy",
+    "answer": "1.3 Valid for products with variation above 10%",
+    "type": "OneInList"
+  },
+  {
+    "id": "QM0104",
+    "group": "Criteria 1:  Product accuracy",
+    "answer": "1.4 Valid for a product or several products where variation is not defined",
+    "type": "OneInList"
+  },
+  {
+    "id": "QM0201",
+    "group": "Criteria 2: Manufacturing accuracy",
+    "answer": "2.1 Valid for a single manufacturing site",
+    "type": "OneInList"
+  },
+  {
+    "id": "QM0202",
+    "group": "Criteria 2: Manufacturing accuracy",
+    "answer": "2.2 Valid for several manufacturing sites from the same company with variation below 10%",
+    "type": "OneInList"
+  },
+  {
+    "id": "QM0203",
+    "group": "Criteria 2: Manufacturing accuracy",
+    "answer": "2.3 Valid for several manufacturing sites from several companies with variation below 10%",
+    "type": "OneInList"
+  },
+  {
+    "id": "QM0204",
+    "group": "Criteria 2: Manufacturing accuracy",
+    "answer": "2.4 Valid for several manufacturing sites from the same company with variation above 10%",
+    "type": "OneInList"
+  },
+  {
+    "id": "QM0301",
+    "group": "Criteria 3 Specific data",
+    "answer": "3.1 Specific data for > 90%",
+    "type": "OneInList"
+  },
+  {
+    "id": "QM0302",
+    "group": "Criteria 3 Specific data",
+    "answer": "3.2 Specific data for > 80%",
+    "type": "OneInList"
+  },
+  {
+    "id": "QM0303",
+    "group": "Criteria 3 Specific data",
+    "answer": "3.3 Specific data for > 60%",
+    "type": "OneInList"
+  },
+  {
+    "id": "QM0304",
+    "group": "Criteria 3 Specific data",
+    "answer": "3.4 Specific data not defined",
+    "type": "OneInList"
+  },
+  {
+    "id": "QM0401",
+    "group": "Criteria 4: Third party review type",
+    "answer": "4.1 Certified EPD according to EN 15804 and ISO 14025",
+    "type": "OneInList"
+  },
+  {
+    "id": "QM0402",
+    "group": "Criteria 4: Third party review type",
+    "answer": "4.2 Self-declared environmental declaration based on certified EPD:s according to EN 15804 (i.e. categorised as 4.1) that contributes to at least 90% of the GWP100 indicator result A1-3, or an environmental declaration made as copy of an already published EPD made from an LCA tool that is verified and the only possible change by the end user is the product recipe.",
+    "type": "OneInList"
+  },
+  {
+    "id": "QM0403",
+    "group": "Criteria 4: Third party review type",
+    "answer": "4.3 Third part verified LCA that complies with EN 15804 and ISO 14021 and made transparent via a public available LCA report and Q metadata report",
+    "type": "OneInList"
+  },
+  {
+    "id": "QM0404",
+    "group": "Criteria 4: Third party review type",
+    "answer": "4.4 Any other third party verified EPD according to ISO 14025 but not according to EN 15804, or any other self-declared LCA result not published by a program operator but following EN 15804 and not made transparent via an LCA report. Q metadata has to reported for this category",
+    "type": "OneInList"
+  },
+  {
+    "id": "QM0501",
+    "group": "5. Methodology transparency",
+    "answer": "5.1 Allocation procedure applied where a by-product is not attributed to any impact?",
+    "type": "Boolean"
+  },
+  {
+    "id": "QM0502",
+    "group": "5. Methodology transparency",
+    "answer": "5.2 Inherent properties are allocated away and do not reflect the physical flows?",
+    "type": "Boolean"
+  },
+  {
+    "id": "QM0503",
+    "group": "5. Methodology transparency",
+    "answer": "5.3 System expansion applied?",
+    "type": "Boolean"
+  },
+  {
+    "id": "QM0504",
+    "group": "5. Methodology transparency",
+    "answer": "5.4 Recycling of a technosphere flow is handled with non-symmetry",
+    "type": "Boolean"
+  },
+  {
+    "id": "QM0505",
+    "group": "5. Methodology transparency",
+    "answer": "5.5 EPD is not based on core process data from the actual manufacturing site",
+    "type": "Boolean"
+  },
+  {
+    "id": "QM0506",
+    "group": "5. Methodology transparency",
+    "answer": "5.6 The inventory for the core process is less than 1 year",
+    "type": "Boolean"
+  },
+  {
+    "id": "QM0507",
+    "group": "5. Methodology transparency",
+    "answer": "5.7 Impact on climate change (GWP result) includes biogenic carbon dioxide emissions that are not reported separately, or it is not possible with information in the EPD to separate GWPGHG and GWPbio.(biogenic CO2 emission and uptake and stored carbon in the product)",
+    "type": "Boolean"
+  },
+  {
+    "id": "QM0508",
+    "group": "5. Methodology transparency",
+    "answer": "5.8 Not all mandatory environmental indicators are reported?",
+    "type": "Boolean"
+  },
+  {
+    "id": "QM0509",
+    "group": "5. Methodology transparency",
+    "answer": "5.9 Any other assumption made?",
+    "type": "Boolean"
+  },
+  {
+    "id": "QM0601",
+    "group": "Criteria 6 Q metadata validation",
+    "answer": "6.1 The same verifier as for the EPD and part of the verification procedure",
+    "type": "OneInList"
+  },
+  {
+    "id": "QM0602",
+    "group": "Criteria 6 Q metadata validation",
+    "answer": "6.2 Any other third party verifier with access to underlying information",
+    "type": "OneInList"
+  },
+  {
+    "id": "QM0603",
+    "group": "Criteria 6 Q metadata validation",
+    "answer": "6.3 Self claim by the company responsible for the EPD",
+    "type": "OneInList"
+  },
+  {
+    "id": "QM0604",
+    "group": "Criteria 6 Q metadata validation",
+    "answer": "6.4 Any other external LCA-expert without access to to underlying information",
+    "type": "OneInList"
+  }
+]

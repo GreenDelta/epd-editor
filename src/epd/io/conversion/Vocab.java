@@ -8,6 +8,7 @@ public class Vocab {
 	static final String NS_OLCA = "http://openlca.org/epd_ilcd";
 	static final String NS_XML = "http://www.w3.org/XML/1998/namespace";
 	public static final String NS_EPDv2 = "http://www.indata.network/EPD/2019";
+	public static final String SBE_ILCD = "http://sbeilcd.se/EPD/2017";
 
 	private Vocab() {
 	}

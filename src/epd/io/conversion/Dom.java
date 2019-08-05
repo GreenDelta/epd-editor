@@ -114,6 +114,21 @@ public final class Dom {
 		return ar.get();
 	}
 
+	public static Element getChild(Other other, String name, String ns) {
+		if (other == null || name == null)
+			return null;
+		for (Object any : other.any) {
+			if (!(any instanceof Element))
+				continue;
+			Element e = (Element) any;
+			if (!Objects.equals(ns, e.getNamespaceURI()))
+				continue;
+			if (Objects.equals(name, e.getLocalName()))
+				return e;
+		}
+		return null;
+	}
+
 	/**
 	 * Creates a new element with the given name and namespace and appends it to
 	 * the given parent element.

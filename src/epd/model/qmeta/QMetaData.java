@@ -2,7 +2,6 @@ package epd.model.qmeta;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -101,17 +100,10 @@ public class QMetaData {
 			return null;
 
 		// find the root element
-		Element root = null;
-		for (Object any : other.any) {
-			if (!(any instanceof Element))
-				continue;
-			Element e = (Element) any;
-			if (Objects.equals(Vocab.NS_EPDv2, e.getNamespaceURI())
-					&& Objects.equals("Q-Metadata", e.getLocalName())) {
-				root = e;
-				break;
-			}
-		}
+		Element root = Dom.getChild(other, "ILCD-SBE", Vocab.SBE_ILCD);
+		if (root == null)
+			return null;
+		root = Dom.getChild(root, "Q-Metadata", Vocab.SBE_ILCD);
 		if (root == null)
 			return null;
 
@@ -132,15 +124,26 @@ public class QMetaData {
 	public void write(Other other, Document doc) {
 		if (other == null || doc == null)
 			return;
-		Dom.clear(other, "Q-Metadata");
+		Element root = Dom.getChild(other, "ILCD-SBE", Vocab.SBE_ILCD);
+		if (root == null) {
+			root = doc.createElementNS(Vocab.SBE_ILCD, "norreq:ILCD-SBE");
+			other.any.add(root);
+		}
+
+		// remove the old content
+		Element qmeta = Dom.getChild(root, "Q-Metadata", Vocab.SBE_ILCD);
+		if (qmeta != null) {
+			root.removeChild(qmeta);
+		}
 		if (questions.isEmpty())
 			return;
-		Element root = doc.createElementNS(
-				Vocab.NS_EPDv2, "epd2:Q-Metadata");
-		other.any.add(root);
+
+		qmeta = doc.createElementNS(
+				Vocab.SBE_ILCD, "norreq:Q-Metadata");
+		root.appendChild(qmeta);
 		for (QQuestion q : questions) {
 			if (q != null) {
-				q.write(root);
+				q.write(qmeta);
 			}
 		}
 	}

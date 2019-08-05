@@ -20,6 +20,10 @@ public class QMetaData {
 
 	public List<QQuestion> questions = new ArrayList<>();
 
+	/**
+	 * Get the question with the given ID from this meta data. It is created if
+	 * it does not exist yet.
+	 */
 	public QQuestion getQuestion(String id) {
 		QQuestion q = questions.stream()
 				.filter(e -> Strings.nullOrEqual(e.id, id))

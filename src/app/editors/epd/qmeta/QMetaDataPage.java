@@ -1,5 +1,7 @@
 package app.editors.epd.qmeta;
 
+import java.util.List;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
@@ -14,14 +16,19 @@ import app.editors.epd.EpdEditor;
 import app.util.Controls;
 import app.util.UI;
 import epd.model.qmeta.QAnswer;
+import epd.model.qmeta.QGroup;
 import epd.model.qmeta.QMetaData;
 import epd.model.qmeta.QQuestion;
+import epd.model.qmeta.QQuestionType;
 import epd.util.Strings;
 
 public class QMetaDataPage extends FormPage {
 
 	private final EpdEditor editor;
 	private final QMetaData qdata;
+
+	private FormToolkit tk;
+	private Composite body;
 
 	public QMetaDataPage(EpdEditor editor) {
 		super(editor, "QMetaDataPage", "Q metadata");
@@ -34,9 +41,28 @@ public class QMetaDataPage extends FormPage {
 
 	@Override
 	protected void createFormContent(IManagedForm mform) {
-		FormToolkit tk = mform.getToolkit();
+		tk = mform.getToolkit();
 		ScrolledForm form = UI.formHeader(mform, "Q metadata");
-		Composite body = UI.formBody(form, mform.getToolkit());
+		body = UI.formBody(form, mform.getToolkit());
+
+		List<QGroup> groups = QGroup.fromJson(
+				this.getClass().getResourceAsStream("qmeta_questions.json"));
+		for (QGroup group : groups) {
+			if (group == null || group.name == null)
+				continue;
+			QQuestionType type = group.getType();
+			if (type == null)
+				continue;
+			Composite comp = UI.formSection(body, tk, group.name);
+			switch (type) {
+			case ONE_IN_LIST:
+				oneInList(group);
+				break;
+
+			default:
+				break;
+			}
+		}
 
 		Composite comp1 = UI.formSection(body, tk, QLabel.Q1);
 		UI.gridLayout(comp1, 1);
@@ -70,8 +96,7 @@ public class QMetaDataPage extends FormPage {
 		form.reflow(true);
 	}
 
-	private void multiChoice(Composite root, FormToolkit tk,
-			String... ids) {
+	private void oneInList(QGroup group) {
 		Composite comp = tk.createComposite(root);
 		UI.gridLayout(comp, 2, 10, 0);
 

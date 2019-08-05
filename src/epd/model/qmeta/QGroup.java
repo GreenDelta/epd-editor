@@ -22,6 +22,19 @@ public class QGroup {
 	public List<QQuestion> questions = new ArrayList<>();
 
 	/**
+	 * The questions in a group should have all the same type. Thus, we return
+	 * (the first non-null) type of the first question as the type of this
+	 * group.
+	 */
+	public QQuestionType getType() {
+		for (QQuestion q : questions) {
+			if (q.type != null)
+				return q.type;
+		}
+		return null;
+	}
+
+	/**
 	 * Read a list of question groups from a JSON configuration file. It assumes
 	 * that the questions and groups are sorted in that configuration.
 	 */

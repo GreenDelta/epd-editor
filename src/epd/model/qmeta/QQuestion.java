@@ -4,6 +4,7 @@ import org.w3c.dom.Element;
 
 import epd.io.conversion.Dom;
 import epd.io.conversion.Vocab;
+import epd.util.Strings;
 
 public class QQuestion {
 
@@ -61,5 +62,17 @@ public class QQuestion {
 			clone.answer = answer.clone();
 		}
 		return clone;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+		if (obj == this)
+			return true;
+		if (!(obj instanceof QQuestion))
+			return false;
+		QQuestion other = (QQuestion) obj;
+		return Strings.nullOrEqual(this.id, other.id);
 	}
 }

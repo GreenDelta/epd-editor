@@ -3,6 +3,8 @@ package epd.model.qmeta;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.openlca.ilcd.commons.Other;
 import org.openlca.ilcd.processes.AdminInfo;
@@ -34,6 +36,44 @@ public class QMetaData {
 		q.id = id;
 		questions.add(q);
 		return q;
+	}
+
+	/**
+	 * Returns the selected question/answer for the given group. This method is
+	 * useful for `one-in-list` questions that can have exactly one answer. It
+	 * returns the (first) question of the given group that is stored in this Q
+	 * metadata with a `yesNo = true` value.
+	 */
+	public QQuestion getSelected(QGroup group) {
+		if (group == null)
+			return null;
+		Set<String> ids = group.questions.stream()
+				.map(q -> q.id)
+				.collect(Collectors.toSet());
+		for (QQuestion q : questions) {
+			if (!ids.contains(q.id))
+				continue;
+			if (q.answer == null || q.answer.yesNo == null)
+				continue;
+			if (q.answer.yesNo)
+				return q;
+		}
+		return null;
+	}
+
+	/**
+	 * Remove all questions from the given group from this meta data.
+	 */
+	public void removeAll(QGroup group) {
+		if (group == null)
+			return;
+		Set<String> ids = group.questions.stream()
+				.map(q -> q.id)
+				.collect(Collectors.toSet());
+		List<QQuestion> removals = this.questions.stream()
+				.filter(q -> ids.contains(q.id))
+				.collect(Collectors.toList());
+		questions.removeAll(removals);
 	}
 
 	/**

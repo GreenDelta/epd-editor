@@ -114,7 +114,7 @@ public class QMetaDataPage extends FormPage {
 					continue;
 				QQuestion q = qdata.getQuestion(config[i].id);
 				q.answer = new QAnswer();
-				q.answer.yesNo = true;
+				q.answer.listText = config[i].text;
 				q.comment = comment.getText();
 				selected.set(q);
 			}
@@ -133,6 +133,7 @@ public class QMetaDataPage extends FormPage {
 
 		for (int i = 0; i < config.length; i++) {
 			QQuestion question = qdata.getQuestion(config[i].id);
+			question.group = group.name;
 			if (question.answer == null) {
 				question.answer = new QAnswer();
 			}

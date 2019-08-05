@@ -41,7 +41,7 @@ public class QMetaData {
 	 * Returns the selected question/answer for the given group. This method is
 	 * useful for `one-in-list` questions that can have exactly one answer. It
 	 * returns the (first) question of the given group that is stored in this Q
-	 * metadata with a `yesNo = true` value.
+	 * metadata with an answer.
 	 */
 	public QQuestion getSelected(QGroup group) {
 		if (group == null)
@@ -52,10 +52,10 @@ public class QMetaData {
 		for (QQuestion q : questions) {
 			if (!ids.contains(q.id))
 				continue;
-			if (q.answer == null || q.answer.yesNo == null)
-				continue;
-			if (q.answer.yesNo)
+			if (q.answer != null) {
+				q.group = group.name;
 				return q;
+			}
 		}
 		return null;
 	}

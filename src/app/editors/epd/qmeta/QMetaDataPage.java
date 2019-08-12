@@ -91,8 +91,16 @@ public class QMetaDataPage extends FormPage {
 					new GridData(SWT.LEFT, SWT.TOP, false, false));
 			tk.createLabel(
 					comp, Strings.wrap(config[i].text, 120));
-			button.setSelection(
-					Objects.equals(selected.get(), config[i]));
+			if (Objects.equals(selected.get(), config[i])) {
+				QQuestion selectedQ = selected.get();
+				if (selectedQ.answer == null) {
+					selectedQ.answer = new QAnswer();
+				}
+				// update the text of the selected answer with
+				// the text of the configuration
+				selectedQ.answer.listText = config[i].text;
+				button.setSelection(true);
+			}
 			buttons[i] = button;
 		}
 

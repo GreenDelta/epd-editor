@@ -141,9 +141,7 @@ public class QMetaData {
 		if (questions.isEmpty())
 			return;
 
-		qmeta = doc.createElementNS(
-				Vocab.SBE_ILCD, "norreq:Q-Metadata");
-		root.appendChild(qmeta);
+		qmeta = Dom.addChild(root, "norreq:Q-Metadata", Vocab.SBE_ILCD);
 		for (QQuestion q : questions) {
 			if (q != null) {
 				q.write(qmeta);

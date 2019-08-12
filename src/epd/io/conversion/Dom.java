@@ -29,7 +29,7 @@ public final class Dom {
 	private Dom() {
 	}
 
-	static Document createDocument() {
+	public static Document createDocument() {
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
@@ -114,6 +114,10 @@ public final class Dom {
 		return ar.get();
 	}
 
+	/**
+	 * Returns the first element with the given name and namespace from the
+	 * given extension element.
+	 */
 	public static Element getChild(Other other, String name, String ns) {
 		if (other == null || name == null)
 			return null;
@@ -121,12 +125,21 @@ public final class Dom {
 			if (!(any instanceof Element))
 				continue;
 			Element e = (Element) any;
-			if (!Objects.equals(ns, e.getNamespaceURI()))
-				continue;
-			if (Objects.equals(name, e.getLocalName()))
+			if (matches(e, name, ns))
 				return e;
 		}
 		return null;
+	}
+
+	/**
+	 * Returns true if the given element has the given (local) name and
+	 * namespace.
+	 */
+	public static boolean matches(Element elem, String name, String ns) {
+		if (elem == null || name == null || ns == null)
+			return false;
+		return Objects.equals(name, elem.getLocalName())
+				&& Objects.equals(ns, elem.getNamespaceURI());
 	}
 
 	/**

@@ -90,9 +90,12 @@ public class QMetaData {
 				return qmeta;
 		}
 		AdminInfo adm = Processes.getAdminInfo(p);
-		if (adm == null)
-			return null;
-		return read(adm.other);
+		if (adm != null) {
+			QMetaData qmeta = read(adm.other);
+			if (qmeta != null)
+				return qmeta;
+		}
+		return QUpgrade.on(p);
 	}
 
 	private static QMetaData read(Other other) {

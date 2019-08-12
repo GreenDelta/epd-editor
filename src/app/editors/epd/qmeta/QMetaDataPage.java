@@ -1,5 +1,6 @@
 package app.editors.epd.qmeta;
 
+import java.io.File;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
@@ -14,6 +15,7 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 
+import app.App;
 import app.editors.epd.EpdEditor;
 import app.rcp.Texts;
 import app.util.Controls;
@@ -52,8 +54,7 @@ public class QMetaDataPage extends FormPage {
 		// those that come from the configuration and define the
 		// available questions and data for the UI and those that
 		// contain answers and are saved in the `QMetaData` object.
-		List<QGroup> config = QGroup.fromJson(
-				this.getClass().getResourceAsStream("qmeta_questions.json"));
+		List<QGroup> config = readConfig();
 		for (QGroup group : config) {
 			if (group == null || group.name == null)
 				continue;
@@ -71,6 +72,18 @@ public class QMetaDataPage extends FormPage {
 			}
 		}
 		form.reflow(true);
+	}
+
+	private List<QGroup> readConfig() {
+		File dir = new File(App.workspace, "q-metadata");
+		File file = new File(dir, "questions.json");
+		if (file.exists()) {
+			List<QGroup> config = QGroup.fromFile(file);
+			if (!config.isEmpty())
+				return config;
+		}
+		return QGroup.fromJson(
+				this.getClass().getResourceAsStream("qmeta_questions.json"));
 	}
 
 	private void oneInList(QGroup group) {

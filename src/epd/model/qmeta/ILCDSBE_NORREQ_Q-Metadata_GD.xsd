@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2018 (x64) (http://www.altova.com) by Jan-Anders Jönsson (ÅKEJ AB) -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" xmlns:ilcd="http://lca.jrc.it/ILCD/Common"
-   elementFormDefault="qualified" attributeFormDefault="unqualified" vc:minVersion="1.1">
-   <xs:import namespace="http://lca.jrc.it/ILCD/Common" schemaLocation="./include/ILCD_Common_Groups.xsd"/>
+   xmlns="http://sbeilcd.se/EPD/2017" targetNamespace="http://sbeilcd.se/EPD/2017" elementFormDefault="qualified" attributeFormDefault="unqualified"
+   vc:minVersion="1.0">
+   <xs:import namespace="http://lca.jrc.it/ILCD/Common" schemaLocation="./ILCD_Common_Groups.xsd"/>
    <xs:attribute name="SupervisorRef" type="xs:int">
       <xs:annotation>
          <xs:documentation>internal ID referens för den som är ansvarig för informationen.</xs:documentation>
@@ -11,43 +12,6 @@
    <xs:attribute name="refObjectId" type="xs:token"/>
    <xs:attribute name="questiondataset" type="xs:token"/>
    <xs:attribute name="UUIDReference" type="ilcd:UUID"/>
-   <xs:simpleType name="ProductPhase">
-      <xs:annotation>
-         <xs:documentation>Från e-BVD2015</xs:documentation>
-      </xs:annotation>
-      <xs:restriction base="xs:string">
-         <xs:enumeration value="Delivery"/>
-         <xs:enumeration value="DeliveryAndMounted"/>
-         <xs:enumeration value="Mounted"/>
-      </xs:restriction>
-   </xs:simpleType>
-   <xs:simpleType name="WeightComparisonOperator">
-      <xs:annotation>
-         <xs:documentation>Från e-BVD2015</xs:documentation>
-      </xs:annotation>
-      <xs:restriction base="xs:string">
-         <xs:enumeration value="Equal"/>
-         <xs:enumeration value="GreaterOrEqualThen"/>
-         <xs:enumeration value="GreaterOrEqualThenMinLessOrEqualThenMax"/>
-         <xs:enumeration value="GreaterOrEqualThenMinLessThenMax"/>
-         <xs:enumeration value="GreaterThen"/>
-         <xs:enumeration value="GreaterThenMinLessOrEqualThenMax"/>
-         <xs:enumeration value="GreaterThenMinLessThenMax"/>
-         <xs:enumeration value="LessOrEqualThen"/>
-         <xs:enumeration value="LessThen"/>
-      </xs:restriction>
-   </xs:simpleType>
-   <xs:simpleType name="WeightUnit">
-      <xs:annotation>
-         <xs:documentation>Från e-BVD2015</xs:documentation>
-      </xs:annotation>
-      <xs:restriction base="xs:string">
-         <xs:enumeration value="kg"/>
-         <xs:enumeration value="kg_m"/>
-         <xs:enumeration value="kg_m2"/>
-         <xs:enumeration value="kg_m3"/>
-      </xs:restriction>
-   </xs:simpleType>
    <xs:simpleType name="BooleanType">
       <xs:annotation>
          <xs:documentation>Från e-BVD2015</xs:documentation>
@@ -56,16 +20,6 @@
          <xs:enumeration value="None"/>
          <xs:enumeration value="Yes"/>
          <xs:enumeration value="No"/>
-      </xs:restriction>
-   </xs:simpleType>
-   <xs:simpleType name="ConcentrationBasedOnType">
-      <xs:annotation>
-         <xs:documentation>Från e-BVD2015</xs:documentation>
-      </xs:annotation>
-      <xs:restriction base="xs:string">
-         <xs:enumeration value="EntireProduct"/>
-         <xs:enumeration value="Component"/>
-         <xs:enumeration value="NotRelevant"/>
       </xs:restriction>
    </xs:simpleType>
    <xs:complexType name="NumType">
@@ -80,7 +34,13 @@
    </xs:complexType>
    <xs:complexType name="QuestionsType">
       <xs:sequence>
-         <xs:element name="Question" type="QuestionType" maxOccurs="unbounded"/>
+         <xs:element name="Question" maxOccurs="unbounded">
+            <xs:complexType>
+               <xs:complexContent>
+                  <xs:extension base="QuestionType"/>
+               </xs:complexContent>
+            </xs:complexType>
+         </xs:element>
       </xs:sequence>
    </xs:complexType>
    <xs:complexType name="QuestionType">
@@ -133,6 +93,7 @@
                         </xs:choice>
                      </xs:complexType>
                   </xs:element>
+                  <xs:element name="QuestionListText" type="xs:string"/>
                </xs:choice>
             </xs:complexType>
          </xs:element>
@@ -150,6 +111,7 @@
       <xs:attribute ref="SupervisorRef"/>
       <xs:attribute ref="refObjectId"/>
       <xs:attribute ref="questiondataset"/>
+      <xs:attribute name="questionIDRef" type="xs:token" use="optional"/>
    </xs:complexType>
    <xs:element name="AnswerText" type="xs:string"/>
    <xs:element name="Num" type="NumType"/>

@@ -1,15 +1,22 @@
 package app.editors.settings;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.Ref;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.AppSettings;
@@ -17,8 +24,11 @@ import app.M;
 import app.store.EpdProfiles;
 import app.store.RefTrees;
 import app.util.Controls;
+import app.util.FileChooser;
+import app.util.MsgBox;
 import app.util.UI;
 import epd.model.EpdProfile;
+import epd.model.qmeta.QGroup;
 import epd.util.Strings;
 
 class DataSetSection {
@@ -46,6 +56,7 @@ class DataSetSection {
 		dependencyCheck(comp, tk);
 		syncCheck(comp, tk);
 		productUpdateCheck(comp, tk);
+		qMetaDataFile(comp, tk);
 	}
 
 	private void dependencyCheck(Composite comp, FormToolkit tk) {
@@ -142,5 +153,47 @@ class DataSetSection {
 			settings().profile = profiles.get(idx).id;
 			page.setDirty();
 		});
+	}
+
+	private void qMetaDataFile(Composite comp, FormToolkit tk) {
+		File dir = new File(App.workspace, "q-metadata");
+		if (!dir.exists()) {
+			dir.mkdirs();
+		}
+		File file = new File(dir, "questions.json");
+
+		UI.formLabel(comp, tk, "Q-Metadata questions");
+		Composite inner = tk.createComposite(comp);
+		UI.innerGrid(inner, 2);
+		Text text = tk.createText(inner, "");
+		text.setEditable(false);
+		UI.gridData(text, false, false).widthHint = 310;
+		if (file.exists()) {
+			text.setText("~/.epd_editor/q-metatdata/questions.json");
+		}
+
+		Button btn = tk.createButton(inner, "Browse ...", SWT.NONE);
+		Controls.onSelect(btn, _e -> {
+			File impFile = FileChooser.open("*.json");
+			if (impFile == null)
+				return;
+			List<QGroup> groups = QGroup.fromFile(impFile);
+			if (groups.isEmpty()) {
+				MsgBox.error("Invalid file",
+						"Could not read Q-Metadata questions from file");
+				return;
+			}
+			try {
+				Files.copy(impFile.toPath(), file.toPath(),
+						StandardCopyOption.REPLACE_EXISTING);
+				text.setText("~/.epd_editor/q-metatdata/questions.json");
+			} catch (Exception e) {
+				MsgBox.error("Failed to copy file",
+						"Could not copy file to workspace");
+				Logger log = LoggerFactory.getLogger(getClass());
+				log.error("Failed to copy file", e);
+			}
+		});
+
 	}
 }

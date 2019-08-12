@@ -1,5 +1,8 @@
 package epd.model.qmeta;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -32,6 +35,19 @@ public class QGroup {
 				return q.type;
 		}
 		return null;
+	}
+
+	/**
+	 * Reads a list of question groups from the given JSON file. It returns an
+	 * empty list when this failed.
+	 */
+	static public List<QGroup> fromFile(File file) {
+		try (FileInputStream fis = new FileInputStream(file);
+				BufferedInputStream buf = new BufferedInputStream(fis)) {
+			return fromJson(buf);
+		} catch (Exception e) {
+			return Collections.emptyList();
+		}
 	}
 
 	/**

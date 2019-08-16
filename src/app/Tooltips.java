@@ -21,11 +21,14 @@ public class Tooltips extends NLS {
 	public static String EPD_ExternalDocumentationSources;
 	public static String EPD_UncertaintyMargins;
 	public static String EPD_UncertaintyMarginsDescription;
+	public static String EPD_Time;
 	public static String EPD_ReferenceYear;
 	public static String EPD_ValidUntil;
 	public static String EPD_TimeDescription;
+	public static String EPD_Geography;
 	public static String EPD_Location;
 	public static String EPD_GeographyDescription;
+	public static String EPD_Technology;
 	public static String EPD_TechnologyDescription;
 	public static String EPD_TechnicalPrupose;
 	public static String EPD_Pictogram;

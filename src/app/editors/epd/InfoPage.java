@@ -64,6 +64,7 @@ class InfoPage extends FormPage {
 				Processes.dataSetInfo(process).externalDocs)
 				.withEditor(editor)
 				.withTitle(M.ExternalDocumentationSources)
+				.withTooltip(Tooltips.EPD_ExternalDocumentationSources)
 				.render(body, tk);
 		createSafetyMarginsSection(body, tb);
 		createTimeSection(body, tb);
@@ -73,6 +74,7 @@ class InfoPage extends FormPage {
 				Processes.technology(process).pictures)
 				.withEditor(editor)
 				.withTitle(M.FlowDiagramsOrPictures)
+				.withTooltip(Tooltips.EPD_FlowDiagramsOrPictures)
 				.render(body, tk);
 		form.reflow(true);
 	}
@@ -98,12 +100,13 @@ class InfoPage extends FormPage {
 
 	private void qRefSection(Composite parent) {
 		Composite comp = UI.formSection(parent, tk,
-				M.DeclaredProduct);
-		UI.formLabel(comp, tk, M.Product);
+				M.DeclaredProduct, Tooltips.EPD_DeclaredProduct);
+		UI.formLabel(comp, tk, M.Product, Tooltips.EPD_DeclaredProduct);
 		RefLink refText = new RefLink(comp, tk, DataSetType.FLOW);
 		Exchange exchange = dataSet.productExchange();
 		refText.setRef(exchange.flow);
-		Text amountText = UI.formText(comp, tk, M.Amount);
+		Text amountText = UI.formText(comp, tk,
+				M.Amount, Tooltips.EPD_ProductAmount);
 		amountText.setText(Double.toString(exchange.meanAmount));
 		amountText.addModifyListener(e -> {
 			try {
@@ -115,7 +118,8 @@ class InfoPage extends FormPage {
 				amountText.setBackground(Colors.errorColor());
 			}
 		});
-		Text unitText = UI.formText(comp, tk, M.Unit);
+		Text unitText = UI.formText(comp, tk,
+				M.Unit, Tooltips.EPD_ProductUnit);
 		unitText.setText(RefDeps.getRefUnit(process));
 		unitText.setEditable(false);
 		refText.onChange(ref -> {
@@ -126,19 +130,22 @@ class InfoPage extends FormPage {
 	}
 
 	private void createSafetyMarginsSection(Composite parent, TextBuilder tb) {
-		Composite composite = UI.formSection(parent, tk,
-				M.SafetyMargins);
+		Composite comp = UI.formSection(parent, tk,
+				M.SafetyMargins, Tooltips.EPD_UncertaintyMargins);
 		SafetyMargins margins = dataSet.safetyMargins;
 		if (margins == null) {
 			margins = new SafetyMargins();
 			dataSet.safetyMargins = margins;
 		}
-		Text marginsText = UI.formText(composite, M.SafetyMargin);
+		Text marginsText = UI.formText(comp, tk,
+				M.SafetyMargin, Tooltips.EPD_UncertaintyMargins);
 		if (margins.margins != null) {
 			marginsText.setText(margins.margins.toString());
 		}
 		marginsText.addModifyListener(e -> modifyMargins(marginsText));
-		tb.multiText(composite, M.Description, margins.description);
+		tb.multiText(comp, M.Description,
+				Tooltips.EPD_UncertaintyMarginsDescription,
+				margins.description);
 	}
 
 	private void modifyMargins(Text text) {
@@ -162,12 +169,13 @@ class InfoPage extends FormPage {
 
 	private void createTechnologySection(Composite body, TextBuilder tb) {
 		Technology tech = Processes.technology(process);
-		Composite comp = UI.formSection(body, tk, M.Technology);
+		Composite comp = UI.formSection(body, tk,
+				M.Technology, Tooltips.EPD_Technology);
 		tb.multiText(comp, M.TechnologyDescription,
-				tech.description);
+				Tooltips.EPD_TechnologyDescription, tech.description);
 		tb.multiText(comp, M.TechnologicalApplicability,
-				tech.applicability);
-		UI.formLabel(comp, M.Pictogram);
+				Tooltips.EPD_TechnicalPrupose, tech.applicability);
+		UI.formLabel(comp, tk, M.Pictogram, Tooltips.EPD_Pictogram);
 		RefLink refText = new RefLink(comp, tk, DataSetType.SOURCE);
 		refText.setRef(tech.pictogram);
 		refText.onChange(ref -> {
@@ -178,31 +186,37 @@ class InfoPage extends FormPage {
 
 	private void createTimeSection(Composite body, TextBuilder tb) {
 		Time time = Processes.time(process);
-		Composite comp = UI.formSection(body, tk, M.Time);
-		intText(comp, M.ReferenceYear, time.referenceYear, val -> {
-			time.referenceYear = val;
-		});
-		intText(comp, M.ValidUntil, time.validUntil, val -> {
-			time.validUntil = val;
-		});
-		tb.multiText(comp, M.TimeDescription, time.description);
+		Composite comp = UI.formSection(body, tk, M.Time, Tooltips.EPD_Time);
+		intText(comp, M.ReferenceYear, Tooltips.EPD_ReferenceYear,
+				time.referenceYear, val -> {
+					time.referenceYear = val;
+				});
+		intText(comp, M.ValidUntil, Tooltips.EPD_ValidUntil,
+				time.validUntil, val -> {
+					time.validUntil = val;
+				});
+		tb.multiText(comp, M.TimeDescription,
+				Tooltips.EPD_TimeDescription, time.description);
 	}
 
 	private void createGeographySection(Composite body, TextBuilder tb) {
 		Location location = Processes.location(process);
-		Composite comp = UI.formSection(body, tk, M.Geography);
-		tk.createLabel(comp, M.Location);
+		Composite comp = UI.formSection(body, tk, M.Geography,
+				Tooltips.EPD_Geography);
+		tk.createLabel(comp, M.Location)
+				.setToolTipText(Tooltips.EPD_Location);
 		LocationCombo viewer = new LocationCombo();
 		viewer.create(comp, location.code, code -> {
 			location.code = code;
 			editor.setDirty();
 		});
-		tb.multiText(comp, M.GeographyDescription, location.description);
+		tb.multiText(comp, M.GeographyDescription,
+				Tooltips.EPD_GeographyDescription, location.description);
 	}
 
-	private void intText(Composite comp, String label, Integer initial,
-			Consumer<Integer> fn) {
-		Text text = UI.formText(comp, tk, label);
+	private void intText(Composite comp, String label, String tooltip,
+			Integer initial, Consumer<Integer> fn) {
+		Text text = UI.formText(comp, tk, label, tooltip);
 		if (initial != null)
 			text.setText(initial.toString());
 		text.addModifyListener(e -> {

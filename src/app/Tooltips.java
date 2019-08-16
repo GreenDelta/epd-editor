@@ -4,14 +4,17 @@ import org.eclipse.osgi.util.NLS;
 
 public class Tooltips extends NLS {
 
-	public static String EPD_GeneralInformation;
-	public static String EPD_UUID;
+	// All
+	public static String All_GeneralInformation;
+	public static String All_UUID;
+	public static String All_File;
+	public static String All_Classification;
+
+	// EPD
 	public static String EPD_Name;
 	public static String EPD_FurtherProperties;
 	public static String EPD_Synonyms;
 	public static String EPD_Comment;
-	public static String EPD_File;
-	public static String EPD_Classification;
 	public static String EPD_DeclaredProduct;
 	public static String EPD_ProductAmount;
 	public static String EPD_ProductUnit;

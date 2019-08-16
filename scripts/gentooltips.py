@@ -1,13 +1,13 @@
 
 tooltips = [
-    ("EPD", "General information"),
-    ("EPD", "UUID"),
+    ("All", "General information"),
+    ("All", "UUID"),
+    ("All", "File"),
+    ("All", "Classification"),
     ("EPD", "Name"),
     ("EPD", "Further properties"),
     ("EPD", "Synonyms"),
     ("EPD", "Comment"),
-    ("EPD", "File"),
-    ("EPD", "Classification"),
     ("EPD", "Declared product"),
     ("EPD", "Product amount"),
     ("EPD", "Product unit"),
@@ -62,7 +62,11 @@ def make_key(tooltip):
 if __name__ == "__main__":
 
     print("Java fields:\n\n")
+    context = None
     for pair in tooltips:
+        if pair[0] != context:
+            context = pair[0]
+            print("\n\t// %s" % context)
         k = make_key(pair)
         print("\tpublic static String %s;" % k)
 

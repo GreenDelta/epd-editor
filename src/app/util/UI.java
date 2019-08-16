@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.M;
+import app.Tooltips;
 import app.rcp.Icon;
 
 public class UI {
@@ -44,8 +45,9 @@ public class UI {
 
 	public static Composite infoSection(IDataSet ds, Composite parent,
 			FormToolkit tk) {
-		Composite comp = UI.formSection(parent, tk, M.GeneralInformation);
-		Text text = UI.formText(comp, tk, M.UUID);
+		Composite comp = UI.formSection(parent, tk,
+				M.GeneralInformation, Tooltips.All_GeneralInformation);
+		Text text = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);
 		text.setEditable(false);
 		String uuid = ds != null ? ds.getUUID() : null;
 		if (uuid != null)
@@ -56,10 +58,11 @@ public class UI {
 	public static void fileLink(IDataSet ds, Composite comp, FormToolkit tk) {
 		if (ds == null || comp == null || tk == null)
 			return;
-		UI.formLabel(comp, tk, M.File);
+		UI.formLabel(comp, tk, M.File, Tooltips.All_File);
 		ImageHyperlink link = tk.createImageHyperlink(comp, SWT.NONE);
 		link.setForeground(Colors.linkBlue());
 		link.setImage(Icon.DOCUMENT.img());
+		link.setToolTipText(Tooltips.All_File);
 		Ref ref = Ref.of(ds);
 		File f = App.store.getFile(ref);
 		if (f == null || !f.exists())
@@ -181,10 +184,16 @@ public class UI {
 		return form;
 	}
 
-	public static Composite formSection(Composite parent, FormToolkit toolkit,
+	public static Composite formSection(Composite comp, FormToolkit tk,
 			String label) {
-		Section section = section(parent, toolkit, label);
-		Composite client = sectionClient(section, toolkit);
+		return formSection(comp, tk, label, null);
+	}
+
+	public static Composite formSection(Composite comp, FormToolkit tk,
+			String label, String tooltip) {
+		Section section = section(comp, tk, label);
+		section.setToolTipText(tooltip);
+		Composite client = sectionClient(section, tk);
 		return client;
 	}
 
@@ -300,10 +309,7 @@ public class UI {
 			Composite comp, FormToolkit tk,
 			String label, String tooltip) {
 		if (label != null) {
-			Label lab = formLabel(comp, tk, label);
-			if (tooltip != null) {
-				lab.setToolTipText(tooltip);
-			}
+			formLabel(comp, tk, label, tooltip);
 		}
 		Text text = null;
 		if (tk != null) {
@@ -330,10 +336,7 @@ public class UI {
 	public static Text formMultiText(Composite comp, FormToolkit tk,
 			String label, String tooltip) {
 		if (label != null) {
-			Label lab = formLabel(comp, tk, label);
-			if (tooltip != null) {
-				lab.setToolTipText(tooltip);
-			}
+			formLabel(comp, tk, label, tooltip);
 		}
 		int flags = SWT.BORDER | SWT.V_SCROLL | SWT.WRAP | SWT.MULTI;
 		Text text = tk != null
@@ -361,23 +364,31 @@ public class UI {
 		return combo;
 	}
 
-	public static Label formLabel(Composite parent, String text) {
-		return formLabel(parent, null, text);
+	public static Label formLabel(Composite comp, String label) {
+		return formLabel(comp, null, label);
 	}
 
-	public static Label formLabel(Composite parent, FormToolkit toolkit,
+	public static Label formLabel(Composite parent, FormToolkit tk,
 			String label) {
-		Label labelWidget = null;
-		if (toolkit != null)
-			labelWidget = toolkit.createLabel(parent, label, SWT.NONE);
+		return formLabel(parent, tk, label, null);
+	}
+
+	public static Label formLabel(Composite parent, FormToolkit tk,
+			String label, String tooltip) {
+		Label lab = null;
+		if (tk != null)
+			lab = tk.createLabel(parent, label, SWT.NONE);
 		else {
-			labelWidget = new Label(parent, SWT.NONE);
-			labelWidget.setText(label);
+			lab = new Label(parent, SWT.NONE);
+			lab.setText(label);
 		}
-		GridData gridData = gridData(labelWidget, false, false);
+		if (tooltip != null) {
+			lab.setToolTipText(tooltip);
+		}
+		GridData gridData = gridData(lab, false, false);
 		gridData.verticalAlignment = SWT.TOP;
 		gridData.verticalIndent = 2;
-		return labelWidget;
+		return lab;
 	}
 
 	public static Label filler(Composite parent, FormToolkit tk) {

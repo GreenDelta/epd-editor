@@ -21,6 +21,7 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import app.App;
 import app.M;
+import app.Tooltips;
 import app.rcp.Icon;
 import app.store.EpdProfiles;
 import app.util.Actions;
@@ -81,8 +82,10 @@ class ModulePage extends FormPage {
 	}
 
 	private void createProfileSection(Composite body) {
-		Composite comp = UI.formSection(body, toolkit, M.EPDProfile);
-		Combo combo = UI.formCombo(comp, toolkit, M.EPDProfile);
+		Composite comp = UI.formSection(body, toolkit,
+				M.EPDProfile, Tooltips.EPD_EPDProfile);
+		Combo combo = UI.formCombo(comp, toolkit,
+				M.EPDProfile, Tooltips.EPD_EPDProfile);
 		int selected = -1;
 		List<EpdProfile> profiles = EpdProfiles.getAll();
 		profiles.sort((p1, p2) -> Strings.compare(p1.name, p2.name));
@@ -113,6 +116,7 @@ class ModulePage extends FormPage {
 
 	private void createScenarioSection(Composite parent) {
 		Section section = UI.section(parent, toolkit, M.Scenarios);
+		section.setToolTipText(Tooltips.EPD_Scenarios);
 		section.setExpanded(false);
 		UI.gridData(section, true, false);
 		scenarioTable = new ScenarioTable(editor, section, toolkit);
@@ -121,12 +125,14 @@ class ModulePage extends FormPage {
 
 	private TableViewer createModuleSection(Composite parent) {
 		Section section = UI.section(parent, toolkit, M.Modules);
+		section.setToolTipText(Tooltips.EPD_Modules);
 		Composite comp = UI.sectionClient(section, toolkit);
 		UI.gridLayout(comp, 1);
 		String[] columns = new String[] { M.Module, M.Scenario,
 				M.ProductSystem, M.Description };
 		TableViewer table = Tables.createViewer(comp, columns);
 		table.setLabelProvider(new ModuleLabel());
+		table.getTable().setToolTipText(Tooltips.EPD_Modules);
 		Tables.addSorter(table, 0, (ModuleEntry e) -> e.module.name);
 		Tables.addSorter(table, 1, (ModuleEntry e) -> e.scenario);
 		Tables.addSorter(table, 3, (ModuleEntry e) -> e.description);
@@ -190,6 +196,7 @@ class ModulePage extends FormPage {
 
 	private ModuleResultTable createResultSection(Composite body) {
 		Section section = UI.section(body, toolkit, M.Results);
+		section.setToolTipText(Tooltips.EPD_Results);
 		UI.gridData(section, true, true);
 		Composite composite = UI.sectionClient(section, toolkit);
 		UI.gridLayout(composite, 1);

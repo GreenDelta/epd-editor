@@ -275,18 +275,20 @@ public class UI {
 		return composite;
 	}
 
-	public static Button formCheckBox(Composite parent, String label) {
-		return formCheckBox(parent, null, label);
+	public static Button formCheckBox(Composite comp, FormToolkit tk,
+			String label) {
+		return formCheckBox(comp, tk, label, null);
 	}
 
-	public static Button formCheckBox(Composite parent, FormToolkit toolkit,
-			String label) {
-		formLabel(parent, label);
-		Button button = null;
-		if (toolkit != null)
-			button = toolkit.createButton(parent, null, SWT.CHECK);
-		else
-			button = new Button(parent, SWT.CHECK);
+	public static Button formCheckBox(Composite comp, FormToolkit tk,
+			String label, String tooltip) {
+		formLabel(comp, tk, label, tooltip);
+		Button button = tk != null
+				? tk.createButton(comp, null, SWT.CHECK)
+				: new Button(comp, SWT.CHECK);
+		if (tooltip != null) {
+			button.setToolTipText(tooltip);
+		}
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false);
 		button.setLayoutData(gd);
 		return button;
@@ -352,14 +354,22 @@ public class UI {
 		return text;
 	}
 
-	public static Combo formCombo(Composite parent, String label) {
-		return formCombo(parent, null, label);
+	public static Combo formCombo(Composite comp, String label) {
+		return formCombo(comp, null, label);
 	}
 
-	public static Combo formCombo(Composite parent, FormToolkit toolkit,
+	public static Combo formCombo(Composite comp, FormToolkit tk,
 			String label) {
-		formLabel(parent, toolkit, label);
-		Combo combo = new Combo(parent, SWT.READ_ONLY);
+		return formCombo(comp, tk, label, null);
+	}
+
+	public static Combo formCombo(Composite comp, FormToolkit tk,
+			String label, String tooltip) {
+		formLabel(comp, tk, label, tooltip);
+		Combo combo = new Combo(comp, SWT.READ_ONLY);
+		if (tooltip != null) {
+			combo.setToolTipText(tooltip);
+		}
 		gridData(combo, true, false);
 		return combo;
 	}

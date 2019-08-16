@@ -13,6 +13,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
 
 import app.M;
+import app.Tooltips;
 import app.rcp.Icon;
 import app.util.UI;
 import epd.model.Version;
@@ -29,7 +30,8 @@ public class VersionField {
 	}
 
 	private void render(Composite parent, FormToolkit toolkit) {
-		UI.formLabel(parent, toolkit, M.DataSetVersion);
+		UI.formLabel(parent, toolkit,
+				M.DataSetVersion, Tooltips.All_DataSetVersion);
 		Composite composite = toolkit.createComposite(parent);
 		GridLayout layout = UI.gridLayout(composite, 3);
 		layout.marginWidth = 0;

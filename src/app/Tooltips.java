@@ -9,6 +9,7 @@ public class Tooltips extends NLS {
 	public static String All_UUID;
 	public static String All_File;
 	public static String All_Classification;
+	public static String All_DataSetVersion;
 
 	// EPD
 	public static String EPD_Name;
@@ -49,7 +50,6 @@ public class Tooltips extends NLS {
 	public static String EPD_Documentor;
 	public static String EPD_DataFormats;
 	public static String EPD_PublicationAndOwnership;
-	public static String EPD_DataSetVersion;
 	public static String EPD_Owner;
 	public static String EPD_Copyright;
 	public static String EPD_AccessRestrictions;

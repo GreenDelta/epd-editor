@@ -12,6 +12,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
 import app.M;
+import app.Tooltips;
 import app.util.Tables;
 import app.util.tables.ModifySupport;
 import app.util.tables.TextCellModifier;
@@ -41,8 +42,8 @@ class ModuleResultTable {
 		Tables.bindColumnWidths(viewer, 0.1, 0.2, 0.3, 0.2, 0.2);
 		ModifySupport<ResultRow> modifier = new ModifySupport<>(viewer);
 		modifier.bind(M.Value, new AmountModifier());
-		ResultLabel label = new ResultLabel();
-		viewer.setLabelProvider(label);
+		viewer.setLabelProvider(new ResultLabel());
+		viewer.getTable().setToolTipText(Tooltips.EPD_Results);
 		Tables.addSorter(viewer, 0, (ResultRow r) -> r.amount.module);
 		Tables.addSorter(viewer, 1, (ResultRow r) -> r.amount.scenario);
 		Tables.addSorter(viewer, 2, (ResultRow r) -> r.result.indicator.name);

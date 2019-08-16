@@ -4,6 +4,7 @@ tooltips = [
     ("All", "UUID"),
     ("All", "File"),
     ("All", "Classification"),
+    ("All", "Data set version"),
 
     ("EPD", "Name"),
     ("EPD", "Further properties"),
@@ -43,7 +44,6 @@ tooltips = [
     ("EPD", "Documentor"),
     ("EPD", "Data formats"),
     ("EPD", "Publication and ownership"),
-    ("EPD", "Data set version"),
     ("EPD", "Owner"),
     ("EPD", "Copyright"),
     ("EPD", "Access restrictions"),

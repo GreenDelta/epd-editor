@@ -16,6 +16,7 @@ import org.openlca.ilcd.processes.Publication;
 import org.openlca.ilcd.util.Processes;
 
 import app.M;
+import app.Tooltips;
 import app.editors.RefLink;
 import app.editors.RefTable;
 import app.editors.VersionField;
@@ -48,6 +49,7 @@ class AdminPage extends FormPage {
 				Processes.dataEntry(process).formats)
 				.withEditor(editor)
 				.withTitle(M.DataFormats)
+				.withTooltip(Tooltips.EPD_DataFormats)
 				.render(body, toolkit);
 		createPublicationSection(body);
 		form.reflow(true);
@@ -55,9 +57,9 @@ class AdminPage extends FormPage {
 
 	private void createDataEntrySection(Composite parent) {
 		Composite comp = UI.formSection(parent, toolkit,
-				M.DataEntry);
+				M.DataEntry, Tooltips.EPD_DataEntry);
 		createLastUpdateText(comp);
-		UI.formLabel(comp, M.Documentor);
+		UI.formLabel(comp, toolkit, M.Documentor, Tooltips.EPD_Documentor);
 		RefLink t = new RefLink(comp, toolkit, DataSetType.CONTACT);
 		DataEntry entry = Processes.dataEntry(process);
 		t.setRef(entry.documentor);
@@ -68,7 +70,8 @@ class AdminPage extends FormPage {
 	}
 
 	private void createLastUpdateText(Composite comp) {
-		Text text = UI.formText(comp, toolkit, M.LastUpdate);
+		Text text = UI.formText(comp, toolkit,
+				M.LastUpdate, Tooltips.EPD_LastUpdate);
 		text.setEditable(false);
 		DataEntry entry = Processes.dataEntry(process);
 		editor.onSaved(() -> {
@@ -83,7 +86,8 @@ class AdminPage extends FormPage {
 
 	private void createPublicationSection(Composite parent) {
 		Composite comp = UI.formSection(parent, toolkit,
-				M.PublicationAndOwnership);
+				M.PublicationAndOwnership,
+				Tooltips.EPD_PublicationAndOwnership);
 		version(comp);
 		owner(comp);
 		copyright(comp);
@@ -91,7 +95,7 @@ class AdminPage extends FormPage {
 	}
 
 	private void owner(Composite comp) {
-		UI.formLabel(comp, M.Owner);
+		UI.formLabel(comp, toolkit, M.Owner, Tooltips.EPD_Owner);
 		RefLink t = new RefLink(comp, toolkit, DataSetType.CONTACT);
 		Publication pub = Processes.publication(process);
 		t.setRef(pub.owner);
@@ -102,8 +106,9 @@ class AdminPage extends FormPage {
 
 	}
 
-	private void copyright(Composite composite) {
-		Button check = UI.formCheckBox(composite, toolkit, M.Copyright);
+	private void copyright(Composite comp) {
+		Button check = UI.formCheckBox(comp, toolkit,
+				M.Copyright, Tooltips.EPD_Copyright);
 		Publication pub = Processes.publication(process);
 		if (pub.copyright != null)
 			check.setSelection(pub.copyright);
@@ -128,6 +133,7 @@ class AdminPage extends FormPage {
 		Publication pub = Processes.publication(process);
 		new TextBuilder(editor, this, toolkit)
 				.text(comp, M.AccessRestrictions,
+						Tooltips.EPD_AccessRestrictions,
 						pub.accessRestrictions);
 	}
 }

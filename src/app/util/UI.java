@@ -283,55 +283,65 @@ public class UI {
 		return button;
 	}
 
-	public static Text formText(Composite parent, int flags) {
-		return formText(parent, null, null, flags | SWT.BORDER);
+	public static Text formText(Composite parent) {
+		return formText(parent, null, null);
 	}
 
 	public static Text formText(Composite parent, String label) {
 		return formText(parent, null, label);
 	}
 
-	public static Text formText(Composite parent, String label, int flags) {
-		return formText(parent, null, label, flags | SWT.BORDER);
-	}
-
-	public static Text formText(Composite parent, FormToolkit toolkit,
+	public static Text formText(Composite comp, FormToolkit tk,
 			String label) {
-		return formText(parent, toolkit, label, SWT.BORDER);
+		return formText(comp, tk, label, null);
 	}
 
-	public static Text formText(Composite parent, FormToolkit toolkit,
-			String label, int flags) {
-		if (label != null)
-			formLabel(parent, toolkit, label);
+	public static Text formText(
+			Composite comp, FormToolkit tk,
+			String label, String tooltip) {
+		if (label != null) {
+			Label lab = formLabel(comp, tk, label);
+			if (tooltip != null) {
+				lab.setToolTipText(tooltip);
+			}
+		}
 		Text text = null;
-		if (toolkit != null)
-			text = toolkit.createText(parent, null, flags);
-		else
-			text = new Text(parent, flags);
+		if (tk != null) {
+			text = tk.createText(comp, null, SWT.BORDER);
+		} else {
+			text = new Text(comp, SWT.BORDER);
+		}
+		if (tooltip != null) {
+			text.setToolTipText(tooltip);
+		}
 		gridData(text, true, false);
 		return text;
 	}
 
-	public static Text formMultiText(Composite parent, String label) {
-		return formMultiText(parent, null, label);
+	public static Text formMultiText(Composite comp, FormToolkit tk) {
+		return formMultiText(comp, tk, null);
 	}
 
-	public static Text formMultiText(Composite parent, FormToolkit toolkit) {
-		return formMultiText(parent, toolkit, null);
-	}
-
-	public static Text formMultiText(Composite parent, FormToolkit toolkit,
+	public static Text formMultiText(Composite comp, FormToolkit tk,
 			String label) {
-		if (label != null)
-			formLabel(parent, toolkit, label);
-		Text text = null;
-		if (toolkit != null)
-			text = toolkit.createText(parent, null, SWT.BORDER | SWT.V_SCROLL
-					| SWT.WRAP | SWT.MULTI);
-		else
-			text = new Text(parent, SWT.BORDER | SWT.V_SCROLL | SWT.WRAP
-					| SWT.MULTI);
+		return formMultiText(comp, tk, label, null);
+	}
+
+	public static Text formMultiText(Composite comp, FormToolkit tk,
+			String label, String tooltip) {
+		if (label != null) {
+			Label lab = formLabel(comp, tk, label);
+			if (tooltip != null) {
+				lab.setToolTipText(tooltip);
+			}
+		}
+		int flags = SWT.BORDER | SWT.V_SCROLL | SWT.WRAP | SWT.MULTI;
+		Text text = tk != null
+				? tk.createText(comp, null, flags)
+				: new Text(comp, flags);
+		if (tooltip != null) {
+			text.setToolTipText(tooltip);
+		}
 		GridData gd = gridData(text, true, false);
 		gd.minimumHeight = 50;
 		gd.heightHint = 50;

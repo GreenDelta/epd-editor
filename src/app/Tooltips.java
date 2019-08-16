@@ -53,7 +53,7 @@ public class Tooltips extends NLS {
 	public static String EPD_Results;
 
 	static {
-		NLS.initializeMessages("app.tooltips", M.class);
+		NLS.initializeMessages("app.tooltips", Tooltips.class);
 	}
 
 	private Tooltips() {

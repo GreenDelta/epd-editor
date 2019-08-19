@@ -36,18 +36,16 @@ class SafetyMarginsConverter {
 		if (element == null)
 			return false;
 		String nsUri = element.getNamespaceURI();
-		return Objects.equals(nsUri, Extensions.NS_EPD)
+		return Objects.equals(nsUri, Vocab.NS_EPD)
 				&& Objects.equals(element.getLocalName(), "safetyMargins");
 	}
 
 	private static SafetyMargins fromElement(Element e) {
 		SafetyMargins margins = new SafetyMargins();
+		margins.margins = Dom.getDouble(Dom.getChild(
+				e, "margins", Vocab.NS_EPD));
 		NodeList nodes = e.getElementsByTagNameNS(
-				Extensions.NS_EPD, "margins");
-		Double val = Util.getDoubleContent(nodes);
-		margins.margins = val;
-		nodes = e.getElementsByTagNameNS(Extensions.NS_EPD,
-				"description");
+				Vocab.NS_EPD, "description");
 		if (nodes == null)
 			return margins;
 		for (int i = 0; i < nodes.getLength(); i++) {
@@ -58,7 +56,7 @@ class SafetyMarginsConverter {
 			if (Strings.nullOrEmpty(text))
 				continue;
 			String lang = ((Element) n).getAttributeNS(
-					Extensions.NS_XML, "lang");
+					Vocab.NS_XML, "lang");
 			if (Strings.nullOrEmpty(lang)) {
 				lang = App.lang();
 			}
@@ -68,9 +66,9 @@ class SafetyMarginsConverter {
 	}
 
 	static void write(EpdDataSet ds, Other other, Document doc) {
-		if (Util.hasNull(ds, other, doc))
+		if (ds == null || other == null || doc == null)
 			return;
-		Util.clear(other, "safetyMargins");
+		Dom.clear(other, "safetyMargins");
 		SafetyMargins m = ds.safetyMargins;
 		if (m == null || (m.margins == null && m.description.isEmpty()))
 			return;
@@ -80,7 +78,7 @@ class SafetyMarginsConverter {
 
 	private static Element toElement(SafetyMargins margins, Document doc) {
 		try {
-			String nsUri = Extensions.NS_EPD;
+			String nsUri = Vocab.NS_EPD;
 			Element root = doc.createElementNS(nsUri, "epd:safetyMargins");
 			if (margins.margins != null) {
 				Element e = doc.createElementNS(nsUri, "epd:margins");
@@ -93,7 +91,7 @@ class SafetyMarginsConverter {
 				Element e = doc.createElementNS(nsUri, "epd:description");
 				e.setTextContent(d.value);
 				if (!Strings.nullOrEmpty(d.lang)) {
-					e.setAttributeNS(Extensions.NS_XML, "xml:lang", d.lang);
+					e.setAttributeNS(Vocab.NS_XML, "xml:lang", d.lang);
 				}
 				root.appendChild(e);
 			}

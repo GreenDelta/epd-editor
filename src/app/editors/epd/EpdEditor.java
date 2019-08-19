@@ -22,6 +22,8 @@ import app.editors.BaseEditor;
 import app.editors.Editors;
 import app.editors.RefCheck;
 import app.editors.RefEditorInput;
+import app.editors.epd.contents.ContentDeclarationPage;
+import app.editors.epd.qmeta.QMetaDataPage;
 import app.store.Data;
 import app.util.UI;
 import epd.model.EpdDataSet;
@@ -65,6 +67,8 @@ public class EpdEditor extends BaseEditor {
 			addPage(new ModelingPage(this));
 			addPage(new AdminPage(this));
 			addPage(new ModulePage(this));
+			addPage(new ContentDeclarationPage(this));
+			addPage(new QMetaDataPage(this));
 			Editors.addInfoPages(this, dataSet.process);
 		} catch (Exception e) {
 			log.error("failed to add editor page", e);

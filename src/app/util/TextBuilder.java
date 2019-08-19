@@ -26,9 +26,21 @@ public class TextBuilder {
 		this.tk = tk;
 	}
 
-	public void text(Composite comp, String label, String initial,
+	public void text(
+			Composite comp,
+			String label,
+			String initial,
 			Consumer<String> fn) {
-		Text t = UI.formText(comp, tk, label);
+		this.text(comp, label, null, initial, fn);
+	}
+
+	public void text(
+			Composite comp,
+			String label,
+			String tooltip,
+			String initial,
+			Consumer<String> fn) {
+		Text t = UI.formText(comp, tk, label, tooltip);
 		if (initial != null)
 			t.setText(initial);
 		t.addModifyListener(e -> {
@@ -37,13 +49,35 @@ public class TextBuilder {
 		});
 	}
 
-	public void text(Composite comp, String label, List<LangString> list) {
-		Text t = UI.formText(comp, tk, label);
+	public void text(
+			Composite comp,
+			String label,
+			List<LangString> list) {
+		text(comp, label, null, list);
+	}
+
+	public void text(
+			Composite comp,
+			String label,
+			String tooltip,
+			List<LangString> list) {
+		Text t = UI.formText(comp, tk, label, tooltip);
 		make(label, list, t);
 	}
 
-	public void multiText(Composite comp, String label, List<LangString> list) {
-		Text t = UI.formMultiText(comp, tk, label);
+	public void multiText(
+			Composite comp,
+			String label,
+			List<LangString> list) {
+		multiText(comp, label, null, list);
+	}
+
+	public void multiText(
+			Composite comp,
+			String label,
+			String tooltip,
+			List<LangString> list) {
+		Text t = UI.formMultiText(comp, tk, label, tooltip);
 		make(label, list, t);
 	}
 

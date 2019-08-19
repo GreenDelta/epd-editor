@@ -21,6 +21,7 @@ import org.openlca.ilcd.util.Processes;
 
 import app.App;
 import app.M;
+import app.Tooltips;
 import app.editors.CategorySection;
 import app.editors.RefLink;
 import app.editors.RefTable;
@@ -38,7 +39,7 @@ class InfoPage extends FormPage {
 	private final EpdDataSet dataSet;
 	private final Process process;
 
-	private FormToolkit toolkit;
+	private FormToolkit tk;
 
 	public InfoPage(EpdEditor editor) {
 		super(editor, "EpdInfoPage", M.DataSetInformation);
@@ -49,13 +50,13 @@ class InfoPage extends FormPage {
 
 	@Override
 	protected void createFormContent(IManagedForm mForm) {
-		toolkit = mForm.getToolkit();
+		tk = mForm.getToolkit();
 		ProcessName pName = Processes.processName(process);
 		Supplier<String> title = () -> M.EPD + ": " + App.s(pName.name);
 		ScrolledForm form = UI.formHeader(mForm, title.get());
 		editor.onSaved(() -> form.setText(title.get()));
 		Composite body = UI.formBody(form, mForm.getToolkit());
-		TextBuilder tb = new TextBuilder(editor, this, toolkit);
+		TextBuilder tb = new TextBuilder(editor, this, tk);
 		infoSection(body, tb);
 		categorySection(body);
 		qRefSection(body);
@@ -63,7 +64,8 @@ class InfoPage extends FormPage {
 				Processes.dataSetInfo(process).externalDocs)
 				.withEditor(editor)
 				.withTitle(M.ExternalDocumentationSources)
-				.render(body, toolkit);
+				.withTooltip(Tooltips.EPD_ExternalDocumentationSources)
+				.render(body, tk);
 		createSafetyMarginsSection(body, tb);
 		createTimeSection(body, tb);
 		createGeographySection(body, tb);
@@ -72,37 +74,39 @@ class InfoPage extends FormPage {
 				Processes.technology(process).pictures)
 				.withEditor(editor)
 				.withTitle(M.FlowDiagramsOrPictures)
-				.render(body, toolkit);
+				.withTooltip(Tooltips.EPD_FlowDiagramsOrPictures)
+				.render(body, tk);
 		form.reflow(true);
 	}
 
 	private void infoSection(Composite parent, TextBuilder tb) {
-		Composite comp = UI.infoSection(process, parent, toolkit);
+		Composite comp = UI.infoSection(process, parent, tk);
 		ProcessName pName = Processes.processName(process);
-		tb.text(comp, M.Name, pName.name);
+		tb.text(comp, M.Name, Tooltips.EPD_Name, pName.name);
 		tb.text(comp, M.QuantitativeProperties,
-				pName.flowProperties);
+				Tooltips.EPD_FurtherProperties, pName.flowProperties);
 		DataSetInfo info = Processes.dataSetInfo(process);
-		tb.text(comp, M.Synonyms, info.synonyms);
-		tb.multiText(comp, M.Comment, info.comment);
-		UI.fileLink(process, comp, toolkit);
+		tb.text(comp, M.Synonyms, Tooltips.EPD_Synonyms, info.synonyms);
+		tb.multiText(comp, M.Comment, Tooltips.EPD_Comment, info.comment);
+		UI.fileLink(process, comp, tk);
 	}
 
 	private void categorySection(Composite body) {
 		DataSetInfo info = Processes.dataSetInfo(process);
 		CategorySection section = new CategorySection(editor,
 				DataSetType.PROCESS, info.classifications);
-		section.render(body, toolkit);
+		section.render(body, tk);
 	}
 
 	private void qRefSection(Composite parent) {
-		Composite comp = UI.formSection(parent, toolkit,
-				M.DeclaredProduct);
-		UI.formLabel(comp, toolkit, M.Product);
-		RefLink refText = new RefLink(comp, toolkit, DataSetType.FLOW);
+		Composite comp = UI.formSection(parent, tk,
+				M.DeclaredProduct, Tooltips.EPD_DeclaredProduct);
+		UI.formLabel(comp, tk, M.Product, Tooltips.EPD_DeclaredProduct);
+		RefLink refText = new RefLink(comp, tk, DataSetType.FLOW);
 		Exchange exchange = dataSet.productExchange();
 		refText.setRef(exchange.flow);
-		Text amountText = UI.formText(comp, toolkit, M.Amount);
+		Text amountText = UI.formText(comp, tk,
+				M.Amount, Tooltips.EPD_ProductAmount);
 		amountText.setText(Double.toString(exchange.meanAmount));
 		amountText.addModifyListener(e -> {
 			try {
@@ -114,7 +118,8 @@ class InfoPage extends FormPage {
 				amountText.setBackground(Colors.errorColor());
 			}
 		});
-		Text unitText = UI.formText(comp, toolkit, M.Unit);
+		Text unitText = UI.formText(comp, tk,
+				M.Unit, Tooltips.EPD_ProductUnit);
 		unitText.setText(RefDeps.getRefUnit(process));
 		unitText.setEditable(false);
 		refText.onChange(ref -> {
@@ -125,19 +130,22 @@ class InfoPage extends FormPage {
 	}
 
 	private void createSafetyMarginsSection(Composite parent, TextBuilder tb) {
-		Composite composite = UI.formSection(parent, toolkit,
-				M.SafetyMargins);
+		Composite comp = UI.formSection(parent, tk,
+				M.SafetyMargins, Tooltips.EPD_UncertaintyMargins);
 		SafetyMargins margins = dataSet.safetyMargins;
 		if (margins == null) {
 			margins = new SafetyMargins();
 			dataSet.safetyMargins = margins;
 		}
-		Text marginsText = UI.formText(composite, M.SafetyMargin);
+		Text marginsText = UI.formText(comp, tk,
+				M.SafetyMargin, Tooltips.EPD_UncertaintyMargins);
 		if (margins.margins != null) {
 			marginsText.setText(margins.margins.toString());
 		}
 		marginsText.addModifyListener(e -> modifyMargins(marginsText));
-		tb.multiText(composite, M.Description, margins.description);
+		tb.multiText(comp, M.Description,
+				Tooltips.EPD_UncertaintyMarginsDescription,
+				margins.description);
 	}
 
 	private void modifyMargins(Text text) {
@@ -161,13 +169,14 @@ class InfoPage extends FormPage {
 
 	private void createTechnologySection(Composite body, TextBuilder tb) {
 		Technology tech = Processes.technology(process);
-		Composite comp = UI.formSection(body, toolkit, M.Technology);
+		Composite comp = UI.formSection(body, tk,
+				M.Technology, Tooltips.EPD_Technology);
 		tb.multiText(comp, M.TechnologyDescription,
-				tech.description);
+				Tooltips.EPD_TechnologyDescription, tech.description);
 		tb.multiText(comp, M.TechnologicalApplicability,
-				tech.applicability);
-		UI.formLabel(comp, M.Pictogram);
-		RefLink refText = new RefLink(comp, toolkit, DataSetType.SOURCE);
+				Tooltips.EPD_TechnicalPrupose, tech.applicability);
+		UI.formLabel(comp, tk, M.Pictogram, Tooltips.EPD_Pictogram);
+		RefLink refText = new RefLink(comp, tk, DataSetType.SOURCE);
 		refText.setRef(tech.pictogram);
 		refText.onChange(ref -> {
 			tech.pictogram = ref;
@@ -177,31 +186,37 @@ class InfoPage extends FormPage {
 
 	private void createTimeSection(Composite body, TextBuilder tb) {
 		Time time = Processes.time(process);
-		Composite comp = UI.formSection(body, toolkit, M.Time);
-		intText(comp, M.ReferenceYear, time.referenceYear, val -> {
-			time.referenceYear = val;
-		});
-		intText(comp, M.ValidUntil, time.validUntil, val -> {
-			time.validUntil = val;
-		});
-		tb.multiText(comp, M.TimeDescription, time.description);
+		Composite comp = UI.formSection(body, tk, M.Time, Tooltips.EPD_Time);
+		intText(comp, M.ReferenceYear, Tooltips.EPD_ReferenceYear,
+				time.referenceYear, val -> {
+					time.referenceYear = val;
+				});
+		intText(comp, M.ValidUntil, Tooltips.EPD_ValidUntil,
+				time.validUntil, val -> {
+					time.validUntil = val;
+				});
+		tb.multiText(comp, M.TimeDescription,
+				Tooltips.EPD_TimeDescription, time.description);
 	}
 
 	private void createGeographySection(Composite body, TextBuilder tb) {
 		Location location = Processes.location(process);
-		Composite comp = UI.formSection(body, toolkit, M.Geography);
-		toolkit.createLabel(comp, M.Location);
+		Composite comp = UI.formSection(body, tk, M.Geography,
+				Tooltips.EPD_Geography);
+		tk.createLabel(comp, M.Location)
+				.setToolTipText(Tooltips.EPD_Location);
 		LocationCombo viewer = new LocationCombo();
 		viewer.create(comp, location.code, code -> {
 			location.code = code;
 			editor.setDirty();
 		});
-		tb.multiText(comp, M.GeographyDescription, location.description);
+		tb.multiText(comp, M.GeographyDescription,
+				Tooltips.EPD_GeographyDescription, location.description);
 	}
 
-	private void intText(Composite comp, String label, Integer initial,
-			Consumer<Integer> fn) {
-		Text text = UI.formText(comp, toolkit, label);
+	private void intText(Composite comp, String label, String tooltip,
+			Integer initial, Consumer<Integer> fn) {
+		Text text = UI.formText(comp, tk, label, tooltip);
 		if (initial != null)
 			text.setText(initial.toString());
 		text.addModifyListener(e -> {

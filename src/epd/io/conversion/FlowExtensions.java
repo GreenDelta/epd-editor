@@ -42,7 +42,7 @@ public class FlowExtensions {
 		Other extension = getMethodExtension(p.flow, false);
 		if (extension == null)
 			return;
-		Element e = Util.getElement(extension, "vendorSpecificProduct");
+		Element e = Dom.getElement(extension, "vendorSpecificProduct");
 		if (e != null) {
 			try {
 				p.vendorSpecific = Boolean
@@ -95,12 +95,12 @@ public class FlowExtensions {
 				"referenceToSource", extension);
 	}
 
-	private static void writeVendorSpecificTag(EpdProduct p, Other extension) {
+	private static void writeVendorSpecificTag(EpdProduct p, Other ext) {
 		String tagName = "vendorSpecificProduct";
-		Element e = Util.getElement(extension, tagName);
+		Element e = Dom.getElement(ext, tagName);
 		if (e == null) {
-			e = Util.createElement(extension, tagName);
-			extension.any.add(e);
+			e = Dom.createElement(tagName);
+			ext.any.add(e);
 		}
 		e.setTextContent(Boolean.toString(p.vendorSpecific));
 	}

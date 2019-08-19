@@ -40,7 +40,7 @@ class DataSetRefExtension {
 	public static void write(Ref descriptor, String tagName, Other extension) {
 		if (tagName == null || extension == null)
 			return;
-		Element old = Util.getElement(extension, tagName);
+		Element old = Dom.getElement(extension, tagName);
 		if (old != null)
 			extension.any.remove(old);
 		if (descriptor == null)
@@ -97,17 +97,16 @@ class DataSetRefExtension {
 	}
 
 	private Ref read(DataSetType type, Other other) {
-		Element element = Util.getElement(other, tagName);
+		Element element = Dom.getElement(other, tagName);
 		if (element == null)
 			return null;
 		try {
 			Ref ref = new Ref();
 			ref.type = type;
 			ref.uuid = element.getAttribute("refObjectId");
-			Element nameElement = Util.getChild(element,
+			Element nameElement = Dom.findChild(element,
 					"shortDescription");
 			if (nameElement != null) {
-				// TODO: support multiple languages here
 				String lang = nameElement.getAttribute("xml:lang");
 				String val = nameElement.getTextContent();
 				LangString.set(ref.name, val, lang);
@@ -123,7 +122,7 @@ class DataSetRefExtension {
 	private void write(Ref d, Other other) {
 		if (other == null)
 			return;
-		Element element = Util.getElement(other, tagName);
+		Element element = Dom.getElement(other, tagName);
 		if (element != null)
 			other.any.remove(element);
 		element = createElement(d);
@@ -133,10 +132,10 @@ class DataSetRefExtension {
 	}
 
 	private Element createElement(Ref d) {
-		Document doc = Util.createDocument();
+		Document doc = Dom.createDocument();
 		if (doc == null || d == null)
 			return null;
-		Element e = doc.createElementNS(Extensions.NS_EPD, "epd:" + tagName);
+		Element e = doc.createElementNS(Vocab.NS_EPD, "epd:" + tagName);
 		e.setAttribute("type", type);
 		e.setAttribute("refObjectId", d.uuid);
 		e.setAttribute("uri", "../" + path + "/" + d.uuid);

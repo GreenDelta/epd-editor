@@ -120,17 +120,17 @@ public class CategoryDialog extends FormDialog {
 	@Override
 	protected void createFormContent(IManagedForm mform) {
 		getShell().setText(M.SelectACategory);
-		FormToolkit toolkit = mform.getToolkit();
-		Composite body = UI.formBody(mform.getForm(), toolkit);
-		createCombo(toolkit, body);
+		FormToolkit tk = mform.getToolkit();
+		Composite body = UI.formBody(mform.getForm(), tk);
+		createCombo(tk, body);
 		createTree(body);
 	}
 
-	private void createCombo(FormToolkit toolkit, Composite body) {
-		Composite composite = UI.formComposite(body, toolkit);
-		UI.gridData(composite, true, false);
-		UI.formLabel(composite, toolkit, M.ClassificationSystem);
-		ComboViewer combo = new ComboViewer(composite);
+	private void createCombo(FormToolkit tk, Composite body) {
+		Composite comp = UI.formComposite(body, tk);
+		UI.gridData(comp, true, false);
+		UI.formLabel(comp, tk, M.ClassificationSystem);
+		ComboViewer combo = new ComboViewer(comp);
 		combo.setContentProvider(ArrayContentProvider.getInstance());
 		UI.gridData(combo.getControl(), true, false);
 		combo.setLabelProvider(new ComboLabel());

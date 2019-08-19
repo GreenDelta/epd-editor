@@ -96,12 +96,12 @@ class MaterialPropertyTable {
 			try {
 				if (element == null)
 					return;
-				if (!text.equals(element.value)) {
-					element.value = Double.valueOf(text);
+				double val = Double.valueOf(text);
+				if (element.value != val) {
+					element.value = val;
 					editor.setDirty();
 				}
 			} catch (NumberFormatException e) {
-
 			}
 		}
 	}

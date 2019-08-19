@@ -126,4 +126,33 @@ public class Strings {
 		}
 		return b.toString();
 	}
+
+	public static String wrap(String text, int len) {
+		if (text == null)
+			return "";
+		String[] words = text.split("\\s");
+		StringBuilder s = new StringBuilder();
+		StringBuilder line = new StringBuilder();
+		for (String w : words) {
+			if (line.length() > 0
+					&& (line.length() + w.length() > len)) {
+				if (s.length() > 0) {
+					s.append('\n');
+				}
+				s.append(line.toString());
+				line = new StringBuilder();
+			}
+			if (line.length() > 0) {
+				line.append(' ');
+			}
+			line.append(w);
+		}
+		if (line.length() > 0) {
+			if (s.length() > 0) {
+				s.append('\n');
+			}
+			s.append(line.toString());
+		}
+		return s.toString();
+	}
 }

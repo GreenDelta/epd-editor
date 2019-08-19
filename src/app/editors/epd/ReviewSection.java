@@ -18,6 +18,7 @@ import org.openlca.ilcd.processes.Validation;
 import org.openlca.ilcd.util.Processes;
 
 import app.M;
+import app.Tooltips;
 import app.editors.RefLink;
 import app.editors.RefTable;
 import app.rcp.Icon;
@@ -46,10 +47,12 @@ class ReviewSection {
 		this.toolkit = toolkit;
 		this.form = form;
 		Section section = UI.section(body, toolkit, M.Reviews);
+		section.setToolTipText(Tooltips.EPD_Review);
 		parent = UI.sectionClient(section, toolkit);
 		UI.gridLayout(parent, 1);
-		for (Review review : validation.reviews)
+		for (Review review : validation.reviews) {
 			new Sec(review);
+		}
 		Action addAction = Actions.create(M.AddReview,
 				Icon.ADD.des(), this::addReview);
 		Actions.bind(section, addAction);
@@ -77,6 +80,7 @@ class ReviewSection {
 		private void createUi() {
 			int idx = validation.reviews.indexOf(review) + 1;
 			section = UI.section(parent, toolkit, M.Review + " " + idx);
+			section.setToolTipText(Tooltips.EPD_Review);
 			Composite body = UI.sectionClient(section, toolkit);
 			UI.gridLayout(body, 1);
 			Composite comp = UI.formComposite(body, toolkit);
@@ -91,7 +95,8 @@ class ReviewSection {
 		}
 
 		private void createReportText(Composite comp) {
-			UI.formLabel(comp, M.CompleteReviewReport);
+			UI.formLabel(comp, toolkit,
+					M.CompleteReviewReport, Tooltips.EPD_ReviewReport);
 			RefLink t = new RefLink(comp, toolkit, DataSetType.SOURCE);
 			t.setRef(review.report);
 			t.onChange(ref -> {
@@ -104,16 +109,18 @@ class ReviewSection {
 			RefTable.create(DataSetType.CONTACT, review.reviewers)
 					.withEditor(editor)
 					.withTitle(M.Reviewer)
+					.withTooltip(Tooltips.EPD_Reviewer)
 					.render(comp, toolkit);
 		}
 
 		private void detailsText(Composite comp) {
 			TextBuilder tb = new TextBuilder(editor, page, toolkit);
-			tb.multiText(comp, M.ReviewDetails, review.details);
+			tb.multiText(comp, M.ReviewDetails,
+					Tooltips.EPD_ReviewDetails, review.details);
 		}
 
 		private void typeCombo(Composite comp) {
-			UI.formLabel(comp, M.ReviewType);
+			UI.formLabel(comp, toolkit, M.ReviewType, Tooltips.EPD_ReviewType);
 			ComboViewer c = new ComboViewer(comp);
 			UI.gridData(c.getControl(), true, false);
 			c.setContentProvider(ArrayContentProvider.getInstance());

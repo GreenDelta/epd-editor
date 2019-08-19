@@ -14,6 +14,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import app.M;
+import app.Tooltips;
 import app.rcp.Icon;
 import app.util.Actions;
 import app.util.Tables;
@@ -42,6 +43,7 @@ class ScenarioTable {
 		UI.gridLayout(comp, 1);
 		table = Tables.createViewer(comp, NAME, GROUP, DESCRIPTION, DEFAULT);
 		table.setLabelProvider(new LabelProvider());
+		table.getTable().setToolTipText(Tooltips.EPD_Scenarios);
 		Tables.bindColumnWidths(table, 0.25, 0.25, 0.25, 0.25);
 		addModifiers();
 		UI.gridData(table.getControl(), true, true).heightHint = 150;

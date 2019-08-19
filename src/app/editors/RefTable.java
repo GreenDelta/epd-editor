@@ -26,6 +26,7 @@ public class RefTable {
 
 	private IEditor editor;
 	private String title = "?";
+	private String tooltip;
 
 	private Consumer<Ref> onAdd;
 	private Consumer<Ref> onRemove;
@@ -49,6 +50,11 @@ public class RefTable {
 		return this;
 	}
 
+	public RefTable withTooltip(String tooltip) {
+		this.tooltip = tooltip;
+		return this;
+	}
+
 	public RefTable onAdd(Consumer<Ref> fn) {
 		this.onAdd = fn;
 		return this;
@@ -61,6 +67,9 @@ public class RefTable {
 
 	public void render(Composite parent, FormToolkit tk) {
 		Section section = UI.section(parent, tk, title);
+		if (tooltip != null) {
+			section.setToolTipText(tooltip);
+		}
 		Composite comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
 		TableViewer table = Tables.createViewer(comp, Labels.get(type));
@@ -70,6 +79,9 @@ public class RefTable {
 		Actions.bind(table, actions);
 		table.setInput(refs);
 		table.getTable().getColumn(0).setWidth(350);
+		if (tooltip != null) {
+			table.getTable().setToolTipText(tooltip);
+		}
 	}
 
 	private Action[] createActions(TableViewer table) {

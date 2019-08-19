@@ -87,8 +87,6 @@ public class Validation implements IRunnableWithProgress {
 				valRefs.putAll(refBuild.getReferences());
 			}
 			chain.setObjectsToValidate(valRefs);
-			// chain.setUpdateEventListener(this); TODO: show validation
-			// progress
 			return chain;
 		} catch (Exception e) {
 			throw new InvocationTargetException(e,

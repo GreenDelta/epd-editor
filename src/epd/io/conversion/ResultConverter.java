@@ -78,7 +78,7 @@ class ResultConverter {
 	static void writeResults(EpdDataSet ds) {
 		if (ds == null || ds.process == null)
 			return;
-		Document doc = Util.createDocument();
+		Document doc = Dom.createDocument();
 		for (IndicatorResult result : ds.results) {
 			Indicator indicator = result.indicator;
 			if (indicator == null)
@@ -136,7 +136,7 @@ class ResultConverter {
 			Document doc) {
 		if (other == null || indicator == null)
 			return;
-		Element root = doc.createElementNS(Extensions.NS_EPD,
+		Element root = doc.createElementNS(Vocab.NS_EPD,
 				"epd:referenceToUnitGroupDataSet");
 		root.setAttribute("type", "unit group data set");
 		root.setAttribute("refObjectId", indicator.unitGroupUUID);

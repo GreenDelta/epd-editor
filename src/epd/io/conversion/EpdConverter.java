@@ -9,6 +9,7 @@ import javax.xml.namespace.QName;
 import org.openlca.ilcd.commons.Other;
 import org.openlca.ilcd.processes.DataSetInfo;
 import org.openlca.ilcd.processes.Method;
+import org.openlca.ilcd.processes.Modelling;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.QuantitativeReference;
 import org.openlca.ilcd.util.Processes;
@@ -16,6 +17,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import epd.model.EpdDataSet;
+import epd.model.qmeta.QMetaData;
 
 /**
  * Converts an EPD to an ILCD process data set
@@ -50,20 +52,42 @@ class EpdConverter {
 	}
 
 	private void writeExtensions() {
+		Document doc = Dom.createDocument();
+
+		// write the Q-Meta data
+		QMetaData qmeta = dataSet.qMetaData;
+		if (qmeta == null) {
+			Modelling mod = Processes.getModelling(dataSet.process);
+			if (mod != null) {
+				// remove possible old data
+				mod.other = null;
+			}
+		} else {
+			Modelling mod = Processes.modelling(dataSet.process);
+			if (mod.other == null) {
+				mod.other = new Other();
+			}
+			dataSet.qMetaData.write(mod.other, doc);
+		}
+
+		// write the other extension elements
 		DataSetInfo info = Processes.dataSetInfo(dataSet.process);
 		Other other = info.other;
 		if (other == null) {
 			other = new Other();
 			info.other = other;
 		}
-		Document doc = Util.createDocument();
 		ModuleConverter.writeModules(dataSet, other, doc);
 		ScenarioConverter.writeScenarios(dataSet, other, doc);
 		SafetyMarginsConverter.write(dataSet, other, doc);
+		if (dataSet.contentDeclaration != null) {
+			dataSet.contentDeclaration.write(other, doc);
+		}
 		writeProfile();
 		writeSubType();
-		if (Util.isEmpty(other))
+		if (Dom.isEmpty(other)) {
 			info.other = null;
+		}
 	}
 
 	private void writeSubType() {
@@ -76,7 +100,7 @@ class EpdConverter {
 		}
 		Method method = Processes.method(dataSet.process);
 		method.other = new Other();
-		Element e = Util.createElement(method.other, "subType");
+		Element e = Dom.createElement("subType");
 		e.setTextContent(dataSet.subType.getLabel());
 		method.other.any.add(e);
 	}

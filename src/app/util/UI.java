@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.M;
+import app.Tooltips;
 import app.rcp.Icon;
 
 public class UI {
@@ -44,8 +45,9 @@ public class UI {
 
 	public static Composite infoSection(IDataSet ds, Composite parent,
 			FormToolkit tk) {
-		Composite comp = UI.formSection(parent, tk, M.GeneralInformation);
-		Text text = UI.formText(comp, tk, M.UUID);
+		Composite comp = UI.formSection(parent, tk,
+				M.GeneralInformation, Tooltips.All_GeneralInformation);
+		Text text = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);
 		text.setEditable(false);
 		String uuid = ds != null ? ds.getUUID() : null;
 		if (uuid != null)
@@ -56,10 +58,11 @@ public class UI {
 	public static void fileLink(IDataSet ds, Composite comp, FormToolkit tk) {
 		if (ds == null || comp == null || tk == null)
 			return;
-		UI.formLabel(comp, tk, M.File);
+		UI.formLabel(comp, tk, M.File, Tooltips.All_File);
 		ImageHyperlink link = tk.createImageHyperlink(comp, SWT.NONE);
 		link.setForeground(Colors.linkBlue());
 		link.setImage(Icon.DOCUMENT.img());
+		link.setToolTipText(Tooltips.All_File);
 		Ref ref = Ref.of(ds);
 		File f = App.store.getFile(ref);
 		if (f == null || !f.exists())
@@ -83,22 +86,32 @@ public class UI {
 	}
 
 	public static Shell shell() {
-		IWorkbenchWindow ww = PlatformUI.getWorkbench()
-				.getActiveWorkbenchWindow();
-		if (ww != null && ww.getShell() != null)
-			return ww.getShell();
+		// first, we try to get the shell from the active workbench window
 		Shell shell = null;
+		try {
+			IWorkbenchWindow wb = PlatformUI.getWorkbench()
+					.getActiveWorkbenchWindow();
+			if (wb != null) {
+				shell = wb.getShell();
+			}
+			if (shell != null)
+				return shell;
+		} catch (Exception e) {
+		}
+
+		// then, try to get it from the display
 		Display display = Display.getCurrent();
-		if (display == null)
+		if (display == null) {
 			display = Display.getDefault();
-		if (display != null)
+		}
+		if (display != null) {
 			shell = display.getActiveShell();
-		if (shell == null)
-			if (display != null)
-				shell = new Shell(display);
-			else
-				shell = new Shell();
-		return shell;
+		}
+		if (shell != null)
+			return shell;
+		return display != null
+				? new Shell(display)
+				: new Shell();
 	}
 
 	public static Font boldFont() {
@@ -171,10 +184,16 @@ public class UI {
 		return form;
 	}
 
-	public static Composite formSection(Composite parent, FormToolkit toolkit,
+	public static Composite formSection(Composite comp, FormToolkit tk,
 			String label) {
-		Section section = section(parent, toolkit, label);
-		Composite client = sectionClient(section, toolkit);
+		return formSection(comp, tk, label, null);
+	}
+
+	public static Composite formSection(Composite comp, FormToolkit tk,
+			String label, String tooltip) {
+		Section section = section(comp, tk, label);
+		section.setToolTipText(tooltip);
+		Composite client = sectionClient(section, tk);
 		return client;
 	}
 
@@ -256,72 +275,78 @@ public class UI {
 		return composite;
 	}
 
-	public static Button formCheckBox(Composite parent, String label) {
-		return formCheckBox(parent, null, label);
+	public static Button formCheckBox(Composite comp, FormToolkit tk,
+			String label) {
+		return formCheckBox(comp, tk, label, null);
 	}
 
-	public static Button formCheckBox(Composite parent, FormToolkit toolkit,
-			String label) {
-		formLabel(parent, label);
-		Button button = null;
-		if (toolkit != null)
-			button = toolkit.createButton(parent, null, SWT.CHECK);
-		else
-			button = new Button(parent, SWT.CHECK);
+	public static Button formCheckBox(Composite comp, FormToolkit tk,
+			String label, String tooltip) {
+		formLabel(comp, tk, label, tooltip);
+		Button button = tk != null
+				? tk.createButton(comp, null, SWT.CHECK)
+				: new Button(comp, SWT.CHECK);
+		if (tooltip != null) {
+			button.setToolTipText(tooltip);
+		}
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false);
 		button.setLayoutData(gd);
 		return button;
 	}
 
-	public static Text formText(Composite parent, int flags) {
-		return formText(parent, null, null, flags | SWT.BORDER);
+	public static Text formText(Composite parent) {
+		return formText(parent, null, null);
 	}
 
 	public static Text formText(Composite parent, String label) {
 		return formText(parent, null, label);
 	}
 
-	public static Text formText(Composite parent, String label, int flags) {
-		return formText(parent, null, label, flags | SWT.BORDER);
-	}
-
-	public static Text formText(Composite parent, FormToolkit toolkit,
+	public static Text formText(Composite comp, FormToolkit tk,
 			String label) {
-		return formText(parent, toolkit, label, SWT.BORDER);
+		return formText(comp, tk, label, null);
 	}
 
-	public static Text formText(Composite parent, FormToolkit toolkit,
-			String label, int flags) {
-		if (label != null)
-			formLabel(parent, toolkit, label);
+	public static Text formText(
+			Composite comp, FormToolkit tk,
+			String label, String tooltip) {
+		if (label != null) {
+			formLabel(comp, tk, label, tooltip);
+		}
 		Text text = null;
-		if (toolkit != null)
-			text = toolkit.createText(parent, null, flags);
-		else
-			text = new Text(parent, flags);
+		if (tk != null) {
+			text = tk.createText(comp, null, SWT.BORDER);
+		} else {
+			text = new Text(comp, SWT.BORDER);
+		}
+		if (tooltip != null) {
+			text.setToolTipText(tooltip);
+		}
 		gridData(text, true, false);
 		return text;
 	}
 
-	public static Text formMultiText(Composite parent, String label) {
-		return formMultiText(parent, null, label);
+	public static Text formMultiText(Composite comp, FormToolkit tk) {
+		return formMultiText(comp, tk, null);
 	}
 
-	public static Text formMultiText(Composite parent, FormToolkit toolkit) {
-		return formMultiText(parent, toolkit, null);
-	}
-
-	public static Text formMultiText(Composite parent, FormToolkit toolkit,
+	public static Text formMultiText(Composite comp, FormToolkit tk,
 			String label) {
-		if (label != null)
-			formLabel(parent, toolkit, label);
-		Text text = null;
-		if (toolkit != null)
-			text = toolkit.createText(parent, null, SWT.BORDER | SWT.V_SCROLL
-					| SWT.WRAP | SWT.MULTI);
-		else
-			text = new Text(parent, SWT.BORDER | SWT.V_SCROLL | SWT.WRAP
-					| SWT.MULTI);
+		return formMultiText(comp, tk, label, null);
+	}
+
+	public static Text formMultiText(Composite comp, FormToolkit tk,
+			String label, String tooltip) {
+		if (label != null) {
+			formLabel(comp, tk, label, tooltip);
+		}
+		int flags = SWT.BORDER | SWT.V_SCROLL | SWT.WRAP | SWT.MULTI;
+		Text text = tk != null
+				? tk.createText(comp, null, flags)
+				: new Text(comp, flags);
+		if (tooltip != null) {
+			text.setToolTipText(tooltip);
+		}
 		GridData gd = gridData(text, true, false);
 		gd.minimumHeight = 50;
 		gd.heightHint = 50;
@@ -329,35 +354,51 @@ public class UI {
 		return text;
 	}
 
-	public static Combo formCombo(Composite parent, String label) {
-		return formCombo(parent, null, label);
+	public static Combo formCombo(Composite comp, String label) {
+		return formCombo(comp, null, label);
 	}
 
-	public static Combo formCombo(Composite parent, FormToolkit toolkit,
+	public static Combo formCombo(Composite comp, FormToolkit tk,
 			String label) {
-		formLabel(parent, toolkit, label);
-		Combo combo = new Combo(parent, SWT.READ_ONLY);
+		return formCombo(comp, tk, label, null);
+	}
+
+	public static Combo formCombo(Composite comp, FormToolkit tk,
+			String label, String tooltip) {
+		formLabel(comp, tk, label, tooltip);
+		Combo combo = new Combo(comp, SWT.READ_ONLY);
+		if (tooltip != null) {
+			combo.setToolTipText(tooltip);
+		}
 		gridData(combo, true, false);
 		return combo;
 	}
 
-	public static Label formLabel(Composite parent, String text) {
-		return formLabel(parent, null, text);
+	public static Label formLabel(Composite comp, String label) {
+		return formLabel(comp, null, label);
 	}
 
-	public static Label formLabel(Composite parent, FormToolkit toolkit,
+	public static Label formLabel(Composite parent, FormToolkit tk,
 			String label) {
-		Label labelWidget = null;
-		if (toolkit != null)
-			labelWidget = toolkit.createLabel(parent, label, SWT.NONE);
+		return formLabel(parent, tk, label, null);
+	}
+
+	public static Label formLabel(Composite parent, FormToolkit tk,
+			String label, String tooltip) {
+		Label lab = null;
+		if (tk != null)
+			lab = tk.createLabel(parent, label, SWT.NONE);
 		else {
-			labelWidget = new Label(parent, SWT.NONE);
-			labelWidget.setText(label);
+			lab = new Label(parent, SWT.NONE);
+			lab.setText(label);
 		}
-		GridData gridData = gridData(labelWidget, false, false);
+		if (tooltip != null) {
+			lab.setToolTipText(tooltip);
+		}
+		GridData gridData = gridData(lab, false, false);
 		gridData.verticalAlignment = SWT.TOP;
 		gridData.verticalIndent = 2;
-		return labelWidget;
+		return lab;
 	}
 
 	public static Label filler(Composite parent, FormToolkit tk) {

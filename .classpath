@@ -70,11 +70,7 @@
 	<classpathentry exported="true" kind="lib" path="libs/truevfs-access-swing-0.11.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/truevfs-profile-default-0.11.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/xmlbeans-2.6.0.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="output" path="bin"/>

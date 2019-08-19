@@ -38,7 +38,7 @@ class ScenarioConverter {
 		if (element == null)
 			return false;
 		String nsUri = element.getNamespaceURI();
-		if (!Objects.equals(nsUri, Extensions.NS_EPD))
+		if (!Objects.equals(nsUri, Vocab.NS_EPD))
 			return false;
 		if (!Objects.equals(element.getLocalName(), "scenarios"))
 			return false;
@@ -49,7 +49,7 @@ class ScenarioConverter {
 	private static List<Scenario> fromElement(Element element) {
 		List<Scenario> scenarios = new ArrayList<>();
 		NodeList list = element.getElementsByTagNameNS(
-				Extensions.NS_EPD,
+				Vocab.NS_EPD,
 				"scenario");
 		for (int i = 0; i < list.getLength(); i++) {
 			Node node = list.item(i);
@@ -61,7 +61,7 @@ class ScenarioConverter {
 				String attVal = atts.item(m).getNodeValue();
 				setField(scenario, attName, attVal);
 			}
-			Element e = Util.getChild((Element) node, "description");
+			Element e = Dom.findChild((Element) node, "description");
 			if (e != null)
 				scenario.description = Strings.trim(e.getTextContent());
 		}
@@ -87,11 +87,11 @@ class ScenarioConverter {
 	}
 
 	static void writeScenarios(EpdDataSet dataSet, Other other, Document doc) {
-		if (Util.hasNull(dataSet, other, doc)
+		if (dataSet == null || other == null || doc == null
 				|| dataSet.scenarios.isEmpty())
 			return;
-		Util.clear(other, "scenarios");
-		Element root = doc.createElementNS(Extensions.NS_EPD,
+		Dom.clear(other, "scenarios");
+		Element root = doc.createElementNS(Vocab.NS_EPD,
 				"epd:scenarios");
 		for (Scenario scenario : dataSet.scenarios) {
 			Element element = toElement(scenario, doc);
@@ -103,7 +103,7 @@ class ScenarioConverter {
 
 	private static Element toElement(Scenario scenario, Document doc) {
 		try {
-			String nsUri = Extensions.NS_EPD;
+			String nsUri = Vocab.NS_EPD;
 			Element element = doc.createElementNS(nsUri, "epd:scenario");
 			if (scenario.name != null)
 				element.setAttribute("epd:name", scenario.name);

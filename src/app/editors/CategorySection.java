@@ -16,6 +16,7 @@ import org.openlca.ilcd.commons.Classification;
 import org.openlca.ilcd.commons.DataSetType;
 
 import app.M;
+import app.Tooltips;
 import app.rcp.Icon;
 import app.util.Actions;
 import app.util.Tables;
@@ -37,15 +38,17 @@ public class CategorySection {
 
 	public void render(Composite parent, FormToolkit tk) {
 		Section section = UI.section(parent, tk, M.Classification);
+		section.setToolTipText(Tooltips.All_Classification);
 		Composite composite = UI.sectionClient(section, tk);
 		UI.gridLayout(composite, 1);
-		TableViewer viewer = Tables.createViewer(composite,
+		TableViewer table = Tables.createViewer(composite,
 				M.ClassificationSystem,
 				M.CategoryPath);
-		viewer.setLabelProvider(new RowLabel());
-		viewer.setInput(classifications);
-		Tables.bindColumnWidths(viewer, 0.3, 0.7);
-		bindActions(section, viewer);
+		table.getTable().setToolTipText(Tooltips.All_Classification);
+		table.setLabelProvider(new RowLabel());
+		table.setInput(classifications);
+		Tables.bindColumnWidths(table, 0.3, 0.7);
+		bindActions(section, table);
 	}
 
 	private void bindActions(Section section, TableViewer viewer) {

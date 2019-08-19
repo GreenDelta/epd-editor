@@ -20,6 +20,7 @@ import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.Processes;
 
 import app.M;
+import app.Tooltips;
 import app.editors.RefTable;
 import app.rcp.Labels;
 import app.util.TextBuilder;
@@ -51,11 +52,13 @@ class ModelingPage extends FormPage {
 				Processes.method(process).methodSources)
 				.withEditor(editor)
 				.withTitle(M.LCAMethodDetails)
+				.withTooltip(Tooltips.EPD_LCAMethodDetails)
 				.render(body, toolkit);
 		RefTable.create(DataSetType.SOURCE,
 				Processes.representativeness(process).sources)
 				.withEditor(editor)
 				.withTitle(M.DataSources)
+				.withTooltip(Tooltips.EPD_DataSources)
 				.render(body, toolkit);
 		createComplianceSection(body);
 		new ReviewSection(editor, this)
@@ -65,11 +68,11 @@ class ModelingPage extends FormPage {
 
 	private void createModelingSection(Composite parent) {
 		Composite comp = UI.formSection(parent, toolkit,
-				M.ModellingAndValidation);
-		UI.formLabel(comp, toolkit, M.Subtype);
+				M.ModellingAndValidation, Tooltips.EPD_ModellingAndValidation);
+		UI.formLabel(comp, toolkit, M.Subtype, Tooltips.EPD_Subtype);
 		createSubTypeViewer(comp);
 		TextBuilder tb = new TextBuilder(editor, this, toolkit);
-		tb.multiText(comp, M.UseAdvice,
+		tb.multiText(comp, M.UseAdvice, Tooltips.EPD_UseAdvice,
 				Processes.representativeness(process).useAdvice);
 	}
 
@@ -112,7 +115,8 @@ class ModelingPage extends FormPage {
 				systems.add(s.system);
 		});
 		RefTable table = RefTable.create(DataSetType.SOURCE, systems)
-				.withTitle(M.ComplianceDeclarations);
+				.withTitle(M.ComplianceDeclarations)
+				.withTooltip(Tooltips.EPD_ComplianceDeclarations);
 		table.render(body, toolkit);
 		table.onAdd(system -> {
 			ComplianceDeclaration decl = Processes.getComplianceDeclaration(

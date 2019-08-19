@@ -14,7 +14,7 @@ public class Actions {
 	private Actions() {
 	}
 
-	public static Action create(final String title, final Runnable fn) {
+	public static Action create(String title, Runnable fn) {
 		return new Action() {
 			{
 				setText(title);
@@ -29,7 +29,8 @@ public class Actions {
 		};
 	}
 
-	public static Action create(final String title, final ImageDescriptor image, final Runnable fn) {
+	public static Action create(String title, ImageDescriptor image,
+			Runnable fn) {
 		return new Action() {
 			{
 				setText(title);

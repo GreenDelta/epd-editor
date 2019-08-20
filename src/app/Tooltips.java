@@ -88,6 +88,24 @@ public class Tooltips extends NLS {
 	public static String Source_BelongsTo;
 	public static String Source_LinksToExternalFiles;
 
+	// FlowProperty
+	public static String FlowProperty_Name;
+	public static String FlowProperty_Synonyms;
+	public static String FlowProperty_Description;
+	public static String FlowProperty_UnitGroup;
+
+	// UnitGroup
+	public static String UnitGroup_Name;
+	public static String UnitGroup_Description;
+	public static String UnitGroup_Units;
+
+	// LCIAMethod
+	public static String LCIAMethod_Name;
+	public static String LCIAMethod_Methodologies;
+	public static String LCIAMethod_ImpactCategories;
+	public static String LCIAMethod_ImpactIndicator;
+	public static String LCIAMethod_Description;
+
 	static {
 		NLS.initializeMessages("app.tooltips", Tooltips.class);
 	}

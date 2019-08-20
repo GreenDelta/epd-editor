@@ -17,6 +17,7 @@ import org.openlca.ilcd.util.UnitGroups;
 
 import app.App;
 import app.M;
+import app.Tooltips;
 import app.editors.CategorySection;
 import app.editors.VersionField;
 import app.util.TextBuilder;
@@ -54,8 +55,9 @@ class InfoPage extends FormPage {
 	private void infoSection(Composite body, TextBuilder tb) {
 		Composite comp = UI.infoSection(unitGroup, body, tk);
 		DataSetInfo info = UnitGroups.dataSetInfo(unitGroup);
-		tb.text(comp, M.Name, info.name);
-		tb.text(comp, M.Description, info.generalComment);
+		tb.text(comp, M.Name, Tooltips.UnitGroup_Name, info.name);
+		tb.text(comp, M.Description,
+				Tooltips.UnitGroup_Description, info.generalComment);
 		UI.fileLink(unitGroup, comp, tk);
 	}
 
@@ -70,9 +72,10 @@ class InfoPage extends FormPage {
 		Composite comp = UI.formSection(body, tk, M.AdministrativeInformation);
 		Publication pub = UnitGroups.publication(unitGroup);
 		DataEntry entry = UnitGroups.dataEntry(unitGroup);
-		Text timeT = UI.formText(comp, tk, M.LastUpdate);
+		Text timeT = UI.formText(comp, tk, M.LastUpdate,
+				Tooltips.All_LastUpdate);
 		timeT.setText(Xml.toString(entry.timeStamp));
-		Text uuidT = UI.formText(comp, tk, M.UUID);
+		Text uuidT = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);
 		if (unitGroup.getUUID() != null)
 			uuidT.setText(unitGroup.getUUID());
 		VersionField vf = new VersionField(comp, tk);

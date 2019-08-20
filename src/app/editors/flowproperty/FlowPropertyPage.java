@@ -16,6 +16,7 @@ import org.openlca.ilcd.flowproperties.QuantitativeReference;
 
 import app.App;
 import app.M;
+import app.Tooltips;
 import app.editors.CategorySection;
 import app.editors.RefLink;
 import app.editors.VersionField;
@@ -53,9 +54,11 @@ class FlowPropertyPage extends FormPage {
 	private void infoSection(Composite body, TextBuilder tb) {
 		Composite comp = UI.infoSection(property, body, tk);
 		DataSetInfo info = property.flowPropertyInfo.dataSetInfo;
-		tb.text(comp, M.Name, info.name);
-		tb.text(comp, M.Synonyms, info.synonyms);
-		tb.text(comp, M.Description, info.generalComment);
+		tb.text(comp, M.Name, Tooltips.FlowProperty_Name, info.name);
+		tb.text(comp, M.Synonyms,
+				Tooltips.FlowProperty_Synonyms, info.synonyms);
+		tb.text(comp, M.Description,
+				Tooltips.FlowProperty_Description, info.generalComment);
 		UI.fileLink(property, comp, tk);
 	}
 
@@ -69,7 +72,7 @@ class FlowPropertyPage extends FormPage {
 	private void unitGroupSection(Composite body) {
 		Composite comp = UI.formSection(body, tk, M.QuantitativeReference);
 		QuantitativeReference qRef = property.flowPropertyInfo.quantitativeReference;
-		UI.formLabel(comp, tk, M.UnitGroup);
+		UI.formLabel(comp, tk, M.UnitGroup, Tooltips.FlowProperty_UnitGroup);
 		RefLink refText = new RefLink(comp, tk, DataSetType.UNIT_GROUP);
 		refText.setRef(qRef.unitGroup);
 		refText.onChange(ref -> {
@@ -81,9 +84,10 @@ class FlowPropertyPage extends FormPage {
 	private void adminSection(Composite body) {
 		Composite comp = UI.formSection(body, tk, M.AdministrativeInformation);
 		AdminInfo info = property.adminInfo;
-		Text timeT = UI.formText(comp, tk, M.LastUpdate);
+		Text timeT = UI.formText(comp, tk,
+				M.LastUpdate, Tooltips.All_LastUpdate);
 		timeT.setText(Xml.toString(info.dataEntry.timeStamp));
-		Text uuidT = UI.formText(comp, tk, M.UUID);
+		Text uuidT = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);
 		if (property.getUUID() != null)
 			uuidT.setText(property.getUUID());
 		VersionField vf = new VersionField(comp, tk);

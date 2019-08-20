@@ -78,6 +78,21 @@ tooltips = [
     ("Source", "Logo"),
     ("Source", "Belongs to"),
     ("Source", "Links to external files"),
+
+    ("FlowProperty", "Name"),
+    ("FlowProperty", "Synonyms"),
+    ("FlowProperty", "Description"),
+    ("FlowProperty", "UnitGroup"),
+
+    ("UnitGroup", "Name"),
+    ("UnitGroup", "Description"),
+    ("UnitGroup", "Units"),
+
+    ("LCIAMethod", "Name"),
+    ("LCIAMethod", "Methodologies"),
+    ("LCIAMethod", "Impact categories"),
+    ("LCIAMethod", "Impact indicator"),
+    ("LCIAMethod", "Description"),
 ]
 
 

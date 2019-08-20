@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.M;
+import app.Tooltips;
 import app.navi.Navigator;
 import app.rcp.Icon;
 import app.util.Actions;
@@ -45,9 +46,11 @@ class FileTable {
 	public void render(Composite parent, FormToolkit tk) {
 		Section section = UI.section(parent, tk,
 				"#Links to external files");
+		section.setToolTipText(Tooltips.Source_LinksToExternalFiles);
 		Composite comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
 		table = Tables.createViewer(comp, "File reference");
+		table.getTable().setToolTipText(Tooltips.Source_LinksToExternalFiles);
 		table.setLabelProvider(new Label());
 		Action[] actions = createActions(table);
 		Actions.bind(section, actions);

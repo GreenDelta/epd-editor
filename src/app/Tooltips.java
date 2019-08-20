@@ -80,6 +80,14 @@ public class Tooltips extends NLS {
 	public static String Contact_Website;
 	public static String Contact_Logo;
 
+	// Source
+	public static String Source_ShortName;
+	public static String Source_Citation;
+	public static String Source_Description;
+	public static String Source_Logo;
+	public static String Source_BelongsTo;
+	public static String Source_LinksToExternalFiles;
+
 	static {
 		NLS.initializeMessages("app.tooltips", Tooltips.class);
 	}

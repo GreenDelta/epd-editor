@@ -71,6 +71,13 @@ tooltips = [
     ("Contact", "Telefax"),
     ("Contact", "Website"),
     ("Contact", "Logo"),
+
+    ("Source", "Short name"),
+    ("Source", "Citation"),
+    ("Source", "Description"),
+    ("Source", "Logo"),
+    ("Source", "Belongs to"),
+    ("Source", "Links to external files"),
 ]
 
 

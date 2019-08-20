@@ -120,3 +120,32 @@ if __name__ == "__main__":
     for pair in tooltips:
         k = make_key(pair)
         print("%s = %s" % (k, pair[1]))
+
+    # try to find German translations
+    kvmap = {}
+    mpath = "../src/app/messages"
+    with open(mpath + ".properties", "r") as f:
+        for line in f:
+            parts = line.split("=")
+            if len(parts) < 2:
+                continue
+            kvmap[parts[0].strip().lower()] = parts[1].strip().lower()
+    
+    tmap = {}
+    with open(mpath + "_de.properties", "r") as f:
+        for line in f:
+            parts = line.split("=")
+            if len(parts) < 2:
+                continue
+            enval = kvmap.get(parts[0].strip().lower())
+            if enval is None:
+                continue
+            tmap[enval] = parts[1].strip()
+
+    print("\n\nMessages_de:\n\n")
+    for pair in tooltips:
+        k = make_key(pair)
+        de_text = tmap.get(pair[1].strip().lower())
+        if de_text is None:
+            de_text = "(keine Beschreibung vorhanden)"
+        print("%s = %s" % (k, de_text))

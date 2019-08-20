@@ -51,6 +51,14 @@ tooltips = [
     ("EPD", "Scenarios"),
     ("EPD", "Modules"),
     ("EPD", "Results"),
+
+    ("Contact", "Short name"),
+    ("Contact", "Name"),
+    ("Contact", "Address"),
+    ("Contact", "Telephone"),
+    ("Contact", "Telefax"),
+    ("Contact", "Website"),
+    ("Contact", "Logo"),
 ]
 
 

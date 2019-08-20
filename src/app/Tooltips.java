@@ -58,6 +58,15 @@ public class Tooltips extends NLS {
 	public static String EPD_Modules;
 	public static String EPD_Results;
 
+	// Contact
+	public static String Contact_ShortName;
+	public static String Contact_Name;
+	public static String Contact_Address;
+	public static String Contact_Telephone;
+	public static String Contact_Telefax;
+	public static String Contact_Website;
+	public static String Contact_Logo;
+
 	static {
 		NLS.initializeMessages("app.tooltips", Tooltips.class);
 	}

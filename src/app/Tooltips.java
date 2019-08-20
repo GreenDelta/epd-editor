@@ -9,6 +9,8 @@ public class Tooltips extends NLS {
 	public static String All_UUID;
 	public static String All_File;
 	public static String All_Classification;
+	public static String All_AdministrativeInformation;
+	public static String All_LastUpdate;
 	public static String All_DataSetVersion;
 
 	// EPD
@@ -46,7 +48,6 @@ public class Tooltips extends NLS {
 	public static String EPD_ReviewReport;
 	public static String EPD_Reviewer;
 	public static String EPD_DataEntry;
-	public static String EPD_LastUpdate;
 	public static String EPD_Documentor;
 	public static String EPD_DataFormats;
 	public static String EPD_PublicationAndOwnership;
@@ -57,6 +58,18 @@ public class Tooltips extends NLS {
 	public static String EPD_Scenarios;
 	public static String EPD_Modules;
 	public static String EPD_Results;
+
+	// Flow
+	public static String Flow_Name;
+	public static String Flow_Synonyms;
+	public static String Flow_Description;
+	public static String Flow_GenericProduct;
+	public static String Flow_VendorInformation;
+	public static String Flow_IsVendorSpecific;
+	public static String Flow_Vendor;
+	public static String Flow_VendorDocumentation;
+	public static String Flow_FlowProperties;
+	public static String Flow_MaterialProperties;
 
 	// Contact
 	public static String Contact_ShortName;

@@ -23,6 +23,7 @@ import org.openlca.ilcd.util.Flows;
 
 import app.App;
 import app.M;
+import app.Tooltips;
 import app.editors.Editors;
 import app.editors.IEditor;
 import app.editors.RefSelectionDialog;
@@ -47,10 +48,12 @@ class FlowPropertySection {
 
 	void render(Composite parent, FormToolkit tk) {
 		Section section = UI.section(parent, tk, M.FlowProperties);
+		section.setToolTipText(Tooltips.Flow_FlowProperties);
 		Composite comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
-		table = Tables.createViewer(comp, M.FlowProperty, M.ConversionFactor,
-				M.Unit);
+		table = Tables.createViewer(comp,
+				M.FlowProperty, M.ConversionFactor, M.Unit);
+		table.getTable().setToolTipText(Tooltips.Flow_FlowProperties);
 		table.setLabelProvider(new Label());
 		table.setInput(Flows.getFlowProperties(flow));
 		Tables.bindColumnWidths(table, 0.4, 0.3, 0.3);

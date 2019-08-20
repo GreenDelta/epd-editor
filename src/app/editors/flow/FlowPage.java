@@ -18,6 +18,7 @@ import org.openlca.ilcd.util.Flows;
 
 import app.App;
 import app.M;
+import app.Tooltips;
 import app.editors.CategorySection;
 import app.editors.RefLink;
 import app.editors.VersionField;
@@ -59,17 +60,19 @@ class FlowPage extends FormPage {
 	private void infoSection(Composite body, TextBuilder tb) {
 		Composite comp = UI.infoSection(product.flow, body, tk);
 		FlowName fName = Flows.flowName(product.flow);
-		tb.text(comp, M.Name, fName.baseName);
+		tb.text(comp, M.Name, Tooltips.Flow_Name, fName.baseName);
 		DataSetInfo info = Flows.dataSetInfo(product.flow);
-		tb.text(comp, M.Synonyms, info.synonyms);
-		tb.text(comp, M.Description, info.generalComment);
-		if (Flows.getType(product.flow) == FlowType.PRODUCT_FLOW)
+		tb.text(comp, M.Synonyms, Tooltips.Flow_Synonyms, info.synonyms);
+		tb.text(comp, M.Description,
+				Tooltips.Flow_Description, info.generalComment);
+		if (Flows.getType(product.flow) == FlowType.PRODUCT_FLOW) {
 			genericProductLink(comp);
+		}
 		UI.fileLink(product.flow, comp, tk);
 	}
 
 	private void genericProductLink(Composite comp) {
-		UI.formLabel(comp, tk, M.GenericProduct);
+		UI.formLabel(comp, tk, M.GenericProduct, Tooltips.Flow_GenericProduct);
 		RefLink rt = new RefLink(comp, tk, DataSetType.FLOW);
 		rt.setRef(product.genericFlow);
 		rt.onChange(ref -> {
@@ -91,6 +94,7 @@ class FlowPage extends FormPage {
 		if (Flows.getType(product.flow) != FlowType.PRODUCT_FLOW)
 			return;
 		Section s = UI.section(body, tk, M.MaterialProperties);
+		s.setToolTipText(Tooltips.Flow_MaterialProperties);
 		UI.gridData(s, true, false);
 		new MaterialPropertyTable(editor, s, tk);
 	}
@@ -99,9 +103,10 @@ class FlowPage extends FormPage {
 		Flow f = product.flow;
 		Composite comp = UI.formSection(body, tk,
 				M.AdministrativeInformation);
-		Text timeT = UI.formText(comp, tk, M.LastUpdate);
+		Text timeT = UI.formText(comp, tk,
+				M.LastUpdate, Tooltips.All_LastUpdate);
 		timeT.setText(Xml.toString(Flows.dataEntry(f).timeStamp));
-		Text uuidT = UI.formText(comp, tk, M.UUID);
+		Text uuidT = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);
 		if (f.getUUID() != null)
 			uuidT.setText(f.getUUID());
 		VersionField vf = new VersionField(comp, tk);

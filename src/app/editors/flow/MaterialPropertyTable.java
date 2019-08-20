@@ -13,6 +13,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import app.M;
+import app.Tooltips;
 import app.rcp.Icon;
 import app.util.Actions;
 import app.util.Tables;
@@ -40,6 +41,7 @@ class MaterialPropertyTable {
 		Composite comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
 		viewer = Tables.createViewer(comp, PROPERTY, VALUE, UNIT);
+		viewer.getTable().setToolTipText(Tooltips.Flow_MaterialProperties);
 		viewer.setLabelProvider(new Label());
 		Tables.bindColumnWidths(viewer, 0.34, 0.33, 0.33);
 		ModifySupport<MaterialPropertyValue> mf = new ModifySupport<>(viewer);

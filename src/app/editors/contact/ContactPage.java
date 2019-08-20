@@ -85,10 +85,12 @@ class ContactPage extends FormPage {
 		DataEntry entry = Contacts.dataEntry(contact);
 		Publication pub = Contacts.publication(contact);
 		Composite comp = UI.formSection(body, tk,
-				M.AdministrativeInformation);
-		Text timeT = UI.formText(comp, tk, M.LastUpdate);
+				M.AdministrativeInformation,
+				Tooltips.All_AdministrativeInformation);
+		Text timeT = UI.formText(comp, tk,
+				M.LastUpdate, Tooltips.All_LastUpdate);
 		timeT.setText(Xml.toString(entry.timeStamp));
-		Text uuidT = UI.formText(comp, tk, M.UUID);
+		Text uuidT = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);
 		if (contact.getUUID() != null)
 			uuidT.setText(contact.getUUID());
 		VersionField vf = new VersionField(comp, tk);

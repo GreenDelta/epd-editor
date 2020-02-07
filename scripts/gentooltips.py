@@ -4,6 +4,8 @@ tooltips = [
     ("All", "UUID"),
     ("All", "File"),
     ("All", "Classification"),
+    ("All", "Administrative information"),
+    ("All", "Last update"),
     ("All", "Data set version"),
 
     ("EPD", "Name"),
@@ -39,8 +41,7 @@ tooltips = [
     ("EPD", "Review details"),
     ("EPD", "Review report"),
     ("EPD", "Reviewer"),
-    ("EPD", "Data entry"),
-    ("EPD", "Last update"),
+    ("EPD", "Data entry"),   
     ("EPD", "Documentor"),
     ("EPD", "Data formats"),
     ("EPD", "Publication and ownership"),
@@ -51,6 +52,47 @@ tooltips = [
     ("EPD", "Scenarios"),
     ("EPD", "Modules"),
     ("EPD", "Results"),
+
+    ("Flow", "Name"),
+    ("Flow", "Synonyms"),
+    ("Flow", "Description"),
+    ("Flow", "Generic product"),
+    ("Flow", "Vendor information"),
+    ("Flow", "Is vendor specific"),
+    ("Flow", "Vendor"),
+    ("Flow", "Vendor documentation"),
+    ("Flow", "Flow properties"),
+    ("Flow", "Material properties"),
+
+    ("Contact", "Short name"),
+    ("Contact", "Name"),
+    ("Contact", "Address"),
+    ("Contact", "Telephone"),
+    ("Contact", "Telefax"),
+    ("Contact", "Website"),
+    ("Contact", "Logo"),
+
+    ("Source", "Short name"),
+    ("Source", "Citation"),
+    ("Source", "Description"),
+    ("Source", "Logo"),
+    ("Source", "Belongs to"),
+    ("Source", "Links to external files"),
+
+    ("FlowProperty", "Name"),
+    ("FlowProperty", "Synonyms"),
+    ("FlowProperty", "Description"),
+    ("FlowProperty", "UnitGroup"),
+
+    ("UnitGroup", "Name"),
+    ("UnitGroup", "Description"),
+    ("UnitGroup", "Units"),
+
+    ("LCIAMethod", "Name"),
+    ("LCIAMethod", "Methodologies"),
+    ("LCIAMethod", "Impact categories"),
+    ("LCIAMethod", "Impact indicator"),
+    ("LCIAMethod", "Description"),
 ]
 
 
@@ -78,3 +120,32 @@ if __name__ == "__main__":
     for pair in tooltips:
         k = make_key(pair)
         print("%s = %s" % (k, pair[1]))
+
+    # try to find German translations
+    kvmap = {}
+    mpath = "../src/app/messages"
+    with open(mpath + ".properties", "r") as f:
+        for line in f:
+            parts = line.split("=")
+            if len(parts) < 2:
+                continue
+            kvmap[parts[0].strip().lower()] = parts[1].strip().lower()
+    
+    tmap = {}
+    with open(mpath + "_de.properties", "r") as f:
+        for line in f:
+            parts = line.split("=")
+            if len(parts) < 2:
+                continue
+            enval = kvmap.get(parts[0].strip().lower())
+            if enval is None:
+                continue
+            tmap[enval] = parts[1].strip()
+
+    print("\n\nMessages_de:\n\n")
+    for pair in tooltips:
+        k = make_key(pair)
+        de_text = tmap.get(pair[1].strip().lower())
+        if de_text is None:
+            de_text = "(keine Beschreibung vorhanden)"
+        print("%s = %s" % (k, de_text))

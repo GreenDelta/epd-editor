@@ -15,6 +15,7 @@ import org.openlca.ilcd.util.Methods;
 
 import app.App;
 import app.M;
+import app.Tooltips;
 import app.editors.CategorySection;
 import app.editors.VersionField;
 import app.util.StringTable;
@@ -52,17 +53,21 @@ class InfoPage extends FormPage {
 	private void infoSection(Composite body, TextBuilder tb) {
 		DataSetInfo info = Methods.dataSetInfo(method);
 		Composite comp = UI.infoSection(method, body, tk);
-		tb.text(comp, M.Name, info.name);
-		UI.formLabel(comp, "#Methodologies");
+		tb.text(comp, M.Name, Tooltips.LCIAMethod_Name, info.name);
+		UI.formLabel(comp, tk, "#Methodologies",
+				Tooltips.LCIAMethod_Methodologies);
 		new StringTable(editor, "#Methodology", info.methods).render(comp, tk);
-		UI.formLabel(comp, "#Impact Categories");
+		UI.formLabel(comp, tk, "#Impact Categories",
+				Tooltips.LCIAMethod_ImpactCategories);
 		new StringTable(editor, "#Impact Category", info.impactCategories)
 				.render(comp, tk);
-		tb.text(comp, "#Impact Indicator", info.indicator, val -> {
-			info.indicator = val;
-			editor.setDirty();
-		});
-		tb.text(comp, M.Description, info.comment);
+		tb.text(comp, "#Impact Indicator", Tooltips.LCIAMethod_ImpactIndicator,
+				info.indicator, val -> {
+					info.indicator = val;
+					editor.setDirty();
+				});
+		tb.text(comp, M.Description,
+				Tooltips.LCIAMethod_Description, info.comment);
 		UI.fileLink(method, comp, tk);
 	}
 
@@ -74,9 +79,10 @@ class InfoPage extends FormPage {
 
 	private void adminSection(Composite body) {
 		Composite comp = UI.formSection(body, tk, M.AdministrativeInformation);
-		Text timeT = UI.formText(comp, tk, M.LastUpdate);
+		Text timeT = UI.formText(comp, tk,
+				M.LastUpdate, Tooltips.All_LastUpdate);
 		timeT.setText(Xml.toString(Methods.dataEntry(method).timeStamp));
-		Text uuidT = UI.formText(comp, tk, M.UUID);
+		Text uuidT = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);
 		if (method.getUUID() != null)
 			uuidT.setText(method.getUUID());
 		VersionField vf = new VersionField(comp, tk);

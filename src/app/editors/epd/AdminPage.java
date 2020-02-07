@@ -71,7 +71,7 @@ class AdminPage extends FormPage {
 
 	private void createLastUpdateText(Composite comp) {
 		Text text = UI.formText(comp, toolkit,
-				M.LastUpdate, Tooltips.EPD_LastUpdate);
+				M.LastUpdate, Tooltips.All_LastUpdate);
 		text.setEditable(false);
 		DataEntry entry = Processes.dataEntry(process);
 		editor.onSaved(() -> {

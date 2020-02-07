@@ -22,6 +22,7 @@ import org.openlca.ilcd.util.UnitGroups;
 
 import app.App;
 import app.M;
+import app.Tooltips;
 import app.editors.IEditor;
 import app.rcp.Icon;
 import app.util.Actions;
@@ -43,6 +44,7 @@ class UnitSection {
 
 	void render(Composite parent, FormToolkit tk) {
 		Section section = UI.section(parent, tk, M.Units);
+		section.setToolTipText(Tooltips.UnitGroup_Units);
 		Composite composite = UI.sectionClient(section, tk);
 		UI.gridLayout(composite, 1);
 		table = Tables.createViewer(composite, M.Unit, M.ConversionFactor,

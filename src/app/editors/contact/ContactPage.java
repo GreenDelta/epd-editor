@@ -17,6 +17,7 @@ import org.openlca.ilcd.util.Contacts;
 
 import app.App;
 import app.M;
+import app.Tooltips;
 import app.editors.CategorySection;
 import app.editors.RefLink;
 import app.editors.VersionField;
@@ -54,14 +55,16 @@ class ContactPage extends FormPage {
 	private void infoSection(Composite body, TextBuilder tb) {
 		Composite comp = UI.infoSection(contact, body, tk);
 		DataSetInfo info = Contacts.dataSetInfo(contact);
-		tb.text(comp, M.ShortName, info.shortName);
-		tb.text(comp, M.Name, info.name);
-		tb.text(comp, M.Address, info.contactAddress);
-		tb.text(comp, M.Telephone, info.telephone, t -> info.telephone = t);
-		tb.text(comp, M.Telefax, info.telefax, t -> info.telefax = t);
-		tb.text(comp, M.Website, info.wwwAddress,
+		tb.text(comp, M.ShortName, Tooltips.Contact_ShortName, info.shortName);
+		tb.text(comp, M.Name, Tooltips.Contact_Name, info.name);
+		tb.text(comp, M.Address, Tooltips.Contact_Address, info.contactAddress);
+		tb.text(comp, M.Telephone, Tooltips.Contact_Telephone, info.telephone,
+				t -> info.telephone = t);
+		tb.text(comp, M.Telefax, Tooltips.Contact_Telefax, info.telefax,
+				t -> info.telefax = t);
+		tb.text(comp, M.Website, Tooltips.Contact_Website, info.wwwAddress,
 				t -> info.wwwAddress = t);
-		UI.formLabel(comp, tk, M.Logo);
+		UI.formLabel(comp, tk, M.Logo, Tooltips.Contact_Logo);
 		RefLink logo = new RefLink(comp, tk, DataSetType.SOURCE);
 		logo.setRef(info.logo);
 		logo.onChange(ref -> {
@@ -82,10 +85,12 @@ class ContactPage extends FormPage {
 		DataEntry entry = Contacts.dataEntry(contact);
 		Publication pub = Contacts.publication(contact);
 		Composite comp = UI.formSection(body, tk,
-				M.AdministrativeInformation);
-		Text timeT = UI.formText(comp, tk, M.LastUpdate);
+				M.AdministrativeInformation,
+				Tooltips.All_AdministrativeInformation);
+		Text timeT = UI.formText(comp, tk,
+				M.LastUpdate, Tooltips.All_LastUpdate);
 		timeT.setText(Xml.toString(entry.timeStamp));
-		Text uuidT = UI.formText(comp, tk, M.UUID);
+		Text uuidT = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);
 		if (contact.getUUID() != null)
 			uuidT.setText(contact.getUUID());
 		VersionField vf = new VersionField(comp, tk);

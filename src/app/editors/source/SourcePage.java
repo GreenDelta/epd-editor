@@ -18,6 +18,7 @@ import org.openlca.ilcd.util.Sources;
 
 import app.App;
 import app.M;
+import app.Tooltips;
 import app.editors.CategorySection;
 import app.editors.RefLink;
 import app.editors.RefTable;
@@ -58,11 +59,13 @@ class SourcePage extends FormPage {
 	private void infoSection(Composite body, TextBuilder tb) {
 		Composite comp = UI.infoSection(source, body, tk);
 		DataSetInfo info = Sources.dataSetInfo(source);
-		tb.text(comp, M.ShortName, info.name);
-		tb.text(comp, M.Citation, info.citation, t -> info.citation = t);
-		tb.text(comp, M.Description, info.description);
+		tb.text(comp, M.ShortName, Tooltips.Source_ShortName, info.name);
+		tb.text(comp, M.Citation, Tooltips.Source_Citation,
+				info.citation, t -> info.citation = t);
+		tb.text(comp, M.Description,
+				Tooltips.Source_Description, info.description);
 		// TODO: source type combo
-		UI.formLabel(comp, tk, M.Logo);
+		UI.formLabel(comp, tk, M.Logo, Tooltips.Source_Logo);
 		RefLink logo = new RefLink(comp, tk, DataSetType.SOURCE);
 		logo.setRef(info.logo);
 		logo.onChange(ref -> {
@@ -84,15 +87,17 @@ class SourcePage extends FormPage {
 		RefTable.create(DataSetType.CONTACT, contacts)
 				.withEditor(editor)
 				.withTitle("#Belongs to")
+				.withTooltip(Tooltips.Source_BelongsTo)
 				.render(body, tk);
 	}
 
 	private void adminSection(Composite body) {
 		Composite comp = UI.formSection(body, tk, M.AdministrativeInformation);
 		AdminInfo info = source.adminInfo;
-		Text timeT = UI.formText(comp, tk, M.LastUpdate);
+		Text timeT = UI.formText(comp, tk,
+				M.LastUpdate, Tooltips.All_LastUpdate);
 		timeT.setText(Xml.toString(info.dataEntry.timeStamp));
-		Text uuidT = UI.formText(comp, tk, M.UUID);
+		Text uuidT = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);
 		if (source.getUUID() != null)
 			uuidT.setText(source.getUUID());
 		VersionField vf = new VersionField(comp, tk);

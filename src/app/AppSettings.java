@@ -32,6 +32,18 @@ public class AppSettings {
 	 */
 	public String validationProfile;
 
+	/**
+	 * Indicates whether the editor tab for content declarations should be shown
+	 * in the EPD editor or not.
+	 */
+	public boolean showContentDeclarations = false;
+
+	/**
+	 * Indicates whether the editor tab for Q meta data should be shown in the
+	 * EPD editor or not.
+	 */
+	public boolean showQMetadata = false;
+
 	public void save() {
 		Json.write(this, new File(App.workspace, "settings.json"));
 	}
@@ -51,6 +63,8 @@ public class AppSettings {
 		clone.lang = lang;
 		clone.showDataSetXML = showDataSetXML;
 		clone.showDataSetDependencies = showDataSetDependencies;
+		clone.showContentDeclarations = showContentDeclarations;
+		clone.showQMetadata = showQMetadata;
 		clone.validationProfile = validationProfile;
 		clone.syncRefDataOnStartup = syncRefDataOnStartup;
 		clone.checkEPDsOnProductUpdates = checkEPDsOnProductUpdates;
@@ -64,6 +78,8 @@ public class AppSettings {
 		lang = from.lang;
 		showDataSetXML = from.showDataSetXML;
 		showDataSetDependencies = from.showDataSetDependencies;
+		showContentDeclarations = from.showContentDeclarations;
+		showQMetadata = from.showQMetadata;
 		validationProfile = from.validationProfile;
 		syncRefDataOnStartup = from.syncRefDataOnStartup;
 		checkEPDsOnProductUpdates = from.checkEPDsOnProductUpdates;

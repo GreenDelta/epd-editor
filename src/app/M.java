@@ -224,8 +224,10 @@ public class M extends NLS {
 	public static String SetAsReference;
 	public static String Settings;
 	public static String ShortName;
+	public static String ShowContentDeclarationEditor;
 	public static String ShowDependenciesInEditors;
 	public static String ShowDetails;
+	public static String ShowQMetadataEditor;
 	public static String ShowXMLInEditors;
 	public static String Source;
 	public static String Sources;

@@ -56,6 +56,8 @@ class DataSetSection {
 		dependencyCheck(comp, tk);
 		syncCheck(comp, tk);
 		productUpdateCheck(comp, tk);
+		contentDeclarationsCheck(comp, tk);
+		qMetaCheck(comp, tk);
 		qMetaDataFile(comp, tk);
 	}
 
@@ -86,6 +88,26 @@ class DataSetSection {
 		check.setSelection(settings().syncRefDataOnStartup);
 		Controls.onSelect(check, e -> {
 			settings().syncRefDataOnStartup = check.getSelection();
+			page.setDirty();
+		});
+	}
+
+	private void contentDeclarationsCheck(Composite comp, FormToolkit tk) {
+		Button check = UI.formCheckBox(comp, tk,
+				M.ShowContentDeclarationEditor);
+		check.setSelection(settings().showContentDeclarations);
+		Controls.onSelect(check, e -> {
+			settings().showContentDeclarations = check.getSelection();
+			page.setDirty();
+		});
+	}
+
+	private void qMetaCheck(Composite comp, FormToolkit tk) {
+		Button check = UI.formCheckBox(comp, tk,
+				M.ShowQMetadataEditor);
+		check.setSelection(settings().showQMetadata);
+		Controls.onSelect(check, e -> {
+			settings().showQMetadata = check.getSelection();
 			page.setDirty();
 		});
 	}

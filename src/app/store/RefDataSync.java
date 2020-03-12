@@ -72,19 +72,25 @@ public class RefDataSync implements Runnable {
 		return con;
 	}
 
+	@SuppressWarnings("unchecked")
 	private void doSync(SodaConnection con) {
 		try (SodaClient client = new SodaClient(con)) {
 			log.info("Connected to {} (datastock={})", con.url,
 					con.dataStockId);
 			Class<?>[] types = new Class<?>[] {
-					Contact.class, Source.class, UnitGroup.class,
-					FlowProperty.class, Flow.class, Process.class,
-					LCIAMethod.class };
+					Contact.class,
+					Source.class,
+					UnitGroup.class,
+					FlowProperty.class,
+					Flow.class,
+					Process.class,
+					LCIAMethod.class,
+			};
 			for (Class<?> type : types) {
 				log.info("Fetch descriptors for type {}", type);
 				List<Descriptor> descriptors = client.getDescriptors(type);
 				log.info("Fetch {} descriptors", descriptors.size());
-				sync(client, type, descriptors);
+				sync(client, (Class<? extends IDataSet>) type, descriptors);
 			}
 		} catch (Exception e) {
 			log.error("Ref. data download failed", e);
@@ -93,7 +99,7 @@ public class RefDataSync implements Runnable {
 		}
 	}
 
-	private void sync(SodaClient client, Class<?> type,
+	private void sync(SodaClient client, Class<? extends IDataSet> type,
 			List<Descriptor> descriptors) {
 		for (Descriptor d : descriptors) {
 			Ref newRef = d.toRef();

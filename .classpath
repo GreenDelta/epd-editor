@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="libs/ilcd-validation-1.5.18.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/olca-ilcd-1.9.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/gson-2.8.5.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ilcd-validation-1.4.10.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/olca-ilcd-1.7.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/bcprov-jdk15on-1.51.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/commons-compress-1.9.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/commons-logging-1.2.jar"/>

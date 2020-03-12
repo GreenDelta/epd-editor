@@ -18,7 +18,7 @@ import org.openlca.ilcd.methods.LCIAMethod;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.sources.Source;
 import org.openlca.ilcd.units.UnitGroup;
-import org.openlca.ilcd.util.ClassList;
+import org.openlca.ilcd.util.Categories;
 import org.openlca.ilcd.util.Refs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,7 +86,7 @@ public class IndexBuilder implements IRunnableWithProgress {
 			}
 			List<Classification> classes;
 			try (FileInputStream is = new FileInputStream(f)) {
-				classes = ClassList.read(is);
+				classes = Categories.read(is);
 			}
 			index.add(ref, classes);
 		} catch (Exception e) {

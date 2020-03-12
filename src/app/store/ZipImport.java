@@ -23,7 +23,7 @@ import org.openlca.ilcd.methods.LCIAMethod;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.sources.Source;
 import org.openlca.ilcd.units.UnitGroup;
-import org.openlca.ilcd.util.ClassList;
+import org.openlca.ilcd.util.Categories;
 import org.openlca.ilcd.util.Refs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,7 +93,7 @@ public class ZipImport implements IRunnableWithProgress {
 				continue;
 			}
 			is.reset();
-			List<Classification> classes = ClassList.read(is);
+			List<Classification> classes = Categories.read(is);
 			File f = new File(dir, getFileName(ref));
 			Files.write(f.toPath(), data, StandardOpenOption.CREATE,
 					StandardOpenOption.TRUNCATE_EXISTING);

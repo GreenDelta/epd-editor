@@ -95,7 +95,7 @@ public class QMetaData {
 			if (qmeta != null)
 				return qmeta;
 		}
-		return QUpgrade.on(p);
+		return null;
 	}
 
 	private static QMetaData read(Other other) {

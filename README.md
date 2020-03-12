@@ -135,7 +135,7 @@ add the following things to the build folder:
 ###### Java Runtime Environment (JRE)
 
 We package a JRE together with the application. Just download the
-[current package](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html)
+[OpenJDK 8 JRE](https://adoptopenjdk.net/)
 for Windows 64 bit (e.g. `jre-8u141-windows-x64.tar.gz`), extract it, and
 copy the content into the folder `build/jre/win64`.
 

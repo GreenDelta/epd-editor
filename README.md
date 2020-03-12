@@ -62,9 +62,8 @@ have no compile errors and you should be able to open the `app.product` file
 and launch the application (click on `Launch an Eclipse application`).
 
 The target platform is configured for multi-platform builds as described
-[here](https://stackoverflow.com/questions/4261866/eclipse-rcp-how-to-download-delta-pack-from-software-site-in-the-target-definit).
-Additionally, it contains translations from the [Eclipse Babel](https://www.eclipse.org/babel/downloads.php) project.
-You may have to update the target platform when setting up the development environment.
+[here](https://stackoverflow.com/a/12737382). You may have to update the target
+platform when setting up the development environment.
 
 Also, when updating the target platform it is probably required to update the product
 configuration in `app.product`. Just remove and re-add all required plugins. It is

@@ -9,6 +9,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
@@ -36,7 +38,7 @@ public class QMetaDataPage extends FormPage {
 	private Composite body;
 
 	public QMetaDataPage(EpdEditor editor) {
-		super(editor, "QMetaDataPage", "Q metadata");
+		super(editor, "QMetaDataPage", "Q Metadata");
 		this.editor = editor;
 		if (editor.dataSet.qMetaData == null) {
 			editor.dataSet.qMetaData = new QMetaData();
@@ -47,7 +49,7 @@ public class QMetaDataPage extends FormPage {
 	@Override
 	protected void createFormContent(IManagedForm mform) {
 		tk = mform.getToolkit();
-		ScrolledForm form = UI.formHeader(mform, "Q metadata");
+		ScrolledForm form = UI.formHeader(mform, "Q Metadata");
 		body = UI.formBody(form, mform.getToolkit());
 
 		// Note that we have two kinds of `QQuestion` objects here:
@@ -102,8 +104,17 @@ public class QMetaDataPage extends FormPage {
 			Button button = tk.createButton(comp, "", SWT.RADIO);
 			button.setLayoutData(
 					new GridData(SWT.LEFT, SWT.TOP, false, false));
-			tk.createLabel(
+			Label label = tk.createLabel(
 					comp, Strings.wrap(config[i].text, 120));
+			Controls.onClick(label, _e -> {
+				if (button.getSelection())
+					return;
+				for (Button other : buttons) {
+					other.setSelection(false);
+				}
+				button.setSelection(true);
+				button.notifyListeners(SWT.Selection, new Event());
+			});
 			if (Objects.equals(selected.get(), config[i])) {
 				QQuestion selectedQ = selected.get();
 				if (selectedQ.answer == null) {
@@ -162,9 +173,10 @@ public class QMetaDataPage extends FormPage {
 				question.answer.yesNo = false;
 			}
 
+			// create the check button
 			Button button = tk.createButton(comp, "", SWT.CHECK);
-			button.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
-			tk.createLabel(comp, Strings.wrap(config[i].text, 120));
+			button.setLayoutData(new GridData(
+					SWT.LEFT, SWT.TOP, false, false));
 			button.setSelection(question.answer.yesNo != null
 					&& question.answer.yesNo);
 			Controls.onSelect(button, _e -> {
@@ -174,6 +186,14 @@ public class QMetaDataPage extends FormPage {
 					question.answer.yesNo = false;
 				}
 				editor.setDirty();
+			});
+
+			// create the label; also react on clicks on the label
+			Label label = tk.createLabel(comp,
+					Strings.wrap(config[i].text, 120));
+			Controls.onClick(label, _e -> {
+				button.setSelection(!button.getSelection());
+				button.notifyListeners(SWT.Selection, new Event());
 			});
 			UI.filler(comp);
 

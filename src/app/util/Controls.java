@@ -2,10 +2,13 @@ package app.util;
 
 import java.util.function.Consumer;
 
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Scale;
@@ -70,6 +73,17 @@ public class Controls {
 		link.addHyperlinkListener(new HyperlinkAdapter() {
 			@Override
 			public void linkActivated(HyperlinkEvent e) {
+				fn.accept(e);
+			}
+		});
+	}
+
+	public static void onClick(Label label, Consumer<MouseEvent> fn) {
+		if (label == null || fn == null)
+			return;
+		label.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
 				fn.accept(e);
 			}
 		});

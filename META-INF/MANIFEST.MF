@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: App
 Bundle-SymbolicName: epd-editor;singleton:=true
-Bundle-Version: 3.0.1
+Bundle-Version: 3.1.0
 Bundle-Activator: app.rcp.Activator
 Eclipse-BundleShape: dir
 Require-Bundle: org.eclipse.ui,
@@ -81,5 +81,5 @@ Bundle-ClassPath: .,
  libs/truevfs-kernel-impl-0.11.1.jar,
  libs/xz-1.5.jar,
  libs/gson-2.8.5.jar,
- libs/ilcd-validation-1.4.10.jar,
- libs/olca-ilcd-1.7.4.jar
+ libs/ilcd-validation-1.5.18.jar,
+ libs/olca-ilcd-1.9.0.jar

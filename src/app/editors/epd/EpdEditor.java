@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.App;
+import app.AppSettings;
 import app.M;
 import app.editors.BaseEditor;
 import app.editors.Editors;
@@ -67,8 +68,15 @@ public class EpdEditor extends BaseEditor {
 			addPage(new ModelingPage(this));
 			addPage(new AdminPage(this));
 			addPage(new ModulePage(this));
-			addPage(new ContentDeclarationPage(this));
-			addPage(new QMetaDataPage(this));
+
+			// pages that are configurable via the settings
+			AppSettings settings = App.settings();
+			if (settings.showContentDeclarations) {
+				addPage(new ContentDeclarationPage(this));
+			}
+			if (settings.showQMetadata) {
+				addPage(new QMetaDataPage(this));
+			}
 			Editors.addInfoPages(this, dataSet.process);
 		} catch (Exception e) {
 			log.error("failed to add editor page", e);

@@ -7,7 +7,7 @@ The EPD editor is an [Eclipse RCP](https://wiki.eclipse.org/Rich_Client_Platform
 application. To compile it from source you need to have the following tools
 installed:
 
-* a [Java Development Kit v8](http://www.oracle.com/technetwork/java/javase/downloads/jdk10-downloads-4416644.html)
+* a [Java Development Kit v8](https://adoptopenjdk.net/)
 * [Maven](http://maven.apache.org/)
 * the [Eclipse package for RCP developers](https://www.eclipse.org/downloads/)
 
@@ -62,9 +62,8 @@ have no compile errors and you should be able to open the `app.product` file
 and launch the application (click on `Launch an Eclipse application`).
 
 The target platform is configured for multi-platform builds as described
-[here](https://stackoverflow.com/questions/4261866/eclipse-rcp-how-to-download-delta-pack-from-software-site-in-the-target-definit).
-Additionally, it contains translations from the [Eclipse Babel](https://www.eclipse.org/babel/downloads.php) project.
-You may have to update the target platform when setting up the development environment.
+[here](https://stackoverflow.com/a/12737382). You may have to update the target
+platform when setting up the development environment.
 
 Also, when updating the target platform it is probably required to update the product
 configuration in `app.product`. Just remove and re-add all required plugins. It is
@@ -136,7 +135,7 @@ add the following things to the build folder:
 ###### Java Runtime Environment (JRE)
 
 We package a JRE together with the application. Just download the
-[current package](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html)
+[OpenJDK 8 JRE](https://adoptopenjdk.net/)
 for Windows 64 bit (e.g. `jre-8u141-windows-x64.tar.gz`), extract it, and
 copy the content into the folder `build/jre/win64`.
 

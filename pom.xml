@@ -17,13 +17,13 @@
 		<dependency>
 			<groupId>org.openlca</groupId>
 			<artifactId>olca-ilcd</artifactId>
-			<version>1.7.4</version>
+			<version>1.9.0</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.okworx.ilcd.validation</groupId>
 			<artifactId>ilcd-validation</artifactId>
-			<version>1.4.10</version>
+			<version>1.5.18</version>
 		</dependency>
 
 		<dependency>

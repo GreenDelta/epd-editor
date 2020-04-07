@@ -58,6 +58,10 @@ public class FlowExtensions {
 				"referenceToSource", extension);
 	}
 
+	/**
+	 * Writes the EPD extensions of the given product to the underlying ILCD
+	 * flow data set.
+	 */
 	public static void write(EpdProduct p) {
 		if (p == null || p.flow == null)
 			return;
@@ -74,15 +78,28 @@ public class FlowExtensions {
 	}
 
 	private static void writeInfoExtension(EpdProduct p) {
-		Other extension = getInfoExtension(p.flow, true);
-		DataSetRefExtension.write(p.genericFlow, "isA", extension);
-		MatML matML = new MatML(extension);
-		if (p.properties.isEmpty())
+		if (p.genericFlow == null && p.properties.isEmpty()) {
+			// clear the extension point
+			if (p.flow == null)
+				return;
+			if (p.flow.flowInfo == null)
+				return;
+			if (p.flow.flowInfo.dataSetInfo == null)
+				return;
+			p.flow.flowInfo.dataSetInfo.other = null;
+			return;
+		}
+
+		Other ext = getInfoExtension(p.flow, true);
+		DataSetRefExtension.write(p.genericFlow, "isA", ext);
+		MatML matML = new MatML(ext);
+		if (p.properties.isEmpty()) {
 			matML.clear();
-		else {
+		} else {
 			matML.createStructure(LangString.getFirst(p.flow.getName()));
-			for (MaterialPropertyValue value : p.properties)
+			for (MaterialPropertyValue value : p.properties) {
 				matML.append(value);
+			}
 		}
 	}
 

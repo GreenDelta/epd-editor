@@ -2,11 +2,14 @@ package app.navi;
 
 import java.util.List;
 
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.actions.ActionContext;
 import org.eclipse.ui.navigator.CommonActionProvider;
+import org.eclipse.ui.navigator.CommonViewer;
 import org.openlca.ilcd.io.SodaConnection;
 
 import app.M;
@@ -35,6 +38,35 @@ import app.util.UI;
 import app.util.Viewers;
 
 public class NavigationMenu extends CommonActionProvider {
+
+	@Override
+	public void fillActionBars(IActionBars actionBars) {
+
+		if (actionBars == null)
+			return;
+		IMenuManager menu = actionBars.getMenuManager();
+		if (menu == null)
+			return;
+
+		Action collapseAll = Actions.create(
+				"Collapse all", Icon.COLLAPSE.des(), () -> {
+					CommonViewer viewer = Navigator.getViewer();
+					if (viewer != null) {
+						viewer.collapseAll();
+					}
+				});
+		menu.add(collapseAll);
+
+		Action expandAll = Actions.create(
+				"Expand all", Icon.EXPAND.des(), () -> {
+					CommonViewer viewer = Navigator.getViewer();
+					if (viewer != null) {
+						viewer.expandAll();
+					}
+				});
+		menu.add(expandAll);
+
+	}
 
 	@Override
 	public void fillContextMenu(IMenuManager menu) {

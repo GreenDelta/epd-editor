@@ -143,7 +143,7 @@ public class Navigator extends CommonNavigator {
 	}
 
 	public static void refresh() {
-		CommonViewer viewer = getNavigationViewer();
+		CommonViewer viewer = getViewer();
 		if (viewer != null) {
 			viewer.refresh();
 		}
@@ -153,20 +153,20 @@ public class Navigator extends CommonNavigator {
 		if (e == null)
 			return;
 		e.update();
-		CommonViewer viewer = getNavigationViewer();
-		viewer.refresh(e);
-	}
-
-	private static CommonViewer getNavigationViewer() {
-		CommonViewer viewer = null;
-		Navigator instance = getInstance();
-		if (instance != null) {
-			viewer = instance.getCommonViewer();
+		CommonViewer viewer = getViewer();
+		if (viewer != null) {
+			viewer.refresh(e);
 		}
-		return viewer;
 	}
 
-	private static Navigator getInstance() {
+	public static CommonViewer getViewer() {
+		Navigator navi = getInstance();
+		return navi == null
+				? null
+				: navi.getCommonViewer();
+	}
+
+	public static Navigator getInstance() {
 		IWorkbench workbench = PlatformUI.getWorkbench();
 		if (workbench == null)
 			return null;

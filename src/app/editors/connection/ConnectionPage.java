@@ -36,7 +36,16 @@ class ConnectionPage extends FormPage {
 		Composite comp = UI.formSection(body, tk, M.ConnectionData);
 		text(comp, "URL", con.url, t -> con.url = t);
 		text(comp, M.User, con.user, t -> con.user = t);
-		text(comp, M.Password, con.password, t -> con.password = t);
+
+		// password
+		UI.formLabel(comp, tk, M.Password);
+		Text pwText = tk.createText(comp, con.password, SWT.PASSWORD);
+		pwText.addModifyListener(e -> {
+			con.password = pwText.getText();
+			editor.setDirty();
+		});
+		UI.gridData(pwText, true, false);
+
 		new DataStockLink(editor).render(comp, tk);
 		new DataSection(con).create(body, tk);
 		UI.filler(comp);

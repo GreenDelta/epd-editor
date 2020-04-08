@@ -72,7 +72,9 @@ public class Editors {
 		case LCIA_METHOD:
 			MethodEditor.open(ref);
 			break;
+		case MODEL:
 		case EXTERNAL_FILE:
+			// we have no editor for these things
 			break;
 		}
 	}

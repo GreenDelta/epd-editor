@@ -32,6 +32,7 @@ import app.navi.actions.ProfileImportAction;
 import app.navi.actions.RefDeleteAction;
 import app.rcp.Icon;
 import app.store.Connections;
+import app.store.ExportDialog;
 import app.store.validation.ValidationDialog;
 import app.util.Actions;
 import app.util.UI;
@@ -133,6 +134,8 @@ public class NavigationMenu extends CommonActionProvider {
 		menu.add(Actions.create(M.Validate, Icon.OK.des(),
 				() -> ValidationDialog.open(e.ref)));
 		menu.add(new DuplicateAction(e));
+		menu.add(Actions.create(M.Export, Icon.EXPORT.des(),
+				() -> ExportDialog.open(e.ref)));
 		menu.add(new RefDeleteAction(e));
 	}
 

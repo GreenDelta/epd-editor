@@ -20,7 +20,6 @@ import app.editors.Editors;
 import app.editors.SimpleEditorInput;
 import app.navi.Navigator;
 import app.rcp.IniFile;
-import app.store.EpdProfiles;
 import app.util.UI;
 import epd.util.Strings;
 
@@ -64,7 +63,6 @@ public class SettingsPage extends BaseEditor {
 		editorDirtyStateChanged();
 		if (langChange) {
 			// order is important
-			EpdProfiles.evictCache();
 			Navigator.refresh();
 		}
 	}

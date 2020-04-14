@@ -9,9 +9,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 
 import org.openlca.ilcd.commons.Ref;
@@ -40,13 +38,7 @@ public final class EpdProfiles {
 
 	private static final String DEFAULT = "EN_15804";
 
-	private static Map<String, EpdProfile> cache = new HashMap<>();
-
 	private EpdProfiles() {
-	}
-
-	public static void evictCache() {
-		cache.clear();
 	}
 
 	public static boolean isDefault(EpdProfile p) {
@@ -97,15 +89,10 @@ public final class EpdProfiles {
 	public static EpdProfile get(String id) {
 		if (id == null)
 			return null;
-		EpdProfile p = cache.get(id);
-		if (p != null)
-			return p;
 		File f = file(id);
 		if (f == null || !f.exists())
 			return null;
-		p = Json.read(f, EpdProfile.class);
-		sync(p);
-		cache.put(id, p);
+		EpdProfile p = Json.read(f, EpdProfile.class);
 		return p;
 	}
 
@@ -140,10 +127,8 @@ public final class EpdProfiles {
 	public static void save(EpdProfile profile) {
 		if (profile == null || profile.id == null)
 			return;
-		sync(profile);
 		File file = file(profile.id);
 		Json.write(profile, file);
-		cache.put(profile.id, profile);
 	}
 
 	/** Delete the profile with the given ID. */
@@ -152,7 +137,6 @@ public final class EpdProfiles {
 		if (file == null || !file.exists())
 			return;
 		file.delete();
-		cache.remove(id);
 	}
 
 	private static File file(String id) {

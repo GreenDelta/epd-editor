@@ -40,10 +40,12 @@ import app.util.Viewers;
 
 public class NavigationMenu extends CommonActionProvider {
 
+	private boolean menuAdded = false;
+
 	@Override
 	public void fillActionBars(IActionBars actionBars) {
 
-		if (actionBars == null)
+		if (actionBars == null || menuAdded)
 			return;
 		IMenuManager menu = actionBars.getMenuManager();
 		if (menu == null)
@@ -66,7 +68,7 @@ public class NavigationMenu extends CommonActionProvider {
 					}
 				});
 		menu.add(expandAll);
-
+		menuAdded = true;
 	}
 
 	@Override

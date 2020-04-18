@@ -22,7 +22,6 @@ import app.App;
 import app.M;
 import app.Tooltips;
 import app.editors.Editors;
-import app.editors.IEditor;
 import app.editors.RefSelectionDialog;
 import app.rcp.Icon;
 import app.store.RefDeps;
@@ -34,7 +33,7 @@ import app.util.tables.ModifySupport;
 
 class FlowPropertySection {
 
-	private final IEditor editor;
+	private final FlowEditor editor;
 	private final Flow flow;
 	private TableViewer table;
 
@@ -108,7 +107,7 @@ class FlowPropertySection {
 		}
 		table.setInput(Flows.getFlowProperties(flow));
 		if (materialPropertySection != null
-				&& PropertyDepsDialog.add(flow)) {
+				&& PropertyDepsDialog.add(editor.product)) {
 			table.setInput(Flows.getFlowProperties(flow));
 			materialPropertySection.refresh();
 		}

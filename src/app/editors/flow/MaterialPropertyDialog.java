@@ -1,7 +1,6 @@
 package app.editors.flow;
 
 import java.util.Collections;
-import java.util.List;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -28,10 +27,15 @@ import epd.util.Strings;
 
 class MaterialPropertyDialog extends Dialog {
 
-	private MaterialProperty selectedProperty;
+	MaterialProperty selectedProperty;
 
-	public MaterialPropertyDialog(Shell shell) {
-		super(shell);
+	public MaterialPropertyDialog() {
+		super(UI.shell());
+	}
+
+	@Override
+	protected void configureShell(Shell shell) {
+		super.configureShell(shell);
 		shell.setText(M.AddAMaterialProperty);
 	}
 
@@ -47,31 +51,30 @@ class MaterialPropertyDialog extends Dialog {
 	}
 
 	private ComboViewer createViewer(Composite parent) {
-		ComboViewer viewer = new ComboViewer(parent, SWT.READ_ONLY);
-		UI.gridData(viewer.getCombo(), true, false);
-		viewer.setContentProvider(ArrayContentProvider.getInstance());
-		viewer.setLabelProvider(new PropertyLabel());
-		setInput(viewer);
-		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
+		var combo = new ComboViewer(parent, SWT.READ_ONLY);
+		UI.gridData(combo.getCombo(), true, false);
+		combo.setContentProvider(ArrayContentProvider.getInstance());
+		combo.setLabelProvider(new PropertyLabel());
+		setInput(combo);
+		combo.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				selectedProperty = Viewers.getFirst(event.getSelection());
 			}
 		});
-		return viewer;
+		return combo;
 	}
 
-	private void setInput(ComboViewer viewer) {
+	private void setInput(ComboViewer combo) {
 		try {
-			List<MaterialProperty> props = MaterialProperties.get();
+			var props = MaterialProperties.get();
 			Collections.sort(props,
 					(p1, p2) -> Strings.compare(p1.name, p2.name));
-			viewer.setInput(props);
+			combo.setInput(props);
 			if (props.size() > 0) {
 				selectedProperty = props.get(0);
-				StructuredSelection selection = new StructuredSelection(
-						selectedProperty);
-				viewer.setSelection(selection);
+				var selection = new StructuredSelection(selectedProperty);
+				combo.setSelection(selection);
 			}
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
@@ -82,10 +85,6 @@ class MaterialPropertyDialog extends Dialog {
 	@Override
 	protected Point getInitialSize() {
 		return new Point(400, 200);
-	}
-
-	public MaterialProperty getSelectedProperty() {
-		return selectedProperty;
 	}
 
 	private class PropertyLabel extends LabelProvider {

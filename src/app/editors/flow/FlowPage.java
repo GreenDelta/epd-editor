@@ -3,13 +3,11 @@ package app.editors.flow;
 import java.util.function.Supplier;
 
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.FlowType;
-import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.util.Flows;
 
 import app.App;
@@ -90,24 +88,24 @@ class FlowPage extends FormPage {
 	}
 
 	private void adminSection(Composite body) {
-		Flow f = product.flow;
-		Composite comp = UI.formSection(body, tk,
-				M.AdministrativeInformation);
-		Text timeT = UI.formText(comp, tk,
+		var flow = product.flow;
+		var comp = UI.formSection(body, tk, M.AdministrativeInformation);
+		var time = UI.formText(comp, tk,
 				M.LastUpdate, Tooltips.All_LastUpdate);
-		timeT.setText(Xml.toString(Flows.dataEntry(f).timeStamp));
-		Text uuidT = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);
-		if (f.getUUID() != null)
-			uuidT.setText(f.getUUID());
-		VersionField vf = new VersionField(comp, tk);
-		vf.setVersion(f.getVersion());
-		vf.onChange(v -> {
-			Flows.publication(f).version = v;
+		time.setText(Xml.toString(Flows.dataEntry(flow).timeStamp));
+		var uuid = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);
+		if (flow.getUUID() != null) {
+			uuid.setText(flow.getUUID());
+		}
+		var version = new VersionField(comp, tk);
+		version.setVersion(flow.getVersion());
+		version.onChange(v -> {
+			Flows.publication(flow).version = v;
 			editor.setDirty();
 		});
 		editor.onSaved(() -> {
-			vf.setVersion(f.getVersion());
-			timeT.setText(Xml.toString(Flows.dataEntry(f).timeStamp));
+			version.setVersion(flow.getVersion());
+			time.setText(Xml.toString(Flows.dataEntry(flow).timeStamp));
 		});
 	}
 }

@@ -74,10 +74,10 @@ class MaterialPropertySection {
 	private void onAdd() {
 		if (editor.product == null)
 			return;
-		var dialog = new MaterialPropertyDialog(UI.shell());
+		var dialog = new MaterialPropertyDialog();
 		if (dialog.open() != Window.OK)
 			return;
-		var property = dialog.getSelectedProperty();
+		var property = dialog.selectedProperty;
 		if (property == null)
 			return;
 		var value = new MaterialPropertyValue();

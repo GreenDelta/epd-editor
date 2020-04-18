@@ -17,18 +17,20 @@ public class MaterialProperty {
 			return true;
 		if (!(obj instanceof MaterialProperty))
 			return false;
-		MaterialProperty other = (MaterialProperty) obj;
+		var other = (MaterialProperty) obj;
 		return Objects.equals(this.id, other.id);
 	}
 
 	@Override
 	public int hashCode() {
-		return id == null ? super.hashCode() : id.hashCode();
+		return id == null
+				? super.hashCode()
+				: id.hashCode();
 	}
 
 	@Override
 	public MaterialProperty clone() {
-		MaterialProperty clone = new MaterialProperty();
+		var clone = new MaterialProperty();
 		clone.id = id;
 		clone.name = name;
 		clone.unit = unit;

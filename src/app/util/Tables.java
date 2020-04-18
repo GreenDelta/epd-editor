@@ -22,13 +22,11 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
 
 /**
  * A helper class for creating tables, table viewers and related resources.
@@ -139,17 +137,16 @@ public class Tables {
 		});
 	}
 
-	/**
-	 * Get the table item where the given event occurred. Returns null if the
-	 * event occurred in the empty table area.
-	 */
-	public static TableItem getItem(TableViewer viewer, MouseEvent event) {
-		if (viewer == null || event == null)
-			return null;
-		Table table = viewer.getTable();
-		if (table == null)
-			return null;
-		return table.getItem(new Point(event.x, event.y));
+	/** Calls the given function when a click appears on the table. */
+	public static void onClick(TableViewer viewer, Consumer<MouseEvent> fn) {
+		if (viewer == null || viewer.getTable() == null || fn == null)
+			return;
+		viewer.getTable().addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				fn.accept(e);
+			}
+		});
 	}
 
 	public static void onDeletePressed(TableViewer viewer,

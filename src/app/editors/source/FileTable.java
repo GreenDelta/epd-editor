@@ -86,8 +86,9 @@ class FileTable {
 			boolean b = MsgBox.ask("File name has non-ASCII characters",
 					"The name of the selected file has non-ASCII characters"
 							+ " which can cause upload problems. It is"
-							+ " recommended to rename the file first. Continue"
-							+ " anyway?");
+							+ " recommended to rename the file first using only"
+							+ " latin letters, digits, underscores and dashes."
+							+ " Continue anyway?");
 			if (!b)
 				return;
 		}
@@ -176,7 +177,9 @@ class FileTable {
 				return null;
 			return "The name of this file has non-ASCII characters"
 					+ " which can cause upload problems. It is"
-					+ " recommended to rename the file.";
+					+ " recommended to rename the file first"
+					+ " using only latin letters, digits,"
+					+ " underscores and dashes.";
 		}
 	}
 

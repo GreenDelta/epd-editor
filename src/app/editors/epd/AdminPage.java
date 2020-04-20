@@ -11,6 +11,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.processes.DataEntry;
+import org.openlca.ilcd.processes.LicenseType;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.Publication;
 import org.openlca.ilcd.util.Processes;
@@ -91,6 +92,7 @@ class AdminPage extends FormPage {
 		version(comp);
 		owner(comp);
 		copyright(comp);
+		license(comp);
 		accessRestrictions(comp);
 	}
 
@@ -130,10 +132,41 @@ class AdminPage extends FormPage {
 	}
 
 	private void accessRestrictions(Composite comp) {
-		Publication pub = Processes.publication(process);
+		var pub = Processes.publication(process);
 		new TextBuilder(editor, this, toolkit)
 				.text(comp, M.AccessRestrictions,
 						Tooltips.EPD_AccessRestrictions,
 						pub.accessRestrictions);
+	}
+
+	private void license(Composite comp) {
+		// TODO: labels, translations and tool-tips
+
+		// map the combo items
+		var pub = Processes.publication(process);
+		var types = LicenseType.values();
+		var items = new String[types.length + 1];
+		items[0] = "";
+		int selected = 0;
+		for (int i = 0; i < types.length; i++) {
+			items[i + 1] = types[i].value();
+			if (pub.license == types[i]) {
+				selected = i + 1;
+			}
+		}
+
+		// create the combo
+		var combo = UI.formCombo(comp, toolkit, "License");
+		combo.setItems(items);
+		combo.select(selected);
+		Controls.onSelect(combo, e -> {
+			int i = combo.getSelectionIndex();
+			if (i == 0) {
+				pub.license = null;
+			} else {
+				pub.license = types[i - 1];
+			}
+			editor.setDirty();
+		});
 	}
 }

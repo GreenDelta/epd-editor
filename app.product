@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="EPD Editor" uid="epd.editor" id="epd-editor.product" application="epd-editor.application" version="3.1.0" useFeatures="false" includeLaunchers="true">
+<product name="EPD Editor" uid="epd.editor" id="epd-editor.product" application="epd-editor.application" version="4.0.0" useFeatures="false" includeLaunchers="true">
 
    <aboutInfo>
       <text>
-         EPD Editor 3.0
+         EPD Editor 4
 Copyright (c) 2020 GreenDelta. All rights reserved.
 
 This product includes software developed in the EPD Editor
@@ -30,6 +30,7 @@ Visit https://github.com/GreenDelta/epd-editor
 
    <windowImages i16="icons/eclipse16.png" i32="icons/eclipse32.png" i48="icons/eclipse48.png" i64="icons/eclipse64.png" i128=" icons/eclipse128.png" i256="icons/eclipse256.png"/>
 
+
    <launcher name="epd-editor">
       <macosx icon="/epd-editor/icons/EPD-Editor.icns"/>
       <win useIco="true">
@@ -37,6 +38,7 @@ Visit https://github.com/GreenDelta/epd-editor
          <bmp/>
       </win>
    </launcher>
+
 
    <vm>
    </vm>

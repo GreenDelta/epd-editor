@@ -1,5 +1,6 @@
 package app.store.validation;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
@@ -28,7 +29,11 @@ final class Event {
 		ref.uuid = iRef.getUuid();
 		ref.version = iRef.getVersion();
 		return new RefStatus(statusValue(e.getSeverity()),
-				ref, e.getAspect() + ": " + e.getMessage());
+				ref, e.getAspect()
+						+ (StringUtils.isNotBlank(e.getAspectDescription())
+								? " (" + e.getAspectDescription() + ")"
+								: "")
+						+ ": " + e.getMessage());
 	}
 
 	static int statusValue(Severity s) {

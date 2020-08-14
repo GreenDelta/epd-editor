@@ -11,7 +11,7 @@
 	<classpathentry exported="true" kind="lib" path="libs/jakarta.activation-api-1.2.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/jakarta.xml.bind-api-2.3.3.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/olca-ilcd-2.0.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ilcd-validation-1.5.18.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/ilcd-validation-2.0.10.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/bcprov-jdk15on-1.51.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/commons-compress-1.9.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/commons-logging-1.2.jar"/>

@@ -24,7 +24,13 @@
 		<dependency>
 			<groupId>com.okworx.ilcd.validation</groupId>
 			<artifactId>ilcd-validation</artifactId>
-			<version>1.5.18</version>
+			<version>2.0.10</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.okworx.ilcd.validation.profiles</groupId>
+			<artifactId>EPD-1.1-OEKOBAUDAT</artifactId>
+			<version>1.0.38</version>
 		</dependency>
 
 		<dependency>
@@ -88,6 +94,18 @@
 						<configuration>
 							<outputDirectory>${basedir}/libs</outputDirectory>
 							<includeScope>runtime</includeScope>
+							<excludeGroupIds>com.okworx.ilcd.validation.profiles</excludeGroupIds>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-profiles</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/build/default_data/validation_profiles</outputDirectory>
+							<includeGroupIds>com.okworx.ilcd.validation.profiles</includeGroupIds>
 						</configuration>
 					</execution>
 				</executions>

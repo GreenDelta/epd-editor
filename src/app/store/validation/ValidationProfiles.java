@@ -63,7 +63,7 @@ public final class ValidationProfiles {
 			return null;
 		try {
 			URL url = file.toURI().toURL();
-			return ProfileManager.INSTANCE.registerProfile(url);
+			return ProfileManager.getInstance().registerProfile(url);
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(ValidationProfiles.class);
 			log.error("failed to load validation profile " + file, e);

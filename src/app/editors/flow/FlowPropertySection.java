@@ -1,9 +1,7 @@
 package app.editors.flow;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ITableFontProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -18,14 +16,12 @@ import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.flows.FlowPropertyRef;
-import org.openlca.ilcd.flows.QuantitativeReference;
 import org.openlca.ilcd.util.Flows;
 
 import app.App;
 import app.M;
 import app.Tooltips;
 import app.editors.Editors;
-import app.editors.IEditor;
 import app.editors.RefSelectionDialog;
 import app.rcp.Icon;
 import app.store.RefDeps;
@@ -37,19 +33,26 @@ import app.util.tables.ModifySupport;
 
 class FlowPropertySection {
 
-	private final IEditor editor;
+	private final FlowEditor editor;
 	private final Flow flow;
 	private TableViewer table;
 
-	FlowPropertySection(IEditor editor, Flow flow) {
+	/**
+	 * We may give hints for adding additional material properties when a flow
+	 * property is added. If the user follows these hints, we also have to
+	 * update the material property table.
+	 */
+	MaterialPropertySection materialPropertySection;
+
+	FlowPropertySection(FlowEditor editor) {
 		this.editor = editor;
-		this.flow = flow;
+		this.flow = editor.product.flow;
 	}
 
-	void render(Composite parent, FormToolkit tk) {
-		Section section = UI.section(parent, tk, M.FlowProperties);
+	void render(Composite body, FormToolkit tk) {
+		var section = UI.section(body, tk, M.FlowProperties);
 		section.setToolTipText(Tooltips.Flow_FlowProperties);
-		Composite comp = UI.sectionClient(section, tk);
+		var comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
 		table = Tables.createViewer(comp,
 				M.FlowProperty, M.ConversionFactor, M.Unit);
@@ -58,7 +61,7 @@ class FlowPropertySection {
 		table.setInput(Flows.getFlowProperties(flow));
 		Tables.bindColumnWidths(table, 0.4, 0.3, 0.3);
 		bindActions(section);
-		ModifySupport<FlowPropertyRef> modifier = new ModifySupport<>(table);
+		var modifier = new ModifySupport<FlowPropertyRef>(table);
 		modifier.onDouble(M.ConversionFactor, propRef -> propRef.meanValue,
 				(propRef, value) -> {
 					propRef.meanValue = value;
@@ -66,15 +69,16 @@ class FlowPropertySection {
 				});
 		Tables.onDoubleClick(table, e -> {
 			FlowPropertyRef ref = Viewers.getFirstSelected(table);
-			if (ref != null)
+			if (ref != null) {
 				Editors.open(ref.flowProperty);
+			}
 		});
 	}
 
 	private void bindActions(Section section) {
-		Action add = Actions.create(M.Add, Icon.ADD.des(), this::add);
-		Action rem = Actions.create(M.Remove, Icon.DELETE.des(), this::remove);
-		Action ref = Actions.create(M.SetAsReference,
+		var add = Actions.create(M.Add, Icon.ADD.des(), this::add);
+		var rem = Actions.create(M.Remove, Icon.DELETE.des(), this::remove);
+		var ref = Actions.create(M.SetAsReference,
 				Icon.des(DataSetType.FLOW_PROPERTY), this::setRef);
 		Actions.bind(section, add, rem);
 		Actions.bind(table, ref, add, rem);
@@ -84,8 +88,9 @@ class FlowPropertySection {
 		Ref ref = RefSelectionDialog.select(DataSetType.FLOW_PROPERTY);
 		if (ref == null)
 			return;
-		FlowPropertyRef propRef = new FlowPropertyRef();
-		List<Integer> existingIDs = Flows.getFlowProperties(flow).stream()
+		var propRef = new FlowPropertyRef();
+		var existingIDs = Flows.getFlowProperties(flow)
+				.stream()
 				.map(pr -> pr.dataSetInternalID)
 				.collect(Collectors.toList());
 		propRef.dataSetInternalID = 0;
@@ -97,10 +102,15 @@ class FlowPropertySection {
 		Flows.flowProperties(flow).add(propRef);
 		if (Flows.getFlowProperties(flow).size() == 1) {
 			// set it as reference flow property if it is the only one
-			QuantitativeReference qRef = Flows.quantitativeReference(flow);
+			var qRef = Flows.quantitativeReference(flow);
 			qRef.referenceFlowProperty = propRef.dataSetInternalID;
 		}
 		table.setInput(Flows.getFlowProperties(flow));
+		if (materialPropertySection != null
+				&& PropertyDepsDialog.add(editor.product)) {
+			table.setInput(Flows.getFlowProperties(flow));
+			materialPropertySection.refresh();
+		}
 		editor.setDirty();
 	}
 
@@ -108,14 +118,15 @@ class FlowPropertySection {
 		FlowPropertyRef propRef = Viewers.getFirstSelected(table);
 		if (propRef == null)
 			return;
-		List<FlowPropertyRef> list = Flows.flowProperties(flow);
+		var list = Flows.flowProperties(flow);
 		list.remove(propRef);
-		if (list.isEmpty())
+		if (list.isEmpty()) {
 			flow.flowPropertyList = null;
-		QuantitativeReference qRef = Flows.getQuantitativeReference(flow);
-		if (qRef != null) {
-			if (propRef.dataSetInternalID == qRef.referenceFlowProperty)
-				qRef.referenceFlowProperty = null;
+		}
+		var qRef = Flows.getQuantitativeReference(flow);
+		if (qRef != null
+				&& qRef.referenceFlowProperty == propRef.dataSetInternalID) {
+			qRef.referenceFlowProperty = null;
 		}
 		table.setInput(Flows.getFlowProperties(flow));
 		editor.setDirty();
@@ -125,7 +136,7 @@ class FlowPropertySection {
 		FlowPropertyRef propRef = Viewers.getFirstSelected(table);
 		if (propRef == null)
 			return;
-		QuantitativeReference qRef = Flows.quantitativeReference(flow);
+		var qRef = Flows.quantitativeReference(flow);
 		qRef.referenceFlowProperty = propRef.dataSetInternalID;
 		table.refresh();
 		editor.setDirty();
@@ -145,7 +156,7 @@ class FlowPropertySection {
 		public String getColumnText(Object obj, int col) {
 			if (!(obj instanceof FlowPropertyRef))
 				return null;
-			FlowPropertyRef ref = (FlowPropertyRef) obj;
+			var ref = (FlowPropertyRef) obj;
 			switch (col) {
 			case 0:
 				Ref propRef = ref.flowProperty;
@@ -165,13 +176,13 @@ class FlowPropertySection {
 		public Font getFont(Object obj, int col) {
 			if (!(obj instanceof FlowPropertyRef))
 				return null;
-			QuantitativeReference qRef = Flows.getQuantitativeReference(flow);
+			var qRef = Flows.getQuantitativeReference(flow);
 			if (qRef == null)
 				return null;
-			FlowPropertyRef ref = (FlowPropertyRef) obj;
-			if (ref.dataSetInternalID == qRef.referenceFlowProperty)
-				return UI.boldFont();
-			return null;
+			var ref = (FlowPropertyRef) obj;
+			return ref.dataSetInternalID == qRef.referenceFlowProperty
+					? UI.boldFont()
+					: null;
 		}
 	}
 }

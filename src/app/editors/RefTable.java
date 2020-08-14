@@ -78,7 +78,7 @@ public class RefTable {
 		Actions.bind(section, actions);
 		Actions.bind(table, actions);
 		table.setInput(refs);
-		table.getTable().getColumn(0).setWidth(350);
+		Tables.bindColumnWidths(table, 1.0);
 		if (tooltip != null) {
 			table.getTable().setToolTipText(tooltip);
 		}

@@ -2,17 +2,13 @@ package app.editors.epd;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.processes.DataEntry;
+import org.openlca.ilcd.processes.LicenseType;
 import org.openlca.ilcd.processes.Process;
-import org.openlca.ilcd.processes.Publication;
 import org.openlca.ilcd.util.Processes;
 
 import app.M;
@@ -24,10 +20,9 @@ import app.util.Controls;
 import app.util.TextBuilder;
 import app.util.UI;
 import epd.model.Xml;
+import epd.util.Strings;
 
 class AdminPage extends FormPage {
-
-	private FormToolkit toolkit;
 
 	private EpdEditor editor;
 	private Process process;
@@ -40,100 +35,191 @@ class AdminPage extends FormPage {
 
 	@Override
 	protected void createFormContent(IManagedForm mform) {
-		toolkit = mform.getToolkit();
-		ScrolledForm form = UI.formHeader(mform,
-				M.AdministrativeInformation);
-		Composite body = UI.formBody(form, mform.getToolkit());
-		createDataEntrySection(body);
-		RefTable.create(DataSetType.SOURCE,
-				Processes.dataEntry(process).formats)
+		var tk = mform.getToolkit();
+		var form = UI.formHeader(mform, M.AdministrativeInformation);
+		var body = UI.formBody(form, mform.getToolkit());
+
+		// project
+		projectSection(body, tk);
+
+		// commissioner
+		var commisioners = Processes.commissionerAndGoal(process).commissioners;
+		RefTable.create(DataSetType.CONTACT, commisioners)
+				.withEditor(editor)
+				.withTitle("Commissioner")
+				.render(body, tk);
+
+		// data entry
+		dataEntrySection(body, tk);
+
+		// data set generators
+		var generators = Processes.dataGenerator(process).contacts;
+		RefTable.create(DataSetType.CONTACT, generators)
+				.withEditor(editor)
+				.withTitle("Data set generator / modeller")
+				.render(body, tk);
+
+		// data formats
+		var formats = Processes.dataEntry(process).formats;
+		RefTable.create(DataSetType.SOURCE, formats)
 				.withEditor(editor)
 				.withTitle(M.DataFormats)
 				.withTooltip(Tooltips.EPD_DataFormats)
-				.render(body, toolkit);
-		createPublicationSection(body);
+				.render(body, tk);
+
+		// publication and ownership
+		publicationSection(body, tk);
+
+		// preceding data version
+		var precedingVersions = Processes
+				.publication(process).precedingVersions;
+		RefTable.create(DataSetType.PROCESS, precedingVersions)
+				.withEditor(editor)
+				.withTitle("Preceding data set version")
+				.render(body, tk);
+
 		form.reflow(true);
 	}
 
-	private void createDataEntrySection(Composite parent) {
-		Composite comp = UI.formSection(parent, toolkit,
+	private void projectSection(Composite body, FormToolkit tk) {
+		var comp = UI.formSection(body, tk, "Project");
+		var goal = Processes.commissionerAndGoal(process);
+
+		// project
+		new TextBuilder(editor, this, tk).multiText(
+				comp,
+				"Project",
+				goal.project);
+
+		// intended applications
+		new TextBuilder(editor, this, tk).multiText(
+				comp,
+				"Intended applications",
+				goal.intendedApplications);
+	}
+
+	private void dataEntrySection(Composite body, FormToolkit tk) {
+		var comp = UI.formSection(body, tk,
 				M.DataEntry, Tooltips.EPD_DataEntry);
-		createLastUpdateText(comp);
-		UI.formLabel(comp, toolkit, M.Documentor, Tooltips.EPD_Documentor);
-		RefLink t = new RefLink(comp, toolkit, DataSetType.CONTACT);
-		DataEntry entry = Processes.dataEntry(process);
-		t.setRef(entry.documentor);
-		t.onChange(ref -> {
+		var entry = Processes.dataEntry(process);
+
+		// last update
+		var lastUpdate = UI.formText(comp, tk,
+				M.LastUpdate, Tooltips.All_LastUpdate);
+		lastUpdate.setEditable(false);
+		editor.onSaved(() -> {
+			XMLGregorianCalendar t = entry.timeStamp;
+			lastUpdate.setText(Xml.toString(t));
+		});
+		if (entry.timeStamp != null) {
+			lastUpdate.setText(Xml.toString(entry.timeStamp));
+		}
+
+		// documentor
+		UI.formLabel(comp, tk, M.Documentor, Tooltips.EPD_Documentor);
+		var documentor = new RefLink(comp, tk, DataSetType.CONTACT);
+		documentor.setRef(entry.documentor);
+		documentor.onChange(ref -> {
 			entry.documentor = ref;
 			editor.setDirty();
 		});
 	}
 
-	private void createLastUpdateText(Composite comp) {
-		Text text = UI.formText(comp, toolkit,
-				M.LastUpdate, Tooltips.All_LastUpdate);
-		text.setEditable(false);
-		DataEntry entry = Processes.dataEntry(process);
-		editor.onSaved(() -> {
-			XMLGregorianCalendar t = entry.timeStamp;
-			text.setText(Xml.toString(t));
-		});
-		if (entry.timeStamp == null)
-			return;
-		String s = Xml.toString(entry.timeStamp);
-		text.setText(s);
-	}
-
-	private void createPublicationSection(Composite parent) {
-		Composite comp = UI.formSection(parent, toolkit,
+	private void publicationSection(Composite body, FormToolkit tk) {
+		var comp = UI.formSection(body, tk,
 				M.PublicationAndOwnership,
 				Tooltips.EPD_PublicationAndOwnership);
-		version(comp);
-		owner(comp);
-		copyright(comp);
-		accessRestrictions(comp);
-	}
+		var pub = Processes.publication(process);
 
-	private void owner(Composite comp) {
-		UI.formLabel(comp, toolkit, M.Owner, Tooltips.EPD_Owner);
-		RefLink t = new RefLink(comp, toolkit, DataSetType.CONTACT);
-		Publication pub = Processes.publication(process);
-		t.setRef(pub.owner);
-		t.onChange(ref -> {
+		// version
+		var version = new VersionField(comp, tk);
+		version.setVersion(pub.version);
+		editor.onSaved(() -> version.setVersion(pub.version));
+		version.onChange(v -> {
+			pub.version = v;
+			editor.setDirty();
+		});
+
+		// registration authority
+		UI.formLabel(comp, tk, "Registration authority");
+		var regAuthority = new RefLink(comp, tk, DataSetType.CONTACT);
+		regAuthority.setRef(pub.registrationAuthority);
+		regAuthority.onChange(ref -> {
+			pub.registrationAuthority = ref;
+			editor.setDirty();
+		});
+
+		// registration number
+		var regNumber = UI.formText(comp, tk, "Registration number");
+		if (pub.registrationNumber != null) {
+			regNumber.setText(pub.registrationNumber);
+		}
+		regNumber.addModifyListener(e -> {
+			String number = regNumber.getText();
+			if (Strings.nullOrEmpty(number)) {
+				pub.registrationNumber = null;
+			} else {
+				pub.registrationNumber = number;
+			}
+		});
+
+		// owner
+		UI.formLabel(comp, tk, M.Owner, Tooltips.EPD_Owner);
+		var owner = new RefLink(comp, tk, DataSetType.CONTACT);
+		owner.setRef(pub.owner);
+		owner.onChange(ref -> {
 			pub.owner = ref;
 			editor.setDirty();
 		});
 
-	}
-
-	private void copyright(Composite comp) {
-		Button check = UI.formCheckBox(comp, toolkit,
+		// copyright
+		var copyright = UI.formCheckBox(comp, tk,
 				M.Copyright, Tooltips.EPD_Copyright);
-		Publication pub = Processes.publication(process);
-		if (pub.copyright != null)
-			check.setSelection(pub.copyright);
-		Controls.onSelect(check, e -> {
-			pub.copyright = check.getSelection();
+		copyright.setSelection(pub.copyright != null && pub.copyright);
+		Controls.onSelect(copyright, e -> {
+			pub.copyright = copyright.getSelection();
 			editor.setDirty();
 		});
+
+		// license
+		licenseCombo(comp, tk);
+
+		// access restrictions
+		new TextBuilder(editor, this, tk).multiText(
+				comp,
+				M.AccessRestrictions,
+				Tooltips.EPD_AccessRestrictions,
+				pub.accessRestrictions);
 	}
 
-	private void version(Composite comp) {
-		VersionField v = new VersionField(comp, toolkit);
-		Publication pub = Processes.publication(process);
-		v.setVersion(pub.version);
-		editor.onSaved(() -> v.setVersion(pub.version));
-		v.onChange(version -> {
-			pub.version = version;
+	private void licenseCombo(Composite comp, FormToolkit tk) {
+		// TODO: labels, translations and tool-tips
+
+		// map the combo items
+		var pub = Processes.publication(process);
+		var types = LicenseType.values();
+		var items = new String[types.length + 1];
+		items[0] = "";
+		int selected = 0;
+		for (int i = 0; i < types.length; i++) {
+			items[i + 1] = types[i].value();
+			if (pub.license == types[i]) {
+				selected = i + 1;
+			}
+		}
+
+		// create the combo
+		var combo = UI.formCombo(comp, tk, "License");
+		combo.setItems(items);
+		combo.select(selected);
+		Controls.onSelect(combo, e -> {
+			int i = combo.getSelectionIndex();
+			if (i == 0) {
+				pub.license = null;
+			} else {
+				pub.license = types[i - 1];
+			}
 			editor.setDirty();
 		});
-	}
-
-	private void accessRestrictions(Composite comp) {
-		Publication pub = Processes.publication(process);
-		new TextBuilder(editor, this, toolkit)
-				.text(comp, M.AccessRestrictions,
-						Tooltips.EPD_AccessRestrictions,
-						pub.accessRestrictions);
 	}
 }

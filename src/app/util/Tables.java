@@ -1,8 +1,6 @@
 package app.util;
 
 import java.util.Comparator;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -20,15 +18,15 @@ import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
 
 /**
  * A helper class for creating tables, table viewers and related resources.
@@ -89,31 +87,41 @@ public class Tables {
 		bindColumnWidths(viewer.getTable(), percents);
 	}
 
-	public static void bindColumnWidths(TableViewer viewer, int minimum,
-			double... percents) {
-		bindColumnWidths(viewer.getTable(), minimum, percents);
-	}
-
 	/**
 	 * Binds the given percentage values (values between 0 and 1) to the column
 	 * widths of the given table
 	 */
 	public static void bindColumnWidths(Table table, double... percents) {
-		bindColumnWidths(table, 0, percents);
-	}
-
-	public static void bindColumnWidths(Table table, int minimum,
-			double... percents) {
 		if (table == null || percents == null)
 			return;
-		TableResizeListener tableListener = new TableResizeListener(table,
-				percents, minimum);
-		// see resize listener declaration for comment on why this is done
-		ColumnResizeListener columnListener = new ColumnResizeListener(
-				tableListener);
-		for (TableColumn column : table.getColumns())
-			column.addControlListener(columnListener);
-		table.addControlListener(tableListener);
+
+		ControlAdapter resizer = new ControlAdapter() {
+			@Override
+			public void controlResized(ControlEvent e) {
+				double width = table.getSize().x - 25;
+				TableColumn[] columns = table.getColumns();
+				for (int i = 0; i < columns.length; i++) {
+					if (i >= percents.length)
+						break;
+					double colWidth = percents[i] * width;
+					columns[i].setWidth((int) colWidth);
+				}
+			}
+		};
+		table.addControlListener(resizer);
+
+		// resize the columns when the table is initially
+		// painted as the control events are not always thrown.
+		// removing the paint listener again takes a bit so
+		// that the resizing may is done several times initially.
+		table.addPaintListener(new PaintListener() {
+			@Override
+			public void paintControl(PaintEvent e) {
+				resizer.controlResized(null);
+				table.removePaintListener(this);
+			}
+		});
+
 	}
 
 	/** Add an event handler for double clicks on the given table viewer. */
@@ -129,17 +137,16 @@ public class Tables {
 		});
 	}
 
-	/**
-	 * Get the table item where the given event occurred. Returns null if the
-	 * event occurred in the empty table area.
-	 */
-	public static TableItem getItem(TableViewer viewer, MouseEvent event) {
-		if (viewer == null || event == null)
-			return null;
-		Table table = viewer.getTable();
-		if (table == null)
-			return null;
-		return table.getItem(new Point(event.x, event.y));
+	/** Calls the given function when a click appears on the table. */
+	public static void onClick(TableViewer viewer, Consumer<MouseEvent> fn) {
+		if (viewer == null || viewer.getTable() == null || fn == null)
+			return;
+		viewer.getTable().addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				fn.accept(e);
+			}
+		});
 	}
 
 	public static void onDeletePressed(TableViewer viewer,
@@ -195,83 +202,6 @@ public class Tables {
 				viewer.refresh();
 			}
 		});
-	}
-
-	// In order to be able to resize columns manually, we must know if a column
-	// was resized before, and in those cases, don't resize the columns
-	// automatically.
-	private static class ColumnResizeListener extends ControlAdapter {
-		private TableResizeListener depending;
-		private boolean enabled = true;
-		private boolean initialized;
-
-		private ColumnResizeListener(TableResizeListener depending) {
-			this.depending = depending;
-		}
-
-		@Override
-		public void controlResized(ControlEvent e) {
-			if (!enabled)
-				return;
-			if (!initialized) {
-				initialized = true;
-				return;
-			}
-			depending.enabled = false;
-			enabled = false;
-			Timer t = new Timer();
-			t.schedule(new TimerTask() {
-				@Override
-				public void run() {
-					depending.enabled = true;
-					enabled = true;
-				}
-			}, 100);
-		}
-	}
-
-	private static class TableResizeListener extends ControlAdapter {
-		private Table table;
-		private double[] percents;
-		private int minimum = 0;
-		private boolean enabled = true;
-
-		private TableResizeListener(Table table, double[] percents,
-				int mininmum) {
-			this.table = table;
-			this.percents = percents;
-			this.minimum = mininmum;
-		}
-
-		@Override
-		public void controlResized(ControlEvent e) {
-			if (!enabled)
-				return;
-			double width = table.getSize().x - 25;
-			TableColumn[] columns = table.getColumns();
-			int longest = -1;
-			double max = 0;
-			double additional = 0;
-			for (int i = 0; i < columns.length; i++) {
-				if (i >= percents.length)
-					break;
-				double colWidth = percents[i] * width;
-				if (max < colWidth) {
-					max = colWidth;
-					longest = i;
-				}
-				if (minimum > 0 && colWidth < minimum) {
-					additional += minimum - colWidth;
-					colWidth = minimum;
-				}
-				columns[i].setWidth((int) colWidth);
-			}
-			if (additional == 0 || longest == -1)
-				return;
-			columns[longest]
-					.setWidth((int) (percents[longest] * width - additional));
-		}
-
 	}
 
 	private static class Sorter<E> extends ViewerComparator {

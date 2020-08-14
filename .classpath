@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="libs/gson-2.8.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/slf4j-api-1.7.30.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/slf4j-log4j12-1.7.30.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/FastInfoset-1.2.16.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/istack-commons-runtime-3.0.8.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jaxb-runtime-2.3.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/stax-ex-1.8.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/txw2-2.3.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jakarta.activation-api-1.2.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jakarta.xml.bind-api-2.3.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/olca-ilcd-2.0.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/ilcd-validation-1.5.18.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/olca-ilcd-1.9.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/gson-2.8.5.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/bcprov-jdk15on-1.51.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/commons-compress-1.9.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/commons-logging-1.2.jar"/>
@@ -35,8 +44,6 @@
 	<classpathentry exported="true" kind="lib" path="libs/poi-3.17.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/poi-ooxml-3.17.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/poi-ooxml-schemas-3.17.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/slf4j-api-1.7.25.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/slf4j-log4j12-1.7.25.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/truevfs-kernel-spec-0.11.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/animal-sniffer-annotations-1.14.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/annotations-3.0.0.jar"/>
@@ -70,7 +77,11 @@
 	<classpathentry exported="true" kind="lib" path="libs/truevfs-access-swing-0.11.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/truevfs-profile-default-0.11.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/xmlbeans-2.6.0.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="output" path="bin"/>

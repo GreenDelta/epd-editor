@@ -1,14 +1,14 @@
 package app.editors.source;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
-import java.util.Objects;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
@@ -16,7 +16,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
-import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.sources.FileRef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,18 +44,19 @@ class FileTable {
 
 	public void render(Composite parent, FormToolkit tk) {
 		Section section = UI.section(parent, tk,
-				"#Links to external files");
+				"Links to external files");
 		section.setToolTipText(Tooltips.Source_LinksToExternalFiles);
 		Composite comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
 		table = Tables.createViewer(comp, "File reference");
 		table.getTable().setToolTipText(Tooltips.Source_LinksToExternalFiles);
 		table.setLabelProvider(new Label());
+		ColumnViewerToolTipSupport.enableFor(table);
 		Action[] actions = createActions(table);
 		Actions.bind(section, actions);
 		Actions.bind(table, actions);
 		table.setInput(fileRefs);
-		table.getTable().getColumn(0).setWidth(350);
+		Tables.bindColumnWidths(table, 1.0);
 	}
 
 	private Action[] createActions(TableViewer table) {
@@ -70,16 +70,29 @@ class FileTable {
 
 	private void add() {
 		FileDialog dialog = new FileDialog(UI.shell(), SWT.OPEN);
-		dialog.setText("#Open file ...");
+		dialog.setText("Open file ...");
 		File dir = new File(App.store.getRootFolder(),
 				"external_docs");
-		if (!dir.exists())
+		if (!dir.exists()) {
 			dir.mkdirs();
+		}
 		dialog.setFilterPath(dir.getAbsolutePath());
 		String path = dialog.open();
 		if (path == null)
 			return;
+
 		File file = new File(path);
+		if (hasNonAsciiChars(file.getName())) {
+			boolean b = MsgBox.ask("File name has non-ASCII characters",
+					"The name of the selected file has non-ASCII characters"
+							+ " which can cause upload problems. It is"
+							+ " recommended to rename the file first using only"
+							+ " latin letters, digits, underscores and dashes."
+							+ " Continue anyway?");
+			if (!b)
+				return;
+		}
+
 		checkCopy(dir, file);
 		FileRef ref = new FileRef();
 		ref.uri = "../external_docs/" + file.getName();
@@ -94,7 +107,7 @@ class FileTable {
 		File copy = new File(dir, file.getName());
 		if (copy.exists())
 			return;
-		boolean b = MsgBox.ask("#Copy file?", "#The selected file is "
+		boolean b = MsgBox.ask("Copy file?", "The selected file is "
 				+ "not located in the 'external_docs' folder. Should "
 				+ "we make a copy there?");
 		if (!b)
@@ -118,27 +131,56 @@ class FileTable {
 		editor.setDirty();
 	}
 
-	private class Label extends LabelProvider implements ITableLabelProvider {
+	/**
+	 * See https://github.com/GreenDelta/epd-editor/issues/39
+	 */
+	private boolean hasNonAsciiChars(String fileName) {
+		if (fileName == null)
+			return false;
+		return !StandardCharsets.US_ASCII
+				.newEncoder()
+				.canEncode(fileName);
+	}
+
+	private class Label extends ColumnLabelProvider {
 
 		@Override
-		public Image getColumnImage(Object obj, int col) {
-			if (!(obj instanceof Ref))
+		public Image getImage(Object obj) {
+			if (!(obj instanceof FileRef))
 				return null;
+			FileRef ref = (FileRef) obj;
+			if (ref.uri == null)
+				return null;
+			File file = new File(ref.uri);
+			if (hasNonAsciiChars(file.getName()))
+				return Icon.WARNING.img();
 			return Icon.DOCUMENT.img();
 		}
 
 		@Override
-		public String getColumnText(Object obj, int col) {
+		public String getText(Object obj) {
 			if (!(obj instanceof FileRef))
 				return null;
 			FileRef ref = (FileRef) obj;
 			return ref.uri;
 		}
+
+		@Override
+		public String getToolTipText(Object obj) {
+			if (!(obj instanceof FileRef))
+				return null;
+			FileRef ref = (FileRef) obj;
+			if (ref.uri == null)
+				return null;
+			File file = new File(ref.uri);
+			if (!hasNonAsciiChars(file.getName()))
+				return null;
+			return "The name of this file has non-ASCII characters"
+					+ " which can cause upload problems. It is"
+					+ " recommended to rename the file first"
+					+ " using only latin letters, digits,"
+					+ " underscores and dashes.";
+		}
 	}
 
-	public static void main(String[] args) {
-		File dir = new File("../epd_editor/libs");
-		File file = new File("libs/gson-2.8.0.jar");
-		System.out.println(Objects.equals(dir, file.getParentFile()));
-	}
 }

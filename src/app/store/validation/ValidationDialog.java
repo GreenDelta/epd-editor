@@ -56,11 +56,11 @@ public class ValidationDialog extends Wizard {
 	}
 
 	/**
-	 * Adds the references of the data sets to the list that need to validated.
-	 * This is typically just the reference that was selected when opening the
-	 * validation dialog. However, for EPD data sets also the product flow is
-	 * added as it is required to validate this product together with the EPD
-	 * data set.
+	 * Adds the references of the data sets to the list that need to be
+	 * validated. This is typically just the reference that was selected when
+	 * opening the validation dialog. However, for EPD data sets also the
+	 * product flow is added as it is required to validate this product together
+	 * with the EPD data set.
 	 */
 	private void addBaseRefs() {
 		allRefs.clear();

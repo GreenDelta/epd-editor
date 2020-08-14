@@ -17,7 +17,6 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
-import org.openlca.ilcd.commons.LangString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,7 +91,7 @@ public class StatusView extends BaseEditor {
 			Composite body = UI.formBody(form, tk);
 			TableViewer table = Tables.createViewer(body, M.Name, M.UUID,
 					M.DataSetVersion, M.Status);
-			Tables.bindColumnWidths(table, 0.3, 0.2, 0.2, 0.3);
+			bindColumnWidths(table);
 			table.setLabelProvider(new Label());
 			table.setInput(stats);
 			table.addDoubleClickListener(e -> {
@@ -100,6 +99,34 @@ public class StatusView extends BaseEditor {
 				if (rs != null && rs.ref != null)
 					Editors.open(rs.ref);
 			});
+		}
+
+		private void bindColumnWidths(TableViewer table) {
+			// try to find good proportions between
+			// the name and message column
+			double maxNameLen = 0;
+			double maxMsgLen = 0;
+			for (RefStatus stat : stats) {
+				if (stat.ref != null) {
+					String name = App.s(stat.ref.name);
+					if (name != null) {
+						maxNameLen = Math.max(maxNameLen, name.length());
+					}
+				}
+				if (stat.message != null) {
+					maxMsgLen = Math.max(maxMsgLen, stat.message.length());
+				}
+			}
+			double totalLen = maxNameLen + maxMsgLen;
+			if (totalLen == 0) {
+				Tables.bindColumnWidths(table, 0.4, 0.1, 0.1, 0.4);
+			} else {
+				double nameWidth = Math.min(.65,
+						Math.max(.15, maxNameLen / totalLen));
+				double msgWidth = Math.min(.65,
+						Math.max(.15, maxMsgLen / totalLen));
+				Tables.bindColumnWidths(table, nameWidth, 0.1, 0.1, msgWidth);
+			}
 		}
 	}
 
@@ -159,7 +186,7 @@ public class StatusView extends BaseEditor {
 				return null;
 			switch (col) {
 			case 0:
-				return LangString.getFirst(rs.ref.name, App.lang());
+				return App.s(rs.ref.name);
 			case 1:
 				return rs.ref.uuid;
 			case 2:

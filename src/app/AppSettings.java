@@ -23,7 +23,7 @@ public class AppSettings {
 	 * If true, it searches for EPDs where a product is used and asks if these
 	 * EPDs should be also updated when the respective product is updated.
 	 */
-	public boolean checkEPDsOnProductUpdates = false;
+	public boolean checkEPDsOnProductUpdates = true;
 
 	/**
 	 * The name of the validation profile that is used when validating the data

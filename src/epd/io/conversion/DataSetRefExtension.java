@@ -37,17 +37,22 @@ class DataSetRefExtension {
 		return ext.read(DataSetType.SOURCE, extension);
 	}
 
-	public static void write(Ref descriptor, String tagName, Other extension) {
-		if (tagName == null || extension == null)
+	/**
+	 * Stores the given data set reference under the given tag name in the
+	 * extension point. If the data set reference is null, it just drops a
+	 * possible old data set reference from that extension.
+	 */
+	public static void write(Ref ref, String tag, Other extension) {
+		if (tag == null || extension == null)
 			return;
-		Element old = Dom.getElement(extension, tagName);
-		if (old != null)
+		Element old = Dom.getElement(extension, tag);
+		if (old != null) {
 			extension.any.remove(old);
-		if (descriptor == null)
+		}
+		if (ref == null)
 			return;
-		DataSetRefExtension ext = new DataSetRefExtension(tagName,
-				descriptor.type);
-		ext.write(descriptor, extension);
+		DataSetRefExtension ext = new DataSetRefExtension(tag, ref.type);
+		ext.write(ref, extension);
 	}
 
 	private DataSetRefExtension(String tagName, DataSetType modelType) {

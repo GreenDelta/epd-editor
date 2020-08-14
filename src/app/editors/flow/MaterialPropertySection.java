@@ -1,8 +1,8 @@
 package app.editors.flow;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -21,67 +21,80 @@ import app.util.UI;
 import app.util.Viewers;
 import app.util.tables.ModifySupport;
 import app.util.tables.TextCellModifier;
-import epd.model.MaterialProperty;
 import epd.model.MaterialPropertyValue;
 
-class MaterialPropertyTable {
+class MaterialPropertySection {
 
 	private final static String PROPERTY = M.Property;
 	private final static String VALUE = M.Value;
 	private final static String UNIT = M.Unit;
 
-	private ArrayList<MaterialPropertyValue> values;
 	private FlowEditor editor;
-	private TableViewer viewer;
+	private TableViewer table;
 
-	public MaterialPropertyTable(FlowEditor editor, Section section,
-			FormToolkit tk) {
+	MaterialPropertySection(FlowEditor editor) {
 		this.editor = editor;
-		this.values = editor.product.properties;
-		Composite comp = UI.sectionClient(section, tk);
+	}
+
+	void render(Composite body, FormToolkit tk) {
+		var section = UI.section(body, tk, M.MaterialProperties);
+		section.setToolTipText(Tooltips.Flow_MaterialProperties);
+		UI.gridData(section, true, false);
+		var comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
-		viewer = Tables.createViewer(comp, PROPERTY, VALUE, UNIT);
-		viewer.getTable().setToolTipText(Tooltips.Flow_MaterialProperties);
-		viewer.setLabelProvider(new Label());
-		Tables.bindColumnWidths(viewer, 0.34, 0.33, 0.33);
-		ModifySupport<MaterialPropertyValue> mf = new ModifySupport<>(viewer);
+		table = Tables.createViewer(comp, PROPERTY, VALUE, UNIT);
+		table.getTable().setToolTipText(Tooltips.Flow_MaterialProperties);
+		table.setLabelProvider(new Label());
+		Tables.bindColumnWidths(table, 0.34, 0.33, 0.33);
+		var mf = new ModifySupport<MaterialPropertyValue>(table);
 		mf.bind(VALUE, new ValueModifier());
-		bindActions(viewer, section);
-		viewer.setInput(values);
+		bindActions(table, section);
+		table.setInput(properties());
+	}
+
+	private List<MaterialPropertyValue> properties() {
+		return editor.product == null
+				? new ArrayList<>()
+				: editor.product.properties;
+	}
+
+	void refresh() {
+		table.setInput(properties());
 	}
 
 	private void bindActions(TableViewer table, Section section) {
-		Action add = Actions.create(M.Add, Icon.ADD.des(),
-				this::onCreate);
-		Action remove = Actions.create(M.Remove, Icon.DELETE.des(),
-				this::onRemove);
+		var add = Actions.create(
+				M.Add, Icon.ADD.des(), this::onAdd);
+		var remove = Actions.create(
+				M.Remove, Icon.DELETE.des(), this::onRemove);
 		Actions.bind(section, add, remove);
 		Actions.bind(table, add, remove);
 	}
 
-	private void onCreate() {
-		if (values == null)
+	private void onAdd() {
+		if (editor.product == null)
 			return;
-		MaterialPropertyDialog dialog = new MaterialPropertyDialog(UI.shell());
+		var dialog = new MaterialPropertyDialog();
 		if (dialog.open() != Window.OK)
 			return;
-		MaterialProperty property = dialog.getSelectedProperty();
+		var property = dialog.selectedProperty;
 		if (property == null)
 			return;
-		MaterialPropertyValue value = new MaterialPropertyValue();
+		var value = new MaterialPropertyValue();
 		value.property = property;
 		value.value = (double) 1;
-		values.add(value);
-		viewer.setInput(values);
+		editor.product.properties.add(value);
+		table.setInput(editor.product.properties);
 		editor.setDirty();
 	}
 
 	private void onRemove() {
-		MaterialPropertyValue v = Viewers.getFirstSelected(viewer);
+		MaterialPropertyValue v = Viewers.getFirstSelected(table);
 		if (v == null)
 			return;
-		values.remove(v);
-		viewer.setInput(values);
+		var props = properties();
+		props.remove(v);
+		table.setInput(props);
 		editor.setDirty();
 	}
 
@@ -89,18 +102,18 @@ class MaterialPropertyTable {
 			extends TextCellModifier<MaterialPropertyValue> {
 
 		@Override
-		protected String getText(MaterialPropertyValue element) {
-			return String.valueOf(element.value);
+		protected String getText(MaterialPropertyValue v) {
+			return String.valueOf(v.value);
 		}
 
 		@Override
-		protected void setText(MaterialPropertyValue element, String text) {
+		protected void setText(MaterialPropertyValue v, String text) {
 			try {
-				if (element == null)
+				if (v == null)
 					return;
 				double val = Double.valueOf(text);
-				if (element.value != val) {
-					element.value = val;
+				if (v.value != val) {
+					v.value = val;
 					editor.setDirty();
 				}
 			} catch (NumberFormatException e) {
@@ -111,16 +124,16 @@ class MaterialPropertyTable {
 	private class Label extends LabelProvider implements ITableLabelProvider {
 
 		@Override
-		public Image getColumnImage(Object element, int columnIndex) {
+		public Image getColumnImage(Object obj, int col) {
 			return null;
 		}
 
 		@Override
-		public String getColumnText(Object element, int col) {
-			if (!(element instanceof MaterialPropertyValue))
+		public String getColumnText(Object obj, int col) {
+			if (!(obj instanceof MaterialPropertyValue))
 				return null;
-			MaterialPropertyValue val = (MaterialPropertyValue) element;
-			MaterialProperty prop = val.property;
+			var val = (MaterialPropertyValue) obj;
+			var prop = val.property;
 			switch (col) {
 			case 0:
 				return prop != null ? prop.name : null;

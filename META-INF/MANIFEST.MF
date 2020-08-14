@@ -2,7 +2,9 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: App
 Bundle-SymbolicName: epd-editor;singleton:=true
-Bundle-Version: 3.1.0
+Automatic-Module-Name: epd-editor
+Bundle-RequiredExecutionEnvironment: JavaSE-13
+Bundle-Version: 4.0.0
 Bundle-Activator: app.rcp.Activator
 Eclipse-BundleShape: dir
 Require-Bundle: org.eclipse.ui,
@@ -48,8 +50,6 @@ Bundle-ClassPath: .,
  libs/poi-3.17.jar,
  libs/poi-ooxml-3.17.jar,
  libs/poi-ooxml-schemas-3.17.jar,
- libs/slf4j-api-1.7.25.jar,
- libs/slf4j-log4j12-1.7.25.jar,
  libs/truevfs-kernel-spec-0.11.1.jar,
  libs/bcprov-jdk15on-1.51.jar,
  libs/commons-compress-1.9.jar,
@@ -80,6 +80,16 @@ Bundle-ClassPath: .,
  libs/truevfs-driver-zip-raes-0.11.1.jar,
  libs/truevfs-kernel-impl-0.11.1.jar,
  libs/xz-1.5.jar,
- libs/gson-2.8.5.jar,
  libs/ilcd-validation-1.5.18.jar,
- libs/olca-ilcd-1.9.0.jar
+ libs/jakarta.activation-api-1.2.2.jar,
+ libs/jakarta.xml.bind-api-2.3.3.jar,
+ libs/olca-ilcd-2.0.0.jar,
+ libs/FastInfoset-1.2.16.jar,
+ libs/istack-commons-runtime-3.0.8.jar,
+ libs/jaxb-runtime-2.3.2.jar,
+ libs/stax-ex-1.8.1.jar,
+ libs/txw2-2.3.2.jar,
+ libs/gson-2.8.6.jar,
+ libs/slf4j-api-1.7.30.jar,
+ libs/slf4j-log4j12-1.7.30.jar
+

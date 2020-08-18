@@ -14,13 +14,11 @@ installed:
 When you have these tools installed you can build the application from source
 via the following steps:
 
-#### Install the openLCA core modules and ILCD validation API
+#### Install the openLCA core modules
 The EPD Editor uses the current version of the 
 [openLCA core modules](https://github.com/GreenDelta/olca-modules) for reading
-and writing ILCD data sets and the [ILCD validation API](https://bitbucket.org/okusche/ilcdvalidation)
-for validating them. These modules are plain Maven projects and can be
-installed via `mvn install`. See the documentation of both projects for a
-more information.
+and writing ILCD data sets. It is a plain Maven project and can be
+installed via `mvn install`. See its documentation for more information.
 
 #### Get the source code of the application
 We recommend to use Git to manage the source code but you can also download the
@@ -91,12 +89,11 @@ generates the list of fields for the class `app.M` from the `messages.properties
 file.
 
 #### Validation profile
-The EPD-Editor uses the EPD profile from the 
-[ILCD Validation API](https://bitbucket.org/okusche/ilcdvalidation). This
-profile needs to be located under `validation_profile/EPD_validation_profile.jar`
-and is not added to this repository. Thus, you need to copy the EPD profile
-from the validation API to this location before testing the validation feature
-or running a build.
+The EPD-Editor uses the EPD profiles from the 
+[ILCD Validation API](https://bitbucket.org/okusche/ilcdvalidation). 
+Profiles need to be located under `validation_profiles`. A profile for the German
+OEKOBAUDAT is automatically added to this location when dependencies are copied
+using `mvn package` as described above under "Copy the Maven dependencies".
 
 #### Building the distribution packages
 We currently build the application via the Eclipse export: right-click on the

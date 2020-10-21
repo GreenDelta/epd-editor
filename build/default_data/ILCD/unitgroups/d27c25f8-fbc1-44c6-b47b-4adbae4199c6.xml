@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<u:unitGroupDataSet xmlns:m="http://lca.jrc.it/ILCD/LCIAMethod" xmlns:common="http://lca.jrc.it/ILCD/Common" xmlns:s="http://lca.jrc.it/ILCD/Source" xmlns:c="http://lca.jrc.it/ILCD/Contact" xmlns:f="http://lca.jrc.it/ILCD/Flow" xmlns="http://lca.jrc.it/ILCD/Process" xmlns:fp="http://lca.jrc.it/ILCD/FlowProperty" xmlns:u="http://lca.jrc.it/ILCD/UnitGroup" version="1.1">
+    <u:unitGroupInformation>
+        <u:dataSetInformation>
+            <common:UUID>d27c25f8-fbc1-44c6-b47b-4adbae4199c6</common:UUID>
+            <common:name xml:lang="en">kg NMVOC eqv.</common:name>
+            <u:classificationInformation>
+                <common:classification name="ILCD">
+                    <common:class level="0" classId="4">Other unit groups</common:class>
+                </common:classification>
+            </u:classificationInformation>
+        </u:dataSetInformation>
+        <u:quantitativeReference>
+            <u:referenceToReferenceUnit>0</u:referenceToReferenceUnit>
+        </u:quantitativeReference>
+    </u:unitGroupInformation>
+    <u:administrativeInformation>
+        <u:dataEntryBy>
+            <common:timeStamp>2020-06-16T10:37:44.692+02:00</common:timeStamp>
+        </u:dataEntryBy>
+        <u:publicationAndOwnership>
+            <common:dataSetVersion>00.00.003</common:dataSetVersion>
+        </u:publicationAndOwnership>
+    </u:administrativeInformation>
+    <u:units>
+        <u:unit dataSetInternalID="0">
+            <u:name>kg NMVOC eqv.</u:name>
+            <u:meanValue>1.0</u:meanValue>
+        </u:unit>
+    </u:units>
+</u:unitGroupDataSet>

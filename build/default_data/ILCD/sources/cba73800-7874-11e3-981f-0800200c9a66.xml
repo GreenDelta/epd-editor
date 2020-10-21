@@ -5,7 +5,7 @@
     <sourceInformation>
         <dataSetInformation>
             <common:UUID>cba73800-7874-11e3-981f-0800200c9a66</common:UUID>
-            <common:shortName xml:lang="de">EPD Data Format Extension</common:shortName>
+            <common:shortName xml:lang="de">EPD Data Format Extension 1.1</common:shortName>
             <classificationInformation>
                 <common:classification>
                     <common:class level="0">Data set formats</common:class>
@@ -20,7 +20,7 @@
     </sourceInformation>
     <administrativeInformation>
         <dataEntryBy>
-            <common:timeStamp>2014-01-01T00:00:00+01:00</common:timeStamp>
+            <common:timeStamp>2020-07-10T12:18:42+01:00</common:timeStamp>
             <common:referenceToDataSetFormat refObjectId="a97a0155-0234-4b87-b4ce-a45da52f2a40" type="source data set"
                 uri="../sources/ILCD_Format_a97a0155-0234-4b87-b4ce-a45da52f2a40.xml">
                 <common:shortDescription xml:lang="de">ILCD format 1.1</common:shortDescription>

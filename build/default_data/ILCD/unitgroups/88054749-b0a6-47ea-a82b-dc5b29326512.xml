@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml-stylesheet type='text/xsl' href='../../stylesheets/unitgroup2html.xsl' ?>
+<unitGroupDataSet xmlns:common="http://lca.jrc.it/ILCD/Common" xmlns="http://lca.jrc.it/ILCD/UnitGroup" version="1.1" xsi:schemaLocation="http://lca.jrc.it/ILCD/UnitGroup ../../schemas/ILCD_UnitGroupDataSet.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <unitGroupInformation>
+        <dataSetInformation>
+            <common:UUID>88054749-b0a6-47ea-a82b-dc5b29326512</common:UUID>
+            <common:name xml:lang="en">Unit of ODP</common:name>
+            <classificationInformation>
+                <common:classification>
+                    <common:class level="0">Other unit groups</common:class>
+                </common:classification>
+            </classificationInformation>
+        </dataSetInformation>
+        <quantitativeReference>
+            <referenceToReferenceUnit>0</referenceToReferenceUnit>
+        </quantitativeReference>
+    </unitGroupInformation>
+    <modellingAndValidation>
+        <complianceDeclarations>
+            <compliance>
+                <common:referenceToComplianceSystem type="source data set" refObjectId="9ba3ac1e-6797-4cc0-afd5-1b8f7bf28c6a" version="03.00.000" uri="../sources/9ba3ac1e-6797-4cc0-afd5-1b8f7bf28c6a.xml">
+                    <common:shortDescription xml:lang="en">ILCD Data Network - compliance (non-Process)</common:shortDescription>
+                </common:referenceToComplianceSystem>
+                <common:approvalOfOverallCompliance>Fully compliant</common:approvalOfOverallCompliance>
+            </compliance>
+        </complianceDeclarations>
+    </modellingAndValidation>
+    <administrativeInformation>
+        <dataEntryBy>
+            <common:timeStamp>2017-06-01T00:00:00.000</common:timeStamp>
+            <common:referenceToDataSetFormat type="source data set" refObjectId="a97a0155-0234-4b87-b4ce-a45da52f2a40" version="03.00.000" uri="../sources/a97a0155-0234-4b87-b4ce-a45da52f2a40.xml">
+                <common:shortDescription xml:lang="en">ILCD format 1.1</common:shortDescription>
+            </common:referenceToDataSetFormat>
+        </dataEntryBy>
+        <publicationAndOwnership>
+            <common:dataSetVersion>00.00.000</common:dataSetVersion>
+        </publicationAndOwnership>
+    </administrativeInformation>
+    <units>
+        <unit dataSetInternalID="0">
+            <name>kg R11 eq.</name>
+            <meanValue>1.0</meanValue>
+        </unit>
+    </units>
+</unitGroupDataSet>

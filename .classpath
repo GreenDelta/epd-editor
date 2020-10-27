@@ -1,88 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="libs/gson-2.8.6.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/slf4j-api-1.7.30.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/slf4j-log4j12-1.7.30.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/FastInfoset-1.2.16.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/istack-commons-runtime-3.0.8.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jaxb-runtime-2.3.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/stax-ex-1.8.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/txw2-2.3.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jakarta.activation-api-1.2.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jakarta.xml.bind-api-2.3.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/olca-ilcd-2.0.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ilcd-validation-2.0.10.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/bcprov-jdk15on-1.51.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/commons-compress-1.9.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/commons-logging-1.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/httpclient-4.4.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/httpcore-4.4.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jcl-over-slf4j-1.7.12.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jna-4.1.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/scala-library-2.11.6.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truecommons-key-console-2.5.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truecommons-key-default-2.5.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truecommons-key-macosx-2.5.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truecommons-key-spec-2.5.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truecommons-key-swing-2.5.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truevfs-comp-ibm437-0.11.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truevfs-comp-tardriver-0.11.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truevfs-comp-zip-0.11.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truevfs-comp-zipdriver-0.11.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truevfs-driver-file-0.11.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truevfs-driver-http-0.11.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truevfs-driver-jar-0.11.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truevfs-driver-odf-0.11.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truevfs-driver-tar-0.11.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truevfs-driver-tar-bzip2-0.11.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truevfs-driver-tar-gzip-0.11.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truevfs-driver-tar-xz-0.11.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truevfs-driver-zip-0.11.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truevfs-driver-zip-raes-0.11.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truevfs-kernel-impl-0.11.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/xz-1.5.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/poi-3.17.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/poi-ooxml-3.17.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/poi-ooxml-schemas-3.17.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truevfs-kernel-spec-0.11.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/animal-sniffer-annotations-1.14.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/annotations-3.0.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/checker-compat-qual-2.0.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/commons-codec-1.10.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/commons-collections4-4.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/commons-io-2.6.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/commons-lang3-3.7.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/curvesapi-1.04.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/error_prone_annotations-2.1.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/guava-24.1-jre.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/j2objc-annotations-1.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/javax.inject-1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jcabi-log-0.14.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jcabi-manifests-1.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jersey-client-1.19.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jersey-core-1.19.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jersey-multipart-1.19.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jsr305-1.3.9.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jsr311-api-1.1.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jxl-2.6.12.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/log4j-1.2.17.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/mimepull-1.9.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truecommons-annotations-2.5.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truecommons-cio-2.5.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truecommons-io-2.5.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truecommons-logging-2.5.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truecommons-services-2.5.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truecommons-shed-2.5.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truevfs-access-0.11.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truevfs-access-swing-0.11.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/truevfs-profile-default-0.11.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/xmlbeans-2.6.0.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="libs/gson-2.8.6.jar"/>
+	<classpathentry kind="lib" path="libs/slf4j-api-1.7.30.jar"/>
+	<classpathentry kind="lib" path="libs/slf4j-log4j12-1.7.30.jar"/>
+	<classpathentry kind="lib" path="libs/FastInfoset-1.2.16.jar"/>
+	<classpathentry kind="lib" path="libs/istack-commons-runtime-3.0.8.jar"/>
+	<classpathentry kind="lib" path="libs/jaxb-runtime-2.3.2.jar"/>
+	<classpathentry kind="lib" path="libs/stax-ex-1.8.1.jar"/>
+	<classpathentry kind="lib" path="libs/txw2-2.3.2.jar"/>
+	<classpathentry kind="lib" path="libs/jakarta.activation-api-1.2.2.jar"/>
+	<classpathentry kind="lib" path="libs/jakarta.xml.bind-api-2.3.3.jar"/>
+	<classpathentry kind="lib" path="libs/olca-ilcd-2.0.0.jar"/>
+	<classpathentry kind="lib" path="libs/bcprov-jdk15on-1.51.jar"/>
+	<classpathentry kind="lib" path="libs/commons-compress-1.9.jar"/>
+	<classpathentry kind="lib" path="libs/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="libs/httpclient-4.4.1.jar"/>
+	<classpathentry kind="lib" path="libs/httpcore-4.4.1.jar"/>
+	<classpathentry kind="lib" path="libs/jcl-over-slf4j-1.7.12.jar"/>
+	<classpathentry kind="lib" path="libs/jna-4.1.0.jar"/>
+	<classpathentry kind="lib" path="libs/scala-library-2.11.6.jar"/>
+	<classpathentry kind="lib" path="libs/truecommons-key-console-2.5.0.jar"/>
+	<classpathentry kind="lib" path="libs/truecommons-key-default-2.5.0.jar"/>
+	<classpathentry kind="lib" path="libs/truecommons-key-macosx-2.5.0.jar"/>
+	<classpathentry kind="lib" path="libs/truecommons-key-spec-2.5.0.jar"/>
+	<classpathentry kind="lib" path="libs/truecommons-key-swing-2.5.0.jar"/>
+	<classpathentry kind="lib" path="libs/truevfs-comp-ibm437-0.11.1.jar"/>
+	<classpathentry kind="lib" path="libs/truevfs-comp-tardriver-0.11.1.jar"/>
+	<classpathentry kind="lib" path="libs/truevfs-comp-zip-0.11.1.jar"/>
+	<classpathentry kind="lib" path="libs/truevfs-comp-zipdriver-0.11.1.jar"/>
+	<classpathentry kind="lib" path="libs/truevfs-driver-file-0.11.1.jar"/>
+	<classpathentry kind="lib" path="libs/truevfs-driver-http-0.11.1.jar"/>
+	<classpathentry kind="lib" path="libs/truevfs-driver-jar-0.11.1.jar"/>
+	<classpathentry kind="lib" path="libs/truevfs-driver-odf-0.11.1.jar"/>
+	<classpathentry kind="lib" path="libs/truevfs-driver-tar-0.11.1.jar"/>
+	<classpathentry kind="lib" path="libs/truevfs-driver-tar-bzip2-0.11.1.jar"/>
+	<classpathentry kind="lib" path="libs/truevfs-driver-tar-gzip-0.11.1.jar"/>
+	<classpathentry kind="lib" path="libs/truevfs-driver-tar-xz-0.11.1.jar"/>
+	<classpathentry kind="lib" path="libs/truevfs-driver-zip-0.11.1.jar"/>
+	<classpathentry kind="lib" path="libs/truevfs-driver-zip-raes-0.11.1.jar"/>
+	<classpathentry kind="lib" path="libs/truevfs-kernel-impl-0.11.1.jar"/>
+	<classpathentry kind="lib" path="libs/xz-1.5.jar"/>
+	<classpathentry kind="lib" path="libs/poi-3.17.jar"/>
+	<classpathentry kind="lib" path="libs/poi-ooxml-3.17.jar"/>
+	<classpathentry kind="lib" path="libs/poi-ooxml-schemas-3.17.jar"/>
+	<classpathentry kind="lib" path="libs/truevfs-kernel-spec-0.11.1.jar"/>
+	<classpathentry kind="lib" path="libs/animal-sniffer-annotations-1.14.jar"/>
+	<classpathentry kind="lib" path="libs/annotations-3.0.0.jar"/>
+	<classpathentry kind="lib" path="libs/checker-compat-qual-2.0.0.jar"/>
+	<classpathentry kind="lib" path="libs/commons-codec-1.10.jar"/>
+	<classpathentry kind="lib" path="libs/commons-collections4-4.1.jar"/>
+	<classpathentry kind="lib" path="libs/commons-io-2.6.jar"/>
+	<classpathentry kind="lib" path="libs/commons-lang3-3.7.jar"/>
+	<classpathentry kind="lib" path="libs/curvesapi-1.04.jar"/>
+	<classpathentry kind="lib" path="libs/error_prone_annotations-2.1.3.jar"/>
+	<classpathentry kind="lib" path="libs/guava-24.1-jre.jar"/>
+	<classpathentry kind="lib" path="libs/j2objc-annotations-1.1.jar"/>
+	<classpathentry kind="lib" path="libs/javax.inject-1.jar"/>
+	<classpathentry kind="lib" path="libs/jcabi-log-0.14.jar"/>
+	<classpathentry kind="lib" path="libs/jcabi-manifests-1.1.jar"/>
+	<classpathentry kind="lib" path="libs/jersey-client-1.19.jar"/>
+	<classpathentry kind="lib" path="libs/jersey-core-1.19.jar"/>
+	<classpathentry kind="lib" path="libs/jersey-multipart-1.19.jar"/>
+	<classpathentry kind="lib" path="libs/jsr305-1.3.9.jar"/>
+	<classpathentry kind="lib" path="libs/jsr311-api-1.1.1.jar"/>
+	<classpathentry kind="lib" path="libs/jxl-2.6.12.jar"/>
+	<classpathentry kind="lib" path="libs/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="libs/mimepull-1.9.3.jar"/>
+	<classpathentry kind="lib" path="libs/truecommons-annotations-2.5.0.jar"/>
+	<classpathentry kind="lib" path="libs/truecommons-cio-2.5.0.jar"/>
+	<classpathentry kind="lib" path="libs/truecommons-io-2.5.0.jar"/>
+	<classpathentry kind="lib" path="libs/truecommons-logging-2.5.0.jar"/>
+	<classpathentry kind="lib" path="libs/truecommons-services-2.5.0.jar"/>
+	<classpathentry kind="lib" path="libs/truecommons-shed-2.5.0.jar"/>
+	<classpathentry kind="lib" path="libs/truevfs-access-0.11.1.jar"/>
+	<classpathentry kind="lib" path="libs/truevfs-access-swing-0.11.1.jar"/>
+	<classpathentry kind="lib" path="libs/truevfs-profile-default-0.11.1.jar"/>
+	<classpathentry kind="lib" path="libs/xmlbeans-2.6.0.jar"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="lib" path="libs/ilcd-validation-2.0.12.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -38,7 +38,7 @@ import epd.util.Strings;
 
 public final class EpdProfiles {
 
-	private static final String DEFAULT = "EN_15804";
+	private static final String DEFAULT = "EN_15804_A2";
 
 	private static Map<String, EpdProfile> cache = new HashMap<>();
 

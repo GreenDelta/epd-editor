@@ -3,7 +3,7 @@
     <ns2:sourceInformation>
         <ns2:dataSetInformation>
             <UUID>28d74cc0-db8b-4d7e-bc44-5f6d56ce0c4a</UUID>
-            <shortName xml:lang="en">GaBi database (all versions)</shortName>
+            <shortName xml:lang="en">GaBi database (general)</shortName>
             <ns2:classificationInformation>
                 <classification>
                     <class level="0" classId="ca877255-4278-4aae-960e-1f1951367f8d">Databases</class>
@@ -20,8 +20,7 @@
             </referenceToDataSetFormat>
         </ns2:dataEntryBy>
         <ns2:publicationAndOwnership>
-            <dataSetVersion>00.03.001</dataSetVersion>
-            <permanentDataSetURI>http://openlca.org/ilcd/resource/sources/28d74cc0-db8b-4d7e-bc44-5f6d56ce0c4a</permanentDataSetURI>
+            <dataSetVersion>00.03.002</dataSetVersion>
         </ns2:publicationAndOwnership>
     </ns2:administrativeInformation>
 </ns2:sourceDataSet>

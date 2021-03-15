@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -31,19 +32,15 @@ import epd.util.Strings;
  */
 class ModuleResultImport implements Runnable {
 
-	private Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
-	private EpdDataSet dataSet;
-	private File excelFile;
+	private final EpdDataSet dataSet;
+	private final File excelFile;
 	private boolean success;
 
 	public ModuleResultImport(EpdDataSet dataSet, File excelFile) {
 		this.dataSet = dataSet;
 		this.excelFile = excelFile;
-	}
-
-	public boolean isDoneWithSuccess() {
-		return success;
 	}
 
 	@Override
@@ -158,16 +155,15 @@ class ModuleResultImport implements Runnable {
 	private String getString(Cell cell) {
 		if (cell == null)
 			return null;
-		if (cell.getCellType() != Cell.CELL_TYPE_STRING)
-			return null;
-		else
-			return cell.getStringCellValue();
+		return cell.getCellTypeEnum() != CellType.STRING
+				? null
+				: cell.getStringCellValue();
 	}
 
 	private Double getDouble(Cell cell) {
 		if (cell == null
-				|| cell.getCellType() == Cell.CELL_TYPE_STRING
-				|| cell.getCellType() == Cell.CELL_TYPE_BLANK)
+				|| cell.getCellTypeEnum() == CellType.STRING
+				|| cell.getCellTypeEnum() == CellType.BLANK)
 			return null;
 		try {
 			return cell.getNumericCellValue();

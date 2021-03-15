@@ -13,11 +13,8 @@ import org.openlca.ilcd.processes.Modelling;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.QuantitativeReference;
 import org.openlca.ilcd.util.Processes;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 import epd.model.EpdDataSet;
-import epd.model.qmeta.QMetaData;
 
 /**
  * Converts an EPD to an ILCD process data set
@@ -33,8 +30,9 @@ class EpdConverter {
 	public void convert() {
 		if (dataSet == null)
 			return;
-		if (dataSet.process == null)
+		if (dataSet.process == null) {
 			dataSet.process = new Process();
+		}
 		clearResults(dataSet.process);
 		ResultConverter.writeResults(dataSet);
 		writeExtensions();
@@ -52,10 +50,10 @@ class EpdConverter {
 	}
 
 	private void writeExtensions() {
-		Document doc = Dom.createDocument();
+		var doc = Dom.createDocument();
 
 		// write the Q-Meta data
-		QMetaData qmeta = dataSet.qMetaData;
+		var qmeta = dataSet.qMetaData;
 		if (qmeta == null) {
 			Modelling mod = Processes.getModelling(dataSet.process);
 			if (mod != null) {
@@ -98,11 +96,13 @@ class EpdConverter {
 			m.other = null;
 			return;
 		}
-		Method method = Processes.method(dataSet.process);
+		var method = Processes.method(dataSet.process);
 		method.other = new Other();
-		Element e = Dom.createElement("subType");
-		e.setTextContent(dataSet.subType.getLabel());
-		method.other.any.add(e);
+		var elem = Dom.createElement("subType");
+		if (elem != null) {
+			elem.setTextContent(dataSet.subType.getLabel());
+			method.other.any.add(elem);
+		}
 	}
 
 	private void writeProfile() {

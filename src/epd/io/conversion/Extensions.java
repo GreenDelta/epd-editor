@@ -10,12 +10,19 @@ public class Extensions {
 	private Extensions() {
 	}
 
+	/**
+	 * Reads the extensions of the given process data set into an EPD data set.
+	 * The given process data set will be wrapped by the EPD data set.
+	 */
 	public static EpdDataSet read(Process process, EpdProfile profile) {
 		return new ProcessConverter(process, profile).convert();
 	}
 
-	public static void write(EpdDataSet dataSet) {
-		new EpdConverter(dataSet).convert();
+	/**
+	 * Write the EPD extensions into the underlying process data set of the
+	 * given EPD.
+	 */
+	public static void write(EpdDataSet epd) {
+		new EpdConverter(epd).convert();
 	}
-
 }

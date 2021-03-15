@@ -1,6 +1,7 @@
 package epd.index;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayDeque;
@@ -21,7 +22,7 @@ import com.google.gson.Gson;
 
 public class Index {
 
-	private HashMap<DataSetType, TypeNode> nodes = new HashMap<>();
+	private final HashMap<DataSetType, TypeNode> nodes = new HashMap<>();
 
 	public TypeNode getNode(DataSetType type) {
 		TypeNode node = nodes.get(type);
@@ -85,9 +86,7 @@ public class Index {
 	public Set<Ref> getRefs() {
 		Set<Ref> refs = new HashSet<>();
 		Queue<Node> queue = new ArrayDeque<>();
-		for (TypeNode node : nodes.values()) {
-			queue.add(node);
-		}
+		queue.addAll(nodes.values());
 		while (!queue.isEmpty()) {
 			Node n = queue.poll();
 			refs.addAll(n.refs);
@@ -102,8 +101,7 @@ public class Index {
 		Gson gson = new Gson();
 		try {
 			String json = gson.toJson(this);
-			byte[] bytes = json.getBytes("utf-8");
-			Files.write(file.toPath(), bytes,
+			Files.writeString(file.toPath(), json,
 					StandardOpenOption.CREATE,
 					StandardOpenOption.TRUNCATE_EXISTING);
 		} catch (Exception e) {
@@ -117,7 +115,7 @@ public class Index {
 			return new Index();
 		try {
 			byte[] bytes = Files.readAllBytes(file.toPath());
-			String json = new String(bytes, "utf-8");
+			String json = new String(bytes, StandardCharsets.UTF_8);
 			Gson gson = new Gson();
 			return gson.fromJson(json, Index.class);
 		} catch (Exception e) {

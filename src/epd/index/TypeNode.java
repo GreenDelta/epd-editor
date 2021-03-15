@@ -2,6 +2,7 @@ package epd.index;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.openlca.ilcd.commons.Category;
@@ -23,7 +24,7 @@ public class TypeNode extends Node {
 			return Collections.emptyList();
 		List<CategoryNode> nodes = new ArrayList<>();
 		for (Classification c : classes) {
-			Collections.sort(c.categories, (c1, c2) -> c1.level - c2.level);
+			c.categories.sort(Comparator.comparingInt(cat -> cat.level));
 			CategoryNode node = null;
 			List<CategoryNode> childs = categories;
 			for (Category cat : c.categories) {

@@ -34,19 +34,16 @@ class ProcessConverter {
 	}
 
 	public EpdDataSet convert() {
-		if (process == null)
-			return null;
-		EpdDataSet dataSet = new EpdDataSet();
-		dataSet.process = process;
-		readExtensions(dataSet);
-		mapResults(dataSet);
-		return dataSet;
+		var epd = new EpdDataSet(process);
+		readExtensions(epd);
+		mapResults(epd);
+		return epd;
 	}
 
-	private void readExtensions(EpdDataSet dataSet) {
-		dataSet.profile = process.otherAttributes.get(Vocab.PROFILE_ATTR);
-		readSubType(dataSet);
-		dataSet.qMetaData = QMetaData.read(process);
+	private void readExtensions(EpdDataSet epd) {
+		epd.profile = process.otherAttributes.get(Vocab.PROFILE_ATTR);
+		readSubType(epd);
+		epd.qMetaData = QMetaData.read(process);
 
 		// read the extensions that are stored under `dataSetInformation`
 		DataSetInfo info = Processes.getDataSetInfo(process);
@@ -54,11 +51,11 @@ class ProcessConverter {
 			return;
 		Other other = info.other;
 		List<Scenario> scenarios = ScenarioConverter.readScenarios(other);
-		dataSet.scenarios.addAll(scenarios);
+		epd.scenarios.addAll(scenarios);
 		List<ModuleEntry> modules = ModuleConverter.readModules(other, profile);
-		dataSet.moduleEntries.addAll(modules);
-		dataSet.safetyMargins = SafetyMarginsConverter.read(other);
-		dataSet.contentDeclaration = ContentDeclaration.read(other);
+		epd.moduleEntries.addAll(modules);
+		epd.safetyMargins = SafetyMarginsConverter.read(other);
+		epd.contentDeclaration = ContentDeclaration.read(other);
 	}
 
 	private void readSubType(EpdDataSet dataSet) {

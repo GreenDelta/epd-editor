@@ -35,17 +35,13 @@ class EPDExtensions {
 		if (epd == null)
 			return;
 		var process = epd.process;
-		if (process == null) {
-			process = new Process();
-			epd.process = process;
-		}
 		clearResults(process);
 		ResultConverter.writeResults(epd);
 		writeExtensions();
 
 		// set the format version
 		process.otherAttributes.put(
-			new QName(Vocab.NS_EPDv2, "epd-version", "epd2"), "1.2");
+				new QName(Vocab.NS_EPDv2, "epd-version", "epd2"), "1.2");
 		process.version = "1.1";
 	}
 
@@ -57,8 +53,8 @@ class EPDExtensions {
 			return;
 		var qRef = Processes.getQuantitativeReference(p);
 		List<Integer> refFlows = qRef == null
-			? Collections.emptyList()
-			: qRef.referenceFlows;
+				? Collections.emptyList()
+				: qRef.referenceFlows;
 		p.exchanges.removeIf(e -> !refFlows.contains(e.id));
 		p.lciaResults = null;
 	}
@@ -128,7 +124,3 @@ class EPDExtensions {
 		}
 	}
 }
-
-
-
-

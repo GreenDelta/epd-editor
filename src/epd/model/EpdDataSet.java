@@ -2,6 +2,7 @@ package epd.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.QuantitativeReferenceType;
@@ -16,7 +17,7 @@ import epd.model.qmeta.QMetaData;
 
 public class EpdDataSet {
 
-	public Process process;
+	public final Process process;
 	public String profile;
 	public SubType subType;
 	public SafetyMargins safetyMargins;
@@ -25,6 +26,14 @@ public class EpdDataSet {
 	public final List<Scenario> scenarios = new ArrayList<>();
 	public ContentDeclaration contentDeclaration;
 	public QMetaData qMetaData;
+
+	public EpdDataSet(Process process) {
+		this.process = Objects.requireNonNull(process);
+	}
+
+	public EpdDataSet() {
+		this(new Process());
+	}
 
 	public IndicatorResult getResult(Indicator indicator) {
 		for (IndicatorResult result : results)
@@ -46,11 +55,9 @@ public class EpdDataSet {
 
 	@Override
 	public EpdDataSet clone() {
-		EpdDataSet clone = new EpdDataSet();
+		EpdDataSet clone = new EpdDataSet(process.clone());
 		clone.profile = profile;
 		clone.subType = subType;
-		if (process != null)
-			clone.process = process.clone();
 		if (safetyMargins != null)
 			clone.safetyMargins = safetyMargins.clone();
 		for (IndicatorResult r : results)

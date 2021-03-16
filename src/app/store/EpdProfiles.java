@@ -1,6 +1,7 @@
 package app.store;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -79,8 +80,7 @@ public final class EpdProfiles {
 		}
 
 		// no DEFAULT profile in storage -> extract it
-		InputStream stream = EpdProfiles.class
-				.getResourceAsStream(DEFAULT + ".json");
+		var stream = EpdProfiles.class.getResourceAsStream(DEFAULT + ".json");
 		p = Json.read(stream, EpdProfile.class);
 		save(p);
 
@@ -168,7 +168,12 @@ public final class EpdProfiles {
 	private static File file(String id) {
 		File dir = new File(App.workspaceFolder(), "epd_profiles");
 		if (!dir.exists()) {
-			dir.mkdirs();
+			try {
+				Files.createDirectories(dir.toPath());
+			} catch (IOException e) {
+				throw new RuntimeException(
+					"failed to create profiles dir @" + dir, e);
+			}
 		}
 		return new File(dir, id + ".json");
 	}

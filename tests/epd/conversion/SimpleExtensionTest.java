@@ -11,9 +11,6 @@ import java.util.function.Consumer;
 
 import javax.xml.namespace.QName;
 
-import app.store.EpdProfiles;
-import epd.model.EpdProfile;
-import epd.model.SubType;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.openlca.ilcd.io.DataStore;
@@ -21,9 +18,12 @@ import org.openlca.ilcd.io.FileStore;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.Processes;
 
+import app.App;
+import app.store.EpdProfiles;
 import epd.io.conversion.Extensions;
 import epd.io.conversion.Vocab;
 import epd.model.EpdDataSet;
+import epd.model.SubType;
 
 public class SimpleExtensionTest {
 
@@ -44,14 +44,15 @@ public class SimpleExtensionTest {
 
 	@Test
 	public void testLocalDate() {
-		// test reading and writing XSD date instances using the new Java time API
+		// test reading and writing XSD date instances using the new Java time
+		// API
 		// examples from https://www.w3schools.com/xml/schema_dtypes_date.asp
 		var format = DateTimeFormatter.ISO_DATE;
 		var dates = new String[] {
-			"2002-09-24",
-			"2002-09-24Z",
-			"2002-09-24-06:00",
-			"2002-09-24+06:00"
+				"2002-09-24",
+				"2002-09-24Z",
+				"2002-09-24-06:00",
+				"2002-09-24+06:00"
 		};
 		for (var s : dates) {
 			var date = LocalDate.parse(s, format);

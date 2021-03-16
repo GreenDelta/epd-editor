@@ -3,6 +3,7 @@ package app.store;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -37,10 +38,10 @@ public class MaterialProperties {
 
 	private static List<MaterialProperty> fromFile() {
 		File file = file();
-		if (file == null || !file.exists()) {
+		if (!file.exists()) {
 			return null;
 		}
-		MaterialProperty[] props = Json.read(file, MaterialProperty[].class);
+		var props = Json.read(file, MaterialProperty[].class);
 		return props == null ? null : asList(props);
 	}
 
@@ -48,13 +49,12 @@ public class MaterialProperties {
 		ArrayList<MaterialProperty> list = new ArrayList<>();
 		if (props == null)
 			return list;
-		for (MaterialProperty prop : props)
-			list.add(prop);
+		list.addAll(Arrays.asList(props));
 		return list;
 	}
 
 	private static File file() {
-		File dir = App.store.getRootFolder();
+		File dir = App.store().getRootFolder();
 		return new File(dir, NAME);
 	}
 

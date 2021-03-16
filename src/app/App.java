@@ -1,14 +1,17 @@
 package app;
 
+import java.io.File;
 import java.net.URL;
 import java.util.List;
 
+import epd.index.Index;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
 import org.openlca.ilcd.commons.LangString;
+import org.openlca.ilcd.io.FileStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +20,7 @@ import epd.util.Strings;
 public class App {
 
 	private static AppSettings _settings;
+
 	private static Workspace _workspace;
 
 	/**
@@ -35,6 +39,18 @@ public class App {
 		}
 	}
 
+	public static FileStore store() {
+		return getWorkspace().store;
+	}
+
+	public static Index index() {
+		return getWorkspace().index;
+	}
+
+	public static File workspaceFolder() {
+		return getWorkspace().folder;
+	}
+
 	public static Workspace getWorkspace() {
 		if (_workspace == null) {
 			_workspace = Workspace.openDefault();
@@ -47,6 +63,10 @@ public class App {
 			_settings = AppSettings.load(getWorkspace());
 		}
 		return _settings;
+	}
+
+	public static void dumpIndex() {
+		getWorkspace().saveIndex();
 	}
 
 	public static String lang() {

@@ -103,19 +103,18 @@ public class RefDataSync implements Runnable {
 			List<Descriptor> descriptors) {
 		for (Descriptor d : descriptors) {
 			Ref newRef = d.toRef();
-			Ref oldRef = App.index.find(newRef);
+			Ref oldRef = App.index().find(newRef);
 			if (!shouldDownload(newRef, oldRef)) {
 				stats.add(RefStatus.ok(oldRef, "No newer version on server"));
 				continue;
 			}
 			try {
-				Object obj = client.get(type, newRef.uuid);
-				if (!(obj instanceof IDataSet)) {
+				var ds = client.get(type, newRef.uuid);
+				if (ds == null) {
 					stats.add(RefStatus.error(newRef,
 							"The downloaded thing was not a data set"));
 					continue;
 				}
-				IDataSet ds = (IDataSet) obj;
 				Download.save(newRef, ds, stats);
 				if (ds instanceof Source) {
 					Download.extDocs((Source) ds, client, stats);

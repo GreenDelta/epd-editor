@@ -7,6 +7,7 @@ import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -40,7 +41,7 @@ public final class EpdProfiles {
 
 	private static final String DEFAULT = "EN_15804_A2";
 
-	private static Map<String, EpdProfile> cache = new HashMap<>();
+	private static final Map<String, EpdProfile> cache = new HashMap<>();
 
 	private EpdProfiles() {
 	}
@@ -101,7 +102,7 @@ public final class EpdProfiles {
 		if (p != null)
 			return p;
 		File f = file(id);
-		if (f == null || !f.exists())
+		if (!f.exists())
 			return null;
 		p = Json.read(f, EpdProfile.class);
 		sync(p);
@@ -119,13 +120,16 @@ public final class EpdProfiles {
 
 	/** Get all EPD profiles from the workspace. */
 	public static List<EpdProfile> getAll() {
-		getDefault(); // make sure that the default profile is loaded.
-		File dir = new File(App.workspace, "epd_profiles");
+		var defaultProfile = getDefault();
+		var dir = new File(App.workspace, "epd_profiles");
 		if (!dir.exists())
-			return Collections.emptyList();
-		List<EpdProfile> profiles = new ArrayList<>();
-		for (File f : dir.listFiles()) {
-			EpdProfile p = Json.read(f, EpdProfile.class);
+			return  List.of(defaultProfile);
+		var profiles = new ArrayList<EpdProfile>();
+		var files = dir.listFiles();
+		if (files == null)
+			return List.of(defaultProfile);
+		for (var f : files) {
+			var p = Json.read(f, EpdProfile.class);
 			if (p != null) {
 				profiles.add(p);
 			}
@@ -149,10 +153,15 @@ public final class EpdProfiles {
 	/** Delete the profile with the given ID. */
 	public static void delete(String id) {
 		File file = file(id);
-		if (file == null || !file.exists())
+		if (!file.exists())
 			return;
-		file.delete();
-		cache.remove(id);
+		try {
+			Files.delete(file.toPath());
+		} catch (Exception e) {
+
+		} finally {
+			cache.remove(id);
+		}
 	}
 
 	private static File file(String id) {

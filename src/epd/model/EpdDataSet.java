@@ -1,5 +1,6 @@
 package epd.model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -20,12 +21,15 @@ public class EpdDataSet {
 	public final Process process;
 	public String profile;
 	public SubType subType;
+	public LocalDate publicationDate;
+
 	public SafetyMargins safetyMargins;
+	public ContentDeclaration contentDeclaration;
+	public QMetaData qMetaData;
+
 	public final List<IndicatorResult> results = new ArrayList<>();
 	public final List<ModuleEntry> moduleEntries = new ArrayList<>();
 	public final List<Scenario> scenarios = new ArrayList<>();
-	public ContentDeclaration contentDeclaration;
-	public QMetaData qMetaData;
 
 	public EpdDataSet(Process process) {
 		this.process = Objects.requireNonNull(process);

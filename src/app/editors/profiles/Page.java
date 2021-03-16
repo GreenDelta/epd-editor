@@ -80,7 +80,7 @@ class Page extends FormPage {
 			}
 			// show statistics + update navi, even if there was an error
 			if (sync.stats.size() > 0) {
-				new Sync(App.index).run();
+				new Sync(App.index()).run();
 				StatusView.open(M.DataSets + " @" + url, sync.stats);
 			}
 		});

@@ -35,6 +35,12 @@ public class Workspace {
 		initData();
 	}
 
+	private Workspace(Workspace ws, Index index) {
+		this.folder = ws.folder;
+		this.store = new FileStore(ws.folder);
+		this.index = index;
+	}
+
 	private void initData() {
 		// copy the default data into the workspace if there
 		// is a "data" folder in the execution folder
@@ -58,6 +64,12 @@ public class Workspace {
 			var log = LoggerFactory.getLogger(App.class);
 			log.error("failed to init data folder @" + folder, e);
 		}
+	}
+
+	Workspace updateIndex(Index index) {
+		var ws = new Workspace(this, index);
+		ws.saveIndex();
+		return ws;
 	}
 
 	/**

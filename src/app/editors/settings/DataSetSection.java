@@ -127,7 +127,7 @@ class DataSetSection {
 			AtomicBoolean allIndexed = new AtomicBoolean(false);
 			// index the data sets
 			App.run(monitor -> {
-				List<Ref> refs = App.index.getRefs()
+				List<Ref> refs = App.index().getRefs()
 						.stream()
 						.filter(ref -> ref.type == DataSetType.PROCESS)
 						.collect(Collectors.toList());
@@ -178,7 +178,7 @@ class DataSetSection {
 	}
 
 	private void qMetaDataFile(Composite comp, FormToolkit tk) {
-		File dir = new File(App.workspace, "q-metadata");
+		File dir = new File(App.workspaceFolder(), "q-metadata");
 		if (!dir.exists()) {
 			dir.mkdirs();
 		}

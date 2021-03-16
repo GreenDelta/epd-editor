@@ -82,7 +82,7 @@ public final class ValidationProfiles {
 	}
 
 	private static File dir() {
-		return new File(App.workspace, "validation_profiles");
+		return new File(App.workspaceFolder(), "validation_profiles");
 	}
 
 	private static boolean isJar(File file) {

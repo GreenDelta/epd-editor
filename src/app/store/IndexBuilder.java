@@ -13,7 +13,6 @@ import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.contacts.Contact;
 import org.openlca.ilcd.flowproperties.FlowProperty;
 import org.openlca.ilcd.flows.Flow;
-import org.openlca.ilcd.io.FileStore;
 import org.openlca.ilcd.methods.LCIAMethod;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.sources.Source;
@@ -32,9 +31,7 @@ import epd.index.Index;
  */
 public class IndexBuilder implements IRunnableWithProgress {
 
-	private final FileStore store = App.store;
 	private final Logger log = LoggerFactory.getLogger(getClass());
-
 	private Index index;
 
 	@Override
@@ -42,17 +39,19 @@ public class IndexBuilder implements IRunnableWithProgress {
 			throws InvocationTargetException, InterruptedException {
 		index = new Index();
 		List<File> dirs = folders();
-		m.beginTask("#Build data set index", totalWork(dirs));
+		m.beginTask("Build data set index", totalWork(dirs));
 		for (File folder : dirs) {
-			m.subTask("#Scan folder: " + folder.getName());
-			for (File file : folder.listFiles()) {
+			m.subTask("Scan folder: " + folder.getName());
+			var files = folder.listFiles();
+			if (files == null)
+				continue;
+			for (File file : files) {
 				add(file);
 				m.worked(1);
 			}
 		}
-		App.index = index;
-		App.dumpIndex();
-		App.runInUI("Refresh navigation", new Sync(App.index));
+		App.updateIndex(index);
+		App.runInUI("Refresh navigation", new Sync(App.index()));
 	}
 
 	private List<File> folders() {
@@ -62,7 +61,7 @@ public class IndexBuilder implements IRunnableWithProgress {
 				Contact.class, Source.class };
 		List<File> folders = new ArrayList<>();
 		for (Class<?> c : classes) {
-			File dir = store.getFolder(c);
+			File dir = App.store().getFolder(c);
 			if (dir == null || !dir.exists())
 				continue;
 			folders.add(dir);
@@ -73,7 +72,10 @@ public class IndexBuilder implements IRunnableWithProgress {
 	private int totalWork(List<File> folders) {
 		int total = 0;
 		for (File folder : folders) {
-			total += folder.list().length;
+			var files = folder.list();
+			if (files != null) {
+				total += files.length;
+			}
 		}
 		return total;
 	}

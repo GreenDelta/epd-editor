@@ -15,13 +15,13 @@ public class RefCheck {
 		App.runInUI("Check references ...", () -> {
 			if (ds == null)
 				return;
-			if (!RefSync.hasOutdatedRefs(ds, App.index))
+			if (!RefSync.hasOutdatedRefs(ds, App.index()))
 				return;
 			boolean b = MsgBox.ask(M.UpdateReferences + "?",
 					M.UpdateDataSetRefs_Question);
 			if (!b)
 				return;
-			RefSync.updateRefs(ds, App.index);
+			RefSync.updateRefs(ds, App.index());
 			Data.updateVersion(ds);
 			Data.save(ds);
 			Ref ref = Ref.of(ds);

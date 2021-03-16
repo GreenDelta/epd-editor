@@ -31,12 +31,12 @@ public class Validation implements IRunnableWithProgress {
 	private final List<File> files = new ArrayList<>();
 
 	public Validation() {
-		files.add(App.store.getRootFolder());
+		files.add(App.store().getRootFolder());
 	}
 
 	public Validation(Collection<Ref> refs) {
 		for (Ref ref : refs) {
-			File f = App.store.getFile(ref);
+			File f = App.store().getFile(ref);
 			if (f == null || !f.exists()) {
 				RefStatus message = RefStatus.error(ref,
 						"#Invalid reference");
@@ -64,12 +64,8 @@ public class Validation implements IRunnableWithProgress {
 	private void add(RefStatus m) {
 		if (m.ref == null || m.ref.uuid == null)
 			return;
-		List<RefStatus> list = messages.get(m.ref.uuid);
-		if (list == null) {
-			list = new ArrayList<>();
-			messages.put(m.ref.uuid, list);
-		}
-		list.add(m);
+		messages.computeIfAbsent(m.ref.uuid, k -> new ArrayList<>())
+			.add(m);
 	}
 
 	private ValidatorChain getValidator() throws InvocationTargetException {

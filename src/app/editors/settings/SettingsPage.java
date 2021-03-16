@@ -28,7 +28,7 @@ public class SettingsPage extends BaseEditor {
 
 	AppSettings settings = App.settings().clone();
 	IniFile ini = IniFile.read();
-	private IniFile originalIni = ini.clone();
+	private final IniFile originalIni = ini.clone();
 
 	public static void open() {
 		SimpleEditorInput input = new SimpleEditorInput("app.Settings");
@@ -57,7 +57,7 @@ public class SettingsPage extends BaseEditor {
 		boolean langChange = !Strings.nullOrEqual(
 				App.settings().lang, settings.lang);
 		App.settings().setValues(settings);
-		App.settings().save();
+		App.settings().save(App.getWorkspace());
 		dirty = false;
 		if (!ini.equals(originalIni))
 			ini.write();

@@ -29,7 +29,7 @@ class Upload {
 		try {
 			if (client.contains(ref))
 				return RefStatus.info(ref, "#Already on the server");
-			IDataSet ds = App.store.get(ref.getDataSetClass(), ref.uuid);
+			IDataSet ds = App.store().get(ref.getDataSetClass(), ref.uuid);
 			if (ds == null)
 				return RefStatus.error(ref, "#Data set does not exist");
 			if (ds instanceof Source)
@@ -47,7 +47,7 @@ class Upload {
 		List<FileRef> fileRefs = Sources.getFileRefs(source);
 		List<File> files = new ArrayList<>();
 		for (FileRef ref : fileRefs) {
-			File file = App.store.getExternalDocument(ref);
+			File file = App.store().getExternalDocument(ref);
 			if (file == null || !file.exists())
 				continue;
 			files.add(file);
@@ -55,9 +55,7 @@ class Upload {
 		if (files.isEmpty())
 			client.put(source);
 		else {
-			File[] array = files.toArray(
-					new File[files.size()]);
-			client.put(source, array);
+			client.put(source, files.toArray(new File[0]));
 		}
 	}
 }

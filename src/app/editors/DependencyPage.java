@@ -29,9 +29,9 @@ import app.util.Viewers;
 
 public class DependencyPage extends FormPage {
 
-	private BaseEditor editor;
-	private IDataSet dataSet;
-	private HashMap<String, Ref> indexRefs = new HashMap<>();
+	private final BaseEditor editor;
+	private final IDataSet dataSet;
+	private final HashMap<String, Ref> indexRefs = new HashMap<>();
 
 	public DependencyPage(BaseEditor editor, IDataSet dataSet) {
 		super(editor, "DependencyPage", M.DataSetReferences);
@@ -67,14 +67,14 @@ public class DependencyPage extends FormPage {
 		for (Ref ref : refTree.getRefs()) {
 			if (!ref.isValid())
 				continue;
-			Ref r = App.index.find(ref);
+			Ref r = App.index().find(ref);
 			indexRefs.put(ref.uuid, r);
 		}
 		tree.setInput(refTree);
 		tree.expandAll();
 	}
 
-	private class ContentProvider implements ITreeContentProvider {
+	private static class ContentProvider implements ITreeContentProvider {
 
 		@Override
 		public Object[] getElements(Object obj) {
@@ -139,16 +139,12 @@ public class DependencyPage extends FormPage {
 				return node.field;
 			if (node.ref == null)
 				return null;
-			switch (col) {
-			case 1:
-				return LangString.getFirst(node.ref.name, App.lang());
-			case 2:
-				return node.ref.uuid;
-			case 3:
-				return node.ref.version;
-			default:
-				return null;
-			}
+			return switch (col) {
+				case 1 -> LangString.getFirst(node.ref.name, App.lang());
+				case 2 -> node.ref.uuid;
+				case 3 -> node.ref.version;
+				default -> null;
+			};
 		}
 
 		@Override

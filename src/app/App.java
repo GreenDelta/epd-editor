@@ -69,6 +69,10 @@ public class App {
 		getWorkspace().saveIndex();
 	}
 
+	public static void updateIndex(Index index) {
+		_workspace = getWorkspace().updateIndex(index);
+	}
+
 	public static String lang() {
 		return settings().lang;
 	}

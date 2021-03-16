@@ -38,10 +38,9 @@ public final class Data {
 
 	public static EpdDataSet getEPD(Ref ref) {
 		try {
-			Process process = App.store.get(Process.class, ref.uuid);
+			Process process = App.store().get(Process.class, ref.uuid);
 			EpdProfile profile = EpdProfiles.get(process);
-			EpdDataSet dataSet = Extensions.read(process, profile);
-			return dataSet;
+			return Extensions.read(process, profile);
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Data.class);
 			log.error("failed to open EPD data set " + ref, e);

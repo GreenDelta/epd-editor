@@ -1,7 +1,6 @@
 package app.editors.flow;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -56,7 +55,7 @@ class FlowUpdateCheck {
 		String flowID = flow.getUUID();
 		if (flowID == null)
 			return;
-		App.index.getRefs()
+		App.index().getRefs()
 				.stream()
 				.filter(ref -> ref.type == DataSetType.PROCESS)
 				.forEach(ref -> {
@@ -84,7 +83,6 @@ class FlowUpdateCheck {
 		private final Flow flow;
 		private final List<Ref> usages;
 		private final HashMap<String, Boolean> selected;
-		private Page page;
 
 		static void show(Flow flow, List<Ref> usages) {
 			Dialog d = new Dialog(flow, usages);
@@ -96,8 +94,8 @@ class FlowUpdateCheck {
 
 		private Dialog(Flow flow, List<Ref> usages) {
 			this.flow = flow;
-			Collections.sort(usages, (r1, r2) -> Strings.compare(
-					App.s(r1.name), App.s(r2.name)));
+			usages.sort((r1, r2) -> Strings.compare(
+				App.s(r1.name), App.s(r2.name)));
 			selected = new HashMap<>();
 			for (Ref ref : usages) {
 				selected.put(ref.uuid, Boolean.TRUE);
@@ -122,8 +120,8 @@ class FlowUpdateCheck {
 					for (Ref ref : updates) {
 						monitor.subTask(Strings.cut(App.s(ref.name), 25));
 						try {
-							Process p = App.store.get(Process.class, ref.uuid);
-							RefSync.updateRefs(p, App.index);
+							Process p = App.store().get(Process.class, ref.uuid);
+							RefSync.updateRefs(p, App.index());
 							Data.updateVersion(p);
 							Data.save(p);
 						} catch (Exception innerE) {
@@ -141,7 +139,7 @@ class FlowUpdateCheck {
 
 		@Override
 		public void addPages() {
-			page = new Page();
+			Page page = new Page();
 			addPage(page);
 		}
 

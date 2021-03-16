@@ -46,7 +46,7 @@ public class Connections {
 	}
 
 	private static File dir() {
-		File dir = new File(App.workspace, "connections");
+		File dir = new File(App.workspaceFolder(), "connections");
 		if (!dir.exists())
 			dir.mkdirs();
 		return dir;

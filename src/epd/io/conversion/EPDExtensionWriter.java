@@ -154,7 +154,9 @@ class EPDExtensionWriter {
 		if (newElem == null)
 			return;
 		newElem.setTextContent(pubDate.toString());
+		if (time.other == null) {
+			time.other = new Other();
+		}
 		time.other.any.add(newElem);
-
 	}
 }

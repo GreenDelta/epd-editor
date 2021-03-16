@@ -1,6 +1,7 @@
 package epd.conversion;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.nio.file.Files;
 import java.time.LocalDate;
@@ -11,6 +12,9 @@ import java.util.function.Consumer;
 import javax.xml.namespace.QName;
 
 import app.store.EpdProfiles;
+import epd.model.EpdProfile;
+import epd.model.SubType;
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.openlca.ilcd.io.DataStore;
 import org.openlca.ilcd.io.FileStore;
@@ -60,16 +64,51 @@ public class SimpleExtensionTest {
 
 	@Test
 	public void testPublicationDate() {
+		var profile = EpdProfiles.getDefault();
+
 		var epd = new EpdDataSet();
 		var id = UUID.randomUUID().toString();
 		Processes.dataSetInfo(epd.process).uuid = id;
 		epd.publicationDate = LocalDate.now();
 		Extensions.write(epd);
 		withStore(store -> {
+
+			// insert and read
 			store.put(epd.process);
-			var process = store.get(Process.class, id);
-			var copy = Extensions.read(process, EpdProfiles.getDefault());
+			var copy = Extensions.read(store.get(Process.class, id), profile);
 			assertEquals(epd.publicationDate, copy.publicationDate);
+
+			// update
+			var next = copy.publicationDate.plusDays(1);
+			copy.publicationDate = next;
+			Extensions.write(copy);
+			store.put(copy.process);
+			copy = Extensions.read(store.get(Process.class, id), profile);
+			assertEquals(next, copy.publicationDate);
+
+			// delete
+			copy.publicationDate = null;
+			Extensions.write(copy);
+			store.put(copy.process);
+			copy = Extensions.read(store.get(Process.class, id), profile);
+			assertNull(copy.publicationDate);
+		});
+	}
+
+	@Test
+	public void testSubType() {
+		var profile = EpdProfiles.getDefault();
+
+		var epd = new EpdDataSet();
+		var id = UUID.randomUUID().toString();
+		Processes.dataSetInfo(epd.process).uuid = id;
+		epd.subType = SubType.REPRESENTATIVE;
+		Extensions.write(epd);
+
+		withStore(store -> {
+			store.put(epd.process);
+			var copy = Extensions.read(store.get(Process.class, id), profile);
+			assertEquals(SubType.REPRESENTATIVE, copy.subType);
 		});
 	}
 
@@ -79,8 +118,8 @@ public class SimpleExtensionTest {
 			try (var store = new FileStore(dir)) {
 				fn.accept(store);
 			}
-			// FileUtils.deleteDirectory(dir);
-			System.out.println(dir.getAbsolutePath());
+			FileUtils.deleteDirectory(dir);
+			// System.out.println(dir.getAbsolutePath());
 		} catch (Exception e) {
 			throw new RuntimeException("failed to test with file store", e);
 		}

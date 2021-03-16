@@ -1,13 +1,17 @@
 package epd.io.conversion;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 
+import epd.util.Strings;
 import org.openlca.ilcd.commons.Other;
 import org.openlca.ilcd.processes.DataSetInfo;
 import org.openlca.ilcd.processes.Method;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.Processes;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 
 import epd.model.Amount;
@@ -47,10 +51,11 @@ class EPDExtensionReader {
 	private void readExtensions(EpdDataSet epd) {
 		epd.profile = process.otherAttributes.get(Vocab.PROFILE_ATTR);
 		readSubType(epd);
+		readPublicationDate(epd);
 		epd.qMetaData = QMetaData.read(process);
 
 		// read the extensions that are stored under `dataSetInformation`
-		DataSetInfo info = Processes.getDataSetInfo(process);
+		var info = Processes.getDataSetInfo(process);
 		if (info == null || info.other == null)
 			return;
 		Other other = info.other;
@@ -68,16 +73,34 @@ class EPDExtensionReader {
 		Method method = process.modelling.method;
 		if (method == null || method.other == null)
 			return;
-		Element e = Dom.getElement(method.other, "subType");
-		if (e != null) {
-			SubType type = SubType.fromLabel(e.getTextContent());
-			dataSet.subType = type;
+		var elem = Dom.getElement(method.other, "subType");
+		if (elem != null) {
+			dataSet.subType = SubType.fromLabel(elem.getTextContent());
+		}
+	}
+
+	private void readPublicationDate(EpdDataSet epd) {
+		var time = Processes.getTime(epd.process);
+		if (time == null || time.other == null)
+			return;
+		var elem = Dom.getElement(time.other, "publicationDateOfEPD");
+		if (elem == null)
+			return;
+		var text = elem.getTextContent();
+		if (Strings.nullOrEmpty(text))
+			return;
+		try {
+			epd.publicationDate = LocalDate.parse(
+				text, DateTimeFormatter.ISO_DATE);
+		} catch (Exception e) {
+			var log = LoggerFactory.getLogger(getClass());
+			log.error("Invalid format for publication date: " + text, e);
 		}
 	}
 
 	private void mapResults(EpdDataSet dataSet) {
 		List<IndicatorResult> results = ResultConverter.readResults(
-				process, profile);
+			process, profile);
 		dataSet.results.addAll(results);
 		// data sets may not have the module-entry extension, thus we have to
 		// find the module entries for such data sets from the results
@@ -98,7 +121,7 @@ class EPDExtensionReader {
 		for (ModuleEntry entry : dataSet.moduleEntries) {
 			if (Objects.equals(entry.module, amount.module)
 					&& Objects
-							.equals(entry.scenario, amount.scenario))
+						.equals(entry.scenario, amount.scenario))
 				return entry;
 		}
 		return null;

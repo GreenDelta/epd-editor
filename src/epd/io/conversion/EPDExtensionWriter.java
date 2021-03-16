@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 
 import org.openlca.ilcd.commons.Other;
-import org.openlca.ilcd.processes.DataSetInfo;
 import org.openlca.ilcd.processes.Method;
 import org.openlca.ilcd.processes.Modelling;
 import org.openlca.ilcd.processes.Process;
@@ -15,11 +14,11 @@ import org.openlca.ilcd.util.Processes;
 
 import epd.model.EpdDataSet;
 
-class EPDExtensions {
+class EPDExtensionWriter {
 
 	private final EpdDataSet epd;
 
-	private EPDExtensions(EpdDataSet dataSet) {
+	private EPDExtensionWriter(EpdDataSet dataSet) {
 		this.epd = dataSet;
 	}
 
@@ -28,7 +27,7 @@ class EPDExtensions {
 	 * data set.
 	 */
 	static void write(EpdDataSet epd) {
-		new EPDExtensions(epd).write();
+		new EPDExtensionWriter(epd).write();
 	}
 
 	private void write() {
@@ -38,7 +37,6 @@ class EPDExtensions {
 		clearResults(process);
 		ResultConverter.writeResults(epd);
 		writeExtensions();
-
 		// set the format version
 		process.otherAttributes.put(
 				new QName(Vocab.NS_EPDv2, "epd-version", "epd2"), "1.2");
@@ -79,7 +77,7 @@ class EPDExtensions {
 		}
 
 		// write the other extension elements
-		DataSetInfo info = Processes.dataSetInfo(epd.process);
+		var info = Processes.dataSetInfo(epd.process);
 		Other other = info.other;
 		if (other == null) {
 			other = new Other();
@@ -93,6 +91,7 @@ class EPDExtensions {
 		}
 		writeProfile();
 		writeSubType();
+		writePublicationDate();
 		if (Dom.isEmpty(other)) {
 			info.other = null;
 		}
@@ -108,7 +107,7 @@ class EPDExtensions {
 		}
 		var method = Processes.method(epd.process);
 		method.other = new Other();
-		var elem = Dom.createElement("subType");
+		var elem = Dom.createElement(Vocab.NS_EPD, "subType");
 		if (elem != null) {
 			elem.setTextContent(epd.subType.getLabel());
 			method.other.any.add(elem);
@@ -122,5 +121,40 @@ class EPDExtensions {
 		} else {
 			atts.remove(Vocab.PROFILE_ATTR);
 		}
+	}
+
+	private void writePublicationDate() {
+		var t = Processes.getTime(epd.process);
+		var pubDate = epd.publicationDate;
+		if (pubDate == null && t == null)
+			return;
+		var time = t == null
+			? Processes.time(epd.process)
+			: t;
+		if (pubDate == null && time.other == null)
+			return;
+		var tag = "publicationDateOfEPD";
+
+		// delete it if publication date is null
+		if (pubDate == null) {
+			Dom.clear(time.other, tag);
+			if (Dom.isEmpty(time.other)) {
+				time.other = null;
+			}
+			return;
+		}
+
+		// create or update the element
+		var elem = Dom.getElement(time.other, tag);
+		if (elem != null) {
+			elem.setTextContent(pubDate.toString());
+			return;
+		}
+		var newElem = Dom.createElement(Vocab.NS_EPDv2, tag);
+		if (newElem == null)
+			return;
+		newElem.setTextContent(pubDate.toString());
+		time.other.any.add(newElem);
+
 	}
 }

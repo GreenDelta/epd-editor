@@ -2,7 +2,6 @@ package app.editors.io;
 
 import java.util.List;
 
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;

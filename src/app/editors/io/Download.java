@@ -65,7 +65,7 @@ public class Download implements IRunnableWithProgress {
 				queue.add(next);
 			}
 		}
-		App.dumpIndex();
+		App.getWorkspace().saveIndex();
 	}
 
 	/**

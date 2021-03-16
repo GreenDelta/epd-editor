@@ -7,7 +7,6 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.openlca.ilcd.commons.LangString;
@@ -31,8 +30,8 @@ public final class Dom {
 
 	public static Document createDocument() {
 		try {
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder db = dbf.newDocumentBuilder();
+			var dbf = DocumentBuilderFactory.newInstance();
+			var db = dbf.newDocumentBuilder();
 			return db.newDocument();
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Dom.class);
@@ -41,12 +40,20 @@ public final class Dom {
 		}
 	}
 
-	static Element createElement(String tagName) {
-		Document doc = createDocument();
+	static Element createElement(String ns, String tag) {
+		if (tag == null)
+			return null;
+		var doc = createDocument();
 		if (doc == null)
 			return null;
-		return doc.createElementNS(
-				Vocab.NS_EPD, "epd:" + tagName);
+		if (ns == null)
+			return doc.createElement(tag);
+		if (tag.contains(":"))
+			return doc.createElementNS(ns, tag);
+		var prefix = Vocab.prefixOf(ns);
+		return prefix.isEmpty()
+				? doc.createElementNS(ns, tag)
+				: doc.createElementNS(ns, prefix.get() + ":" + tag);
 	}
 
 	/**
@@ -101,7 +108,7 @@ public final class Dom {
 	public static Element getChild(Element parent, String name, String ns) {
 		if (parent == null || name == null)
 			return null;
-		AtomicReference<Element> ar = new AtomicReference<Element>();
+		var ar = new AtomicReference<Element>();
 		eachChild(parent, e -> {
 			if (ar.get() != null)
 				return;
@@ -183,26 +190,22 @@ public final class Dom {
 		return s.toString();
 	}
 
-	static Node getFirstNode(NodeList nodeList) {
-		if (nodeList == null || nodeList.getLength() == 0)
-			return null;
-		return nodeList.item(0);
-	}
-
 	static Element getElement(Other extension, String tagName) {
 		if (extension == null || tagName == null)
 			return null;
-		for (Object any : extension.any) {
+		for (var any : extension.any) {
 			if (!(any instanceof Element))
 				continue;
-			Element e = (Element) any;
+			var e = (Element) any;
 			if (Objects.equals(tagName, e.getLocalName()))
 				return e;
 		}
 		return null;
 	}
 
-	/** Removes all elements with the given tag-name from the extensions. */
+	/**
+	 * Removes all elements with the given tag-name from the extensions.
+	 */
 	public static void clear(Other extension, String tagName) {
 		if (extension == null || tagName == null)
 			return;
@@ -217,7 +220,9 @@ public final class Dom {
 		extension.any.removeAll(matches);
 	}
 
-	/** Returns true if the given extension element is null or empty. */
+	/**
+	 * Returns true if the given extension element is null or empty.
+	 */
 	static boolean isEmpty(Other ext) {
 		if (ext == null || ext.any == null)
 			return true;

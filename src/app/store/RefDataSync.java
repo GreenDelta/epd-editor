@@ -53,7 +53,7 @@ public class RefDataSync implements Runnable {
 				doSync(con);
 			}
 		}
-		App.dumpIndex();
+		App.getWorkspace().saveIndex();
 	}
 
 	private SodaConnection makeConnection(String url) {

@@ -15,7 +15,7 @@ public class Extensions {
 	 * The given process data set will be wrapped by the EPD data set.
 	 */
 	public static EpdDataSet read(Process process, EpdProfile profile) {
-		return new ProcessConverter(process, profile).convert();
+		return EPDExtensionReader.read(process, profile);
 	}
 
 	/**
@@ -23,6 +23,6 @@ public class Extensions {
 	 * given EPD.
 	 */
 	public static void write(EpdDataSet epd) {
-		EPDExtensions.write(epd);
+		EPDExtensionWriter.write(epd);
 	}
 }

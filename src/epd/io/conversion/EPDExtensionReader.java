@@ -23,17 +23,21 @@ import epd.model.qmeta.QMetaData;
 /**
  * Converts an ILCD process data set to an EPD data set.
  */
-class ProcessConverter {
+class EPDExtensionReader {
 
 	private final Process process;
 	private final EpdProfile profile;
 
-	public ProcessConverter(Process process, EpdProfile profile) {
+	private EPDExtensionReader(Process process, EpdProfile profile) {
 		this.process = process;
 		this.profile = profile;
 	}
 
-	public EpdDataSet convert() {
+	static EpdDataSet read(Process process, EpdProfile profile) {
+		return new EPDExtensionReader(process, profile).read();
+	}
+
+	private EpdDataSet read() {
 		var epd = new EpdDataSet(process);
 		readExtensions(epd);
 		mapResults(epd);

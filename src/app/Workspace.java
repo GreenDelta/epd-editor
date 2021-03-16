@@ -97,7 +97,7 @@ public class Workspace {
 		return open(dir);
 	}
 
-	public void saveIndex() {
+	public synchronized void saveIndex() {
 		index.dump(new File(folder, "index.json"));
 	}
 

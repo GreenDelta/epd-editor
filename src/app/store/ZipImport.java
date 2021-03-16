@@ -57,7 +57,7 @@ public class ZipImport implements IRunnableWithProgress {
 			}
 			extDocs(monitor);
 			zip.close();
-			App.dumpIndex();
+			App.getWorkspace().saveIndex();
 			monitor.done();
 			App.runInUI("Refresh...", () -> new Sync(App.index()).run());
 			StatusView.open(M.Import, status);

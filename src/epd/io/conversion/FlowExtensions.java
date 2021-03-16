@@ -42,20 +42,20 @@ public class FlowExtensions {
 		Other extension = getMethodExtension(p.flow, false);
 		if (extension == null)
 			return;
-		Element e = Dom.getElement(extension, "vendorSpecificProduct");
-		if (e != null) {
+		Element elem = Dom.getElement(extension, "vendorSpecificProduct");
+		if (elem != null) {
 			try {
 				p.vendorSpecific = Boolean
-						.parseBoolean(e.getTextContent());
-			} catch (Exception e2) {
-				Logger log = LoggerFactory.getLogger(FlowExtensions.class);
+					.parseBoolean(elem.getTextContent());
+			} catch (Exception e) {
+				var log = LoggerFactory.getLogger(FlowExtensions.class);
 				log.error("vendorSpecificProduct contains not a boolean", e);
 			}
 		}
 		p.vendor = DataSetRefExtension.readActor(
-				"referenceToVendor", extension);
+			"referenceToVendor", extension);
 		p.documentation = DataSetRefExtension.readSource(
-				"referenceToSource", extension);
+			"referenceToSource", extension);
 	}
 
 	/**
@@ -66,9 +66,6 @@ public class FlowExtensions {
 		if (p == null || p.flow == null)
 			return;
 		try {
-			Flow flow = p.flow;
-			if (flow == null)
-				return;
 			writeInfoExtension(p);
 			writeMethodExtension(p);
 		} catch (Exception e) {
@@ -106,17 +103,17 @@ public class FlowExtensions {
 	private static void writeMethodExtension(EpdProduct p) {
 		Other extension = getMethodExtension(p.flow, true);
 		writeVendorSpecificTag(p, extension);
-		DataSetRefExtension.write(p.vendor, "referenceToVendor",
-				extension);
-		DataSetRefExtension.write(p.documentation,
-				"referenceToSource", extension);
+		DataSetRefExtension.write(
+			p.vendor, "referenceToVendor", extension);
+		DataSetRefExtension.write(
+			p.documentation, "referenceToSource", extension);
 	}
 
 	private static void writeVendorSpecificTag(EpdProduct p, Other ext) {
-		String tagName = "vendorSpecificProduct";
-		Element e = Dom.getElement(ext, tagName);
+		String tag = "vendorSpecificProduct";
+		Element e = Dom.getElement(ext, tag);
 		if (e == null) {
-			e = Dom.createElement(tagName);
+			e = Dom.createElement(Vocab.NS_EPD, tag);
 			ext.any.add(e);
 		}
 		e.setTextContent(Boolean.toString(p.vendorSpecific));

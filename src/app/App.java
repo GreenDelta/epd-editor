@@ -65,11 +65,7 @@ public class App {
 		return _settings;
 	}
 
-	public static void dumpIndex() {
-		getWorkspace().saveIndex();
-	}
-
-	public static void updateIndex(Index index) {
+	public static synchronized void updateIndex(Index index) {
 		_workspace = getWorkspace().updateIndex(index);
 	}
 

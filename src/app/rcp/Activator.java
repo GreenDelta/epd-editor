@@ -20,10 +20,10 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		App.init();
+		App.initRCP();
 		LoggerConfig.setUp();
 		Logger log = LoggerFactory.getLogger(getClass());
-		log.info("Using workspace {}", App.workspace);
+		log.info("Using workspace {}", App.getWorkspace());
 		log.info("Data set language {}", App.lang());
 	}
 

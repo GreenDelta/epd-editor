@@ -79,12 +79,13 @@ public final class Data {
 			return;
 		try {
 			Ref ref = Ref.of(ds);
-			App.store.put(ds);
-			App.index.remove(ref);
-			App.index.add(ds);
-			App.dumpIndex();
+			var workspace = App.getWorkspace();
+			workspace.store.put(ds);
+			workspace.index.remove(ref);
+			workspace.index.add(ds);
+			workspace.saveIndex();
 			RefTrees.cache(ds);
-			new Sync(App.index).run();
+			new Sync(workspace.index).run();
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Data.class);
 			log.error("Failed to update data set: " + ds, e);
@@ -95,10 +96,11 @@ public final class Data {
 		if (ref == null)
 			return;
 		try {
-			App.store.delete(ref.getDataSetClass(), ref.uuid);
-			App.index.remove(ref);
-			App.dumpIndex();
-			new Sync(App.index).run();
+			var workspace = App.getWorkspace();
+			workspace.store.delete(ref.getDataSetClass(), ref.uuid);
+			workspace.index.remove(ref);
+			workspace.saveIndex();
+			new Sync(workspace.index).run();
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Data.class);
 			log.error("failed to delete data set " + ref, e);
@@ -109,7 +111,8 @@ public final class Data {
 		if (ref == null || !ref.isValid())
 			return null;
 		try {
-			return App.store.get(ref.getDataSetClass(), ref.uuid);
+			var store = App.getWorkspace().store;
+			return store.get(ref.getDataSetClass(), ref.uuid);
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Data.class);
 			log.error("failed to load data set " + ref, e);

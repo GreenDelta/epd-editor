@@ -8,7 +8,6 @@ import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Queue;
 import java.util.Set;
 
 import org.openlca.ilcd.commons.Classification;
@@ -85,12 +84,11 @@ public class Index {
 	 */
 	public Set<Ref> getRefs() {
 		Set<Ref> refs = new HashSet<>();
-		Queue<Node> queue = new ArrayDeque<>();
-		queue.addAll(nodes.values());
+		var queue = new ArrayDeque<Node>(nodes.values());
 		while (!queue.isEmpty()) {
-			Node n = queue.poll();
-			refs.addAll(n.refs);
-			queue.addAll(n.categories);
+			var node = queue.poll();
+			refs.addAll(node.refs);
+			queue.addAll(node.categories);
 		}
 		return refs;
 	}

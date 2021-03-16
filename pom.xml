@@ -75,6 +75,13 @@
 			</exclusions>
 		</dependency>
 
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.13.1</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -85,6 +92,7 @@
 				<artifactId>maven-dependency-plugin</artifactId>
 				<version>3.1.0</version>
 				<executions>
+
 					<execution>
 						<id>copy-dependencies</id>
 						<phase>package</phase>
@@ -97,6 +105,19 @@
 							<excludeGroupIds>com.okworx.ilcd.validation.profiles</excludeGroupIds>
 						</configuration>
 					</execution>
+
+					<execution>
+						<id>copy-test-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/libs-test</outputDirectory>
+							<includeArtifactIds>junit,hamcrest-core</includeArtifactIds>
+						</configuration>
+					</execution>
+
 					<execution>
 						<id>copy-profiles</id>
 						<phase>package</phase>
@@ -108,6 +129,7 @@
 							<includeGroupIds>com.okworx.ilcd.validation.profiles</includeGroupIds>
 						</configuration>
 					</execution>
+
 				</executions>
 			</plugin>
 
@@ -119,6 +141,13 @@
 					<filesets>
 						<fileset>
 							<directory>${basedir}/libs</directory>
+							<includes>
+								<include>**/*</include>
+							</includes>
+							<followSymlinks>false</followSymlinks>
+						</fileset>
+						<fileset>
+							<directory>${basedir}/libs-test</directory>
 							<includes>
 								<include>**/*</include>
 							</includes>

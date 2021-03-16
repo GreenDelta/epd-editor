@@ -23,6 +23,6 @@ public class Extensions {
 	 * given EPD.
 	 */
 	public static void write(EpdDataSet epd) {
-		new EpdConverter(epd).convert();
+		EPDExtensions.write(epd);
 	}
 }

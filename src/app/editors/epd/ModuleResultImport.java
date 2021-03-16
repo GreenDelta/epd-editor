@@ -36,7 +36,6 @@ class ModuleResultImport implements Runnable {
 
 	private final EpdDataSet dataSet;
 	private final File excelFile;
-	private boolean success;
 
 	public ModuleResultImport(EpdDataSet dataSet, File excelFile) {
 		this.dataSet = dataSet;
@@ -45,7 +44,6 @@ class ModuleResultImport implements Runnable {
 
 	@Override
 	public void run() {
-		success = false;
 		log.trace("import results for {} from {}", dataSet, excelFile);
 		try (FileInputStream fis = new FileInputStream(excelFile)) {
 			Workbook workbook = WorkbookFactory.create(fis);
@@ -53,7 +51,6 @@ class ModuleResultImport implements Runnable {
 			List<IndicatorResult> results = readRows(sheet);
 			dataSet.results.clear();
 			dataSet.results.addAll(results);
-			success = true;
 		} catch (Exception e) {
 			log.error("failed to import results from file " + excelFile, e);
 		}

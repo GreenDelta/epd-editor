@@ -7,10 +7,14 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Other;
+import org.openlca.ilcd.commons.Ref;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -271,6 +275,39 @@ public final class Dom {
 			if (!(node instanceof Element))
 				continue;
 			fn.accept((Element) node);
+		}
+	}
+
+	static <T extends Ref> List<T> jaxbRefsOf(Class<T> type, Other ext) {
+		if (ext == null || type == null || ext.any.isEmpty())
+			return Collections.emptyList();
+		var rootDef = type.getAnnotation(XmlRootElement.class);
+		if (rootDef == null)
+			return Collections.emptyList();
+
+		try {
+			var list = new ArrayList<T>();
+			Unmarshaller unmarshaller = null;
+			for (var obj : ext.any) {
+				if (!(obj instanceof Element))
+					continue;
+				var elem = (Element) obj;
+				if (!Strings.nullOrEqual(elem.getLocalName(), rootDef.name()))
+					continue;
+				if (unmarshaller == null) {
+					var context = JAXBContext.newInstance(type);
+					unmarshaller = context.createUnmarshaller();
+				}
+				var instance = unmarshaller.unmarshal(elem);
+				if (type.isInstance(instance)) {
+					list.add(type.cast(instance));
+				}
+			}
+			return list;
+		} catch (Exception e) {
+			var log = LoggerFactory.getLogger(Dom.class);
+			log.error("failed to unmarshal Ref type of " + type, e);
+			return Collections.emptyList();
 		}
 	}
 

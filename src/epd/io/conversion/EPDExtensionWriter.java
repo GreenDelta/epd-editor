@@ -76,25 +76,27 @@ class EPDExtensionWriter {
 			epd.qMetaData.write(mod.other, doc);
 		}
 
-		// write the other extension elements
+		// write info extensions
 		var info = Processes.dataSetInfo(epd.process);
-		Other other = info.other;
-		if (other == null) {
-			other = new Other();
-			info.other = other;
+		Other infoOther = info.other;
+		if (infoOther == null) {
+			infoOther = new Other();
+			info.other = infoOther;
 		}
-		ModuleConverter.writeModules(epd, other, doc);
-		ScenarioConverter.writeScenarios(epd, other, doc);
-		SafetyMarginsConverter.write(epd, other, doc);
+		ModuleConverter.writeModules(epd, infoOther, doc);
+		ScenarioConverter.writeScenarios(epd, infoOther, doc);
+		SafetyMarginsConverter.write(epd, infoOther, doc);
 		if (epd.contentDeclaration != null) {
-			epd.contentDeclaration.write(other, doc);
+			epd.contentDeclaration.write(infoOther, doc);
 		}
+		if (Dom.isEmpty(infoOther)) {
+			info.other = null;
+		}
+
 		writeProfile();
 		writeSubType();
 		writePublicationDate();
-		if (Dom.isEmpty(other)) {
-			info.other = null;
-		}
+		PublisherRef.write(epd);
 	}
 
 	private void writeSubType() {

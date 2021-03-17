@@ -7,12 +7,10 @@ import java.util.Objects;
 
 import epd.util.Strings;
 import org.openlca.ilcd.commons.Other;
-import org.openlca.ilcd.processes.DataSetInfo;
 import org.openlca.ilcd.processes.Method;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.Processes;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Element;
 
 import epd.model.Amount;
 import epd.model.EpdDataSet;
@@ -52,6 +50,7 @@ class EPDExtensionReader {
 		epd.profile = process.otherAttributes.get(Vocab.PROFILE_ATTR);
 		readSubType(epd);
 		readPublicationDate(epd);
+		PublisherRef.read(epd);
 		epd.qMetaData = QMetaData.read(process);
 
 		// read the extensions that are stored under `dataSetInformation`

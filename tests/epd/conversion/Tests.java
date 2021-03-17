@@ -3,7 +3,6 @@ package epd.conversion;
 import java.nio.file.Files;
 import java.util.function.Consumer;
 
-import org.apache.commons.io.FileUtils;
 import org.openlca.ilcd.io.DataStore;
 import org.openlca.ilcd.io.FileStore;
 

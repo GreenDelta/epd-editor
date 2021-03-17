@@ -59,23 +59,37 @@ public class EpdDataSet {
 
 	@Override
 	public EpdDataSet clone() {
-		EpdDataSet clone = new EpdDataSet(process.clone());
+		var clone = new EpdDataSet(process.clone());
 		clone.profile = profile;
 		clone.subType = subType;
-		if (safetyMargins != null)
-			clone.safetyMargins = safetyMargins.clone();
-		for (IndicatorResult r : results)
-			clone.results.add(r.clone());
-		for (ModuleEntry e : moduleEntries)
-			clone.moduleEntries.add(e.clone());
-		for (Scenario s : scenarios)
-			clone.scenarios.add(s.clone());
-		if (contentDeclaration != null) {
-			clone.contentDeclaration = contentDeclaration.clone();
+
+		if (publicationDate != null) {
+			clone.publicationDate = LocalDate.of(
+				publicationDate.getYear(),
+				publicationDate.getMonthValue(),
+				publicationDate.getDayOfMonth());
 		}
-		if (qMetaData != null) {
-			clone.qMetaData = qMetaData.clone();
+
+		clone.safetyMargins = safetyMargins != null
+			? safetyMargins.clone()
+			: null;
+		clone.contentDeclaration = contentDeclaration != null
+			? contentDeclaration.clone()
+			: null;
+		clone.qMetaData = qMetaData != null
+			? qMetaData.clone()
+			: null;
+
+		for (var result : results) {
+			clone.results.add(result.clone());
 		}
+		for (var entry : moduleEntries) {
+			clone.moduleEntries.add(entry.clone());
+		}
+		for (var scenario : scenarios) {
+			clone.scenarios.add(scenario.clone());
+		}
+
 		return clone;
 	}
 
@@ -86,7 +100,7 @@ public class EpdDataSet {
 	 */
 	public Exchange productExchange() {
 		QuantitativeReference qRef = Processes
-				.quantitativeReference(process);
+			.quantitativeReference(process);
 		qRef.type = QuantitativeReferenceType.REFERENCE_FLOWS;
 		if (qRef.referenceFlows.isEmpty())
 			qRef.referenceFlows.add(1);

@@ -18,7 +18,6 @@ import org.openlca.ilcd.io.FileStore;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.Processes;
 
-import app.App;
 import app.store.EpdProfiles;
 import epd.io.conversion.Extensions;
 import epd.io.conversion.Vocab;

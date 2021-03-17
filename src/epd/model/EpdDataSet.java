@@ -94,6 +94,13 @@ public class EpdDataSet {
 			clone.scenarios.add(scenario.clone());
 		}
 
+		for (var ref : publishers) {
+			clone.publishers.add(ref.clone());
+		}
+		for (var ref : originalEPDs) {
+			clone.originalEPDs.add(ref.clone());
+		}
+
 		return clone;
 	}
 

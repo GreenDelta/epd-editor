@@ -3,18 +3,13 @@ package epd.conversion;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 import javax.xml.namespace.QName;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.Test;
-import org.openlca.ilcd.io.DataStore;
-import org.openlca.ilcd.io.FileStore;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.Processes;
 
@@ -32,7 +27,7 @@ public class SimpleExtensionTest {
 		var info = Processes.dataSetInfo(epd.process);
 		info.uuid = UUID.randomUUID().toString();
 		Extensions.write(epd);
-		withStore(store -> {
+		Tests.withStore(store -> {
 			store.put(epd.process);
 			var process = store.get(Process.class, info.uuid);
 			var qName = "{" + Vocab.NS_EPDv2 + "}epd-version";
@@ -71,7 +66,7 @@ public class SimpleExtensionTest {
 		Processes.dataSetInfo(epd.process).uuid = id;
 		epd.publicationDate = LocalDate.now();
 		Extensions.write(epd);
-		withStore(store -> {
+		Tests.withStore(store -> {
 
 			// insert and read
 			store.put(epd.process);
@@ -105,24 +100,11 @@ public class SimpleExtensionTest {
 		epd.subType = SubType.REPRESENTATIVE;
 		Extensions.write(epd);
 
-		withStore(store -> {
+		Tests.withStore(store -> {
 			store.put(epd.process);
 			var copy = Extensions.read(store.get(Process.class, id), profile);
 			assertEquals(SubType.REPRESENTATIVE, copy.subType);
 		});
-	}
-
-	private void withStore(Consumer<DataStore> fn) {
-		try {
-			var dir = Files.createTempDirectory("_epd_test").toFile();
-			try (var store = new FileStore(dir)) {
-				fn.accept(store);
-			}
-			FileUtils.deleteDirectory(dir);
-			// System.out.println(dir.getAbsolutePath());
-		} catch (Exception e) {
-			throw new RuntimeException("failed to test with file store", e);
-		}
 	}
 
 }

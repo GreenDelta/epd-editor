@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
@@ -70,9 +71,9 @@ public class RefTable {
 		if (tooltip != null) {
 			section.setToolTipText(tooltip);
 		}
-		Composite comp = UI.sectionClient(section, tk);
+		var comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
-		TableViewer table = Tables.createViewer(comp, Labels.get(type));
+		var table = Tables.createViewer(comp, Labels.get(type));
 		table.setLabelProvider(new RefTableLabel());
 		Action[] actions = createActions(table);
 		Actions.bind(section, actions);
@@ -82,6 +83,21 @@ public class RefTable {
 		if (tooltip != null) {
 			table.getTable().setToolTipText(tooltip);
 		}
+		Tables.onDoubleClick(table, _e -> {
+			var item = Viewers.getFirstSelected(table);
+			if (item instanceof Ref) {
+				Editors.open((Ref) item);
+			}
+		});
+
+		// make ref-tables a bit smaller than other tables
+		// because we typically only have only 1 or a few
+		// refs to show here
+		var layout = table.getTable().getLayoutData();
+		if (layout instanceof GridData) {
+			((GridData) layout).minimumHeight = 85;
+		}
+
 	}
 
 	private Action[] createActions(TableViewer table) {

@@ -3,6 +3,7 @@ package app.editors.epd;
 import java.util.ArrayList;
 import java.util.List;
 
+import epd.model.EpdDataSet;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -32,80 +33,84 @@ class ModelingPage extends FormPage {
 
 	private FormToolkit toolkit;
 
-	private EpdEditor editor;
-	private Process process;
+	private final EpdEditor editor;
+	private final EpdDataSet epd;
+	private final Process process;
 
 	public ModelingPage(EpdEditor editor) {
 		super(editor, "EpdInfoPage", M.ModellingAndValidation);
 		this.editor = editor;
-		process = editor.dataSet.process;
+		this.epd = editor.dataSet;
+		process = epd.process;
 	}
 
 	@Override
 	protected void createFormContent(IManagedForm mform) {
 		toolkit = mform.getToolkit();
-		ScrolledForm form = UI.formHeader(mform,
-				M.ModellingAndValidation);
-		Composite body = UI.formBody(form, mform.getToolkit());
+		var form = UI.formHeader(mform, M.ModellingAndValidation);
+		var body = UI.formBody(form, mform.getToolkit());
+
 		createModelingSection(body);
+
 		RefTable.create(DataSetType.SOURCE,
-				Processes.method(process).methodSources)
-				.withEditor(editor)
-				.withTitle(M.LCAMethodDetails)
-				.withTooltip(Tooltips.EPD_LCAMethodDetails)
-				.render(body, toolkit);
+			Processes.method(process).methodSources)
+			.withEditor(editor)
+			.withTitle(M.LCAMethodDetails)
+			.withTooltip(Tooltips.EPD_LCAMethodDetails)
+			.render(body, toolkit);
+
 		RefTable.create(DataSetType.SOURCE,
-				Processes.representativeness(process).sources)
-				.withEditor(editor)
-				.withTitle(M.DataSources)
-				.withTooltip(Tooltips.EPD_DataSources)
-				.render(body, toolkit);
+			Processes.representativeness(process).sources)
+			.withEditor(editor)
+			.withTitle(M.DataSources)
+			.withTooltip(Tooltips.EPD_DataSources)
+			.render(body, toolkit);
+
 		createComplianceSection(body);
+
+		RefTable.create(DataSetType.SOURCE, epd.originalEPDs)
+			.withEditor(editor)
+			.withTitle("Original EPDs")
+			.render(body, toolkit);
+
 		new ReviewSection(editor, this)
-				.render(body, toolkit, form);
+			.render(body, toolkit, form);
 		form.reflow(true);
 	}
 
 	private void createModelingSection(Composite parent) {
 		Composite comp = UI.formSection(parent, toolkit,
-				M.ModellingAndValidation, Tooltips.EPD_ModellingAndValidation);
+			M.ModellingAndValidation, Tooltips.EPD_ModellingAndValidation);
 		UI.formLabel(comp, toolkit, M.Subtype, Tooltips.EPD_Subtype);
 		createSubTypeViewer(comp);
 		TextBuilder tb = new TextBuilder(editor, this, toolkit);
 		tb.multiText(comp, M.UseAdvice, Tooltips.EPD_UseAdvice,
-				Processes.representativeness(process).useAdvice);
+			Processes.representativeness(process).useAdvice);
 	}
 
-	private ComboViewer createSubTypeViewer(Composite parent) {
-		ComboViewer viewer = new ComboViewer(parent, SWT.READ_ONLY);
-		UI.gridData(viewer.getControl(), true, false);
-		viewer.setContentProvider(ArrayContentProvider.getInstance());
-		viewer.setLabelProvider(new LabelProvider() {
+	private void createSubTypeViewer(Composite parent) {
+		var combo = new ComboViewer(parent, SWT.READ_ONLY);
+		UI.gridData(combo.getControl(), true, false);
+		combo.setContentProvider(ArrayContentProvider.getInstance());
+		combo.setLabelProvider(new LabelProvider() {
 			@Override
 			public String getText(Object element) {
 				if (element instanceof SubType) {
-					SubType subType = (SubType) element;
+					var subType = (SubType) element;
 					return Labels.get(subType);
 				}
 				return super.getText(element);
 			}
 		});
-		viewer.setInput(SubType.values());
-		selectSubType(viewer);
-		viewer.addSelectionChangedListener((event) -> {
-			SubType type = Viewers.getFirst(event.getSelection());
-			editor.dataSet.subType = type;
+
+		combo.setInput(SubType.values());
+		if (epd.subType != null) {
+			combo.setSelection(new StructuredSelection(epd.subType));
+		}
+		combo.addSelectionChangedListener(e -> {
+			editor.dataSet.subType = Viewers.getFirst(e.getSelection());
 			editor.setDirty();
 		});
-		return viewer;
-	}
-
-	private void selectSubType(ComboViewer combo) {
-		if (editor.dataSet.subType == null)
-			return;
-		StructuredSelection s = new StructuredSelection(
-				editor.dataSet.subType);
-		combo.setSelection(s);
 	}
 
 	private void createComplianceSection(Composite body) {
@@ -115,25 +120,25 @@ class ModelingPage extends FormPage {
 				systems.add(s.system);
 		});
 		RefTable table = RefTable.create(DataSetType.SOURCE, systems)
-				.withTitle(M.ComplianceDeclarations)
-				.withTooltip(Tooltips.EPD_ComplianceDeclarations);
+			.withTitle(M.ComplianceDeclarations)
+			.withTooltip(Tooltips.EPD_ComplianceDeclarations);
 		table.render(body, toolkit);
 		table.onAdd(system -> {
 			ComplianceDeclaration decl = Processes.getComplianceDeclaration(
-					process, system);
+				process, system);
 			if (decl != null)
 				return;
 			Processes.complianceDeclaration(process).system = system;
 			editor.setDirty();
 		});
 		table.onRemove(system -> {
-			ComplianceDeclaration decl = Processes.getComplianceDeclaration(
-					process, system);
+			var decl = Processes.getComplianceDeclaration(process, system);
 			if (decl == null)
 				return;
 			Processes.getComplianceDeclarations(process).remove(decl);
-			if (process.modelling.complianceDeclarations.entries.isEmpty())
+			if (process.modelling.complianceDeclarations.entries.isEmpty()) {
 				process.modelling.complianceDeclarations = null;
+			}
 			editor.setDirty();
 		});
 	}

@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.QuantitativeReferenceType;
+import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.processes.Exchange;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.ProcessName;
@@ -30,6 +31,9 @@ public class EpdDataSet {
 	public final List<IndicatorResult> results = new ArrayList<>();
 	public final List<ModuleEntry> moduleEntries = new ArrayList<>();
 	public final List<Scenario> scenarios = new ArrayList<>();
+
+	public final List<Ref> publishers = new ArrayList<>();
+	public final List<Ref> originalEPDs = new ArrayList<>();
 
 	public EpdDataSet(Process process) {
 		this.process = Objects.requireNonNull(process);

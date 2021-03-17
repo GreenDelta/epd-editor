@@ -277,38 +277,4 @@ public final class Dom {
 			fn.accept((Element) node);
 		}
 	}
-
-	static <T extends Ref> List<T> jaxbRefsOf(Class<T> type, Other ext) {
-		if (ext == null || type == null || ext.any.isEmpty())
-			return Collections.emptyList();
-		var rootDef = type.getAnnotation(XmlRootElement.class);
-		if (rootDef == null)
-			return Collections.emptyList();
-
-		try {
-			var list = new ArrayList<T>();
-			Unmarshaller unmarshaller = null;
-			for (var obj : ext.any) {
-				if (!(obj instanceof Element))
-					continue;
-				var elem = (Element) obj;
-				if (!Strings.nullOrEqual(elem.getLocalName(), rootDef.name()))
-					continue;
-				if (unmarshaller == null) {
-					var context = JAXBContext.newInstance(type);
-					unmarshaller = context.createUnmarshaller();
-				}
-				var instance = unmarshaller.unmarshal(elem);
-				if (type.isInstance(instance)) {
-					list.add(type.cast(instance));
-				}
-			}
-			return list;
-		} catch (Exception e) {
-			var log = LoggerFactory.getLogger(Dom.class);
-			log.error("failed to unmarshal Ref type of " + type, e);
-			return Collections.emptyList();
-		}
-	}
-
 }

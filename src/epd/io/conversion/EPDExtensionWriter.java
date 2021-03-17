@@ -97,6 +97,7 @@ class EPDExtensionWriter {
 		writeSubType();
 		writePublicationDate();
 		PublisherRef.write(epd);
+		OriginalEPDRef.write(epd);
 	}
 
 	private void writeSubType() {

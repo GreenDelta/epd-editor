@@ -41,6 +41,7 @@ class EPDExtensionWriter {
 		process.otherAttributes.put(
 				new QName(Vocab.NS_EPDv2, "epd-version", "epd2"), "1.2");
 		process.version = "1.1";
+		Cleanup.on(epd);
 	}
 
 	/**

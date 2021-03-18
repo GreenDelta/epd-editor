@@ -4,9 +4,10 @@ import java.io.File;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,29 +24,30 @@ public final class ValidationProfiles {
 
 	public static List<File> getFiles() {
 		File dir = dir();
-		if (dir == null || !dir.exists())
+		if (!dir.exists())
 			return Collections.emptyList();
-		List<File> files = new ArrayList<>();
-		for (File file : dir.listFiles()) {
-			if (isJar(file))
-				files.add(file);
-		}
-		return files;
+		var files = dir.listFiles();
+		if (files == null)
+			return Collections.emptyList();
+		return Arrays.stream(files)
+			.filter(ValidationProfiles::isJar)
+			.collect(Collectors.toList());
 	}
 
 	public static File put(File file) {
 		if (!isJar(file))
 			return null;
-		File dir = dir();
-		if (!dir.exists())
-			dir.mkdirs();
-		File target = new File(dir, file.getName());
 		try {
+			var dir = dir();
+			if (!dir.exists()) {
+				Files.createDirectories(dir.toPath());
+			}
+			var target = new File(dir, file.getName());
 			Files.copy(file.toPath(), target.toPath(),
-					StandardCopyOption.REPLACE_EXISTING);
+				StandardCopyOption.REPLACE_EXISTING);
 			return target;
 		} catch (Exception e) {
-			Logger log = LoggerFactory.getLogger(ValidationProfiles.class);
+			var log = LoggerFactory.getLogger(ValidationProfiles.class);
 			log.error("failed to copy profile", e);
 			return null;
 		}

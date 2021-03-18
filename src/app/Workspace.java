@@ -32,38 +32,15 @@ public class Workspace {
 		this.folder = folder;
 		store = new FileStore(folder);
 		index = Index.load(new File(folder, "index.json"));
-		initData();
+		// copy the default data into the workspace if there
+		// is a "data" folder in the execution folder
+		syncWith(new File("data"));
 	}
 
 	private Workspace(Workspace ws, Index index) {
 		this.folder = ws.folder;
 		this.store = new FileStore(ws.folder);
 		this.index = index;
-	}
-
-	private void initData() {
-		// copy the default data into the workspace if there
-		// is a "data" folder in the execution folder
-		var dataDir = new File("data");
-		if (!dataDir.exists()
-				|| !dataDir.isDirectory()
-				|| dataDir.equals(folder))
-			return;
-		var files = dataDir.listFiles();
-		if (files == null)
-			return;
-		try {
-			for (var f : files) {
-				if (f.isFile()) {
-					FileUtils.copyFileToDirectory(f, folder);
-				} else {
-					FileUtils.copyDirectoryToDirectory(f, folder);
-				}
-			}
-		} catch (Exception e) {
-			var log = LoggerFactory.getLogger(App.class);
-			log.error("failed to init data folder @" + folder, e);
-		}
 	}
 
 	Workspace updateIndex(Index index) {
@@ -104,5 +81,28 @@ public class Workspace {
 	@Override
 	public String toString() {
 		return "Workspace{" + "folder=" + folder + '}';
+	}
+
+	public void syncWith(File folder) {
+		if (folder == null
+			  || !folder.exists()
+				|| !folder.isDirectory()
+				|| folder.equals(this.folder))
+			return;
+		var files = folder.listFiles();
+		if (files == null)
+			return;
+		try {
+			for (var f : files) {
+				if (f.isFile()) {
+					FileUtils.copyFileToDirectory(f, this.folder);
+				} else {
+					FileUtils.copyDirectoryToDirectory(f, this.folder);
+				}
+			}
+		} catch (Exception e) {
+			var log = LoggerFactory.getLogger(App.class);
+			log.error("failed to init data folder @" + this.folder, e);
+		}
 	}
 }

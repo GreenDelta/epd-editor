@@ -5,6 +5,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import app.App;
+import app.editors.Editors;
+import app.rcp.Icon;
+import app.util.Viewers;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -22,54 +26,76 @@ import epd.model.Indicator;
 import epd.model.IndicatorResult;
 import epd.model.Module;
 import epd.util.Strings;
+import org.openlca.ilcd.commons.DataSetType;
 
 class ResultTable {
 
-	private EpdEditor editor;
-	private EpdDataSet dataSet;
+	private final EpdEditor editor;
+	private final EpdDataSet epd;
 
-	private TableViewer viewer;
+	private TableViewer table;
 
-	public ResultTable(EpdEditor editor, EpdDataSet dataSet) {
+	public ResultTable(EpdEditor editor, EpdDataSet epd) {
 		this.editor = editor;
-		this.dataSet = dataSet;
+		this.epd = epd;
 	}
 
 	public void create(Composite composite) {
-		String[] columns = new String[] { M.Module, M.Scenario,
-				M.Indicator, M.Value, M.Unit };
-		viewer = Tables.createViewer(composite, columns);
-		Tables.bindColumnWidths(viewer, 0.1, 0.2, 0.3, 0.2, 0.2);
-		var modifier = new ModifySupport<ResultRow>(viewer);
+		var columns = new String[]{
+			M.Module, M.Scenario, M.Indicator, M.Value, M.Unit};
+		table = Tables.createViewer(composite, columns);
+		Tables.bindColumnWidths(table, 0.1, 0.2, 0.3, 0.2, 0.2);
+		var modifier = new ModifySupport<ResultRow>(table);
 		modifier.bind(M.Value, new AmountModifier());
-		viewer.setLabelProvider(new ResultLabel());
-		viewer.getTable().setToolTipText(Tooltips.EPD_Results);
+		table.setLabelProvider(new ResultLabel());
+		table.getTable().setToolTipText(Tooltips.EPD_Results);
 
-		// add setorrs
-		Tables.addSorter(viewer, 0, (ResultRow r) -> r.amount.module);
-		Tables.addSorter(viewer, 1, (ResultRow r) -> r.amount.scenario);
-		Tables.addSorter(viewer, 2, (ResultRow r) -> r.result.indicator.name);
-		Tables.addSorter(viewer, 3, (ResultRow r) -> r.amount.value);
-		Tables.addSorter(viewer, 4, (ResultRow r) -> r.result.indicator.unit);
+		Tables.onDoubleClick(table, $ -> {
+			ResultRow row = Viewers.getFirstSelected(table);
+			if (row == null)
+				return;
+			var indicator = row.indicator();
+			if (indicator == null)
+				return;
+			var ref = row.indicator().getRef(App.lang());
+			var indexRef = App.index().find(ref);
+			if (indexRef != null) {
+				Editors.open(indexRef);
+			}
+		});
+
+		// add sorters
+		Tables.addSorter(table, 0, (ResultRow r) -> r.amount.module);
+		Tables.addSorter(table, 1, (ResultRow r) -> r.amount.scenario);
+		Tables.addSorter(table, 2, (ResultRow r) -> r.result.indicator.name);
+		Tables.addSorter(table, 3, (ResultRow r) -> r.amount.value);
+		Tables.addSorter(table, 4, (ResultRow r) -> r.result.indicator.unit);
 	}
 
 	public void refresh() {
 		List<ResultRow> rows = new ArrayList<>();
-		for (IndicatorResult result : dataSet.results) {
+		for (IndicatorResult result : epd.results) {
 			for (Amount amount : result.amounts) {
-				ResultRow row = new ResultRow();
-				row.amount = amount;
-				row.result = result;
-				rows.add(row);
+				rows.add(new ResultRow(result, amount));
 			}
 		}
 		Collections.sort(rows);
-		viewer.setInput(rows);
+		table.setInput(rows);
 	}
 
-	private class ResultRow implements Comparable<ResultRow> {
-		IndicatorResult result;
-		Amount amount;
+	private static class ResultRow implements Comparable<ResultRow> {
+
+		private final IndicatorResult result;
+		private final Amount amount;
+
+		ResultRow(IndicatorResult result, Amount amount) {
+			this.result = result;
+			this.amount = amount;
+		}
+
+		Indicator indicator() {
+			return result.indicator;
+		}
 
 		@Override
 		public int compareTo(ResultRow other) {
@@ -105,34 +131,42 @@ class ResultTable {
 		}
 	}
 
-	private class ResultLabel extends LabelProvider implements
-			ITableLabelProvider {
+	private static class ResultLabel extends LabelProvider implements
+		ITableLabelProvider {
 
 		@Override
-		public Image getColumnImage(Object element, int columnIndex) {
+		public Image getColumnImage(Object obj, int col) {
+			if (!(obj instanceof ResultRow))
+				return null;
+			ResultRow row = (ResultRow) obj;
+			if (col == 2) {
+				var indicator = row.indicator();
+				if (indicator == null)
+					return null;
+				return indicator.type == Indicator.Type.LCI
+					? Icon.img(DataSetType.FLOW)
+					: Icon.img(DataSetType.LCIA_METHOD);
+			}
+
+			if (col == 4)
+				return Icon.img(DataSetType.UNIT_GROUP);
 			return null;
 		}
 
 		@Override
-		public String getColumnText(Object element, int col) {
-			if (!(element instanceof ResultRow))
+		public String getColumnText(Object obj, int col) {
+			if (!(obj instanceof ResultRow))
 				return null;
-			ResultRow row = (ResultRow) element;
-			Amount a = row.amount;
-			switch (col) {
-			case 0:
-				return a.module == null ? null : a.module.name;
-			case 1:
-				return a.scenario;
-			case 2:
-				return row.result.indicator.name;
-			case 3:
-				return a.value == null ? " - " : a.value.toString();
-			case 4:
-				return row.result.indicator.unit;
-			default:
-				return null;
-			}
+			var row = (ResultRow) obj;
+			var a = row.amount;
+			return switch (col) {
+				case 0 -> a.module == null ? null : a.module.name;
+				case 1 -> a.scenario;
+				case 2 -> row.result.indicator.name;
+				case 3 -> a.value == null ? " - " : a.value.toString();
+				case 4 -> row.result.indicator.unit;
+				default -> null;
+			};
 		}
 	}
 

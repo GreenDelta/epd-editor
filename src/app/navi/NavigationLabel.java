@@ -13,7 +13,6 @@ public class NavigationLabel extends ColumnLabelProvider implements
 		ICommonLabelProvider {
 
 	private Font boldFont;
-	private FontRegistry fontReg;
 
 	@Override
 	public String getText(Object element) {
@@ -46,7 +45,7 @@ public class NavigationLabel extends ColumnLabelProvider implements
 
 	@Override
 	public void init(ICommonContentExtensionSite aConfig) {
-		fontReg = new FontRegistry();
+		FontRegistry fontReg = new FontRegistry();
 		Display display = Display.getCurrent();
 		if (display == null)
 			return;

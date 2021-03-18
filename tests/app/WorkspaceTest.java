@@ -1,13 +1,15 @@
 package app;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 import app.store.EpdProfiles;
 import app.store.validation.ValidationProfiles;
-import epd.index.Index;
-import org.junit.Test;
 
 public class WorkspaceTest {
 
@@ -35,7 +37,7 @@ public class WorkspaceTest {
 	public void testEPDProfile() {
 		// make sure that at least the default index is loaded
 		Workspace.openDefault()
-			.syncWith(new File("build/default_data"));
+				.syncWith(new File("build/default_data"));
 		var ws = Workspace.openDefault();
 		var profile = EpdProfiles.getDefault();
 		var indicators = 0;

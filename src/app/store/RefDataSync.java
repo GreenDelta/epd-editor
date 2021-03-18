@@ -48,7 +48,7 @@ public class RefDataSync implements Runnable {
 		if (urls == null || urls.isEmpty())
 			return;
 		for (String url : urls) {
-			SodaConnection con = makeConnection(url);
+			var con = makeConnection(url);
 			if (con != null) {
 				doSync(con);
 			}
@@ -66,7 +66,7 @@ public class RefDataSync implements Runnable {
 			baseUrl = parts[0];
 			dataStock = parts[1].replace("/", "");
 		}
-		SodaConnection con = new SodaConnection();
+		var con = new SodaConnection();
 		con.dataStockId = dataStock;
 		con.url = baseUrl;
 		return con;
@@ -74,7 +74,7 @@ public class RefDataSync implements Runnable {
 
 	@SuppressWarnings("unchecked")
 	private void doSync(SodaConnection con) {
-		try (SodaClient client = new SodaClient(con)) {
+		try (var client = new SodaClient(con)) {
 			log.info("Connected to {} (datastock={})", con.url,
 					con.dataStockId);
 			Class<?>[] types = new Class<?>[] {

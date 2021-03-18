@@ -11,9 +11,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
@@ -64,19 +64,21 @@ public class TranslationView extends ViewPart implements ISelectionListener {
 		form.getForm().setForeground(Colors.get(70, 70, 70));
 		composite = form.getBody();
 		UI.gridLayout(composite, 2);
-		ISelectionService service = getSite().getWorkbenchWindow()
+		var service = getSite()
+				.getWorkbenchWindow()
 				.getSelectionService();
-		if (service != null)
+		if (service != null) {
 			service.addSelectionListener(this);
+		}
 	}
 
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		if (!(selection instanceof Selection))
 			return;
-		controls.forEach(c -> c.dispose());
+		controls.forEach(Widget::dispose);
 		controls.clear();
-		Selection s = (Selection) selection;
+		var s = (Selection) selection;
 		if (s.isEmpty()) {
 			form.setText(M.Translation_NoContentsYet);
 			return;
@@ -101,7 +103,8 @@ public class TranslationView extends ViewPart implements ISelectionListener {
 
 	@Override
 	public void dispose() {
-		ISelectionService service = getSite().getWorkbenchWindow()
+		var service = getSite()
+				.getWorkbenchWindow()
 				.getSelectionService();
 		if (service != null)
 			service.removeSelectionListener(this);
@@ -112,7 +115,8 @@ public class TranslationView extends ViewPart implements ISelectionListener {
 	public void setFocus() {
 	}
 
-	public static void register(WorkbenchPart part, String title, Text text,
+	public static void register(
+			WorkbenchPart part, String title, Text text,
 			List<LangString> strings) {
 		if (text == null)
 			return;

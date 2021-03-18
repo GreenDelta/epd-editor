@@ -5,7 +5,7 @@ import java.io.File;
 import app.store.EpdProfiles;
 import app.store.Json;
 
-public final class AppSettings {
+public final class AppSettings implements Cloneable {
 
 	/** The ID of the EPD profile that should be used in the application. */
 	public String profile = EpdProfiles.DEFAULT;
@@ -60,17 +60,7 @@ public final class AppSettings {
 	@Override
 	public AppSettings clone() {
 		try {
-			var clone = (AppSettings) super.clone();
-			clone.profile = profile;
-			clone.lang = lang;
-			clone.showDataSetXML = showDataSetXML;
-			clone.showDataSetDependencies = showDataSetDependencies;
-			clone.showContentDeclarations = showContentDeclarations;
-			clone.showQMetadata = showQMetadata;
-			clone.validationProfile = validationProfile;
-			clone.syncRefDataOnStartup = syncRefDataOnStartup;
-			clone.checkEPDsOnProductUpdates = checkEPDsOnProductUpdates;
-			return clone;
+			return (AppSettings) super.clone();
 		} catch (CloneNotSupportedException e) {
 			throw new RuntimeException(e);
 		}

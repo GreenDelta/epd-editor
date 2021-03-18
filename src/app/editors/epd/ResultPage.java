@@ -41,7 +41,7 @@ import epd.model.ModuleEntry;
 import epd.model.Scenario;
 import epd.util.Strings;
 
-class ModulePage extends FormPage {
+class ResultPage extends FormPage {
 
 	private EpdEditor editor;
 	private FormToolkit toolkit;
@@ -52,7 +52,7 @@ class ModulePage extends FormPage {
 	private TableViewer moduleTable;
 	private ModuleResultTable resultTable;
 
-	public ModulePage(EpdEditor editor) {
+	public ResultPage(EpdEditor editor) {
 		super(editor, "ModulesPage", M.EnvironmentalIndicators);
 		this.editor = editor;
 		dataSet = editor.dataSet;

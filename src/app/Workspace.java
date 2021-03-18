@@ -31,10 +31,11 @@ public class Workspace {
 	private Workspace(File folder) {
 		this.folder = folder;
 		store = new FileStore(folder);
-		index = Index.load(new File(folder, "index.json"));
 		// copy the default data into the workspace if there
 		// is a "data" folder in the execution folder
 		syncWith(new File("data"));
+		// load the index after we synced the files
+		index = Index.load(new File(folder, "index.json"));
 	}
 
 	private Workspace(Workspace ws, Index index) {

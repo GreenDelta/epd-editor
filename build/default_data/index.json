@@ -1,1598 +1,2321 @@
 {
-    "nodes": {
-        "SOURCE": {
-            "type": "SOURCE",
-            "refs": [],
-            "categories": [
-                {
-                    "category": {
-                        "value": "Databases",
-                        "level": 0,
-                        "classId": "ca877255-4278-4aae-960e-1f1951367f8d",
-                        "otherAttributes": {}
-                    },
-                    "refs": [
-                        {
-                            "name": [
-                                {
-                                    "value": "ecoinvent 2.1 database",
-                                    "lang": "en"
-                                }
-                            ],
-                            "type": "SOURCE",
-                            "uuid": "dd4ba261-1847-4d00-a9c0-7e81a3402dae",
-                            "version": "00.00.000",
-                            "uri": "http://openlca.org/ilcd/resource/sources/dd4ba261-1847-4d00-a9c0-7e81a3402dae"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "GaBi database SP26 2014",
-                                    "lang": "en"
-                                }
-                            ],
-                            "type": "SOURCE",
-                            "uuid": "7d81b748-d7ea-4efd-b72e-205c69306f38",
-                            "version": "00.00.000",
-                            "uri": "http://openlca.org/ilcd/resource/sources/7d81b748-d7ea-4efd-b72e-205c69306f38"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "ecoinvent 3.2 database",
-                                    "lang": "en"
-                                }
-                            ],
-                            "type": "SOURCE",
-                            "uuid": "d82a6cdc-1930-4a8a-9b07-2f7fda03fcbd",
-                            "version": "00.00.000",
-                            "uri": "http://openlca.org/ilcd/resource/sources/d82a6cdc-1930-4a8a-9b07-2f7fda03fcbd"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "GaBi database SP29 2016",
-                                    "lang": "en"
-                                }
-                            ],
-                            "type": "SOURCE",
-                            "uuid": "8cb50bdc-0299-4a4c-9a4e-4c62917018c7",
-                            "version": "00.00.000",
-                            "uri": "http://openlca.org/ilcd/resource/sources/8cb50bdc-0299-4a4c-9a4e-4c62917018c7"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "ecoinvent 2.0 database",
-                                    "lang": "en"
-                                }
-                            ],
-                            "type": "SOURCE",
-                            "uuid": "67e57f6b-53d2-4adb-a5db-7e8157ce5865",
-                            "version": "00.00.000",
-                            "uri": "http://openlca.org/ilcd/resource/sources/67e57f6b-53d2-4adb-a5db-7e8157ce5865"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "GaBi database SP28 2015",
-                                    "lang": "en"
-                                }
-                            ],
-                            "type": "SOURCE",
-                            "uuid": "176effc6-2e73-4419-be24-60b3399e91cf",
-                            "version": "00.00.000",
-                            "uri": "http://openlca.org/ilcd/resource/sources/176effc6-2e73-4419-be24-60b3399e91cf"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "ecoinvent 2.2 database",
-                                    "lang": "en"
-                                }
-                            ],
-                            "type": "SOURCE",
-                            "uuid": "9ffadc15-4649-4871-b565-cee8197b17e9",
-                            "version": "00.00.000",
-                            "uri": "http://openlca.org/ilcd/resource/sources/9ffadc15-4649-4871-b565-cee8197b17e9"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "ecoinvent 3.1 database",
-                                    "lang": "en"
-                                }
-                            ],
-                            "type": "SOURCE",
-                            "uuid": "44df4cc3-a75f-4e13-a37a-971dadc97b35",
-                            "version": "00.00.000",
-                            "uri": "http://openlca.org/ilcd/resource/sources/44df4cc3-a75f-4e13-a37a-971dadc97b35"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "GaBi database SP27 2015",
-                                    "lang": "en"
-                                }
-                            ],
-                            "type": "SOURCE",
-                            "uuid": "9422129a-7992-4eaf-aa17-0fca36af4512",
-                            "version": "00.00.000",
-                            "uri": "http://openlca.org/ilcd/resource/sources/9422129a-7992-4eaf-aa17-0fca36af4512"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "ecoinvent 3.0 database",
-                                    "lang": "en"
-                                }
-                            ],
-                            "type": "SOURCE",
-                            "uuid": "ae9fac17-61c1-4776-947a-0fc2865954ff",
-                            "version": "00.00.000",
-                            "uri": "http://openlca.org/ilcd/resource/sources/ae9fac17-61c1-4776-947a-0fc2865954ff"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "GaBi database SP20 2013",
-                                    "lang": "en"
-                                }
-                            ],
-                            "type": "SOURCE",
-                            "uuid": "b9fdf525-e9b8-47a0-b897-2ecfe7e2cff5",
-                            "version": "00.00.000",
-                            "uri": "http://openlca.org/ilcd/resource/sources/b9fdf525-e9b8-47a0-b897-2ecfe7e2cff5"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "GaBi database SP25 2014",
-                                    "lang": "en"
-                                }
-                            ],
-                            "type": "SOURCE",
-                            "uuid": "04536297-8f33-4ef0-b06c-54dc273c2aaa",
-                            "version": "00.00.000",
-                            "uri": "http://openlca.org/ilcd/resource/sources/04536297-8f33-4ef0-b06c-54dc273c2aaa"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "ecoinvent database (all versions)",
-                                    "lang": "en"
-                                }
-                            ],
-                            "type": "SOURCE",
-                            "uuid": "b497a91f-e14b-4b69-8f28-f50eb1576766",
-                            "version": "00.03.001",
-                            "uri": "http://openlca.org/ilcd/resource/sources/b497a91f-e14b-4b69-8f28-f50eb1576766"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "GaBi database (all versions)",
-                                    "lang": "en"
-                                }
-                            ],
-                            "type": "SOURCE",
-                            "uuid": "28d74cc0-db8b-4d7e-bc44-5f6d56ce0c4a",
-                            "version": "00.03.001",
-                            "uri": "http://openlca.org/ilcd/resource/sources/28d74cc0-db8b-4d7e-bc44-5f6d56ce0c4a"
-                        }
-                    ],
-                    "categories": []
-                },
-                {
-                    "category": {
-                        "value": "Data set formats",
-                        "level": 0,
-                        "otherAttributes": {}
-                    },
-                    "refs": [
-                        {
-                            "name": [
-                                {
-                                    "value": "EPD Data Format Extension",
-                                    "lang": "de"
-                                }
-                            ],
-                            "type": "SOURCE",
-                            "uuid": "cba73800-7874-11e3-981f-0800200c9a66",
-                            "version": "00.01.000"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "ILCD format",
-                                    "lang": "en"
-                                }
-                            ],
-                            "type": "SOURCE",
-                            "uuid": "a97a0155-0234-4b87-b4ce-a45da52f2a40",
-                            "version": "01.00.000",
-                            "uri": "http://lca.jrc.ec.europa.eu/lcainfohub/sample_data/ilcd/sources/ILCD_Format_a97a0155-0234-4b87-b4ce-a45da52f2a40_01.00.000.xml"
-                        }
-                    ],
-                    "categories": []
-                },
-                {
-                    "category": {
-                        "value": "Compliance systems",
-                        "level": 0,
-                        "otherAttributes": {}
-                    },
-                    "refs": [
-                        {
-                            "name": [
-                                {
-                                    "value": "EN 15804",
-                                    "lang": "de"
-                                }
-                            ],
-                            "type": "SOURCE",
-                            "uuid": "b00f9ec0-7874-11e3-981f-0800200c9a66",
-                            "version": "00.02.000"
-                        }
-                    ],
-                    "categories": []
-                }
-            ]
-        },
-        "FLOW": {
-            "type": "FLOW",
-            "refs": [],
-            "categories": [
-                {
-                    "category": {
-                        "value": "Größen",
-                        "level": 0,
-                        "classId": "f9ec79e6-9fdd-4691-9c05-04e9fa45fb14",
-                        "otherAttributes": {}
-                    },
-                    "refs": [],
-                    "categories": [
-                        {
-                            "category": {
-                                "value": "Umweltliche Größen",
-                                "level": 1,
-                                "classId": "34390d09-b09f-4f90-9b44-f5967461e18c",
-                                "otherAttributes": {}
-                            },
-                            "refs": [],
-                            "categories": [
-                                {
-                                    "category": {
-                                        "value": "EPD EN 15804",
-                                        "level": 2,
-                                        "classId": "66999bad-2002-445f-bc89-8230780f539a",
-                                        "otherAttributes": {}
-                                    },
-                                    "refs": [],
-                                    "categories": [
-                                        {
-                                            "category": {
-                                                "value": "LCI Indikatoren",
-                                                "level": 3,
-                                                "classId": "c3bb7da8-448e-496f-8185-7e1c5ce9908d",
-                                                "otherAttributes": {}
-                                            },
-                                            "refs": [
-                                                {
-                                                    "name": [
-                                                        {
-                                                            "value": "Non hazardous waste dispose (NHWD)",
-                                                            "lang": "en"
-                                                        },
-                                                        {
-                                                            "value": "Entsorgter nicht gefährlicher Abfall (NHWD)",
-                                                            "lang": "de"
-                                                        },
-                                                        {
-                                                            "value": "Residuos no peligrosos eliminados (NHWD)",
-                                                            "lang": "es"
-                                                        }
-                                                    ],
-                                                    "type": "FLOW",
-                                                    "uuid": "b29ef66b-e286-4afa-949f-62f1a7b4d7fa",
-                                                    "version": "30.00.000"
-                                                },
-                                                {
-                                                    "name": [
-                                                        {
-                                                            "value": "Components for re-use (CRU)",
-                                                            "lang": "en"
-                                                        },
-                                                        {
-                                                            "value": "Komponenten für die Wiederverwendung (CRU)",
-                                                            "lang": "de"
-                                                        },
-                                                        {
-                                                            "value": "Componentes para su reutilización (CRU)",
-                                                            "lang": "es"
-                                                        }
-                                                    ],
-                                                    "type": "FLOW",
-                                                    "uuid": "a2b32f97-3fc7-4af2-b209-525bc6426f33",
-                                                    "version": "30.00.000"
-                                                },
-                                                {
-                                                    "name": [
-                                                        {
-                                                            "value": "Exported thermal energy (EET)",
-                                                            "lang": "en"
-                                                        },
-                                                        {
-                                                            "value": "Exportierte thermische Energie (EET)",
-                                                            "lang": "de"
-                                                        },
-                                                        {
-                                                            "value": "Energía exportada termal (EET)",
-                                                            "lang": "es"
-                                                        }
-                                                    ],
-                                                    "type": "FLOW",
-                                                    "uuid": "98daf38a-7a79-46d3-9a37-2b7bd0955810",
-                                                    "version": "30.00.000"
-                                                },
-                                                {
-                                                    "name": [
-                                                        {
-                                                            "value": "Hazardous waste disposed (HWD)",
-                                                            "lang": "en"
-                                                        },
-                                                        {
-                                                            "value": "Gefährlicher Abfall zur Deponie (HWD)",
-                                                            "lang": "de"
-                                                        },
-                                                        {
-                                                            "value": "Residuos peligrosos eliminados (HWD)",
-                                                            "lang": "es"
-                                                        }
-                                                    ],
-                                                    "type": "FLOW",
-                                                    "uuid": "430f9e0f-59b2-46a0-8e0d-55e0e84948fc",
-                                                    "version": "30.00.000"
-                                                },
-                                                {
-                                                    "name": [
-                                                        {
-                                                            "value": "Use of secondary material (SM)",
-                                                            "lang": "en"
-                                                        },
-                                                        {
-                                                            "value": "Einsatz von Sekundärstoffen (SM)",
-                                                            "lang": "de"
-                                                        },
-                                                        {
-                                                            "value": "Uso de materiales secundarios (SM)",
-                                                            "lang": "es"
-                                                        }
-                                                    ],
-                                                    "type": "FLOW",
-                                                    "uuid": "c6a1f35f-2d09-4f54-8dfb-97e502e1ce92",
-                                                    "version": "30.00.000"
-                                                },
-                                                {
-                                                    "name": [
-                                                        {
-                                                            "value": "Materials for energy recovery (MER)",
-                                                            "lang": "en"
-                                                        },
-                                                        {
-                                                            "value": "Stoffe für die Energierückgewinnung (MER)",
-                                                            "lang": "de"
-                                                        },
-                                                        {
-                                                            "value": "Materiales para valorización energética (recuperación de energía) (MER)",
-                                                            "lang": "es"
-                                                        }
-                                                    ],
-                                                    "type": "FLOW",
-                                                    "uuid": "59a9181c-3aaf-46ee-8b13-2b3723b6e447",
-                                                    "version": "30.00.000"
-                                                },
-                                                {
-                                                    "name": [
-                                                        {
-                                                            "value": "Exported electrical energy (EEE)",
-                                                            "lang": "en"
-                                                        },
-                                                        {
-                                                            "value": "Exportierte elektrische Energie (EEE)",
-                                                            "lang": "de"
-                                                        },
-                                                        {
-                                                            "value": "Energía exportada electrica (EEE)",
-                                                            "lang": "es"
-                                                        }
-                                                    ],
-                                                    "type": "FLOW",
-                                                    "uuid": "4da0c987-2b76-40d6-9e9e-82a017aaaf29",
-                                                    "version": "30.00.000"
-                                                },
-                                                {
-                                                    "name": [
-                                                        {
-                                                            "value": "Total use of renewable primary energy resources (PERT)",
-                                                            "lang": "en"
-                                                        },
-                                                        {
-                                                            "value": "Total erneuerbare Primärenergie (PERT)",
-                                                            "lang": "de"
-                                                        },
-                                                        {
-                                                            "value": "Uso total de la energía primaria renovable (energía primaria y recursos de energía primaria renovable utilizada como materia prima) (PERT)",
-                                                            "lang": "es"
-                                                        }
-                                                    ],
-                                                    "type": "FLOW",
-                                                    "uuid": "53f97275-fa8a-4cdd-9024-65936002acd0",
-                                                    "version": "30.00.000"
-                                                },
-                                                {
-                                                    "name": [
-                                                        {
-                                                            "value": "Use of renewable primary energy (PERE)",
-                                                            "lang": "en"
-                                                        },
-                                                        {
-                                                            "value": "Erneuerbare Primärenergie als Energieträger (PERE)",
-                                                            "lang": "de"
-                                                        },
-                                                        {
-                                                            "value": "Uso de energía primaria renovable excluyendo los recursos de energía primaria renovable utilizada como materia prima (PERE)",
-                                                            "lang": "es"
-                                                        }
-                                                    ],
-                                                    "type": "FLOW",
-                                                    "uuid": "20f32be5-0398-4288-9b6d-accddd195317",
-                                                    "version": "30.00.000"
-                                                },
-                                                {
-                                                    "name": [
-                                                        {
-                                                            "value": "Use of non renewable secondary fuels (NRSF)",
-                                                            "lang": "en"
-                                                        },
-                                                        {
-                                                            "value": "Nicht erneuerbare Sekundärbrennstoffe (NRSF)",
-                                                            "lang": "de"
-                                                        },
-                                                        {
-                                                            "value": "Uso de combustibles secundarios no renovables (NRSF)",
-                                                            "lang": "es"
-                                                        }
-                                                    ],
-                                                    "type": "FLOW",
-                                                    "uuid": "89def144-d39a-4287-b86f-efde453ddcb2",
-                                                    "version": "30.00.000"
-                                                },
-                                                {
-                                                    "name": [
-                                                        {
-                                                            "value": "Radioactive waste disposed (RWD)",
-                                                            "lang": "en"
-                                                        },
-                                                        {
-                                                            "value": "Entsorgter radioaktiver Abfall (RWD)",
-                                                            "lang": "de"
-                                                        },
-                                                        {
-                                                            "value": "Residuos radiactivos eliminados (RWD)",
-                                                            "lang": "es"
-                                                        }
-                                                    ],
-                                                    "type": "FLOW",
-                                                    "uuid": "3449546e-52ad-4b39-b809-9fb77cea8ff6",
-                                                    "version": "30.00.000"
-                                                },
-                                                {
-                                                    "name": [
-                                                        {
-                                                            "value": "Materials for recycling (MFR)",
-                                                            "lang": "en"
-                                                        },
-                                                        {
-                                                            "value": "Stoffe zum Recycling (MFR)",
-                                                            "lang": "de"
-                                                        },
-                                                        {
-                                                            "value": "Materiales para el reciclaje (MFR)",
-                                                            "lang": "es"
-                                                        }
-                                                    ],
-                                                    "type": "FLOW",
-                                                    "uuid": "d7fe48a5-4103-49c8-9aae-b0b5dfdbd6ae",
-                                                    "version": "30.00.000"
-                                                },
-                                                {
-                                                    "name": [
-                                                        {
-                                                            "value": "Use of net fresh water (FW)",
-                                                            "lang": "en"
-                                                        },
-                                                        {
-                                                            "value": "Einsatz von Süßwasserressourcen (FW)",
-                                                            "lang": "de"
-                                                        },
-                                                        {
-                                                            "value": "Uso neto de recursos de agua dulce (FW)",
-                                                            "lang": "es"
-                                                        }
-                                                    ],
-                                                    "type": "FLOW",
-                                                    "uuid": "3cf952c8-f3a4-461d-8c96-96456ca62246",
-                                                    "version": "30.00.000"
-                                                },
-                                                {
-                                                    "name": [
-                                                        {
-                                                            "value": "Use of renewable secondary fuels (RSF)",
-                                                            "lang": "en"
-                                                        },
-                                                        {
-                                                            "value": "Erneuerbare Sekundärbrennstoffe (RSF)",
-                                                            "lang": "de"
-                                                        },
-                                                        {
-                                                            "value": "Uso de combustibles secundarios renovables (RSF)",
-                                                            "lang": "es"
-                                                        }
-                                                    ],
-                                                    "type": "FLOW",
-                                                    "uuid": "64333088-a55f-4aa2-9a31-c10b07816787",
-                                                    "version": "30.00.000"
-                                                },
-                                                {
-                                                    "name": [
-                                                        {
-                                                            "value": "Use of non renewable primary energy resources used as raw materials (PENRM)",
-                                                            "lang": "en"
-                                                        },
-                                                        {
-                                                            "value": "Nicht-erneuerbare Primärenergie zur stofflichen Nutzung (PENRM)",
-                                                            "lang": "de"
-                                                        },
-                                                        {
-                                                            "value": "Uso de la energía primaria no renovable utilizada como materia prima (PENRM)",
-                                                            "lang": "es"
-                                                        }
-                                                    ],
-                                                    "type": "FLOW",
-                                                    "uuid": "1421caa0-679d-4bf4-b282-0eb850ccae27",
-                                                    "version": "30.00.000"
-                                                },
-                                                {
-                                                    "name": [
-                                                        {
-                                                            "value": "Use of renewable primary energy resources used as raw materials (PERM)",
-                                                            "lang": "en"
-                                                        },
-                                                        {
-                                                            "value": "Erneuerbare Primärenergie zur stofflichen Nutzung (PERM)",
-                                                            "lang": "de"
-                                                        },
-                                                        {
-                                                            "value": "Uso de energía primaria renovable utilizada como materia prima (PERM)",
-                                                            "lang": "es"
-                                                        }
-                                                    ],
-                                                    "type": "FLOW",
-                                                    "uuid": "fb3ec0de-548d-4508-aea5-00b73bf6f702",
-                                                    "version": "30.00.000"
-                                                },
-                                                {
-                                                    "name": [
-                                                        {
-                                                            "value": "Total use of non renewable primary energy resource (PENRT)",
-                                                            "lang": "en"
-                                                        },
-                                                        {
-                                                            "value": "Total nicht erneuerbare Primärenergie (PENRT)",
-                                                            "lang": "de"
-                                                        },
-                                                        {
-                                                            "value": "Uso total de la energía primaria no renovable (energía primaria y recursos de energía primaria renovable utilizada como materia prima) (PENRT)",
-                                                            "lang": "es"
-                                                        }
-                                                    ],
-                                                    "type": "FLOW",
-                                                    "uuid": "06159210-646b-4c8d-8583-da9b3b95a6c1",
-                                                    "version": "30.00.000"
-                                                },
-                                                {
-                                                    "name": [
-                                                        {
-                                                            "value": "Use of non renewable primary energy (PENRE)",
-                                                            "lang": "en"
-                                                        },
-                                                        {
-                                                            "value": "Nicht-erneuerbare Primärenergie als Energieträger (PENRE)",
-                                                            "lang": "de"
-                                                        },
-                                                        {
-                                                            "value": "Uso de energía primaria no renovable, excluyendo los recursos de energía primaria no renovable utilizada como materia prima (PENRE)",
-                                                            "lang": "es"
-                                                        }
-                                                    ],
-                                                    "type": "FLOW",
-                                                    "uuid": "ac857178-2b45-46ec-892a-a9a4332f0372",
-                                                    "version": "30.00.000"
-                                                }
-                                            ],
-                                            "categories": []
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        "EXTERNAL_FILE": {
-            "type": "EXTERNAL_FILE",
-            "refs": [],
-            "categories": []
-        },
-        "PROCESS": {
-            "type": "PROCESS",
-            "refs": [],
-            "categories": []
-        },
-        "UNIT_GROUP": {
-            "type": "UNIT_GROUP",
-            "refs": [],
-            "categories": [
-                {
-                    "category": {
-                        "value": "Technical unit groups",
-                        "level": 0,
-                        "otherAttributes": {}
-                    },
-                    "refs": [
-                        {
-                            "name": [
-                                {
-                                    "value": "Units of items",
-                                    "lang": "en"
-                                },
-                                {
-                                    "value": "Stückeinheiten",
-                                    "lang": "de"
-                                }
-                            ],
-                            "type": "UNIT_GROUP",
-                            "uuid": "5beb6eed-33a9-47b8-9ede-1dfe8f679159",
-                            "version": "03.00.000",
-                            "uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/5beb6eed-33a9-47b8-9ede-1dfe8f679159.xml"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Units of items*time",
-                                    "lang": "en"
-                                },
-                                {
-                                    "value": "Stück*Zeit-Einheiten",
-                                    "lang": "de"
-                                }
-                            ],
-                            "type": "UNIT_GROUP",
-                            "uuid": "1acf7c0f-aa9d-4022-a4b7-fe0b54ea0b91",
-                            "version": "03.00.000",
-                            "uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/1acf7c0f-aa9d-4022-a4b7-fe0b54ea0b91.xml"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Units of area",
-                                    "lang": "en"
-                                },
-                                {
-                                    "value": "Flächeneinheiten",
-                                    "lang": "de"
-                                }
-                            ],
-                            "type": "UNIT_GROUP",
-                            "uuid": "93a60a57-a3c8-18da-a746-0800200c9a66",
-                            "version": "03.00.000",
-                            "uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/93a60a57-a3c8-18da-a746-0800200c9a66.xml"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Units of mass*length",
-                                    "lang": "en"
-                                },
-                                {
-                                    "value": "Masse*Länge-Einheiten",
-                                    "lang": "de"
-                                }
-                            ],
-                            "type": "UNIT_GROUP",
-                            "uuid": "838aaa21-0117-11db-92e3-0800200c9a66",
-                            "version": "03.00.000",
-                            "uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/838aaa21-0117-11db-92e3-0800200c9a66.xml"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Units of mass*time",
-                                    "lang": "en"
-                                },
-                                {
-                                    "value": "Masse*Zeit-Einheiten",
-                                    "lang": "de"
-                                }
-                            ],
-                            "type": "UNIT_GROUP",
-                            "uuid": "59f191d6-5dd3-4553-af88-1a32accfe308",
-                            "version": "03.00.000",
-                            "uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/59f191d6-5dd3-4553-af88-1a32accfe308.xml"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Units of time",
-                                    "lang": "en"
-                                },
-                                {
-                                    "value": "Zeiteinheiten",
-                                    "lang": "de"
-                                }
-                            ],
-                            "type": "UNIT_GROUP",
-                            "uuid": "af638906-3ec7-4314-8de7-f76039f2dd01",
-                            "version": "03.00.000",
-                            "uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/af638906-3ec7-4314-8de7-f76039f2dd01.xml"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Units of items*length",
-                                    "lang": "en"
-                                },
-                                {
-                                    "value": "Stück*Länge-Einheiten",
-                                    "lang": "de"
-                                }
-                            ],
-                            "type": "UNIT_GROUP",
-                            "uuid": "5454b231-270e-45e6-89b2-7f4f3e482245",
-                            "version": "03.00.000",
-                            "uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/5454b231-270e-45e6-89b2-7f4f3e482245.xml"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Units of area*time",
-                                    "lang": "en"
-                                },
-                                {
-                                    "value": "Fläche*Zeiteinheiten",
-                                    "lang": "de"
-                                }
-                            ],
-                            "type": "UNIT_GROUP",
-                            "uuid": "93a60a57-a3c8-20da-a746-0800200c9a66",
-                            "version": "03.00.000",
-                            "uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/93a60a57-a3c8-20da-a746-0800200c9a66.xml"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Units of radioactivity",
-                                    "lang": "en"
-                                },
-                                {
-                                    "value": "Aktivitätseinheit",
-                                    "lang": "de"
-                                }
-                            ],
-                            "type": "UNIT_GROUP",
-                            "uuid": "93a60a57-a3c8-16da-a746-0800200c9a66",
-                            "version": "03.00.000",
-                            "uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/93a60a57-a3c8-16da-a746-0800200c9a66.xml"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Units of volume*length",
-                                    "lang": "en"
-                                },
-                                {
-                                    "value": "Volumen*Länge-Einheiten",
-                                    "lang": "de"
-                                }
-                            ],
-                            "type": "UNIT_GROUP",
-                            "uuid": "ff8ed45d-bbfb-4531-8c7b-9b95e52bd41d",
-                            "version": "03.00.000",
-                            "uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/ff8ed45d-bbfb-4531-8c7b-9b95e52bd41d.xml"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Units of length",
-                                    "lang": "en"
-                                },
-                                {
-                                    "value": "Längeeinheiten",
-                                    "lang": "de"
-                                }
-                            ],
-                            "type": "UNIT_GROUP",
-                            "uuid": "838aaa22-0117-11db-92e3-0800200c9a66",
-                            "version": "03.00.000",
-                            "uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/838aaa22-0117-11db-92e3-0800200c9a66.xml"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Units of volume*time",
-                                    "lang": "en"
-                                },
-                                {
-                                    "value": "Volumen*Zeit-Einheiten",
-                                    "lang": "de"
-                                }
-                            ],
-                            "type": "UNIT_GROUP",
-                            "uuid": "93a60a57-a3c8-23da-a746-0800200c9a66",
-                            "version": "03.00.000",
-                            "uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/93a60a57-a3c8-23da-a746-0800200c9a66.xml"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Units of volume",
-                                    "lang": "en"
-                                },
-                                {
-                                    "value": "Volumeneinheiten",
-                                    "lang": "de"
-                                }
-                            ],
-                            "type": "UNIT_GROUP",
-                            "uuid": "93a60a57-a3c8-12da-a746-0800200c9a66",
-                            "version": "03.00.000",
-                            "uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/93a60a57-a3c8-12da-a746-0800200c9a66.xml"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Units of energy",
-                                    "lang": "en"
-                                },
-                                {
-                                    "value": "Energieeinheiten",
-                                    "lang": "de"
-                                }
-                            ],
-                            "type": "UNIT_GROUP",
-                            "uuid": "93a60a57-a3c8-11da-a746-0800200c9a66",
-                            "version": "03.00.000",
-                            "uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/93a60a57-a3c8-11da-a746-0800200c9a66.xml"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Units of mole",
-                                    "lang": "en"
-                                },
-                                {
-                                    "value": "Moleinheiten",
-                                    "lang": "de"
-                                }
-                            ],
-                            "type": "UNIT_GROUP",
-                            "uuid": "f170abd3-f010-45f4-8e7c-9871a5c0421b",
-                            "version": "03.00.000",
-                            "uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/f170abd3-f010-45f4-8e7c-9871a5c0421b.xml"
-                        }
-                    ],
-                    "categories": []
-                },
-                {
-                    "category": {
-                        "value": "Technische Einheiten",
-                        "level": 0,
-                        "classId": "30c118c5-1fb2-4c6d-93e3-5450c9698f1e",
-                        "otherAttributes": {}
-                    },
-                    "refs": [
-                        {
-                            "name": [
-                                {
-                                    "value": "Volumeneinheit",
-                                    "lang": "de"
-                                },
-                                {
-                                    "value": "bbl"
-                                }
-                            ],
-                            "type": "UNIT_GROUP",
-                            "uuid": "cd950537-0a98-4044-9ba7-9f9a68d0a504",
-                            "version": "25.00.000"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Masseneinheit",
-                                    "lang": "de"
-                                },
-                                {
-                                    "value": "u"
-                                }
-                            ],
-                            "type": "UNIT_GROUP",
-                            "uuid": "ad38d542-3fe9-439d-9b95-2f5f7752acaf",
-                            "version": "25.00.000"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Energieeinheit",
-                                    "lang": "de"
-                                },
-                                {
-                                    "value": "MMBtu"
-                                }
-                            ],
-                            "type": "UNIT_GROUP",
-                            "uuid": "de5104d8-3de0-4218-a29d-b7123ce9ca3c",
-                            "version": "25.00.000"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Anzahl-Einheit",
-                                    "lang": "de"
-                                },
-                                {
-                                    "value": "unit"
-                                }
-                            ],
-                            "type": "UNIT_GROUP",
-                            "uuid": "934110e3-baf4-49e9-992c-3d8109a6aafb",
-                            "version": "25.00.000"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Fläche-Einheit",
-                                    "lang": "de"
-                                },
-                                {
-                                    "value": "sqft"
-                                }
-                            ],
-                            "type": "UNIT_GROUP",
-                            "uuid": "c20a03d7-bd90-4569-bc94-66cfd364dfc8",
-                            "version": "25.00.000"
-                        }
-                    ],
-                    "categories": []
-                },
-                {
-                    "category": {
-                        "value": "Umweltliche Einheiten",
-                        "level": 0,
-                        "classId": "2d993f37-0fcf-49bb-abf5-36c4f39ba66e",
-                        "otherAttributes": {}
-                    },
-                    "refs": [
-                        {
-                            "name": [
-                                {
-                                    "value": "GWP-Einheit",
-                                    "lang": "de"
-                                },
-                                {
-                                    "value": "kg CO2-Äqv."
-                                }
-                            ],
-                            "type": "UNIT_GROUP",
-                            "uuid": "1ebf3012-d0db-4de2-aefd-ef30cedb0be1",
-                            "version": "25.00.000"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Photooxidationspotential (POCP)-Einheit",
-                                    "lang": "de"
-                                },
-                                {
-                                    "value": "kg Ethen-Äqv."
-                                }
-                            ],
-                            "type": "UNIT_GROUP",
-                            "uuid": "01c26c17-9a76-406e-8295-f17b55fd909e",
-                            "version": "25.00.000"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Eutrophierungspotential-Einheit",
-                                    "lang": "de"
-                                },
-                                {
-                                    "value": "kg Phosphat-Äqv."
-                                }
-                            ],
-                            "type": "UNIT_GROUP",
-                            "uuid": "67b5401d-873c-485f-bcf3-6ae83b918822",
-                            "version": "25.00.000"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Versauerungspotential-Einheit",
-                                    "lang": "de"
-                                },
-                                {
-                                    "value": "kg SO2-Äqv."
-                                }
-                            ],
-                            "type": "UNIT_GROUP",
-                            "uuid": "bc50c624-a9bc-45b1-a9b0-e6b10d00476f",
-                            "version": "25.00.000"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Einheit Ozonabbau (Traci)",
-                                    "lang": "de"
-                                },
-                                {
-                                    "value": "kg CFC 11-Äquiv."
-                                }
-                            ],
-                            "type": "UNIT_GROUP",
-                            "uuid": "d9e957c9-7309-4474-bf3a-7777df6c4e5b",
-                            "version": "25.00.000"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Einheit Abiotischer Ressourcenverbrauch (CML 2001)",
-                                    "lang": "de"
-                                },
-                                {
-                                    "value": "kg Sb-Äqv."
-                                }
-                            ],
-                            "type": "UNIT_GROUP",
-                            "uuid": "54ccd2d9-a32a-4fc2-923d-f2c8c93e89d4",
-                            "version": "25.00.000"
-                        }
-                    ],
-                    "categories": []
-                }
-            ]
-        },
-        "CONTACT": {
-            "type": "CONTACT",
-            "refs": [],
-            "categories": []
-        },
-        "FLOW_PROPERTY": {
-            "type": "FLOW_PROPERTY",
-            "refs": [],
-            "categories": [
-                {
-                    "category": {
-                        "value": "Umweltliche Größen",
-                        "level": 0,
-                        "classId": "34390d09-b09f-4f90-9b44-f5967461e18c",
-                        "otherAttributes": {}
-                    },
-                    "refs": [],
-                    "categories": [
-                        {
-                            "category": {
-                                "value": "EPD EN 15804",
-                                "level": 1,
-                                "classId": "66999bad-2002-445f-bc89-8230780f539a",
-                                "otherAttributes": {}
-                            },
-                            "refs": [],
-                            "categories": [
-                                {
-                                    "category": {
-                                        "value": "LCI Indikatoren",
-                                        "level": 2,
-                                        "classId": "c3bb7da8-448e-496f-8185-7e1c5ce9908d",
-                                        "otherAttributes": {}
-                                    },
-                                    "refs": [
-                                        {
-                                            "name": [
-                                                {
-                                                    "value": "Erneuerbare Primärenergie zur stofflichen Nutzung",
-                                                    "lang": "de"
-                                                }
-                                            ],
-                                            "type": "FLOW_PROPERTY",
-                                            "uuid": "67cbf02a-2a4e-4668-941a-b4209c30b3c6",
-                                            "version": "20.00.000"
-                                        },
-                                        {
-                                            "name": [
-                                                {
-                                                    "value": "Total nicht erneuerbare Primärenergie (PENRT)",
-                                                    "lang": "de"
-                                                }
-                                            ],
-                                            "type": "FLOW_PROPERTY",
-                                            "uuid": "70097bf8-cd55-4045-af5f-07144a8448ce",
-                                            "version": "25.00.000"
-                                        },
-                                        {
-                                            "name": [
-                                                {
-                                                    "value": "Nicht-erneuerbare Primärenergie als Energieträger (PENRE)",
-                                                    "lang": "de"
-                                                }
-                                            ],
-                                            "type": "FLOW_PROPERTY",
-                                            "uuid": "15aa5df7-7905-4004-9b5f-a5a539c7aaae",
-                                            "version": "25.00.000"
-                                        },
-                                        {
-                                            "name": [
-                                                {
-                                                    "value": "Nicht erneuerbare Primärenergie zur stofflichen Nutzung",
-                                                    "lang": "de"
-                                                }
-                                            ],
-                                            "type": "FLOW_PROPERTY",
-                                            "uuid": "59b3b1e8-813f-4647-81ca-8220ea2a4cdb",
-                                            "version": "20.00.000"
-                                        },
-                                        {
-                                            "name": [
-                                                {
-                                                    "value": "Erneuerbare Primärenergie als Energieträger (PERE)",
-                                                    "lang": "de"
-                                                }
-                                            ],
-                                            "type": "FLOW_PROPERTY",
-                                            "uuid": "f403679a-8f0c-4945-85ca-15c5d6d9cadf",
-                                            "version": "25.00.000"
-                                        }
-                                    ],
-                                    "categories": []
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "category": {
-                        "value": "Technical flow properties",
-                        "level": 0,
-                        "otherAttributes": {}
-                    },
-                    "refs": [
-                        {
-                            "name": [
-                                {
-                                    "value": "Länge",
-                                    "lang": "de"
-                                },
-                                {
-                                    "value": "Length",
-                                    "lang": "en"
-                                }
-                            ],
-                            "type": "FLOW_PROPERTY",
-                            "uuid": "838aaa23-0117-11db-92e3-0800200c9a66",
-                            "version": "03.00.000",
-                            "uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/flowproperties/838aaa23-0117-11db-92e3-0800200c9a66.xml"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Energy reg. (unterer Heizwert)",
-                                    "lang": "de"
-                                },
-                                {
-                                    "value": "Energy ren. (net calorific value)",
-                                    "lang": "en"
-                                }
-                            ],
-                            "type": "FLOW_PROPERTY",
-                            "uuid": "9b784a67-fbb1-4ad2-8774-30c39643b844",
-                            "version": "02.00.000",
-                            "uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/flowproperties/Gross_calorific_value_93a60a56-a3c8-14da-a746-0800200c9a66_02.00.000.xml"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Fläche*Zeit",
-                                    "lang": "de"
-                                },
-                                {
-                                    "value": "Area*time",
-                                    "lang": "en"
-                                }
-                            ],
-                            "type": "FLOW_PROPERTY",
-                            "uuid": "93a60a56-a3c8-21da-a746-0800200c9a66",
-                            "version": "03.00.000",
-                            "uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/flowproperties/93a60a56-a3c8-21da-a746-0800200c9a66.xml"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Unterer Heizwert",
-                                    "lang": "de"
-                                },
-                                {
-                                    "value": "Net calorific value",
-                                    "lang": "en"
-                                }
-                            ],
-                            "type": "FLOW_PROPERTY",
-                            "uuid": "93a60a56-a3c8-11da-a746-0800200c9a66",
-                            "version": "03.00.000",
-                            "uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/flowproperties/93a60a56-a3c8-11da-a746-0800200c9a66.xml"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Volumen",
-                                    "lang": "de"
-                                },
-                                {
-                                    "value": "Volume",
-                                    "lang": "en"
-                                }
-                            ],
-                            "type": "FLOW_PROPERTY",
-                            "uuid": "93a60a56-a3c8-22da-a746-0800200c9a66",
-                            "version": "03.00.000"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Anzahl",
-                                    "lang": "de"
-                                },
-                                {
-                                    "value": "Number of pieces",
-                                    "lang": "en"
-                                }
-                            ],
-                            "type": "FLOW_PROPERTY",
-                            "uuid": "01846770-4cfe-4a25-8ad9-919d8d378345",
-                            "version": "03.00.000"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Radioaktivität",
-                                    "lang": "de"
-                                },
-                                {
-                                    "value": "Radioactivity",
-                                    "lang": "en"
-                                }
-                            ],
-                            "type": "FLOW_PROPERTY",
-                            "uuid": "93a60a56-a3c8-17da-a746-0800200c9a66",
-                            "version": "03.00.000",
-                            "uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/flowproperties/93a60a56-a3c8-17da-a746-0800200c9a66.xml"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Gütertransport (Masse*Entfernung)",
-                                    "lang": "de"
-                                },
-                                {
-                                    "value": "Goods transport (mass*distance)",
-                                    "lang": "en"
-                                }
-                            ],
-                            "type": "FLOW_PROPERTY",
-                            "uuid": "838aaa20-0117-11db-92e3-0800200c9a66",
-                            "version": "03.00.000",
-                            "uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/flowproperties/838aaa20-0117-11db-92e3-0800200c9a66.xml"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Zeit",
-                                    "lang": "de"
-                                },
-                                {
-                                    "value": "Duration",
-                                    "lang": "en"
-                                }
-                            ],
-                            "type": "FLOW_PROPERTY",
-                            "uuid": "c0447923-0e60-4b3c-97c2-a86dddd9eea5",
-                            "version": "03.00.000",
-                            "uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/flowproperties/c0447923-0e60-4b3c-97c2-a86dddd9eea5.xml"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Fläche",
-                                    "lang": "de"
-                                },
-                                {
-                                    "value": "Area",
-                                    "lang": "en"
-                                }
-                            ],
-                            "type": "FLOW_PROPERTY",
-                            "uuid": "93a60a56-a3c8-19da-a746-0800200c9a66",
-                            "version": "03.00.000"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Oberer Heizwert",
-                                    "lang": "de"
-                                },
-                                {
-                                    "value": "Gross calorific value",
-                                    "lang": "en"
-                                }
-                            ],
-                            "type": "FLOW_PROPERTY",
-                            "uuid": "93a60a56-a3c8-14da-a746-0800200c9a66",
-                            "version": "03.00.000",
-                            "uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/flowproperties/93a60a56-a3c8-14da-a746-0800200c9a66.xml"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Normvolumen",
-                                    "lang": "de"
-                                },
-                                {
-                                    "value": "Normal Volume",
-                                    "lang": "en"
-                                }
-                            ],
-                            "type": "FLOW_PROPERTY",
-                            "uuid": "93a60a56-a3c8-13da-a746-0800200c9a66",
-                            "version": "03.00.000",
-                            "uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/flowproperties/93a60a56-a3c8-13da-a746-0800200c9a66.xml"
-                        },
-                        {
-                            "name": [
-                                {
-                                    "value": "Masse",
-                                    "lang": "de"
-                                },
-                                {
-                                    "value": "Mass",
-                                    "lang": "en"
-                                }
-                            ],
-                            "type": "FLOW_PROPERTY",
-                            "uuid": "93a60a56-a3c8-11da-a746-0800200b9a66",
-                            "version": "03.00.000"
-                        }
-                    ],
-                    "categories": []
-                },
-                {
-                    "category": {
-                        "value": "Economic flow properties",
-                        "level": 0,
-                        "otherAttributes": {}
-                    },
-                    "refs": [
-                        {
-                            "name": [
-                                {
-                                    "value": "Preis",
-                                    "lang": "de"
-                                },
-                                {
-                                    "value": "Price",
-                                    "lang": "en"
-                                }
-                            ],
-                            "type": "FLOW_PROPERTY",
-                            "uuid": "bcf81c0a-9fe9-4b88-a25b-99e0dd64ddaa",
-                            "version": "19.00.000"
-                        }
-                    ],
-                    "categories": []
-                }
-            ]
-        },
-        "LCIA_METHOD": {
-            "type": "LCIA_METHOD",
-            "refs": [],
-            "categories": [
-                {
-                    "category": {
-                        "value": "Größen",
-                        "level": 0,
-                        "classId": "f9ec79e6-9fdd-4691-9c05-04e9fa45fb14",
-                        "otherAttributes": {}
-                    },
-                    "refs": [],
-                    "categories": [
-                        {
-                            "category": {
-                                "value": "Umweltliche Größen",
-                                "level": 1,
-                                "classId": "34390d09-b09f-4f90-9b44-f5967461e18c",
-                                "otherAttributes": {}
-                            },
-                            "refs": [],
-                            "categories": [
-                                {
-                                    "category": {
-                                        "value": "EPD EN 15804",
-                                        "level": 2,
-                                        "classId": "66999bad-2002-445f-bc89-8230780f539a",
-                                        "otherAttributes": {}
-                                    },
-                                    "refs": [],
-                                    "categories": [
-                                        {
-                                            "category": {
-                                                "value": "LCIA Indikatoren",
-                                                "level": 3,
-                                                "classId": "76eb9b6d-fe9b-4312-b013-f875ef552845",
-                                                "otherAttributes": {}
-                                            },
-                                            "refs": [
-                                                {
-                                                    "name": [
-                                                        {
-                                                            "value": "Global warming potential (GWP)",
-                                                            "lang": "en"
-                                                        },
-                                                        {
-                                                            "value": "Globales Erwärmungspotenzial (GWP)",
-                                                            "lang": "de"
-                                                        },
-                                                        {
-                                                            "value": "Potencial de calentamiento global (GWP)",
-                                                            "lang": "es"
-                                                        }
-                                                    ],
-                                                    "type": "LCIA_METHOD",
-                                                    "uuid": "77e416eb-a363-4258-a04e-171d843a6460",
-                                                    "version": "00.01.000"
-                                                },
-                                                {
-                                                    "name": [
-                                                        {
-                                                            "value": "Formation potential of tropospheric ozone (POCP)",
-                                                            "lang": "en"
-                                                        },
-                                                        {
-                                                            "value": "Bildungspotential für troposphärisches Ozon (POCP)",
-                                                            "lang": "de"
-                                                        },
-                                                        {
-                                                            "value": "Potencial de formación de ozono troposférico (POCP)",
-                                                            "lang": "es"
-                                                        }
-                                                    ],
-                                                    "type": "LCIA_METHOD",
-                                                    "uuid": "1e84a202-dae6-42aa-9e9d-71ea48b8be00",
-                                                    "version": "00.01.000"
-                                                },
-                                                {
-                                                    "name": [
-                                                        {
-                                                            "value": "Depletion potential of the stratospheric ozone layer (ODP)",
-                                                            "lang": "en"
-                                                        },
-                                                        {
-                                                            "value": "Abbau Potential der stratosphärischen Ozonschicht (ODP)",
-                                                            "lang": "de"
-                                                        },
-                                                        {
-                                                            "value": "Potencial de agotamiento de la capa de ozono estratosférico (ODP)",
-                                                            "lang": "es"
-                                                        }
-                                                    ],
-                                                    "type": "LCIA_METHOD",
-                                                    "uuid": "06dcd26f-025f-401a-a7c1-5e457eb54637",
-                                                    "version": "00.01.000"
-                                                },
-                                                {
-                                                    "name": [
-                                                        {
-                                                            "value": "Acidification potential of soil and water (AP)",
-                                                            "lang": "en"
-                                                        },
-                                                        {
-                                                            "value": "Versauerungspotenzial von Boden und Wasser (AP)",
-                                                            "lang": "de"
-                                                        },
-                                                        {
-                                                            "value": "Potencial de acidificación del suelo y de los recursos de agua (AP)",
-                                                            "lang": "es"
-                                                        }
-                                                    ],
-                                                    "type": "LCIA_METHOD",
-                                                    "uuid": "b4274add-93b7-4905-a5e4-2e878c4e4216",
-                                                    "version": "00.01.000"
-                                                },
-                                                {
-                                                    "name": [
-                                                        {
-                                                            "value": "Abiotic depletion potential for non fossil resources (ADPE)",
-                                                            "lang": "en"
-                                                        },
-                                                        {
-                                                            "value": "Potenzial für den abiotischen Abbau nicht fossiler Ressourcen (ADPE)",
-                                                            "lang": "de"
-                                                        },
-                                                        {
-                                                            "value": "Potencial de agotamiento de recursos abióticos para recursos no fósiles (ADPE)",
-                                                            "lang": "es"
-                                                        }
-                                                    ],
-                                                    "type": "LCIA_METHOD",
-                                                    "uuid": "f7c73bb9-ab1a-4249-9c6d-379a0de6f67e",
-                                                    "version": "00.01.000"
-                                                },
-                                                {
-                                                    "name": [
-                                                        {
-                                                            "value": "Eutrophication potential (EP)",
-                                                            "lang": "en"
-                                                        },
-                                                        {
-                                                            "value": "Eutrophierungspotenzial (EP)",
-                                                            "lang": "de"
-                                                        },
-                                                        {
-                                                            "value": "Potencial de eutrofización (EP)",
-                                                            "lang": "es"
-                                                        }
-                                                    ],
-                                                    "type": "LCIA_METHOD",
-                                                    "uuid": "f58827d0-b407-4ec6-be75-8b69efb98a0f",
-                                                    "version": "00.01.000"
-                                                },
-                                                {
-                                                    "name": [
-                                                        {
-                                                            "value": "Abiotic depletion potential for fossil resources (ADPF)",
-                                                            "lang": "en"
-                                                        },
-                                                        {
-                                                            "value": "Potenzial für den abiotischen Abbau fossiler Brennstoffe (ADPF)",
-                                                            "lang": "de"
-                                                        },
-                                                        {
-                                                            "value": "Potencial de agotamiento de recursos abióticos para recursos fósiles (ADPF)",
-                                                            "lang": "es"
-                                                        }
-                                                    ],
-                                                    "type": "LCIA_METHOD",
-                                                    "uuid": "804ebcdf-309d-4098-8ed8-fdaf2f389981",
-                                                    "version": "00.01.000"
-                                                }
-                                            ],
-                                            "categories": []
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        }
-    }
+	"nodes": {
+		"FLOW": {
+			"type": "FLOW",
+			"refs": [],
+			"categories": [
+				{
+					"category": {
+						"value": "Größen",
+						"level": 0,
+						"classId": "f9ec79e6-9fdd-4691-9c05-04e9fa45fb14"
+					},
+					"refs": [],
+					"categories": [
+						{
+							"category": {
+								"value": "Umweltliche Größen",
+								"level": 1,
+								"classId": "34390d09-b09f-4f90-9b44-f5967461e18c"
+							},
+							"refs": [],
+							"categories": [
+								{
+									"category": {
+										"value": "EPD EN 15804",
+										"level": 2,
+										"classId": "66999bad-2002-445f-bc89-8230780f539a"
+									},
+									"refs": [],
+									"categories": [
+										{
+											"category": {
+												"value": "LCI Indikatoren",
+												"level": 3,
+												"classId": "c3bb7da8-448e-496f-8185-7e1c5ce9908d"
+											},
+											"refs": [
+												{
+													"name": [
+														{
+															"value": "Non hazardous waste dispose (NHWD)",
+															"lang": "en"
+														},
+														{
+															"value": "Entsorgter nicht gefährlicher Abfall (NHWD)",
+															"lang": "de"
+														},
+														{
+															"value": "Residuos no peligrosos eliminados (NHWD)",
+															"lang": "es"
+														}
+													],
+													"type": "FLOW",
+													"uuid": "b29ef66b-e286-4afa-949f-62f1a7b4d7fa",
+													"version": "30.00.000"
+												},
+												{
+													"name": [
+														{
+															"value": "Materials for energy recovery (MER)",
+															"lang": "en"
+														},
+														{
+															"value": "Stoffe für die Energierückgewinnung (MER)",
+															"lang": "de"
+														},
+														{
+															"value": "Materiales para valorización energética (recuperación de energía) (MER)",
+															"lang": "es"
+														}
+													],
+													"type": "FLOW",
+													"uuid": "59a9181c-3aaf-46ee-8b13-2b3723b6e447",
+													"version": "30.00.000"
+												},
+												{
+													"name": [
+														{
+															"value": "Use of non renewable primary energy (PENRE)",
+															"lang": "en"
+														},
+														{
+															"value": "Nicht-erneuerbare Primärenergie als Energieträger (PENRE)",
+															"lang": "de"
+														},
+														{
+															"value": "Uso de energía primaria no renovable, excluyendo los recursos de energía primaria no renovable utilizada como materia prima (PENRE)",
+															"lang": "es"
+														}
+													],
+													"type": "FLOW",
+													"uuid": "ac857178-2b45-46ec-892a-a9a4332f0372",
+													"version": "30.00.000"
+												},
+												{
+													"name": [
+														{
+															"value": "Materials for recycling (MFR)",
+															"lang": "en"
+														},
+														{
+															"value": "Stoffe zum Recycling (MFR)",
+															"lang": "de"
+														},
+														{
+															"value": "Materiales para el reciclaje (MFR)",
+															"lang": "es"
+														}
+													],
+													"type": "FLOW",
+													"uuid": "d7fe48a5-4103-49c8-9aae-b0b5dfdbd6ae",
+													"version": "30.00.000"
+												},
+												{
+													"name": [
+														{
+															"value": "Components for re-use (CRU)",
+															"lang": "en"
+														},
+														{
+															"value": "Komponenten für die Wiederverwendung (CRU)",
+															"lang": "de"
+														},
+														{
+															"value": "Componentes para su reutilización (CRU)",
+															"lang": "es"
+														}
+													],
+													"type": "FLOW",
+													"uuid": "a2b32f97-3fc7-4af2-b209-525bc6426f33",
+													"version": "30.00.000"
+												},
+												{
+													"name": [
+														{
+															"value": "Exported electrical energy (EEE)",
+															"lang": "en"
+														},
+														{
+															"value": "Exportierte elektrische Energie (EEE)",
+															"lang": "de"
+														},
+														{
+															"value": "Energía exportada electrica (EEE)",
+															"lang": "es"
+														}
+													],
+													"type": "FLOW",
+													"uuid": "4da0c987-2b76-40d6-9e9e-82a017aaaf29",
+													"version": "30.00.000"
+												},
+												{
+													"name": [
+														{
+															"value": "Exported thermal energy (EET)",
+															"lang": "en"
+														},
+														{
+															"value": "Exportierte thermische Energie (EET)",
+															"lang": "de"
+														},
+														{
+															"value": "Energía exportada termal (EET)",
+															"lang": "es"
+														}
+													],
+													"type": "FLOW",
+													"uuid": "98daf38a-7a79-46d3-9a37-2b7bd0955810",
+													"version": "30.00.000"
+												},
+												{
+													"name": [
+														{
+															"value": "Use of renewable secondary fuels (RSF)",
+															"lang": "en"
+														},
+														{
+															"value": "Erneuerbare Sekundärbrennstoffe (RSF)",
+															"lang": "de"
+														},
+														{
+															"value": "Uso de combustibles secundarios renovables (RSF)",
+															"lang": "es"
+														}
+													],
+													"type": "FLOW",
+													"uuid": "64333088-a55f-4aa2-9a31-c10b07816787",
+													"version": "30.00.000"
+												},
+												{
+													"name": [
+														{
+															"value": "Use of secondary material (SM)",
+															"lang": "en"
+														},
+														{
+															"value": "Einsatz von Sekundärstoffen (SM)",
+															"lang": "de"
+														},
+														{
+															"value": "Uso de materiales secundarios (SM)",
+															"lang": "es"
+														}
+													],
+													"type": "FLOW",
+													"uuid": "c6a1f35f-2d09-4f54-8dfb-97e502e1ce92",
+													"version": "30.00.000"
+												},
+												{
+													"name": [
+														{
+															"value": "Use of renewable primary energy resources used as raw materials (PERM)",
+															"lang": "en"
+														},
+														{
+															"value": "Erneuerbare Primärenergie zur stofflichen Nutzung (PERM)",
+															"lang": "de"
+														},
+														{
+															"value": "Uso de energía primaria renovable utilizada como materia prima (PERM)",
+															"lang": "es"
+														}
+													],
+													"type": "FLOW",
+													"uuid": "fb3ec0de-548d-4508-aea5-00b73bf6f702",
+													"version": "30.00.000"
+												},
+												{
+													"name": [
+														{
+															"value": "Total use of non renewable primary energy resource (PENRT)",
+															"lang": "en"
+														},
+														{
+															"value": "Total nicht erneuerbare Primärenergie (PENRT)",
+															"lang": "de"
+														},
+														{
+															"value": "Uso total de la energía primaria no renovable (energía primaria y recursos de energía primaria renovable utilizada como materia prima) (PENRT)",
+															"lang": "es"
+														}
+													],
+													"type": "FLOW",
+													"uuid": "06159210-646b-4c8d-8583-da9b3b95a6c1",
+													"version": "30.00.000"
+												},
+												{
+													"name": [
+														{
+															"value": "Use of non renewable primary energy resources used as raw materials (PENRM)",
+															"lang": "en"
+														},
+														{
+															"value": "Nicht-erneuerbare Primärenergie zur stofflichen Nutzung (PENRM)",
+															"lang": "de"
+														},
+														{
+															"value": "Uso de la energía primaria no renovable utilizada como materia prima (PENRM)",
+															"lang": "es"
+														}
+													],
+													"type": "FLOW",
+													"uuid": "1421caa0-679d-4bf4-b282-0eb850ccae27",
+													"version": "30.00.000"
+												},
+												{
+													"name": [
+														{
+															"value": "Hazardous waste disposed (HWD)",
+															"lang": "en"
+														},
+														{
+															"value": "Gefährlicher Abfall zur Deponie (HWD)",
+															"lang": "de"
+														},
+														{
+															"value": "Residuos peligrosos eliminados (HWD)",
+															"lang": "es"
+														}
+													],
+													"type": "FLOW",
+													"uuid": "430f9e0f-59b2-46a0-8e0d-55e0e84948fc",
+													"version": "30.00.000"
+												},
+												{
+													"name": [
+														{
+															"value": "Use of renewable primary energy (PERE)",
+															"lang": "en"
+														},
+														{
+															"value": "Erneuerbare Primärenergie als Energieträger (PERE)",
+															"lang": "de"
+														},
+														{
+															"value": "Uso de energía primaria renovable excluyendo los recursos de energía primaria renovable utilizada como materia prima (PERE)",
+															"lang": "es"
+														}
+													],
+													"type": "FLOW",
+													"uuid": "20f32be5-0398-4288-9b6d-accddd195317",
+													"version": "30.00.000"
+												},
+												{
+													"name": [
+														{
+															"value": "Total use of renewable primary energy resources (PERT)",
+															"lang": "en"
+														},
+														{
+															"value": "Total erneuerbare Primärenergie (PERT)",
+															"lang": "de"
+														},
+														{
+															"value": "Uso total de la energía primaria renovable (energía primaria y recursos de energía primaria renovable utilizada como materia prima) (PERT)",
+															"lang": "es"
+														}
+													],
+													"type": "FLOW",
+													"uuid": "53f97275-fa8a-4cdd-9024-65936002acd0",
+													"version": "30.00.000"
+												},
+												{
+													"name": [
+														{
+															"value": "Use of non renewable secondary fuels (NRSF)",
+															"lang": "en"
+														},
+														{
+															"value": "Nicht erneuerbare Sekundärbrennstoffe (NRSF)",
+															"lang": "de"
+														},
+														{
+															"value": "Uso de combustibles secundarios no renovables (NRSF)",
+															"lang": "es"
+														}
+													],
+													"type": "FLOW",
+													"uuid": "89def144-d39a-4287-b86f-efde453ddcb2",
+													"version": "30.00.000"
+												},
+												{
+													"name": [
+														{
+															"value": "Radioactive waste disposed (RWD)",
+															"lang": "en"
+														},
+														{
+															"value": "Entsorgter radioaktiver Abfall (RWD)",
+															"lang": "de"
+														},
+														{
+															"value": "Residuos radiactivos eliminados (RWD)",
+															"lang": "es"
+														}
+													],
+													"type": "FLOW",
+													"uuid": "3449546e-52ad-4b39-b809-9fb77cea8ff6",
+													"version": "30.00.000"
+												},
+												{
+													"name": [
+														{
+															"value": "Use of net fresh water (FW)",
+															"lang": "en"
+														},
+														{
+															"value": "Einsatz von Süßwasserressourcen (FW)",
+															"lang": "de"
+														},
+														{
+															"value": "Uso neto de recursos de agua dulce (FW)",
+															"lang": "es"
+														}
+													],
+													"type": "FLOW",
+													"uuid": "3cf952c8-f3a4-461d-8c96-96456ca62246",
+													"version": "30.00.000"
+												}
+											],
+											"categories": []
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		"LCIA_METHOD": {
+			"type": "LCIA_METHOD",
+			"refs": [
+				{
+					"name": [
+						{
+							"value": "Potential Comparative Toxic Unit for humans - cancer effects (HTP-c)",
+							"lang": "en"
+						},
+						{
+							"value": "Potenzielle Toxizitätsvergleichseinheit für den Menschen - kanzerogene Wirkung (HTP-c)",
+							"lang": "de"
+						}
+					],
+					"type": "LCIA_METHOD",
+					"uuid": "2299222a-bbd8-474f-9d4f-4dd1f18aea7c",
+					"version": "01.00.004",
+					"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/elcd/lciamethods/2299222a-bbd8-474f-9d4f-4dd1f18aea7c.xml"
+				},
+				{
+					"name": [
+						{
+							"value": "Versauerungspotenzial, kumulierte Überschreitung (AP)",
+							"lang": "en"
+						},
+						{
+							"value": "Bildungspotenzial für troposphärisches Ozon (POCP)",
+							"lang": "de"
+						}
+					],
+					"type": "LCIA_METHOD",
+					"uuid": "b5c610fe-def3-11e6-bf01-fe55135034f3",
+					"version": "02.00.014",
+					"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/elcd/lciamethods/ec7836be-83eb-41da-bcda-1a6a3fe2d149.xml"
+				},
+				{
+					"name": [
+						{
+							"value": "Acidification potential, Accumulated Exceedance (AP)",
+							"lang": "en"
+						},
+						{
+							"value": "Versauerungspotenzial, kumulierte Überschreitung (AP)",
+							"lang": "de"
+						}
+					],
+					"type": "LCIA_METHOD",
+					"uuid": "b5c611c6-def3-11e6-bf01-fe55135034f3",
+					"version": "01.03.010",
+					"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/elcd/lciamethods/f6cbd466-253f-4145-a4bb-8dae7d266e89.xml"
+				},
+				{
+					"name": [
+						{
+							"value": "Depletion potential of the stratospheric ozone layer (ODP)",
+							"lang": "en"
+						},
+						{
+							"value": "Abbaupotenzial der stratosphärischen Ozonschicht (ODP)",
+							"lang": "de"
+						}
+					],
+					"type": "LCIA_METHOD",
+					"uuid": "b5c629d6-def3-11e6-bf01-fe55135034f3",
+					"version": "02.00.013",
+					"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/elcd/lciamethods/8b723200-3d8f-4eec-9e10-444edb029476.xml"
+				},
+				{
+					"name": [
+						{
+							"value": "Potential Human exposure efficiency relative to U235 (IRP)",
+							"lang": "en"
+						},
+						{
+							"value": "Potenzielle Wirkung durch Exposition des Menschen mit U235 (IRP)",
+							"lang": "de"
+						}
+					],
+					"type": "LCIA_METHOD",
+					"uuid": "b5c632be-def3-11e6-bf01-fe55135034f3",
+					"version": "01.00.012",
+					"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/elcd/lciamethods/a6f4cbc8-5388-44d6-9a67-53d05684f93e.xml"
+				},
+				{
+					"name": [
+						{
+							"value": "Global Warming Potential - land use and land use change (GWP-luluc)",
+							"lang": "en"
+						},
+						{
+							"value": "Globales Erwärmungspotenzial - luluc (GWP-luluc)",
+							"lang": "de"
+						}
+					],
+					"type": "LCIA_METHOD",
+					"uuid": "4331bbdb-978a-490d-8707-eeb047f01a55",
+					"version": "01.00.006",
+					"uri": ""
+				},
+				{
+					"name": [
+						{
+							"value": "Eutrophication potential - freshwater (EP-freshwater)",
+							"lang": "en"
+						},
+						{
+							"value": "Eutrophierungspotenzial - Süßwasser (EP-freshwater)",
+							"lang": "de"
+						}
+					],
+					"type": "LCIA_METHOD",
+					"uuid": "b53ec18f-7377-4ad3-86eb-cc3f4f276b2b",
+					"version": "01.00.011",
+					"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/elcd/lciamethods/a4630d5b-df2f-48ae-b3f2-5e5257606d68.xml"
+				},
+				{
+					"name": [
+						{
+							"value": "Potential Comparative Toxic Unit for ecosystems (ETP-fw)",
+							"lang": "en"
+						},
+						{
+							"value": "Potenzielle Toxizitätsvergleichseinheit für Ökosysteme (ETP-fw)",
+							"lang": "de"
+						}
+					],
+					"type": "LCIA_METHOD",
+					"uuid": "ee1082d1-b0f7-43ca-a1f0-21e2a4a74511",
+					"version": "01.00.003",
+					"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/elcd/lciamethods/ee1082d1-b0f7-43ca-a1f0-21e2a4a74511.xml"
+				},
+				{
+					"name": [
+						{
+							"value": "Water (user) deprivation potential (WDP)",
+							"lang": "en"
+						},
+						{
+							"value": "Wasser-Entzugspotenzial (Benutzer) (WDP)",
+							"lang": "de"
+						}
+					],
+					"type": "LCIA_METHOD",
+					"uuid": "b2ad66ce-c78d-11e6-9d9d-cec0c932ce01",
+					"version": "03.00.015",
+					"uri": ""
+				},
+				{
+					"name": [
+						{
+							"value": "Global Warming Potential - biogenic (GWP-biogenic)",
+							"lang": "en"
+						},
+						{
+							"value": "Globales Erwärmungspotenzial - biogen (GWP-biogenic)",
+							"lang": "de"
+						}
+					],
+					"type": "LCIA_METHOD",
+					"uuid": "2356e1ab-0185-4db5-86e5-16de51c7485c",
+					"version": "01.00.006",
+					"uri": ""
+				},
+				{
+					"name": [
+						{
+							"value": "Potential Soil quality index (SQP)",
+							"lang": "en"
+						},
+						{
+							"value": "Potenzieller Bodenqualitätsindex (SQP)",
+							"lang": "de"
+						}
+					],
+					"type": "LCIA_METHOD",
+					"uuid": "b2ad6890-c78d-11e6-9d9d-cec0c932ce01",
+					"version": "01.00.011",
+					"uri": ""
+				},
+				{
+					"name": [
+						{
+							"value": "Potential incidence of disease due to PM emissions (PM)",
+							"lang": "en"
+						},
+						{
+							"value": "Potenzielles Auftreten von Krankheiten aufgrund von Feinstaubemissionen (PM)",
+							"lang": "de"
+						}
+					],
+					"type": "LCIA_METHOD",
+					"uuid": "b5c602c6-def3-11e6-bf01-fe55135034f3",
+					"version": "02.00.012",
+					"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/elcd/lciamethods/72ce3013-f678-4c6a-935b-f4752ff8901b.xml"
+				},
+				{
+					"name": [
+						{
+							"value": "Eutrophication potential - marine (EP-marine)",
+							"lang": "en"
+						},
+						{
+							"value": "Eutrophierungspotenzial - Salzwasser (EP-marine)",
+							"lang": "de"
+						}
+					],
+					"type": "LCIA_METHOD",
+					"uuid": "b5c619fa-def3-11e6-bf01-fe55135034f3",
+					"version": "02.00.011",
+					"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/elcd/lciamethods/5296e2be-060b-4e50-b033-d45f85f6ac92.xml"
+				},
+				{
+					"name": [
+						{
+							"value": "Global Warming Potential - total (GWP-total)",
+							"lang": "en"
+						},
+						{
+							"value": "Globales Erwärmungspotenzial - total (GWP-total)",
+							"lang": "de"
+						}
+					],
+					"type": "LCIA_METHOD",
+					"uuid": "6a37f984-a4b3-458a-a20a-64418c145fa2",
+					"version": "04.00.017",
+					"uri": ""
+				},
+				{
+					"name": [
+						{
+							"value": "Potential Comparative Toxic Unit for humans - non-cancer effects (HTP-nc)",
+							"lang": "en"
+						},
+						{
+							"value": "Potenzielle Toxizitätsvergleichseinheit für den Menschen - nicht kanzerogene Wirkung (HTP-nc)",
+							"lang": "de"
+						}
+					],
+					"type": "LCIA_METHOD",
+					"uuid": "3af763a5-b7a1-48c9-9cee-1f223481fcef",
+					"version": "01.00.003",
+					"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/elcd/lciamethods/3af763a5-b7a1-48c9-9cee-1f223481fcef.xml"
+				},
+				{
+					"name": [
+						{
+							"value": "Global Warming Potential - fossil fuels (GWP-fossil)",
+							"lang": "en"
+						},
+						{
+							"value": "Globales Erwärmungspotenzial - fossil (GWP-fossil)",
+							"lang": "de"
+						}
+					],
+					"type": "LCIA_METHOD",
+					"uuid": "5f635281-343e-44fb-83df-1971b155e6b6",
+					"version": "01.00.009",
+					"uri": ""
+				},
+				{
+					"name": [
+						{
+							"value": "Abiotic depletion potential - non-fossil resources (ADPE)",
+							"lang": "en"
+						},
+						{
+							"value": "Potenzial für die Verknappung abiotischer Ressourcen – nicht fossile Ressourcen (ADPE)",
+							"lang": "de"
+						}
+					],
+					"type": "LCIA_METHOD",
+					"uuid": "b2ad6494-c78d-11e6-9d9d-cec0c932ce01",
+					"version": "01.00.011",
+					"uri": ""
+				},
+				{
+					"name": [
+						{
+							"value": "Eutrophication potential - terrestrial (EP-terrestrial)",
+							"lang": "en"
+						},
+						{
+							"value": "Eutrophierungspotenzial - Land (EP-terrestrial)",
+							"lang": "de"
+						}
+					],
+					"type": "LCIA_METHOD",
+					"uuid": "b5c614d2-def3-11e6-bf01-fe55135034f3",
+					"version": "01.02.010",
+					"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/elcd/lciamethods/40054970-5936-477c-9bec-29fa23b1cb77.xml"
+				},
+				{
+					"name": [
+						{
+							"value": "Abiotic depletion potential - fossil resources (ADPF)",
+							"lang": "en"
+						},
+						{
+							"value": "Potenzial für die Verknappung abiotischer Ressourcen – fossile Brennstoffe (ADPF)",
+							"lang": "de"
+						}
+					],
+					"type": "LCIA_METHOD",
+					"uuid": "b2ad6110-c78d-11e6-9d9d-cec0c932ce01",
+					"version": "01.00.012",
+					"uri": ""
+				}
+			],
+			"categories": [
+				{
+					"category": {
+						"value": "Größen",
+						"level": 0,
+						"classId": "f9ec79e6-9fdd-4691-9c05-04e9fa45fb14"
+					},
+					"refs": [],
+					"categories": [
+						{
+							"category": {
+								"value": "Umweltliche Größen",
+								"level": 1,
+								"classId": "34390d09-b09f-4f90-9b44-f5967461e18c"
+							},
+							"refs": [],
+							"categories": [
+								{
+									"category": {
+										"value": "EPD EN 15804",
+										"level": 2,
+										"classId": "66999bad-2002-445f-bc89-8230780f539a"
+									},
+									"refs": [],
+									"categories": [
+										{
+											"category": {
+												"value": "LCIA Indikatoren",
+												"level": 3,
+												"classId": "76eb9b6d-fe9b-4312-b013-f875ef552845"
+											},
+											"refs": [
+												{
+													"name": [
+														{
+															"value": "Formation potential of tropospheric ozone (POCP)",
+															"lang": "en"
+														},
+														{
+															"value": "Bildungspotential für troposphärisches Ozon (POCP)",
+															"lang": "de"
+														},
+														{
+															"value": "Potencial de formación de ozono troposférico (POCP)",
+															"lang": "es"
+														}
+													],
+													"type": "LCIA_METHOD",
+													"uuid": "1e84a202-dae6-42aa-9e9d-71ea48b8be00",
+													"version": "00.01.000"
+												},
+												{
+													"name": [
+														{
+															"value": "Eutrophication potential (EP)",
+															"lang": "en"
+														},
+														{
+															"value": "Eutrophierungspotenzial (EP)",
+															"lang": "de"
+														},
+														{
+															"value": "Potencial de eutrofización (EP)",
+															"lang": "es"
+														}
+													],
+													"type": "LCIA_METHOD",
+													"uuid": "f58827d0-b407-4ec6-be75-8b69efb98a0f",
+													"version": "00.01.000"
+												},
+												{
+													"name": [
+														{
+															"value": "Abiotic depletion potential for non fossil resources (ADPE)",
+															"lang": "en"
+														},
+														{
+															"value": "Potenzial für den abiotischen Abbau nicht fossiler Ressourcen (ADPE)",
+															"lang": "de"
+														},
+														{
+															"value": "Potencial de agotamiento de recursos abióticos para recursos no fósiles (ADPE)",
+															"lang": "es"
+														}
+													],
+													"type": "LCIA_METHOD",
+													"uuid": "f7c73bb9-ab1a-4249-9c6d-379a0de6f67e",
+													"version": "00.01.000"
+												},
+												{
+													"name": [
+														{
+															"value": "Depletion potential of the stratospheric ozone layer (ODP)",
+															"lang": "en"
+														},
+														{
+															"value": "Abbau Potential der stratosphärischen Ozonschicht (ODP)",
+															"lang": "de"
+														},
+														{
+															"value": "Potencial de agotamiento de la capa de ozono estratosférico (ODP)",
+															"lang": "es"
+														}
+													],
+													"type": "LCIA_METHOD",
+													"uuid": "06dcd26f-025f-401a-a7c1-5e457eb54637",
+													"version": "00.01.000"
+												},
+												{
+													"name": [
+														{
+															"value": "Global warming potential (GWP)",
+															"lang": "en"
+														},
+														{
+															"value": "Globales Erwärmungspotenzial (GWP)",
+															"lang": "de"
+														},
+														{
+															"value": "Potencial de calentamiento global (GWP)",
+															"lang": "es"
+														}
+													],
+													"type": "LCIA_METHOD",
+													"uuid": "77e416eb-a363-4258-a04e-171d843a6460",
+													"version": "00.01.000"
+												},
+												{
+													"name": [
+														{
+															"value": "Abiotic depletion potential for fossil resources (ADPF)",
+															"lang": "en"
+														},
+														{
+															"value": "Potenzial für den abiotischen Abbau fossiler Brennstoffe (ADPF)",
+															"lang": "de"
+														},
+														{
+															"value": "Potencial de agotamiento de recursos abióticos para recursos fósiles (ADPF)",
+															"lang": "es"
+														}
+													],
+													"type": "LCIA_METHOD",
+													"uuid": "804ebcdf-309d-4098-8ed8-fdaf2f389981",
+													"version": "00.01.000"
+												},
+												{
+													"name": [
+														{
+															"value": "Acidification potential of soil and water (AP)",
+															"lang": "en"
+														},
+														{
+															"value": "Versauerungspotenzial von Boden und Wasser (AP)",
+															"lang": "de"
+														},
+														{
+															"value": "Potencial de acidificación del suelo y de los recursos de agua (AP)",
+															"lang": "es"
+														}
+													],
+													"type": "LCIA_METHOD",
+													"uuid": "b4274add-93b7-4905-a5e4-2e878c4e4216",
+													"version": "00.01.000"
+												}
+											],
+											"categories": []
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		"CONTACT": {
+			"type": "CONTACT",
+			"refs": [],
+			"categories": []
+		},
+		"MODEL": {
+			"type": "MODEL",
+			"refs": [],
+			"categories": []
+		},
+		"FLOW_PROPERTY": {
+			"type": "FLOW_PROPERTY",
+			"refs": [],
+			"categories": [
+				{
+					"category": {
+						"value": "Technical flow properties",
+						"level": 0
+					},
+					"refs": [
+						{
+							"name": [
+								{
+									"value": "Normvolumen",
+									"lang": "de"
+								},
+								{
+									"value": "Normal Volume",
+									"lang": "en"
+								}
+							],
+							"type": "FLOW_PROPERTY",
+							"uuid": "93a60a56-a3c8-13da-a746-0800200c9a66",
+							"version": "03.00.000",
+							"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/flowproperties/93a60a56-a3c8-13da-a746-0800200c9a66.xml"
+						},
+						{
+							"name": [
+								{
+									"value": "Oberer Heizwert",
+									"lang": "de"
+								},
+								{
+									"value": "Gross calorific value",
+									"lang": "en"
+								}
+							],
+							"type": "FLOW_PROPERTY",
+							"uuid": "93a60a56-a3c8-14da-a746-0800200c9a66",
+							"version": "03.00.000",
+							"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/flowproperties/93a60a56-a3c8-14da-a746-0800200c9a66.xml"
+						},
+						{
+							"name": [
+								{
+									"value": "Anzahl",
+									"lang": "de"
+								},
+								{
+									"value": "Number of pieces",
+									"lang": "en"
+								}
+							],
+							"type": "FLOW_PROPERTY",
+							"uuid": "01846770-4cfe-4a25-8ad9-919d8d378345",
+							"version": "03.00.000"
+						},
+						{
+							"name": [
+								{
+									"value": "Masse",
+									"lang": "de"
+								},
+								{
+									"value": "Mass",
+									"lang": "en"
+								}
+							],
+							"type": "FLOW_PROPERTY",
+							"uuid": "93a60a56-a3c8-11da-a746-0800200b9a66",
+							"version": "03.00.000"
+						},
+						{
+							"name": [
+								{
+									"value": "Gütertransport (Masse*Entfernung)",
+									"lang": "de"
+								},
+								{
+									"value": "Goods transport (mass*distance)",
+									"lang": "en"
+								}
+							],
+							"type": "FLOW_PROPERTY",
+							"uuid": "838aaa20-0117-11db-92e3-0800200c9a66",
+							"version": "03.00.000",
+							"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/flowproperties/838aaa20-0117-11db-92e3-0800200c9a66.xml"
+						},
+						{
+							"name": [
+								{
+									"value": "Radioaktivität",
+									"lang": "de"
+								},
+								{
+									"value": "Radioactivity",
+									"lang": "en"
+								}
+							],
+							"type": "FLOW_PROPERTY",
+							"uuid": "93a60a56-a3c8-17da-a746-0800200c9a66",
+							"version": "03.00.000",
+							"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/flowproperties/93a60a56-a3c8-17da-a746-0800200c9a66.xml"
+						},
+						{
+							"name": [
+								{
+									"value": "Länge",
+									"lang": "de"
+								},
+								{
+									"value": "Length",
+									"lang": "en"
+								}
+							],
+							"type": "FLOW_PROPERTY",
+							"uuid": "838aaa23-0117-11db-92e3-0800200c9a66",
+							"version": "03.00.000",
+							"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/flowproperties/838aaa23-0117-11db-92e3-0800200c9a66.xml"
+						},
+						{
+							"name": [
+								{
+									"value": "Energy reg. (unterer Heizwert)",
+									"lang": "de"
+								},
+								{
+									"value": "Energy ren. (net calorific value)",
+									"lang": "en"
+								}
+							],
+							"type": "FLOW_PROPERTY",
+							"uuid": "9b784a67-fbb1-4ad2-8774-30c39643b844",
+							"version": "02.00.000",
+							"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/flowproperties/Gross_calorific_value_93a60a56-a3c8-14da-a746-0800200c9a66_02.00.000.xml"
+						},
+						{
+							"name": [
+								{
+									"value": "Unterer Heizwert",
+									"lang": "de"
+								},
+								{
+									"value": "Net calorific value",
+									"lang": "en"
+								}
+							],
+							"type": "FLOW_PROPERTY",
+							"uuid": "93a60a56-a3c8-11da-a746-0800200c9a66",
+							"version": "03.00.000",
+							"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/flowproperties/93a60a56-a3c8-11da-a746-0800200c9a66.xml"
+						},
+						{
+							"name": [
+								{
+									"value": "Fläche",
+									"lang": "de"
+								},
+								{
+									"value": "Area",
+									"lang": "en"
+								}
+							],
+							"type": "FLOW_PROPERTY",
+							"uuid": "93a60a56-a3c8-19da-a746-0800200c9a66",
+							"version": "03.00.000"
+						},
+						{
+							"name": [
+								{
+									"value": "Volumen",
+									"lang": "de"
+								},
+								{
+									"value": "Volume",
+									"lang": "en"
+								}
+							],
+							"type": "FLOW_PROPERTY",
+							"uuid": "93a60a56-a3c8-22da-a746-0800200c9a66",
+							"version": "03.00.000"
+						},
+						{
+							"name": [
+								{
+									"value": "Fläche*Zeit",
+									"lang": "de"
+								},
+								{
+									"value": "Area*time",
+									"lang": "en"
+								}
+							],
+							"type": "FLOW_PROPERTY",
+							"uuid": "93a60a56-a3c8-21da-a746-0800200c9a66",
+							"version": "03.00.000",
+							"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/flowproperties/93a60a56-a3c8-21da-a746-0800200c9a66.xml"
+						},
+						{
+							"name": [
+								{
+									"value": "Zeit",
+									"lang": "de"
+								},
+								{
+									"value": "Duration",
+									"lang": "en"
+								}
+							],
+							"type": "FLOW_PROPERTY",
+							"uuid": "c0447923-0e60-4b3c-97c2-a86dddd9eea5",
+							"version": "03.00.000",
+							"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/flowproperties/c0447923-0e60-4b3c-97c2-a86dddd9eea5.xml"
+						}
+					],
+					"categories": []
+				},
+				{
+					"category": {
+						"value": "Umweltliche Größen",
+						"level": 0,
+						"classId": "34390d09-b09f-4f90-9b44-f5967461e18c"
+					},
+					"refs": [],
+					"categories": [
+						{
+							"category": {
+								"value": "EPD EN 15804",
+								"level": 1,
+								"classId": "66999bad-2002-445f-bc89-8230780f539a"
+							},
+							"refs": [],
+							"categories": [
+								{
+									"category": {
+										"value": "LCI Indikatoren",
+										"level": 2,
+										"classId": "c3bb7da8-448e-496f-8185-7e1c5ce9908d"
+									},
+									"refs": [
+										{
+											"name": [
+												{
+													"value": "Erneuerbare Primärenergie zur stofflichen Nutzung",
+													"lang": "de"
+												}
+											],
+											"type": "FLOW_PROPERTY",
+											"uuid": "67cbf02a-2a4e-4668-941a-b4209c30b3c6",
+											"version": "20.00.000"
+										},
+										{
+											"name": [
+												{
+													"value": "Nicht erneuerbare Primärenergie zur stofflichen Nutzung",
+													"lang": "de"
+												}
+											],
+											"type": "FLOW_PROPERTY",
+											"uuid": "59b3b1e8-813f-4647-81ca-8220ea2a4cdb",
+											"version": "20.00.000"
+										},
+										{
+											"name": [
+												{
+													"value": "Erneuerbare Primärenergie als Energieträger (PERE)",
+													"lang": "de"
+												}
+											],
+											"type": "FLOW_PROPERTY",
+											"uuid": "f403679a-8f0c-4945-85ca-15c5d6d9cadf",
+											"version": "25.00.000"
+										},
+										{
+											"name": [
+												{
+													"value": "Total nicht erneuerbare Primärenergie (PENRT)",
+													"lang": "de"
+												}
+											],
+											"type": "FLOW_PROPERTY",
+											"uuid": "70097bf8-cd55-4045-af5f-07144a8448ce",
+											"version": "25.00.000"
+										},
+										{
+											"name": [
+												{
+													"value": "Nicht-erneuerbare Primärenergie als Energieträger (PENRE)",
+													"lang": "de"
+												}
+											],
+											"type": "FLOW_PROPERTY",
+											"uuid": "15aa5df7-7905-4004-9b5f-a5a539c7aaae",
+											"version": "25.00.000"
+										}
+									],
+									"categories": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"category": {
+						"value": "Chemical composition of flows",
+						"level": 0
+					},
+					"refs": [
+						{
+							"name": [
+								{
+									"value": "Carbon content (biogenic)",
+									"lang": "en"
+								}
+							],
+							"type": "FLOW_PROPERTY",
+							"uuid": "62e503ce-544a-4599-b2ad-bcea15a7bf20",
+							"version": "03.00.003",
+							"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/flowproperties/62e503ce-544a-4599-b2ad-bcea15a7bf20.xml"
+						},
+						{
+							"name": [
+								{
+									"value": "Carbon content (biogenic) - packaging",
+									"lang": "en"
+								}
+							],
+							"type": "FLOW_PROPERTY",
+							"uuid": "262a541b-209e-44cc-a426-33bce30de7b1",
+							"version": "00.01.000"
+						}
+					],
+					"categories": []
+				},
+				{
+					"category": {
+						"value": "Economic flow properties",
+						"level": 0
+					},
+					"refs": [
+						{
+							"name": [
+								{
+									"value": "Preis",
+									"lang": "de"
+								},
+								{
+									"value": "Price",
+									"lang": "en"
+								}
+							],
+							"type": "FLOW_PROPERTY",
+							"uuid": "bcf81c0a-9fe9-4b88-a25b-99e0dd64ddaa",
+							"version": "19.00.000"
+						}
+					],
+					"categories": []
+				}
+			]
+		},
+		"UNIT_GROUP": {
+			"type": "UNIT_GROUP",
+			"refs": [],
+			"categories": [
+				{
+					"category": {
+						"value": "Umweltliche Einheiten",
+						"level": 0,
+						"classId": "2d993f37-0fcf-49bb-abf5-36c4f39ba66e"
+					},
+					"refs": [
+						{
+							"name": [
+								{
+									"value": "Photooxidationspotential (POCP)-Einheit",
+									"lang": "de"
+								},
+								{
+									"value": "kg Ethen-Äqv."
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "01c26c17-9a76-406e-8295-f17b55fd909e",
+							"version": "25.00.000"
+						},
+						{
+							"name": [
+								{
+									"value": "Versauerungspotential-Einheit",
+									"lang": "de"
+								},
+								{
+									"value": "kg SO2-Äqv."
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "bc50c624-a9bc-45b1-a9b0-e6b10d00476f",
+							"version": "25.00.000"
+						},
+						{
+							"name": [
+								{
+									"value": "Einheit Abiotischer Ressourcenverbrauch (CML 2001)",
+									"lang": "de"
+								},
+								{
+									"value": "kg Sb-Äqv."
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "54ccd2d9-a32a-4fc2-923d-f2c8c93e89d4",
+							"version": "25.00.000"
+						},
+						{
+							"name": [
+								{
+									"value": "GWP-Einheit",
+									"lang": "de"
+								},
+								{
+									"value": "kg CO2-Äqv."
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "1ebf3012-d0db-4de2-aefd-ef30cedb0be1",
+							"version": "25.00.000"
+						},
+						{
+							"name": [
+								{
+									"value": "Einheit Ozonabbau (Traci)",
+									"lang": "de"
+								},
+								{
+									"value": "kg CFC 11-Äquiv."
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "d9e957c9-7309-4474-bf3a-7777df6c4e5b",
+							"version": "25.00.000"
+						},
+						{
+							"name": [
+								{
+									"value": "Eutrophierungspotential-Einheit",
+									"lang": "de"
+								},
+								{
+									"value": "kg Phosphat-Äqv."
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "67b5401d-873c-485f-bcf3-6ae83b918822",
+							"version": "25.00.000"
+						}
+					],
+					"categories": []
+				},
+				{
+					"category": {
+						"value": "Technical unit groups",
+						"level": 0
+					},
+					"refs": [
+						{
+							"name": [
+								{
+									"value": "Units of mole",
+									"lang": "en"
+								},
+								{
+									"value": "Moleinheiten",
+									"lang": "de"
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "f170abd3-f010-45f4-8e7c-9871a5c0421b",
+							"version": "03.00.000",
+							"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/f170abd3-f010-45f4-8e7c-9871a5c0421b.xml"
+						},
+						{
+							"name": [
+								{
+									"value": "Units of items",
+									"lang": "en"
+								},
+								{
+									"value": "Stückeinheiten",
+									"lang": "de"
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "5beb6eed-33a9-47b8-9ede-1dfe8f679159",
+							"version": "03.00.000",
+							"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/5beb6eed-33a9-47b8-9ede-1dfe8f679159.xml"
+						},
+						{
+							"name": [
+								{
+									"value": "Units of area*time",
+									"lang": "en"
+								},
+								{
+									"value": "Fläche*Zeiteinheiten",
+									"lang": "de"
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "93a60a57-a3c8-20da-a746-0800200c9a66",
+							"version": "03.00.000",
+							"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/93a60a57-a3c8-20da-a746-0800200c9a66.xml"
+						},
+						{
+							"name": [
+								{
+									"value": "Units of items*length",
+									"lang": "en"
+								},
+								{
+									"value": "Stück*Länge-Einheiten",
+									"lang": "de"
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "5454b231-270e-45e6-89b2-7f4f3e482245",
+							"version": "03.00.000",
+							"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/5454b231-270e-45e6-89b2-7f4f3e482245.xml"
+						},
+						{
+							"name": [
+								{
+									"value": "Units of energy",
+									"lang": "en"
+								},
+								{
+									"value": "Energieeinheiten",
+									"lang": "de"
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "93a60a57-a3c8-11da-a746-0800200c9a66",
+							"version": "03.00.000",
+							"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/93a60a57-a3c8-11da-a746-0800200c9a66.xml"
+						},
+						{
+							"name": [
+								{
+									"value": "dimensionless",
+									"lang": "en"
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "f130951c-e67f-4f7f-8dd4-665de3974e18",
+							"version": "00.00.003"
+						},
+						{
+							"name": [
+								{
+									"value": "Units of length",
+									"lang": "en"
+								},
+								{
+									"value": "Längeeinheiten",
+									"lang": "de"
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "838aaa22-0117-11db-92e3-0800200c9a66",
+							"version": "03.00.000",
+							"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/838aaa22-0117-11db-92e3-0800200c9a66.xml"
+						},
+						{
+							"name": [
+								{
+									"value": "Units of mass*time",
+									"lang": "en"
+								},
+								{
+									"value": "Masse*Zeit-Einheiten",
+									"lang": "de"
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "59f191d6-5dd3-4553-af88-1a32accfe308",
+							"version": "03.00.000",
+							"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/59f191d6-5dd3-4553-af88-1a32accfe308.xml"
+						},
+						{
+							"name": [
+								{
+									"value": "Units of radioactivity",
+									"lang": "en"
+								},
+								{
+									"value": "Aktivitätseinheit",
+									"lang": "de"
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "93a60a57-a3c8-16da-a746-0800200c9a66",
+							"version": "03.00.000",
+							"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/93a60a57-a3c8-16da-a746-0800200c9a66.xml"
+						},
+						{
+							"name": [
+								{
+									"value": "Units of mass",
+									"lang": "en"
+								},
+								{
+									"value": "Masseeinheiten",
+									"lang": "de"
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "93a60a57-a4c8-11da-a746-0800200c9a66",
+							"version": "03.00.000",
+							"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/93a60a57-a4c8-11da-a746-0800200c9a66.xml"
+						},
+						{
+							"name": [
+								{
+									"value": "Units of volume*length",
+									"lang": "en"
+								},
+								{
+									"value": "Volumen*Länge-Einheiten",
+									"lang": "de"
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "ff8ed45d-bbfb-4531-8c7b-9b95e52bd41d",
+							"version": "03.00.000",
+							"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/ff8ed45d-bbfb-4531-8c7b-9b95e52bd41d.xml"
+						},
+						{
+							"name": [
+								{
+									"value": "Units of volume*time",
+									"lang": "en"
+								},
+								{
+									"value": "Volumen*Zeit-Einheiten",
+									"lang": "de"
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "93a60a57-a3c8-23da-a746-0800200c9a66",
+							"version": "03.00.000",
+							"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/93a60a57-a3c8-23da-a746-0800200c9a66.xml"
+						},
+						{
+							"name": [
+								{
+									"value": "Units of volume",
+									"lang": "en"
+								},
+								{
+									"value": "Volumeneinheiten",
+									"lang": "de"
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "93a60a57-a3c8-12da-a746-0800200c9a66",
+							"version": "03.00.000",
+							"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/93a60a57-a3c8-12da-a746-0800200c9a66.xml"
+						},
+						{
+							"name": [
+								{
+									"value": "Units of mass*length",
+									"lang": "en"
+								},
+								{
+									"value": "Masse*Länge-Einheiten",
+									"lang": "de"
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "838aaa21-0117-11db-92e3-0800200c9a66",
+							"version": "03.00.000",
+							"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/838aaa21-0117-11db-92e3-0800200c9a66.xml"
+						},
+						{
+							"name": [
+								{
+									"value": "Units of area",
+									"lang": "en"
+								},
+								{
+									"value": "Flächeneinheiten",
+									"lang": "de"
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "93a60a57-a3c8-18da-a746-0800200c9a66",
+							"version": "03.00.000",
+							"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/93a60a57-a3c8-18da-a746-0800200c9a66.xml"
+						},
+						{
+							"name": [
+								{
+									"value": "Units of time",
+									"lang": "en"
+								},
+								{
+									"value": "Zeiteinheiten",
+									"lang": "de"
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "af638906-3ec7-4314-8de7-f76039f2dd01",
+							"version": "03.00.000",
+							"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/af638906-3ec7-4314-8de7-f76039f2dd01.xml"
+						},
+						{
+							"name": [
+								{
+									"value": "Units of items*time",
+									"lang": "en"
+								},
+								{
+									"value": "Stück*Zeit-Einheiten",
+									"lang": "de"
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "1acf7c0f-aa9d-4022-a4b7-fe0b54ea0b91",
+							"version": "03.00.000",
+							"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/datasets/ilcd/unitgroups/1acf7c0f-aa9d-4022-a4b7-fe0b54ea0b91.xml"
+						}
+					],
+					"categories": []
+				},
+				{
+					"category": {
+						"value": "Other unit groups",
+						"level": 0,
+						"classId": "4"
+					},
+					"refs": [
+						{
+							"name": [
+								{
+									"value": "disease incidence",
+									"lang": "en"
+								},
+								{
+									"value": "disease incidence"
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "3883559b-648f-4afc-8ba2-0bd24f3affa3",
+							"version": "00.00.003"
+						},
+						{
+							"name": [
+								{
+									"value": "m3 world eqv.",
+									"lang": "en"
+								},
+								{
+									"value": "m3 world eqv."
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "6ae2df01-888e-46c8-b17d-49fa3869b476",
+							"version": "00.00.003"
+						},
+						{
+							"name": [
+								{
+									"value": "mol N eqv.",
+									"lang": "en"
+								},
+								{
+									"value": "mol N eqv."
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "71b4d617-0ec9-4d3f-b65e-e438940c2401",
+							"version": "00.00.003"
+						},
+						{
+							"name": [
+								{
+									"value": "CTUe",
+									"lang": "en"
+								},
+								{
+									"value": "CTUe"
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "aa959ded-f1eb-4efb-9c5c-2d60be36b3e6",
+							"version": "00.00.003"
+						},
+						{
+							"name": [
+								{
+									"value": "kg NMVOC eqv.",
+									"lang": "en"
+								},
+								{
+									"value": "kg NMVOC eqv."
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "d27c25f8-fbc1-44c6-b47b-4adbae4199c6",
+							"version": "00.00.003"
+						},
+						{
+							"name": [
+								{
+									"value": "Unit of ODP",
+									"lang": "en"
+								},
+								{
+									"value": "kg R11 eq."
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "88054749-b0a6-47ea-a82b-dc5b29326512",
+							"version": "00.00.000"
+						},
+						{
+							"name": [
+								{
+									"value": "CTUh",
+									"lang": "en"
+								},
+								{
+									"value": "CTUh"
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "d4c9523e-2d7e-49fd-8469-998f547d3a70",
+							"version": "00.00.003"
+						},
+						{
+							"name": [
+								{
+									"value": "kg N eqv.",
+									"lang": "en"
+								},
+								{
+									"value": "kg N eqv."
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "d05bb823-ecdf-4686-8c40-bf1d9257859f",
+							"version": "00.00.003"
+						},
+						{
+							"name": [
+								{
+									"value": "kBq U235 eqv.",
+									"lang": "en"
+								},
+								{
+									"value": "kBq U235 eqv."
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "456b05bf-1415-44a9-9993-02452f554c09",
+							"version": "00.00.003"
+						}
+					],
+					"categories": []
+				},
+				{
+					"category": {
+						"value": "Technische Einheiten",
+						"level": 0,
+						"classId": "30c118c5-1fb2-4c6d-93e3-5450c9698f1e"
+					},
+					"refs": [
+						{
+							"name": [
+								{
+									"value": "Fläche-Einheit",
+									"lang": "de"
+								},
+								{
+									"value": "sqft"
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "c20a03d7-bd90-4569-bc94-66cfd364dfc8",
+							"version": "25.00.000"
+						},
+						{
+							"name": [
+								{
+									"value": "Masseneinheit",
+									"lang": "de"
+								},
+								{
+									"value": "u"
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "ad38d542-3fe9-439d-9b95-2f5f7752acaf",
+							"version": "25.00.000"
+						},
+						{
+							"name": [
+								{
+									"value": "Volumeneinheit",
+									"lang": "de"
+								},
+								{
+									"value": "bbl"
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "cd950537-0a98-4044-9ba7-9f9a68d0a504",
+							"version": "25.00.000"
+						},
+						{
+							"name": [
+								{
+									"value": "Anzahl-Einheit",
+									"lang": "de"
+								},
+								{
+									"value": "unit"
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "934110e3-baf4-49e9-992c-3d8109a6aafb",
+							"version": "25.00.000"
+						},
+						{
+							"name": [
+								{
+									"value": "Energieeinheit",
+									"lang": "de"
+								},
+								{
+									"value": "MMBtu"
+								}
+							],
+							"type": "UNIT_GROUP",
+							"uuid": "de5104d8-3de0-4218-a29d-b7123ce9ca3c",
+							"version": "25.00.000"
+						}
+					],
+					"categories": []
+				}
+			]
+		},
+		"EXTERNAL_FILE": {
+			"type": "EXTERNAL_FILE",
+			"refs": [],
+			"categories": []
+		},
+		"PROCESS": {
+			"type": "PROCESS",
+			"refs": [],
+			"categories": []
+		},
+		"SOURCE": {
+			"type": "SOURCE",
+			"refs": [],
+			"categories": [
+				{
+					"category": {
+						"value": "Databases",
+						"level": 0
+					},
+					"refs": [
+						{
+							"name": [
+								{
+									"value": "GaBi database SP40 2020",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "0115289e-52f0-4920-bc7e-57b1c96aec8d",
+							"version": "00.00.002",
+							"uri": "http://www.oekobaudat.de/OEKOBAU.DAT/resource/sources/feda7597-12a1-4bd5-93ef-4d8120877b78"
+						},
+						{
+							"name": [
+								{
+									"value": "ecoinvent 3.3 database",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "c667cc42-12a7-4d92-9d7b-5e4e90a7a274",
+							"version": "00.00.000",
+							"uri": "http://www.oekobaudat.de/OEKOBAU.DAT/resource/sources/c667cc42-12a7-4d92-9d7b-5e4e90a7a274"
+						},
+						{
+							"name": [
+								{
+									"value": "ecoinvent 3.0 database",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "ae9fac17-61c1-4776-947a-0fc2865954ff",
+							"version": "00.00.000",
+							"uri": "http://openlca.org/ilcd/resource/sources/ae9fac17-61c1-4776-947a-0fc2865954ff"
+						},
+						{
+							"name": [
+								{
+									"value": "ecoinvent 3.5 database",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "ca0da4f4-c837-4005-9c17-e77b9bd09d8b",
+							"version": "00.00.000"
+						},
+						{
+							"name": [
+								{
+									"value": "GaBi database SP36 2018",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "dad5023c-8d97-4656-b82a-2fc6480b33a7",
+							"version": "00.00.001",
+							"uri": "feda7597-12a1-4bd5-93ef-4d8120877b78"
+						},
+						{
+							"name": [
+								{
+									"value": "GaBi database SP35 2018",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "feda7597-12a1-4bd5-93ef-4d8120877b78",
+							"version": "00.00.000",
+							"uri": "http://www.oekobaudat.de/OEKOBAU.DAT/resource/sources/feda7597-12a1-4bd5-93ef-4d8120877b78"
+						},
+						{
+							"name": [
+								{
+									"value": "ecoinvent 3.6 database",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "766b9973-5ee8-48a2-8098-72c8e20b369f",
+							"version": "00.00.001"
+						},
+						{
+							"name": [
+								{
+									"value": "ecoinvent database (general)",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "b497a91f-e14b-4b69-8f28-f50eb1576766",
+							"version": "00.03.002"
+						},
+						{
+							"name": [
+								{
+									"value": "GaBi database SP39 2019",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "07d9b8a7-e0fc-408f-a95e-c90735f843ce",
+							"version": "00.00.002",
+							"uri": "http://www.oekobaudat.de/OEKOBAU.DAT/resource/sources/feda7597-12a1-4bd5-93ef-4d8120877b78"
+						},
+						{
+							"name": [
+								{
+									"value": "GaBi database SP27 2015",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "9422129a-7992-4eaf-aa17-0fca36af4512",
+							"version": "00.00.000",
+							"uri": "http://openlca.org/ilcd/resource/sources/9422129a-7992-4eaf-aa17-0fca36af4512"
+						},
+						{
+							"name": [
+								{
+									"value": "ecoinvent 2.0 database",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "67e57f6b-53d2-4adb-a5db-7e8157ce5865",
+							"version": "00.00.000",
+							"uri": "http://openlca.org/ilcd/resource/sources/67e57f6b-53d2-4adb-a5db-7e8157ce5865"
+						},
+						{
+							"name": [
+								{
+									"value": "GaBi database SP25 2014",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "04536297-8f33-4ef0-b06c-54dc273c2aaa",
+							"version": "00.00.000",
+							"uri": "http://openlca.org/ilcd/resource/sources/04536297-8f33-4ef0-b06c-54dc273c2aaa"
+						},
+						{
+							"name": [
+								{
+									"value": "GaBi database SP20 2013",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "b9fdf525-e9b8-47a0-b897-2ecfe7e2cff5",
+							"version": "00.00.000",
+							"uri": "http://openlca.org/ilcd/resource/sources/b9fdf525-e9b8-47a0-b897-2ecfe7e2cff5"
+						},
+						{
+							"name": [
+								{
+									"value": "GaBi database (general)",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "28d74cc0-db8b-4d7e-bc44-5f6d56ce0c4a",
+							"version": "00.03.002"
+						},
+						{
+							"name": [
+								{
+									"value": "GaBi database SP37 2019",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "aaef5d83-7fd3-424f-86c6-00f51cd39845",
+							"version": "00.00.002",
+							"uri": "http://www.oekobaudat.de/OEKOBAU.DAT/resource/sources/feda7597-12a1-4bd5-93ef-4d8120877b78"
+						},
+						{
+							"name": [
+								{
+									"value": "GaBi database SP38 2019",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "4467e22f-78e4-4e21-ae4a-b8ffeda7d795",
+							"version": "00.00.001",
+							"uri": "http://www.oekobaudat.de/OEKOBAU.DAT/resource/sources/feda7597-12a1-4bd5-93ef-4d8120877b78"
+						},
+						{
+							"name": [
+								{
+									"value": "GaBi database SP26 2014",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "7d81b748-d7ea-4efd-b72e-205c69306f38",
+							"version": "00.00.000",
+							"uri": "http://openlca.org/ilcd/resource/sources/7d81b748-d7ea-4efd-b72e-205c69306f38"
+						},
+						{
+							"name": [
+								{
+									"value": "ecoinvent 2.1 database",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "dd4ba261-1847-4d00-a9c0-7e81a3402dae",
+							"version": "00.00.000",
+							"uri": "http://openlca.org/ilcd/resource/sources/dd4ba261-1847-4d00-a9c0-7e81a3402dae"
+						},
+						{
+							"name": [
+								{
+									"value": "GaBi database SP34 2017",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "07650073-f65e-4d07-97e9-359a58b7299e",
+							"version": "00.00.000",
+							"uri": "http://www.oekobaudat.de/OEKOBAU.DAT/resource/sources/07650073-f65e-4d07-97e9-359a58b7299e"
+						},
+						{
+							"name": [
+								{
+									"value": "ecoinvent 3.2 database",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "d82a6cdc-1930-4a8a-9b07-2f7fda03fcbd",
+							"version": "00.00.000",
+							"uri": "http://openlca.org/ilcd/resource/sources/d82a6cdc-1930-4a8a-9b07-2f7fda03fcbd"
+						},
+						{
+							"name": [
+								{
+									"value": "ecoinvent 3.4 database",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "db59e0c6-db9a-4d9a-8637-67b8ed42415c",
+							"version": "00.00.000",
+							"uri": "http://www.oekobaudat.de/OEKOBAU.DAT/resource/sources/db59e0c6-db9a-4d9a-8637-67b8ed42415c"
+						},
+						{
+							"name": [
+								{
+									"value": "ecoinvent 3.1 database",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "44df4cc3-a75f-4e13-a37a-971dadc97b35",
+							"version": "00.00.000",
+							"uri": "http://openlca.org/ilcd/resource/sources/44df4cc3-a75f-4e13-a37a-971dadc97b35"
+						},
+						{
+							"name": [
+								{
+									"value": "GaBi database SP28 2015",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "176effc6-2e73-4419-be24-60b3399e91cf",
+							"version": "00.00.000",
+							"uri": "http://openlca.org/ilcd/resource/sources/176effc6-2e73-4419-be24-60b3399e91cf"
+						},
+						{
+							"name": [
+								{
+									"value": "GaBi database SP30 2016",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "6985fea4-15ea-4b96-9237-c67ee3a1f28c",
+							"version": "00.00.000",
+							"uri": "http://www.oekobaudat.de/OEKOBAU.DAT/resource/sources/6985fea4-15ea-4b96-9237-c67ee3a1f28c"
+						},
+						{
+							"name": [
+								{
+									"value": "GaBi database SP29 2016",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "8cb50bdc-0299-4a4c-9a4e-4c62917018c7",
+							"version": "00.00.000",
+							"uri": "http://openlca.org/ilcd/resource/sources/8cb50bdc-0299-4a4c-9a4e-4c62917018c7"
+						},
+						{
+							"name": [
+								{
+									"value": "ecoinvent 2.2 database",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "9ffadc15-4649-4871-b565-cee8197b17e9",
+							"version": "00.00.000",
+							"uri": "http://openlca.org/ilcd/resource/sources/9ffadc15-4649-4871-b565-cee8197b17e9"
+						}
+					],
+					"categories": []
+				},
+				{
+					"category": {
+						"value": "Compliance systems",
+						"level": 0
+					},
+					"refs": [
+						{
+							"name": [
+								{
+									"value": "ISO 21930",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "9c1e8451-2321-4498-b459-b6568b6b6547",
+							"version": "00.00.001"
+						},
+						{
+							"name": [
+								{
+									"value": "EN 15804+A2",
+									"lang": "de"
+								},
+								{
+									"value": "EN 15804+A2",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "c0016b33-8cf7-415c-ac6e-deba0d21440d",
+							"version": "00.01.000"
+						},
+						{
+							"name": [
+								{
+									"value": "ISO 14025",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "4f2eb655-6e44-4874-a95a-e28f5442cd4d",
+							"version": "00.00.001"
+						},
+						{
+							"name": [
+								{
+									"value": "EN 15804",
+									"lang": "de"
+								},
+								{
+									"value": "EN 15804",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "b00f9ec0-7874-11e3-981f-0800200c9a66",
+							"version": "00.02.000"
+						}
+					],
+					"categories": []
+				},
+				{
+					"category": {
+						"value": "Data set formats",
+						"level": 0
+					},
+					"refs": [
+						{
+							"name": [
+								{
+									"value": "ILCD format",
+									"lang": "en"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "a97a0155-0234-4b87-b4ce-a45da52f2a40",
+							"version": "01.00.000",
+							"uri": "http://lca.jrc.ec.europa.eu/lcainfohub/sample_data/ilcd/sources/ILCD_Format_a97a0155-0234-4b87-b4ce-a45da52f2a40_01.00.000.xml"
+						},
+						{
+							"name": [
+								{
+									"value": "EPD Data Format Extensions v1.2",
+									"lang": "en"
+								},
+								{
+									"value": "EPD-Datenformaterweiterungen v1.2",
+									"lang": "de"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "a29449fd-aa2f-4de8-b5d7-4b06b43c6fde",
+							"version": "00.01.000"
+						},
+						{
+							"name": [
+								{
+									"value": "EPD Data Format Extension 1.1",
+									"lang": "de"
+								}
+							],
+							"type": "SOURCE",
+							"uuid": "cba73800-7874-11e3-981f-0800200c9a66",
+							"version": "00.01.000"
+						}
+					],
+					"categories": []
+				},
+				{
+					"category": {
+						"value": "Reference, Citation",
+						"level": 0,
+						"classId": "a5661b37-c582-440c-943f-267ef944dcd5"
+					},
+					"refs": [],
+					"categories": [
+						{
+							"category": {
+								"value": "Databases",
+								"level": 1,
+								"classId": "158fa994-e12d-4ab7-b8e3-b840fc256744"
+							},
+							"refs": [
+								{
+									"name": [
+										{
+											"value": "GaBi Database Edition 2019, SP37",
+											"lang": "en"
+										}
+									],
+									"type": "SOURCE",
+									"uuid": "cb50c596-16b4-44e4-b1aa-319319a79fb5",
+									"version": "38.00.000"
+								},
+								{
+									"name": [
+										{
+											"value": "GaBi Database Edition 2017, SP33",
+											"lang": "en"
+										}
+									],
+									"type": "SOURCE",
+									"uuid": "d8181616-4417-4dbd-9614-09937353f17a",
+									"version": "33.00.000"
+								}
+							],
+							"categories": []
+						}
+					]
+				}
+			]
+		}
+	}
 }

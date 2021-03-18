@@ -23,7 +23,7 @@ import epd.model.Module;
 /**
  * Exports the module results of an EPD data set to an Excel file.
  */
-class ModuleResultExport implements Runnable {
+class ResultExport implements Runnable {
 
 	private Logger log = LoggerFactory.getLogger(getClass());
 
@@ -31,7 +31,7 @@ class ModuleResultExport implements Runnable {
 	private File excelFile;
 	private boolean success;
 
-	public ModuleResultExport(EpdDataSet dataSet, File excelFile) {
+	public ResultExport(EpdDataSet dataSet, File excelFile) {
 		this.dataSet = dataSet;
 		this.excelFile = excelFile;
 	}

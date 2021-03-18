@@ -30,14 +30,14 @@ import epd.util.Strings;
 /**
  * Imports module results from an Excel file.
  */
-class ModuleResultImport implements Runnable {
+class ResultImport implements Runnable {
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	private final EpdDataSet dataSet;
 	private final File excelFile;
 
-	public ModuleResultImport(EpdDataSet dataSet, File excelFile) {
+	public ResultImport(EpdDataSet dataSet, File excelFile) {
 		this.dataSet = dataSet;
 		this.excelFile = excelFile;
 	}

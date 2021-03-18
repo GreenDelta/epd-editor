@@ -50,7 +50,7 @@ class ResultPage extends FormPage {
 	private EpdDataSet dataSet;
 	private ScenarioTable scenarioTable;
 	private TableViewer moduleTable;
-	private ModuleResultTable resultTable;
+	private ResultTable resultTable;
 
 	public ResultPage(EpdEditor editor) {
 		super(editor, "ModulesPage", M.EnvironmentalIndicators);
@@ -194,13 +194,13 @@ class ResultPage extends FormPage {
 		editor.setDirty();
 	}
 
-	private ModuleResultTable createResultSection(Composite body) {
+	private ResultTable createResultSection(Composite body) {
 		Section section = UI.section(body, toolkit, M.Results);
 		section.setToolTipText(Tooltips.EPD_Results);
 		UI.gridData(section, true, true);
 		Composite composite = UI.sectionClient(section, toolkit);
 		UI.gridLayout(composite, 1);
-		ModuleResultTable table = new ModuleResultTable(editor, dataSet);
+		var table = new ResultTable(editor, dataSet);
 		table.create(composite);
 		Actions.bind(section, createResultActions());
 		return table;
@@ -210,7 +210,7 @@ class ResultPage extends FormPage {
 		Action[] actions = new Action[3];
 		actions[0] = Actions.create(M.SynchronizeWithModules,
 				Icon.CHECK_TRUE.des(), () -> {
-					new ModuleResultSync(dataSet).run();
+					new ResultSync(dataSet).run();
 					resultTable.refresh();
 					editor.setDirty();
 				});
@@ -225,7 +225,7 @@ class ResultPage extends FormPage {
 		File file = FileChooser.save("results.xlsx", "*.xlsx");
 		if (file == null)
 			return;
-		ModuleResultExport export = new ModuleResultExport(dataSet, file);
+		ResultExport export = new ResultExport(dataSet, file);
 		App.run(M.Export, export, () -> {
 			if (export.isDoneWithSuccess())
 				return;
@@ -238,7 +238,7 @@ class ResultPage extends FormPage {
 		File file = FileChooser.open("*.xlsx");
 		if (file == null)
 			return;
-		ModuleResultImport resultImport = new ModuleResultImport(dataSet, file);
+		ResultImport resultImport = new ResultImport(dataSet, file);
 		App.run(M.Import, resultImport, () -> {
 			resultTable.refresh();
 			moduleTable.refresh();

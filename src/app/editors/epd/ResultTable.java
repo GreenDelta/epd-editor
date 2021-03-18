@@ -23,14 +23,14 @@ import epd.model.IndicatorResult;
 import epd.model.Module;
 import epd.util.Strings;
 
-class ModuleResultTable {
+class ResultTable {
 
 	private EpdEditor editor;
 	private EpdDataSet dataSet;
 
 	private TableViewer viewer;
 
-	public ModuleResultTable(EpdEditor editor, EpdDataSet dataSet) {
+	public ResultTable(EpdEditor editor, EpdDataSet dataSet) {
 		this.editor = editor;
 		this.dataSet = dataSet;
 	}
@@ -40,10 +40,12 @@ class ModuleResultTable {
 				M.Indicator, M.Value, M.Unit };
 		viewer = Tables.createViewer(composite, columns);
 		Tables.bindColumnWidths(viewer, 0.1, 0.2, 0.3, 0.2, 0.2);
-		ModifySupport<ResultRow> modifier = new ModifySupport<>(viewer);
+		var modifier = new ModifySupport<ResultRow>(viewer);
 		modifier.bind(M.Value, new AmountModifier());
 		viewer.setLabelProvider(new ResultLabel());
 		viewer.getTable().setToolTipText(Tooltips.EPD_Results);
+
+		// add setorrs
 		Tables.addSorter(viewer, 0, (ResultRow r) -> r.amount.module);
 		Tables.addSorter(viewer, 1, (ResultRow r) -> r.amount.scenario);
 		Tables.addSorter(viewer, 2, (ResultRow r) -> r.result.indicator.name);

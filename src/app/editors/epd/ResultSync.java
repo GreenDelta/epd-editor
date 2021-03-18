@@ -17,11 +17,11 @@ import epd.util.Strings;
  * Initializes indicator results for added modules and removes results for
  * module entries that no longer exist in an EPD data set.
  */
-class ModuleResultSync implements Runnable {
+class ResultSync implements Runnable {
 
 	private final EpdDataSet epd;
 
-	public ModuleResultSync(EpdDataSet epd) {
+	public ResultSync(EpdDataSet epd) {
 		this.epd = epd;
 	}
 

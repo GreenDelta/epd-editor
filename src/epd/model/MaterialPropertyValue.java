@@ -1,15 +1,16 @@
 package epd.model;
 
-public class MaterialPropertyValue {
+public final class MaterialPropertyValue implements Cloneable {
 
 	public MaterialProperty property;
 	public double value;
 
 	@Override
 	public MaterialPropertyValue clone() {
-		MaterialPropertyValue clone = new MaterialPropertyValue();
-		clone.property = property;
-		clone.value = value;
-		return clone;
+		try {
+			return (MaterialPropertyValue) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

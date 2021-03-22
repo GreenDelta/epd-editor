@@ -52,7 +52,6 @@ public final class Data {
 		if (epd == null)
 			return;
 		try {
-			XmlCleanUp.on(epd);
 			Extensions.write(epd);
 			save(epd.process);
 		} catch (Exception e) {

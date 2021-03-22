@@ -44,9 +44,12 @@ public class EpdDataSet {
 	}
 
 	public IndicatorResult getResult(Indicator indicator) {
-		for (IndicatorResult result : results)
-			if (result.indicator == indicator)
+		if (indicator == null)
+			return null;
+		for (var result : results) {
+			if (Objects.equals(result.indicator, indicator))
 				return result;
+		}
 		return null;
 	}
 
@@ -69,20 +72,20 @@ public class EpdDataSet {
 
 		if (publicationDate != null) {
 			clone.publicationDate = LocalDate.of(
-				publicationDate.getYear(),
-				publicationDate.getMonthValue(),
-				publicationDate.getDayOfMonth());
+					publicationDate.getYear(),
+					publicationDate.getMonthValue(),
+					publicationDate.getDayOfMonth());
 		}
 
 		clone.safetyMargins = safetyMargins != null
-			? safetyMargins.clone()
-			: null;
+				? safetyMargins.clone()
+				: null;
 		clone.contentDeclaration = contentDeclaration != null
-			? contentDeclaration.clone()
-			: null;
+				? contentDeclaration.clone()
+				: null;
 		clone.qMetaData = qMetaData != null
-			? qMetaData.clone()
-			: null;
+				? qMetaData.clone()
+				: null;
 
 		for (var result : results) {
 			clone.results.add(result.clone());
@@ -111,7 +114,7 @@ public class EpdDataSet {
 	 */
 	public Exchange productExchange() {
 		QuantitativeReference qRef = Processes
-			.quantitativeReference(process);
+				.quantitativeReference(process);
 		qRef.type = QuantitativeReferenceType.REFERENCE_FLOWS;
 		if (qRef.referenceFlows.isEmpty())
 			qRef.referenceFlows.add(1);

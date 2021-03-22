@@ -52,39 +52,45 @@ class ModelingPage extends FormPage {
 		createModelingSection(body);
 
 		RefTable.create(DataSetType.SOURCE,
-				Processes.method(process).methodSources)
-				.withEditor(editor)
-				.withTitle(M.LCAMethodDetails)
-				.withTooltip(Tooltips.EPD_LCAMethodDetails)
-				.render(body, toolkit);
+			Processes.method(process).methodSources)
+			.withEditor(editor)
+			.withTitle(M.LCAMethodDetails)
+			.withTooltip(Tooltips.EPD_LCAMethodDetails)
+			.render(body, toolkit);
 
 		RefTable.create(DataSetType.SOURCE,
-				Processes.representativeness(process).sources)
-				.withEditor(editor)
-				.withTitle(M.DataSources)
-				.withTooltip(Tooltips.EPD_DataSources)
-				.render(body, toolkit);
+			Processes.representativeness(process).dataHandlingSources)
+			.withEditor(editor)
+			.withTitle("#Documentation of data quality management")
+			.render(body, toolkit);
+
+		RefTable.create(DataSetType.SOURCE,
+			Processes.representativeness(process).sources)
+			.withEditor(editor)
+			.withTitle(M.DataSources)
+			.withTooltip(Tooltips.EPD_DataSources)
+			.render(body, toolkit);
 
 		createComplianceSection(body);
 
 		RefTable.create(DataSetType.SOURCE, epd.originalEPDs)
-				.withEditor(editor)
-				.withTitle("Original EPDs")
-				.render(body, toolkit);
+			.withEditor(editor)
+			.withTitle("Original EPDs")
+			.render(body, toolkit);
 
 		new ReviewSection(editor, this)
-				.render(body, toolkit, form);
+			.render(body, toolkit, form);
 		form.reflow(true);
 	}
 
 	private void createModelingSection(Composite parent) {
 		Composite comp = UI.formSection(parent, toolkit,
-				M.ModellingAndValidation, Tooltips.EPD_ModellingAndValidation);
+			M.ModellingAndValidation, Tooltips.EPD_ModellingAndValidation);
 		UI.formLabel(comp, toolkit, M.Subtype, Tooltips.EPD_Subtype);
 		createSubTypeViewer(comp);
 		TextBuilder tb = new TextBuilder(editor, this, toolkit);
 		tb.multiText(comp, M.UseAdvice, Tooltips.EPD_UseAdvice,
-				Processes.representativeness(process).useAdvice);
+			Processes.representativeness(process).useAdvice);
 	}
 
 	private void createSubTypeViewer(Composite parent) {
@@ -119,12 +125,12 @@ class ModelingPage extends FormPage {
 				systems.add(s.system);
 		});
 		RefTable table = RefTable.create(DataSetType.SOURCE, systems)
-				.withTitle(M.ComplianceDeclarations)
-				.withTooltip(Tooltips.EPD_ComplianceDeclarations);
+			.withTitle(M.ComplianceDeclarations)
+			.withTooltip(Tooltips.EPD_ComplianceDeclarations);
 		table.render(body, toolkit);
 		table.onAdd(system -> {
 			ComplianceDeclaration decl = Processes.getComplianceDeclaration(
-					process, system);
+				process, system);
 			if (decl != null)
 				return;
 			Processes.complianceDeclaration(process).system = system;

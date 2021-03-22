@@ -27,8 +27,8 @@ import app.editors.Editors;
  */
 public class CleanUp implements IRunnableWithProgress {
 
-	private FileStore store = App.store;
-	private Logger log = LoggerFactory.getLogger(getClass());
+	private final FileStore store = App.store();
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	public int deleted = 0;
 	public int failors = 0;

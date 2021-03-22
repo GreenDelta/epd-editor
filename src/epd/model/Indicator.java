@@ -1,5 +1,7 @@
 package epd.model;
 
+import java.util.Objects;
+
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
@@ -10,7 +12,7 @@ import org.openlca.ilcd.commons.Ref;
  * serialized as exchanges and impact assessment indicators are serialized as
  * LCIA results in an ILCD data set.
  */
-public class Indicator {
+public final class Indicator {
 
 	public enum Type {
 		LCI, LCIA
@@ -83,12 +85,10 @@ public class Indicator {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof Indicator))
 			return false;
-		Indicator other = (Indicator) obj;
-		if (this.uuid == null || other.uuid == null)
-			return false;
-		return this.uuid.equals(other.uuid);
+		var other = (Indicator) obj;
+		return Objects.equals(this.uuid, other.uuid);
 	}
 
 	@Override

@@ -29,7 +29,7 @@ public class ZipExport implements IRunnableWithProgress {
 
 	@Override
 	public void run(IProgressMonitor monitor)
-			throws InvocationTargetException, InterruptedException {
+		throws InvocationTargetException, InterruptedException {
 		if (zipFile == null)
 			return;
 		this.monitor = monitor;
@@ -50,7 +50,7 @@ public class ZipExport implements IRunnableWithProgress {
 	}
 
 	private int countFiles() {
-		File rootDir = App.store.getRootFolder();
+		File rootDir = App.store().getRootFolder();
 		if (!rootDir.exists())
 			return 0;
 		int c = 0;
@@ -67,9 +67,15 @@ public class ZipExport implements IRunnableWithProgress {
 	}
 
 	private void packageData(FileSystem zip) throws Exception {
-		String[] subDirs = { "contacts", "external_docs", "flowproperties",
-				"flows", "lciamethods", "processes", "sources",
-				"unitgroups" };
+		String[] subDirs = {
+			"contacts",
+			"external_docs",
+			"flowproperties",
+			"flows",
+			"lciamethods",
+			"processes",
+			"sources",
+			"unitgroups"};
 		for (String subDir : subDirs) {
 			pack(subDir, subDir);
 		}
@@ -78,7 +84,7 @@ public class ZipExport implements IRunnableWithProgress {
 	}
 
 	private void pack(String subDir, String... targetPath) throws Exception {
-		File rootDir = App.store.getRootFolder();
+		File rootDir = App.store().getRootFolder();
 		File dir = new File(rootDir, subDir);
 		if (!dir.exists())
 			return;
@@ -92,7 +98,7 @@ public class ZipExport implements IRunnableWithProgress {
 			filePath[targetPath.length] = f.getName();
 			Path target = zip.getPath("ILCD", filePath);
 			Files.copy(f.toPath(), target,
-					StandardCopyOption.REPLACE_EXISTING);
+				StandardCopyOption.REPLACE_EXISTING);
 			monitor.worked(1);
 		}
 	}

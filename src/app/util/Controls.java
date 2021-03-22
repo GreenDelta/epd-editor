@@ -22,47 +22,41 @@ public class Controls {
 	private Controls() {
 	}
 
-	public static void onSelect(Combo combo,
-			Consumer<SelectionEvent> consumer) {
-		combo.addSelectionListener(createSelectionListener(consumer));
+	public static void onSelect(Combo combo, Consumer<SelectionEvent> fn) {
+		combo.addSelectionListener(onSelect(fn));
 	}
 
-	public static void onSelect(Button button,
-			Consumer<SelectionEvent> consumer) {
-		button.addSelectionListener(createSelectionListener(consumer));
+	public static void onSelect(Button button, Consumer<SelectionEvent> fn) {
+		button.addSelectionListener(onSelect(fn));
 	}
 
-	public static void onSelect(MenuItem item,
-			Consumer<SelectionEvent> consumer) {
-		item.addSelectionListener(createSelectionListener(consumer));
+	public static void onSelect(MenuItem item, Consumer<SelectionEvent> fn) {
+		item.addSelectionListener(onSelect(fn));
 	}
 
-	public static void onSelect(Scale scale,
-			Consumer<SelectionEvent> consumer) {
-		scale.addSelectionListener(createSelectionListener(consumer));
+	public static void onSelect(Scale scale, Consumer<SelectionEvent> fn) {
+		scale.addSelectionListener(onSelect(fn));
 	}
 
-	public static void onSelect(Link link, Consumer<SelectionEvent> consumer) {
-		link.addSelectionListener(createSelectionListener(consumer));
+	public static void onSelect(Link link, Consumer<SelectionEvent> fn) {
+		link.addSelectionListener(onSelect(fn));
 	}
 
-	public static void onSelect(Spinner spinner,
-			Consumer<SelectionEvent> consumer) {
-		spinner.addSelectionListener(createSelectionListener(consumer));
+	public static void onSelect(Spinner spinner, Consumer<SelectionEvent> fn) {
+		spinner.addSelectionListener(onSelect(fn));
 	}
 
-	private static SelectionListener createSelectionListener(
-			Consumer<SelectionEvent> consumer) {
+	public static SelectionListener onSelect(Consumer<SelectionEvent> fn) {
 		return new SelectionListener() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				consumer.accept(e);
+				fn.accept(e);
 			}
 
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				consumer.accept(e);
+				fn.accept(e);
 			}
 		};
 	}

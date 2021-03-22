@@ -62,7 +62,7 @@ public class WorkbenchWindow extends WorkbenchWindowAdvisor {
 		App.run("Synchronize reference data ...", sync, () -> {
 			if (sync.stats.isEmpty())
 				return;
-			new Sync(App.index).run();
+			new Sync(App.index()).run();
 			boolean didUpdates = false;
 			for (RefStatus stat : sync.stats) {
 				if (stat.value == RefStatus.DOWNLOADED) {

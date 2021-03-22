@@ -24,8 +24,8 @@ import epd.util.Strings;
 
 class AdminPage extends FormPage {
 
-	private EpdEditor editor;
-	private Process process;
+	private final EpdEditor editor;
+	private final Process process;
 
 	public AdminPage(EpdEditor editor) {
 		super(editor, "EpdInfoPage", M.AdministrativeInformation);
@@ -43,8 +43,8 @@ class AdminPage extends FormPage {
 		projectSection(body, tk);
 
 		// commissioner
-		var commisioners = Processes.commissionerAndGoal(process).commissioners;
-		RefTable.create(DataSetType.CONTACT, commisioners)
+		var commissioners = Processes.commissionerAndGoal(process).commissioners;
+		RefTable.create(DataSetType.CONTACT, commissioners)
 				.withEditor(editor)
 				.withTitle("Commissioner")
 				.render(body, tk);
@@ -69,6 +69,12 @@ class AdminPage extends FormPage {
 
 		// publication and ownership
 		publicationSection(body, tk);
+
+		// publishers
+		RefTable.create(DataSetType.CONTACT, editor.dataSet.publishers)
+			.withEditor(editor)
+			.withTitle("Publisher of the data set")
+			.render(body, tk);
 
 		// preceding data version
 		var precedingVersions = Processes

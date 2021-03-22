@@ -36,7 +36,7 @@ public class MethodEditor extends BaseEditor {
 		Editors.setTabTitle(input, this);
 		try {
 			RefEditorInput in = (RefEditorInput) input;
-			method = App.store.get(LCIAMethod.class, in.ref.uuid);
+			method = App.store().get(LCIAMethod.class, in.ref.uuid);
 			RefCheck.on(method);
 		} catch (Exception e) {
 			throw new PartInitException("Failed to open method editor", e);

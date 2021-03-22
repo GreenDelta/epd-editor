@@ -24,7 +24,7 @@ public class Module implements Comparable<Module> {
 	public int compareTo(Module other) {
 		if (other == null)
 			return 1;
-		return this.index - other.index;
+		return Integer.compare(this.index, other.index);
 	}
 
 	@Override

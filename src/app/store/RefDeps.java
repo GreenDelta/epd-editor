@@ -47,7 +47,7 @@ public class RefDeps {
 
 	public static <T extends IDataSet> T load(Class<T> type, Ref ref) {
 		try {
-			return App.store.get(type, ref.uuid);
+			return App.store().get(type, ref.uuid);
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(RefDeps.class);
 			log.error("failed load data set " + ref, e);

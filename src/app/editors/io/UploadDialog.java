@@ -31,12 +31,11 @@ import epd.util.ExtensionRefs;
 
 public class UploadDialog extends Wizard {
 
-	private Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	private final Ref ref;
 	private final List<Ref> allRefs = new ArrayList<>();
 
 	private ConnectionCombo conCombo;
-	private Page page;
 
 	private UploadDialog(Ref ref) {
 		this.ref = ref;
@@ -81,8 +80,7 @@ public class UploadDialog extends Wizard {
 
 	@Override
 	public void addPages() {
-		page = new Page();
-		addPage(page);
+		addPage(new Page());
 	}
 
 	private class Page extends WizardPage {
@@ -90,8 +88,8 @@ public class UploadDialog extends Wizard {
 		private TableViewer table;
 
 		private Page() {
-			super("UploadDialogPage", M.UploadDataSet + ": " +
-					App.header(ref.name, 50), null);
+			super("UploadDialogPage",
+				M.UploadDataSet + ": " + App.header(ref.name, 50), null);
 			setPageComplete(true);
 		}
 
@@ -127,7 +125,7 @@ public class UploadDialog extends Wizard {
 
 		private void createTable(Composite parent) {
 			table = Tables.createViewer(parent, M.DataSet, M.UUID,
-					M.DataSetVersion);
+				M.DataSetVersion);
 			table.setLabelProvider(new RefTableLabel());
 			Tables.bindColumnWidths(table, 0.6, 0.2, 0.2);
 			table.setInput(allRefs);
@@ -137,9 +135,9 @@ public class UploadDialog extends Wizard {
 			try {
 				getContainer().run(true, false, monitor -> {
 					monitor.beginTask(M.SearchDependentDataSets,
-							IProgressMonitor.UNKNOWN);
+						IProgressMonitor.UNKNOWN);
 					allRefs.clear();
-					new DependencyTraversal(App.store).on(ref, ds -> {
+					new DependencyTraversal(App.store()).on(ref, ds -> {
 						Ref next = Ref.of(ds);
 						monitor.subTask(App.header(next.name, 75));
 						allRefs.add(next);

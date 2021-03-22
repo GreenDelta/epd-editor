@@ -2,6 +2,7 @@ package app.store;
 
 import java.io.File;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,8 +38,7 @@ public final class CategorySystems {
 		List<CategorySystem> list = new ArrayList<>();
 		for (File file : dir.listFiles()) {
 			try {
-				CategorySystem system = JAXB.unmarshal(file,
-						CategorySystem.class);
+				var system = JAXB.unmarshal(file, CategorySystem.class);
 				list.add(system);
 			} catch (Exception e) {
 				Logger log = LoggerFactory.getLogger(CategorySystems.class);
@@ -55,7 +55,7 @@ public final class CategorySystems {
 		if (Strings.isNullOrEmpty(name))
 			name = "unknown";
 		try {
-			name = URLEncoder.encode(name, "utf-8");
+			name = URLEncoder.encode(name, StandardCharsets.UTF_8);
 			File file = new File(getDir(), name + ".xml");
 			JAXB.marshal(system, file);
 		} catch (Exception e) {
@@ -65,7 +65,7 @@ public final class CategorySystems {
 	}
 
 	private static File getDir() {
-		File rootDir = App.store.getRootFolder();
+		File rootDir = App.store().getRootFolder();
 		File dir = new File(rootDir, "classifications");
 		if (!dir.exists())
 			dir.mkdirs();

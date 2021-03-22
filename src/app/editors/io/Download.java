@@ -65,7 +65,7 @@ public class Download implements IRunnableWithProgress {
 				queue.add(next);
 			}
 		}
-		App.dumpIndex();
+		App.getWorkspace().saveIndex();
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class Download implements IRunnableWithProgress {
 			try {
 				InputStream is = client.getExternalDocument(
 						source.getUUID(), fileName);
-				File target = App.store.getExternalDocument(ref);
+				File target = App.store().getExternalDocument(ref);
 				Files.copy(is, target.toPath(),
 						StandardCopyOption.REPLACE_EXISTING);
 			} catch (Exception e) {
@@ -97,9 +97,9 @@ public class Download implements IRunnableWithProgress {
 	 */
 	public static void save(Ref ref, IDataSet ds, List<RefStatus> stats) {
 		try {
-			App.store.put(ds);
-			App.index.remove(ref);
-			App.index.add(ds);
+			App.store().put(ds);
+			App.index().remove(ref);
+			App.index().add(ds);
 			RefTrees.cache(ds);
 			stats.add(RefStatus.downloaded(ref, "Downloaded/Updated"));
 		} catch (Exception e) {
@@ -115,7 +115,7 @@ public class Download implements IRunnableWithProgress {
 		}
 		Class<? extends IDataSet> type = ref.getDataSetClass();
 		try {
-			if (!overwriteExisting && App.store.contains(type, ref.uuid)) {
+			if (!overwriteExisting && App.store().contains(type, ref.uuid)) {
 				status.add(RefStatus.info(ref, M.AlreadyExists));
 				return null;
 			}

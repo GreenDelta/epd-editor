@@ -2,12 +2,13 @@ package app;
 
 import java.io.File;
 
+import app.store.EpdProfiles;
 import app.store.Json;
 
-public class AppSettings {
+public final class AppSettings implements Cloneable {
 
 	/** The ID of the EPD profile that should be used in the application. */
-	public String profile = "EN_15804";
+	public String profile = EpdProfiles.DEFAULT;
 
 	/**
 	 * If true, synchronize the reference data (defined as data stock URLs in
@@ -44,12 +45,12 @@ public class AppSettings {
 	 */
 	public boolean showQMetadata = false;
 
-	public void save() {
-		Json.write(this, new File(App.workspace, "settings.json"));
+	public void save(Workspace workspace) {
+		Json.write(this, new File(workspace.folder, "settings.json"));
 	}
 
-	static AppSettings load() {
-		File f = new File(App.workspace, "settings.json");
+	static AppSettings load(Workspace workspace) {
+		File f = new File(workspace.folder, "settings.json");
 		if (!f.exists())
 			return new AppSettings();
 		AppSettings as = Json.read(f, AppSettings.class);
@@ -58,17 +59,11 @@ public class AppSettings {
 
 	@Override
 	public AppSettings clone() {
-		AppSettings clone = new AppSettings();
-		clone.profile = profile;
-		clone.lang = lang;
-		clone.showDataSetXML = showDataSetXML;
-		clone.showDataSetDependencies = showDataSetDependencies;
-		clone.showContentDeclarations = showContentDeclarations;
-		clone.showQMetadata = showQMetadata;
-		clone.validationProfile = validationProfile;
-		clone.syncRefDataOnStartup = syncRefDataOnStartup;
-		clone.checkEPDsOnProductUpdates = checkEPDsOnProductUpdates;
-		return clone;
+		try {
+			return (AppSettings) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public void setValues(AppSettings from) {

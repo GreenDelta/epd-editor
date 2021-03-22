@@ -52,14 +52,14 @@ class FileTable {
 		table.getTable().setToolTipText(Tooltips.Source_LinksToExternalFiles);
 		table.setLabelProvider(new Label());
 		ColumnViewerToolTipSupport.enableFor(table);
-		Action[] actions = createActions(table);
+		Action[] actions = createActions();
 		Actions.bind(section, actions);
 		Actions.bind(table, actions);
 		table.setInput(fileRefs);
 		Tables.bindColumnWidths(table, 1.0);
 	}
 
-	private Action[] createActions(TableViewer table) {
+	private Action[] createActions() {
 		Action[] actions = new Action[2];
 		actions[0] = Actions.create(M.Add,
 				Icon.ADD.des(), this::add);
@@ -71,7 +71,7 @@ class FileTable {
 	private void add() {
 		FileDialog dialog = new FileDialog(UI.shell(), SWT.OPEN);
 		dialog.setText("Open file ...");
-		File dir = new File(App.store.getRootFolder(),
+		File dir = new File(App.store().getRootFolder(),
 				"external_docs");
 		if (!dir.exists()) {
 			dir.mkdirs();

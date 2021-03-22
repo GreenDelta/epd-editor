@@ -188,7 +188,7 @@ public class ExportDialog extends Wizard {
 					monitor.beginTask(M.SearchDependentDataSets,
 							IProgressMonitor.UNKNOWN);
 					all.clear();
-					new DependencyTraversal(App.store).on(ref, ds -> {
+					new DependencyTraversal(App.store()).on(ref, ds -> {
 						Ref next = Ref.of(ds);
 						monitor.subTask(App.header(next.name, 75));
 						all.add(next);
@@ -224,7 +224,7 @@ public class ExportDialog extends Wizard {
 					continue;
 				handled.add(ref.uuid);
 
-				IDataSet ds = App.store.get(
+				IDataSet ds = App.store().get(
 						ref.getDataSetClass(), ref.uuid);
 				if (ds == null)
 					continue;
@@ -239,7 +239,7 @@ public class ExportDialog extends Wizard {
 					continue;
 				}
 				File[] files = fileRefs.stream()
-						.map(fileRef -> App.store.getExternalDocument(fileRef))
+						.map(fileRef -> App.store().getExternalDocument(fileRef))
 						.filter(file -> file != null && file.exists())
 						.toArray(File[]::new);
 				zip.put(source, files);

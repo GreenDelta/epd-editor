@@ -9,7 +9,6 @@ import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.contacts.Contact;
-import org.openlca.ilcd.contacts.DataSetInfo;
 import org.openlca.ilcd.flowproperties.FlowProperty;
 import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.flows.FlowName;
@@ -73,82 +72,72 @@ public class DuplicateAction extends Action {
 		}
 	}
 
-	private IDataSet duplicate(String name) throws Exception {
-		switch (e.ref.type) {
-		case CONTACT:
-			return contact(name, e.ref);
-		case FLOW:
-			return flow(name, e.ref);
-		case FLOW_PROPERTY:
-			return flowProperty(name, e.ref);
-		case LCIA_METHOD:
-			return impactMethod(name, e.ref);
-		case PROCESS:
-			return process(name, e.ref);
-		case SOURCE:
-			return source(name, e.ref);
-		case UNIT_GROUP:
-			return unitGroup(name, e.ref);
-		default:
-			return null;
-		}
+	private IDataSet duplicate(String name) {
+		return switch (e.ref.type) {
+			case CONTACT -> contact(name, e.ref);
+			case FLOW -> flow(name, e.ref);
+			case FLOW_PROPERTY -> flowProperty(name, e.ref);
+			case LCIA_METHOD -> impactMethod(name, e.ref);
+			case PROCESS -> process(name, e.ref);
+			case SOURCE -> source(name, e.ref);
+			case UNIT_GROUP -> unitGroup(name, e.ref);
+			default -> null;
+		};
 	}
 
-	private Contact contact(String name, Ref ref) throws Exception {
-		Contact contact = App.store.get(Contact.class, ref.uuid);
-		DataSetInfo info = Contacts.dataSetInfo(contact);
+	private Contact contact(String name, Ref ref) {
+		Contact contact = App.store().get(Contact.class, ref.uuid);
+		var info = Contacts.dataSetInfo(contact);
 		info.uuid = UUID.randomUUID().toString();
 		LangString.set(info.name, name, App.lang());
 		return contact;
 	}
 
-	private Flow flow(String name, Ref ref) throws Exception {
-		Flow flow = App.store.get(Flow.class, ref.uuid);
-		org.openlca.ilcd.flows.DataSetInfo info = Flows.dataSetInfo(flow);
+	private Flow flow(String name, Ref ref) {
+		Flow flow = App.store().get(Flow.class, ref.uuid);
+		var info = Flows.dataSetInfo(flow);
 		info.uuid = UUID.randomUUID().toString();
 		FlowName flowName = Flows.flowName(flow);
 		LangString.set(flowName.baseName, name, App.lang());
 		return flow;
 	}
 
-	private FlowProperty flowProperty(String name, Ref ref) throws Exception {
-		FlowProperty property = App.store.get(FlowProperty.class, ref.uuid);
-		org.openlca.ilcd.flowproperties.DataSetInfo info = FlowProperties
-				.dataSetInfo(property);
+	private FlowProperty flowProperty(String name, Ref ref) {
+		FlowProperty property = App.store().get(FlowProperty.class, ref.uuid);
+		var info = FlowProperties.dataSetInfo(property);
 		info.uuid = UUID.randomUUID().toString();
 		LangString.set(info.name, name, App.lang());
 		return property;
 	}
 
-	private LCIAMethod impactMethod(String name, Ref ref) throws Exception {
-		LCIAMethod method = App.store.get(LCIAMethod.class, ref.uuid);
-		org.openlca.ilcd.methods.DataSetInfo info = Methods.dataSetInfo(method);
+	private LCIAMethod impactMethod(String name, Ref ref) {
+		LCIAMethod method = App.store().get(LCIAMethod.class, ref.uuid);
+		var info = Methods.dataSetInfo(method);
 		info.uuid = UUID.randomUUID().toString();
 		LangString.set(info.name, name, App.lang());
 		return method;
 	}
 
-	private Process process(String name, Ref ref) throws Exception {
-		Process process = App.store.get(Process.class, ref.uuid);
-		org.openlca.ilcd.processes.DataSetInfo info = Processes
-				.dataSetInfo(process);
+	private Process process(String name, Ref ref) {
+		Process process = App.store().get(Process.class, ref.uuid);
+		var info = Processes.dataSetInfo(process);
 		info.uuid = UUID.randomUUID().toString();
 		ProcessName processName = Processes.processName(process);
 		LangString.set(processName.name, name, App.lang());
 		return process;
 	}
 
-	private Source source(String name, Ref ref) throws Exception {
-		Source source = App.store.get(Source.class, ref.uuid);
-		org.openlca.ilcd.sources.DataSetInfo info = Sources.dataSetInfo(source);
+	private Source source(String name, Ref ref) {
+		Source source = App.store().get(Source.class, ref.uuid);
+		var info = Sources.dataSetInfo(source);
 		info.uuid = UUID.randomUUID().toString();
 		LangString.set(info.name, name, App.lang());
 		return source;
 	}
 
-	private UnitGroup unitGroup(String name, Ref ref) throws Exception {
-		UnitGroup group = App.store.get(UnitGroup.class, ref.uuid);
-		org.openlca.ilcd.units.DataSetInfo info = UnitGroups.dataSetInfo(group);
+	private UnitGroup unitGroup(String name, Ref ref) {
+		UnitGroup group = App.store().get(UnitGroup.class, ref.uuid);
+		var info = UnitGroups.dataSetInfo(group);
 		info.uuid = UUID.randomUUID().toString();
 		LangString.set(info.name, name, App.lang());
 		return group;

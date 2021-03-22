@@ -41,7 +41,7 @@ public class SourceEditor extends BaseEditor {
 		Editors.setTabTitle(input, this);
 		try {
 			RefEditorInput in = (RefEditorInput) input;
-			source = App.store.get(Source.class, in.ref.uuid);
+			source = App.store().get(Source.class, in.ref.uuid);
 			RefCheck.on(source);
 			initStructs();
 		} catch (Exception e) {

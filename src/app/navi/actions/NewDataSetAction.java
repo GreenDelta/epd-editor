@@ -1,7 +1,7 @@
 package app.navi.actions;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -45,13 +45,12 @@ import epd.model.Xml;
 public class NewDataSetAction extends Action {
 
 	private final NavigationElement parent;
-	private DataSetType type;
+	private final DataSetType type;
 
 	public NewDataSetAction(NavigationElement elem) {
-		if (elem instanceof RefElement)
-			parent = elem.getParent();
-		else
-			parent = elem;
+		parent = elem instanceof RefElement
+				? elem.getParent()
+				: elem;
 		type = getType(elem);
 		setImageDescriptor(Icon.des(type));
 		setText(getLabel());
@@ -74,24 +73,16 @@ public class NewDataSetAction extends Action {
 	private String getLabel() {
 		if (type == null)
 			return M.None;
-		switch (type) {
-		case CONTACT:
-			return M.NewContact;
-		case FLOW:
-			return M.NewProduct;
-		case FLOW_PROPERTY:
-			return M.NewFlowProperty;
-		case LCIA_METHOD:
-			return M.NewLCIAMethod;
-		case PROCESS:
-			return M.NewEPD;
-		case SOURCE:
-			return M.NewSource;
-		case UNIT_GROUP:
-			return M.NewUnitGroup;
-		default:
-			return M.None;
-		}
+		return switch (type) {
+		case CONTACT -> M.NewContact;
+		case FLOW -> M.NewProduct;
+		case FLOW_PROPERTY -> M.NewFlowProperty;
+		case LCIA_METHOD -> M.NewLCIAMethod;
+		case PROCESS -> M.NewEPD;
+		case SOURCE -> M.NewSource;
+		case UNIT_GROUP -> M.NewUnitGroup;
+		default -> M.None;
+		};
 	}
 
 	@Override
@@ -110,24 +101,16 @@ public class NewDataSetAction extends Action {
 	private IDataSet make() {
 		if (type == null)
 			return null;
-		switch (type) {
-		case CONTACT:
-			return makeContact();
-		case FLOW:
-			return makeFlow();
-		case FLOW_PROPERTY:
-			return makeFlowProperty();
-		case LCIA_METHOD:
-			return makeMethod();
-		case PROCESS:
-			return makeEpd();
-		case SOURCE:
-			return makeSource();
-		case UNIT_GROUP:
-			return makeUnitGroup();
-		default:
-			return null;
-		}
+		return switch (type) {
+		case CONTACT -> makeContact();
+		case FLOW -> makeFlow();
+		case FLOW_PROPERTY -> makeFlowProperty();
+		case LCIA_METHOD -> makeMethod();
+		case PROCESS -> makeEpd();
+		case SOURCE -> makeSource();
+		case UNIT_GROUP -> makeUnitGroup();
+		default -> null;
+		};
 	}
 
 	private Contact makeContact() {
@@ -190,7 +173,7 @@ public class NewDataSetAction extends Action {
 	}
 
 	private Process makeEpd() {
-		Process p = new Process();
+		var p = new Process();
 		p.version = "1.1";
 		with(Processes.dataSetInfo(p), info -> {
 			info.uuid = UUID.randomUUID().toString();
@@ -240,11 +223,11 @@ public class NewDataSetAction extends Action {
 	}
 
 	private Classification getClassification() {
-		List<Category> cats = new ArrayList<>();
+		var cats = new ArrayList<Category>();
 		categories(parent, cats);
 		if (cats.isEmpty())
 			return null;
-		Collections.sort(cats, (c1, c2) -> c1.level - c2.level);
+		cats.sort(Comparator.comparingInt(c -> c.level));
 		Classification c = new Classification();
 		c.categories.addAll(cats);
 		return c;
@@ -253,7 +236,7 @@ public class NewDataSetAction extends Action {
 	private void categories(NavigationElement elem, List<Category> list) {
 		if (!(elem instanceof CategoryElement))
 			return;
-		CategoryElement e = (CategoryElement) elem;
+		var e = (CategoryElement) elem;
 		if (e.getCategory() == null)
 			return;
 		list.add(e.getCategory());

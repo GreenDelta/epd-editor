@@ -57,9 +57,9 @@ public class ZipImport implements IRunnableWithProgress {
 			}
 			extDocs(monitor);
 			zip.close();
-			App.dumpIndex();
+			App.getWorkspace().saveIndex();
 			monitor.done();
-			App.runInUI("Refresh...", () -> new Sync(App.index).run());
+			App.runInUI("Refresh...", () -> new Sync(App.index()).run());
 			StatusView.open(M.Import, status);
 		} catch (Exception e) {
 			throw new InvocationTargetException(e, e.getMessage());
@@ -78,7 +78,7 @@ public class ZipImport implements IRunnableWithProgress {
 
 	private void run(Class<? extends IDataSet> type, IProgressMonitor monitor)
 			throws Exception {
-		File dir = App.store.getFolder(type);
+		File dir = App.store().getFolder(type);
 		if (!dir.exists())
 			dir.mkdirs();
 		monitor.subTask(dir.getName());
@@ -98,7 +98,7 @@ public class ZipImport implements IRunnableWithProgress {
 			Files.write(f.toPath(), data, StandardOpenOption.CREATE,
 					StandardOpenOption.TRUNCATE_EXISTING);
 			RefTrees.remove(ref);
-			App.index.add(ref, classes);
+			App.index().add(ref, classes);
 			status.add(RefStatus.ok(ref, M.Imported));
 			monitor.worked(1);
 		}
@@ -106,7 +106,7 @@ public class ZipImport implements IRunnableWithProgress {
 
 	private void extDocs(IProgressMonitor monitor) throws Exception {
 		monitor.subTask("external_docs");
-		File targetDir = new File(App.store.getRootFolder(), "external_docs");
+		File targetDir = new File(App.store().getRootFolder(), "external_docs");
 		if (!targetDir.exists())
 			targetDir.mkdirs();
 		for (Path doc : zip.getEntries("external_docs")) {

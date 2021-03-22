@@ -1,13 +1,11 @@
 package app.editors.profiles;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.ScrolledForm;
 
 import app.App;
 import app.M;
@@ -34,9 +32,9 @@ class Page extends FormPage {
 
 	@Override
 	protected void createFormContent(IManagedForm mform) {
-		FormToolkit tk = mform.getToolkit();
-		ScrolledForm form = UI.formHeader(mform, profile.name);
-		Composite body = UI.formBody(form, mform.getToolkit());
+		var tk = mform.getToolkit();
+		var form = UI.formHeader(mform, profile.name);
+		var body = UI.formBody(form, mform.getToolkit());
 		infoSection(tk, body);
 		new IndicatorTable(editor, profile).render(body, tk);
 		ModuleTable.of(profile).render(body, tk);
@@ -46,14 +44,17 @@ class Page extends FormPage {
 	private void infoSection(FormToolkit tk, Composite body) {
 		Composite comp = UI.formSection(body, tk, M.GeneralInformation);
 		UI.gridLayout(comp, 3);
+
 		// name
 		Text nameText = UI.formText(comp, tk, M.Name);
 		Texts.set(nameText, profile.name).setEditable(false);
 		UI.filler(comp);
+
 		// description
 		Text descrText = UI.formMultiText(comp, tk, M.Description);
 		Texts.set(descrText, profile.description).setEditable(false);
 		UI.filler(comp);
+
 		// reference data URL
 		Text urlText = UI.formText(comp, tk, M.ReferenceDataURL);
 		Texts.set(urlText, profile.referenceDataUrl);
@@ -62,7 +63,7 @@ class Page extends FormPage {
 			editor.setDirty();
 		});
 
-		Button button = tk.createButton(comp, M.DownloadDataSets, SWT.NONE);
+		var button = tk.createButton(comp, M.DownloadDataSets, SWT.NONE);
 		Controls.onSelect(button, e -> syncRefData(urlText.getText()));
 	}
 
@@ -80,7 +81,7 @@ class Page extends FormPage {
 			}
 			// show statistics + update navi, even if there was an error
 			if (sync.stats.size() > 0) {
-				new Sync(App.index).run();
+				new Sync(App.index()).run();
 				StatusView.open(M.DataSets + " @" + url, sync.stats);
 			}
 		});

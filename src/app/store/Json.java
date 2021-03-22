@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +21,9 @@ public final class Json {
 	}
 
 	public static void write(Object obj, File file) {
-		try (FileOutputStream fos = new FileOutputStream(file);
-				OutputStreamWriter writer = new OutputStreamWriter(fos,
-						"utf-8");
-				BufferedWriter buffer = new BufferedWriter(writer)) {
+		try (var fos = new FileOutputStream(file);
+				 var writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+				 var buffer = new BufferedWriter(writer)) {
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
 			String string = gson.toJson(obj);
 			buffer.write(string);
@@ -44,8 +44,7 @@ public final class Json {
 	}
 
 	public static <T> T read(InputStream stream, Class<T> clazz) {
-		try (InputStreamReader reader = new InputStreamReader(stream,
-				"utf-8")) {
+		try (var reader = new InputStreamReader(stream, StandardCharsets.UTF_8)) {
 			Gson gson = new Gson();
 			return gson.fromJson(reader, clazz);
 		} catch (Exception e) {

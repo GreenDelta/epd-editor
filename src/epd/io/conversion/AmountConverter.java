@@ -41,10 +41,7 @@ class AmountConverter {
 		String nsUri = element.getNamespaceURI();
 		if (!Objects.equals(nsUri, Vocab.NS_EPD))
 			return false;
-		if (!Objects.equals(element.getLocalName(), "amount"))
-			return false;
-		else
-			return true;
+		return Objects.equals(element.getLocalName(), "amount");
 	}
 
 	static Amount fromElement(Element element, EpdProfile profile) {
@@ -55,12 +52,8 @@ class AmountConverter {
 			String attName = attributes.item(m).getLocalName();
 			String attVal = attributes.item(m).getNodeValue();
 			switch (attName) {
-			case "module":
-				amount.module = profile.module(attVal);
-				break;
-			case "scenario":
-				amount.scenario = attVal;
-				break;
+				case "module" -> amount.module = profile.module(attVal);
+				case "scenario" -> amount.scenario = attVal;
 			}
 		}
 		return amount;

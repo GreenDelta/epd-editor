@@ -48,12 +48,12 @@ public class RefDataSync implements Runnable {
 		if (urls == null || urls.isEmpty())
 			return;
 		for (String url : urls) {
-			SodaConnection con = makeConnection(url);
+			var con = makeConnection(url);
 			if (con != null) {
 				doSync(con);
 			}
 		}
-		App.dumpIndex();
+		App.getWorkspace().saveIndex();
 	}
 
 	private SodaConnection makeConnection(String url) {
@@ -66,7 +66,7 @@ public class RefDataSync implements Runnable {
 			baseUrl = parts[0];
 			dataStock = parts[1].replace("/", "");
 		}
-		SodaConnection con = new SodaConnection();
+		var con = new SodaConnection();
 		con.dataStockId = dataStock;
 		con.url = baseUrl;
 		return con;
@@ -74,7 +74,7 @@ public class RefDataSync implements Runnable {
 
 	@SuppressWarnings("unchecked")
 	private void doSync(SodaConnection con) {
-		try (SodaClient client = new SodaClient(con)) {
+		try (var client = new SodaClient(con)) {
 			log.info("Connected to {} (datastock={})", con.url,
 					con.dataStockId);
 			Class<?>[] types = new Class<?>[] {
@@ -103,19 +103,18 @@ public class RefDataSync implements Runnable {
 			List<Descriptor> descriptors) {
 		for (Descriptor d : descriptors) {
 			Ref newRef = d.toRef();
-			Ref oldRef = App.index.find(newRef);
+			Ref oldRef = App.index().find(newRef);
 			if (!shouldDownload(newRef, oldRef)) {
 				stats.add(RefStatus.ok(oldRef, "No newer version on server"));
 				continue;
 			}
 			try {
-				Object obj = client.get(type, newRef.uuid);
-				if (!(obj instanceof IDataSet)) {
+				var ds = client.get(type, newRef.uuid);
+				if (ds == null) {
 					stats.add(RefStatus.error(newRef,
 							"The downloaded thing was not a data set"));
 					continue;
 				}
-				IDataSet ds = (IDataSet) obj;
 				Download.save(newRef, ds, stats);
 				if (ds instanceof Source) {
 					Download.extDocs((Source) ds, client, stats);

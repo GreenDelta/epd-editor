@@ -180,6 +180,7 @@ public class M extends NLS {
 	public static String ProductSystem;
 	public static String Products;
 	public static String Property;
+	public static String PublicationDate;
 	public static String PublicationAndOwnership;
 
 	public static String QuantitativeProperties;

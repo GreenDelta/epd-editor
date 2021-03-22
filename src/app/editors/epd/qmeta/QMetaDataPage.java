@@ -77,7 +77,7 @@ public class QMetaDataPage extends FormPage {
 	}
 
 	private List<QGroup> readConfig() {
-		File dir = new File(App.workspace, "q-metadata");
+		File dir = new File(App.workspaceFolder(), "q-metadata");
 		File file = new File(dir, "questions.json");
 		if (file.exists()) {
 			List<QGroup> config = QGroup.fromFile(file);
@@ -94,8 +94,7 @@ public class QMetaDataPage extends FormPage {
 		Composite comp = tk.createComposite(root);
 		UI.gridLayout(comp, 2, 10, 0);
 
-		QQuestion[] config = group.questions.toArray(
-				new QQuestion[group.questions.size()]);
+		QQuestion[] config = group.questions.toArray(new QQuestion[0]);
 		AtomicReference<QQuestion> selected = new AtomicReference<>(
 				qdata.getSelected(group));
 
@@ -160,9 +159,7 @@ public class QMetaDataPage extends FormPage {
 
 	private void multiChecks(QGroup group) {
 		Composite comp = UI.formSection(body, tk, group.name);
-		QQuestion[] config = group.questions.toArray(
-				new QQuestion[group.questions.size()]);
-
+		QQuestion[] config = group.questions.toArray(new QQuestion[0]);
 		for (int i = 0; i < config.length; i++) {
 			QQuestion question = qdata.getQuestion(config[i].id);
 			question.group = group.name;
@@ -180,11 +177,7 @@ public class QMetaDataPage extends FormPage {
 			button.setSelection(question.answer.yesNo != null
 					&& question.answer.yesNo);
 			Controls.onSelect(button, _e -> {
-				if (button.getSelection()) {
-					question.answer.yesNo = true;
-				} else {
-					question.answer.yesNo = false;
-				}
+				question.answer.yesNo = button.getSelection();
 				editor.setDirty();
 			});
 

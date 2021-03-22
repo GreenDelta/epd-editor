@@ -67,7 +67,7 @@ public class EpdEditor extends BaseEditor {
 			addPage(new InfoPage(this));
 			addPage(new ModelingPage(this));
 			addPage(new AdminPage(this));
-			addPage(new ModulePage(this));
+			addPage(new ResultPage(this));
 
 			// pages that are configurable via the settings
 			AppSettings settings = App.settings();

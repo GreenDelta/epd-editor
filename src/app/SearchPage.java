@@ -112,7 +112,7 @@ public class SearchPage extends FormEditor {
 
 		private void doIt() {
 			String term = text.getText().trim().toLowerCase();
-			Set<Ref> refs = App.index.getRefs();
+			Set<Ref> refs = App.index().getRefs();
 			List<Ref> filtered = new ArrayList<>();
 			for (Ref ref : refs) {
 				String name = LangString.getFirst(ref.name, App.lang());

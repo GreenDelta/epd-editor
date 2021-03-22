@@ -20,19 +20,20 @@ public final class Locations {
 	}
 
 	public static Set<Location> get() {
-		if (App.store == null)
+		if (App.store() == null)
 			return Collections.emptySet();
-		File folder = new File(App.store.getRootFolder(), "locations");
+		File folder = new File(App.store().getRootFolder(), "locations");
 		if (!folder.exists())
 			return Collections.emptySet();
 		HashSet<Location> set = new HashSet<>();
-		for (File file : folder.listFiles()) {
+		var files = folder.listFiles();
+		if (files == null)
+			return set;
+		for (File file : files) {
 			LocationList list = getList(file);
 			if (list == null)
 				continue;
-			for (Location loc : list.locations) {
-				set.add(loc);
-			}
+			set.addAll(list.locations);
 		}
 		return set;
 	}

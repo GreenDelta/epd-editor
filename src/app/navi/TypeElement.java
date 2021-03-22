@@ -25,9 +25,9 @@ public class TypeElement extends NavigationElement {
 		if (childs == null)
 			return;
 		childs.clear();
-		if (App.index == null)
+		if (App.index() == null)
 			return;
-		TypeNode node = App.index.getNode(type);
+		TypeNode node = App.index().getNode(type);
 		if (node == null)
 			return;
 		for (CategoryNode catNode : node.categories) {
@@ -49,26 +49,17 @@ public class TypeElement extends NavigationElement {
 	public String getLabel() {
 		if (type == null)
 			return "";
-		switch (type) {
-		case CONTACT:
-			return M.Contacts;
-		case EXTERNAL_FILE:
-			return M.ExternalFiles;
-		case FLOW:
-			return M.Flows;
-		case FLOW_PROPERTY:
-			return M.FlowProperties;
-		case LCIA_METHOD:
-			return M.LCIAMethods;
-		case PROCESS:
-			return M.EPDs;
-		case SOURCE:
-			return M.Sources;
-		case UNIT_GROUP:
-			return M.UnitGroups;
-		default:
-			return M.None;
-		}
+		return switch (type) {
+			case CONTACT -> M.Contacts;
+			case EXTERNAL_FILE -> M.ExternalFiles;
+			case FLOW -> M.Flows;
+			case FLOW_PROPERTY -> M.FlowProperties;
+			case LCIA_METHOD -> M.LCIAMethods;
+			case PROCESS -> M.EPDs;
+			case SOURCE -> M.Sources;
+			case UNIT_GROUP -> M.UnitGroups;
+			default -> M.None;
+		};
 	}
 
 	@Override

@@ -1,12 +1,14 @@
 package app.store;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -38,9 +40,9 @@ import epd.util.Strings;
 
 public final class EpdProfiles {
 
-	private static final String DEFAULT = "EN_15804_A2";
+	public static final String DEFAULT = "EN_15804_A2";
 
-	private static Map<String, EpdProfile> cache = new HashMap<>();
+	private static final Map<String, EpdProfile> cache = new HashMap<>();
 
 	private EpdProfiles() {
 	}
@@ -71,15 +73,14 @@ public final class EpdProfiles {
 		// id != DEFAULT and does not exist -> switch to default
 		if (!id.equals(DEFAULT)) {
 			App.settings().profile = DEFAULT;
-			App.settings().save();
+			App.settings().save(App.getWorkspace());
 			p = get(DEFAULT);
 			if (p != null)
 				return p;
 		}
 
 		// no DEFAULT profile in storage -> extract it
-		InputStream stream = EpdProfiles.class
-				.getResourceAsStream(DEFAULT + ".json");
+		var stream = EpdProfiles.class.getResourceAsStream(DEFAULT + ".json");
 		p = Json.read(stream, EpdProfile.class);
 		save(p);
 
@@ -101,7 +102,7 @@ public final class EpdProfiles {
 		if (p != null)
 			return p;
 		File f = file(id);
-		if (f == null || !f.exists())
+		if (!f.exists())
 			return null;
 		p = Json.read(f, EpdProfile.class);
 		sync(p);
@@ -119,13 +120,16 @@ public final class EpdProfiles {
 
 	/** Get all EPD profiles from the workspace. */
 	public static List<EpdProfile> getAll() {
-		getDefault(); // make sure that the default profile is loaded.
-		File dir = new File(App.workspace, "epd_profiles");
+		var defaultProfile = getDefault();
+		var dir = new File(App.workspaceFolder(), "epd_profiles");
 		if (!dir.exists())
-			return Collections.emptyList();
-		List<EpdProfile> profiles = new ArrayList<>();
-		for (File f : dir.listFiles()) {
-			EpdProfile p = Json.read(f, EpdProfile.class);
+			return  List.of(defaultProfile);
+		var profiles = new ArrayList<EpdProfile>();
+		var files = dir.listFiles();
+		if (files == null)
+			return List.of(defaultProfile);
+		for (var f : files) {
+			var p = Json.read(f, EpdProfile.class);
 			if (p != null) {
 				profiles.add(p);
 			}
@@ -149,16 +153,27 @@ public final class EpdProfiles {
 	/** Delete the profile with the given ID. */
 	public static void delete(String id) {
 		File file = file(id);
-		if (file == null || !file.exists())
+		if (!file.exists())
 			return;
-		file.delete();
-		cache.remove(id);
+		try {
+			Files.delete(file.toPath());
+		} catch (Exception e) {
+			var log = LoggerFactory.getLogger(EpdProfiles.class);
+			log.error("failed to delete EPD profile " + id, e);
+		} finally {
+			cache.remove(id);
+		}
 	}
 
 	private static File file(String id) {
-		File dir = new File(App.workspace, "epd_profiles");
+		File dir = new File(App.workspaceFolder(), "epd_profiles");
 		if (!dir.exists()) {
-			dir.mkdirs();
+			try {
+				Files.createDirectories(dir.toPath());
+			} catch (IOException e) {
+				throw new RuntimeException(
+					"failed to create profiles dir @" + dir, e);
+			}
 		}
 		return new File(dir, id + ".json");
 	}
@@ -182,8 +197,7 @@ public final class EpdProfiles {
 		return stats;
 	}
 
-	private static void syncRefs(Indicator i, List<RefStatus> stats)
-			throws Exception {
+	private static void syncRefs(Indicator i, List<RefStatus> stats) {
 		if (i == null)
 			return;
 		if (i.type == Type.LCI) {
@@ -191,7 +205,7 @@ public final class EpdProfiles {
 		} else {
 			stats.add(syncMethod(i));
 		}
-		UnitGroup ug = App.store.get(UnitGroup.class, i.unitGroupUUID);
+		UnitGroup ug = App.store().get(UnitGroup.class, i.unitGroupUUID);
 		if (ug == null) {
 			stats.add(RefStatus.error(i.getUnitGroupRef(App.lang()),
 					"Not found in local store"));
@@ -207,8 +221,8 @@ public final class EpdProfiles {
 		stats.add(RefStatus.info(uRef, "Found"));
 	}
 
-	private static RefStatus syncMethod(Indicator i) throws Exception {
-		LCIAMethod m = App.store.get(LCIAMethod.class, i.uuid);
+	private static RefStatus syncMethod(Indicator i) {
+		LCIAMethod m = App.store().get(LCIAMethod.class, i.uuid);
 		if (m == null) {
 			return RefStatus.error(i.getRef(App.lang()),
 					"Not found in local store");
@@ -218,8 +232,8 @@ public final class EpdProfiles {
 		}
 	}
 
-	private static RefStatus syncFlow(Indicator i) throws Exception {
-		Flow flow = App.store.get(Flow.class, i.uuid);
+	private static RefStatus syncFlow(Indicator i) {
+		Flow flow = App.store().get(Flow.class, i.uuid);
 		if (flow == null) {
 			return RefStatus.error(i.getRef(App.lang()),
 					"Not found in local store");
@@ -257,8 +271,8 @@ public final class EpdProfiles {
 				log.warn("Response code = {}", http.getResponseCode());
 				return;
 			}
-			try (InputStream in = con.getInputStream();
-					Reader reader = new InputStreamReader(in, "utf-8")) {
+			try (var in = con.getInputStream();
+					 var reader = new InputStreamReader(in, StandardCharsets.UTF_8)) {
 				JsonArray array = new Gson().fromJson(reader, JsonArray.class);
 				for (JsonElement elem : array) {
 					if (!elem.isJsonObject())

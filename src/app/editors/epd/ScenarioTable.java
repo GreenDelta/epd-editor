@@ -90,7 +90,7 @@ class ScenarioTable {
 		editor.setDirty();
 	}
 
-	private class LabelProvider extends BaseLabelProvider implements
+	private static class LabelProvider extends BaseLabelProvider implements
 			ITableLabelProvider {
 
 		@Override
@@ -108,16 +108,12 @@ class ScenarioTable {
 			Scenario scenario = (Scenario) obj;
 			if (scenario == null)
 				return "";
-			switch (col) {
-			case 0:
-				return scenario.name;
-			case 1:
-				return scenario.group;
-			case 2:
-				return scenario.description;
-			default:
-				return null;
-			}
+			return switch (col) {
+			case 0 -> scenario.name;
+			case 1 -> scenario.group;
+			case 2 -> scenario.description;
+			default -> null;
+			};
 		}
 	}
 
@@ -167,12 +163,17 @@ class ScenarioTable {
 
 		@Override
 		protected void setChecked(Scenario checked, boolean value) {
-			for (Scenario scenario : scenarios) {
-				if (Objects.equals(scenario, checked))
-					checked.defaultScenario = value;
-				else
+			if (checked == null)
+				return;
+			var group = checked.group;
+			for (var scenario : scenarios) {
+				if (Objects.equals(scenario, checked)) {
+					scenario.defaultScenario = value;
+				} else if (Objects.equals(group, scenario.group)) {
 					scenario.defaultScenario = false;
+				}
 			}
+			table.refresh();
 			editor.setDirty();
 		}
 	}

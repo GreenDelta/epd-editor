@@ -11,7 +11,7 @@ import epd.util.Strings;
 public class RefElement extends NavigationElement {
 
 	public Ref ref;
-	private NavigationElement parent;
+	private final NavigationElement parent;
 
 	public RefElement(NavigationElement parent, Ref ref) {
 		this.parent = parent;

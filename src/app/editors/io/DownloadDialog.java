@@ -2,7 +2,6 @@ package app.editors.io;
 
 import java.util.List;
 
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -56,7 +55,7 @@ public class DownloadDialog extends Wizard {
 			download.withDependencies = page.dependencyCheck.getSelection();
 			download.overwriteExisting = page.overwriteCheck.getSelection();
 			getContainer().run(true, false, download);
-			new Sync(App.index).run();
+			new Sync(App.index()).run();
 			StatusView.open(M.Download, download.status);
 			return true;
 		} catch (Exception e) {
@@ -74,7 +73,6 @@ public class DownloadDialog extends Wizard {
 	private class Page extends WizardPage {
 
 		private ConnectionCombo conCombo;
-		private TableViewer table;
 		private Button dependencyCheck;
 		private Button overwriteCheck;
 
@@ -109,7 +107,7 @@ public class DownloadDialog extends Wizard {
 		}
 
 		private void createTable(Composite comp) {
-			table = Tables.createViewer(comp, M.DataSet, "UUID", M.Version);
+			var table = Tables.createViewer(comp, M.DataSet, "UUID", M.Version);
 			table.setLabelProvider(new RefTableLabel());
 			Tables.bindColumnWidths(table, 0.6, 0.2, 0.2);
 			table.setInput(refs);

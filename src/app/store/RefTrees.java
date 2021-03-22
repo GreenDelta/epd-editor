@@ -59,7 +59,7 @@ public final class RefTrees {
 
 	private static File cacheFile(Ref ref) {
 		File dir = new File(
-				App.workspace,
+				App.workspaceFolder(),
 				"cache/refs/" + ref.type.name() + "");
 		if (!dir.exists()) {
 			dir.mkdirs();

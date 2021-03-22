@@ -4,7 +4,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
+import epd.index.Index;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -15,70 +15,62 @@ import org.openlca.ilcd.io.FileStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import epd.index.Index;
 import epd.util.Strings;
 
 public class App {
 
-	private static AppSettings settings;
+	private static AppSettings _settings;
 
-	public static FileStore store;
-	public static File workspace;
-	public static Index index;
+	private static Workspace _workspace;
 
-	public static void init() {
+	/**
+	 * Initializes the workspace and resources of the RCP application.
+	 */
+	public static void initRCP() {
 		try {
-			String prop = System.getProperty("user.home");
-			File userDir = new File(prop);
-			File dir = new File(userDir, ".epd-editor");
-			if (!dir.exists()) {
-				dir.mkdirs();
-				initData(dir);
-			}
+			_workspace = Workspace.openDefault();
 			Platform.getInstanceLocation().release();
-			URL workspaceUrl = new URL("file", null, dir.getAbsolutePath());
-			Platform.getInstanceLocation().set(workspaceUrl, true);
-			workspace = dir;
-			store = new FileStore(dir);
-			index = Index.load(new File(dir, "index.json"));
+			var url = new URL("file", null,
+				_workspace.folder.getAbsolutePath());
+			Platform.getInstanceLocation().set(url, true);
 		} catch (Exception e) {
-			Logger log = LoggerFactory.getLogger(App.class);
+			var log = LoggerFactory.getLogger(App.class);
 			log.error("failed to init App", e);
 		}
 	}
 
-	private static void initData(File workspace) {
-		File dataDir = new File("data");
-		if (!dataDir.exists() || !workspace.exists())
-			return;
-		try {
-			for (File f : dataDir.listFiles()) {
-				if (f.isFile()) {
-					FileUtils.copyFileToDirectory(f, workspace);
-				} else {
-					FileUtils.copyDirectoryToDirectory(f, workspace);
-				}
-			}
-		} catch (Exception e) {
-			Logger log = LoggerFactory.getLogger(App.class);
-			log.error("failed to init data folder @" + workspace, e);
+	public static FileStore store() {
+		return getWorkspace().store;
+	}
+
+	public static Index index() {
+		return getWorkspace().index;
+	}
+
+	public static File workspaceFolder() {
+		return getWorkspace().folder;
+	}
+
+	public static Workspace getWorkspace() {
+		if (_workspace == null) {
+			_workspace = Workspace.openDefault();
 		}
+		return _workspace;
 	}
 
 	public static AppSettings settings() {
-		if (settings == null)
-			settings = AppSettings.load();
-		return settings;
+		if (_settings == null) {
+			_settings = AppSettings.load(getWorkspace());
+		}
+		return _settings;
+	}
+
+	public static synchronized void updateIndex(Index index) {
+		_workspace = getWorkspace().updateIndex(index);
 	}
 
 	public static String lang() {
 		return settings().lang;
-	}
-
-	public static void dumpIndex() {
-		Logger log = LoggerFactory.getLogger(App.class);
-		log.info("update index file");
-		index.dump(new File(workspace, "index.json"));
 	}
 
 	public static String s(List<LangString> strings) {
@@ -130,7 +122,7 @@ public class App {
 		if (p == null)
 			return;
 		IProgressService progress = PlatformUI.getWorkbench()
-				.getProgressService();
+			.getProgressService();
 		try {
 			progress.run(true, true, p);
 			if (uiFn != null) {

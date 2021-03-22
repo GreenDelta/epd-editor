@@ -1,16 +1,19 @@
 package app.editors.epd;
 
+import java.time.LocalDate;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import app.util.Controls;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.commons.Time;
 import org.openlca.ilcd.processes.DataSetInfo;
 import org.openlca.ilcd.processes.Exchange;
 import org.openlca.ilcd.processes.Location;
@@ -36,7 +39,7 @@ import epd.util.Strings;
 class InfoPage extends FormPage {
 
 	private final EpdEditor editor;
-	private final EpdDataSet dataSet;
+	private final EpdDataSet epd;
 	private final Process process;
 
 	private FormToolkit tk;
@@ -44,8 +47,8 @@ class InfoPage extends FormPage {
 	public InfoPage(EpdEditor editor) {
 		super(editor, "EpdInfoPage", M.DataSetInformation);
 		this.editor = editor;
-		dataSet = editor.dataSet;
-		process = dataSet.process;
+		epd = editor.dataSet;
+		process = epd.process;
 	}
 
 	@Override
@@ -103,7 +106,7 @@ class InfoPage extends FormPage {
 				M.DeclaredProduct, Tooltips.EPD_DeclaredProduct);
 		UI.formLabel(comp, tk, M.Product, Tooltips.EPD_DeclaredProduct);
 		RefLink refText = new RefLink(comp, tk, DataSetType.FLOW);
-		Exchange exchange = dataSet.productExchange();
+		Exchange exchange = epd.productExchange();
 		refText.setRef(exchange.flow);
 		Text amountText = UI.formText(comp, tk,
 				M.Amount, Tooltips.EPD_ProductAmount);
@@ -132,10 +135,10 @@ class InfoPage extends FormPage {
 	private void createSafetyMarginsSection(Composite parent, TextBuilder tb) {
 		Composite comp = UI.formSection(parent, tk,
 				M.SafetyMargins, Tooltips.EPD_UncertaintyMargins);
-		SafetyMargins margins = dataSet.safetyMargins;
+		SafetyMargins margins = epd.safetyMargins;
 		if (margins == null) {
 			margins = new SafetyMargins();
-			dataSet.safetyMargins = margins;
+			epd.safetyMargins = margins;
 		}
 		Text marginsText = UI.formText(comp, tk,
 				M.SafetyMargin, Tooltips.EPD_UncertaintyMargins);
@@ -150,7 +153,7 @@ class InfoPage extends FormPage {
 
 	private void modifyMargins(Text text) {
 		String t = text.getText();
-		SafetyMargins margins = dataSet.safetyMargins;
+		SafetyMargins margins = epd.safetyMargins;
 		if (Strings.nullOrEmpty(t)) {
 			margins.margins = null;
 			editor.setDirty();
@@ -185,16 +188,31 @@ class InfoPage extends FormPage {
 	}
 
 	private void createTimeSection(Composite body, TextBuilder tb) {
-		Time time = Processes.time(process);
-		Composite comp = UI.formSection(body, tk, M.Time, Tooltips.EPD_Time);
+		var time = Processes.time(process);
+		var comp = UI.formSection(body, tk, M.Time, Tooltips.EPD_Time);
 		intText(comp, M.ReferenceYear, Tooltips.EPD_ReferenceYear,
-				time.referenceYear, val -> {
-					time.referenceYear = val;
-				});
+				time.referenceYear, val -> time.referenceYear = val);
 		intText(comp, M.ValidUntil, Tooltips.EPD_ValidUntil,
-				time.validUntil, val -> {
-					time.validUntil = val;
-				});
+				time.validUntil, val -> time.validUntil = val);
+
+		// publication date
+		tk.createLabel(comp, M.PublicationDate);
+		var dateBox = new DateTime(comp, SWT.DATE | SWT.DROP_DOWN);
+		if (epd.publicationDate != null) {
+			var pd = epd.publicationDate;
+			dateBox.setDate(
+				pd.getYear(),
+				pd.getMonthValue() - 1,
+				pd.getDayOfMonth());
+		}
+		dateBox.addSelectionListener(Controls.onSelect(_e -> {
+			epd.publicationDate = LocalDate.of(
+				dateBox.getYear(),
+				dateBox.getMonth() + 1,
+				dateBox.getDay());
+			editor.setDirty();
+		}));
+
 		tb.multiText(comp, M.TimeDescription,
 				Tooltips.EPD_TimeDescription, time.description);
 	}

@@ -1,10 +1,13 @@
 package epd.model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.QuantitativeReferenceType;
+import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.processes.Exchange;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.ProcessName;
@@ -16,20 +19,37 @@ import epd.model.qmeta.QMetaData;
 
 public class EpdDataSet {
 
-	public Process process;
+	public final Process process;
 	public String profile;
 	public SubType subType;
+	public LocalDate publicationDate;
+
 	public SafetyMargins safetyMargins;
-	public final List<IndicatorResult> results = new ArrayList<>();
-	public final List<ModuleEntry> moduleEntries = new ArrayList<>();
-	public final List<Scenario> scenarios = new ArrayList<>();
 	public ContentDeclaration contentDeclaration;
 	public QMetaData qMetaData;
 
+	public final List<IndicatorResult> results = new ArrayList<>();
+	public final List<ModuleEntry> moduleEntries = new ArrayList<>();
+	public final List<Scenario> scenarios = new ArrayList<>();
+
+	public final List<Ref> publishers = new ArrayList<>();
+	public final List<Ref> originalEPDs = new ArrayList<>();
+
+	public EpdDataSet(Process process) {
+		this.process = Objects.requireNonNull(process);
+	}
+
+	public EpdDataSet() {
+		this(new Process());
+	}
+
 	public IndicatorResult getResult(Indicator indicator) {
-		for (IndicatorResult result : results)
-			if (result.indicator == indicator)
+		if (indicator == null)
+			return null;
+		for (var result : results) {
+			if (Objects.equals(result.indicator, indicator))
 				return result;
+		}
 		return null;
 	}
 
@@ -46,25 +66,44 @@ public class EpdDataSet {
 
 	@Override
 	public EpdDataSet clone() {
-		EpdDataSet clone = new EpdDataSet();
+		var clone = new EpdDataSet(process.clone());
 		clone.profile = profile;
 		clone.subType = subType;
-		if (process != null)
-			clone.process = process.clone();
-		if (safetyMargins != null)
-			clone.safetyMargins = safetyMargins.clone();
-		for (IndicatorResult r : results)
-			clone.results.add(r.clone());
-		for (ModuleEntry e : moduleEntries)
-			clone.moduleEntries.add(e.clone());
-		for (Scenario s : scenarios)
-			clone.scenarios.add(s.clone());
-		if (contentDeclaration != null) {
-			clone.contentDeclaration = contentDeclaration.clone();
+
+		if (publicationDate != null) {
+			clone.publicationDate = LocalDate.of(
+					publicationDate.getYear(),
+					publicationDate.getMonthValue(),
+					publicationDate.getDayOfMonth());
 		}
-		if (qMetaData != null) {
-			clone.qMetaData = qMetaData.clone();
+
+		clone.safetyMargins = safetyMargins != null
+				? safetyMargins.clone()
+				: null;
+		clone.contentDeclaration = contentDeclaration != null
+				? contentDeclaration.clone()
+				: null;
+		clone.qMetaData = qMetaData != null
+				? qMetaData.clone()
+				: null;
+
+		for (var result : results) {
+			clone.results.add(result.clone());
 		}
+		for (var entry : moduleEntries) {
+			clone.moduleEntries.add(entry.clone());
+		}
+		for (var scenario : scenarios) {
+			clone.scenarios.add(scenario.clone());
+		}
+
+		for (var ref : publishers) {
+			clone.publishers.add(ref.clone());
+		}
+		for (var ref : originalEPDs) {
+			clone.originalEPDs.add(ref.clone());
+		}
+
 		return clone;
 	}
 

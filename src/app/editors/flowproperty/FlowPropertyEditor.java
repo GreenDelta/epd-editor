@@ -42,7 +42,7 @@ public class FlowPropertyEditor extends BaseEditor {
 		Editors.setTabTitle(input, this);
 		try {
 			RefEditorInput in = (RefEditorInput) input;
-			property = App.store.get(FlowProperty.class, in.ref.uuid);
+			property = App.store().get(FlowProperty.class, in.ref.uuid);
 			RefCheck.on(property);
 			initStructs();
 		} catch (Exception e) {

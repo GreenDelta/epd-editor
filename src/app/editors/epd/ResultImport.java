@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -29,26 +30,20 @@ import epd.util.Strings;
 /**
  * Imports module results from an Excel file.
  */
-class ModuleResultImport implements Runnable {
+class ResultImport implements Runnable {
 
-	private Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
-	private EpdDataSet dataSet;
-	private File excelFile;
-	private boolean success;
+	private final EpdDataSet dataSet;
+	private final File excelFile;
 
-	public ModuleResultImport(EpdDataSet dataSet, File excelFile) {
+	public ResultImport(EpdDataSet dataSet, File excelFile) {
 		this.dataSet = dataSet;
 		this.excelFile = excelFile;
 	}
 
-	public boolean isDoneWithSuccess() {
-		return success;
-	}
-
 	@Override
 	public void run() {
-		success = false;
 		log.trace("import results for {} from {}", dataSet, excelFile);
 		try (FileInputStream fis = new FileInputStream(excelFile)) {
 			Workbook workbook = WorkbookFactory.create(fis);
@@ -56,7 +51,6 @@ class ModuleResultImport implements Runnable {
 			List<IndicatorResult> results = readRows(sheet);
 			dataSet.results.clear();
 			dataSet.results.addAll(results);
-			success = true;
 		} catch (Exception e) {
 			log.error("failed to import results from file " + excelFile, e);
 		}
@@ -158,16 +152,15 @@ class ModuleResultImport implements Runnable {
 	private String getString(Cell cell) {
 		if (cell == null)
 			return null;
-		if (cell.getCellType() != Cell.CELL_TYPE_STRING)
-			return null;
-		else
-			return cell.getStringCellValue();
+		return cell.getCellTypeEnum() != CellType.STRING
+				? null
+				: cell.getStringCellValue();
 	}
 
 	private Double getDouble(Cell cell) {
 		if (cell == null
-				|| cell.getCellType() == Cell.CELL_TYPE_STRING
-				|| cell.getCellType() == Cell.CELL_TYPE_BLANK)
+				|| cell.getCellTypeEnum() == CellType.STRING
+				|| cell.getCellTypeEnum() == CellType.BLANK)
 			return null;
 		try {
 			return cell.getNumericCellValue();

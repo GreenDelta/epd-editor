@@ -19,7 +19,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.HyperlinkSettings;
 import org.eclipse.ui.forms.IManagedForm;
@@ -64,7 +63,7 @@ public class UI {
 		link.setImage(Icon.DOCUMENT.img());
 		link.setToolTipText(Tooltips.All_File);
 		Ref ref = Ref.of(ds);
-		File f = App.store.getFile(ref);
+		File f = App.store().getFile(ref);
 		if (f == null || !f.exists())
 			return;
 		String path = f.getAbsolutePath();
@@ -89,14 +88,14 @@ public class UI {
 		// first, we try to get the shell from the active workbench window
 		Shell shell = null;
 		try {
-			IWorkbenchWindow wb = PlatformUI.getWorkbench()
+			var wb = PlatformUI.getWorkbench()
 					.getActiveWorkbenchWindow();
 			if (wb != null) {
 				shell = wb.getShell();
 			}
 			if (shell != null)
 				return shell;
-		} catch (Exception e) {
+		} catch (Exception ignored) {
 		}
 
 		// then, try to get it from the display
@@ -137,8 +136,7 @@ public class UI {
 			return null;
 		FontData fd = control.getFont().getFontData()[0];
 		fd.setStyle(SWT.ITALIC);
-		Font font = new Font(control.getDisplay(), fd);
-		return font;
+		return new Font(control.getDisplay(), fd);
 	}
 
 	public static void applyItalicFont(Control control) {
@@ -193,8 +191,7 @@ public class UI {
 			String label, String tooltip) {
 		Section section = section(comp, tk, label);
 		section.setToolTipText(tooltip);
-		Composite client = sectionClient(section, tk);
-		return client;
+		return sectionClient(section, tk);
 	}
 
 	public static Section section(Composite parent, FormToolkit tk,

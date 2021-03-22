@@ -2,7 +2,7 @@ package app.editors.epd;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,23 +41,23 @@ import epd.model.ModuleEntry;
 import epd.model.Scenario;
 import epd.util.Strings;
 
-class ModulePage extends FormPage {
+class ResultPage extends FormPage {
 
-	private EpdEditor editor;
+	private final EpdEditor editor;
 	private FormToolkit toolkit;
 
-	private List<ModuleEntry> modules;
-	private EpdDataSet dataSet;
+	private final List<ModuleEntry> modules;
+	private final EpdDataSet epd;
 	private ScenarioTable scenarioTable;
 	private TableViewer moduleTable;
-	private ModuleResultTable resultTable;
+	private ResultTable resultTable;
 
-	public ModulePage(EpdEditor editor) {
+	public ResultPage(EpdEditor editor) {
 		super(editor, "ModulesPage", M.EnvironmentalIndicators);
 		this.editor = editor;
-		dataSet = editor.dataSet;
-		modules = dataSet.moduleEntries;
-		Collections.sort(modules, (e1, e2) -> {
+		epd = editor.dataSet;
+		modules = epd.moduleEntries;
+		modules.sort((e1, e2) -> {
 			Module m1 = e1.module;
 			Module m2 = e2.module;
 			if (Objects.equals(m1, m2))
@@ -93,11 +93,11 @@ class ModulePage extends FormPage {
 		for (int i = 0; i < profiles.size(); i++) {
 			EpdProfile p = profiles.get(i);
 			items[i] = p.name != null ? p.name : "?";
-			if (Objects.equals(p.id, dataSet.profile)) {
+			if (Objects.equals(p.id, epd.profile)) {
 				selected = i;
-			} else if (dataSet.profile == null && EpdProfiles.isDefault(p)) {
+			} else if (epd.profile == null && EpdProfiles.isDefault(p)) {
 				selected = i;
-				dataSet.profile = p.id;
+				epd.profile = p.id;
 			}
 		}
 		combo.setItems(items);
@@ -108,7 +108,7 @@ class ModulePage extends FormPage {
 			int i = combo.getSelectionIndex();
 			EpdProfile p = profiles.get(i);
 			if (p != null) {
-				dataSet.profile = p.id;
+				epd.profile = p.id;
 				editor.setDirty();
 			}
 		});
@@ -149,10 +149,10 @@ class ModulePage extends FormPage {
 
 	private Action[] createModuleActions() {
 		Action[] actions = new Action[2];
-		actions[0] = Actions.create(M.Add, Icon.ADD.des(),
-				() -> createModule());
-		actions[1] = Actions.create(M.Remove, Icon.DELETE.des(),
-				() -> removeModule());
+		actions[0] = Actions.create(
+			M.Add, Icon.ADD.des(), this::createModule);
+		actions[1] = Actions.create(
+			M.Remove, Icon.DELETE.des(), this::removeModule);
 		return actions;
 	}
 
@@ -194,13 +194,13 @@ class ModulePage extends FormPage {
 		editor.setDirty();
 	}
 
-	private ModuleResultTable createResultSection(Composite body) {
+	private ResultTable createResultSection(Composite body) {
 		Section section = UI.section(body, toolkit, M.Results);
 		section.setToolTipText(Tooltips.EPD_Results);
 		UI.gridData(section, true, true);
 		Composite composite = UI.sectionClient(section, toolkit);
 		UI.gridLayout(composite, 1);
-		ModuleResultTable table = new ModuleResultTable(editor, dataSet);
+		var table = new ResultTable(editor, epd);
 		table.create(composite);
 		Actions.bind(section, createResultActions());
 		return table;
@@ -210,14 +210,14 @@ class ModulePage extends FormPage {
 		Action[] actions = new Action[3];
 		actions[0] = Actions.create(M.SynchronizeWithModules,
 				Icon.CHECK_TRUE.des(), () -> {
-					new ModuleResultSync(dataSet).run();
+					new ResultSync(epd).run();
 					resultTable.refresh();
 					editor.setDirty();
 				});
-		actions[1] = Actions.create(M.Export, Icon.EXPORT.des(),
-				() -> exportResults());
-		actions[2] = Actions.create(M.Import, Icon.IMPORT.des(),
-				() -> importResults());
+		actions[1] = Actions.create(
+			M.Export, Icon.EXPORT.des(), this::exportResults);
+		actions[2] = Actions.create(
+			M.Import, Icon.IMPORT.des(), this::importResults);
 		return actions;
 	}
 
@@ -225,7 +225,7 @@ class ModulePage extends FormPage {
 		File file = FileChooser.save("results.xlsx", "*.xlsx");
 		if (file == null)
 			return;
-		ModuleResultExport export = new ModuleResultExport(dataSet, file);
+		ResultExport export = new ResultExport(epd, file);
 		App.run(M.Export, export, () -> {
 			if (export.isDoneWithSuccess())
 				return;
@@ -238,7 +238,7 @@ class ModulePage extends FormPage {
 		File file = FileChooser.open("*.xlsx");
 		if (file == null)
 			return;
-		ModuleResultImport resultImport = new ModuleResultImport(dataSet, file);
+		ResultImport resultImport = new ResultImport(epd, file);
 		App.run(M.Import, resultImport, () -> {
 			resultTable.refresh();
 			moduleTable.refresh();
@@ -248,15 +248,15 @@ class ModulePage extends FormPage {
 	}
 
 	private Module[] modules() {
-		EpdProfile profile = EpdProfiles.get(dataSet.profile);
+		EpdProfile profile = EpdProfiles.get(epd.profile);
 		if (profile == null)
 			profile = EpdProfiles.getDefault();
 		List<Module> modules = profile.modules;
-		modules.sort((m1, m2) -> m1.index - m2.index);
-		return modules.toArray(new Module[modules.size()]);
+		modules.sort(Comparator.comparingInt(m -> m.index));
+		return modules.toArray(new Module[0]);
 	}
 
-	private class ModuleLabel extends LabelProvider implements
+	private static class ModuleLabel extends LabelProvider implements
 			ITableLabelProvider {
 
 		@Override
@@ -270,18 +270,13 @@ class ModulePage extends FormPage {
 				return null;
 			ModuleEntry entry = (ModuleEntry) element;
 			Module module = entry.module;
-			switch (col) {
-			case 0:
-				return module != null ? module.name : null;
-			case 1:
-				return entry.scenario;
-			case 2:
-				return "";
-			case 3:
-				return entry.description;
-			default:
-				return null;
-			}
+			return switch (col) {
+				case 0 -> module != null ? module.name : null;
+				case 1 -> entry.scenario;
+				case 2 -> "";
+				case 3 -> entry.description;
+				default -> null;
+			};
 		}
 
 	}
@@ -325,7 +320,7 @@ class ModulePage extends FormPage {
 
 		@Override
 		protected String[] getItems(ModuleEntry element) {
-			List<Scenario> scenarios = dataSet.scenarios;
+			List<Scenario> scenarios = epd.scenarios;
 			String[] names = new String[scenarios.size()];
 			for (int i = 0; i < scenarios.size(); i++)
 				names[i] = scenarios.get(i).name;

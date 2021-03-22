@@ -64,43 +64,31 @@ public class FolderElement extends NavigationElement {
 	}
 
 	public File getFolder() {
-		FileStore store = App.store;
-		File root = null;
-		if (store == null)
-			root = new File("data/ILCD");
-		else
-			root = store.getRootFolder();
+		FileStore store = App.store();
+		File root = store == null
+			? new File("data/ILCD")
+			: store.getRootFolder();
 		return new File(root, getFolderName());
 	}
 
 	public String getFileExtension() {
 		if (type == null)
 			return "*.*";
-		switch (type) {
-		case CLASSIFICATION:
+		if (type == FolderType.CLASSIFICATION) {
 			return "*.xml";
-		case DOC:
-			return "*.*";
-		case LOCATION:
-			return "*.*";
-		default:
-			return "*.*";
 		}
+		return "*.*";
 	}
 
 	private String getFolderName() {
 		if (type == null)
 			return "other";
-		switch (type) {
-		case CLASSIFICATION:
-			return "classifications";
-		case LOCATION:
-			return "locations";
-		case DOC:
-			return "external_docs";
-		default:
-			return "other";
-		}
+		return switch (type) {
+			case CLASSIFICATION -> "classifications";
+			case LOCATION -> "locations";
+			case DOC -> "external_docs";
+			default -> "other";
+		};
 	}
 
 }

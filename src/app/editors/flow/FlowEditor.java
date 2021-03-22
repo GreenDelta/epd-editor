@@ -38,7 +38,7 @@ public class FlowEditor extends BaseEditor {
 		Editors.setTabTitle(input, this);
 		try {
 			RefEditorInput in = (RefEditorInput) input;
-			Flow flow = App.store.get(Flow.class, in.ref.uuid);
+			Flow flow = App.store().get(Flow.class, in.ref.uuid);
 			RefCheck.on(flow);
 			product = FlowExtensions.read(flow);
 		} catch (Exception e) {

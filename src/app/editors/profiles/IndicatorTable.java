@@ -3,6 +3,8 @@ package app.editors.profiles;
 import java.util.ArrayList;
 import java.util.List;
 
+import app.editors.Editors;
+import app.util.Viewers;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -10,7 +12,6 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.Section;
 
 import app.App;
 import app.M;
@@ -24,6 +25,7 @@ import epd.model.EpdProfile;
 import epd.model.Indicator;
 import epd.model.Indicator.Type;
 import epd.model.RefStatus;
+import org.openlca.ilcd.commons.DataSetType;
 
 class IndicatorTable {
 
@@ -37,14 +39,26 @@ class IndicatorTable {
 	}
 
 	void render(Composite body, FormToolkit tk) {
-		Section section = UI.section(body, tk, M.EnvironmentalIndicators);
-		Composite comp = UI.sectionClient(section, tk);
+		var section = UI.section(body, tk, M.EnvironmentalIndicators);
+		var comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
 		table = Tables.createViewer(comp, M.Indicator,
-				M.DataSetReference, M.UnitReference);
+			M.DataSetReference, M.UnitReference);
 		Tables.bindColumnWidths(table, 0.4, 0.3, 0.3);
 		table.setLabelProvider(new Label());
 		table.setInput(profile.indicators);
+
+		Tables.onDoubleClick(table, $ -> {
+			Indicator indicator = Viewers.getFirstSelected(table);
+			if (indicator == null)
+				return;
+			var ref = indicator.getRef(App.lang());
+			var indexRef = App.index().find(ref);
+			if (indexRef != null) {
+				Editors.open(indexRef);
+			}
+		});
+
 		Sync sync = new Sync();
 		Actions.bind(section, sync);
 		Actions.bind(table, sync);
@@ -63,23 +77,34 @@ class IndicatorTable {
 			App.run(M.Synchronize, () -> {
 				List<RefStatus> stats = EpdProfiles.sync(profile);
 				stats.stream()
-						.filter(stat -> stat.value == RefStatus.ERROR)
-						.forEach(stat -> errors.add(stat));
+					.filter(stat -> stat.value == RefStatus.ERROR)
+					.forEach(errors::add);
 			}, () -> {
 				table.setInput(profile.indicators);
 				editor.setDirty();
 				if (!errors.isEmpty()) {
 					StatusView.open(M.Error + ": "
-							+ profile.name, errors);
+													+ profile.name, errors);
 				}
 			});
 		}
 	}
 
-	private class Label extends LabelProvider implements ITableLabelProvider {
+	private static class Label extends LabelProvider
+		implements ITableLabelProvider {
 
 		@Override
 		public Image getColumnImage(Object obj, int col) {
+			if (!(obj instanceof Indicator))
+				return null;
+			if (col == 2)
+				return Icon.UNIT.img();
+			if (col == 1) {
+				var indicator = (Indicator) obj;
+				return indicator.type == Type.LCI
+					? Icon.img(DataSetType.FLOW)
+					: Icon.img(DataSetType.LCIA_METHOD);
+			}
 			return null;
 		}
 
@@ -87,20 +112,18 @@ class IndicatorTable {
 		public String getColumnText(Object obj, int col) {
 			if (!(obj instanceof Indicator))
 				return null;
-			Indicator indicator = (Indicator) obj;
-			switch (col) {
-			case 0:
-				return indicator.name;
-			case 1:
-				String type = indicator.type == Type.LCI
+			var indicator = (Indicator) obj;
+			return switch (col) {
+				case 0 -> indicator.name;
+				case 1 -> {
+					String type = indicator.type == Type.LCI
 						? M.Flow
 						: M.LCIAMethod;
-				return type + ": " + indicator.uuid;
-			case 2:
-				return indicator.unit + ": " + indicator.unitGroupUUID;
-			default:
-				return null;
-			}
+					yield type + ": " + indicator.uuid;
+				}
+				case 2 -> indicator.unit;
+				default -> null;
+			};
 		}
 
 	}

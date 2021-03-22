@@ -33,12 +33,10 @@ import epd.util.ExtensionRefs;
 
 public class ValidationDialog extends Wizard {
 
-	private Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	private final Ref ref;
 	private final List<Ref> allRefs = new ArrayList<>();
-
-	private Page page;
 
 	private ValidationDialog(Ref ref) {
 		this.ref = ref;
@@ -98,8 +96,7 @@ public class ValidationDialog extends Wizard {
 
 	@Override
 	public void addPages() {
-		page = new Page();
-		addPage(page);
+		addPage(new Page());
 	}
 
 	private class Page extends WizardPage {
@@ -148,7 +145,7 @@ public class ValidationDialog extends Wizard {
 					monitor.beginTask(M.SearchDependentDataSets,
 							IProgressMonitor.UNKNOWN);
 					allRefs.clear();
-					new DependencyTraversal(App.store).on(ref, ds -> {
+					new DependencyTraversal(App.store()).on(ref, ds -> {
 						Ref next = Ref.of(ds);
 						monitor.subTask(App.header(next.name, 75));
 						allRefs.add(next);

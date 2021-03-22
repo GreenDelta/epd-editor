@@ -1,5 +1,6 @@
 package app.editors.flow;
 
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.jface.viewers.ITableFontProvider;
@@ -56,10 +57,18 @@ class FlowPropertySection {
 		UI.gridLayout(comp, 1);
 		table = Tables.createViewer(comp,
 				M.FlowProperty, M.ConversionFactor, M.Unit);
-		table.getTable().setToolTipText(Tooltips.Flow_FlowProperties);
 		table.setLabelProvider(new Label());
 		table.setInput(Flows.getFlowProperties(flow));
 		Tables.bindColumnWidths(table, 0.4, 0.3, 0.3);
+
+		// set tooltip texts
+		var swtTable = table.getTable();
+		swtTable.setToolTipText(Tooltips.Flow_FlowProperties);
+		for (var col : swtTable.getColumns()) {
+			col.setToolTipText(Tooltips.Flow_FlowProperties);
+		}
+
+		// add actions
 		bindActions(section);
 		var modifier = new ModifySupport<FlowPropertyRef>(table);
 		modifier.onDouble(M.ConversionFactor, propRef -> propRef.meanValue,
@@ -85,7 +94,7 @@ class FlowPropertySection {
 	}
 
 	private void add() {
-		Ref ref = RefSelectionDialog.select(DataSetType.FLOW_PROPERTY);
+		var ref = RefSelectionDialog.select(DataSetType.FLOW_PROPERTY);
 		if (ref == null)
 			return;
 		var propRef = new FlowPropertyRef();
@@ -124,8 +133,8 @@ class FlowPropertySection {
 			flow.flowPropertyList = null;
 		}
 		var qRef = Flows.getQuantitativeReference(flow);
-		if (qRef != null
-				&& qRef.referenceFlowProperty == propRef.dataSetInternalID) {
+		if (qRef != null && Objects.equals(
+			qRef.referenceFlowProperty, propRef.dataSetInternalID)) {
 			qRef.referenceFlowProperty = null;
 		}
 		table.setInput(Flows.getFlowProperties(flow));
@@ -180,7 +189,7 @@ class FlowPropertySection {
 			if (qRef == null)
 				return null;
 			var ref = (FlowPropertyRef) obj;
-			return ref.dataSetInternalID == qRef.referenceFlowProperty
+			return Objects.equals(ref.dataSetInternalID, qRef.referenceFlowProperty)
 					? UI.boldFont()
 					: null;
 		}

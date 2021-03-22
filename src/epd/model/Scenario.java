@@ -1,6 +1,8 @@
 package epd.model;
 
-public class Scenario {
+import java.util.Objects;
+
+public final class Scenario implements Cloneable {
 
 	public String name;
 	public boolean defaultScenario;
@@ -8,12 +10,32 @@ public class Scenario {
 	public String description;
 
 	@Override
+	public String toString() {
+		return "Scenario {name=" + name + ", group=" + group + "}";
+	}
+
+	@Override
 	public Scenario clone() {
-		Scenario clone = new Scenario();
-		clone.name = name;
-		clone.defaultScenario = defaultScenario;
-		clone.group = group;
-		clone.description = description;
-		return clone;
+		try {
+			return (Scenario) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		var other = (Scenario) o;
+		return Objects.equals(name, other.name)
+				&& Objects.equals(group, other.group);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(name, group);
 	}
 }

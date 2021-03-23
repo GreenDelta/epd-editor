@@ -40,6 +40,10 @@ def pack_win_app():
         print('  .. copy the JRE')
         shutil.copytree(jre_dir, app_jre_dir)
 
+    # copy the default data into the app
+    if not exists(app_dir + '/data'):
+        shutil.copytree('default_data', app_dir + '/data')
+
     # create the distribution package
     version = read_app_version()
     print('  .. create package')
@@ -102,6 +106,9 @@ def pack_mac_app():
         with open(out_ini_path, mode='w', encoding='utf-8', newline='\n') as o:
             o.write(text)
 
+    # copy the default data and clean up
+    if not exists(app_dir + '/Contents/data'):
+        shutil.copytree('default_data', app_dir + '/Contents/data')
     shutil.rmtree(base_dir + "/MacOS")
     os.remove(base_dir + "/Info.plist")
     os.remove(app_dir + "/Contents/MacOS/epd-editor.ini")
@@ -109,7 +116,6 @@ def pack_mac_app():
     version = read_app_version()
     print('  .. create package')
     dist_file = 'dist/epd-editor_macOS_%s_%s' % (version, date())
-    # shutil.make_archive(dist_file, 'gztar', 'macosx.cocoa.x86_64/epd-editor')
     targz('macosx.cocoa.x86_64/epd-editor', dist_file)
     print('  done')
 
@@ -132,7 +138,7 @@ def targz(folder, tar_file):
     if not exists('7za.exe'):
         shutil.make_archive(tar_file, 'gztar', folder)
         return
-    cmd = ['7za.exe', 'a', '-ttar', tar_file + '.tar', folder + '/*']
+    cmd = ['7za.exe', 'a', '-ttar', tar_file + '.tar', folder]
     subprocess.call(cmd)
     cmd = ['7za.exe', 'a', '-tgzip', tar_file + '.tar.gz', tar_file + '.tar']
     subprocess.call(cmd)

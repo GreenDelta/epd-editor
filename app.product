@@ -23,13 +23,13 @@ Visit https://github.com/GreenDelta/epd-editor
       </programArgs>
       <vmArgs>-Dorg.osgi.framework.bundle.parent=ext
 --add-modules=ALL-SYSTEM
+--illegal-access=permit
       </vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
    </launcherArgs>
 
    <windowImages i16="icons/eclipse16.png" i32="icons/eclipse32.png" i48="icons/eclipse48.png" i64="icons/eclipse64.png" i128=" icons/eclipse128.png" i256="icons/eclipse256.png"/>
-
 
    <launcher name="epd-editor">
       <macosx icon="/epd-editor/icons/EPD-Editor.icns"/>
@@ -38,7 +38,6 @@ Visit https://github.com/GreenDelta/epd-editor
          <bmp/>
       </win>
    </launcher>
-
 
    <vm>
    </vm>

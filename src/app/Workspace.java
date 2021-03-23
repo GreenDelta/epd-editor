@@ -99,6 +99,9 @@ public class Workspace {
 			return;
 		try {
 			for (var f : files) {
+				var existing = new File(this.folder, f.getName());
+				if (existing.exists())
+					continue;
 				if (f.isFile()) {
 					FileUtils.copyFileToDirectory(f, this.folder);
 				} else {

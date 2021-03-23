@@ -19,7 +19,7 @@ def main():
 
     version = read_app_version()
     print(version)
-    # pack_win_app()
+    pack_win_app()
     pack_mac_app()
 
 

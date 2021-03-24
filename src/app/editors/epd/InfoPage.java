@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import app.util.Controls;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DateTime;
@@ -30,6 +29,7 @@ import app.editors.RefLink;
 import app.editors.RefTable;
 import app.store.RefDeps;
 import app.util.Colors;
+import app.util.Controls;
 import app.util.TextBuilder;
 import app.util.UI;
 import epd.model.EpdDataSet;
@@ -196,20 +196,21 @@ class InfoPage extends FormPage {
 				time.validUntil, val -> time.validUntil = val);
 
 		// publication date
-		tk.createLabel(comp, M.PublicationDate);
+		tk.createLabel(comp, M.PublicationDate)
+				.setToolTipText(Tooltips.EPD_PublicationDate);
 		var dateBox = new DateTime(comp, SWT.DATE | SWT.DROP_DOWN);
 		if (epd.publicationDate != null) {
 			var pd = epd.publicationDate;
 			dateBox.setDate(
-				pd.getYear(),
-				pd.getMonthValue() - 1,
-				pd.getDayOfMonth());
+					pd.getYear(),
+					pd.getMonthValue() - 1,
+					pd.getDayOfMonth());
 		}
 		dateBox.addSelectionListener(Controls.onSelect(_e -> {
 			epd.publicationDate = LocalDate.of(
-				dateBox.getYear(),
-				dateBox.getMonth() + 1,
-				dateBox.getDay());
+					dateBox.getYear(),
+					dateBox.getMonth() + 1,
+					dateBox.getDay());
 			editor.setDirty();
 		}));
 

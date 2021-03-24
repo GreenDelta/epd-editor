@@ -27,6 +27,7 @@ public class M extends NLS {
 	public static String Classifications;
 	public static String Code;
 	public static String Comment;
+	public static String Commissioner;
 	public static String CompleteReviewReport;
 	public static String ComplianceDeclarations;
 	public static String ComponentsForReuse;
@@ -50,6 +51,7 @@ public class M extends NLS {
 	public static String DataSetUploadedMessage;
 	public static String DataSetVersion;
 	public static String DataSets;
+	public static String DataSetGeneratorModeller;
 	public static String DataSources;
 	public static String DataStock;
 	public static String DataStocks;
@@ -67,6 +69,7 @@ public class M extends NLS {
 	public static String DependentInternalReview;
 	public static String Description;
 	public static String Documentation;
+	public static String DocumentationDataQualityManagement;
 	public static String Documentor;
 	public static String Documents;
 	public static String Download;
@@ -128,6 +131,7 @@ public class M extends NLS {
 	public static String IndexProductRelations;
 	public static String Indicator;
 	public static String Information;
+	public static String IntendedApplications;
 	public static String InvalidName;
 	public static String InvalidReference;
 	public static String IsVendorSpecific;
@@ -137,6 +141,7 @@ public class M extends NLS {
 	public static String LCIAMethods;
 	public static String Language;
 	public static String LastUpdate;
+	public static String LicenseType;
 	public static String Location;
 	public static String Locations;
 	public static String Logo;
@@ -174,20 +179,26 @@ public class M extends NLS {
 
 	public static String Password;
 	public static String Pictogram;
+	public static String PrecedingDataSetVersion;
 	public static String ProcessInformation;
 	public static String Processes;
 	public static String Product;
 	public static String ProductSystem;
+	public static String Project;
 	public static String Products;
 	public static String Property;
 	public static String PublicationDate;
+	public static String Publisher;
 	public static String PublicationAndOwnership;
 
 	public static String QuantitativeProperties;
 	public static String QuantitativeReference;
 
 	public static String ReferenceDataURL;
+	public static String ReferenceOriginalEPD;
 	public static String ReferenceYear;
+	public static String RegistrationAuthority;
+	public static String RegistrationNumber;
 	public static String Reload;
 	public static String ReloadNavigation;
 	public static String ReloadUnsaved_Message;

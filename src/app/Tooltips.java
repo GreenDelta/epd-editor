@@ -58,6 +58,19 @@ public class Tooltips extends NLS {
 	public static String EPD_Scenarios;
 	public static String EPD_Modules;
 	public static String EPD_Results;
+	public static String EPD_LicenseType;
+	public static String EPD_AccessUseRestrictions;
+	public static String EPD_ReferenceOriginal;
+	public static String EPD_DocumentationDataQualityManagement;
+	public static String EPD_DataSetGeneratorModeller;
+	public static String EPD_PrecedingDataSetVersion;
+	public static String EPD_PublicationDate;
+	public static String EPD_Publisher;
+	public static String EPD_RegistrationAuthority;
+	public static String EPD_RegistrationNumber;
+	public static String EPD_Commisioner;
+	public static String EPD_Project;
+	public static String EPD_IntendedApplications;
 
 	// Flow
 	public static String Flow_Name;

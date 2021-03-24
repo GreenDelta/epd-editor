@@ -6,7 +6,6 @@ public class M extends NLS {
 
 	public static String AboutEPDEditor;
 	public static String AccessRestrictions;
-	public static String AccessUseRestrictions;
 	public static String AccreditedThirdPartyReview;
 	public static String Add;
 	public static String AddAMaterialProperty;
@@ -189,7 +188,6 @@ public class M extends NLS {
 	public static String Products;
 	public static String Property;
 	public static String PublicationDate;
-	public static String PublicationDateEPD;
 	public static String Publisher;
 	public static String PublicationAndOwnership;
 

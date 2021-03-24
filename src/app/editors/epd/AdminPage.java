@@ -43,10 +43,12 @@ class AdminPage extends FormPage {
 		projectSection(body, tk);
 
 		// commissioner
-		var commissioners = Processes.commissionerAndGoal(process).commissioners;
+		var commissioners = Processes
+				.commissionerAndGoal(process).commissioners;
 		RefTable.create(DataSetType.CONTACT, commissioners)
 				.withEditor(editor)
-				.withTitle("Commissioner")
+				.withTitle(M.Commissioner)
+				.withTooltip(Tooltips.EPD_Commissioner)
 				.render(body, tk);
 
 		// data entry
@@ -56,7 +58,8 @@ class AdminPage extends FormPage {
 		var generators = Processes.dataGenerator(process).contacts;
 		RefTable.create(DataSetType.CONTACT, generators)
 				.withEditor(editor)
-				.withTitle("Data set generator / modeller")
+				.withTitle(M.DataSetGeneratorModeller)
+				.withTooltip(Tooltips.EPD_DataSetGeneratorModeller)
 				.render(body, tk);
 
 		// data formats
@@ -72,35 +75,39 @@ class AdminPage extends FormPage {
 
 		// publishers
 		RefTable.create(DataSetType.CONTACT, editor.dataSet.publishers)
-			.withEditor(editor)
-			.withTitle("Publisher of the data set")
-			.render(body, tk);
+				.withEditor(editor)
+				.withTitle(M.Publisher)
+				.withTooltip(Tooltips.EPD_Publisher)
+				.render(body, tk);
 
 		// preceding data version
 		var precedingVersions = Processes
 				.publication(process).precedingVersions;
 		RefTable.create(DataSetType.PROCESS, precedingVersions)
 				.withEditor(editor)
-				.withTitle("Preceding data set version")
+				.withTitle(M.PrecedingDataSetVersion)
+				.withTooltip(Tooltips.EPD_PrecedingDataSetVersion)
 				.render(body, tk);
 
 		form.reflow(true);
 	}
 
 	private void projectSection(Composite body, FormToolkit tk) {
-		var comp = UI.formSection(body, tk, "Project");
+		var comp = UI.formSection(body, tk, M.Project);
 		var goal = Processes.commissionerAndGoal(process);
 
 		// project
 		new TextBuilder(editor, this, tk).multiText(
 				comp,
-				"Project",
+				M.Project,
+				Tooltips.EPD_Project,
 				goal.project);
 
 		// intended applications
 		new TextBuilder(editor, this, tk).multiText(
 				comp,
-				"Intended applications",
+				M.IntendedApplications,
+				Tooltips.EPD_IntendedApplications,
 				goal.intendedApplications);
 	}
 
@@ -147,7 +154,8 @@ class AdminPage extends FormPage {
 		});
 
 		// registration authority
-		UI.formLabel(comp, tk, "Registration authority");
+		UI.formLabel(comp, tk, M.RegistrationAuthority,
+				Tooltips.EPD_RegistrationAuthority);
 		var regAuthority = new RefLink(comp, tk, DataSetType.CONTACT);
 		regAuthority.setRef(pub.registrationAuthority);
 		regAuthority.onChange(ref -> {
@@ -156,7 +164,8 @@ class AdminPage extends FormPage {
 		});
 
 		// registration number
-		var regNumber = UI.formText(comp, tk, "Registration number");
+		var regNumber = UI.formText(comp, tk, M.RegistrationNumber,
+				Tooltips.EPD_RegistrationNumber);
 		if (pub.registrationNumber != null) {
 			regNumber.setText(pub.registrationNumber);
 		}
@@ -215,7 +224,8 @@ class AdminPage extends FormPage {
 		}
 
 		// create the combo
-		var combo = UI.formCombo(comp, tk, "License");
+		var combo = UI.formCombo(comp, tk, M.LicenseType,
+				Tooltips.EPD_LicenseType);
 		combo.setItems(items);
 		combo.select(selected);
 		Controls.onSelect(combo, e -> {

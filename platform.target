@@ -3,15 +3,15 @@
 <target name="platform" sequenceNumber="7">
   <locations>
 	  <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-		  <repository location="https://download.eclipse.org/eclipse/updates/4.17/"/>
-		  <unit id="org.eclipse.equinox.sdk.feature.group" version="3.20.300.v20200828-1034"/>
-		  <unit id="org.eclipse.platform.sdk" version="4.17.0.I20200902-1800"/>
-		  <unit id="org.eclipse.rcp.feature.group" version="4.17.0.v20200902-1800"/>
-		  <unit id="org.eclipse.rcp.source.feature.group" version="4.17.0.v20200902-1800"/>
+		  <repository location="https://download.eclipse.org/eclipse/updates/4.19/"/>
+		  <unit id="org.eclipse.equinox.sdk.feature.group" version="3.22.0.v20210227-0235"/>
+		  <unit id="org.eclipse.platform.sdk" version="4.19.0.I20210303-1800"/>
+		  <unit id="org.eclipse.rcp.feature.group" version="4.19.0.v20210303-1800"/>
+		  <unit id="org.eclipse.rcp.source.feature.group" version="4.19.0.v20210303-1800"/>
 	  </location>
 	  <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-		  <repository location="https://download.eclipse.org/modeling/emf/emf/builds/release/2.24"/>
-		  <unit id="org.eclipse.emf.sdk.feature.group" version="2.24.0.v20200917-1439"/>
+		  <repository location="https://download.eclipse.org/modeling/emf/emf/builds/release/2.25"/>
+		  <unit id="org.eclipse.emf.sdk.feature.group" version="2.25.0.v20210114-1734"/>
 	  </location>
   </locations>
 </target>

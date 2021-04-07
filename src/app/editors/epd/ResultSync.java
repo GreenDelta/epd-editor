@@ -33,15 +33,20 @@ class ResultSync implements Runnable {
 			EpdProfiles.get(epd.profile),
 			EpdProfiles::getDefault);
 
+		// collect the defined module-scenario pairs
+		var definedMods = epd.moduleEntries.stream()
+			.map(e -> e.module + "/" + e.scenario)
+			.collect(Collectors.toSet());
+		if (definedMods.isEmpty()) {
+			epd.results.clear();
+			return;
+		}
 
 		// remove the results with non-matching or duplicate
 		// indicators
 		removeResults(profile);
 
 		// add new result entries
-		var definedMods = epd.moduleEntries.stream()
-			.map(e -> e.module + "/" + e.scenario)
-			.collect(Collectors.toSet());
 		for (var indicator : profile.indicators) {
 
 			// get or create the result

@@ -1,5 +1,7 @@
 package app.editors;
 
+import java.util.function.BiConsumer;
+
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.part.EditorActionBarContributor;
@@ -24,7 +26,7 @@ import app.util.MsgBox;
 
 public class DataSetToolBar extends EditorActionBarContributor {
 
-	private Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	@Override
 	public void contributeToToolBar(IToolBarManager manager) {
@@ -37,63 +39,68 @@ public class DataSetToolBar extends EditorActionBarContributor {
 	}
 
 	private void reload() {
-		IEditorPart p = Editors.getActive();
-		IDataSet ds = getDataSet(p);
-		if (ds == null)
-			return;
-		if (p.isDirty()) {
-			boolean b = MsgBox.ask(M.UnsavedChanges, M.ReloadUnsaved_Message);
-			if (!b)
-				return;
-		}
-		Ref ref = Ref.of(ds);
-		Editors.close(ref);
-		Editors.open(ref);
+		with((editor, dataSet) -> {
+			if (editor.isDirty()) {
+				boolean b = MsgBox.ask(
+						M.UnsavedChanges, M.ReloadUnsaved_Message);
+				if (!b)
+					return;
+			}
+			Ref ref = Ref.of(dataSet);
+			Editors.close(ref);
+			Editors.open(ref);
+		});
 	}
 
 	private void tryUpload() {
-		IEditorPart p = Editors.getActive();
-		if (p.isDirty()) {
-			MsgBox.error(M.UnsavedChanges, M.UnsavedChanges_Message);
-			return;
-		}
-		IDataSet ds = getDataSet(p);
-		if (ds == null) {
-			log.error("could not get data set from {}", p);
-			return;
-		}
-		UploadDialog.open(Ref.of(ds));
+		with((editor, dataSet) -> {
+			if (editor.isDirty()) {
+				MsgBox.error(M.UnsavedChanges, M.UnsavedChanges_Message);
+				return;
+			}
+			UploadDialog.open(Ref.of(dataSet));
+		});
 	}
 
 	private void tryValidate() {
-		IEditorPart p = Editors.getActive();
-		if (p.isDirty()) {
-			MsgBox.error(M.UnsavedChanges, M.UnsavedChanges_Message);
-			return;
-		}
-		IDataSet ds = getDataSet(p);
-		if (ds == null) {
-			log.error("could not get data set from {}", p);
-			return;
-		}
-		ValidationDialog.open(Ref.of(ds));
+		with((editor, dataSet) -> {
+			if (editor.isDirty()) {
+				MsgBox.error(M.UnsavedChanges, M.UnsavedChanges_Message);
+				return;
+			}
+			ValidationDialog.open(Ref.of(dataSet));
+		});
 	}
 
-	private IDataSet getDataSet(IEditorPart p) {
-		if (p instanceof ContactEditor)
-			return ((ContactEditor) p).contact;
-		if (p instanceof EpdEditor)
-			return ((EpdEditor) p).dataSet.process;
-		if (p instanceof FlowEditor)
-			return ((FlowEditor) p).product.flow;
-		if (p instanceof FlowPropertyEditor)
-			return ((FlowPropertyEditor) p).property;
-		if (p instanceof SourceEditor)
-			return ((SourceEditor) p).source;
-		if (p instanceof UnitGroupEditor)
-			return ((UnitGroupEditor) p).unitGroup;
-		if (p instanceof MethodEditor)
-			return ((MethodEditor) p).method;
+	private void with(BiConsumer<IEditorPart, IDataSet> fn) {
+		var editor = Editors.getActive();
+		if (editor == null) {
+			log.error("could not get the active editor");
+			return;
+		}
+		var dataSet = getDataSet(editor);
+		if (dataSet == null) {
+			log.error("could not get data set from {}", editor);
+			return;
+		}
+		fn.accept(editor, dataSet);
+	}
+
+	private IDataSet getDataSet(IEditorPart editor) {
+		if (editor instanceof ContactEditor)
+			return ((ContactEditor) editor).contact;
+		if (editor instanceof EpdEditor)
+			return ((EpdEditor) editor).dataSet.process;
+		if (editor instanceof FlowEditor)
+			return ((FlowEditor) editor).product.flow;
+		if (editor instanceof FlowPropertyEditor)
+			return ((FlowPropertyEditor) editor).property;
+		if (editor instanceof SourceEditor)
+			return ((SourceEditor) editor).source;
+		if (editor instanceof UnitGroupEditor)
+			return ((UnitGroupEditor) editor).unitGroup;
+		if (editor instanceof MethodEditor)
+			return ((MethodEditor) editor).method;
 		return null;
 	}
 

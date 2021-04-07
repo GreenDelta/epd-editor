@@ -43,7 +43,7 @@ class Upload {
 		}
 	}
 
-	private void uploadSource(Source source) throws Exception {
+	private void uploadSource(Source source) {
 		List<FileRef> fileRefs = Sources.getFileRefs(source);
 		List<File> files = new ArrayList<>();
 		for (FileRef ref : fileRefs) {

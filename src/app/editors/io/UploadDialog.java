@@ -134,15 +134,20 @@ public class UploadDialog extends Wizard {
 		private void collectRefs() {
 			try {
 				getContainer().run(true, false, monitor -> {
-					monitor.beginTask(M.SearchDependentDataSets,
+					monitor.beginTask(
+						M.SearchDependentDataSets,
 						IProgressMonitor.UNKNOWN);
 					allRefs.clear();
-					new DependencyTraversal(App.store()).on(ref, ds -> {
-						Ref next = Ref.of(ds);
-						monitor.subTask(App.header(next.name, 75));
-						allRefs.add(next);
-						ExtensionRefs.collect(ds, allRefs);
-					});
+
+					DependencyTraversal.of(App.store(), ref)
+						.filter()
+						.forEach(ds -> {
+							Ref next = Ref.of(ds);
+							monitor.subTask(App.header(next.name, 75));
+							allRefs.add(next);
+							ExtensionRefs.collect(ds, allRefs);
+						});
+
 					App.runInUI("update table", () -> table.setInput(allRefs));
 					monitor.done();
 				});

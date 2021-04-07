@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import app.editors.RefTable;
+import app.store.EpdProfiles;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
@@ -15,7 +16,6 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.io.SodaClient;
 import org.openlca.ilcd.util.DependencyTraversal;
@@ -145,16 +145,14 @@ public class UploadDialog extends Wizard {
 					allRefs.clear();
 
 					DependencyTraversal.of(App.store(), ref)
-						.filter(ref -> ref.type != DataSetType.LCIA_METHOD)
+						.filter(r -> !EpdProfiles.isProfileRef(r))
 						.forEach(ds -> {
 							Ref next = Ref.of(ds);
 							monitor.subTask(App.header(next.name, 75));
 							allRefs.add(next);
 							ExtensionRefs.of(ds)
 								.stream()
-								.filter(ExtensionRefs.noneOf(
-									DataSetType.LCIA_METHOD,
-									DataSetType.UNIT_GROUP))
+								.filter(r -> !EpdProfiles.isProfileRef(r))
 								.forEach(allRefs::add);
 						});
 

@@ -3,11 +3,9 @@ package epd.util;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.FlowType;
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
@@ -74,17 +72,5 @@ public final class ExtensionRefs {
 			product.documentation)
 			.filter(r -> r != null && r.isValid())
 			.collect(Collectors.toSet());
-	}
-
-	public static Predicate<Ref> noneOf(DataSetType... types) {
-		return ref -> {
-			if (ref == null || ref.type == null)
-				return false;
-			for (var t : types) {
-				if (ref.type == t)
-					return false;
-			}
-			return true;
-		};
 	}
 }

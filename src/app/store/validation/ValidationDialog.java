@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import app.editors.RefTable;
+import app.store.EpdProfiles;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
@@ -150,16 +151,14 @@ public class ValidationDialog extends Wizard {
 					allRefs.clear();
 
 					DependencyTraversal.of(App.store(), ref)
-						.filter(ref -> ref.type != DataSetType.LCIA_METHOD)
+						.filter(r -> !EpdProfiles.isProfileRef(r))
 						.forEach(ds -> {
 							Ref next = Ref.of(ds);
 							monitor.subTask(App.header(next.name, 75));
 							allRefs.add(next);
 							ExtensionRefs.of(ds)
 								.stream()
-								.filter(ExtensionRefs.noneOf(
-									DataSetType.LCIA_METHOD,
-									DataSetType.UNIT_GROUP))
+								.filter(r -> !EpdProfiles.isProfileRef(r))
 								.forEach(allRefs::add);
 						});
 

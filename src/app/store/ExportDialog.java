@@ -2,11 +2,13 @@ package app.store;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import app.editors.RefTable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.TableViewer;
@@ -101,7 +103,7 @@ public class ExportDialog extends Wizard {
 		try {
 			File file = new File(page.filePath);
 			if (file.exists()) {
-				file.delete();
+				Files.delete(file.toPath());
 			}
 			ZipStore zip = new ZipStore(file);
 			getContainer().run(true, false, new Exporter(zip));
@@ -178,6 +180,7 @@ public class ExportDialog extends Wizard {
 			table = Tables.createViewer(comp,
 					M.DataSet, M.UUID, M.DataSetVersion);
 			table.setLabelProvider(new RefTableLabel());
+			table.setComparator(RefTable.comparator());
 			Tables.bindColumnWidths(table, 0.6, 0.2, 0.2);
 			table.setInput(all);
 		}
@@ -193,7 +196,7 @@ public class ExportDialog extends Wizard {
 								Ref next = Ref.of(ds);
 								monitor.subTask(App.header(next.name, 75));
 								all.add(next);
-								ExtensionRefs.of(ds).forEach(all::add);
+								all.addAll(ExtensionRefs.of(ds));
 							});
 					App.runInUI("update table", () -> table.setInput(all));
 					monitor.done();

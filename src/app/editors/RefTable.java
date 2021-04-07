@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -75,6 +76,7 @@ public class RefTable {
 		UI.gridLayout(comp, 1);
 		var table = Tables.createViewer(comp, Labels.get(type));
 		table.setLabelProvider(new RefTableLabel());
+		table.setComparator(comparator());
 		Action[] actions = createActions(table);
 		Actions.bind(section, actions);
 		Actions.bind(table, actions);
@@ -104,7 +106,7 @@ public class RefTable {
 		Action[] actions = new Action[2];
 		actions[0] = Actions.create(M.Add, Icon.ADD.des(), () -> add(table));
 		actions[1] = Actions.create(M.Remove, Icon.DELETE.des(),
-				() -> remove(table));
+			() -> remove(table));
 		return actions;
 	}
 
@@ -130,6 +132,36 @@ public class RefTable {
 			onRemove.accept(ref);
 		if (editor != null)
 			editor.setDirty();
+	}
+
+
+	public static ViewerComparator comparator() {
+		return Comparator.instance;
+	}
+
+	private static class Comparator extends ViewerComparator {
+
+		static final Comparator instance = new Comparator();
+
+		@Override
+		public int category(Object obj) {
+			if (!(obj instanceof Ref))
+				return -1;
+			var ref = (Ref) obj;
+			if (ref.type == null)
+				return -1;
+			return switch (ref.type) {
+				case MODEL -> 0;
+				case PROCESS -> 1;
+				case FLOW -> 2;
+				case LCIA_METHOD -> 3;
+				case SOURCE -> 4;
+				case CONTACT -> 5;
+				case FLOW_PROPERTY -> 6;
+				case UNIT_GROUP -> 7;
+				case EXTERNAL_FILE -> 8;
+			};
+		}
 	}
 
 }

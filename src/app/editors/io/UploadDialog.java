@@ -1,8 +1,11 @@
 package app.editors.io;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import app.editors.RefTable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
@@ -12,6 +15,7 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.io.SodaClient;
 import org.openlca.ilcd.util.DependencyTraversal;
@@ -33,7 +37,7 @@ public class UploadDialog extends Wizard {
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	private final Ref ref;
-	private final List<Ref> allRefs = new ArrayList<>();
+	private final Set<Ref> allRefs = new HashSet<>();
 
 	private ConnectionCombo conCombo;
 
@@ -127,6 +131,7 @@ public class UploadDialog extends Wizard {
 			table = Tables.createViewer(parent, M.DataSet, M.UUID,
 				M.DataSetVersion);
 			table.setLabelProvider(new RefTableLabel());
+			table.setComparator(RefTable.comparator());
 			Tables.bindColumnWidths(table, 0.6, 0.2, 0.2);
 			table.setInput(allRefs);
 		}
@@ -140,12 +145,17 @@ public class UploadDialog extends Wizard {
 					allRefs.clear();
 
 					DependencyTraversal.of(App.store(), ref)
-						.filter()
+						.filter(ref -> ref.type != DataSetType.LCIA_METHOD)
 						.forEach(ds -> {
 							Ref next = Ref.of(ds);
 							monitor.subTask(App.header(next.name, 75));
 							allRefs.add(next);
-							ExtensionRefs.collect(ds, allRefs);
+							ExtensionRefs.of(ds)
+								.stream()
+								.filter(ExtensionRefs.noneOf(
+									DataSetType.LCIA_METHOD,
+									DataSetType.UNIT_GROUP))
+								.forEach(allRefs::add);
 						});
 
 					App.runInUI("update table", () -> table.setInput(allRefs));
@@ -155,5 +165,7 @@ public class UploadDialog extends Wizard {
 				log.error("failed to collect references", e);
 			}
 		}
+
+
 	}
 }

@@ -1,8 +1,9 @@
 package app.store.validation;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
+import app.editors.RefTable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
@@ -36,7 +37,7 @@ public class ValidationDialog extends Wizard {
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	private final Ref ref;
-	private final List<Ref> allRefs = new ArrayList<>();
+	private final Set<Ref> allRefs = new HashSet<>();
 
 	private ValidationDialog(Ref ref) {
 		this.ref = ref;
@@ -104,8 +105,8 @@ public class ValidationDialog extends Wizard {
 		private TableViewer table;
 
 		private Page() {
-			super("ValidationDialogPage", M.ValidateDataSet + ": " +
-					App.header(ref.name, 50), null);
+			super("ValidationDialogPage",
+				M.ValidateDataSet + ": " + App.header(ref.name, 50), null);
 			setPageComplete(true);
 		}
 
@@ -133,8 +134,9 @@ public class ValidationDialog extends Wizard {
 
 		private void createTable(Composite parent) {
 			table = Tables.createViewer(parent, M.DataSet, M.UUID,
-					M.DataSetVersion);
+				M.DataSetVersion);
 			table.setLabelProvider(new RefTableLabel());
+			table.setComparator(RefTable.comparator());
 			Tables.bindColumnWidths(table, 0.6, 0.2, 0.2);
 			table.setInput(allRefs);
 		}
@@ -142,15 +144,25 @@ public class ValidationDialog extends Wizard {
 		private void collectRefs() {
 			try {
 				getContainer().run(true, false, monitor -> {
-					monitor.beginTask(M.SearchDependentDataSets,
-							IProgressMonitor.UNKNOWN);
+					monitor.beginTask(
+						M.SearchDependentDataSets,
+						IProgressMonitor.UNKNOWN);
 					allRefs.clear();
-					new DependencyTraversal(App.store()).on(ref, ds -> {
-						Ref next = Ref.of(ds);
-						monitor.subTask(App.header(next.name, 75));
-						allRefs.add(next);
-						ExtensionRefs.collect(ds, allRefs);
-					});
+
+					DependencyTraversal.of(App.store(), ref)
+						.filter(ref -> ref.type != DataSetType.LCIA_METHOD)
+						.forEach(ds -> {
+							Ref next = Ref.of(ds);
+							monitor.subTask(App.header(next.name, 75));
+							allRefs.add(next);
+							ExtensionRefs.of(ds)
+								.stream()
+								.filter(ExtensionRefs.noneOf(
+									DataSetType.LCIA_METHOD,
+									DataSetType.UNIT_GROUP))
+								.forEach(allRefs::add);
+						});
+
 					App.runInUI("update table", () -> table.setInput(allRefs));
 					monitor.done();
 				});

@@ -61,7 +61,6 @@ def pack_mac_app():
 
     print('build macOS version')
 
-
     # move things around
     print('  .. restructure the app folder')
     os.makedirs(app_dir + '/Contents/Eclipse', exist_ok=True)
@@ -72,7 +71,7 @@ def pack_mac_app():
     move(base_dir + '/.eclipseproduct', app_dir + '/Contents/Eclipse')
     move(base_dir + '/Resources', app_dir + '/Contents')
     copyfile(base_dir+'/MacOS/epd-editor', app_dir + '/Contents/MacOS/eclipse')
-    copytree('default_data', app_dir + '/Contents/data')
+    copytree('default_data', app_dir + '/Contents/MacOS/data')
     rmtree(base_dir + "/MacOS")
     os.remove(base_dir + "/Info.plist")
     os.remove(app_dir + "/Contents/MacOS/epd-editor.ini")
@@ -83,7 +82,8 @@ def pack_mac_app():
     launcher_lib = basename(glob(plugins_dir + '*launcher.cocoa.macosx*')[0])
     with open("macos/eclipse.ini", mode='r', encoding="utf-8") as f:
         text = f.read()
-        text = text.format(launcher_jar=launcher_jar, launcher_lib=launcher_lib)
+        text = text.format(launcher_jar=launcher_jar,
+                           launcher_lib=launcher_lib)
         out_ini_path = app_dir + "/Contents/Eclipse/eclipse.ini"
         with open(out_ini_path, mode='w', encoding='utf-8', newline='\n') as o:
             o.write(text)
@@ -118,15 +118,19 @@ def date() -> str:
     return '%d-%02d-%02d' % (now.year, now.month, now.day)
 
 
-def targz(folder, tar_file):
+def targz(folder: str, out_name: str):
+    """Creates a tar.gz file of the given folder. Uses 7zip if the executable
+       is available in the build folder. The given out_name should be the path
+       to the output file without the tar.gz extension."""
     if not exists('7za.exe'):
-        make_archive(tar_file, 'gztar', folder)
+        make_archive(out_name, 'gztar', folder)
         return
-    cmd = ['7za.exe', 'a', '-ttar', tar_file + '.tar', folder + "/*"]
+    folder_ = './' + folder + '/*'
+    cmd = ['7za.exe', 'a', '-ttar', out_name + '.tar', folder_]
     subprocess.call(cmd)
-    cmd = ['7za.exe', 'a', '-tgzip', tar_file + '.tar.gz', tar_file + '.tar']
+    cmd = ['7za.exe', 'a', '-tgzip', out_name + '.tar.gz', out_name + '.tar']
     subprocess.call(cmd)
-    os.remove(tar_file + '.tar')
+    os.remove(out_name + '.tar')
 
 
 def unzip(zip_file, to_dir):

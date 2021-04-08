@@ -1,12 +1,12 @@
-
 import datetime
-import glob
 import os
-import shutil
 import subprocess
 import sys
 
-from os.path import exists
+from glob import glob
+from os.path import basename, exists
+from shutil import copyfile, copytree, make_archive, move, rmtree,\
+    unpack_archive
 
 
 def main():
@@ -14,7 +14,7 @@ def main():
     # delete the `dist` folder
     if exists('dist'):
         print('clear `dist` folder')
-        shutil.rmtree('dist')
+        rmtree('dist')
     os.mkdir('dist')
 
     version = read_app_version()
@@ -38,17 +38,17 @@ def pack_win_app():
     app_jre_dir = app_dir + '/jre'
     if not exists(app_jre_dir):
         print('  .. copy the JRE')
-        shutil.copytree(jre_dir, app_jre_dir)
+        copytree(jre_dir, app_jre_dir)
 
     # copy the default data into the app
     if not exists(app_dir + '/data'):
-        shutil.copytree('default_data', app_dir + '/data')
+        copytree('default_data', app_dir + '/data')
 
     # create the distribution package
     version = read_app_version()
     print('  .. create package')
     zip_file = 'dist/epd-editor_win64_%s_%s' % (version, date())
-    shutil.make_archive(zip_file, 'zip', 'win32.win32.x86_64')
+    make_archive(zip_file, 'zip', 'win32.win32.x86_64')
     print('  done')
 
 
@@ -61,57 +61,41 @@ def pack_mac_app():
 
     print('build macOS version')
 
-    # copy the JRE version
-    jre_tar = glob.glob('jre/*mac*.tar')
-    if len(jre_tar) == 0:
-        sys.exit('ERROR: could not find JRE for macOS')
-    if not exists(app_dir + '/jre'):
-        print('  .. copy the JRE')
-        unzip(jre_tar[0], app_dir)
-        # shutil.unpack_archive(jre_tar[0], app_dir + '/epd-editor.app')
-        jre_dir = glob.glob(app_dir + '/*jre*')
-        for _dir in jre_dir:
-            if os.path.isdir(_dir):
-                os.rename(_dir, app_dir + '/jre')
 
     # move things around
     print('  .. restructure the app folder')
-    shutil.copyfile('macos/Info.plist', app_dir + '/Contents/Info.plist')
-    eclipse_contents = [
-        '/configuration',
-        '/plugins',
-        '/.eclipseproduct',
-    ]
-    for f in eclipse_contents:
-        if exists(base_dir + f):
-            shutil.move(base_dir + f, app_dir + '/Contents/Eclipse')
-
-    if exists(base_dir + '/Resources'):
-        shutil.move(base_dir + '/Resources', app_dir + '/Contents')
-    if exists(base_dir+'/MacOS/epd-editor'):
-        shutil.copy2(base_dir+'/MacOS/epd-editor',
-                     app_dir + '/Contents/MacOS/eclipse')
+    os.makedirs(app_dir + '/Contents/Eclipse', exist_ok=True)
+    os.makedirs(app_dir + '/Contents/MacOS', exist_ok=True)
+    copyfile('macos/Info.plist', app_dir + '/Contents/Info.plist')
+    move(base_dir + '/configuration', app_dir + '/Contents/Eclipse')
+    move(base_dir + '/plugins', app_dir + '/Contents/Eclipse')
+    move(base_dir + '/.eclipseproduct', app_dir + '/Contents/Eclipse')
+    move(base_dir + '/Resources', app_dir + '/Contents')
+    copyfile(base_dir+'/MacOS/epd-editor', app_dir + '/Contents/MacOS/eclipse')
+    copytree('default_data', app_dir + '/Contents/data')
+    rmtree(base_dir + "/MacOS")
+    os.remove(base_dir + "/Info.plist")
+    os.remove(app_dir + "/Contents/MacOS/epd-editor.ini")
 
     # create the ini-file
     plugins_dir = app_dir + '/Contents/Eclipse/plugins/'
-    launcher_jar = os.path.basename(
-        glob.glob(plugins_dir + '*launcher*.jar')[0])
-    launcher_lib = os.path.basename(
-        glob.glob(plugins_dir + '*launcher.cocoa.macosx*')[0])
+    launcher_jar = basename(glob(plugins_dir + '*launcher*.jar')[0])
+    launcher_lib = basename(glob(plugins_dir + '*launcher.cocoa.macosx*')[0])
     with open("macos/eclipse.ini", mode='r', encoding="utf-8") as f:
         text = f.read()
-        text = text.format(launcher_jar=launcher_jar,
-                           launcher_lib=launcher_lib)
+        text = text.format(launcher_jar=launcher_jar, launcher_lib=launcher_lib)
         out_ini_path = app_dir + "/Contents/Eclipse/eclipse.ini"
         with open(out_ini_path, mode='w', encoding='utf-8', newline='\n') as o:
             o.write(text)
 
-    # copy the default data and clean up
-    if not exists(app_dir + '/Contents/data'):
-        shutil.copytree('default_data', app_dir + '/Contents/data')
-    shutil.rmtree(base_dir + "/MacOS")
-    os.remove(base_dir + "/Info.plist")
-    os.remove(app_dir + "/Contents/MacOS/epd-editor.ini")
+    # copy the JRE version
+    jre_tar = glob('jre/*mac*.tar')
+    if len(jre_tar) == 0:
+        sys.exit('ERROR: could not find JRE for macOS')
+    print('  .. copy the JRE')
+    unzip(jre_tar[0], app_dir)
+    jre_dir = glob(app_dir + '/*jre*')[0]
+    os.rename(jre_dir, app_dir + '/jre')
 
     version = read_app_version()
     print('  .. create package')
@@ -136,9 +120,9 @@ def date() -> str:
 
 def targz(folder, tar_file):
     if not exists('7za.exe'):
-        shutil.make_archive(tar_file, 'gztar', folder)
+        make_archive(tar_file, 'gztar', folder)
         return
-    cmd = ['7za.exe', 'a', '-ttar', tar_file + '.tar', folder]
+    cmd = ['7za.exe', 'a', '-ttar', tar_file + '.tar', folder + "/*"]
     subprocess.call(cmd)
     cmd = ['7za.exe', 'a', '-tgzip', tar_file + '.tar.gz', tar_file + '.tar']
     subprocess.call(cmd)
@@ -149,7 +133,7 @@ def unzip(zip_file, to_dir):
     if not os.path.exists(to_dir):
         os.makedirs(to_dir)
     if not exists('7za.exe'):
-        shutil.unpack_archive(zip_file, to_dir)
+        unpack_archive(zip_file, to_dir)
         return
     cmd = ['7za.exe', 'x', zip_file, '-o%s' % to_dir]
     subprocess.call(cmd)

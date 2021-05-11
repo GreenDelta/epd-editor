@@ -8,7 +8,7 @@
             "type": "LCIA",
             "group": "RESOURCE_USE",
             "unit": "kg Sb eq",
-            "uuid": "f7c73bb9-ab1a-4249-9c6d-379a0de6f67e",
+            "uuid": "b2ad6494-c78d-11e6-9d9d-cec0c932ce01",
             "unitGroupUUID": "54ccd2d9-a32a-4fc2-923d-f2c8c93e89d4"
         },
         {
@@ -16,24 +16,24 @@
             "type": "LCIA",
             "group": "RESOURCE_USE",
             "unit": "MJ",
-            "uuid": "804ebcdf-309d-4098-8ed8-fdaf2f389981",
+            "uuid": "b2ad6110-c78d-11e6-9d9d-cec0c932ce01",
             "unitGroupUUID": "93a60a57-a3c8-11da-a746-0800200c9a66"
         },
         {
             "name": "Acidification potential, Accumulated Exceedance (AP)",
             "type": "LCIA",
             "group": "ENVIRONMENTAL",
-            "unit": "kg SO2 eq",
+            "unit": "mol H+ eqv.",
             "uuid": "b5c611c6-def3-11e6-bf01-fe55135034f3",
-            "unitGroupUUID": "bc50c624-a9bc-45b1-a9b0-e6b10d00476f"
+            "unitGroupUUID": "42e089ac-92bf-4bf2-8ca1-5fc40d18f2ed"
         },
         {
             "name": "Eutrophication potential - freshwater (EP-freshwater)",
             "type": "LCIA",
             "group": "ENVIRONMENTAL",
-            "unit": "kg PO4 eq",
+            "unit": "kg P eq",
             "uuid": "b53ec18f-7377-4ad3-86eb-cc3f4f276b2b",
-            "unitGroupUUID": "67b5401d-873c-485f-bcf3-6ae83b918822"
+            "unitGroupUUID": "0429039d-a61d-4590-ba67-aa4a20a810a1"
         },
         {
             "name": "Eutrophication potential - marine (EP-marine)",
@@ -111,7 +111,7 @@
             "name": "Potential incidence of disease due to PM emissions (PM)",
             "type": "LCIA",
             "group": "ENVIRONMENTAL",
-            "unit": "Disease incidence",
+            "unit": "disease incidence",
             "uuid": "b5c602c6-def3-11e6-bf01-fe55135034f3",
             "unitGroupUUID": "3883559b-648f-4afc-8ba2-0bd24f3affa3"
         },

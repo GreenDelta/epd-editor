@@ -1,13 +1,9 @@
 package app.editors.flow;
 
-import java.util.Collections;
-
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
@@ -50,26 +46,20 @@ class MaterialPropertyDialog extends Dialog {
 		return parent;
 	}
 
-	private ComboViewer createViewer(Composite parent) {
+	private void createViewer(Composite parent) {
 		var combo = new ComboViewer(parent, SWT.READ_ONLY);
 		UI.gridData(combo.getCombo(), true, false);
 		combo.setContentProvider(ArrayContentProvider.getInstance());
 		combo.setLabelProvider(new PropertyLabel());
 		setInput(combo);
-		combo.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				selectedProperty = Viewers.getFirst(event.getSelection());
-			}
-		});
-		return combo;
+		combo.addSelectionChangedListener(
+			e -> selectedProperty = Viewers.getFirst(e.getSelection()));
 	}
 
 	private void setInput(ComboViewer combo) {
 		try {
 			var props = MaterialProperties.get();
-			Collections.sort(props,
-					(p1, p2) -> Strings.compare(p1.name, p2.name));
+			props.sort((p1, p2) -> Strings.compare(p1.name, p2.name));
 			combo.setInput(props);
 			if (props.size() > 0) {
 				selectedProperty = props.get(0);
@@ -87,13 +77,13 @@ class MaterialPropertyDialog extends Dialog {
 		return new Point(400, 200);
 	}
 
-	private class PropertyLabel extends LabelProvider {
+	private static class PropertyLabel extends LabelProvider {
 
 		@Override
 		public String getText(Object element) {
 			if (!(element instanceof MaterialProperty))
 				return null;
-			MaterialProperty property = (MaterialProperty) element;
+			var property = (MaterialProperty) element;
 			return property.name + " (" + property.unit + ")";
 		}
 	}

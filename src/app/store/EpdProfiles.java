@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.flows.FlowName;
@@ -60,7 +61,9 @@ public final class EpdProfiles {
 		return p.id.equals(settingsID);
 	}
 
-	/** Get the active profile of the application. */
+	/**
+	 * Get the active profile of the application.
+	 */
 	public static EpdProfile getDefault() {
 		String id = App.settings().profile;
 		if (id == null) {
@@ -118,12 +121,14 @@ public final class EpdProfiles {
 		return profile != null ? profile : getDefault();
 	}
 
-	/** Get all EPD profiles from the workspace. */
+	/**
+	 * Get all EPD profiles from the workspace.
+	 */
 	public static List<EpdProfile> getAll() {
 		var defaultProfile = getDefault();
 		var dir = new File(App.workspaceFolder(), "epd_profiles");
 		if (!dir.exists())
-			return  List.of(defaultProfile);
+			return List.of(defaultProfile);
 		var profiles = new ArrayList<EpdProfile>();
 		var files = dir.listFiles();
 		if (files == null)
@@ -150,7 +155,9 @@ public final class EpdProfiles {
 		cache.put(profile.id, profile);
 	}
 
-	/** Delete the profile with the given ID. */
+	/**
+	 * Delete the profile with the given ID.
+	 */
 	public static void delete(String id) {
 		File file = file(id);
 		if (!file.exists())
@@ -191,7 +198,7 @@ public final class EpdProfiles {
 				syncRefs(i, stats);
 			} catch (Exception e) {
 				stats.add(RefStatus.error(i.getRef(App.lang()),
-						"Failed to lead refs.: " + e.getMessage()));
+					"Failed to lead refs.: " + e.getMessage()));
 			}
 		}
 		return stats;
@@ -208,7 +215,7 @@ public final class EpdProfiles {
 		UnitGroup ug = App.store().get(UnitGroup.class, i.unitGroupUUID);
 		if (ug == null) {
 			stats.add(RefStatus.error(i.getUnitGroupRef(App.lang()),
-					"Not found in local store"));
+				"Not found in local store"));
 			return;
 		}
 		Ref uRef = Ref.of(ug);
@@ -225,7 +232,7 @@ public final class EpdProfiles {
 		LCIAMethod m = App.store().get(LCIAMethod.class, i.uuid);
 		if (m == null) {
 			return RefStatus.error(i.getRef(App.lang()),
-					"Not found in local store");
+				"Not found in local store");
 		} else {
 			i.name = App.s(m.getName());
 			return RefStatus.info(i.getRef(App.lang()), "Updated");
@@ -236,7 +243,7 @@ public final class EpdProfiles {
 		Flow flow = App.store().get(Flow.class, i.uuid);
 		if (flow == null) {
 			return RefStatus.error(i.getRef(App.lang()),
-					"Not found in local store");
+				"Not found in local store");
 		} else {
 			FlowName flowName = Flows.getFlowName(flow);
 			if (flowName != null) {
@@ -329,5 +336,34 @@ public final class EpdProfiles {
 			log.error("Failed to download profiles", e);
 			return null;
 		}
+	}
+
+	/**
+	 * Returns true if the given Ref is a data set reference
+	 * that is used in a profile. If this is true, it
+	 * describes a reference data set for which different
+	 * rules regarding upload, validation, etc. apply.
+	 */
+	public static boolean isProfileRef(Ref ref) {
+		if (ref == null || ref.uuid == null)
+			return false;
+		var checkIndicator =
+			ref.type == DataSetType.LCIA_METHOD
+			|| ref.type == DataSetType.FLOW;
+		var checkUnit = ref.type == DataSetType.UNIT_GROUP;
+		if (!checkIndicator && !checkUnit)
+			return false;
+
+		for (var profile : getAll()) {
+			for (var indicator : profile.indicators) {
+				if (checkIndicator
+						&& Strings.nullOrEqual(indicator.uuid, ref.uuid))
+						return true;
+				if (checkUnit
+					  && Strings.nullOrEqual(indicator.unitGroupUUID, ref.uuid))
+					return true;
+			}
+		}
+		return false;
 	}
 }

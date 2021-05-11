@@ -2,7 +2,7 @@ package epd.model;
 
 import java.util.Objects;
 
-public class MaterialProperty {
+public final class MaterialProperty implements Cloneable {
 
 	public String id;
 	public String name;
@@ -24,17 +24,16 @@ public class MaterialProperty {
 	@Override
 	public int hashCode() {
 		return id == null
-				? super.hashCode()
-				: id.hashCode();
+			? super.hashCode()
+			: id.hashCode();
 	}
 
 	@Override
 	public MaterialProperty clone() {
-		var clone = new MaterialProperty();
-		clone.id = id;
-		clone.name = name;
-		clone.unit = unit;
-		clone.unitDescription = unitDescription;
-		return clone;
+		try {
+			return (MaterialProperty) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

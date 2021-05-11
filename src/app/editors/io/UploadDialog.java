@@ -1,8 +1,12 @@
 package app.editors.io;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import app.editors.RefTable;
+import app.store.EpdProfiles;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
@@ -33,7 +37,7 @@ public class UploadDialog extends Wizard {
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	private final Ref ref;
-	private final List<Ref> allRefs = new ArrayList<>();
+	private final Set<Ref> allRefs = new HashSet<>();
 
 	private ConnectionCombo conCombo;
 
@@ -127,6 +131,7 @@ public class UploadDialog extends Wizard {
 			table = Tables.createViewer(parent, M.DataSet, M.UUID,
 				M.DataSetVersion);
 			table.setLabelProvider(new RefTableLabel());
+			table.setComparator(RefTable.comparator());
 			Tables.bindColumnWidths(table, 0.6, 0.2, 0.2);
 			table.setInput(allRefs);
 		}
@@ -134,15 +139,23 @@ public class UploadDialog extends Wizard {
 		private void collectRefs() {
 			try {
 				getContainer().run(true, false, monitor -> {
-					monitor.beginTask(M.SearchDependentDataSets,
+					monitor.beginTask(
+						M.SearchDependentDataSets,
 						IProgressMonitor.UNKNOWN);
 					allRefs.clear();
-					new DependencyTraversal(App.store()).on(ref, ds -> {
-						Ref next = Ref.of(ds);
-						monitor.subTask(App.header(next.name, 75));
-						allRefs.add(next);
-						ExtensionRefs.collect(ds, allRefs);
-					});
+
+					DependencyTraversal.of(App.store(), ref)
+						.filter(r -> !EpdProfiles.isProfileRef(r))
+						.forEach(ds -> {
+							Ref next = Ref.of(ds);
+							monitor.subTask(App.header(next.name, 75));
+							allRefs.add(next);
+							ExtensionRefs.of(ds)
+								.stream()
+								.filter(r -> !EpdProfiles.isProfileRef(r))
+								.forEach(allRefs::add);
+						});
+
 					App.runInUI("update table", () -> table.setInput(allRefs));
 					monitor.done();
 				});
@@ -150,5 +163,7 @@ public class UploadDialog extends Wizard {
 				log.error("failed to collect references", e);
 			}
 		}
+
+
 	}
 }

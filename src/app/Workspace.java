@@ -3,10 +3,11 @@ package app;
 import java.io.File;
 import java.nio.file.Files;
 
-import epd.index.Index;
 import org.apache.commons.io.FileUtils;
 import org.openlca.ilcd.io.FileStore;
 import org.slf4j.LoggerFactory;
+
+import epd.index.Index;
 
 /**
  * The workspace is the folder where the EPD editor stores its data.
@@ -59,15 +60,15 @@ public class Workspace {
 				Files.createDirectories(folder.toPath());
 			} catch (Exception e) {
 				throw new RuntimeException(
-					"failed to open workspace @" + folder, e);
+						"failed to open workspace @" + folder, e);
 			}
 		}
 		return new Workspace(folder);
 	}
 
 	/**
-	 * Opens a workspace in the default folder of the EPD editor
-	 * which is the ~/.epd-editor folder in the users directory.
+	 * Opens a workspace in the default folder of the EPD editor which is the
+	 * ~/.epd-editor folder in the users directory.
 	 */
 	public static Workspace openDefault() {
 		var home = System.getProperty("user.home");
@@ -85,16 +86,22 @@ public class Workspace {
 	}
 
 	public void syncWith(File folder) {
-		if (folder == null
-			  || !folder.exists()
+		if (!folder.exists()
 				|| !folder.isDirectory()
-				|| folder.equals(this.folder))
+				|| folder.equals(this.folder)) {
+			var log = LoggerFactory.getLogger(getClass());
+			log.info("sync folder '{}' does not exist",
+					folder.getAbsolutePath());
 			return;
+		}
 		var files = folder.listFiles();
 		if (files == null)
 			return;
 		try {
 			for (var f : files) {
+				var existing = new File(this.folder, f.getName());
+				if (existing.exists())
+					continue;
 				if (f.isFile()) {
 					FileUtils.copyFileToDirectory(f, this.folder);
 				} else {

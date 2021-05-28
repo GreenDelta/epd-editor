@@ -1,9 +1,15 @@
 package app;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributes;
 
 import org.apache.commons.io.FileUtils;
 import org.openlca.ilcd.io.FileStore;
@@ -34,10 +40,6 @@ public class Workspace {
 	private Workspace(File folder) {
 		this.folder = folder;
 		store = new FileStore(folder);
-		// copy the default data into the workspace if there
-		// is a "data" folder in the execution folder
-		syncWith(new File("data"));
-		// load the index after we synced the files
 		index = Index.load(new File(folder, "index.json"));
 	}
 
@@ -62,7 +64,7 @@ public class Workspace {
 				Files.createDirectories(folder.toPath());
 			} catch (Exception e) {
 				throw new RuntimeException(
-						"failed to open workspace @" + folder, e);
+					"failed to open workspace @" + folder, e);
 			}
 		}
 		return new Workspace(folder);
@@ -119,31 +121,20 @@ public class Workspace {
 		}
 	}
 
-	public void syncWith(File folder) {
-		if (!folder.exists()
-				|| !folder.isDirectory()
-				|| folder.equals(this.folder)) {
-			var log = LoggerFactory.getLogger(getClass());
-			log.info("sync folder '{}' does not exist",
-					folder.getAbsolutePath());
+	public void syncFilesFrom(File dir) {
+		var log = LoggerFactory.getLogger(getClass());
+		log.info("sync folder {} with workspace {}", dir, this.folder);
+		if (dir == null || !dir.exists() || !dir.isDirectory()) {
+			log.warn("folder {} does not exist", dir);
 			return;
 		}
-		var files = folder.listFiles();
-		if (files == null)
+		if (dir.equals(this.folder)) {
+			log.warn("cannot sync folder with itself");
 			return;
+		}
 		try {
-			for (var f : files) {
-				var existing = new File(this.folder, f.getName());
-				if (existing.exists())
-					continue;
-				if (f.isFile()) {
-					FileUtils.copyFileToDirectory(f, this.folder);
-				} else {
-					FileUtils.copyDirectoryToDirectory(f, this.folder);
-				}
-			}
+			FileSync.sync(dir.toPath(), this.folder.toPath());
 		} catch (Exception e) {
-			var log = LoggerFactory.getLogger(App.class);
 			log.error("failed to init data folder @" + this.folder, e);
 		}
 	}
@@ -151,5 +142,51 @@ public class Workspace {
 	@Override
 	public String toString() {
 		return "Workspace{" + "folder=" + folder + '}';
+	}
+
+	/**
+	 * Copies all files from a source directory to a target directory. Files that
+	 * exists in both directories will be overwritten by the version in the source
+	 * directory.
+	 */
+	private static class FileSync extends SimpleFileVisitor<Path> {
+
+		private final Path sourceDir;
+		private final Path targetDir;
+
+		private FileSync(Path sourceDir, Path targetDir) {
+			this.sourceDir = sourceDir;
+			this.targetDir = targetDir;
+		}
+
+		static void sync(Path sourceDir, Path targetDir) throws IOException {
+			if (!Files.exists(sourceDir))
+				return;
+			if (!Files.exists(targetDir)) {
+				Files.createDirectories(targetDir);
+			}
+			var sync = new FileSync(sourceDir, targetDir);
+			Files.walkFileTree(sourceDir, sync);
+		}
+
+		@Override
+		public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
+			throws IOException {
+			var target = targetDir.resolve(sourceDir.relativize(dir));
+			if (!Files.exists(target)) {
+				Files.createDirectories(target);
+			}
+			return FileVisitResult.CONTINUE;
+		}
+
+		@Override
+		public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+			throws IOException {
+			var target = targetDir.resolve(sourceDir.relativize(file));
+			Files.copy(file, target,
+				StandardCopyOption.REPLACE_EXISTING,
+				StandardCopyOption.COPY_ATTRIBUTES);
+			return FileVisitResult.CONTINUE;
+		}
 	}
 }

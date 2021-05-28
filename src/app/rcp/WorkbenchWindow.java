@@ -35,14 +35,13 @@ public class WorkbenchWindow extends WorkbenchWindowAdvisor {
 
 	@Override
 	public void preWindowOpen() {
-		IWorkbenchWindowConfigurer conf = getWindowConfigurer();
+		var conf = getWindowConfigurer();
 		conf.setInitialSize(new Point(800, 600));
 		conf.setShowCoolBar(true);
 		conf.setShowStatusLine(true);
 		conf.setShowProgressIndicator(true);
 		conf.setShowMenuBar(true);
-		conf.setTitle("EPD - Editor "
-				+ Activator.getDefault().getBundle().getVersion());
+		conf.setTitle("EPD - Editor " + App.version());
 	}
 
 	@Override

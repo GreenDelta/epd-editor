@@ -1,7 +1,9 @@
 package app;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.apache.commons.io.FileUtils;
 import org.openlca.ilcd.io.FileStore;
@@ -80,9 +82,41 @@ public class Workspace {
 		index.dump(new File(folder, "index.json"));
 	}
 
-	@Override
-	public String toString() {
-		return "Workspace{" + "folder=" + folder + '}';
+	/**
+	 * Get the version with which the workspace is tagged. This version can be
+	 * different to the version of the application when the version is not in
+	 * sync with the application yet.
+	 */
+	public String version() {
+		var versionFile = Paths.get(folder.getAbsolutePath(), ".version");
+		if (!Files.isRegularFile(versionFile))
+			return "0";
+		try {
+			var bytes = Files.readAllBytes(versionFile);
+			var version = new String(bytes, StandardCharsets.UTF_8);
+			return version.trim();
+		} catch (Exception e) {
+			var log = LoggerFactory.getLogger(App.class);
+			log.error("failed to read workspace version from " + versionFile, e);
+			return "0";
+		}
+	}
+
+	/**
+	 * Sets the version tag of this workspace. The version is stored in a
+	 * {@code .version} file in the workspace.
+	 *
+	 * @param version the new version of the workspace
+	 */
+	public void setVersion(String version) {
+		var v = version == null ? "0" : version;
+		var versionFile = Paths.get(folder.getAbsolutePath(), ".version");
+		try {
+			Files.writeString(versionFile, v);
+		} catch (Exception e) {
+			var log = LoggerFactory.getLogger(App.class);
+			log.error("failed to write workspace version to " + versionFile, e);
+		}
 	}
 
 	public void syncWith(File folder) {
@@ -112,5 +146,10 @@ public class Workspace {
 			var log = LoggerFactory.getLogger(App.class);
 			log.error("failed to init data folder @" + this.folder, e);
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "Workspace{" + "folder=" + folder + '}';
 	}
 }

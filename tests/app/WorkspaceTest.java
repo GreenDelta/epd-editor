@@ -1,8 +1,6 @@
 package app;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.File;
 
@@ -20,6 +18,14 @@ public class WorkspaceTest {
 		assertNotNull(ws.store);
 		var next = ws.updateIndex(ws.index);
 		assertNotSame(next.store, ws.store);
+	}
+
+	@Test
+	public void testVersion() {
+		var ws = Workspace.openDefault();
+		ws.setVersion("0.0.1");
+		ws = Workspace.openDefault();
+		assertEquals("0.0.1", ws.version());
 	}
 
 	@Test

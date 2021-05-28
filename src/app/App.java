@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.List;
 
+import app.rcp.Activator;
 import epd.index.Index;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.jobs.Job;
@@ -22,6 +23,10 @@ public class App {
 	private static AppSettings _settings;
 
 	private static Workspace _workspace;
+
+	public static String version() {
+		return Activator.getDefault().getBundle().getVersion().toString();
+	}
 
 	/**
 	 * Initializes the workspace and resources of the RCP application.

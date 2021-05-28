@@ -32,12 +32,11 @@ import epd.index.Index;
 public class IndexBuilder implements IRunnableWithProgress {
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
-	private Index index;
 
 	@Override
 	public void run(IProgressMonitor m)
-			throws InvocationTargetException, InterruptedException {
-		index = new Index();
+		throws InvocationTargetException, InterruptedException {
+		var index = new Index();
 		List<File> dirs = folders();
 		m.beginTask("Build data set index", totalWork(dirs));
 		for (File folder : dirs) {
@@ -46,7 +45,7 @@ public class IndexBuilder implements IRunnableWithProgress {
 			if (files == null)
 				continue;
 			for (File file : files) {
-				add(file);
+				add(file, index);
 				m.worked(1);
 			}
 		}
@@ -55,10 +54,14 @@ public class IndexBuilder implements IRunnableWithProgress {
 	}
 
 	private List<File> folders() {
-		Class<?>[] classes = new Class<?>[] {
-				LCIAMethod.class, Process.class, Flow.class,
-				FlowProperty.class, UnitGroup.class,
-				Contact.class, Source.class };
+		Class<?>[] classes = new Class<?>[]{
+			LCIAMethod.class,
+			Process.class,
+			Flow.class,
+			FlowProperty.class,
+			UnitGroup.class,
+			Contact.class,
+			Source.class};
 		List<File> folders = new ArrayList<>();
 		for (Class<?> c : classes) {
 			File dir = App.store().getFolder(c);
@@ -80,7 +83,7 @@ public class IndexBuilder implements IRunnableWithProgress {
 		return total;
 	}
 
-	private void add(File f) {
+	private void add(File f, Index index) {
 		try {
 			Ref ref;
 			try (FileInputStream is = new FileInputStream(f)) {

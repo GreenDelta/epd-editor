@@ -79,11 +79,14 @@ public final class Data {
 			Ref ref = Ref.of(ds);
 			var workspace = App.getWorkspace();
 			workspace.store.put(ds);
-			workspace.index.remove(ref);
-			workspace.index.add(ds);
+
+			var index = workspace.index();
+			index.remove(ref);
+			index.add(ds);
 			workspace.saveIndex();
+
 			RefTrees.cache(ds);
-			new NaviSync(workspace.index).run();
+			new NaviSync(workspace.index()).run();
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Data.class);
 			log.error("Failed to update data set: " + ds, e);
@@ -96,9 +99,9 @@ public final class Data {
 		try {
 			var workspace = App.getWorkspace();
 			workspace.store.delete(ref.getDataSetClass(), ref.uuid);
-			workspace.index.remove(ref);
+			workspace.index().remove(ref);
 			workspace.saveIndex();
-			new NaviSync(workspace.index).run();
+			new NaviSync(workspace.index()).run();
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Data.class);
 			log.error("failed to delete data set " + ref, e);

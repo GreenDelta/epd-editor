@@ -2,7 +2,6 @@ package app;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -17,10 +16,8 @@ public class WorkspaceTest {
 	@Test
 	public void testOpenDefault() {
 		var ws = Workspace.openDefault();
-		assertNotNull(ws.index);
+		assertNotNull(ws.index());
 		assertNotNull(ws.store);
-		var next = ws.updateIndex(ws.index);
-		assertNotSame(next.store, ws.store);
 	}
 
 	@Test
@@ -50,8 +47,9 @@ public class WorkspaceTest {
 		var ws = Workspace.openDefault();
 		var profile = EpdProfiles.getDefault();
 		var indicators = 0;
+		var index = ws.index();
 		for (var indicator : profile.indicators) {
-			var ref = ws.index.find(indicator.getRef("en"));
+			var ref = index.find(indicator.getRef("en"));
 			assertNotNull("could not find indicator " + indicator.name, ref);
 			indicators++;
 		}

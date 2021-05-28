@@ -34,24 +34,28 @@ public class Workspace {
 	/**
 	 * The data set index of the file store.
 	 */
-	public final Index index;
+	private volatile Index index;
 
 	private Workspace(File folder) {
 		this.folder = folder;
 		store = new FileStore(folder);
-		index = Index.load(new File(folder, "index.json"));
 	}
 
-	private Workspace(Workspace ws, Index index) {
-		this.folder = ws.folder;
-		this.store = new FileStore(ws.folder);
+	synchronized void updateIndex(Index index) {
+		saveIndex();
 		this.index = index;
 	}
 
-	Workspace updateIndex(Index index) {
-		var ws = new Workspace(this, index);
-		ws.saveIndex();
-		return ws;
+	public Index index() {
+		var idx = index;
+		if (idx != null)
+			return idx;
+		synchronized (this) {
+			if (index == null) {
+				index = Index.load(new File(folder, "index.json"));
+			}
+			return index;
+		}
 	}
 
 	/**
@@ -182,6 +186,13 @@ public class Workspace {
 		public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
 			throws IOException {
 			var target = targetDir.resolve(sourceDir.relativize(file));
+
+			// do not overwrite user settings
+			if (target.getFileName().toString().equals("settings.json")
+				&& Files.exists(target)) {
+				return FileVisitResult.CONTINUE;
+			}
+
 			Files.copy(file, target,
 				StandardCopyOption.REPLACE_EXISTING,
 				StandardCopyOption.COPY_ATTRIBUTES);

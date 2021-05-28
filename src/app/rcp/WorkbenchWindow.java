@@ -1,6 +1,8 @@
 package app.rcp;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
@@ -15,6 +17,7 @@ import app.M;
 import app.StatusView;
 import app.navi.NaviSync;
 import app.store.EpdProfiles;
+import app.store.IndexBuilder;
 import app.store.RefDataSync;
 import app.util.UI;
 import epd.model.EpdProfile;
@@ -45,10 +48,34 @@ public class WorkbenchWindow extends WorkbenchWindowAdvisor {
 
 	@Override
 	public void postWindowOpen() {
-
-		if (App.settings().syncRefDataOnStartup) {
-			syncRefData();
+		var appVersion = App.version();
+		var workspaceVersion = App.getWorkspace().version();
+		if (Objects.equals(appVersion, workspaceVersion)) {
+			if (App.settings().syncRefDataOnStartup) {
+				syncRefData();
+			}
+			return;
 		}
+
+		// copy possible new reference data
+		// TODO: we currently do not ask the user?
+		/*
+		var b = MsgBox.ask(
+				"Update reference data?",
+				"Seems that you use a new editor version. " +
+						"Do you want to update the reference data?");
+		if (!b)
+			return;
+		*/
+
+		// copy the files
+		App.runWithProgress(
+				"Copy reference data",
+				() -> App.getWorkspace().syncFilesFrom(new File("data")));
+		App.run(new IndexBuilder());
+
+		// finally, tag the workspace with the current version
+		App.getWorkspace().setVersion(appVersion);
 	}
 
 	private void syncRefData() {
@@ -81,9 +108,9 @@ public class WorkbenchWindow extends WorkbenchWindowAdvisor {
 			}
 			if (didUpdates) {
 				int code = MessageDialog.open(
-					MessageDialog.INFORMATION, UI.shell(),
-					M.Information, M.UpdatedReferenceData, SWT.NONE,
-					"OK", M.ShowDetails);
+						MessageDialog.INFORMATION, UI.shell(),
+						M.Information, M.UpdatedReferenceData, SWT.NONE,
+						"OK", M.ShowDetails);
 				if (code == 1) {
 					StatusView.open(M.UpdatedReferenceData, sync.stats);
 				}

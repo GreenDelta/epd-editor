@@ -4,18 +4,18 @@ import java.io.File;
 import java.net.URL;
 import java.util.List;
 
-import app.rcp.Activator;
-import epd.index.Index;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.progress.IProgressService;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.io.FileStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import app.rcp.Activator;
+import epd.index.Index;
 import epd.util.Strings;
 
 public class App {
@@ -36,7 +36,7 @@ public class App {
 			_workspace = Workspace.openDefault();
 			Platform.getInstanceLocation().release();
 			var url = new URL("file", null,
-				_workspace.folder.getAbsolutePath());
+					_workspace.folder.getAbsolutePath());
 			Platform.getInstanceLocation().set(url, true);
 		} catch (Exception e) {
 			var log = LoggerFactory.getLogger(App.class);
@@ -49,7 +49,7 @@ public class App {
 	}
 
 	public static Index index() {
-		return getWorkspace().index;
+		return getWorkspace().index();
 	}
 
 	public static File workspaceFolder() {
@@ -71,7 +71,7 @@ public class App {
 	}
 
 	public static synchronized void updateIndex(Index index) {
-		_workspace = getWorkspace().updateIndex(index);
+		getWorkspace().updateIndex(index);
 	}
 
 	public static String lang() {
@@ -126,8 +126,8 @@ public class App {
 	public static void run(IRunnableWithProgress p, Runnable uiFn) {
 		if (p == null)
 			return;
-		IProgressService progress = PlatformUI.getWorkbench()
-			.getProgressService();
+		var progress = PlatformUI.getWorkbench()
+				.getProgressService();
 		try {
 			progress.run(true, true, p);
 			if (uiFn != null) {
@@ -136,6 +136,20 @@ public class App {
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(App.class);
 			log.error("failed to run " + p.getClass(), e);
+		}
+	}
+
+	public static void runWithProgress(String name, Runnable runnable) {
+		var progress = PlatformUI.getWorkbench().getProgressService();
+		try {
+			progress.run(true, false, (monitor) -> {
+				monitor.beginTask(name, IProgressMonitor.UNKNOWN);
+				runnable.run();
+				monitor.done();
+			});
+		} catch (Exception e) {
+			Logger log = LoggerFactory.getLogger(App.class);
+			log.error("Error while running progress " + name, e);
 		}
 	}
 }

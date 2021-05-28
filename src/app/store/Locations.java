@@ -5,14 +5,13 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.xml.bind.JAXB;
-
 import org.openlca.ilcd.lists.Location;
 import org.openlca.ilcd.lists.LocationList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.App;
+import jakarta.xml.bind.JAXB;
 
 public final class Locations {
 

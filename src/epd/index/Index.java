@@ -10,11 +10,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.xml.bind.annotation.XmlAnyAttribute;
-
-import com.google.gson.ExclusionStrategy;
-import com.google.gson.FieldAttributes;
-import com.google.gson.GsonBuilder;
 import org.openlca.ilcd.commons.Classification;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.IDataSet;
@@ -22,7 +17,12 @@ import org.openlca.ilcd.commons.Ref;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import jakarta.xml.bind.annotation.XmlAnyAttribute;
 
 public class Index {
 
@@ -136,8 +136,8 @@ public class Index {
 
 		static Gson getGson() {
 			return new GsonBuilder()
-				.setExclusionStrategies(new AnyAttrExclusion())
-				.create();
+					.setExclusionStrategies(new AnyAttrExclusion())
+					.create();
 		}
 
 		@Override

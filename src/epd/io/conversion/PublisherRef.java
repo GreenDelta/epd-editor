@@ -1,17 +1,16 @@
 package epd.io.conversion;
 
 import java.util.stream.Collectors;
-import javax.xml.bind.annotation.XmlRootElement;
 
-import epd.model.EpdDataSet;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.Other;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.util.Processes;
 
-@XmlRootElement(
-	name = "referenceToPublisher",
-	namespace = Vocab.NS_EPDv2)
+import epd.model.EpdDataSet;
+import jakarta.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "referenceToPublisher", namespace = Vocab.NS_EPDv2)
 final class PublisherRef extends Ref {
 
 	private static PublisherRef wrap(Ref other) {
@@ -22,8 +21,8 @@ final class PublisherRef extends Ref {
 	}
 
 	/**
-	 * Write the publisher references to the underlying
-	 * process data set of the given EPD.
+	 * Write the publisher references to the underlying process data set of the
+	 * given EPD.
 	 */
 	static void write(EpdDataSet epd) {
 		if (epd == null)
@@ -47,14 +46,14 @@ final class PublisherRef extends Ref {
 		}
 		pub.other.any.clear();
 		var pubRefs = epd.publishers.stream()
-			.map(PublisherRef::wrap)
-			.collect(Collectors.toList());
+				.map(PublisherRef::wrap)
+				.collect(Collectors.toList());
 		JaxbRefs.write(PublisherRef.class, pubRefs, pub.other);
 	}
 
 	/**
-	 * Write the publisher references from the underlying
-	 * process data set to the given EPD.
+	 * Write the publisher references from the underlying process data set to
+	 * the given EPD.
 	 */
 	static void read(EpdDataSet epd) {
 		if (epd == null)

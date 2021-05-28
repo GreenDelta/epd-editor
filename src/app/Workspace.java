@@ -42,8 +42,9 @@ public class Workspace {
 	}
 
 	synchronized void updateIndex(Index index) {
-		saveIndex();
+		// order is important here; otherwise we store the old index
 		this.index = index;
+		saveIndex();
 	}
 
 	public Index index() {
@@ -67,7 +68,7 @@ public class Workspace {
 				Files.createDirectories(folder.toPath());
 			} catch (Exception e) {
 				throw new RuntimeException(
-					"failed to open workspace @" + folder, e);
+						"failed to open workspace @" + folder, e);
 			}
 		}
 		return new Workspace(folder);
@@ -102,7 +103,8 @@ public class Workspace {
 			return version.trim();
 		} catch (Exception e) {
 			var log = LoggerFactory.getLogger(App.class);
-			log.error("failed to read workspace version from " + versionFile, e);
+			log.error("failed to read workspace version from " + versionFile,
+					e);
 			return "0";
 		}
 	}
@@ -111,7 +113,8 @@ public class Workspace {
 	 * Sets the version tag of this workspace. The version is stored in a
 	 * {@code .version} file in the workspace.
 	 *
-	 * @param version the new version of the workspace
+	 * @param version
+	 *            the new version of the workspace
 	 */
 	public void setVersion(String version) {
 		var v = version == null ? "0" : version;
@@ -148,9 +151,9 @@ public class Workspace {
 	}
 
 	/**
-	 * Copies all files from a source directory to a target directory. Files that
-	 * exists in both directories will be overwritten by the version in the source
-	 * directory.
+	 * Copies all files from a source directory to a target directory. Files
+	 * that exists in both directories will be overwritten by the version in the
+	 * source directory.
 	 */
 	private static class FileSync extends SimpleFileVisitor<Path> {
 
@@ -173,8 +176,9 @@ public class Workspace {
 		}
 
 		@Override
-		public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
-			throws IOException {
+		public FileVisitResult preVisitDirectory(Path dir,
+				BasicFileAttributes attrs)
+				throws IOException {
 			var target = targetDir.resolve(sourceDir.relativize(dir));
 			if (!Files.exists(target)) {
 				Files.createDirectories(target);
@@ -184,18 +188,18 @@ public class Workspace {
 
 		@Override
 		public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
-			throws IOException {
+				throws IOException {
 			var target = targetDir.resolve(sourceDir.relativize(file));
 
 			// do not overwrite user settings
 			if (target.getFileName().toString().equals("settings.json")
-				&& Files.exists(target)) {
+					&& Files.exists(target)) {
 				return FileVisitResult.CONTINUE;
 			}
 
 			Files.copy(file, target,
-				StandardCopyOption.REPLACE_EXISTING,
-				StandardCopyOption.COPY_ATTRIBUTES);
+					StandardCopyOption.REPLACE_EXISTING,
+					StandardCopyOption.COPY_ATTRIBUTES);
 			return FileVisitResult.CONTINUE;
 		}
 	}

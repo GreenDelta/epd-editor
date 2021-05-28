@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.App;
-import app.navi.Sync;
+import app.navi.NaviSync;
 import epd.index.Index;
 
 /**
@@ -51,7 +51,7 @@ public class IndexBuilder implements IRunnableWithProgress {
 			}
 		}
 		App.updateIndex(index);
-		App.runInUI("Refresh navigation", new Sync(App.index()));
+		App.runInUI("Refresh navigation", new NaviSync(App.index()));
 	}
 
 	private List<File> folders() {

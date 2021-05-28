@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.App;
-import app.navi.Sync;
+import app.navi.NaviSync;
 import epd.io.conversion.Extensions;
 import epd.io.conversion.FlowExtensions;
 import epd.model.EpdDataSet;
@@ -83,7 +83,7 @@ public final class Data {
 			workspace.index.add(ds);
 			workspace.saveIndex();
 			RefTrees.cache(ds);
-			new Sync(workspace.index).run();
+			new NaviSync(workspace.index).run();
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Data.class);
 			log.error("Failed to update data set: " + ds, e);
@@ -98,7 +98,7 @@ public final class Data {
 			workspace.store.delete(ref.getDataSetClass(), ref.uuid);
 			workspace.index.remove(ref);
 			workspace.saveIndex();
-			new Sync(workspace.index).run();
+			new NaviSync(workspace.index).run();
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Data.class);
 			log.error("failed to delete data set " + ref, e);

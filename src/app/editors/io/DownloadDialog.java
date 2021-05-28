@@ -17,7 +17,7 @@ import app.App;
 import app.M;
 import app.StatusView;
 import app.editors.RefTableLabel;
-import app.navi.Sync;
+import app.navi.NaviSync;
 import app.util.MsgBox;
 import app.util.Tables;
 import app.util.UI;
@@ -55,7 +55,7 @@ public class DownloadDialog extends Wizard {
 			download.withDependencies = page.dependencyCheck.getSelection();
 			download.overwriteExisting = page.overwriteCheck.getSelection();
 			getContainer().run(true, false, download);
-			new Sync(App.index()).run();
+			new NaviSync(App.index()).run();
 			StatusView.open(M.Download, download.status);
 			return true;
 		} catch (Exception e) {

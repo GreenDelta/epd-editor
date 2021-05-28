@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 import app.App;
 import app.M;
 import app.StatusView;
-import app.navi.Sync;
+import app.navi.NaviSync;
 import epd.model.RefStatus;
 
 public class ZipImport implements IRunnableWithProgress {
@@ -59,7 +59,7 @@ public class ZipImport implements IRunnableWithProgress {
 			zip.close();
 			App.getWorkspace().saveIndex();
 			monitor.done();
-			App.runInUI("Refresh...", () -> new Sync(App.index()).run());
+			App.runInUI("Refresh...", () -> new NaviSync(App.index()).run());
 			StatusView.open(M.Import, status);
 		} catch (Exception e) {
 			throw new InvocationTargetException(e, e.getMessage());

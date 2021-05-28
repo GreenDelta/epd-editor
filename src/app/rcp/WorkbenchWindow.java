@@ -1,7 +1,6 @@
 package app.rcp;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
@@ -14,7 +13,7 @@ import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 import app.App;
 import app.M;
 import app.StatusView;
-import app.navi.Sync;
+import app.navi.NaviSync;
 import app.store.EpdProfiles;
 import app.store.RefDataSync;
 import app.util.UI;
@@ -46,22 +45,33 @@ public class WorkbenchWindow extends WorkbenchWindowAdvisor {
 
 	@Override
 	public void postWindowOpen() {
-		if (!App.settings().syncRefDataOnStartup)
-			return;
-		List<String> urls = new ArrayList<>();
-		for (EpdProfile p : EpdProfiles.getAll()) {
-			if (Strings.nullOrEmpty(p.referenceDataUrl))
+
+		if (App.settings().syncRefDataOnStartup) {
+			syncRefData();
+		}
+	}
+
+	private void syncRefData() {
+
+		// collect the URLs from the EPD profiles
+		var urls = new ArrayList<String>();
+		for (EpdProfile profile : EpdProfiles.getAll()) {
+			if (Strings.nullOrEmpty(profile.referenceDataUrl))
 				continue;
-			if (!urls.contains(p.referenceDataUrl))
-				urls.add(p.referenceDataUrl);
+			if (!urls.contains(profile.referenceDataUrl))
+				urls.add(profile.referenceDataUrl);
 		}
 		if (urls.isEmpty())
 			return;
-		RefDataSync sync = new RefDataSync(urls);
+
+		// update the reference data from the collected URLs
+		var sync = new RefDataSync(urls);
 		App.run("Synchronize reference data ...", sync, () -> {
 			if (sync.stats.isEmpty())
 				return;
-			new Sync(App.index()).run();
+
+			// update the navigation and display possible updates
+			new NaviSync(App.index()).run();
 			boolean didUpdates = false;
 			for (RefStatus stat : sync.stats) {
 				if (stat.value == RefStatus.DOWNLOADED) {
@@ -71,9 +81,9 @@ public class WorkbenchWindow extends WorkbenchWindowAdvisor {
 			}
 			if (didUpdates) {
 				int code = MessageDialog.open(
-						MessageDialog.INFORMATION, UI.shell(),
-						M.Information, M.UpdatedReferenceData, SWT.NONE,
-						"OK", M.ShowDetails);
+					MessageDialog.INFORMATION, UI.shell(),
+					M.Information, M.UpdatedReferenceData, SWT.NONE,
+					"OK", M.ShowDetails);
 				if (code == 1) {
 					StatusView.open(M.UpdatedReferenceData, sync.stats);
 				}

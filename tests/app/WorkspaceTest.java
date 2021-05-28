@@ -1,6 +1,9 @@
 package app;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
@@ -31,7 +34,7 @@ public class WorkspaceTest {
 	@Test
 	public void testValidationProfile() {
 		var ws = Workspace.openDefault();
-		ws.syncWith(new File("build/default_data"));
+		ws.syncFilesFrom(new File("build/default_data"));
 		var settings = AppSettings.load(ws);
 		if (settings.validationProfile != null) {
 			var profile = ValidationProfiles.getActive();
@@ -43,7 +46,7 @@ public class WorkspaceTest {
 	public void testEPDProfile() {
 		// make sure that at least the default index is loaded
 		Workspace.openDefault()
-				.syncWith(new File("build/default_data"));
+				.syncFilesFrom(new File("build/default_data"));
 		var ws = Workspace.openDefault();
 		var profile = EpdProfiles.getDefault();
 		var indicators = 0;

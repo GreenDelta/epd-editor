@@ -7,7 +7,7 @@ The EPD editor is an [Eclipse RCP](https://wiki.eclipse.org/Rich_Client_Platform
 application. To compile it from source you need to have the following tools
 installed:
 
-* a [Java Development Kit v8](https://adoptopenjdk.net/)
+* a [Java Development Kit >= 14](https://adoptopenjdk.net/)
 * [Maven](http://maven.apache.org/)
 * the [Eclipse package for RCP developers](https://www.eclipse.org/downloads/)
 
@@ -21,7 +21,7 @@ and writing ILCD data sets. It is a plain Maven project and can be
 installed via `mvn install`. See its documentation for more information.
 
 #### Get the source code of the application
-We recommend to use Git to manage the source code but you can also download the
+We recommend to use Git to manage the source code, but you can also download the
 source code as a [zip file](https://github.com/GreenDelta/epd-editor/archive/master.zip).
 If you have Git installed, just clone the repository via:
 
@@ -56,7 +56,7 @@ project into Eclipse via `Import/General/Existing Projects into Workspace`
 'Set as target platform' on the top right of the editor. This will download the
 runtime platform into the folder `.metadata/.plugins/org.eclipse.pde.core/.bundle_pool`
 of your workspace and thus may take a bit of time. After this, the project should
-have no compile errors and you should be able to open the `app.product` file
+have no compile errors, and you should be able to open the `app.product` file
 and launch the application (click on `Launch an Eclipse application`).
 
 The target platform is configured for multi-platform builds as described
@@ -65,7 +65,7 @@ platform when setting up the development environment.
 
 Also, when updating the target platform it is probably required to update the product
 configuration in `app.product`. Just remove and re-add all required plugins. It is
-important to set the start levels for the following plugings to these values:
+important to set the start levels for the following plugins to these values:
 
 ```xml
 <configurations>
@@ -109,54 +109,31 @@ following settings:
 * (take the defaults for the others)
 
 In the next page, select the platforms for which you want to build the product.
-However, only the Windows `x86_64` version is currently fully supported when
-building the distribution package and also the build is written for Windows.
+Currently, only Windows and macOS x64 builds are supported as build targets.
+After the export, you should see corresponding exported folders under the
+`build` directory. With the `make.py` script you can create the distribution
+packages (yee need to have Python 3 installed for this):
 
-Unfortunately, with Java 10 the export currently produces the following error in
-Exlipse Oxygen and Photon:
+```
+cd build
+python make.py
+```
 
->  option -bootclasspath not supported at compliance level 9 and above
-
-This is related to [this bug in Eclipse](https://bugs.eclipse.org/bugs/show_bug.cgi?id=525280).
-As also a Maven Tycho build currently fails with Java 10 due to 
-[this bug](https://bugs.eclipse.org/bugs/show_bug.cgi?id=525522) (which is marked as fixed
-but still appears in our EPD-Editor build), we need to set the Java compliance level
-to Java 8 in Eclipse and the project configuration in order to have a working build.
-
-##### Windows 
-
-The `make.bat` script packages then the application (and the `clean.bat`
-removes all the build artifacts again). In order to run the script, you need to
-add the following things to the build folder:
+In order to run this script, you need to add the following things to the `build`
+folder:
 
 ###### Java Runtime Environment (JRE)
 
 We package a JRE together with the application. Just download the
-[OpenJDK 8 JRE](https://adoptopenjdk.net/)
+[JRE >= 14](https://adoptopenjdk.net/)
 for Windows 64 bit (e.g. `jre-8u141-windows-x64.tar.gz`), extract it, and
-copy the content into the folder `build/jre/win64`.
+copy the content into the folder `build/jre/win64`. For macOS, copy the `tar`
+file (not the `tar.gz` file to that folder)
 
 ###### 7zip
 For packaging the applications we use [7zip](http://www.7-zip.org/download.html).
 Just download the non-installer version and copy the (64bit) `7za.exe`
 directly into the build folder.
-
-##### macOS
-
-To build on macOS, it is necessary to create a build path variable `SWT_LIB` and 
-point it to 
-`Eclipse.app/Contents/Eclipse/plugins/org.eclipse.swt.cocoa.macosx.x86_64_3.106.3.v20180329-0507.jar`
-in order for the application to run.
-
-To create an application bundle for distribution, run the export wizard with the above
-settings. The result will be written to a folder `eclipse` in the selected export folder 
-and will not run on macOS out of the box. In order to repair the build, run the
-`repair4mac.sh` script giving the full or relative path to the `eclipse` folder above as 
-an argument.
-
-In order for the application to run under macOS, currently the Java 8 JDK needs to be 
-installed on the target system.
-
 
 #### Validation profile
 ... 

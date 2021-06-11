@@ -115,7 +115,7 @@ class FileTable {
 		try {
 			Files.copy(file.toPath(), copy.toPath(),
 					StandardCopyOption.REPLACE_EXISTING);
-			Navigator.refresh();
+			Navigator.refreshFolders();
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to copy file " + file, e);

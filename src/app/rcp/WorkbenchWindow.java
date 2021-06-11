@@ -74,7 +74,7 @@ public class WorkbenchWindow extends WorkbenchWindowAdvisor {
 				"Copy reference data",
 				() -> App.getWorkspace().syncFilesFrom(new File("data")));
 		App.run(new IndexBuilder());
-		Navigator.refresh();
+		Navigator.refreshAll();
 
 		// finally, tag the workspace with the current version
 		App.getWorkspace().setVersion(appVersion);

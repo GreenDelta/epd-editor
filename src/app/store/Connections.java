@@ -1,6 +1,8 @@
 package app.store;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,6 +13,7 @@ import app.App;
 import app.editors.Editors;
 import app.navi.Navigator;
 import epd.util.Strings;
+import org.slf4j.LoggerFactory;
 
 public class Connections {
 
@@ -23,14 +26,17 @@ public class Connections {
 	}
 
 	public static List<SodaConnection> get() {
-		List<SodaConnection> list = new ArrayList<>();
-		for (File f : dir().listFiles()) {
-			SodaConnection con = Json.read(f, SodaConnection.class);
-			if (con != null)
+		var files = dir().listFiles();
+		if (files == null)
+			return Collections.emptyList();
+		var list = new ArrayList<SodaConnection>();
+		for (File f : files) {
+			var con = Json.read(f, SodaConnection.class);
+			if (con != null) {
 				list.add(con);
+			}
 		}
-		Collections.sort(list,
-				(c1, c2) -> Strings.compare(c1.toString(), c2.toString()));
+		list.sort((c1, c2) -> Strings.compare(c1.toString(), c2.toString()));
 		return list;
 	}
 
@@ -38,17 +44,26 @@ public class Connections {
 		if (con == null)
 			return;
 		File f = new File(dir(), con.uuid + ".json");
-		if (f.exists()) {
-			f.delete();
+		try {
+			Files.delete(f.toPath());
+		} catch (IOException e) {
+			var log = LoggerFactory.getLogger(Connections.class);
+			log.error("failed to delete connection: " + f, e);
 		}
 		Navigator.refreshConnections();
 		Editors.close(con);
 	}
 
 	private static File dir() {
-		File dir = new File(App.workspaceFolder(), "connections");
-		if (!dir.exists())
-			dir.mkdirs();
+		var dir = new File(App.workspaceFolder(), "connections");
+		if (!dir.exists()) {
+			try {
+				Files.createDirectories(dir.toPath());
+			} catch (Exception e) {
+				var log = LoggerFactory.getLogger(Connections.class);
+				log.error("failed to create connection folder: " + dir, e);
+			}
+		}
 		return dir;
 	}
 

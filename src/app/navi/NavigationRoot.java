@@ -9,6 +9,9 @@ public class NavigationRoot extends NavigationElement {
 
 	@Override
 	public void update() {
+		if (childs == null)
+			return;
+		childs.clear();
 		childs.addAll(Arrays.asList(
 				new TypeElement(this, DataSetType.PROCESS),
 				new TypeElement(this, DataSetType.CONTACT),
@@ -22,9 +25,6 @@ public class NavigationRoot extends NavigationElement {
 				new FolderElement(this, FolderType.DOC),
 				new ProfileFolder(this),
 				new ConnectionFolder(this)));
-		for (NavigationElement child : getChilds()) {
-			child.getChilds();
-		}
 	}
 
 	@Override

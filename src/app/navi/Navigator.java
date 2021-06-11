@@ -142,18 +142,35 @@ public class Navigator extends CommonNavigator {
 		}
 	}
 
-	public static void refresh() {
-		CommonViewer viewer = getViewer();
+	/**
+	 * Refreshes the navigation viewer. It does not update the content of the
+	 * navigation elements (just the labels etc.). If you want to updated also
+	 * the content of all elements, you should call {@link #refreshAll()} instead.
+	 */
+	public static void refreshViewer() {
+		var viewer = getViewer();
 		if (viewer != null) {
 			viewer.refresh();
 		}
+	}
+
+	/**
+	 * Updates the content of the navigation tree and refreshes the viewer. For
+	 * performance reasons you should only do this when you want to update the
+	 * complete tree.
+	 */
+	public static void refreshAll() {
+		var instance = getInstance();
+		if (instance == null)
+			return;
+		refresh(instance.getRoot());
 	}
 
 	public static void refresh(NavigationElement e) {
 		if (e == null)
 			return;
 		e.update();
-		CommonViewer viewer = getViewer();
+		var viewer = getViewer();
 		if (viewer != null) {
 			viewer.refresh(e);
 		}

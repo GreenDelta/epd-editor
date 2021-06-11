@@ -65,7 +65,7 @@ public class SettingsPage extends BaseEditor {
 		if (langChange) {
 			// order is important
 			EpdProfiles.evictCache();
-			Navigator.refresh();
+			Navigator.refreshViewer();
 		}
 	}
 

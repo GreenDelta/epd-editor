@@ -35,8 +35,7 @@ public class NaviSync implements Runnable {
 				continue;
 			sync(node, elem);
 		}
-		Navigator.refreshFolders();
-		Navigator.refreshViewer();
+		Navigator.refreshAll();
 	}
 
 	private void sync(Node node, NavigationElement parent) {

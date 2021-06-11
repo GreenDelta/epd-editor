@@ -47,27 +47,32 @@ public class NavigationMenu extends CommonActionProvider {
 
 		if (actionBars == null || menuAdded)
 			return;
-		IMenuManager menu = actionBars.getMenuManager();
+		var menu = actionBars.getMenuManager();
 		if (menu == null)
 			return;
 
-		Action collapseAll = Actions.create(
-				"Collapse all", Icon.COLLAPSE.des(), () -> {
-					CommonViewer viewer = Navigator.getViewer();
-					if (viewer != null) {
-						viewer.collapseAll();
-					}
-				});
+		var collapseAll = Actions.create(
+			"Collapse all", Icon.COLLAPSE.des(), () -> {
+				CommonViewer viewer = Navigator.getViewer();
+				if (viewer != null) {
+					viewer.collapseAll();
+				}
+			});
 		menu.add(collapseAll);
 
-		Action expandAll = Actions.create(
-				"Expand all", Icon.EXPAND.des(), () -> {
-					CommonViewer viewer = Navigator.getViewer();
-					if (viewer != null) {
-						viewer.expandAll();
-					}
-				});
+		var expandAll = Actions.create(
+			"Expand all", Icon.EXPAND.des(), () -> {
+				CommonViewer viewer = Navigator.getViewer();
+				if (viewer != null) {
+					viewer.expandAll();
+				}
+			});
 		menu.add(expandAll);
+
+		var refresh = Actions.create(
+			"Refresh", Icon.RELOAD.des(), Navigator::refreshAll);
+		menu.add(refresh);
+
 		menuAdded = true;
 	}
 
@@ -75,7 +80,7 @@ public class NavigationMenu extends CommonActionProvider {
 	public void fillContextMenu(IMenuManager menu) {
 		ActionContext con = getContext();
 		IStructuredSelection s = (IStructuredSelection) con
-				.getSelection();
+			.getSelection();
 		List<NavigationElement> elements = Viewers.getAll(s);
 		if (elements.isEmpty())
 			return;
@@ -108,7 +113,7 @@ public class NavigationMenu extends CommonActionProvider {
 		if (first instanceof ProfileElement) {
 			ProfileElement pe = (ProfileElement) first;
 			menu.add(Actions.create(M.Open, Icon.OPEN.des(),
-					() -> ProfileEditor.open(pe.profile)));
+				() -> ProfileEditor.open(pe.profile)));
 			menu.add(new ProfileExportAction(pe.profile));
 			menu.add(new ProfileDeleteAction(pe.profile));
 		}
@@ -121,23 +126,23 @@ public class NavigationMenu extends CommonActionProvider {
 		if (first instanceof ConnectionElement) {
 			ConnectionElement e = (ConnectionElement) first;
 			menu.add(Actions.create(M.Open, Icon.OPEN.des(),
-					() -> ConnectionEditor.open(e.con)));
+				() -> ConnectionEditor.open(e.con)));
 			menu.add(Actions.create(M.DownloadEPDProfiles,
-					Icon.DOWNLOAD.des(), () -> {
-						EpdProfileDownload.runInUI(e.con.url);
-					}));
+				Icon.DOWNLOAD.des(), () -> {
+					EpdProfileDownload.runInUI(e.con.url);
+				}));
 			menu.add(new ConnectionDeleteAction(e));
 		}
 	}
 
 	private void forRef(RefElement e, IMenuManager menu) {
 		menu.add(Actions.create(M.Open, Icon.OPEN.des(),
-				() -> Editors.open(e.ref)));
+			() -> Editors.open(e.ref)));
 		menu.add(Actions.create(M.Validate, Icon.OK.des(),
-				() -> ValidationDialog.open(e.ref)));
+			() -> ValidationDialog.open(e.ref)));
 		menu.add(new DuplicateAction(e));
 		menu.add(Actions.create(M.Export, Icon.EXPORT.des(),
-				() -> ExportDialog.open(e.ref)));
+			() -> ExportDialog.open(e.ref)));
 		menu.add(new RefDeleteAction(e));
 	}
 
@@ -155,7 +160,7 @@ public class NavigationMenu extends CommonActionProvider {
 
 	private void categorySync(IMenuManager menu, String systemName) {
 		MenuManager syncMenu = new MenuManager(M.Update,
-				Icon.DOWNLOAD.des(), "UpdateClassifications");
+			Icon.DOWNLOAD.des(), "UpdateClassifications");
 		menu.add(syncMenu);
 		for (SodaConnection con : Connections.get()) {
 			syncMenu.add(new ClassificationSync(con, systemName));
@@ -167,17 +172,17 @@ public class NavigationMenu extends CommonActionProvider {
 			return;
 		Runnable fn = null;
 		switch (e.getType()) {
-		case CLASSIFICATION:
-			fn = () -> ClassificationEditor.open(e.file);
-			break;
-		case LOCATION:
-			fn = () -> LocationEditor.open(e.file);
-			break;
-		case DOC:
-			fn = () -> UI.open(e.file);
-			break;
-		default:
-			break;
+			case CLASSIFICATION:
+				fn = () -> ClassificationEditor.open(e.file);
+				break;
+			case LOCATION:
+				fn = () -> LocationEditor.open(e.file);
+				break;
+			case DOC:
+				fn = () -> UI.open(e.file);
+				break;
+			default:
+				break;
 		}
 		if (fn == null)
 			return;

@@ -85,7 +85,7 @@ public class ActionBar extends ActionBarAdvisor {
 	}
 
 	private MenuManager extrasMenu() {
-		MenuManager m = new MenuManager(M.Extras,
+		var m = new MenuManager(M.Extras,
 				IWorkbenchActionConstants.M_EDIT);
 		m.add(Actions.create(M.Settings,
 				Icon.SETTINGS.des(), SettingsPage::open));

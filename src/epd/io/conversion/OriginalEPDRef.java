@@ -36,7 +36,7 @@ class OriginalEPDRef extends Ref {
 			return;
 		}
 
-		var rep = Processes.representativeness(epd.process);
+		var rep = Processes.forceRepresentativeness(epd.process);
 		if (rep.other == null) {
 			rep.other = new Other();
 		}

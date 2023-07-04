@@ -24,7 +24,7 @@ public class SimpleExtensionTest {
 	@Test
 	public void testFormatVersion() {
 		var epd = new EpdDataSet();
-		var info = Processes.dataSetInfo(epd.process);
+		var info = Processes.forceDataSetInfo(epd.process);
 		info.uuid = UUID.randomUUID().toString();
 		Extensions.write(epd);
 		Tests.withStore(store -> {
@@ -63,7 +63,7 @@ public class SimpleExtensionTest {
 
 		var epd = new EpdDataSet();
 		var id = UUID.randomUUID().toString();
-		Processes.dataSetInfo(epd.process).uuid = id;
+		Processes.forceDataSetInfo(epd.process).uuid = id;
 		epd.publicationDate = LocalDate.now();
 		Extensions.write(epd);
 		Tests.withStore(store -> {
@@ -96,7 +96,7 @@ public class SimpleExtensionTest {
 
 		var epd = new EpdDataSet();
 		var id = UUID.randomUUID().toString();
-		Processes.dataSetInfo(epd.process).uuid = id;
+		Processes.forceDataSetInfo(epd.process).uuid = id;
 		epd.subType = SubType.REPRESENTATIVE;
 		Extensions.write(epd);
 

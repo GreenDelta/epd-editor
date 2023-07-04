@@ -23,7 +23,7 @@ public class RefExtensionTest {
 	public void testPublisherRefs() {
 		var epd = new EpdDataSet();
 		var id = UUID.randomUUID().toString();
-		Processes.dataSetInfo(epd.process).uuid = id;
+		Processes.forceDataSetInfo(epd.process).uuid = id;
 		epd.publishers.addAll(makeRefs(DataSetType.CONTACT));
 		Extensions.write(epd);
 		Tests.withStore(store -> {
@@ -39,7 +39,7 @@ public class RefExtensionTest {
 	public void testOriginalEPDRefs() {
 		var epd = new EpdDataSet();
 		var id = UUID.randomUUID().toString();
-		Processes.dataSetInfo(epd.process).uuid = id;
+		Processes.forceDataSetInfo(epd.process).uuid = id;
 		epd.originalEPDs.addAll(makeRefs(DataSetType.SOURCE));
 		Extensions.write(epd);
 		Tests.withStore(store -> {

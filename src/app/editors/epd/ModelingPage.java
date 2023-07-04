@@ -52,21 +52,21 @@ class ModelingPage extends FormPage {
 		createModelingSection(body);
 
 		RefTable.create(DataSetType.SOURCE,
-				Processes.method(process).methodSources)
+				Processes.forceMethod(process).methodSources)
 				.withEditor(editor)
 				.withTitle(M.LCAMethodDetails)
 				.withTooltip(Tooltips.EPD_LCAMethodDetails)
 				.render(body, toolkit);
 
 		RefTable.create(DataSetType.SOURCE,
-				Processes.representativeness(process).dataHandlingSources)
+				Processes.forceRepresentativeness(process).dataHandlingSources)
 				.withEditor(editor)
 				.withTitle(M.DocumentationDataQualityManagement)
 				.withTooltip(Tooltips.EPD_DocumentationDataQualityManagement)
 				.render(body, toolkit);
 
 		RefTable.create(DataSetType.SOURCE,
-				Processes.representativeness(process).sources)
+				Processes.forceRepresentativeness(process).sources)
 				.withEditor(editor)
 				.withTitle(M.DataSources)
 				.withTooltip(Tooltips.EPD_DataSources)
@@ -92,7 +92,7 @@ class ModelingPage extends FormPage {
 		createSubTypeViewer(comp);
 		TextBuilder tb = new TextBuilder(editor, this, toolkit);
 		tb.multiText(comp, M.UseAdvice, Tooltips.EPD_UseAdvice,
-				Processes.representativeness(process).useAdvice);
+				Processes.forceRepresentativeness(process).useAdvice);
 	}
 
 	private void createSubTypeViewer(Composite parent) {
@@ -135,7 +135,7 @@ class ModelingPage extends FormPage {
 					process, system);
 			if (decl != null)
 				return;
-			Processes.complianceDeclaration(process).system = system;
+			Processes.createComplianceDeclaration(process).system = system;
 			editor.setDirty();
 		});
 		table.onRemove(system -> {

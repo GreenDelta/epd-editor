@@ -40,7 +40,7 @@ final class PublisherRef extends Ref {
 			return;
 		}
 
-		var pub = Processes.publication(epd.process);
+		var pub = Processes.forcePublication(epd.process);
 		if (pub.other == null) {
 			pub.other = new Other();
 		}

@@ -14,7 +14,7 @@
 	<classpathentry exported="true" kind="lib" path="libs/curvesapi-1.04.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/error_prone_annotations-2.3.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/failureaccess-1.0.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/gson-2.8.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/gson-2.8.9.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/guava-30.0-jre.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/hk2-api-3.0.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/hk2-locator-3.0.1.jar"/>

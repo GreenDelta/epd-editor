@@ -70,7 +70,7 @@ class EPDExtensionWriter {
 				mod.other = null;
 			}
 		} else {
-			Modelling mod = Processes.modelling(epd.process);
+			Modelling mod = Processes.forceModelling(epd.process);
 			if (mod.other == null) {
 				mod.other = new Other();
 			}
@@ -78,7 +78,7 @@ class EPDExtensionWriter {
 		}
 
 		// write info extensions
-		var info = Processes.dataSetInfo(epd.process);
+		var info = Processes.forceDataSetInfo(epd.process);
 		Other infoOther = info.other;
 		if (infoOther == null) {
 			infoOther = new Other();
@@ -109,7 +109,7 @@ class EPDExtensionWriter {
 			m.other = null;
 			return;
 		}
-		var method = Processes.method(epd.process);
+		var method = Processes.forceMethod(epd.process);
 		method.other = new Other();
 		var elem = Dom.createElement(Vocab.NS_EPD, "subType");
 		if (elem != null) {
@@ -133,7 +133,7 @@ class EPDExtensionWriter {
 		if (pubDate == null && t == null)
 			return;
 		var time = t == null
-			? Processes.time(epd.process)
+			? Processes.forceTime(epd.process)
 			: t;
 		if (pubDate == null && time.other == null)
 			return;

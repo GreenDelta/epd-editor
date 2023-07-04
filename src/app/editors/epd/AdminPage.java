@@ -44,7 +44,7 @@ class AdminPage extends FormPage {
 
 		// commissioner
 		var commissioners = Processes
-				.commissionerAndGoal(process).commissioners;
+				.forceCommissionerAndGoal(process).commissioners;
 		RefTable.create(DataSetType.CONTACT, commissioners)
 				.withEditor(editor)
 				.withTitle(M.Commissioner)
@@ -55,7 +55,7 @@ class AdminPage extends FormPage {
 		dataEntrySection(body, tk);
 
 		// data set generators
-		var generators = Processes.dataGenerator(process).contacts;
+		var generators = Processes.forceDataGenerator(process).contacts;
 		RefTable.create(DataSetType.CONTACT, generators)
 				.withEditor(editor)
 				.withTitle(M.DataSetGeneratorModeller)
@@ -63,7 +63,7 @@ class AdminPage extends FormPage {
 				.render(body, tk);
 
 		// data formats
-		var formats = Processes.dataEntry(process).formats;
+		var formats = Processes.forceDataEntry(process).formats;
 		RefTable.create(DataSetType.SOURCE, formats)
 				.withEditor(editor)
 				.withTitle(M.DataFormats)
@@ -82,7 +82,7 @@ class AdminPage extends FormPage {
 
 		// preceding data version
 		var precedingVersions = Processes
-				.publication(process).precedingVersions;
+				.forcePublication(process).precedingVersions;
 		RefTable.create(DataSetType.PROCESS, precedingVersions)
 				.withEditor(editor)
 				.withTitle(M.PrecedingDataSetVersion)
@@ -94,7 +94,7 @@ class AdminPage extends FormPage {
 
 	private void projectSection(Composite body, FormToolkit tk) {
 		var comp = UI.formSection(body, tk, M.Project);
-		var goal = Processes.commissionerAndGoal(process);
+		var goal = Processes.forceCommissionerAndGoal(process);
 
 		// project
 		new TextBuilder(editor, this, tk).multiText(
@@ -114,7 +114,7 @@ class AdminPage extends FormPage {
 	private void dataEntrySection(Composite body, FormToolkit tk) {
 		var comp = UI.formSection(body, tk,
 				M.DataEntry, Tooltips.EPD_DataEntry);
-		var entry = Processes.dataEntry(process);
+		var entry = Processes.forceDataEntry(process);
 
 		// last update
 		var lastUpdate = UI.formText(comp, tk,
@@ -142,7 +142,7 @@ class AdminPage extends FormPage {
 		var comp = UI.formSection(body, tk,
 				M.PublicationAndOwnership,
 				Tooltips.EPD_PublicationAndOwnership);
-		var pub = Processes.publication(process);
+		var pub = Processes.forcePublication(process);
 
 		// version
 		var version = new VersionField(comp, tk);
@@ -211,7 +211,7 @@ class AdminPage extends FormPage {
 		// TODO: labels, translations and tool-tips
 
 		// map the combo items
-		var pub = Processes.publication(process);
+		var pub = Processes.forcePublication(process);
 		var types = LicenseType.values();
 		var items = new String[types.length + 1];
 		items[0] = "";

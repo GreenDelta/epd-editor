@@ -130,11 +130,11 @@ public final class Data {
 	public static void updateVersion(IDataSet ds) {
 		if (ds instanceof Process) {
 			Process p = (Process) ds;
-			with(Processes.publication(p), pub -> {
+			with(Processes.forcePublication(p), pub -> {
 				pub.version = Version.fromString(pub.version)
 						.incUpdate().toString();
 			});
-			Processes.dataEntry(p).timeStamp = Xml.now();
+			Processes.forceDataEntry(p).timeStamp = Xml.now();
 		}
 
 		if (ds instanceof Flow) {
@@ -184,11 +184,11 @@ public final class Data {
 
 		if (ds instanceof LCIAMethod) {
 			LCIAMethod l = (LCIAMethod) ds;
-			with(Methods.publication(l), pub -> {
+			with(Methods.forcePublication(l), pub -> {
 				pub.version = Version.fromString(pub.version)
 						.incUpdate().toString();
 			});
-			Methods.dataEntry(l).timeStamp = Xml.now();
+			Methods.forceDataEntry(l).timeStamp = Xml.now();
 		}
 	}
 

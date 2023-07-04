@@ -160,31 +160,31 @@ public class NewDataSetAction extends Action {
 	private LCIAMethod makeMethod() {
 		LCIAMethod m = new LCIAMethod();
 		m.version = "1.1";
-		with(Methods.dataSetInfo(m), info -> {
+		with(Methods.forceDataSetInfo(m), info -> {
 			info.uuid = UUID.randomUUID().toString();
 			LangString.set(info.name, M.NewLCIAMethod, App.lang());
 			Classification category = getClassification();
 			if (category != null)
 				info.classifications.add(category);
 		});
-		Methods.dataEntry(m).timeStamp = Xml.now();
-		Methods.publication(m).version = "00.00.000";
+		Methods.forceDataEntry(m).timeStamp = Xml.now();
+		Methods.forcePublication(m).version = "00.00.000";
 		return m;
 	}
 
 	private Process makeEpd() {
 		var p = new Process();
 		p.version = "1.1";
-		with(Processes.dataSetInfo(p), info -> {
+		with(Processes.forceDataSetInfo(p), info -> {
 			info.uuid = UUID.randomUUID().toString();
 			Classification category = getClassification();
 			if (category != null)
 				info.classifications.add(category);
 		});
-		Processes.method(p).processType = ProcessType.EPD;
-		LangString.set(Processes.processName(p).name, M.NewEPD, App.lang());
-		Processes.dataEntry(p).timeStamp = Xml.now();
-		Processes.publication(p).version = "00.00.000";
+		Processes.forceMethod(p).processType = ProcessType.EPD;
+		LangString.set(Processes.forceProcessName(p).name, M.NewEPD, App.lang());
+		Processes.forceDataEntry(p).timeStamp = Xml.now();
+		Processes.forcePublication(p).version = "00.00.000";
 		return p;
 	}
 

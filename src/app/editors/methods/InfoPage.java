@@ -51,7 +51,7 @@ class InfoPage extends FormPage {
 	}
 
 	private void infoSection(Composite body, TextBuilder tb) {
-		DataSetInfo info = Methods.dataSetInfo(method);
+		DataSetInfo info = Methods.forceDataSetInfo(method);
 		Composite comp = UI.infoSection(method, body, tk);
 		tb.text(comp, M.Name, Tooltips.LCIAMethod_Name, info.name);
 		UI.formLabel(comp, tk, "#Methodologies",
@@ -81,19 +81,19 @@ class InfoPage extends FormPage {
 		Composite comp = UI.formSection(body, tk, M.AdministrativeInformation);
 		Text timeT = UI.formText(comp, tk,
 				M.LastUpdate, Tooltips.All_LastUpdate);
-		timeT.setText(Xml.toString(Methods.dataEntry(method).timeStamp));
+		timeT.setText(Xml.toString(Methods.forceDataEntry(method).timeStamp));
 		Text uuidT = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);
 		if (method.getUUID() != null)
 			uuidT.setText(method.getUUID());
 		VersionField vf = new VersionField(comp, tk);
 		vf.setVersion(method.getVersion());
 		vf.onChange(v -> {
-			Methods.publication(method).version = v;
+			Methods.forcePublication(method).version = v;
 			editor.setDirty();
 		});
 		editor.onSaved(() -> {
 			vf.setVersion(method.getVersion());
-			timeT.setText(Xml.toString(Methods.dataEntry(method).timeStamp));
+			timeT.setText(Xml.toString(Methods.forceDataEntry(method).timeStamp));
 		});
 	}
 

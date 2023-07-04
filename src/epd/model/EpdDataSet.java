@@ -114,7 +114,7 @@ public class EpdDataSet {
 	 */
 	public Exchange productExchange() {
 		QuantitativeReference qRef = Processes
-				.quantitativeReference(process);
+				.forceQuantitativeReference(process);
 		qRef.type = QuantitativeReferenceType.REFERENCE_FLOWS;
 		if (qRef.referenceFlows.isEmpty())
 			qRef.referenceFlows.add(1);
@@ -123,7 +123,7 @@ public class EpdDataSet {
 			if (id == exchange.id)
 				return exchange;
 		}
-		Exchange e = Processes.exchange(process);
+		Exchange e = Processes.createExchange(process);
 		e.meanAmount = 1d;
 		e.resultingAmount = 1d;
 		e.id = id;

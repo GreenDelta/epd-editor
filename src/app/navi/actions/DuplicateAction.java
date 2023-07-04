@@ -112,7 +112,7 @@ public class DuplicateAction extends Action {
 
 	private LCIAMethod impactMethod(String name, Ref ref) {
 		LCIAMethod method = App.store().get(LCIAMethod.class, ref.uuid);
-		var info = Methods.dataSetInfo(method);
+		var info = Methods.forceDataSetInfo(method);
 		info.uuid = UUID.randomUUID().toString();
 		LangString.set(info.name, name, App.lang());
 		return method;
@@ -120,9 +120,9 @@ public class DuplicateAction extends Action {
 
 	private Process process(String name, Ref ref) {
 		Process process = App.store().get(Process.class, ref.uuid);
-		var info = Processes.dataSetInfo(process);
+		var info = Processes.forceDataSetInfo(process);
 		info.uuid = UUID.randomUUID().toString();
-		ProcessName processName = Processes.processName(process);
+		ProcessName processName = Processes.forceProcessName(process);
 		LangString.set(processName.name, name, App.lang());
 		return process;
 	}

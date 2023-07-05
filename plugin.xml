@@ -20,7 +20,7 @@
       <product application="epd-editor.application"
                name="EPD Editor">
          <property name="windowImages"
-                   value="icons/logo/16_32bit.png,icons/logo/32_32bit.png,icons/logo/48_32bit.png,icons/logo/64_32bit.png,icons/logo/128_32bit.png">
+                   value="icons/logo/16_32bit.png,icons/logo/32_32bit.png,icons/logo/48_32bit.png,icons/logo/64_32bit.png,icons/logo/128_32bit.png,icons/logo/256_32bit.png">
          </property>
          <property name="appName"
                    value="EPD Editor">

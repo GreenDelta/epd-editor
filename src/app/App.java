@@ -1,6 +1,7 @@
 package app;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 
@@ -41,6 +42,24 @@ public class App {
 		} catch (Exception e) {
 			var log = LoggerFactory.getLogger(App.class);
 			log.error("failed to init App", e);
+		}
+	}
+
+
+	/**
+	 * Get the folder where EPD Editor is installed. This is where the EPDEditor.ini file is
+	 * located. On macOS this is the folder `EPD Editor.app/Contents/Eclipse`.
+	 */
+	public static File getInstallLocation() {
+		URL url = Platform.getInstallLocation().getURL();
+		try {
+			// url.toURI() does not work for URLs with specific characters
+			// which is the case when the application is installed in
+			// folders like C:\Program Files (x86)\openLCA; see
+			// https://community.oracle.com/blogs/kohsuke/2007/04/25/how-convert-javaneturl-javaiofile
+			return new File(url.toURI());
+		} catch (URISyntaxException e) {
+			return new File(url.getPath());
 		}
 	}
 

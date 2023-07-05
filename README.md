@@ -95,51 +95,6 @@ Profiles need to be located under `validation_profiles`. A profile for the Germa
 OEKOBAUDAT is automatically added to this location when dependencies are copied
 using `mvn package` as described above under "Copy the Maven dependencies".
 
-#### Building the distribution packages
-We currently build the application via the Eclipse export: right-click on the
-project and select `Export > Eclipse product`. In the wizard select the
-following settings:
-
-* Configuration: `epd-editor/app-product` (should be the default)
-* Root directory: `epd-editor`
-* Synchronize before exporting: yes [x]
-* Destination directory: choose the `build` folder of this project
-* Generate p2 repository: no [ ] (would be just overhead)
-* Export for multiple platforms: yes [x]
-* (take the defaults for the others)
-
-In the next page, select the platforms for which you want to build the product.
-Currently, only Windows and macOS x64 builds are supported as build targets.
-After the export, you should see corresponding exported folders under the
-`build` directory. With the `make.py` script you can create the distribution
-packages (yee need to have Python 3 installed for this):
-
-```
-cd build
-python make.py
-```
-
-In order to run this script, you need to add the following things to the `build`
-folder:
-
-###### Java Runtime Environment (JRE)
-
-We package a JRE together with the application. Just download the
-[JRE >= 14](https://adoptopenjdk.net/)
-for Windows 64 bit (e.g. `jre-8u141-windows-x64.tar.gz`), extract it, and
-copy the content into the folder `build/jre/win64`. For macOS, copy the `tar`
-file (not the `tar.gz` file to that folder)
-
-###### 7zip
-For packaging the applications we use [7zip](http://www.7-zip.org/download.html).
-Just download the non-installer version and copy the (64bit) `7za.exe`
-directly into the build folder.
-
-#### Validation profile
-... 
-
-...
-
 ## License
 Unless stated otherwise, all source code of the openLCA project is licensed
 under the [Mozilla Public License, v. 2.0](http://mozilla.org/MPL/2.0/). Please

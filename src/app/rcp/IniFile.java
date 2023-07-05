@@ -1,7 +1,6 @@
 package app.rcp;
 
 import java.io.File;
-import java.net.URL;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +8,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.osgi.service.datalocation.Location;
+import app.App;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,17 +66,8 @@ public class IniFile {
 	}
 
 	private static File getIniFile() {
-		Location location = Platform.getInstallLocation();
-		URL url = location.getURL();
-		File dir = new File(url.getFile());
-		// TODO: if OS == macOS dir = Contents/MacOS ?
-		for (File f : dir.listFiles()) {
-			if (f.isFile() && f.getName().endsWith(".ini"))
-				return f;
-		}
-		Logger log = LoggerFactory.getLogger(IniFile.class);
-		log.warn("Could not find *.ini file");
-		return new File(dir, "epd-editor.ini");
+		var dir = App.getInstallLocation();
+		return new File(dir, "EPDEditor.ini");
 	}
 
 	private static IniFile parseFile(File iniFile) throws Exception {

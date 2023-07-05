@@ -44,7 +44,7 @@ public class WorkbenchWindow extends WorkbenchWindowAdvisor {
 		conf.setShowStatusLine(true);
 		conf.setShowProgressIndicator(true);
 		conf.setShowMenuBar(true);
-		conf.setTitle("EPD - Editor " + App.version());
+		conf.setTitle("EPD Editor " + App.version());
 	}
 
 	@Override

@@ -29,15 +29,17 @@ Visit https://github.com/GreenDelta/epd-editor
       </vmArgsMac>
    </launcherArgs>
 
-   <windowImages i16="icons/eclipse16.png" i32="icons/eclipse32.png" i48="icons/eclipse48.png" i64="icons/eclipse64.png" i128=" icons/eclipse128.png" i256="icons/eclipse256.png"/>
+   <windowImages i16="/epd-editor/icons/logo/16_32bit.png" i32="/epd-editor/icons/logo/32_32bit.png" i48="/epd-editor/icons/logo/48_32bit.png" i64="/epd-editor/icons/logo/64_32bit.png" i128="/epd-editor/icons/logo/128_32bit.png" i256="/epd-editor/icons/logo/256_32bit.png"/>
+
 
    <launcher name="epd-editor">
-      <macosx icon="/epd-editor/icons/EPD-Editor.icns"/>
+      <macosx icon="/epd-editor/icons/logo/logo.icns"/>
       <win useIco="true">
-         <ico path="/epd-editor/icons/EPD-Editor.ico"/>
+         <ico path="/epd-editor/icons/logo/logo.ico"/>
          <bmp/>
       </win>
    </launcher>
+
 
    <vm>
    </vm>

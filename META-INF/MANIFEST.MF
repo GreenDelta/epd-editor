@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: App
 Bundle-SymbolicName: epd-editor;singleton:=true
 Automatic-Module-Name: epd-editor
-Bundle-RequiredExecutionEnvironment: JavaSE-14
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-Version: 5.0.0
 Bundle-Activator: app.rcp.Activator
 Eclipse-BundleShape: dir

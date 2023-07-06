@@ -1,28 +1,58 @@
 package app.logging;
 
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
+import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
 
 /**
  * The configuration of the application logging.
  */
 public class LoggerConfig {
 
-	public static void setUp() {
-		Logger logger = Logger.getRootLogger();
-		logger.setLevel(Level.INFO);
-		HtmlLogFile.create(logger);
-		addConsoleOutput(logger);
+	static void setLevel(Level level) {
+		if (level == null)
+			return;
+
+		var domainLog = LoggerFactory.getLogger("epd.editor");
+		if (domainLog instanceof Logger log) {
+			log.setLevel(level);
+		}
+		domainLog.info("set log-level=" + level);
+
+		var rootLog = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+		if (rootLog instanceof Logger log) {
+			log.setLevel(translateForRoot(level));
+		}
 	}
 
-	private static void addConsoleOutput(Logger logger) {
-		BasicConfigurator.configure();
-		ConsoleAppender appender = new ConsoleAppender(new PatternLayout());
-		logger.addAppender(appender);
-		appender.setTarget(ConsoleAppender.SYSTEM_OUT);
-		appender.activateOptions();
+	public static void setUp() {
+		var root = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+		if (!(root instanceof Logger log))
+			return;
+
+		var html = HtmlLog.createAppender();
+		if (html != null) {
+			log.addAppender(html);
+		}
+
+		setLevel(Level.INFO);
 	}
+
+
+	/**
+	 * Depending on the log-level of the EPD Editor domain logger,
+	 * we hide some details for the root logger.
+	 */
+	private static Level translateForRoot(Level level) {
+		if (level == null)
+			return Level.ERROR;
+		return switch (level.levelInt) {
+			case Level.WARN_INT -> Level.ERROR;
+			case Level.INFO_INT -> Level.WARN;
+			case Level.DEBUG_INT -> Level.INFO;
+			default -> level;
+		};
+	}
+
 }

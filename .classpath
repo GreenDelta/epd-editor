@@ -30,8 +30,6 @@
 	<classpathentry exported="true" kind="lib" path="libs/javax.inject-1.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/jaxb-core-3.0.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/jaxb-impl-3.0.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jcabi-log-0.14.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jcabi-manifests-1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/jersey-client-3.0.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/jersey-common-3.0.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/jersey-hk2-3.0.2.jar"/>
@@ -40,16 +38,16 @@
 	<classpathentry exported="true" kind="lib" path="libs/jsr305-3.0.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/jxl-2.6.12.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/log4j-1.2.17.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/mimepull-1.9.13.jar"/>
+    <classpathentry exported="true" kind="lib" path="libs/logback-classic-1.2.11.jar"/>
+    <classpathentry exported="true" kind="lib" path="libs/logback-core-1.2.11.jar"/>
+    <classpathentry exported="true" kind="lib" path="libs/mimepull-1.9.13.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/olca-ilcd-2.0.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/osgi-resource-locator-1.0.3.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/poi-3.17.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/poi-ooxml-3.17.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/poi-ooxml-schemas-3.17.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/scala-library-2.11.6.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/slf4j-api-1.7.30.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/slf4j-log4j12-1.7.30.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/slf4j-api-1.7.36.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/truecommons-annotations-2.5.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/truecommons-cio-2.5.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/truecommons-io-2.5.0.jar"/>

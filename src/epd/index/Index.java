@@ -1,6 +1,23 @@
 package epd.index;
 
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import epd.util.Strings;
+import jakarta.xml.bind.annotation.XmlAnyAttribute;
+import org.openlca.ilcd.commons.Classification;
+import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.commons.IDataSet;
+import org.openlca.ilcd.commons.Ref;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
+import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
@@ -9,20 +26,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import org.openlca.ilcd.commons.Classification;
-import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.commons.IDataSet;
-import org.openlca.ilcd.commons.Ref;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.gson.ExclusionStrategy;
-import com.google.gson.FieldAttributes;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import jakarta.xml.bind.annotation.XmlAnyAttribute;
 
 public class Index {
 
@@ -74,7 +77,9 @@ public class Index {
 		}
 	}
 
-	/** Get the reference with the same type and UUID from the tree. */
+	/**
+	 * Get the reference with the same type and UUID from the tree.
+	 */
 	public Ref find(Ref ref) {
 		if (ref == null)
 			return null;
@@ -102,12 +107,15 @@ public class Index {
 		if (file == null)
 			return;
 		try {
-			String json = AnyAttrExclusion.getGson().toJson(this);
+			var json = new GsonBuilder()
+				.setExclusionStrategies(new AnyAttrExclusion())
+				.create()
+				.toJson(this);
 			Files.writeString(file.toPath(), json,
-					StandardOpenOption.CREATE,
-					StandardOpenOption.TRUNCATE_EXISTING);
+				StandardOpenOption.CREATE,
+				StandardOpenOption.TRUNCATE_EXISTING);
 		} catch (Exception e) {
-			Logger log = LoggerFactory.getLogger(getClass());
+			var log = LoggerFactory.getLogger(getClass());
 			log.error("failed to write index", e);
 		}
 	}
@@ -116,12 +124,15 @@ public class Index {
 		if (file == null || !file.exists())
 			return new Index();
 		try {
-			byte[] bytes = Files.readAllBytes(file.toPath());
-			String json = new String(bytes, StandardCharsets.UTF_8);
-			var gson = AnyAttrExclusion.getGson();
+			var bytes = Files.readAllBytes(file.toPath());
+			var json = new String(bytes, StandardCharsets.UTF_8);
+			var gson = new GsonBuilder()
+				.setExclusionStrategies(new AnyAttrExclusion())
+				.registerTypeAdapter(DataSetType.class, new DataSetTypeAdapter())
+				.create();
 			return gson.fromJson(json, Index.class);
 		} catch (Exception e) {
-			Logger log = LoggerFactory.getLogger(Index.class);
+			var log = LoggerFactory.getLogger(Index.class);
 			log.error("failed to read index", e);
 			return new Index();
 		}
@@ -134,12 +145,6 @@ public class Index {
 	 */
 	private static class AnyAttrExclusion implements ExclusionStrategy {
 
-		static Gson getGson() {
-			return new GsonBuilder()
-					.setExclusionStrategies(new AnyAttrExclusion())
-					.create();
-		}
-
 		@Override
 		public boolean shouldSkipField(FieldAttributes attributes) {
 			return attributes.getAnnotation(XmlAnyAttribute.class) != null;
@@ -148,6 +153,49 @@ public class Index {
 		@Override
 		public boolean shouldSkipClass(Class<?> aClass) {
 			return false;
+		}
+	}
+
+	/**
+	 * We need a specific type adapter for de-serializing items of the
+	 * {@code DataSetType} enumeration. This is because we use it as keys in maps,
+	 * and it is also a field of instances of type {@code Ref}. Gson makes
+	 * different things here: when it is serialized as a key in a map, the
+	 * {@code toString} method is used; but when it is serialized as a field,
+	 * the {@code name} method is used to convert an enum-item to a string.
+	 * However, when de-serializing it, the {@code name} seems to be used in both
+	 * cases. Thus, we need to attach an adapter that supports both cases.
+	 */
+	private static class DataSetTypeAdapter
+		implements JsonDeserializer<DataSetType> {
+
+		@Override
+		public DataSetType deserialize(
+			JsonElement elem, Type type, JsonDeserializationContext ctx
+		) throws JsonParseException {
+
+			if (!DataSetType.class.equals(type))
+				return new Gson().fromJson(elem, type);
+			if (elem == null || !elem.isJsonPrimitive())
+				return null;
+			var prim = elem.getAsJsonPrimitive();
+			if (!prim.isString())
+				return null;
+
+			var s = prim.getAsString();
+			if (Strings.nullOrEmpty(s))
+				return null;
+
+			try {
+				// first try by item-value
+				var dsType = DataSetType.fromValue(s);
+				if (dsType != null)
+					return dsType;
+				// then try by item-name
+				return DataSetType.valueOf(s);
+			} catch (Exception e) {
+				return null;
+			}
 		}
 	}
 }

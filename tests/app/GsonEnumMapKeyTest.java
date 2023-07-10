@@ -3,8 +3,14 @@ package app;
 import static org.junit.Assert.*;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import org.junit.Test;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 
 public class GsonEnumMapKeyTest {
@@ -29,6 +35,28 @@ public class GsonEnumMapKeyTest {
 		public final HashMap<AB, String> idx = new HashMap<>();
 	}
 
+	public static class ABAdapter implements JsonDeserializer<AB> {
+
+		@Override
+		public AB deserialize(
+			JsonElement elem, Type type, JsonDeserializationContext ctx
+		) throws JsonParseException {
+			if (!AB.class.equals(type))
+				return new Gson().fromJson(elem, type);
+			if (!elem.isJsonPrimitive())
+				return null;
+			var prim = elem.getAsJsonPrimitive();
+			if (!prim.isString())
+				return null;
+			var s = prim.getAsString();
+			for (var ab : AB.values()) {
+				if (s.equals(ab.toString()))
+					return ab;
+			}
+			return null;
+		}
+	}
+
 	/**
 	 * This is a quite confusing aspect of the Gson-API: when you use enumerations
 	 * as keys in maps, the {@code toString} method of the respective enumeration
@@ -49,5 +77,22 @@ public class GsonEnumMapKeyTest {
 		var copy = gson.fromJson(json, Wrapper.class);
 		assertEquals("B", copy.idx.get(AB.A));
 		assertEquals("A", copy.idx.get(AB.B));
+	}
+
+	/**
+	 * Solves the problem described above with a type adapter.
+	 */
+	@Test
+	public void testEnumKeyAdapter() {
+		var w = new Wrapper();
+		w.idx.put(AB.A, "A");
+		w.idx.put(AB.B, "B");
+		var json = new Gson().toJson(w);
+		var copy = new GsonBuilder()
+			.registerTypeAdapter(AB.class, new ABAdapter())
+			.create()
+			.fromJson(json, Wrapper.class);
+		assertEquals("A", copy.idx.get(AB.A));
+		assertEquals("B", copy.idx.get(AB.B));
 	}
 }

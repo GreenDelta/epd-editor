@@ -6,8 +6,8 @@
 	<classpathentry exported="true" kind="lib" path="libs/aopalliance-repackaged-3.0.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/bcprov-jdk15on-1.70.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/checker-qual-3.12.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/commons-codec-1.10.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/commons-collections4-4.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/commons-codec-1.13.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/commons-collections4-4.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/commons-compress-1.21.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/commons-io-2.8.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/commons-lang3-3.12.0.jar"/>
@@ -44,7 +44,7 @@
     <classpathentry exported="true" kind="lib" path="libs/mimepull-1.9.13.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/olca-ilcd-2.0.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/osgi-resource-locator-1.0.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/poi-3.17.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/poi-4.1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/poi-ooxml-3.17.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/poi-ooxml-schemas-3.17.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/scala-library-2.11.12.jar"/>

@@ -15,7 +15,7 @@ from typing import Optional
 # the bundle ID of the JRE
 JRE_ID = "org.epd.editor.jre"
 
-# the root of the build project epd-editor/epd-editor-build
+# the root of the build project epd-editor/build
 PROJECT_DIR = Path(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -210,7 +210,7 @@ class BuildDir:
             return self.app_dir / "data"
 
     @property
-    def olca_plugin_dir(self) -> Path | None:
+    def olca_plugin_dir(self) -> Optional[Path]:
         if self.osa.is_mac():
             plugin_dir = self.app_dir / "Contents/Eclipse/plugins"
         else:
@@ -245,9 +245,7 @@ class BuildDir:
 
         # copy default data
         print("  copy default data")
-        default_data = PROJECT_DIR / "default_data"
-        if default_data.exists():
-            shutil.copytree(default_data, self.default_data_dir)
+        self.copy_default_data()
 
         # copy ini and bin files
         if self.osa.is_win():
@@ -270,6 +268,20 @@ class BuildDir:
             shutil.make_archive(pack.as_posix(), "zip", self.root.as_posix())
         else:
             Zip.targz(self.root, pack)
+
+    def copy_default_data(self):
+        default_data = PROJECT_DIR / "default_data"
+        if not default_data.exists():
+            return
+
+        # copy the default data directory
+        shutil.copytree(default_data, self.default_data_dir)
+
+        # copy epd profiles from the plugin
+        epd_profiles = self.default_data_dir / "validation_profiles"
+        app_store = PROJECT_DIR.parent / "src/app/store"
+        for json in ["EN_15804.json", "EN_15804_A2.json"]:
+            shutil.copy2(app_store / json, epd_profiles / json)
 
 
 class JRE:

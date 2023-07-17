@@ -4,13 +4,19 @@
   <locations>
 	  <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
 		  <repository location="https://download.eclipse.org/modeling/emf/emf/builds/release/2.32"/>
-	      <unit id="org.eclipse.emf.sdk.feature.group" version="2.32.0.v20221121-1400"/>
+		  <unit id="org.eclipse.emf.sdk.feature.group" version="2.32.0.v20221121-1400"/>
 	  </location>
 	  <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-		  <repository location="https://download.eclipse.org/eclipse/updates/4.28/"/>
-		  <unit id="org.eclipse.equinox.sdk.feature.group" version="3.23.800.v20230523-2142"/>
-		  <unit id="org.eclipse.platform.sdk" version="4.28.0.I20230605-0440"/>
-		  <unit id="org.eclipse.rcp.feature.group" version="4.28.0.v20230605-0440"/>
+		  <repository location="https://download.eclipse.org/eclipse/updates/4.26/"/>
+		  <unit id="org.eclipse.equinox.sdk.feature.group" version="3.23.600.v20221116-1440"/>
+		  <unit id="org.eclipse.platform.ide" version="4.26.0.I20221123-1800"/>
+		  <unit id="org.eclipse.platform.sdk" version="4.26.0.I20221123-1800"/>
+		  <unit id="org.eclipse.rcp.feature.group" version="4.26.0.v20221123-2302"/>
+	  </location>
+	  <location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+		  <repository location="https://download.eclipse.org/tools/orbit/downloads/drops/R20230531010532/repository"/>
+		  <unit id="org.apache.commons.io" version="2.8.0.v20210415-0900"/>
+		  <unit id="org.apache.commons.logging" version="1.2.0.v20180409-1502"/>
 	  </location>
   </locations>
 </target>

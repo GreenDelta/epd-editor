@@ -152,15 +152,15 @@ class ResultImport implements Runnable {
 	private String getString(Cell cell) {
 		if (cell == null)
 			return null;
-		return cell.getCellTypeEnum() != CellType.STRING
+		return cell.getCellType() != CellType.STRING
 				? null
 				: cell.getStringCellValue();
 	}
 
 	private Double getDouble(Cell cell) {
 		if (cell == null
-				|| cell.getCellTypeEnum() == CellType.STRING
-				|| cell.getCellTypeEnum() == CellType.BLANK)
+				|| cell.getCellType() == CellType.STRING
+				|| cell.getCellType() == CellType.BLANK)
 			return null;
 		try {
 			return cell.getNumericCellValue();

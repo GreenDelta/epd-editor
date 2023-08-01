@@ -3,7 +3,7 @@
     <u:unitGroupInformation>
         <u:dataSetInformation>
             <common:UUID>42e089ac-92bf-4bf2-8ca1-5fc40d18f2ed</common:UUID>
-            <common:name xml:lang="en">mol H+ eqv.</common:name>
+            <common:name xml:lang="en">mol H+-eq.</common:name>
             <common:name xml:lang="de">mol H+-Äqv.</common:name>
             <u:classificationInformation>
                 <common:classification name="ILCD">
@@ -25,7 +25,7 @@
     </u:administrativeInformation>
     <u:units>
         <u:unit dataSetInternalID="0">
-            <u:name>mol H+ eqv.</u:name>
+            <u:name>mol H+-eq.</u:name>
             <u:meanValue>1.0</u:meanValue>
         </u:unit>
     </u:units>

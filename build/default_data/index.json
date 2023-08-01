@@ -1260,7 +1260,7 @@
 									"lang": "de"
 								},
 								{
-									"value": "kg Ethen-Äqv."
+									"value": "kg Ethen-eq."
 								}
 							],
 							"type": "UNIT_GROUP",
@@ -1274,7 +1274,7 @@
 									"lang": "de"
 								},
 								{
-									"value": "kg SO2-Äqv."
+									"value": "kg SO2-eq."
 								}
 							],
 							"type": "UNIT_GROUP",
@@ -1288,7 +1288,7 @@
 									"lang": "de"
 								},
 								{
-									"value": "kg Sb-Äqv."
+									"value": "kg Sb-eq."
 								}
 							],
 							"type": "UNIT_GROUP",
@@ -1302,7 +1302,7 @@
 									"lang": "de"
 								},
 								{
-									"value": "kg CO2-Äqv."
+									"value": "kg CO2-eq."
 								}
 							],
 							"type": "UNIT_GROUP",
@@ -1316,7 +1316,7 @@
 									"lang": "de"
 								},
 								{
-									"value": "kg CFC 11-Äquiv."
+									"value": "kg CFC-11-eq."
 								}
 							],
 							"type": "UNIT_GROUP",
@@ -1330,7 +1330,7 @@
 									"lang": "de"
 								},
 								{
-									"value": "kg Phosphat-Äqv."
+									"value": "kg P-eq."
 								}
 							],
 							"type": "UNIT_GROUP",
@@ -1640,11 +1640,11 @@
 						{
 							"name": [
 								{
-									"value": "m3 world eqv.",
+									"value": "m3 world eq. deprived",
 									"lang": "en"
 								},
 								{
-									"value": "m3 world eqv."
+									"value": "m3 world eq. deprived"
 								}
 							],
 							"type": "UNIT_GROUP",
@@ -1654,11 +1654,11 @@
 						{
 							"name": [
 								{
-									"value": "mol N eqv.",
+									"value": "mol N-eq.",
 									"lang": "en"
 								},
 								{
-									"value": "mol N eqv."
+									"value": "mol N-eq."
 								}
 							],
 							"type": "UNIT_GROUP",
@@ -1682,11 +1682,11 @@
 						{
 							"name": [
 								{
-									"value": "kg NMVOC eqv.",
+									"value": "kg NMVOC-eq.",
 									"lang": "en"
 								},
 								{
-									"value": "kg NMVOC eqv."
+									"value": "kg NMVOC-eq."
 								}
 							],
 							"type": "UNIT_GROUP",
@@ -1700,7 +1700,7 @@
 									"lang": "en"
 								},
 								{
-									"value": "kg R11 eq."
+									"value": "kg CFC-11-eq."
 								}
 							],
 							"type": "UNIT_GROUP",
@@ -1724,11 +1724,11 @@
 						{
 							"name": [
 								{
-									"value": "kg N eqv.",
+									"value": "kg N-eq.",
 									"lang": "en"
 								},
 								{
-									"value": "kg N eqv."
+									"value": "kg N-eq."
 								}
 							],
 							"type": "UNIT_GROUP",
@@ -1738,11 +1738,11 @@
 						{
 							"name": [
 								{
-									"value": "kBq U235 eqv.",
+									"value": "kBq U235 equivalents",
 									"lang": "en"
 								},
 								{
-									"value": "kBq U235 eqv."
+									"value": "kBq U235-eq."
 								}
 							],
 							"type": "UNIT_GROUP",

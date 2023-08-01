@@ -81,7 +81,7 @@
             "type": "LCIA",
             "group": "RESOURCE_USE",
             "code": "ADPE",
-            "unit": "kg Sb eq.",
+            "unit": "kg Sb-eq.",
             "uuid": "f7c73bb9-ab1a-4249-9c6d-379a0de6f67e",
             "unitGroupUUID": "54ccd2d9-a32a-4fc2-923d-f2c8c93e89d4"
         },
@@ -99,7 +99,7 @@
             "type": "LCIA",
             "group": "ENVIRONMENTAL",
             "code": "AP",
-            "unit": "kg SO2 eq.",
+            "unit": "kg SO2-eq.",
             "uuid": "b4274add-93b7-4905-a5e4-2e878c4e4216",
             "unitGroupUUID": "bc50c624-a9bc-45b1-a9b0-e6b10d00476f"
         },
@@ -117,7 +117,7 @@
             "type": "LCIA",
             "group": "ENVIRONMENTAL",
             "code": "EP",
-            "unit": "kg (PO4)3- eq.",
+            "unit": "kg P-eq.",
             "uuid": "f58827d0-b407-4ec6-be75-8b69efb98a0f",
             "unitGroupUUID": "67b5401d-873c-485f-bcf3-6ae83b918822"
         },
@@ -144,7 +144,7 @@
             "type": "LCIA",
             "group": "ENVIRONMENTAL",
             "code": "GWP",
-            "unit": "kg CO2 eq.",
+            "unit": "kg CO2-eq.",
             "uuid": "77e416eb-a363-4258-a04e-171d843a6460",
             "unitGroupUUID": "1ebf3012-d0db-4de2-aefd-ef30cedb0be1"
         },
@@ -229,7 +229,7 @@
             "type": "LCIA",
             "group": "ENVIRONMENTAL",
             "code": "ODP",
-            "unit": "kg CFC 11 eq.",
+            "unit": "kg CFC-11-eq.",
             "uuid": "06dcd26f-025f-401a-a7c1-5e457eb54637",
             "unitGroupUUID": "88054749-b0a6-47ea-a82b-dc5b29326512"
         },
@@ -238,7 +238,7 @@
             "type": "LCIA",
             "group": "ENVIRONMENTAL",
             "code": "POCP",
-            "unit": "kg C2H2 eq.",
+            "unit": "kg C2H2-eq.",
             "uuid": "1e84a202-dae6-42aa-9e9d-71ea48b8be00",
             "unitGroupUUID": "01c26c17-9a76-406e-8295-f17b55fd909e"
         },

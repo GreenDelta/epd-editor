@@ -33,7 +33,7 @@
    </administrativeInformation>
    <units>
       <unit dataSetInternalID="0">
-         <name>kg Ethen-Äqv.</name>
+         <name>kg Ethen-eq.</name>
          <meanValue>1</meanValue>
       </unit>
    </units>

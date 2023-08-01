@@ -34,7 +34,7 @@
    </administrativeInformation>
    <units>
       <unit dataSetInternalID="0">
-         <name>kg P eqv.</name>
+         <name>kg P-eq.</name>
          <meanValue>1</meanValue>
       </unit>
    </units>

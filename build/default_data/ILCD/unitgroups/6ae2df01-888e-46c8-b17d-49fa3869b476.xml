@@ -3,7 +3,7 @@
     <u:unitGroupInformation>
         <u:dataSetInformation>
             <common:UUID>6ae2df01-888e-46c8-b17d-49fa3869b476</common:UUID>
-            <common:name xml:lang="en">m3 world eqv.</common:name>
+            <common:name xml:lang="en">m3 world eq. deprived</common:name>
             <u:classificationInformation>
                 <common:classification name="ILCD">
                     <common:class level="0" classId="4">Other unit groups</common:class>
@@ -24,7 +24,7 @@
     </u:administrativeInformation>
     <u:units>
         <u:unit dataSetInternalID="0">
-            <u:name>m3 world eqv.</u:name>
+            <u:name>m3 world eq. deprived</u:name>
             <u:meanValue>1.0</u:meanValue>
         </u:unit>
     </u:units>

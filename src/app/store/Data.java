@@ -128,8 +128,7 @@ public final class Data {
 	}
 
 	public static void updateVersion(IDataSet ds) {
-		if (ds instanceof Process) {
-			Process p = (Process) ds;
+		if (ds instanceof Process p) {
 			with(Processes.forcePublication(p), pub -> {
 				pub.version = Version.fromString(pub.version)
 						.incUpdate().toString();
@@ -137,8 +136,7 @@ public final class Data {
 			Processes.forceDataEntry(p).timeStamp = Xml.now();
 		}
 
-		if (ds instanceof Flow) {
-			Flow f = (Flow) ds;
+		if (ds instanceof Flow f) {
 			with(Flows.publication(f), pub -> {
 				pub.version = Version.fromString(pub.version)
 						.incUpdate().toString();
@@ -146,8 +144,7 @@ public final class Data {
 			Flows.dataEntry(f).timeStamp = Xml.now();
 		}
 
-		if (ds instanceof FlowProperty) {
-			FlowProperty fp = (FlowProperty) ds;
+		if (ds instanceof FlowProperty fp) {
 			with(FlowProperties.publication(fp), pub -> {
 				pub.version = Version.fromString(pub.version)
 						.incUpdate().toString();
@@ -155,8 +152,7 @@ public final class Data {
 			FlowProperties.dataEntry(fp).timeStamp = Xml.now();
 		}
 
-		if (ds instanceof UnitGroup) {
-			UnitGroup ug = (UnitGroup) ds;
+		if (ds instanceof UnitGroup ug) {
 			with(UnitGroups.publication(ug), pub -> {
 				pub.version = Version.fromString(pub.version)
 						.incUpdate().toString();
@@ -164,8 +160,7 @@ public final class Data {
 			UnitGroups.dataEntry(ug).timeStamp = Xml.now();
 		}
 
-		if (ds instanceof Contact) {
-			Contact c = (Contact) ds;
+		if (ds instanceof Contact c) {
 			with(Contacts.publication(c), pub -> {
 				pub.version = Version.fromString(pub.version)
 						.incUpdate().toString();
@@ -173,8 +168,7 @@ public final class Data {
 			Contacts.dataEntry(c).timeStamp = Xml.now();
 		}
 
-		if (ds instanceof Source) {
-			Source s = (Source) ds;
+		if (ds instanceof Source s) {
 			with(Sources.publication(s), pub -> {
 				pub.version = Version.fromString(pub.version)
 						.incUpdate().toString();
@@ -182,8 +176,7 @@ public final class Data {
 			Sources.dataEntry(s).timeStamp = Xml.now();
 		}
 
-		if (ds instanceof LCIAMethod) {
-			LCIAMethod l = (LCIAMethod) ds;
+		if (ds instanceof LCIAMethod l) {
 			with(Methods.forcePublication(l), pub -> {
 				pub.version = Version.fromString(pub.version)
 						.incUpdate().toString();

@@ -33,7 +33,7 @@
    </administrativeInformation>
    <units>
       <unit dataSetInternalID="0">
-         <name>kg Sb-Äqv.</name>
+         <name>kg Sb-eq.</name>
          <meanValue>1</meanValue>
       </unit>
    </units>

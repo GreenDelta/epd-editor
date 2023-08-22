@@ -38,7 +38,7 @@
     </administrativeInformation>
     <units>
         <unit dataSetInternalID="0">
-            <name>kg R11 eq.</name>
+            <name>kg CFC-11-eq.</name>
             <meanValue>1.0</meanValue>
         </unit>
     </units>

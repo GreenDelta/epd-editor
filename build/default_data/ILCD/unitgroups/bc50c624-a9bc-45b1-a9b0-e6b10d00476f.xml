@@ -33,7 +33,7 @@
    </administrativeInformation>
    <units>
       <unit dataSetInternalID="0">
-         <name>kg SO2-Äqv.</name>
+         <name>kg SO2-eq.</name>
          <meanValue>1</meanValue>
       </unit>
    </units>

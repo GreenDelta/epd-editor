@@ -13,7 +13,7 @@ import app.util.UI;
 class Page extends FormPage {
 
 	private FormToolkit toolkit;
-	private MaterialPropertyEditor editor;
+	private final MaterialPropertyEditor editor;
 
 	public Page(MaterialPropertyEditor editor) {
 		super(editor, "MaterialPropertyPage", M.MaterialProperties);

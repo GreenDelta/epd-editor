@@ -35,7 +35,7 @@ public class EpdEditor extends BaseEditor {
 
 	private static final String ID = "epd.editor";
 
-	private Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	public EpdDataSet dataSet;
 

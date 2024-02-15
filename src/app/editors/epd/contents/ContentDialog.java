@@ -1,7 +1,12 @@
 package app.editors.epd.contents;
 
-import java.util.Arrays;
-
+import app.App;
+import app.M;
+import app.rcp.Texts;
+import app.util.UI;
+import epd.model.content.ContentDeclaration;
+import epd.model.content.ContentElement;
+import epd.model.content.Substance;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
@@ -10,13 +15,7 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.openlca.ilcd.commons.LangString;
 
-import app.App;
-import app.M;
-import app.rcp.Texts;
-import app.util.UI;
-import epd.model.content.ContentDeclaration;
-import epd.model.content.ContentElement;
-import epd.model.content.Substance;
+import java.util.Arrays;
 
 class ContentDialog extends FormDialog {
 
@@ -76,7 +75,7 @@ class ContentDialog extends FormDialog {
 			UI.gridData(combo, true, false);
 			UI.filler(comp, tk);
 			new ParentCombo(decl, elem).bind(combo).onChange(
-					p -> this.parent = p);
+				p -> this.parent = p);
 			this.parent = Content.getParent(elem, decl);
 		}
 
@@ -98,9 +97,7 @@ class ContentDialog extends FormDialog {
 		massWidget.setAmount(elem.mass);
 		UI.formLabel(comp, tk, "kg");
 
-		if (elem instanceof Substance) {
-			Substance subst = (Substance) elem;
-
+		if (elem instanceof Substance subst) {
 			// CAS
 			casText = UI.formText(comp, tk, "CAS number");
 			Texts.set(casText, subst.casNumber);
@@ -113,31 +110,31 @@ class ContentDialog extends FormDialog {
 
 			// GUUID
 			guuidText = UI.formText(comp, tk,
-					"Data dictionary GUUID");
+				"Data dictionary GUUID");
 			Texts.set(guuidText, subst.guid);
 			UI.filler(comp, tk);
 
 			// renewable resource
 			renewableText = UI.formText(comp, tk,
-					"Percentage of renewable resources");
+				"Percentage of renewable resources");
 			Texts.set(renewableText, subst.renewable);
 			UI.formLabel(comp, tk, "%");
 
 			// recycled content
 			recycledText = UI.formText(comp, tk,
-					"Percentage of recycled content");
+				"Percentage of recycled content");
 			Texts.set(recycledText, subst.recycled);
 			UI.formLabel(comp, tk, "%");
 
 			// recyclable content
 			recycableText = UI.formText(comp, tk,
-					"Percentage of recyclable content");
+				"Percentage of recyclable content");
 			Texts.set(recycableText, subst.recyclable);
 			UI.formLabel(comp, tk, "%");
 
 			// add validation
 			Arrays.asList(renewableText, recycledText, recycableText)
-					.forEach(t -> Texts.validateNumber(t));
+				.forEach(Texts::validateNumber);
 		}
 
 		commentText = UI.formMultiText(comp, tk, "Comment");
@@ -151,8 +148,7 @@ class ContentDialog extends FormDialog {
 		elem.massPerc = massPercWidget.getAmount();
 		elem.mass = massWidget.getAmount();
 		LangString.set(elem.comment, commentText.getText(), App.lang());
-		if (elem instanceof Substance) {
-			Substance subst = (Substance) elem;
+		if (elem instanceof Substance subst) {
 			subst.casNumber = Texts.getString(casText);
 			subst.ecNumber = Texts.getString(ecText);
 			subst.guid = Texts.getString(guuidText);

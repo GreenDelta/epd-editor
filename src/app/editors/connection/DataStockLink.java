@@ -37,12 +37,9 @@ class DataStockLink {
 		Controls.onClick(link, e -> {
 			String[] error = new String[1];
 			List<DataStock> list = new ArrayList<>();
-			App.run("Get data stocks...", () -> {
-				fetchStocks(list, error);
-			}, () -> {
-				afterFetch(list, error);
-			});
-
+			App.run("Get data stocks...",
+				() -> fetchStocks(list, error),
+				() -> afterFetch(list, error));
 		});
 		setLinkText();
 	}

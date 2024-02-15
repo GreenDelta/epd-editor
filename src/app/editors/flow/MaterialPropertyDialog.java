@@ -1,5 +1,11 @@
 package app.editors.flow;
 
+import app.M;
+import app.store.MaterialProperties;
+import app.util.UI;
+import app.util.Viewers;
+import epd.model.MaterialProperty;
+import epd.util.Strings;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -13,13 +19,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import app.M;
-import app.store.MaterialProperties;
-import app.util.UI;
-import app.util.Viewers;
-import epd.model.MaterialProperty;
-import epd.util.Strings;
 
 class MaterialPropertyDialog extends Dialog {
 
@@ -41,7 +40,7 @@ class MaterialPropertyDialog extends Dialog {
 		UI.gridLayout(composite, 1);
 		UI.gridData(composite, true, false);
 		new Label(composite, SWT.NONE)
-				.setText(M.SelectAMaterialProperty);
+			.setText(M.SelectAMaterialProperty);
 		createViewer(composite);
 		return parent;
 	}
@@ -61,7 +60,7 @@ class MaterialPropertyDialog extends Dialog {
 			var props = MaterialProperties.get();
 			props.sort((p1, p2) -> Strings.compare(p1.name, p2.name));
 			combo.setInput(props);
-			if (props.size() > 0) {
+			if (!props.isEmpty()) {
 				selectedProperty = props.get(0);
 				var selection = new StructuredSelection(selectedProperty);
 				combo.setSelection(selection);
@@ -81,9 +80,8 @@ class MaterialPropertyDialog extends Dialog {
 
 		@Override
 		public String getText(Object element) {
-			if (!(element instanceof MaterialProperty))
+			if (!(element instanceof MaterialProperty property))
 				return null;
-			var property = (MaterialProperty) element;
 			return property.name + " (" + property.unit + ")";
 		}
 	}

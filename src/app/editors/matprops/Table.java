@@ -1,17 +1,5 @@
 package app.editors.matprops;
 
-import java.util.List;
-import java.util.Objects;
-
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.viewers.BaseLabelProvider;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.Section;
-
 import app.M;
 import app.rcp.Icon;
 import app.util.Actions;
@@ -23,6 +11,17 @@ import app.util.tables.ModifySupport;
 import app.util.tables.TextCellModifier;
 import epd.model.MaterialProperty;
 import epd.util.Strings;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.viewers.BaseLabelProvider;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.Section;
+
+import java.util.List;
+import java.util.Objects;
 
 class Table {
 
@@ -30,12 +29,12 @@ class Table {
 	private final static String UNIT = M.Unit;
 	private final static String DESCRIPTION = M.UnitDescription;
 
-	private MaterialPropertyEditor editor;
-	private List<MaterialProperty> properties;
-	private TableViewer viewer;
+	private final MaterialPropertyEditor editor;
+	private final List<MaterialProperty> properties;
+	private final TableViewer viewer;
 
 	public Table(MaterialPropertyEditor editor, Section section,
-			FormToolkit tk) {
+							 FormToolkit tk) {
 		this.editor = editor;
 		this.properties = editor.properties;
 		Composite comp = UI.sectionClient(section, tk);
@@ -54,9 +53,9 @@ class Table {
 
 	private void bindActions(TableViewer table, Section section) {
 		Action add = Actions.create(M.Add, Icon.ADD.des(),
-				this::onCreate);
+			this::onCreate);
 		Action remove = Actions.create(M.Remove, Icon.DELETE.des(),
-				this::onRemove);
+			this::onRemove);
 		Actions.bind(section, add, remove);
 		Actions.bind(table, add, remove);
 	}
@@ -97,8 +96,8 @@ class Table {
 		return false;
 	}
 
-	private class Label extends BaseLabelProvider implements
-			ITableLabelProvider {
+	private static class Label extends BaseLabelProvider implements
+		ITableLabelProvider {
 
 		@Override
 		public Image getColumnImage(Object obj, int col) {
@@ -107,21 +106,15 @@ class Table {
 
 		@Override
 		public String getColumnText(Object obj, int col) {
-			if (!(obj instanceof MaterialProperty))
+			if (!(obj instanceof MaterialProperty p))
 				return null;
-			MaterialProperty p = (MaterialProperty) obj;
-			switch (col) {
-			case 0:
-				return p.id;
-			case 1:
-				return p.name;
-			case 2:
-				return p.unit;
-			case 3:
-				return p.unitDescription;
-			default:
-				return null;
-			}
+			return switch (col) {
+				case 0 -> p.id;
+				case 1 -> p.name;
+				case 2 -> p.unit;
+				case 3 -> p.unitDescription;
+				default -> null;
+			};
 		}
 	}
 
@@ -143,12 +136,12 @@ class Table {
 			String id = text.trim();
 			if (idExists(id)) {
 				MsgBox.error("#ID already exists",
-						"#A material property with the given ID already exists.");
+					"#A material property with the given ID already exists.");
 				return;
 			}
 			if (!isValid(id)) {
 				MsgBox.error("#Invalid ID",
-						"#It must start with a letter followed by letters and digits only.");
+					"#It must start with a letter followed by letters and digits only.");
 				return;
 			}
 			p.id = id;
@@ -204,7 +197,7 @@ class Table {
 	}
 
 	private class DescriptionModifier extends
-			TextCellModifier<MaterialProperty> {
+		TextCellModifier<MaterialProperty> {
 
 		@Override
 		protected String getText(MaterialProperty p) {

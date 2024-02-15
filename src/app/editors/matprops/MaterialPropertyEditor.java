@@ -20,7 +20,7 @@ public class MaterialPropertyEditor extends FormEditor implements IEditor {
 
 	private static final String ID = "material.properties.editor";
 
-	private Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	List<MaterialProperty> properties;
 	private boolean dirty;

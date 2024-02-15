@@ -1,13 +1,12 @@
 package app.editors.classifications;
 
+import app.M;
+import app.rcp.Icon;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.openlca.ilcd.lists.Category;
 import org.openlca.ilcd.lists.CategoryList;
 import org.openlca.ilcd.lists.ContentType;
-
-import app.M;
-import app.rcp.Icon;
 
 class TreeLabel extends LabelProvider {
 
@@ -18,12 +17,10 @@ class TreeLabel extends LabelProvider {
 
 	@Override
 	public String getText(Object obj) {
-		if (obj instanceof CategoryList) {
-			CategoryList cl = (CategoryList) obj;
+		if (obj instanceof CategoryList cl) {
 			return s(cl.type);
 		}
-		if (obj instanceof Category) {
-			Category c = (Category) obj;
+		if (obj instanceof Category c) {
 			return s(c);
 		}
 		return super.getText(obj);
@@ -32,24 +29,15 @@ class TreeLabel extends LabelProvider {
 	private String s(ContentType t) {
 		if (t == null)
 			return null;
-		switch (t) {
-		case CONTACT:
-			return M.Contacts;
-		case FLOW:
-			return M.Flows;
-		case FLOW_PROPERTY:
-			return M.FlowProperties;
-		case LCIA_METHOD:
-			return M.LCIAMethods;
-		case PROCESS:
-			return M.EPDs;
-		case SOURCE:
-			return M.Sources;
-		case UNIT_GROUP:
-			return M.UnitGroups;
-		default:
-			return null;
-		}
+		return switch (t) {
+			case CONTACT -> M.Contacts;
+			case FLOW -> M.Flows;
+			case FLOW_PROPERTY -> M.FlowProperties;
+			case LCIA_METHOD -> M.LCIAMethods;
+			case PROCESS -> M.EPDs;
+			case SOURCE -> M.Sources;
+			case UNIT_GROUP -> M.UnitGroups;
+		};
 	}
 
 	private String s(Category c) {

@@ -1,24 +1,5 @@
 package app.editors.epd;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.IManagedForm;
-import org.eclipse.ui.forms.editor.FormPage;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.ScrolledForm;
-import org.eclipse.ui.forms.widgets.Section;
-
 import app.App;
 import app.M;
 import app.Tooltips;
@@ -40,6 +21,24 @@ import epd.model.Module;
 import epd.model.ModuleEntry;
 import epd.model.Scenario;
 import epd.util.Strings;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.IManagedForm;
+import org.eclipse.ui.forms.editor.FormPage;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.ScrolledForm;
+import org.eclipse.ui.forms.widgets.Section;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 
 class ResultPage extends FormPage {
 
@@ -70,7 +69,7 @@ class ResultPage extends FormPage {
 	protected void createFormContent(IManagedForm managedForm) {
 		toolkit = managedForm.getToolkit();
 		ScrolledForm form = UI.formHeader(managedForm,
-				M.EnvironmentalIndicators);
+			M.EnvironmentalIndicators);
 		Composite body = UI.formBody(form, managedForm.getToolkit());
 		createProfileSection(body);
 		createScenarioSection(body);
@@ -83,9 +82,9 @@ class ResultPage extends FormPage {
 
 	private void createProfileSection(Composite body) {
 		Composite comp = UI.formSection(body, toolkit,
-				M.EPDProfile, Tooltips.EPD_EPDProfile);
+			M.EPDProfile, Tooltips.EPD_EPDProfile);
 		Combo combo = UI.formCombo(comp, toolkit,
-				M.EPDProfile, Tooltips.EPD_EPDProfile);
+			M.EPDProfile, Tooltips.EPD_EPDProfile);
 		int selected = -1;
 		List<EpdProfile> profiles = EpdProfiles.getAll();
 		profiles.sort((p1, p2) -> Strings.compare(p1.name, p2.name));
@@ -128,8 +127,8 @@ class ResultPage extends FormPage {
 		section.setToolTipText(Tooltips.EPD_Modules);
 		Composite comp = UI.sectionClient(section, toolkit);
 		UI.gridLayout(comp, 1);
-		String[] columns = new String[] { M.Module, M.Scenario,
-				M.ProductSystem, M.Description };
+		String[] columns = new String[]{M.Module, M.Scenario,
+			M.ProductSystem, M.Description};
 		TableViewer table = Tables.createViewer(comp, columns);
 		table.setLabelProvider(new ModuleLabel());
 		table.getTable().setToolTipText(Tooltips.EPD_Modules);
@@ -209,11 +208,11 @@ class ResultPage extends FormPage {
 	private Action[] createResultActions() {
 		Action[] actions = new Action[3];
 		actions[0] = Actions.create(M.SynchronizeWithModules,
-				Icon.CHECK_TRUE.des(), () -> {
-					new ResultSync(epd).run();
-					resultTable.refresh();
-					editor.setDirty();
-				});
+			Icon.CHECK_TRUE.des(), () -> {
+				new ResultSync(epd).run();
+				resultTable.refresh();
+				editor.setDirty();
+			});
 		actions[1] = Actions.create(
 			M.Export, Icon.EXPORT.des(), this::exportResults);
 		actions[2] = Actions.create(
@@ -257,7 +256,7 @@ class ResultPage extends FormPage {
 	}
 
 	private static class ModuleLabel extends LabelProvider implements
-			ITableLabelProvider {
+		ITableLabelProvider {
 
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
@@ -266,9 +265,8 @@ class ResultPage extends FormPage {
 
 		@Override
 		public String getColumnText(Object element, int col) {
-			if (!(element instanceof ModuleEntry))
+			if (!(element instanceof ModuleEntry entry))
 				return null;
-			ModuleEntry entry = (ModuleEntry) element;
 			Module module = entry.module;
 			return switch (col) {
 				case 0 -> module != null ? module.name : null;
@@ -282,7 +280,7 @@ class ResultPage extends FormPage {
 	}
 
 	private class ModuleModifier extends
-			ComboBoxCellModifier<ModuleEntry, Module> {
+		ComboBoxCellModifier<ModuleEntry, Module> {
 
 		@Override
 		protected Module getItem(ModuleEntry module) {
@@ -311,7 +309,7 @@ class ResultPage extends FormPage {
 	}
 
 	private class ScenarioModifier extends
-			ComboBoxCellModifier<ModuleEntry, String> {
+		ComboBoxCellModifier<ModuleEntry, String> {
 
 		@Override
 		protected String getItem(ModuleEntry module) {

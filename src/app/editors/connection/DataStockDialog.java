@@ -1,9 +1,11 @@
 package app.editors.connection;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-
+import app.M;
+import app.rcp.Icon;
+import app.util.Tables;
+import app.util.UI;
+import app.util.Viewers;
+import epd.util.Strings;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -17,12 +19,8 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.openlca.ilcd.descriptors.DataStock;
 
-import app.M;
-import app.rcp.Icon;
-import app.util.Tables;
-import app.util.UI;
-import app.util.Viewers;
-import epd.util.Strings;
+import java.util.List;
+import java.util.Objects;
 
 class DataStockDialog extends FormDialog {
 
@@ -32,8 +30,7 @@ class DataStockDialog extends FormDialog {
 	DataStockDialog(List<DataStock> dataStocks) {
 		super(UI.shell());
 		this.dataStocks = dataStocks;
-		Collections.sort(dataStocks,
-				(s1, s2) -> Strings.compare(s1.shortName, s2.shortName));
+		dataStocks.sort((s1, s2) -> Strings.compare(s1.shortName, s2.shortName));
 		setBlockOnOpen(true);
 	}
 
@@ -44,7 +41,7 @@ class DataStockDialog extends FormDialog {
 		Composite body = UI.formBody(mform.getForm(), tk);
 		UI.gridLayout(body, 1);
 		TableViewer table = Tables.createViewer(body, M.Name, M.UUID,
-				M.Description);
+			M.Description);
 		table.setLabelProvider(new Label());
 		tk.adapt(table.getTable());
 		Tables.bindColumnWidths(table, 0.2, 0.2, 0.6);
@@ -72,11 +69,10 @@ class DataStockDialog extends FormDialog {
 
 		@Override
 		public Image getColumnImage(Object obj, int col) {
-			if (!(obj instanceof DataStock))
+			if (!(obj instanceof DataStock stock))
 				return null;
 			if (col != 0)
 				return null;
-			DataStock stock = (DataStock) obj;
 			if (Objects.equals(stock, selected))
 				return Icon.CHECK_TRUE.img();
 			else
@@ -85,20 +81,15 @@ class DataStockDialog extends FormDialog {
 
 		@Override
 		public String getColumnText(Object obj, int col) {
-			if (!(obj instanceof DataStock))
+			if (!(obj instanceof DataStock stock))
 				return null;
-			DataStock stock = (DataStock) obj;
-			switch (col) {
-			case 0:
-				return stock.shortName;
-			case 1:
-				return stock.uuid;
-			case 2:
-				return stock.description == null ? null
-						: stock.description.value;
-			default:
-				return null;
-			}
+			return switch (col) {
+				case 0 -> stock.shortName;
+				case 1 -> stock.uuid;
+				case 2 -> stock.description == null ? null
+					: stock.description.value;
+				default -> null;
+			};
 		}
 	}
 }

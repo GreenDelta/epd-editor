@@ -17,7 +17,7 @@ import epd.util.Strings;
 
 class LocationCombo {
 
-	private List<Location> locations = new ArrayList<>();
+	private final List<Location> locations = new ArrayList<>();
 	private Combo combo;
 
 	void create(Composite parent, String selectedCode, Consumer<String> fn) {
@@ -51,8 +51,7 @@ class LocationCombo {
 			loc.name = selectedCode;
 			locations.add(loc);
 		}
-		Collections.sort(locations,
-				(loc1, loc2) -> Strings.compare(loc1.name, loc2.name));
+		locations.sort((loc1, loc2) -> Strings.compare(loc1.name, loc2.name));
 	}
 
 	private void onSelect(Consumer<String> fn) {

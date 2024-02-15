@@ -1,8 +1,14 @@
 package app.editors.epd;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import app.M;
+import app.Tooltips;
+import app.editors.RefTable;
+import app.rcp.Labels;
+import app.util.TextBuilder;
+import app.util.UI;
+import app.util.Viewers;
+import epd.model.EpdDataSet;
+import epd.model.SubType;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -18,15 +24,8 @@ import org.openlca.ilcd.processes.ComplianceDeclaration;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.Processes;
 
-import app.M;
-import app.Tooltips;
-import app.editors.RefTable;
-import app.rcp.Labels;
-import app.util.TextBuilder;
-import app.util.UI;
-import app.util.Viewers;
-import epd.model.EpdDataSet;
-import epd.model.SubType;
+import java.util.ArrayList;
+import java.util.List;
 
 class ModelingPage extends FormPage {
 
@@ -53,46 +52,46 @@ class ModelingPage extends FormPage {
 
 		RefTable.create(DataSetType.SOURCE,
 				Processes.forceMethod(process).methodSources)
-				.withEditor(editor)
-				.withTitle(M.LCAMethodDetails)
-				.withTooltip(Tooltips.EPD_LCAMethodDetails)
-				.render(body, toolkit);
+			.withEditor(editor)
+			.withTitle(M.LCAMethodDetails)
+			.withTooltip(Tooltips.EPD_LCAMethodDetails)
+			.render(body, toolkit);
 
 		RefTable.create(DataSetType.SOURCE,
 				Processes.forceRepresentativeness(process).dataHandlingSources)
-				.withEditor(editor)
-				.withTitle(M.DocumentationDataQualityManagement)
-				.withTooltip(Tooltips.EPD_DocumentationDataQualityManagement)
-				.render(body, toolkit);
+			.withEditor(editor)
+			.withTitle(M.DocumentationDataQualityManagement)
+			.withTooltip(Tooltips.EPD_DocumentationDataQualityManagement)
+			.render(body, toolkit);
 
 		RefTable.create(DataSetType.SOURCE,
 				Processes.forceRepresentativeness(process).sources)
-				.withEditor(editor)
-				.withTitle(M.DataSources)
-				.withTooltip(Tooltips.EPD_DataSources)
-				.render(body, toolkit);
+			.withEditor(editor)
+			.withTitle(M.DataSources)
+			.withTooltip(Tooltips.EPD_DataSources)
+			.render(body, toolkit);
 
 		createComplianceSection(body);
 
 		RefTable.create(DataSetType.SOURCE, epd.originalEPDs)
-				.withEditor(editor)
-				.withTitle(M.ReferenceOriginalEPD)
-				.withTooltip(Tooltips.EPD_ReferenceOriginal)
-				.render(body, toolkit);
+			.withEditor(editor)
+			.withTitle(M.ReferenceOriginalEPD)
+			.withTooltip(Tooltips.EPD_ReferenceOriginal)
+			.render(body, toolkit);
 
 		new ReviewSection(editor, this)
-				.render(body, toolkit, form);
+			.render(body, toolkit, form);
 		form.reflow(true);
 	}
 
 	private void createModelingSection(Composite parent) {
 		Composite comp = UI.formSection(parent, toolkit,
-				M.ModellingAndValidation, Tooltips.EPD_ModellingAndValidation);
+			M.ModellingAndValidation, Tooltips.EPD_ModellingAndValidation);
 		UI.formLabel(comp, toolkit, M.Subtype, Tooltips.EPD_Subtype);
 		createSubTypeViewer(comp);
 		TextBuilder tb = new TextBuilder(editor, this, toolkit);
 		tb.multiText(comp, M.UseAdvice, Tooltips.EPD_UseAdvice,
-				Processes.forceRepresentativeness(process).useAdvice);
+			Processes.forceRepresentativeness(process).useAdvice);
 	}
 
 	private void createSubTypeViewer(Composite parent) {
@@ -102,8 +101,7 @@ class ModelingPage extends FormPage {
 		combo.setLabelProvider(new LabelProvider() {
 			@Override
 			public String getText(Object element) {
-				if (element instanceof SubType) {
-					var subType = (SubType) element;
+				if (element instanceof SubType subType) {
 					return Labels.get(subType);
 				}
 				return super.getText(element);
@@ -127,12 +125,12 @@ class ModelingPage extends FormPage {
 				systems.add(s.system);
 		});
 		RefTable table = RefTable.create(DataSetType.SOURCE, systems)
-				.withTitle(M.ComplianceDeclarations)
-				.withTooltip(Tooltips.EPD_ComplianceDeclarations);
+			.withTitle(M.ComplianceDeclarations)
+			.withTooltip(Tooltips.EPD_ComplianceDeclarations);
 		table.render(body, toolkit);
 		table.onAdd(system -> {
 			ComplianceDeclaration decl = Processes.getComplianceDeclaration(
-					process, system);
+				process, system);
 			if (decl != null)
 				return;
 			Processes.createComplianceDeclaration(process).system = system;

@@ -36,12 +36,12 @@ import app.util.tables.ICellModifier.CellEditingType;
  */
 public class ModifySupport<T> {
 
-	private Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	private Map<String, ICellModifier<T>> cellModifiers;
 	private CellEditor[] editors;
 	private String[] columnProperties;
-	private TableViewer viewer;
+	private final TableViewer viewer;
 
 	public ModifySupport(TableViewer viewer) {
 		this.viewer = viewer;

@@ -1,14 +1,16 @@
 package app.editors.settings;
 
-import java.io.File;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.jar.Attributes;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
-
+import app.M;
+import app.rcp.Icon;
+import app.store.validation.ValidationProfiles;
+import app.util.Actions;
+import app.util.FileChooser;
+import app.util.MsgBox;
+import app.util.Tables;
+import app.util.UI;
+import app.util.Viewers;
+import com.okworx.ilcd.validation.profile.Profile;
+import epd.util.Strings;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ITableFontProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -22,18 +24,13 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.okworx.ilcd.validation.profile.Profile;
-
-import app.M;
-import app.rcp.Icon;
-import app.store.validation.ValidationProfiles;
-import app.util.Actions;
-import app.util.FileChooser;
-import app.util.MsgBox;
-import app.util.Tables;
-import app.util.UI;
-import app.util.Viewers;
-import epd.util.Strings;
+import java.io.File;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.jar.Attributes;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
 
 class ValidationSection {
 
@@ -46,8 +43,8 @@ class ValidationSection {
 		for (File file : ValidationProfiles.getFiles()) {
 			infos.add(new ProfileInfo(file));
 		}
-		Collections.sort(infos, (i1, i2) -> Strings
-				.compare(i1.profile.getName(), i2.profile.getName()));
+		infos.sort((i1, i2) -> Strings
+			.compare(i1.profile.getName(), i2.profile.getName()));
 	}
 
 	void render(Composite body, FormToolkit tk) {
@@ -63,7 +60,7 @@ class ValidationSection {
 
 	private void bindActions(Section section) {
 		Action ref = Actions.create(M.SetAsActiveProfile, Icon.OK.des(),
-				this::selectActive);
+			this::selectActive);
 		Action add = Actions.create(M.Add, Icon.ADD.des(), this::add);
 		Action del = Actions.create(M.Remove, Icon.DELETE.des(), this::remove);
 		Actions.bind(table, ref, add, del);
@@ -76,7 +73,7 @@ class ValidationSection {
 			return;
 		if (ValidationProfiles.contains(file)) {
 			MsgBox.error(M.AlreadyExists,
-					"#A profile with this name already exists.");
+				"#A profile with this name already exists.");
 			return;
 		}
 		file = ValidationProfiles.put(file);
@@ -91,12 +88,12 @@ class ValidationSection {
 		if (info == null)
 			return;
 		boolean b = MsgBox.ask(M.Delete,
-				"#Delete selected validation profile?");
+			"#Delete selected validation profile?");
 		if (!b)
 			return;
 		infos.remove(info);
 		if (Strings.nullOrEqual(page.settings.validationProfile,
-				info.file.getName())) {
+			info.file.getName())) {
 			page.settings.validationProfile = null;
 			page.setDirty();
 		}
@@ -113,7 +110,7 @@ class ValidationSection {
 		table.refresh();
 	}
 
-	private class ProfileInfo {
+	private static class ProfileInfo {
 
 		final File file;
 		final Profile profile;
@@ -147,7 +144,7 @@ class ValidationSection {
 	}
 
 	private class ProfileLabel extends LabelProvider
-			implements ITableLabelProvider, ITableFontProvider {
+		implements ITableLabelProvider, ITableFontProvider {
 
 		@Override
 		public Image getColumnImage(Object obj, int col) {
@@ -156,28 +153,22 @@ class ValidationSection {
 
 		@Override
 		public String getColumnText(Object obj, int col) {
-			if (!(obj instanceof ProfileInfo))
+			if (!(obj instanceof ProfileInfo pi))
 				return null;
-			ProfileInfo pi = (ProfileInfo) obj;
-			switch (col) {
-			case 0:
-				return pi.name();
-			case 1:
-				return pi.version();
-			case 2:
-				return pi.file.getName();
-			default:
-				return null;
-			}
+			return switch (col) {
+				case 0 -> pi.name();
+				case 1 -> pi.version();
+				case 2 -> pi.file.getName();
+				default -> null;
+			};
 		}
 
 		@Override
 		public Font getFont(Object obj, int col) {
-			if (!(obj instanceof ProfileInfo))
+			if (!(obj instanceof ProfileInfo pi))
 				return null;
-			ProfileInfo pi = (ProfileInfo) obj;
 			if (Strings.nullOrEqual(page.settings.validationProfile,
-					pi.file.getName()))
+				pi.file.getName()))
 				return UI.boldFont();
 			return null;
 		}

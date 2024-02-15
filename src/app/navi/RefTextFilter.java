@@ -1,12 +1,11 @@
 package app.navi;
 
+import epd.util.Strings;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.TreeItem;
-
-import epd.util.Strings;
 
 /**
  * A class for filtering model elements from an navigation tree via a text
@@ -14,7 +13,7 @@ import epd.util.Strings;
  */
 public class RefTextFilter extends ViewerFilter {
 
-	private Text filterText;
+	private final Text filterText;
 
 	public RefTextFilter(Text filterText, final TreeViewer viewer) {
 		this.filterText = filterText;
@@ -46,8 +45,7 @@ public class RefTextFilter extends ViewerFilter {
 	}
 
 	private boolean select(NavigationElement elem, String text) {
-		if (elem instanceof RefElement) {
-			RefElement e = (RefElement) elem;
+		if (elem instanceof RefElement e) {
 			String label = e.getLabel();
 			if (Strings.nullOrEmpty(label))
 				return false;

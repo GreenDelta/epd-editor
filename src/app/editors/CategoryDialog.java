@@ -1,18 +1,16 @@
 package app.editors;
 
-import java.util.Collections;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
-
+import app.M;
+import app.rcp.Icon;
+import app.store.CategorySystems;
+import app.util.UI;
+import app.util.Viewers;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
@@ -26,11 +24,11 @@ import org.openlca.ilcd.lists.CategoryList;
 import org.openlca.ilcd.lists.CategorySystem;
 import org.openlca.ilcd.lists.ContentType;
 
-import app.M;
-import app.rcp.Icon;
-import app.store.CategorySystems;
-import app.util.UI;
-import app.util.Viewers;
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
 
 public class CategoryDialog extends FormDialog {
 
@@ -50,24 +48,16 @@ public class CategoryDialog extends FormDialog {
 	private ContentType mapType(DataSetType type) {
 		if (type == null)
 			return null;
-		switch (type) {
-		case CONTACT:
-			return ContentType.CONTACT;
-		case FLOW:
-			return ContentType.FLOW;
-		case FLOW_PROPERTY:
-			return ContentType.FLOW_PROPERTY;
-		case LCIA_METHOD:
-			return ContentType.LCIA_METHOD;
-		case PROCESS:
-			return ContentType.PROCESS;
-		case SOURCE:
-			return ContentType.SOURCE;
-		case UNIT_GROUP:
-			return ContentType.UNIT_GROUP;
-		default:
-			return null;
-		}
+		return switch (type) {
+			case CONTACT -> ContentType.CONTACT;
+			case FLOW -> ContentType.FLOW;
+			case FLOW_PROPERTY -> ContentType.FLOW_PROPERTY;
+			case LCIA_METHOD -> ContentType.LCIA_METHOD;
+			case PROCESS -> ContentType.PROCESS;
+			case SOURCE -> ContentType.SOURCE;
+			case UNIT_GROUP -> ContentType.UNIT_GROUP;
+			default -> null;
+		};
 	}
 
 	@Override
@@ -97,7 +87,7 @@ public class CategoryDialog extends FormDialog {
 	}
 
 	private void fillParentMap(List<Category> rootCategories,
-			Map<Category, Category> parentMap) {
+														 Map<Category, Category> parentMap) {
 		for (Category root : rootCategories) {
 			for (Category child : root.category)
 				parentMap.put(child, root);
@@ -106,7 +96,7 @@ public class CategoryDialog extends FormDialog {
 	}
 
 	private Stack<Category> getPath(Category category,
-			Map<Category, Category> parentMap) {
+																	Map<Category, Category> parentMap) {
 		Stack<Category> stack = new Stack<>();
 		stack.push(category);
 		Category parent = parentMap.get(category);
@@ -135,7 +125,7 @@ public class CategoryDialog extends FormDialog {
 		UI.gridData(combo.getControl(), true, false);
 		combo.setLabelProvider(new ComboLabel());
 		combo.setInput(systems);
-		if (systems.size() > 0) {
+		if (!systems.isEmpty()) {
 			selectedSystem = systems.get(0);
 			combo.setSelection(new StructuredSelection(selectedSystem));
 		}
@@ -152,7 +142,7 @@ public class CategoryDialog extends FormDialog {
 		UI.gridData(treeViewer.getControl(), true, true);
 		treeViewer.setContentProvider(new TreeContent());
 		treeViewer.setLabelProvider(new TreeLabel());
-		if (systems.size() > 0)
+		if (!systems.isEmpty())
 			treeViewer.setInput(systems.get(0));
 		treeViewer.addSelectionChangedListener((e) -> {
 			selectedCategory = Viewers.getFirstSelected(treeViewer);
@@ -169,13 +159,12 @@ public class CategoryDialog extends FormDialog {
 		return Collections.emptyList();
 	}
 
-	private class ComboLabel extends LabelProvider {
+	private static class ComboLabel extends LabelProvider {
 
 		@Override
 		public String getText(Object element) {
-			if (!(element instanceof CategorySystem))
+			if (!(element instanceof CategorySystem system))
 				return null;
-			CategorySystem system = (CategorySystem) element;
 			return system.name != null ? system.name : "<no name>";
 		}
 
@@ -184,28 +173,17 @@ public class CategoryDialog extends FormDialog {
 	private class TreeContent implements ITreeContentProvider {
 
 		@Override
-		public void dispose() {
-		}
-
-		@Override
-		public void inputChanged(Viewer viewer, Object oldInput,
-				Object newInput) {
-		}
-
-		@Override
 		public Object[] getElements(Object inputElement) {
-			if (!(inputElement instanceof CategorySystem))
+			if (!(inputElement instanceof CategorySystem system))
 				return new Object[0];
-			CategorySystem system = (CategorySystem) inputElement;
 			List<Category> categories = getRootCategories(system);
 			return categories.toArray();
 		}
 
 		@Override
 		public Object[] getChildren(Object parentElement) {
-			if (!(parentElement instanceof Category))
+			if (!(parentElement instanceof Category category))
 				return new Object[0];
-			Category category = (Category) parentElement;
 			return category.category.toArray();
 		}
 
@@ -216,14 +194,13 @@ public class CategoryDialog extends FormDialog {
 
 		@Override
 		public boolean hasChildren(Object element) {
-			if (!(element instanceof Category))
+			if (!(element instanceof Category category))
 				return false;
-			Category category = (Category) element;
 			return !category.category.isEmpty();
 		}
 	}
 
-	private class TreeLabel extends LabelProvider {
+	private static class TreeLabel extends LabelProvider {
 
 		@Override
 		public Image getImage(Object element) {
@@ -232,9 +209,8 @@ public class CategoryDialog extends FormDialog {
 
 		@Override
 		public String getText(Object element) {
-			if (!(element instanceof Category))
+			if (!(element instanceof Category category))
 				return null;
-			Category category = (Category) element;
 			return category.name;
 		}
 	}

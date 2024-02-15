@@ -1,11 +1,16 @@
 package app.navi.actions;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
-import java.util.function.Consumer;
-
+import app.App;
+import app.M;
+import app.editors.Editors;
+import app.navi.CategoryElement;
+import app.navi.NavigationElement;
+import app.navi.RefElement;
+import app.navi.TypeElement;
+import app.rcp.Icon;
+import app.store.Data;
+import app.util.MsgBox;
+import epd.model.Xml;
 import org.eclipse.jface.action.Action;
 import org.openlca.ilcd.commons.Category;
 import org.openlca.ilcd.commons.Classification;
@@ -30,17 +35,11 @@ import org.openlca.ilcd.util.Processes;
 import org.openlca.ilcd.util.Sources;
 import org.openlca.ilcd.util.UnitGroups;
 
-import app.App;
-import app.M;
-import app.editors.Editors;
-import app.navi.CategoryElement;
-import app.navi.NavigationElement;
-import app.navi.RefElement;
-import app.navi.TypeElement;
-import app.rcp.Icon;
-import app.store.Data;
-import app.util.MsgBox;
-import epd.model.Xml;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
+import java.util.function.Consumer;
 
 public class NewDataSetAction extends Action {
 
@@ -49,8 +48,8 @@ public class NewDataSetAction extends Action {
 
 	public NewDataSetAction(NavigationElement elem) {
 		parent = elem instanceof RefElement
-				? elem.getParent()
-				: elem;
+			? elem.getParent()
+			: elem;
 		type = getType(elem);
 		setImageDescriptor(Icon.des(type));
 		setText(getLabel());
@@ -74,14 +73,14 @@ public class NewDataSetAction extends Action {
 		if (type == null)
 			return M.None;
 		return switch (type) {
-		case CONTACT -> M.NewContact;
-		case FLOW -> M.NewProduct;
-		case FLOW_PROPERTY -> M.NewFlowProperty;
-		case LCIA_METHOD -> M.NewLCIAMethod;
-		case PROCESS -> M.NewEPD;
-		case SOURCE -> M.NewSource;
-		case UNIT_GROUP -> M.NewUnitGroup;
-		default -> M.None;
+			case CONTACT -> M.NewContact;
+			case FLOW -> M.NewProduct;
+			case FLOW_PROPERTY -> M.NewFlowProperty;
+			case LCIA_METHOD -> M.NewLCIAMethod;
+			case PROCESS -> M.NewEPD;
+			case SOURCE -> M.NewSource;
+			case UNIT_GROUP -> M.NewUnitGroup;
+			default -> M.None;
 		};
 	}
 
@@ -102,14 +101,14 @@ public class NewDataSetAction extends Action {
 		if (type == null)
 			return null;
 		return switch (type) {
-		case CONTACT -> makeContact();
-		case FLOW -> makeFlow();
-		case FLOW_PROPERTY -> makeFlowProperty();
-		case LCIA_METHOD -> makeMethod();
-		case PROCESS -> makeEpd();
-		case SOURCE -> makeSource();
-		case UNIT_GROUP -> makeUnitGroup();
-		default -> null;
+			case CONTACT -> makeContact();
+			case FLOW -> makeFlow();
+			case FLOW_PROPERTY -> makeFlowProperty();
+			case LCIA_METHOD -> makeMethod();
+			case PROCESS -> makeEpd();
+			case SOURCE -> makeSource();
+			case UNIT_GROUP -> makeUnitGroup();
+			default -> null;
 		};
 	}
 
@@ -234,9 +233,8 @@ public class NewDataSetAction extends Action {
 	}
 
 	private void categories(NavigationElement elem, List<Category> list) {
-		if (!(elem instanceof CategoryElement))
+		if (!(elem instanceof CategoryElement e))
 			return;
-		var e = (CategoryElement) elem;
 		if (e.getCategory() == null)
 			return;
 		list.add(e.getCategory());

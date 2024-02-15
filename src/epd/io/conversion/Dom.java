@@ -1,14 +1,6 @@
 package epd.io.conversion;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Consumer;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-
+import epd.util.Strings;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Other;
 import org.slf4j.Logger;
@@ -18,7 +10,13 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import epd.util.Strings;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 
 /**
  * Utility methods for reading and writing data using the W3C DOM API.
@@ -52,8 +50,8 @@ public final class Dom {
 			return doc.createElementNS(ns, tag);
 		var prefix = Vocab.prefixOf(ns);
 		return prefix.isEmpty()
-				? doc.createElementNS(ns, tag)
-				: doc.createElementNS(ns, prefix.get() + ":" + tag);
+			? doc.createElementNS(ns, tag)
+			: doc.createElementNS(ns, prefix.get() + ":" + tag);
 	}
 
 	/**
@@ -61,7 +59,7 @@ public final class Dom {
 	 * element.
 	 */
 	public static List<Element> getChilds(Element parent, String name,
-			String ns) {
+																				String ns) {
 		if (parent == null || name == null)
 			return Collections.emptyList();
 		List<Element> elems = new ArrayList<>();
@@ -129,9 +127,8 @@ public final class Dom {
 		if (other == null || name == null)
 			return null;
 		for (Object any : other.any) {
-			if (!(any instanceof Element))
+			if (!(any instanceof Element e))
 				continue;
-			Element e = (Element) any;
 			if (matches(e, name, ns))
 				return e;
 		}
@@ -146,7 +143,7 @@ public final class Dom {
 		if (elem == null || name == null || ns == null)
 			return false;
 		return Objects.equals(name, elem.getLocalName())
-				&& Objects.equals(ns, elem.getNamespaceURI());
+			&& Objects.equals(ns, elem.getNamespaceURI());
 	}
 
 	/**
@@ -194,9 +191,8 @@ public final class Dom {
 		if (extension == null || tagName == null)
 			return null;
 		for (var any : extension.any) {
-			if (!(any instanceof Element))
+			if (!(any instanceof Element e))
 				continue;
-			var e = (Element) any;
 			if (Objects.equals(tagName, e.getLocalName()))
 				return e;
 		}
@@ -211,9 +207,8 @@ public final class Dom {
 			return;
 		List<Element> matches = new ArrayList<>();
 		for (Object any : extension.any) {
-			if (!(any instanceof Element))
+			if (!(any instanceof Element e))
 				continue;
-			Element e = (Element) any;
 			if (Objects.equals(tagName, e.getLocalName()))
 				matches.add(e);
 		}
@@ -248,9 +243,8 @@ public final class Dom {
 			element = null;
 			for (int i = 0; i < list.getLength(); i++) {
 				Node node = list.item(i);
-				if (!(node instanceof Element))
+				if (!(node instanceof Element child))
 					continue;
-				Element child = (Element) node;
 				if (Objects.equals(child.getLocalName(), tagName)) {
 					element = child;
 					break;

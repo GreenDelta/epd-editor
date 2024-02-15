@@ -56,7 +56,7 @@ public class ClassificationSync extends Action {
 		}
 	}
 
-	private List<String> getSystems(SodaClient client) throws Exception {
+	private List<String> getSystems(SodaClient client) {
 		CategorySystemList list = client.getCategorySystemList();
 		if (list == null)
 			return Collections.emptyList();

@@ -14,11 +14,10 @@ public class ModuleEntry {
 			return false;
 		if (obj == this)
 			return true;
-		if (!(obj instanceof ModuleEntry))
+		if (!(obj instanceof ModuleEntry other))
 			return false;
-		ModuleEntry other = (ModuleEntry) obj;
 		return Objects.equals(this.module, other.module)
-				&& Objects.equals(this.scenario, other.scenario);
+			&& Objects.equals(this.scenario, other.scenario);
 	}
 
 	@Override

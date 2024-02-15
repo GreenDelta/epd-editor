@@ -1,10 +1,8 @@
 package epd.io.conversion;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-
+import com.google.common.base.Strings;
+import epd.model.Amount;
+import epd.model.EpdProfile;
 import org.openlca.ilcd.commons.Other;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,10 +10,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 
-import com.google.common.base.Strings;
-
-import epd.model.Amount;
-import epd.model.EpdProfile;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 class AmountConverter {
 
@@ -24,10 +22,9 @@ class AmountConverter {
 			return Collections.emptyList();
 		List<Amount> amounts = new ArrayList<>();
 		for (Object any : other.any) {
-			if (!(any instanceof Element)) {
+			if (!(any instanceof Element element)) {
 				continue;
 			}
-			Element element = (Element) any;
 			if (!isValid(element))
 				continue;
 			amounts.add(fromElement(element, profile));
@@ -73,7 +70,7 @@ class AmountConverter {
 	}
 
 	static void writeAmounts(List<Amount> amounts, Other extension,
-			Document doc) {
+													 Document doc) {
 		if (amounts == null || extension == null || doc == null)
 			return;
 		for (Amount amount : amounts) {
@@ -90,10 +87,10 @@ class AmountConverter {
 			Element element = doc.createElementNS(nsUri, "epd:amount");
 			if (amount.module != null)
 				element.setAttributeNS(nsUri, "epd:module",
-						amount.module.name);
+					amount.module.name);
 			if (amount.scenario != null)
 				element.setAttributeNS(nsUri, "epd:scenario",
-						amount.scenario);
+					amount.scenario);
 			if (amount.value != null)
 				element.setTextContent(amount.value.toString());
 			return element;

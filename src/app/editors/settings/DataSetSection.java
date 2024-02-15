@@ -130,7 +130,7 @@ class DataSetSection {
 				List<Ref> refs = App.index().getRefs()
 						.stream()
 						.filter(ref -> ref.type == DataSetType.PROCESS)
-						.collect(Collectors.toList());
+						.toList();
 				monitor.beginTask(M.IndexProductRelations, refs.size());
 				for (int i = 0; i < refs.size(); i++) {
 					if (monitor.isCanceled())

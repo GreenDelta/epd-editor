@@ -1,8 +1,12 @@
 package app.editors;
 
-import java.util.List;
-import java.util.function.Consumer;
-
+import app.M;
+import app.rcp.Icon;
+import app.rcp.Labels;
+import app.util.Actions;
+import app.util.Tables;
+import app.util.UI;
+import app.util.Viewers;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.ViewerComparator;
@@ -13,13 +17,8 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.Ref;
 
-import app.M;
-import app.rcp.Icon;
-import app.rcp.Labels;
-import app.util.Actions;
-import app.util.Tables;
-import app.util.UI;
-import app.util.Viewers;
+import java.util.List;
+import java.util.function.Consumer;
 
 public class RefTable {
 
@@ -145,9 +144,8 @@ public class RefTable {
 
 		@Override
 		public int category(Object obj) {
-			if (!(obj instanceof Ref))
+			if (!(obj instanceof Ref ref))
 				return -1;
-			var ref = (Ref) obj;
 			if (ref.type == null)
 				return -1;
 			return switch (ref.type) {

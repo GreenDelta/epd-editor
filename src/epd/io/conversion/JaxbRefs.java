@@ -65,10 +65,9 @@ final class JaxbRefs {
 			var list = new ArrayList<Ref>();
 			Unmarshaller unmarshaller = null;
 			for (var obj : ext.any) {
-				if (!(obj instanceof Element))
+				if (!(obj instanceof Element elem))
 					continue;
-				var elem = (Element) obj;
-				if (!Strings.nullOrEqual(elem.getLocalName(), rootDef.name()))
+                if (!Strings.nullOrEqual(elem.getLocalName(), rootDef.name()))
 					continue;
 				if (unmarshaller == null) {
 					var context = JAXBContext.newInstance(type);

@@ -1,10 +1,10 @@
 package epd.model;
 
-import java.util.Objects;
-
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
+
+import java.util.Objects;
 
 /**
  * Each indicator contains the field values that are necessary for serializing
@@ -38,7 +38,9 @@ public final class Indicator {
 
 	public String unit;
 
-	/** The UUID of the ILCD indicator data set. */
+	/**
+	 * The UUID of the ILCD indicator data set.
+	 */
 	public String uuid;
 
 	/**
@@ -47,22 +49,26 @@ public final class Indicator {
 	 */
 	public String unitGroupUUID;
 
-	/** Create a ILCD data set reference for this indicator. */
+	/**
+	 * Create a ILCD data set reference for this indicator.
+	 */
 	public Ref getRef(String lang) {
 		Ref ref = new Ref();
 		ref.uuid = uuid;
 		String path = type == Type.LCI
-				? "flows"
-				: "lciamethods";
+			? "flows"
+			: "lciamethods";
 		ref.uri = "../" + path + "/" + uuid;
 		ref.type = type == Type.LCI
-				? DataSetType.FLOW
-				: DataSetType.LCIA_METHOD;
+			? DataSetType.FLOW
+			: DataSetType.LCIA_METHOD;
 		LangString.set(ref.name, name, lang);
 		return ref;
 	}
 
-	/** Create a ILCD data set reference to the unit group of this indicator. */
+	/**
+	 * Create a ILCD data set reference to the unit group of this indicator.
+	 */
 	public Ref getUnitGroupRef(String lang) {
 		Ref ref = new Ref();
 		ref.uuid = unitGroupUUID;
@@ -85,16 +91,15 @@ public final class Indicator {
 			return true;
 		if (obj == null)
 			return false;
-		if (!(obj instanceof Indicator))
+		if (!(obj instanceof Indicator other))
 			return false;
-		var other = (Indicator) obj;
 		return Objects.equals(this.uuid, other.uuid);
 	}
 
 	@Override
 	public String toString() {
 		return "Indicator [ name=\"" + name
-				+ "\" uuid =\"" + uuid + "\"]";
+			+ "\" uuid =\"" + uuid + "\"]";
 	}
 
 }

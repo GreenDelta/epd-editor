@@ -18,10 +18,10 @@ import org.slf4j.LoggerFactory;
  */
 public class Colors {
 
-	private static Logger log = LoggerFactory.getLogger(Colors.class);
-	private static HashMap<RGB, Color> createdColors = new HashMap<>();
+	private static final Logger log = LoggerFactory.getLogger(Colors.class);
+	private static final HashMap<RGB, Color> createdColors = new HashMap<>();
 
-	private static Display display;
+	private static final Display display;
 
 	static {
 		display = PlatformUI.getWorkbench().getDisplay();

@@ -1,7 +1,9 @@
 package epd.io.conversion;
 
-import java.util.Objects;
-
+import app.App;
+import epd.model.EpdDataSet;
+import epd.model.SafetyMargins;
+import epd.util.Strings;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Other;
 import org.slf4j.Logger;
@@ -11,10 +13,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import app.App;
-import epd.model.EpdDataSet;
-import epd.model.SafetyMargins;
-import epd.util.Strings;
+import java.util.Objects;
 
 class SafetyMarginsConverter {
 
@@ -22,9 +21,8 @@ class SafetyMarginsConverter {
 		if (other == null)
 			return null;
 		for (Object any : other.any) {
-			if (!(any instanceof Element))
+			if (!(any instanceof Element element))
 				continue;
-			Element element = (Element) any;
 			if (!isValid(element))
 				continue;
 			return fromElement(element);
@@ -37,15 +35,15 @@ class SafetyMarginsConverter {
 			return false;
 		String nsUri = element.getNamespaceURI();
 		return Objects.equals(nsUri, Vocab.NS_EPD)
-				&& Objects.equals(element.getLocalName(), "safetyMargins");
+			&& Objects.equals(element.getLocalName(), "safetyMargins");
 	}
 
 	private static SafetyMargins fromElement(Element e) {
 		SafetyMargins margins = new SafetyMargins();
 		margins.margins = Dom.getDouble(Dom.getChild(
-				e, "margins", Vocab.NS_EPD));
+			e, "margins", Vocab.NS_EPD));
 		NodeList nodes = e.getElementsByTagNameNS(
-				Vocab.NS_EPD, "description");
+			Vocab.NS_EPD, "description");
 		if (nodes == null)
 			return margins;
 		for (int i = 0; i < nodes.getLength(); i++) {
@@ -56,7 +54,7 @@ class SafetyMarginsConverter {
 			if (Strings.nullOrEmpty(text))
 				continue;
 			String lang = ((Element) n).getAttributeNS(
-					Vocab.NS_XML, "lang");
+				Vocab.NS_XML, "lang");
 			if (Strings.nullOrEmpty(lang)) {
 				lang = App.lang();
 			}

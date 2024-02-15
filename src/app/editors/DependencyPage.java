@@ -1,7 +1,12 @@
 package app.editors;
 
-import java.util.HashMap;
-
+import app.App;
+import app.M;
+import app.rcp.Icon;
+import app.util.Colors;
+import app.util.Trees;
+import app.util.UI;
+import app.util.Viewers;
 import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -19,13 +24,7 @@ import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.util.RefTree;
 
-import app.App;
-import app.M;
-import app.rcp.Icon;
-import app.util.Colors;
-import app.util.Trees;
-import app.util.UI;
-import app.util.Viewers;
+import java.util.HashMap;
 
 public class DependencyPage extends FormPage {
 
@@ -45,7 +44,7 @@ public class DependencyPage extends FormPage {
 		ScrolledForm form = UI.formHeader(mform, M.DataSetReferences);
 		Composite body = UI.formBody(form, tk);
 		TreeViewer tree = Trees.createViewer(body, M.XMLField,
-				M.DataSetReference, M.UUID, M.DataSetVersion);
+			M.DataSetReference, M.UUID, M.DataSetVersion);
 		tree.getTree().setLinesVisible(false);
 		tree.setContentProvider(new ContentProvider());
 		tree.setLabelProvider(new Label());
@@ -78,17 +77,15 @@ public class DependencyPage extends FormPage {
 
 		@Override
 		public Object[] getElements(Object obj) {
-			if (!(obj instanceof RefTree))
+			if (!(obj instanceof RefTree tree))
 				return new Object[0];
-			RefTree tree = (RefTree) obj;
-			return new Object[] { tree.root };
+			return new Object[]{tree.root};
 		}
 
 		@Override
 		public Object[] getChildren(Object obj) {
-			if (!(obj instanceof RefTree.Node))
+			if (!(obj instanceof RefTree.Node node))
 				return new Object[0];
-			RefTree.Node node = (RefTree.Node) obj;
 			return node.childs.toArray();
 		}
 
@@ -99,23 +96,21 @@ public class DependencyPage extends FormPage {
 
 		@Override
 		public boolean hasChildren(Object obj) {
-			if (!(obj instanceof RefTree.Node))
+			if (!(obj instanceof RefTree.Node node))
 				return false;
-			RefTree.Node node = (RefTree.Node) obj;
 			return !node.childs.isEmpty();
 		}
 	}
 
 	private class Label extends LabelProvider
-			implements ITableLabelProvider, ITableColorProvider {
+		implements ITableLabelProvider, ITableColorProvider {
 
 		@Override
 		public Image getColumnImage(Object obj, int col) {
 			if (col == 2 || col == 3)
 				return null;
-			if (!(obj instanceof RefTree.Node))
+			if (!(obj instanceof RefTree.Node node))
 				return null;
-			RefTree.Node node = (RefTree.Node) obj;
 			if (col == 0) {
 				if (node.ref == null)
 					return Icon.FOLDER.img();
@@ -132,9 +127,8 @@ public class DependencyPage extends FormPage {
 
 		@Override
 		public String getColumnText(Object obj, int col) {
-			if (!(obj instanceof RefTree.Node))
+			if (!(obj instanceof RefTree.Node node))
 				return null;
-			RefTree.Node node = (RefTree.Node) obj;
 			if (col == 0)
 				return node.field;
 			if (node.ref == null)

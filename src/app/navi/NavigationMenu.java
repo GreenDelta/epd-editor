@@ -1,7 +1,20 @@
 package app.navi;
 
-import java.util.List;
-
+import app.M;
+import app.editors.Editors;
+import app.editors.classifications.ClassificationEditor;
+import app.editors.connection.ConnectionEditor;
+import app.editors.connection.EpdProfileDownload;
+import app.editors.locations.LocationEditor;
+import app.editors.profiles.ProfileEditor;
+import app.navi.actions.*;
+import app.rcp.Icon;
+import app.store.Connections;
+import app.store.ExportDialog;
+import app.store.validation.ValidationDialog;
+import app.util.Actions;
+import app.util.UI;
+import app.util.Viewers;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -11,31 +24,7 @@ import org.eclipse.ui.navigator.CommonActionProvider;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.openlca.ilcd.io.SodaConnection;
 
-import app.M;
-import app.editors.Editors;
-import app.editors.classifications.ClassificationEditor;
-import app.editors.connection.ConnectionEditor;
-import app.editors.connection.EpdProfileDownload;
-import app.editors.locations.LocationEditor;
-import app.editors.profiles.ProfileEditor;
-import app.navi.actions.ClassificationSync;
-import app.navi.actions.ConnectionDeleteAction;
-import app.navi.actions.DuplicateAction;
-import app.navi.actions.FileDeletion;
-import app.navi.actions.FileImport;
-import app.navi.actions.NewConnectionAction;
-import app.navi.actions.NewDataSetAction;
-import app.navi.actions.ProfileDeleteAction;
-import app.navi.actions.ProfileExportAction;
-import app.navi.actions.ProfileImportAction;
-import app.navi.actions.RefDeleteAction;
-import app.rcp.Icon;
-import app.store.Connections;
-import app.store.ExportDialog;
-import app.store.validation.ValidationDialog;
-import app.util.Actions;
-import app.util.UI;
-import app.util.Viewers;
+import java.util.List;
 
 public class NavigationMenu extends CommonActionProvider {
 
@@ -84,16 +73,13 @@ public class NavigationMenu extends CommonActionProvider {
 		if (elements.isEmpty())
 			return;
 		NavigationElement first = elements.get(0);
-		if (first instanceof TypeElement) {
-			TypeElement e = (TypeElement) first;
+		if (first instanceof TypeElement e) {
 			menu.add(new NewDataSetAction(e));
 		}
-		if (first instanceof CategoryElement) {
-			CategoryElement e = (CategoryElement) first;
+		if (first instanceof CategoryElement e) {
 			menu.add(new NewDataSetAction(e));
 		}
-		if (first instanceof FolderElement) {
-			FolderElement e = (FolderElement) first;
+		if (first instanceof FolderElement e) {
 			if (e.type == FolderType.CLASSIFICATION)
 				categorySync(menu, null);
 			menu.add(new FileImport(e));
@@ -109,21 +95,18 @@ public class NavigationMenu extends CommonActionProvider {
 			menu.add(new ProfileImportAction());
 		}
 
-		if (first instanceof ProfileElement) {
-			ProfileElement pe = (ProfileElement) first;
+		if (first instanceof ProfileElement pe) {
 			menu.add(Actions.create(M.Open, Icon.OPEN.des(),
 				() -> ProfileEditor.open(pe.profile)));
 			menu.add(new ProfileExportAction(pe.profile));
 			menu.add(new ProfileDeleteAction(pe.profile));
 		}
 
-		if (first instanceof ConnectionFolder) {
-			ConnectionFolder cf = (ConnectionFolder) first;
+		if (first instanceof ConnectionFolder cf) {
 			menu.add(new NewConnectionAction(cf));
 		}
 
-		if (first instanceof ConnectionElement) {
-			ConnectionElement e = (ConnectionElement) first;
+		if (first instanceof ConnectionElement e) {
 			menu.add(Actions.create(M.Open, Icon.OPEN.des(),
 				() -> ConnectionEditor.open(e.con)));
 			menu.add(Actions.create(M.DownloadEPDProfiles,

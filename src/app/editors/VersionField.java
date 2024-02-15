@@ -1,7 +1,10 @@
 package app.editors;
 
-import java.util.function.Consumer;
-
+import app.M;
+import app.Tooltips;
+import app.rcp.Icon;
+import app.util.UI;
+import epd.model.Version;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridLayout;
@@ -12,11 +15,7 @@ import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
 
-import app.M;
-import app.Tooltips;
-import app.rcp.Icon;
-import app.util.UI;
-import epd.model.Version;
+import java.util.function.Consumer;
 
 public class VersionField {
 
@@ -31,7 +30,7 @@ public class VersionField {
 
 	private void render(Composite parent, FormToolkit toolkit) {
 		UI.formLabel(parent, toolkit,
-				M.DataSetVersion, Tooltips.All_DataSetVersion);
+			M.DataSetVersion, Tooltips.All_DataSetVersion);
 		Composite composite = toolkit.createComposite(parent);
 		GridLayout layout = UI.gridLayout(composite, 3);
 		layout.marginWidth = 0;
@@ -59,7 +58,6 @@ public class VersionField {
 
 		private Image hoverIcon = null;
 		private Image icon = null;
-		private String tooltip = null;
 
 		public VersionLink(Composite parent, FormToolkit toolkit, int type) {
 			this.type = type;
@@ -69,15 +67,11 @@ public class VersionField {
 		}
 
 		private void configureLink() {
-			if (type == MAJOR) {
-				tooltip = M.UpdateMajorVersion;
-				hoverIcon = Icon.UP.img();
-				icon = Icon.UP_DISABLED.img();
-			} else {
-				tooltip = M.UpdateMinorVersion;
-				hoverIcon = Icon.UP.img();
-				icon = Icon.UP_DISABLED.img();
-			}
+			var tooltip = type == MAJOR
+				? M.UpdateMajorVersion
+				: M.UpdateMinorVersion;
+			hoverIcon = Icon.UP.img();
+			icon = Icon.UP_DISABLED.img();
 			link.setToolTipText(tooltip);
 			link.setActiveImage(hoverIcon);
 			link.setImage(icon);

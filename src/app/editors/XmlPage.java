@@ -1,7 +1,7 @@
 package app.editors;
 
-import java.io.StringWriter;
-
+import app.util.Colors;
+import app.util.UI;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
@@ -16,12 +16,11 @@ import org.openlca.ilcd.io.XmlBinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import app.util.Colors;
-import app.util.UI;
+import java.io.StringWriter;
 
 public class XmlPage extends FormPage {
 
-	private IDataSet dataSet;
+	private final IDataSet dataSet;
 	private StyledText text;
 
 	public XmlPage(BaseEditor editor, IDataSet dataSet) {
@@ -76,20 +75,13 @@ public class XmlPage extends FormPage {
 	private Color color(TokenType type) {
 		if (type == null)
 			return Colors.darkGray();
-		switch (type) {
-		case INSTRUCTION:
-			return Colors.get(217, 217, 217);
-		case ATTRIBUTE:
-			return Colors.get(186, 36, 91);
-		case ATTRIBUTE_VALUE:
-			return Colors.get(241, 128, 22);
-		case MARKUP:
-			return Colors.get(0, 128, 128);
-		case MARKUP_VALUE:
-			return Colors.black();
-		default:
-			return Colors.black();
-		}
+		return switch (type) {
+			case INSTRUCTION -> Colors.get(217, 217, 217);
+			case ATTRIBUTE -> Colors.get(186, 36, 91);
+			case ATTRIBUTE_VALUE -> Colors.get(241, 128, 22);
+			case MARKUP -> Colors.get(0, 128, 128);
+			default -> Colors.black();
+		};
 	}
 
 }

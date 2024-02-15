@@ -1,14 +1,13 @@
 package epd.model;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class Xml {
 
@@ -20,9 +19,7 @@ public class Xml {
 			Date date = new Date();
 			GregorianCalendar cal = new GregorianCalendar();
 			cal.setTime(date);
-			XMLGregorianCalendar xml = DatatypeFactory.newInstance()
-					.newXMLGregorianCalendar(cal);
-			return xml;
+			return DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Xml.class);
 			log.error("failed to create XMLGregorianCalendar", e);
@@ -36,7 +33,7 @@ public class Xml {
 		try {
 			Date time = cal.toGregorianCalendar().getTime();
 			SimpleDateFormat format = new SimpleDateFormat(
-					"yyyy-MM-dd'T'HH:mm:ssZ");
+				"yyyy-MM-dd'T'HH:mm:ssZ");
 			return format.format(time);
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Xml.class);

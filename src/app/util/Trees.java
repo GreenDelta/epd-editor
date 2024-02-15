@@ -135,7 +135,7 @@ public class Trees {
 	// was resized before, and in those cases, don't resize the columns
 	// automatically.
 	private static class ColumnResizeListener extends ControlAdapter {
-		private TreeResizeListener depending;
+		private final TreeResizeListener depending;
 		private boolean enabled = true;
 		private boolean initialized;
 
@@ -165,9 +165,9 @@ public class Trees {
 	}
 
 	private static class TreeResizeListener extends ControlAdapter {
-		private Tree tree;
-		private double[] percents;
-		private int minimum;
+		private final Tree tree;
+		private final double[] percents;
+		private final int minimum;
 		private boolean enabled = true;
 		private boolean initialized;
 

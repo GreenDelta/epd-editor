@@ -68,9 +68,9 @@ public class MsgBox {
 
 	private static class BoxJob extends UIJob {
 
-		private String title;
-		private String message;
-		private int type;
+		private final String title;
+		private final String message;
+		private final int type;
 
 		public BoxJob(String title, String message, int type) {
 			super("Open message box");

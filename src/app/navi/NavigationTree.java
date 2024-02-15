@@ -12,8 +12,8 @@ public class NavigationTree {
 
 	/**
 	 * Creates a tree viewer with the same content provider, label provider,
-	 * etc. as in the navigation tree. This this viewer accepts an instance
-	 * {@link INavigationElement} as input.
+	 * etc. as in the navigation tree. This viewer accepts an instance
+	 * {@link NavigationElement} as input.
 	 */
 	@SuppressWarnings("deprecation")
 	public static TreeViewer viewer(Composite parent) {

@@ -1,5 +1,9 @@
 package app.rcp;
 
+import app.App;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -7,10 +11,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import app.App;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Reads and writes values from and to the *.ini file which is located in the
@@ -98,12 +98,11 @@ public class IniFile {
 		if (!matcher.find()) {
 			Logger log = LoggerFactory.getLogger(IniFile.class);
 			log.warn("could not extract memory value from "
-					+ "{} with -xmx([0-9]+)m", memStr);
+				+ "{} with -xmx([0-9]+)m", memStr);
 			return;
 		}
 		try {
-			int val = Integer.parseInt(matcher.group(1));
-			ini.maxMemory = val;
+			ini.maxMemory = Integer.parseInt(matcher.group(1));
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(IniFile.class);
 			log.error("failed to parse memory value from ini: " + memStr, e);
@@ -124,10 +123,9 @@ public class IniFile {
 			return false;
 		if (this == obj)
 			return true;
-		if (!(obj instanceof IniFile))
+		if (!(obj instanceof IniFile other))
 			return false;
-		IniFile other = (IniFile) obj;
 		return Objects.equals(this.lang, other.lang)
-				&& this.maxMemory == other.maxMemory;
+			&& this.maxMemory == other.maxMemory;
 	}
 }

@@ -155,8 +155,8 @@ public class Editors {
 
 	private static class OpenInUIJob extends UIJob {
 
-		private IEditorInput input;
-		private String editorId;
+		private final IEditorInput input;
+		private final String editorId;
 
 		public OpenInUIJob(IEditorInput input, String editorId) {
 			super(M.OpenEditor);

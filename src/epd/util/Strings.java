@@ -35,14 +35,11 @@ public class Strings {
 		if (str.length() <= length)
 			return str;
 
-		switch (length) {
-		case 1:
-			return ".";
-		case 2:
-			return "..";
-		default:
-			return str.substring(0, length - 3).concat("...");
-		}
+		return switch (length) {
+			case 1 -> ".";
+			case 2 -> "..";
+			default -> str.substring(0, length - 3).concat("...");
+		};
 	}
 
 	public static String[] readLines(InputStream is) throws IOException {
@@ -57,7 +54,7 @@ public class Strings {
 				list.add(line);
 			}
 		}
-		return list.toArray(new String[list.size()]);
+		return list.toArray(new String[0]);
 	}
 
 	/**
@@ -66,8 +63,7 @@ public class Strings {
 	 */
 	public static boolean nullOrEqual(String string1, String string2) {
 		return (string1 == null && string2 == null)
-				|| (string1 != null && string2 != null && string1
-						.equals(string2));
+			|| (string1 != null && string1.equals(string2));
 	}
 
 	/**
@@ -76,7 +72,7 @@ public class Strings {
 	public static boolean nullOrEmpty(String val) {
 		if (val == null)
 			return true;
-		return val.trim().length() == 0;
+		return val.isBlank();
 	}
 
 	/**
@@ -98,7 +94,7 @@ public class Strings {
 			return 0;
 		if (str1 != null && str2 == null)
 			return 1;
-		if (str1 == null && str2 != null)
+		if (str1 == null)
 			return -1;
 		return str1.compareToIgnoreCase(str2);
 	}
@@ -134,24 +130,24 @@ public class Strings {
 		StringBuilder s = new StringBuilder();
 		StringBuilder line = new StringBuilder();
 		for (String w : words) {
-			if (line.length() > 0
-					&& (line.length() + w.length() > len)) {
-				if (s.length() > 0) {
+			if (!line.isEmpty()
+				&& (line.length() + w.length() > len)) {
+				if (!s.isEmpty()) {
 					s.append('\n');
 				}
-				s.append(line.toString());
+				s.append(line);
 				line = new StringBuilder();
 			}
-			if (line.length() > 0) {
+			if (!line.isEmpty()) {
 				line.append(' ');
 			}
 			line.append(w);
 		}
-		if (line.length() > 0) {
-			if (s.length() > 0) {
+		if (!line.isEmpty()) {
+			if (!s.isEmpty()) {
 				s.append('\n');
 			}
-			s.append(line.toString());
+			s.append(line);
 		}
 		return s.toString();
 	}

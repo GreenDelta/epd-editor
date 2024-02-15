@@ -1,20 +1,20 @@
 package epd.model.qmeta;
 
+import com.google.gson.Gson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.gson.Gson;
 
 /**
  * A QGroup bundles a set of Q metadata questions.
@@ -43,7 +43,7 @@ public class QGroup {
 	 */
 	static public List<QGroup> fromFile(File file) {
 		try (FileInputStream fis = new FileInputStream(file);
-				BufferedInputStream buf = new BufferedInputStream(fis)) {
+				 BufferedInputStream buf = new BufferedInputStream(fis)) {
 			return fromJson(buf);
 		} catch (Exception e) {
 			return Collections.emptyList();
@@ -58,7 +58,7 @@ public class QGroup {
 	static public List<QGroup> fromJson(InputStream is) {
 		if (is == null)
 			return Collections.emptyList();
-		try (InputStreamReader reader = new InputStreamReader(is, "utf-8")) {
+		try (var reader = new InputStreamReader(is, StandardCharsets.UTF_8)) {
 			Gson gson = new Gson();
 			Map<String, ?>[] data = gson.fromJson(reader, Map[].class);
 			if (data == null || data.length == 0)
@@ -72,8 +72,8 @@ public class QGroup {
 				if (!(group instanceof String))
 					continue;
 				QGroup g = groups.stream()
-						.filter(gi -> Objects.equals(gi.name, group))
-						.findFirst().orElse(null);
+					.filter(gi -> Objects.equals(gi.name, group))
+					.findFirst().orElse(null);
 				if (g == null) {
 					g = new QGroup();
 					g.name = (String) group;
@@ -111,14 +111,11 @@ public class QGroup {
 	private static QQuestionType readType(String s) {
 		if (s == null)
 			return null;
-		switch (s) {
-		case "OneInList":
-			return QQuestionType.ONE_IN_LIST;
-		case "Boolean":
-			return QQuestionType.BOOLEAN;
-		default:
-			return null;
-		}
+		return switch (s) {
+			case "OneInList" -> QQuestionType.ONE_IN_LIST;
+			case "Boolean" -> QQuestionType.BOOLEAN;
+			default -> null;
+		};
 	}
 
 }

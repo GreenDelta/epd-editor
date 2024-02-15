@@ -1,5 +1,15 @@
 package app.editors;
 
+import app.M;
+import app.navi.NavigationElement;
+import app.navi.NavigationTree;
+import app.navi.Navigator;
+import app.navi.RefElement;
+import app.navi.RefTextFilter;
+import app.rcp.Icon;
+import app.util.Actions;
+import app.util.UI;
+import app.util.Viewers;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -7,7 +17,6 @@ import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
@@ -21,17 +30,6 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.Ref;
 
-import app.M;
-import app.navi.NavigationElement;
-import app.navi.NavigationTree;
-import app.navi.Navigator;
-import app.navi.RefElement;
-import app.navi.RefTextFilter;
-import app.rcp.Icon;
-import app.util.Actions;
-import app.util.UI;
-import app.util.Viewers;
-
 public class RefSelectionDialog extends FormDialog {
 
 	private final DataSetType modelType;
@@ -41,7 +39,7 @@ public class RefSelectionDialog extends FormDialog {
 
 	public static Ref select(DataSetType type) {
 		RefSelectionDialog diag = new RefSelectionDialog(
-				UI.shell(), type);
+			UI.shell(), type);
 		if (diag.open() == OK)
 			return diag.selection;
 		return null;
@@ -56,10 +54,10 @@ public class RefSelectionDialog extends FormDialog {
 	@Override
 	protected void createButtonsForButtonBar(Composite comp) {
 		createButton(comp, IDialogConstants.OK_ID,
-				IDialogConstants.OK_LABEL, false);
+			IDialogConstants.OK_LABEL, false);
 		getButton(IDialogConstants.OK_ID).setEnabled(false);
 		createButton(comp, IDialogConstants.CANCEL_ID,
-				IDialogConstants.CANCEL_LABEL, true);
+			IDialogConstants.CANCEL_LABEL, true);
 	}
 
 	@Override
@@ -82,30 +80,22 @@ public class RefSelectionDialog extends FormDialog {
 	private String getTitle() {
 		if (modelType == null)
 			return "unknown?";
-		switch (modelType) {
-		case CONTACT:
-			return M.Contact;
-		case FLOW:
-			return M.Flow;
-		case FLOW_PROPERTY:
-			return M.FlowProperty;
-		case LCIA_METHOD:
-			return M.LCIAMethod;
-		case PROCESS:
-			return M.EPD;
-		case SOURCE:
-			return M.Source;
-		case UNIT_GROUP:
-			return M.UnitGroup;
-		default:
-			return "unknown?";
-		}
+		return switch (modelType) {
+			case CONTACT -> M.Contact;
+			case FLOW -> M.Flow;
+			case FLOW_PROPERTY -> M.FlowProperty;
+			case LCIA_METHOD -> M.LCIAMethod;
+			case PROCESS -> M.EPD;
+			case SOURCE -> M.Source;
+			case UNIT_GROUP -> M.UnitGroup;
+			default -> "unknown?";
+		};
 	}
 
 	private void createViewer(Composite composite) {
 		viewer = NavigationTree.viewer(composite);
 		RefTextFilter filter = new RefTextFilter(filterText, viewer);
-		viewer.setFilters(new ViewerFilter[] { filter });
+		viewer.setFilters(filter);
 		UI.gridData(viewer.getTree(), true, true);
 		viewer.addSelectionChangedListener(new SelectionChange());
 		viewer.addDoubleClickListener(new DoubleClick());
@@ -128,13 +118,13 @@ public class RefSelectionDialog extends FormDialog {
 
 	private void addSectionActions(Section section) {
 		Action expand = Actions.create(
-				"#Expand all",
-				Icon.EXPAND.des(),
-				() -> viewer.expandAll());
+			"#Expand all",
+			Icon.EXPAND.des(),
+			() -> viewer.expandAll());
 		Action collapse = Actions.create(
-				"#Collapse all",
-				Icon.COLLAPSE.des(),
-				() -> viewer.collapseAll());
+			"#Collapse all",
+			Icon.COLLAPSE.des(),
+			() -> viewer.collapseAll());
 		Actions.bind(section, expand, collapse);
 	}
 
@@ -152,9 +142,8 @@ public class RefSelectionDialog extends FormDialog {
 		@Override
 		public void selectionChanged(SelectionChangedEvent evt) {
 			NavigationElement e = Viewers.getFirst(evt.getSelection());
-			if (!(e instanceof RefElement))
+			if (!(e instanceof RefElement refElem))
 				return;
-			RefElement refElem = (RefElement) e;
 			selection = refElem.ref;
 			getButton(IDialogConstants.OK_ID).setEnabled(selection != null);
 		}
@@ -165,9 +154,8 @@ public class RefSelectionDialog extends FormDialog {
 		@Override
 		public void doubleClick(DoubleClickEvent evt) {
 			NavigationElement e = Viewers.getFirst(evt.getSelection());
-			if (!(e instanceof RefElement))
+			if (!(e instanceof RefElement refElem))
 				return;
-			RefElement refElem = (RefElement) e;
 			selection = refElem.ref;
 			okPressed();
 		}

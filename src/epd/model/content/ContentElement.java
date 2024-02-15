@@ -2,7 +2,7 @@ package epd.model.content;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 import org.openlca.ilcd.commons.LangString;
 import org.w3c.dom.Element;
@@ -35,12 +35,12 @@ public abstract class ContentElement {
 			return this;
 		name.addAll(Dom.getChilds(e, "name", Vocab.NS_EPDv2)
 				.stream().map(Dom::getLangString)
-				.filter(n -> n != null)
-				.collect(Collectors.toList()));
+				.filter(Objects::nonNull)
+				.toList());
 		comment.addAll(Dom.getChilds(e, "comment", Vocab.NS_EPDv2)
 				.stream().map(Dom::getLangString)
-				.filter(n -> n != null)
-				.collect(Collectors.toList()));
+				.filter(Objects::nonNull)
+				.toList());
 
 		Element massPercElem = Dom.getChild(e, "weightPerc", Vocab.NS_EPDv2);
 		if (massPercElem != null) {

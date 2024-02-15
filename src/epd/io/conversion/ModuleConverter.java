@@ -1,10 +1,9 @@
 package epd.io.conversion;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-
+import epd.model.EpdDataSet;
+import epd.model.EpdProfile;
+import epd.model.ModuleEntry;
+import epd.util.Strings;
 import org.openlca.ilcd.commons.Other;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,10 +13,10 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import epd.model.EpdDataSet;
-import epd.model.EpdProfile;
-import epd.model.ModuleEntry;
-import epd.util.Strings;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 class ModuleConverter {
 
@@ -25,9 +24,8 @@ class ModuleConverter {
 		if (other == null)
 			return Collections.emptyList();
 		for (Object any : other.any) {
-			if (!(any instanceof Element))
+			if (!(any instanceof Element element))
 				continue;
-			Element element = (Element) any;
 			if (!isValid(element))
 				continue;
 			return fromElement(element, profile);
@@ -40,14 +38,14 @@ class ModuleConverter {
 			return false;
 		String nsUri = element.getNamespaceURI();
 		return Objects.equals(nsUri, Vocab.NS_OLCA)
-				&& Objects.equals(element.getLocalName(), "modules");
+			&& Objects.equals(element.getLocalName(), "modules");
 	}
 
 	private static List<ModuleEntry> fromElement(Element element,
-			EpdProfile profile) {
+																							 EpdProfile profile) {
 		List<ModuleEntry> modules = new ArrayList<>();
 		NodeList moduleList = element.getElementsByTagNameNS(
-				Vocab.NS_OLCA, "module");
+			Vocab.NS_OLCA, "module");
 		for (int i = 0; i < moduleList.getLength(); i++) {
 			Node node = moduleList.item(i);
 			NamedNodeMap attributes = node.getAttributes();
@@ -64,14 +62,14 @@ class ModuleConverter {
 	}
 
 	private static void setAttributeValue(ModuleEntry e,
-			String attribute, String value, EpdProfile profile) {
+																				String attribute, String value, EpdProfile profile) {
 		switch (attribute) {
-		case "name":
-			e.module = profile.module(value);
-			break;
-		case "scenario":
-			e.scenario = value;
-			break;
+			case "name":
+				e.module = profile.module(value);
+				break;
+			case "scenario":
+				e.scenario = value;
+				break;
 		}
 	}
 
@@ -79,7 +77,7 @@ class ModuleConverter {
 		if (other == null || doc == null || !shouldWriteEntries(dataSet))
 			return;
 		Element root = doc.createElementNS(Vocab.NS_OLCA,
-				"olca:modules");
+			"olca:modules");
 		for (ModuleEntry module : dataSet.moduleEntries) {
 			Element element = toElement(module, doc);
 			if (element != null)

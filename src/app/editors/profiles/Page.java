@@ -76,11 +76,11 @@ class Page extends FormPage {
 		App.run("Synchronize reference data ...", sync, () -> {
 			if (!sync.errors.isEmpty()) {
 				MsgBox.error(sync.errors.get(0));
-			} else if (sync.stats.size() == 0) {
+			} else if (sync.stats.isEmpty()) {
 				MsgBox.info(M.NoDataFoundOnServer);
 			}
 			// show statistics + update navi, even if there was an error
-			if (sync.stats.size() > 0) {
+			if (!sync.stats.isEmpty()) {
 				new NaviSync(App.index()).run();
 				StatusView.open(M.DataSets + " @" + url, sync.stats);
 			}

@@ -86,7 +86,7 @@ public enum Icon {
 
 	private final String fileName;
 
-	private Icon(String fileName) {
+	Icon(String fileName) {
 		this.fileName = fileName;
 	}
 
@@ -105,49 +105,32 @@ public enum Icon {
 	public static Image img(DataSetType type) {
 		if (type == null)
 			return null;
-		switch (type) {
-		case LCIA_METHOD:
-			return METHOD.img();
-		case PROCESS:
-			return EPD.img();
-		case CONTACT:
-			return CONTACT.img();
-		case SOURCE:
-			return SOURCE.img();
-		case FLOW:
-			return PRODUCT.img();
-		case FLOW_PROPERTY:
-			return QUANTITY.img();
-		case UNIT_GROUP:
-			return UNIT.img();
-		default:
-			return null;
-		}
+		return switch (type) {
+			case LCIA_METHOD -> METHOD.img();
+			case PROCESS -> EPD.img();
+			case CONTACT -> CONTACT.img();
+			case SOURCE -> SOURCE.img();
+			case FLOW -> PRODUCT.img();
+			case FLOW_PROPERTY -> QUANTITY.img();
+			case UNIT_GROUP -> UNIT.img();
+			default -> null;
+		};
 	}
 
 	public static ImageDescriptor des(DataSetType type) {
 		if (type == null)
 			return null;
-		switch (type) {
-		case PROCESS:
-			return EPD.des();
-		case CONTACT:
-			return CONTACT.des();
-		case SOURCE:
-			return SOURCE.des();
-		case FLOW:
-			return PRODUCT.des();
-		case FLOW_PROPERTY:
-			return QUANTITY.des();
-		case UNIT_GROUP:
-			return UNIT.des();
-		case LCIA_METHOD:
-			return METHOD.des();
-		case EXTERNAL_FILE:
-			return DOCUMENT.des();
-		default:
-			return null;
-		}
+		return switch (type) {
+			case PROCESS -> EPD.des();
+			case CONTACT -> CONTACT.des();
+			case SOURCE -> SOURCE.des();
+			case FLOW -> PRODUCT.des();
+			case FLOW_PROPERTY -> QUANTITY.des();
+			case UNIT_GROUP -> UNIT.des();
+			case LCIA_METHOD -> METHOD.des();
+			case EXTERNAL_FILE -> DOCUMENT.des();
+			default -> null;
+		};
 	}
 
 }

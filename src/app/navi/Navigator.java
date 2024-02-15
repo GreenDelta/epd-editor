@@ -1,7 +1,12 @@
 package app.navi;
 
-import java.util.function.Consumer;
-
+import app.editors.Editors;
+import app.editors.classifications.ClassificationEditor;
+import app.editors.connection.ConnectionEditor;
+import app.editors.locations.LocationEditor;
+import app.editors.profiles.ProfileEditor;
+import app.util.UI;
+import app.util.Viewers;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
@@ -16,13 +21,7 @@ import org.openlca.ilcd.commons.DataSetType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import app.editors.Editors;
-import app.editors.classifications.ClassificationEditor;
-import app.editors.connection.ConnectionEditor;
-import app.editors.locations.LocationEditor;
-import app.editors.profiles.ProfileEditor;
-import app.util.UI;
-import app.util.Viewers;
+import java.util.function.Consumer;
 
 public class Navigator extends CommonNavigator {
 
@@ -50,16 +49,13 @@ public class Navigator extends CommonNavigator {
 		ColumnViewerToolTipSupport.enableFor(viewer);
 		viewer.addDoubleClickListener(e -> {
 			Object obj = Viewers.getFirstSelected(viewer);
-			if (obj instanceof RefElement) {
-				RefElement refEl = (RefElement) obj;
+			if (obj instanceof RefElement refEl) {
 				Editors.open(refEl.ref);
-			} else if (obj instanceof ConnectionElement) {
-				ConnectionElement conEl = (ConnectionElement) obj;
+			} else if (obj instanceof ConnectionElement conEl) {
 				ConnectionEditor.open(conEl.con);
 			} else if (obj instanceof FileElement) {
 				open((FileElement) obj);
-			} else if (obj instanceof ProfileElement) {
-				ProfileElement pe = (ProfileElement) obj;
+			} else if (obj instanceof ProfileElement pe) {
 				ProfileEditor.open(pe.profile);
 			}
 		});
@@ -69,17 +65,17 @@ public class Navigator extends CommonNavigator {
 		if (e.getType() == null)
 			return;
 		switch (e.getType()) {
-		case DOC:
-			UI.open(e.file);
-			break;
-		case CLASSIFICATION:
-			ClassificationEditor.open(e.file);
-			break;
-		case LOCATION:
-			LocationEditor.open(e.file);
-			break;
-		default:
-			break;
+			case DOC:
+				UI.open(e.file);
+				break;
+			case CLASSIFICATION:
+				ClassificationEditor.open(e.file);
+				break;
+			case LOCATION:
+				LocationEditor.open(e.file);
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -92,9 +88,8 @@ public class Navigator extends CommonNavigator {
 		if (navigator == null || navigator.root == null)
 			return new TypeElement(null, type);
 		for (NavigationElement e : navigator.root.getChilds()) {
-			if (!(e instanceof TypeElement))
+			if (!(e instanceof TypeElement te))
 				continue;
-			TypeElement te = (TypeElement) e;
 			if (te.type == type)
 				return te;
 		}
@@ -179,8 +174,8 @@ public class Navigator extends CommonNavigator {
 	public static CommonViewer getViewer() {
 		Navigator navi = getInstance();
 		return navi == null
-				? null
-				: navi.getCommonViewer();
+			? null
+			: navi.getCommonViewer();
 	}
 
 	public static Navigator getInstance() {

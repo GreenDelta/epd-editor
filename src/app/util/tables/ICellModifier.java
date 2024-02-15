@@ -4,7 +4,7 @@ import org.eclipse.swt.SWT;
 
 public interface ICellModifier<T> {
 
-	public enum CellEditingType {
+	enum CellEditingType {
 		TEXTBOX, COMBOBOX, CHECKBOX;
 	}
 

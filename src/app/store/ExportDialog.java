@@ -1,14 +1,17 @@
 package app.store;
 
-import java.io.File;
-import java.lang.reflect.InvocationTargetException;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import app.App;
+import app.M;
 import app.editors.RefTable;
+import app.editors.RefTableLabel;
+import app.util.Colors;
+import app.util.Controls;
+import app.util.FileChooser;
+import app.util.MsgBox;
+import app.util.Tables;
+import app.util.UI;
+import com.google.common.base.Strings;
+import epd.util.ExtensionRefs;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.TableViewer;
@@ -33,18 +36,13 @@ import org.openlca.ilcd.util.Sources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Strings;
-
-import app.App;
-import app.M;
-import app.editors.RefTableLabel;
-import app.util.Colors;
-import app.util.Controls;
-import app.util.FileChooser;
-import app.util.MsgBox;
-import app.util.Tables;
-import app.util.UI;
-import epd.util.ExtensionRefs;
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * A dialog for exporting single data sets into ILCD zip packages.
@@ -97,7 +95,7 @@ public class ExportDialog extends Wizard {
 	public boolean performFinish() {
 		if (Strings.isNullOrEmpty(page.filePath)) {
 			MsgBox.error("No export file",
-					"No export file was selected");
+				"No export file was selected");
 			return false;
 		}
 		try {
@@ -111,7 +109,7 @@ public class ExportDialog extends Wizard {
 			return true;
 		} catch (Exception e) {
 			MsgBox.error("File export failed", "The file export failed with "
-					+ "the following error: " + e.getMessage());
+				+ "the following error: " + e.getMessage());
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("Failed to export file", e);
 			return false;
@@ -132,7 +130,7 @@ public class ExportDialog extends Wizard {
 
 		private Page() {
 			super("ValidationDialogPage", M.ValidateDataSet + ": " +
-					App.header(ref.name, 50), null);
+				App.header(ref.name, 50), null);
 			setPageComplete(true);
 		}
 
@@ -178,7 +176,7 @@ public class ExportDialog extends Wizard {
 
 			// the table
 			table = Tables.createViewer(comp,
-					M.DataSet, M.UUID, M.DataSetVersion);
+				M.DataSet, M.UUID, M.DataSetVersion);
 			table.setLabelProvider(new RefTableLabel());
 			table.setComparator(RefTable.comparator());
 			Tables.bindColumnWidths(table, 0.6, 0.2, 0.2);
@@ -189,15 +187,15 @@ public class ExportDialog extends Wizard {
 			try {
 				getContainer().run(true, false, monitor -> {
 					monitor.beginTask(M.SearchDependentDataSets,
-							IProgressMonitor.UNKNOWN);
+						IProgressMonitor.UNKNOWN);
 					all.clear();
 					DependencyTraversal.of(App.store(), ref)
-							.forEach(ds -> {
-								Ref next = Ref.of(ds);
-								monitor.subTask(App.header(next.name, 75));
-								all.add(next);
-								all.addAll(ExtensionRefs.of(ds));
-							});
+						.forEach(ds -> {
+							Ref next = Ref.of(ds);
+							monitor.subTask(App.header(next.name, 75));
+							all.add(next);
+							all.addAll(ExtensionRefs.of(ds));
+						});
 					App.runInUI("update table", () -> table.setInput(all));
 					monitor.done();
 				});
@@ -218,7 +216,7 @@ public class ExportDialog extends Wizard {
 
 		@Override
 		public void run(IProgressMonitor monitor)
-				throws InvocationTargetException, InterruptedException {
+			throws InvocationTargetException, InterruptedException {
 			monitor.beginTask(M.Export, all.size() + 1);
 
 			Set<String> handled = new HashSet<>();
@@ -229,24 +227,23 @@ public class ExportDialog extends Wizard {
 				handled.add(ref.uuid);
 
 				IDataSet ds = App.store().get(
-						ref.getDataSetClass(), ref.uuid);
+					ref.getDataSetClass(), ref.uuid);
 				if (ds == null)
 					continue;
-				if (!(ds instanceof Source)) {
+				if (!(ds instanceof Source source)) {
 					zip.put(ds);
 					continue;
 				}
-				Source source = (Source) ds;
 				List<FileRef> fileRefs = Sources.getFileRefs(source);
 				if (fileRefs == null || fileRefs.isEmpty()) {
 					zip.put(source);
 					continue;
 				}
 				File[] files = fileRefs.stream()
-						.map(fileRef -> App.store()
-								.getExternalDocument(fileRef))
-						.filter(file -> file != null && file.exists())
-						.toArray(File[]::new);
+					.map(fileRef -> App.store()
+						.getExternalDocument(fileRef))
+					.filter(file -> file != null && file.exists())
+					.toArray(File[]::new);
 				zip.put(source, files);
 			}
 			monitor.done();

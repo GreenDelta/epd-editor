@@ -15,7 +15,7 @@ import epd.model.EpdProfile;
 
 public class ProfileEditor extends BaseEditor {
 
-	private Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	private EpdProfile profile;
 
 	public static void open(EpdProfile profile) {

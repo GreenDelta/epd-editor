@@ -1,10 +1,10 @@
 package app.editors;
 
-import java.util.Objects;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
+
+import java.util.Objects;
 
 public class SimpleEditorInput implements IEditorInput {
 
@@ -21,7 +21,7 @@ public class SimpleEditorInput implements IEditorInput {
 	}
 
 	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	public Object getAdapter(Class adapter) {
 		return null;
 	}
@@ -57,11 +57,10 @@ public class SimpleEditorInput implements IEditorInput {
 			return false;
 		if (obj == this)
 			return true;
-		if (!(obj instanceof SimpleEditorInput))
+		if (!(obj instanceof SimpleEditorInput other))
 			return false;
-		SimpleEditorInput other = (SimpleEditorInput) obj;
 		if (id != null || other.id != null)
-			Objects.equals(this.id, other.id);
+			return Objects.equals(this.id, other.id);
 		return Objects.equals(this.getName(), other.getName());
 	}
 

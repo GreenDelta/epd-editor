@@ -1,10 +1,9 @@
 package app.navi;
 
-import org.eclipse.swt.graphics.Image;
-
 import app.rcp.Icon;
 import epd.model.EpdProfile;
 import epd.util.Strings;
+import org.eclipse.swt.graphics.Image;
 
 public class ProfileElement extends NavigationElement {
 
@@ -23,9 +22,8 @@ public class ProfileElement extends NavigationElement {
 
 	@Override
 	public int compareTo(NavigationElement elem) {
-		if (!(elem instanceof ProfileElement))
+		if (!(elem instanceof ProfileElement other))
 			return 1;
-		ProfileElement other = (ProfileElement) elem;
 		if (this.profile == null || other.profile == null)
 			return 0;
 		return Strings.compare(this.profile.name, other.profile.name);

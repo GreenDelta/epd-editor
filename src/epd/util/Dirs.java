@@ -103,8 +103,8 @@ public final class Dirs {
 
 	private static class Copy extends SimpleFileVisitor<Path> {
 
-		private Path from;
-		private Path to;
+		private final Path from;
+		private final Path to;
 
 		public Copy(Path from, Path to) {
 			this.from = from;

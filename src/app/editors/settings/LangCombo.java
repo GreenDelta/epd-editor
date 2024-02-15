@@ -1,18 +1,16 @@
 package app.editors.settings;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.TreeSet;
-import java.util.function.Consumer;
-
-import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-
 import app.M;
 import app.util.Controls;
 import app.util.UI;
 import epd.util.Strings;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+
+import java.util.Locale;
+import java.util.TreeSet;
+import java.util.function.Consumer;
 
 class LangCombo {
 
@@ -30,12 +28,7 @@ class LangCombo {
 			if (!Strings.nullOrEmpty(lang))
 				set.add(lang);
 		}
-		codes = set.toArray(new String[set.size()]);
-	}
-
-	LangCombo(String initial, List<String> all) {
-		this.initial = initial;
-		this.codes = all.toArray(new String[all.size()]);
+		codes = set.toArray(new String[0]);
 	}
 
 	void onChange(Consumer<String> fn) {

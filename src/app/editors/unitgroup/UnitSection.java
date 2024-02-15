@@ -1,8 +1,15 @@
 package app.editors.unitgroup;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import app.App;
+import app.M;
+import app.Tooltips;
+import app.editors.IEditor;
+import app.rcp.Icon;
+import app.util.Actions;
+import app.util.Tables;
+import app.util.UI;
+import app.util.Viewers;
+import app.util.tables.ModifySupport;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ITableFontProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -20,16 +27,7 @@ import org.openlca.ilcd.units.Unit;
 import org.openlca.ilcd.units.UnitGroup;
 import org.openlca.ilcd.util.UnitGroups;
 
-import app.App;
-import app.M;
-import app.Tooltips;
-import app.editors.IEditor;
-import app.rcp.Icon;
-import app.util.Actions;
-import app.util.Tables;
-import app.util.UI;
-import app.util.Viewers;
-import app.util.tables.ModifySupport;
+import java.util.List;
 
 class UnitSection {
 
@@ -48,7 +46,7 @@ class UnitSection {
 		Composite composite = UI.sectionClient(section, tk);
 		UI.gridLayout(composite, 1);
 		table = Tables.createViewer(composite, M.Unit, M.ConversionFactor,
-				M.Comment);
+			M.Comment);
 		table.setLabelProvider(new Label());
 		table.setInput(UnitGroups.getUnits(group));
 		Tables.bindColumnWidths(table, 0.2, 0.3, 0.5);
@@ -76,15 +74,14 @@ class UnitSection {
 		Action add = Actions.create(M.Add, Icon.ADD.des(), this::add);
 		Action rem = Actions.create(M.Remove, Icon.DELETE.des(), this::remove);
 		Action ref = Actions.create(M.SetAsReference,
-				Icon.des(DataSetType.FLOW_PROPERTY), this::setRef);
+			Icon.des(DataSetType.FLOW_PROPERTY), this::setRef);
 		Actions.bind(section, add, rem);
 		Actions.bind(table, ref, add, rem);
 	}
 
 	private void add() {
 		List<Unit> units = UnitGroups.units(group);
-		List<Integer> existingIDs = units.stream().map(u -> u.id)
-				.collect(Collectors.toList());
+		List<Integer> existingIDs = units.stream().map(u -> u.id).toList();
 		Unit u = new Unit();
 		u.id = 0;
 		while (existingIDs.contains(u.id)) {
@@ -117,7 +114,7 @@ class UnitSection {
 	}
 
 	private class Label extends LabelProvider implements
-			ITableLabelProvider, ITableFontProvider {
+		ITableLabelProvider, ITableFontProvider {
 
 		@Override
 		public Image getColumnImage(Object obj, int col) {
@@ -126,19 +123,14 @@ class UnitSection {
 
 		@Override
 		public String getColumnText(Object obj, int col) {
-			if (!(obj instanceof Unit))
+			if (!(obj instanceof Unit unit))
 				return null;
-			Unit unit = (Unit) obj;
-			switch (col) {
-			case 0:
-				return unit.name;
-			case 1:
-				return String.valueOf(unit.factor);
-			case 2:
-				return App.s(unit.comment);
-			default:
-				return null;
-			}
+			return switch (col) {
+				case 0 -> unit.name;
+				case 1 -> String.valueOf(unit.factor);
+				case 2 -> App.s(unit.comment);
+				default -> null;
+			};
 		}
 
 		@Override
@@ -146,7 +138,7 @@ class UnitSection {
 			if (!(obj instanceof Unit))
 				return null;
 			QuantitativeReference qRef = UnitGroups
-					.getQuantitativeReference(group);
+				.getQuantitativeReference(group);
 			if (qRef == null)
 				return null;
 			Unit u = (Unit) obj;

@@ -1,17 +1,16 @@
 package app.navi;
 
+import app.rcp.Icon;
+import epd.index.CategoryNode;
+import epd.util.Strings;
 import org.eclipse.swt.graphics.Image;
 import org.openlca.ilcd.commons.Category;
 import org.openlca.ilcd.commons.Ref;
 
-import app.rcp.Icon;
-import epd.index.CategoryNode;
-import epd.util.Strings;
-
 public class CategoryElement extends NavigationElement {
 
-	private NavigationElement parent;
-	private CategoryNode node;
+	private final NavigationElement parent;
+	private final CategoryNode node;
 
 	public CategoryElement(NavigationElement parent, CategoryNode node) {
 		this.parent = parent;
@@ -50,9 +49,8 @@ public class CategoryElement extends NavigationElement {
 	public int compareTo(NavigationElement other) {
 		if (other == null)
 			return 1;
-		if (!(other instanceof CategoryElement))
+		if (!(other instanceof CategoryElement o))
 			return -1;
-		CategoryElement o = (CategoryElement) other;
 		return Strings.compare(getLabel(), o.getLabel());
 	}
 

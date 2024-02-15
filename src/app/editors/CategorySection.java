@@ -1,7 +1,12 @@
 package app.editors;
 
-import java.util.List;
-
+import app.M;
+import app.Tooltips;
+import app.rcp.Icon;
+import app.util.Actions;
+import app.util.Tables;
+import app.util.UI;
+import app.util.Viewers;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -15,13 +20,8 @@ import org.openlca.ilcd.commons.Category;
 import org.openlca.ilcd.commons.Classification;
 import org.openlca.ilcd.commons.DataSetType;
 
-import app.M;
-import app.Tooltips;
-import app.rcp.Icon;
-import app.util.Actions;
-import app.util.Tables;
-import app.util.UI;
-import app.util.Viewers;
+import java.util.Comparator;
+import java.util.List;
 
 public class CategorySection {
 
@@ -30,7 +30,7 @@ public class CategorySection {
 	private final List<Classification> classifications;
 
 	public CategorySection(IEditor editor, DataSetType type,
-			List<Classification> list) {
+												 List<Classification> list) {
 		this.editor = editor;
 		this.type = type;
 		classifications = list;
@@ -42,8 +42,8 @@ public class CategorySection {
 		Composite composite = UI.sectionClient(section, tk);
 		UI.gridLayout(composite, 1);
 		TableViewer table = Tables.createViewer(composite,
-				M.ClassificationSystem,
-				M.CategoryPath);
+			M.ClassificationSystem,
+			M.CategoryPath);
 		table.getTable().setToolTipText(Tooltips.All_Classification);
 		table.setLabelProvider(new RowLabel());
 		table.setInput(classifications);
@@ -53,9 +53,9 @@ public class CategorySection {
 
 	private void bindActions(Section section, TableViewer viewer) {
 		Action add = Actions.create(M.Add, Icon.ADD.des(),
-				() -> addRow(viewer));
+			() -> addRow(viewer));
 		Action delete = Actions.create(M.Remove, Icon.DELETE.des(),
-				() -> deleteRow(viewer));
+			() -> deleteRow(viewer));
 		Actions.bind(section, add, delete);
 		Actions.bind(viewer, add, delete);
 	}
@@ -81,8 +81,8 @@ public class CategorySection {
 		editor.setDirty();
 	}
 
-	private class RowLabel extends LabelProvider implements
-			ITableLabelProvider {
+	private static class RowLabel extends LabelProvider implements
+		ITableLabelProvider {
 
 		@Override
 		public Image getColumnImage(Object element, int col) {
@@ -91,22 +91,18 @@ public class CategorySection {
 
 		@Override
 		public String getColumnText(Object element, int col) {
-			if (!(element instanceof Classification))
+			if (!(element instanceof Classification classification))
 				return null;
-			Classification classification = (Classification) element;
-			switch (col) {
-			case 0:
-				return classification.name;
-			case 1:
-				return getPath(classification);
-			default:
-				return null;
-			}
+			return switch (col) {
+				case 0 -> classification.name;
+				case 1 -> getPath(classification);
+				default -> null;
+			};
 		}
 
 		private String getPath(Classification classification) {
 			List<Category> classes = classification.categories;
-			classification.categories.sort((c1, c2) -> c1.level - c2.level);
+			classification.categories.sort(Comparator.comparingInt(c -> c.level));
 			StringBuilder path = new StringBuilder();
 			for (int i = 0; i < classes.size(); i++) {
 				Category clazz = classes.get(i);

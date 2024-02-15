@@ -1,10 +1,8 @@
 package epd.model.qmeta;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import epd.io.conversion.Dom;
+import epd.io.conversion.Vocab;
+import epd.util.Strings;
 import org.openlca.ilcd.commons.Other;
 import org.openlca.ilcd.processes.AdminInfo;
 import org.openlca.ilcd.processes.Modelling;
@@ -13,9 +11,10 @@ import org.openlca.ilcd.util.Processes;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import epd.io.conversion.Dom;
-import epd.io.conversion.Vocab;
-import epd.util.Strings;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class QMetaData {
 
@@ -27,8 +26,8 @@ public class QMetaData {
 	 */
 	public QQuestion getQuestion(String id) {
 		QQuestion q = questions.stream()
-				.filter(e -> Strings.nullOrEqual(e.id, id))
-				.findFirst().orElse(null);
+			.filter(e -> Strings.nullOrEqual(e.id, id))
+			.findFirst().orElse(null);
 		if (q != null)
 			return q;
 		q = new QQuestion();
@@ -47,8 +46,8 @@ public class QMetaData {
 		if (group == null)
 			return null;
 		Set<String> ids = group.questions.stream()
-				.map(q -> q.id)
-				.collect(Collectors.toSet());
+			.map(q -> q.id)
+			.collect(Collectors.toSet());
 		for (QQuestion q : questions) {
 			if (!ids.contains(q.id))
 				continue;
@@ -67,11 +66,11 @@ public class QMetaData {
 		if (group == null)
 			return;
 		Set<String> ids = group.questions.stream()
-				.map(q -> q.id)
-				.collect(Collectors.toSet());
+			.map(q -> q.id)
+			.collect(Collectors.toSet());
 		List<QQuestion> removals = this.questions.stream()
-				.filter(q -> ids.contains(q.id))
-				.collect(Collectors.toList());
+			.filter(q -> ids.contains(q.id))
+			.toList();
 		questions.removeAll(removals);
 	}
 
@@ -91,9 +90,7 @@ public class QMetaData {
 		}
 		AdminInfo adm = Processes.getAdminInfo(p);
 		if (adm != null) {
-			QMetaData qmeta = read(adm.other);
-			if (qmeta != null)
-				return qmeta;
+			return read(adm.other);
 		}
 		return null;
 	}

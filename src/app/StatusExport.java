@@ -1,12 +1,8 @@
 package app;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
-import java.util.List;
-
+import app.rcp.Labels;
+import app.util.FileChooser;
+import epd.model.RefStatus;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
@@ -19,9 +15,12 @@ import org.openlca.ilcd.commons.Ref;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import app.rcp.Labels;
-import app.util.FileChooser;
-import epd.model.RefStatus;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.List;
 
 class StatusExport implements Runnable {
 
@@ -30,7 +29,7 @@ class StatusExport implements Runnable {
 			return;
 		Date d = new Date();
 		LocalDate ld = d.toInstant().atZone(ZoneId.systemDefault())
-				.toLocalDate();
+			.toLocalDate();
 		int year = ld.getYear();
 		int month = ld.getMonthValue();
 		int day = ld.getDayOfMonth();
@@ -56,7 +55,7 @@ class StatusExport implements Runnable {
 			Workbook workbook = new XSSFWorkbook();
 			Sheet sheet = workbook.createSheet("Status");
 			createHeaders(workbook, sheet);
-			createRows(workbook, sheet);
+			createRows(sheet);
 			for (int col = 0; col < 4; col++)
 				sheet.autoSizeColumn(col);
 			workbook.write(out);
@@ -71,8 +70,8 @@ class StatusExport implements Runnable {
 		font.setBold(true);
 		style.setFont(font);
 		Row row = sheet.createRow(0);
-		String[] columns = new String[] { M.DataSet, M.Name,
-				M.UUID, M.Version, M.Status };
+		String[] columns = new String[]{M.DataSet, M.Name,
+			M.UUID, M.Version, M.Status};
 		for (int col = 0; col < columns.length; col++) {
 			Cell cell = row.createCell(col);
 			cell.setCellValue(columns[col]);
@@ -80,7 +79,7 @@ class StatusExport implements Runnable {
 		}
 	}
 
-	private void createRows(Workbook workbook, Sheet sheet) {
+	private void createRows(Sheet sheet) {
 		int row = 1;
 		for (RefStatus stat : stats) {
 			Ref ref = stat.ref;
@@ -99,21 +98,14 @@ class StatusExport implements Runnable {
 	private String getPrefix(RefStatus stat) {
 		if (stat == null)
 			return "";
-		switch (stat.value) {
-		case RefStatus.CANCEL:
-			return "CANCELED";
-		case RefStatus.ERROR:
-			return "ERROR";
-		case RefStatus.INFO:
-			return "INFO";
-		case RefStatus.OK:
-			return "OK";
-		case RefStatus.WARNING:
-			return "WARNING";
-		case RefStatus.DOWNLOADED:
-			return "DOWNLOADED";
-		default:
-			return "?";
-		}
+		return switch (stat.value) {
+			case RefStatus.CANCEL -> "CANCELED";
+			case RefStatus.ERROR -> "ERROR";
+			case RefStatus.INFO -> "INFO";
+			case RefStatus.OK -> "OK";
+			case RefStatus.WARNING -> "WARNING";
+			case RefStatus.DOWNLOADED -> "DOWNLOADED";
+			default -> "?";
+		};
 	}
 }

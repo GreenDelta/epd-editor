@@ -22,8 +22,8 @@ import epd.util.Strings;
 public class RefLink extends Composite {
 
 	private ImageHyperlink link;
-	private DataSetType type;
-	private FormToolkit toolkit;
+	private final DataSetType type;
+	private final FormToolkit toolkit;
 	private Ref ref;
 	private Consumer<Ref> onChange;
 
@@ -69,9 +69,7 @@ public class RefLink extends Composite {
 		l.setToolTipText(M.Remove);
 		l.setHoverImage(Icon.DELETE.img());
 		l.setImage(Icon.DELETE_DIS.img());
-		Controls.onClick(l, e -> {
-			setRef(null);
-		});
+		Controls.onClick(l, e -> setRef(null));
 	}
 
 	public void setRef(Ref ref) {

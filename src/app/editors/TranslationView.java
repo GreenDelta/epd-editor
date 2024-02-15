@@ -1,9 +1,10 @@
 package app.editors;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
+import app.App;
+import app.M;
+import app.util.Colors;
+import app.util.UI;
+import epd.util.Strings;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
@@ -25,11 +26,9 @@ import org.eclipse.ui.part.WorkbenchPart;
 import org.openlca.ilcd.commons.LangString;
 import org.slf4j.LoggerFactory;
 
-import app.App;
-import app.M;
-import app.util.Colors;
-import app.util.UI;
-import epd.util.Strings;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class TranslationView extends ViewPart implements ISelectionListener {
 
@@ -41,16 +40,16 @@ public class TranslationView extends ViewPart implements ISelectionListener {
 	public static void open() {
 		try {
 			PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-					.getActivePage().showView("TranslationView");
+				.getActivePage().showView("TranslationView");
 		} catch (Exception e) {
 			LoggerFactory.getLogger(TranslationView.class)
-					.error("failed to open translations", e);
+				.error("failed to open translations", e);
 		}
 	}
 
 	@Override
 	public void init(IViewSite site, IMemento memento)
-			throws PartInitException {
+		throws PartInitException {
 		super.init(site, memento);
 		setPartName(M.Translations);
 	}
@@ -65,8 +64,8 @@ public class TranslationView extends ViewPart implements ISelectionListener {
 		composite = form.getBody();
 		UI.gridLayout(composite, 2);
 		var service = getSite()
-				.getWorkbenchWindow()
-				.getSelectionService();
+			.getWorkbenchWindow()
+			.getSelectionService();
 		if (service != null) {
 			service.addSelectionListener(this);
 		}
@@ -74,11 +73,10 @@ public class TranslationView extends ViewPart implements ISelectionListener {
 
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		if (!(selection instanceof Selection))
+		if (!(selection instanceof Selection s))
 			return;
 		controls.forEach(Widget::dispose);
 		controls.clear();
-		var s = (Selection) selection;
 		if (s.isEmpty()) {
 			form.setText(M.Translation_NoContentsYet);
 			return;
@@ -104,8 +102,8 @@ public class TranslationView extends ViewPart implements ISelectionListener {
 	@Override
 	public void dispose() {
 		var service = getSite()
-				.getWorkbenchWindow()
-				.getSelectionService();
+			.getWorkbenchWindow()
+			.getSelectionService();
 		if (service != null)
 			service.removeSelectionListener(this);
 		super.dispose();
@@ -116,8 +114,8 @@ public class TranslationView extends ViewPart implements ISelectionListener {
 	}
 
 	public static void register(
-			WorkbenchPart part, String title, Text text,
-			List<LangString> strings) {
+		WorkbenchPart part, String title, Text text,
+		List<LangString> strings) {
 		if (text == null)
 			return;
 		text.addModifyListener(e -> Selection.set(part, title, strings));
@@ -134,14 +132,8 @@ public class TranslationView extends ViewPart implements ISelectionListener {
 		});
 	}
 
-	private static class Selection implements ISelection {
-		final String title;
-		final List<LangString> strings;
-
-		Selection(String title, List<LangString> strings) {
-			this.title = title;
-			this.strings = strings;
-		}
+	private record Selection(
+		String title, List<LangString> strings) implements ISelection {
 
 		@Override
 		public boolean isEmpty() {
@@ -149,7 +141,7 @@ public class TranslationView extends ViewPart implements ISelectionListener {
 		}
 
 		static void set(WorkbenchPart part, String title,
-				List<LangString> strings) {
+										List<LangString> strings) {
 			if (part == null)
 				return;
 			Selection s = new Selection(title, strings);

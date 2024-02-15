@@ -1,11 +1,15 @@
 package app.editors.source;
 
-import java.io.File;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.util.List;
-
+import app.App;
+import app.M;
+import app.Tooltips;
+import app.navi.Navigator;
+import app.rcp.Icon;
+import app.util.Actions;
+import app.util.MsgBox;
+import app.util.Tables;
+import app.util.UI;
+import app.util.Viewers;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
@@ -20,16 +24,11 @@ import org.openlca.ilcd.sources.FileRef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import app.App;
-import app.M;
-import app.Tooltips;
-import app.navi.Navigator;
-import app.rcp.Icon;
-import app.util.Actions;
-import app.util.MsgBox;
-import app.util.Tables;
-import app.util.UI;
-import app.util.Viewers;
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.util.List;
 
 class FileTable {
 
@@ -44,7 +43,7 @@ class FileTable {
 
 	public void render(Composite parent, FormToolkit tk) {
 		Section section = UI.section(parent, tk,
-				"Links to external files");
+			"Links to external files");
 		section.setToolTipText(Tooltips.Source_LinksToExternalFiles);
 		Composite comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
@@ -62,9 +61,9 @@ class FileTable {
 	private Action[] createActions() {
 		Action[] actions = new Action[2];
 		actions[0] = Actions.create(M.Add,
-				Icon.ADD.des(), this::add);
+			Icon.ADD.des(), this::add);
 		actions[1] = Actions.create(M.Remove,
-				Icon.DELETE.des(), this::remove);
+			Icon.DELETE.des(), this::remove);
 		return actions;
 	}
 
@@ -72,7 +71,7 @@ class FileTable {
 		FileDialog dialog = new FileDialog(UI.shell(), SWT.OPEN);
 		dialog.setText("Open file ...");
 		File dir = new File(App.store().getRootFolder(),
-				"external_docs");
+			"external_docs");
 		if (!dir.exists()) {
 			dir.mkdirs();
 		}
@@ -84,11 +83,11 @@ class FileTable {
 		File file = new File(path);
 		if (hasNonAsciiChars(file.getName())) {
 			boolean b = MsgBox.ask("File name has non-ASCII characters",
-					"The name of the selected file has non-ASCII characters"
-							+ " which can cause upload problems. It is"
-							+ " recommended to rename the file first using only"
-							+ " latin letters, digits, underscores and dashes."
-							+ " Continue anyway?");
+				"The name of the selected file has non-ASCII characters"
+					+ " which can cause upload problems. It is"
+					+ " recommended to rename the file first using only"
+					+ " latin letters, digits, underscores and dashes."
+					+ " Continue anyway?");
 			if (!b)
 				return;
 		}
@@ -108,13 +107,13 @@ class FileTable {
 		if (copy.exists())
 			return;
 		boolean b = MsgBox.ask("Copy file?", "The selected file is "
-				+ "not located in the 'external_docs' folder. Should "
-				+ "we make a copy there?");
+			+ "not located in the 'external_docs' folder. Should "
+			+ "we make a copy there?");
 		if (!b)
 			return;
 		try {
 			Files.copy(file.toPath(), copy.toPath(),
-					StandardCopyOption.REPLACE_EXISTING);
+				StandardCopyOption.REPLACE_EXISTING);
 			Navigator.refreshFolders();
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
@@ -131,24 +130,21 @@ class FileTable {
 		editor.setDirty();
 	}
 
-	/**
-	 * See https://github.com/GreenDelta/epd-editor/issues/39
-	 */
+	// see https://github.com/GreenDelta/epd-editor/issues/39
 	private boolean hasNonAsciiChars(String fileName) {
 		if (fileName == null)
 			return false;
 		return !StandardCharsets.US_ASCII
-				.newEncoder()
-				.canEncode(fileName);
+			.newEncoder()
+			.canEncode(fileName);
 	}
 
 	private class Label extends ColumnLabelProvider {
 
 		@Override
 		public Image getImage(Object obj) {
-			if (!(obj instanceof FileRef))
+			if (!(obj instanceof FileRef ref))
 				return null;
-			FileRef ref = (FileRef) obj;
 			if (ref.uri == null)
 				return null;
 			File file = new File(ref.uri);
@@ -159,27 +155,25 @@ class FileTable {
 
 		@Override
 		public String getText(Object obj) {
-			if (!(obj instanceof FileRef))
+			if (!(obj instanceof FileRef ref))
 				return null;
-			FileRef ref = (FileRef) obj;
 			return ref.uri;
 		}
 
 		@Override
 		public String getToolTipText(Object obj) {
-			if (!(obj instanceof FileRef))
+			if (!(obj instanceof FileRef ref))
 				return null;
-			FileRef ref = (FileRef) obj;
 			if (ref.uri == null)
 				return null;
 			File file = new File(ref.uri);
 			if (!hasNonAsciiChars(file.getName()))
 				return null;
 			return "The name of this file has non-ASCII characters"
-					+ " which can cause upload problems. It is"
-					+ " recommended to rename the file first"
-					+ " using only latin letters, digits,"
-					+ " underscores and dashes.";
+				+ " which can cause upload problems. It is"
+				+ " recommended to rename the file first"
+				+ " using only latin letters, digits,"
+				+ " underscores and dashes.";
 		}
 	}
 

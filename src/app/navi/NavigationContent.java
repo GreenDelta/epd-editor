@@ -1,11 +1,10 @@
 package app.navi;
 
-import java.util.List;
-
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.navigator.ICommonContentExtensionSite;
 import org.eclipse.ui.navigator.ICommonContentProvider;
+
+import java.util.List;
 
 public class NavigationContent implements ICommonContentProvider {
 
@@ -16,9 +15,8 @@ public class NavigationContent implements ICommonContentProvider {
 
 	@Override
 	public Object[] getChildren(Object parent) {
-		if (!(parent instanceof NavigationElement))
+		if (!(parent instanceof NavigationElement e))
 			return new Object[0];
-		NavigationElement e = (NavigationElement) parent;
 		List<NavigationElement> childs = e.getChilds();
 		if (childs == null)
 			return new Object[0];
@@ -36,18 +34,9 @@ public class NavigationContent implements ICommonContentProvider {
 
 	@Override
 	public boolean hasChildren(Object element) {
-		if (!(element instanceof NavigationElement))
+		if (!(element instanceof NavigationElement e))
 			return false;
-		NavigationElement e = (NavigationElement) element;
 		return !e.getChilds().isEmpty();
-	}
-
-	@Override
-	public void dispose() {
-	}
-
-	@Override
-	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 	}
 
 	@Override

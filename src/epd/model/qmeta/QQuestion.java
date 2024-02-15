@@ -1,10 +1,9 @@
 package epd.model.qmeta;
 
-import org.w3c.dom.Element;
-
 import epd.io.conversion.Dom;
 import epd.io.conversion.Vocab;
 import epd.util.Strings;
+import org.w3c.dom.Element;
 
 public class QQuestion {
 
@@ -22,12 +21,12 @@ public class QQuestion {
 		if (id != null) {
 			Dom.addChild(elem,
 					"norreq:QuestionID", Vocab.SBE_ILCD)
-					.setTextContent(id);
+				.setTextContent(id);
 		}
 		if (group != null) {
 			Dom.addChild(elem,
 					"norreq:QuestionGroup", Vocab.SBE_ILCD)
-					.setTextContent(group);
+				.setTextContent(group);
 		}
 		if (answer != null) {
 			answer.write(elem);
@@ -35,7 +34,7 @@ public class QQuestion {
 		if (comment != null) {
 			Dom.addChild(elem, "norreq:Comment",
 					Vocab.SBE_ILCD)
-					.setTextContent(comment);
+				.setTextContent(comment);
 		}
 	}
 
@@ -84,9 +83,8 @@ public class QQuestion {
 			return false;
 		if (obj == this)
 			return true;
-		if (!(obj instanceof QQuestion))
+		if (!(obj instanceof QQuestion other))
 			return false;
-		QQuestion other = (QQuestion) obj;
 		return Strings.nullOrEqual(this.id, other.id);
 	}
 }

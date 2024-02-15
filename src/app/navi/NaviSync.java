@@ -1,16 +1,15 @@
 package app.navi;
 
-import java.util.Objects;
-
-import org.openlca.ilcd.commons.Category;
-import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.commons.Ref;
-
 import epd.index.CategoryNode;
 import epd.index.Index;
 import epd.index.Node;
 import epd.index.TypeNode;
 import epd.util.Strings;
+import org.openlca.ilcd.commons.Category;
+import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.commons.Ref;
+
+import java.util.Objects;
 
 /**
  * Synchronizes the navigation with an index.
@@ -67,9 +66,8 @@ public class NaviSync implements Runnable {
 
 	private RefElement findChild(Ref ref, NavigationElement parent) {
 		for (NavigationElement child : parent.childs) {
-			if (!(child instanceof RefElement))
+			if (!(child instanceof RefElement re))
 				continue;
-			RefElement re = (RefElement) child;
 			if (Objects.equals(re.ref, ref))
 				return re;
 		}
@@ -80,9 +78,8 @@ public class NaviSync implements Runnable {
 		if (cat == null)
 			return null;
 		for (NavigationElement child : parent.childs) {
-			if (!(child instanceof CategoryElement))
+			if (!(child instanceof CategoryElement ca))
 				continue;
-			CategoryElement ca = (CategoryElement) child;
 			if (ca.getCategory() == null)
 				continue;
 			if (Strings.nullOrEqual(ca.getCategory().value, cat.value))
@@ -93,12 +90,10 @@ public class NaviSync implements Runnable {
 
 	private void remove(Node node, NavigationElement parent) {
 		parent.childs.removeIf(elem -> {
-			if (elem instanceof CategoryElement) {
-				CategoryElement ce = (CategoryElement) elem;
+			if (elem instanceof CategoryElement ce) {
 				return !contains(node, ce.getCategory());
 			}
-			if (elem instanceof RefElement) {
-				RefElement re = (RefElement) elem;
+			if (elem instanceof RefElement re) {
 				return !node.refs.contains(re.ref);
 			}
 			return false;

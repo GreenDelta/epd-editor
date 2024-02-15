@@ -1,9 +1,9 @@
 package app.util;
 
-import java.io.File;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
+
+import java.io.File;
 
 public class FileChooser {
 
@@ -24,8 +24,8 @@ public class FileChooser {
 		if (!file.exists())
 			return file;
 		boolean b = MsgBox.ask("#Overwrite existing file?",
-				"#The selected file already exists. "
-						+ "Should we overwrite it?");
+			"#The selected file already exists. "
+				+ "Should we overwrite it?");
 		return b ? file : null;
 	}
 
@@ -37,8 +37,7 @@ public class FileChooser {
 		String path = dialog.open();
 		if (path == null)
 			return null;
-		File file = new File(path);
-		return file;
+		return new File(path);
 	}
 
 }

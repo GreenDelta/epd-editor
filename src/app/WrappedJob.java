@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 class WrappedJob extends Job {
 
-	private Runnable runnable;
+	private final Runnable runnable;
 	private WrappedUIJob callback;
 
 	public WrappedJob(String name, Runnable runnable) {

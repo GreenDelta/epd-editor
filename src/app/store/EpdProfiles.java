@@ -1,5 +1,26 @@
 package app.store;
 
+import app.App;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import epd.io.conversion.Vocab;
+import epd.model.EpdProfile;
+import epd.model.Indicator;
+import epd.model.Indicator.Type;
+import epd.model.RefStatus;
+import epd.util.Strings;
+import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.flows.Flow;
+import org.openlca.ilcd.flows.FlowName;
+import org.openlca.ilcd.methods.LCIAMethod;
+import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.units.UnitGroup;
+import org.openlca.ilcd.util.Flows;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,29 +36,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-
-import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.commons.Ref;
-import org.openlca.ilcd.flows.Flow;
-import org.openlca.ilcd.flows.FlowName;
-import org.openlca.ilcd.methods.LCIAMethod;
-import org.openlca.ilcd.processes.Process;
-import org.openlca.ilcd.units.UnitGroup;
-import org.openlca.ilcd.util.Flows;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-
-import app.App;
-import epd.io.conversion.Vocab;
-import epd.model.EpdProfile;
-import epd.model.Indicator;
-import epd.model.Indicator.Type;
-import epd.model.RefStatus;
-import epd.util.Strings;
 
 public final class EpdProfiles {
 
@@ -267,11 +265,10 @@ public final class EpdProfiles {
 		log.info("Try to download profiles from {}", url);
 		try {
 			URLConnection con = new URL(url).openConnection();
-			if (!(con instanceof HttpURLConnection)) {
+			if (!(con instanceof HttpURLConnection http)) {
 				log.warn("No HTTP connection");
 				return;
 			}
-			HttpURLConnection http = (HttpURLConnection) con;
 			http.setRequestMethod("GET");
 			http.connect();
 			if (http.getResponseCode() >= 400) {
@@ -311,11 +308,10 @@ public final class EpdProfiles {
 		log.info("Download profile from {}", url);
 		try {
 			URLConnection con = new URL(url).openConnection();
-			if (!(con instanceof HttpURLConnection)) {
+			if (!(con instanceof HttpURLConnection http)) {
 				log.warn("No HTTP connection");
 				return null;
 			}
-			HttpURLConnection http = (HttpURLConnection) con;
 			http.setRequestMethod("GET");
 			http.connect();
 			if (http.getResponseCode() >= 400) {
@@ -349,7 +345,7 @@ public final class EpdProfiles {
 			return false;
 		var checkIndicator =
 			ref.type == DataSetType.LCIA_METHOD
-			|| ref.type == DataSetType.FLOW;
+				|| ref.type == DataSetType.FLOW;
 		var checkUnit = ref.type == DataSetType.UNIT_GROUP;
 		if (!checkIndicator && !checkUnit)
 			return false;
@@ -357,10 +353,10 @@ public final class EpdProfiles {
 		for (var profile : getAll()) {
 			for (var indicator : profile.indicators) {
 				if (checkIndicator
-						&& Strings.nullOrEqual(indicator.uuid, ref.uuid))
-						return true;
+					&& Strings.nullOrEqual(indicator.uuid, ref.uuid))
+					return true;
 				if (checkUnit
-					  && Strings.nullOrEqual(indicator.unitGroupUUID, ref.uuid))
+					&& Strings.nullOrEqual(indicator.unitGroupUUID, ref.uuid))
 					return true;
 			}
 		}

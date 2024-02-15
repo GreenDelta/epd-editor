@@ -1,10 +1,10 @@
 package app.store;
 
+import app.App;
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.flowproperties.FlowProperty;
 import org.openlca.ilcd.flows.Flow;
-import org.openlca.ilcd.flows.FlowPropertyRef;
 import org.openlca.ilcd.processes.Exchange;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.QuantitativeReference;
@@ -17,7 +17,7 @@ import org.openlca.ilcd.util.UnitGroups;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import app.App;
+import java.util.Objects;
 
 /**
  * An utility class for loading references and dependencies. from the local data
@@ -31,18 +31,13 @@ public class RefDeps {
 	public static String getRefUnit(Ref ref) {
 		if (ref == null || !ref.isValid())
 			return "";
-		switch (ref.type) {
-		case FLOW:
-			return getRefUnit(load(Flow.class, ref));
-		case FLOW_PROPERTY:
-			return getRefUnit(load(FlowProperty.class, ref));
-		case PROCESS:
-			return getRefUnit(load(Process.class, ref));
-		case UNIT_GROUP:
-			return getRefUnit(load(UnitGroup.class, ref));
-		default:
-			return "";
-		}
+		return switch (ref.type) {
+			case FLOW -> getRefUnit(load(Flow.class, ref));
+			case FLOW_PROPERTY -> getRefUnit(load(FlowProperty.class, ref));
+			case PROCESS -> getRefUnit(load(Process.class, ref));
+			case UNIT_GROUP -> getRefUnit(load(UnitGroup.class, ref));
+			default -> "";
+		};
 	}
 
 	public static <T extends IDataSet> T load(Class<T> type, Ref ref) {
@@ -83,12 +78,11 @@ public class RefDeps {
 	private static Ref propertyRef(Flow flow) {
 		if (flow == null)
 			return null;
-		org.openlca.ilcd.flows.QuantitativeReference qRef = Flows
-				.getQuantitativeReference(flow);
+		var qRef = Flows.getQuantitativeReference(flow);
 		if (qRef == null || qRef.referenceFlowProperty == null)
 			return null;
-		for (FlowPropertyRef propRef : Flows.getFlowProperties(flow)) {
-			if (propRef.dataSetInternalID == qRef.referenceFlowProperty)
+		for (var propRef : Flows.getFlowProperties(flow)) {
+			if (Objects.equals(propRef.dataSetInternalID, qRef.referenceFlowProperty))
 				return propRef.flowProperty;
 		}
 		return null;

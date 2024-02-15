@@ -1,17 +1,15 @@
 package app.store.validation;
 
-import org.apache.commons.lang3.StringUtils;
-import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.commons.LangString;
-import org.openlca.ilcd.commons.Ref;
-
+import app.App;
 import com.okworx.ilcd.validation.common.DatasetType;
 import com.okworx.ilcd.validation.events.IValidationEvent;
 import com.okworx.ilcd.validation.events.Severity;
 import com.okworx.ilcd.validation.reference.IDatasetReference;
-
-import app.App;
 import epd.model.RefStatus;
+import org.apache.commons.lang3.StringUtils;
+import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.commons.LangString;
+import org.openlca.ilcd.commons.Ref;
 
 final class Event {
 
@@ -29,51 +27,38 @@ final class Event {
 		ref.uuid = iRef.getUuid();
 		ref.version = iRef.getVersion();
 		return new RefStatus(statusValue(e.getSeverity()),
-				ref, e.getAspect()
-						+ (StringUtils.isNotBlank(e.getAspectDescription())
-								? " (" + e.getAspectDescription() + ")"
-								: "")
-						+ ": " + e.getMessage());
+			ref, e.getAspect()
+			+ (StringUtils.isNotBlank(e.getAspectDescription())
+			? " (" + e.getAspectDescription() + ")"
+			: "")
+			+ ": " + e.getMessage());
 	}
 
 	static int statusValue(Severity s) {
 		if (s == null)
 			return RefStatus.INFO;
-		switch (s) {
-		case ERROR:
-			return RefStatus.ERROR;
-		case SUCCESS:
-			return RefStatus.OK;
-		case WARNING:
-			return RefStatus.WARNING;
-		default:
-			return RefStatus.INFO;
-		}
+		return switch (s) {
+			case ERROR -> RefStatus.ERROR;
+			case SUCCESS -> RefStatus.OK;
+			case WARNING -> RefStatus.WARNING;
+			default -> RefStatus.INFO;
+		};
 	}
 
 	private static DataSetType type(DatasetType iType) {
 		if (iType == null)
 			return null;
-		switch (iType) {
-		case CONTACT:
-			return DataSetType.CONTACT;
-		case EXTERNAL_FILE:
-			return DataSetType.EXTERNAL_FILE;
-		case FLOW:
-			return DataSetType.FLOW;
-		case FLOWPROPERTY:
-			return DataSetType.FLOW_PROPERTY;
-		case LCIAMETHOD:
-			return DataSetType.LCIA_METHOD;
-		case PROCESS:
-			return DataSetType.PROCESS;
-		case SOURCE:
-			return DataSetType.SOURCE;
-		case UNITGROUP:
-			return DataSetType.UNIT_GROUP;
-		default:
-			return null;
-		}
+		return switch (iType) {
+			case CONTACT -> DataSetType.CONTACT;
+			case EXTERNAL_FILE -> DataSetType.EXTERNAL_FILE;
+			case FLOW -> DataSetType.FLOW;
+			case FLOWPROPERTY -> DataSetType.FLOW_PROPERTY;
+			case LCIAMETHOD -> DataSetType.LCIA_METHOD;
+			case PROCESS -> DataSetType.PROCESS;
+			case SOURCE -> DataSetType.SOURCE;
+			case UNITGROUP -> DataSetType.UNIT_GROUP;
+			default -> null;
+		};
 	}
 
 }

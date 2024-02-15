@@ -1,13 +1,12 @@
 package app.navi;
 
-import java.io.File;
-
-import org.eclipse.swt.graphics.Image;
-import org.openlca.ilcd.io.FileStore;
-
 import app.App;
 import app.M;
 import app.rcp.Icon;
+import org.eclipse.swt.graphics.Image;
+import org.openlca.ilcd.io.FileStore;
+
+import java.io.File;
 
 public class FolderElement extends NavigationElement {
 
@@ -33,16 +32,11 @@ public class FolderElement extends NavigationElement {
 	public String getLabel() {
 		if (type == null)
 			return "?";
-		switch (type) {
-		case CLASSIFICATION:
-			return M.Classifications;
-		case LOCATION:
-			return M.Locations;
-		case DOC:
-			return M.Documents;
-		default:
-			return "?";
-		}
+		return switch (type) {
+			case CLASSIFICATION -> M.Classifications;
+			case LOCATION -> M.Locations;
+			case DOC -> M.Documents;
+		};
 	}
 
 	@Override

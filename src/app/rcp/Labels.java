@@ -1,9 +1,8 @@
 package app.rcp;
 
-import org.openlca.ilcd.commons.DataSetType;
-
 import app.M;
 import epd.model.SubType;
+import org.openlca.ilcd.commons.DataSetType;
 
 public class Labels {
 
@@ -13,45 +12,29 @@ public class Labels {
 	public static String get(DataSetType type) {
 		if (type == null)
 			return "";
-		switch (type) {
-		case CONTACT:
-			return M.Contact;
-		case EXTERNAL_FILE:
-			return M.ExternalFile;
-		case FLOW:
-			return M.Flow;
-		case FLOW_PROPERTY:
-			return M.FlowProperty;
-		case LCIA_METHOD:
-			return M.LCIAMethod;
-		case PROCESS:
-			return M.EPD;
-		case SOURCE:
-			return M.Source;
-		case UNIT_GROUP:
-			return M.UnitGroup;
-		default:
-			return M.Unknown;
-		}
+		return switch (type) {
+			case CONTACT -> M.Contact;
+			case EXTERNAL_FILE -> M.ExternalFile;
+			case FLOW -> M.Flow;
+			case FLOW_PROPERTY -> M.FlowProperty;
+			case LCIA_METHOD -> M.LCIAMethod;
+			case PROCESS -> M.EPD;
+			case SOURCE -> M.Source;
+			case UNIT_GROUP -> M.UnitGroup;
+			default -> M.Unknown;
+		};
 	}
 
 	public static String get(SubType subtype) {
 		if (subtype == null)
 			return null;
-		switch (subtype) {
-		case AVERAGE:
-			return M.Average;
-		case GENERIC:
-			return M.Generic;
-		case REPRESENTATIVE:
-			return M.Representative;
-		case SPECIFIC:
-			return M.Specific;
-		case TEMPLATE:
-			return M.Template;
-		default:
-			return M.None;
-		}
+		return switch (subtype) {
+			case AVERAGE -> M.Average;
+			case GENERIC -> M.Generic;
+			case REPRESENTATIVE -> M.Representative;
+			case SPECIFIC -> M.Specific;
+			case TEMPLATE -> M.Template;
+		};
 	}
 
 }

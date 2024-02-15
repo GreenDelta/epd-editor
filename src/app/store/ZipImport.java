@@ -36,7 +36,7 @@ import epd.model.RefStatus;
 
 public class ZipImport implements IRunnableWithProgress {
 
-	private Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	private final ZipStore zip;
 	private final List<RefStatus> status = new ArrayList<>();
 

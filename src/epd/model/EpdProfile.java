@@ -1,10 +1,10 @@
 package epd.model;
 
+import epd.util.Strings;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import epd.util.Strings;
 
 public class EpdProfile {
 
@@ -15,7 +15,9 @@ public class EpdProfile {
 	public final List<Indicator> indicators = new ArrayList<>();
 	public final List<Module> modules = new ArrayList<>();
 
-	/** Get the indicator with the given ID from the this profile. */
+	/**
+	 * Get the indicator with the given ID from the this profile.
+	 */
 	public Indicator indicator(String uuid) {
 		if (uuid == null)
 			return null;
@@ -26,7 +28,9 @@ public class EpdProfile {
 		return null;
 	}
 
-	/** Get the module for the given name from the profile. */
+	/**
+	 * Get the module for the given name from the profile.
+	 */
 	public Module module(String name) {
 		if (name == null)
 			return null;
@@ -43,9 +47,8 @@ public class EpdProfile {
 			return false;
 		if (obj == this)
 			return true;
-		if (!(obj instanceof EpdProfile))
+		if (!(obj instanceof EpdProfile other))
 			return false;
-		EpdProfile other = (EpdProfile) obj;
 		return Objects.equals(this.id, other.id);
 	}
 

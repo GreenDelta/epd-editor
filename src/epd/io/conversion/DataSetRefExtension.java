@@ -17,23 +17,21 @@ class DataSetRefExtension {
 
 	private String type;
 	private String path;
-	private String tagName;
+	private final String tagName;
 
 	public static Ref readFlow(String tagName, Other extension) {
-		DataSetRefExtension ext = new DataSetRefExtension(tagName,
-				DataSetType.FLOW);
+		var ext = new DataSetRefExtension(tagName, DataSetType.FLOW);
 		return ext.read(DataSetType.FLOW, extension);
 	}
 
 	public static Ref readActor(String tagName, Other extension) {
-		DataSetRefExtension ext = new DataSetRefExtension(tagName,
-				DataSetType.CONTACT);
+		var ext = new DataSetRefExtension(tagName, DataSetType.CONTACT);
 		return ext.read(DataSetType.CONTACT, extension);
 	}
 
 	public static Ref readSource(String tagName, Other extension) {
 		DataSetRefExtension ext = new DataSetRefExtension(tagName,
-				DataSetType.SOURCE);
+			DataSetType.SOURCE);
 		return ext.read(DataSetType.SOURCE, extension);
 	}
 
@@ -64,40 +62,41 @@ class DataSetRefExtension {
 		if (modelType == null) {
 			type = "other external file";
 			path = "unknown";
+			return;
 		}
 		switch (modelType) {
-		case CONTACT:
-			type = "contact data set";
-			path = "contacts";
-			break;
-		case SOURCE:
-			type = "source data set";
-			path = "sources";
-			break;
-		case FLOW:
-			type = "flow data set";
-			path = "flows";
-			break;
-		case LCIA_METHOD:
-			type = "LCIA method data set";
-			path = "lciamethods";
-			break;
-		case PROCESS:
-			type = "process data set";
-			path = "processes";
-			break;
-		case FLOW_PROPERTY:
-			type = "flow property data set";
-			path = "flowproperties";
-			break;
-		case UNIT_GROUP:
-			type = "unit group data set";
-			path = "unitgroups";
-			break;
-		default:
-			type = "other external file";
-			path = "unknown";
-			break;
+			case CONTACT:
+				type = "contact data set";
+				path = "contacts";
+				break;
+			case SOURCE:
+				type = "source data set";
+				path = "sources";
+				break;
+			case FLOW:
+				type = "flow data set";
+				path = "flows";
+				break;
+			case LCIA_METHOD:
+				type = "LCIA method data set";
+				path = "lciamethods";
+				break;
+			case PROCESS:
+				type = "process data set";
+				path = "processes";
+				break;
+			case FLOW_PROPERTY:
+				type = "flow property data set";
+				path = "flowproperties";
+				break;
+			case UNIT_GROUP:
+				type = "unit group data set";
+				path = "unitgroups";
+				break;
+			default:
+				type = "other external file";
+				path = "unknown";
+				break;
 		}
 	}
 
@@ -110,7 +109,7 @@ class DataSetRefExtension {
 			ref.type = type;
 			ref.uuid = element.getAttribute("refObjectId");
 			Element nameElement = Dom.findChild(element,
-					"shortDescription");
+				"shortDescription");
 			if (nameElement != null) {
 				String lang = nameElement.getAttribute("xml:lang");
 				String val = nameElement.getTextContent();
@@ -146,8 +145,8 @@ class DataSetRefExtension {
 		e.setAttribute("uri", "../" + path + "/" + d.uuid);
 		for (LangString name : d.name) {
 			Element nameElem = doc.createElementNS(
-					"http://lca.jrc.it/ILCD/Common",
-					"common:shortDescription");
+				"http://lca.jrc.it/ILCD/Common",
+				"common:shortDescription");
 			e.appendChild(nameElem);
 			e.setAttribute("xml:lang", name.lang);
 			nameElem.setTextContent(name.value);

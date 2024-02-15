@@ -1,15 +1,14 @@
 package app.editors;
 
-import java.util.Objects;
-
+import app.App;
+import app.rcp.Icon;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 
-import app.App;
-import app.rcp.Icon;
+import java.util.Objects;
 
 public class RefEditorInput implements IEditorInput {
 
@@ -20,7 +19,7 @@ public class RefEditorInput implements IEditorInput {
 	}
 
 	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	public Object getAdapter(Class adapter) {
 		return null;
 	}
@@ -59,9 +58,8 @@ public class RefEditorInput implements IEditorInput {
 			return false;
 		if (obj == this)
 			return true;
-		if (!(obj instanceof RefEditorInput))
+		if (!(obj instanceof RefEditorInput other))
 			return false;
-		RefEditorInput other = (RefEditorInput) obj;
 		return Objects.equals(this.ref, other.ref);
 	}
 }

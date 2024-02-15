@@ -25,10 +25,10 @@ import epd.model.Module;
  */
 class ResultExport implements Runnable {
 
-	private Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
-	private EpdDataSet dataSet;
-	private File excelFile;
+	private final EpdDataSet dataSet;
+	private final File excelFile;
 	private boolean success;
 
 	public ResultExport(EpdDataSet dataSet, File excelFile) {
@@ -48,7 +48,7 @@ class ResultExport implements Runnable {
 			Workbook workbook = new XSSFWorkbook();
 			Sheet sheet = workbook.createSheet("results");
 			createHeaders(workbook, sheet);
-			createRows(workbook, sheet);
+			createRows(sheet);
 			for (int col = 0; col < 5; col++)
 				sheet.autoSizeColumn(col);
 			workbook.write(out);
@@ -74,7 +74,7 @@ class ResultExport implements Runnable {
 		}
 	}
 
-	private void createRows(Workbook workbook, Sheet sheet) {
+	private void createRows(Sheet sheet) {
 		int rowNumber = 1;
 		for (IndicatorResult result : dataSet.results) {
 			for (Amount amount : result.amounts) {

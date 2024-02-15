@@ -1,5 +1,14 @@
 package app.editors.epd;
 
+import app.M;
+import app.Tooltips;
+import app.editors.RefLink;
+import app.editors.RefTable;
+import app.rcp.Icon;
+import app.util.Actions;
+import app.util.TextBuilder;
+import app.util.UI;
+import app.util.Viewers;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -17,21 +26,11 @@ import org.openlca.ilcd.processes.Review;
 import org.openlca.ilcd.processes.Validation;
 import org.openlca.ilcd.util.Processes;
 
-import app.M;
-import app.Tooltips;
-import app.editors.RefLink;
-import app.editors.RefTable;
-import app.rcp.Icon;
-import app.util.Actions;
-import app.util.TextBuilder;
-import app.util.UI;
-import app.util.Viewers;
-
 class ReviewSection {
 
-	private Validation validation;
-	private EpdEditor editor;
-	private FormPage page;
+	private final Validation validation;
+	private final EpdEditor editor;
+	private final FormPage page;
 
 	private Composite parent;
 	private FormToolkit toolkit;
@@ -54,7 +53,7 @@ class ReviewSection {
 			new Sec(review);
 		}
 		Action addAction = Actions.create(M.AddReview,
-				Icon.ADD.des(), this::addReview);
+			Icon.ADD.des(), this::addReview);
 		Actions.bind(section, addAction);
 		form.reflow(true);
 	}
@@ -69,7 +68,7 @@ class ReviewSection {
 
 	private class Sec {
 
-		private Review review;
+		private final Review review;
 		private Section section;
 
 		Sec(Review model) {
@@ -90,13 +89,13 @@ class ReviewSection {
 			createReportText(comp);
 			createActorTable(body);
 			Action deleteAction = Actions.create(M.DeleteReview,
-					Icon.DELETE.des(), this::delete);
+				Icon.DELETE.des(), this::delete);
 			Actions.bind(section, deleteAction);
 		}
 
 		private void createReportText(Composite comp) {
 			UI.formLabel(comp, toolkit,
-					M.CompleteReviewReport, Tooltips.EPD_ReviewReport);
+				M.CompleteReviewReport, Tooltips.EPD_ReviewReport);
 			RefLink t = new RefLink(comp, toolkit, DataSetType.SOURCE);
 			t.setRef(review.report);
 			t.onChange(ref -> {
@@ -107,16 +106,16 @@ class ReviewSection {
 
 		private void createActorTable(Composite comp) {
 			RefTable.create(DataSetType.CONTACT, review.reviewers)
-					.withEditor(editor)
-					.withTitle(M.Reviewer)
-					.withTooltip(Tooltips.EPD_Reviewer)
-					.render(comp, toolkit);
+				.withEditor(editor)
+				.withTitle(M.Reviewer)
+				.withTooltip(Tooltips.EPD_Reviewer)
+				.render(comp, toolkit);
 		}
 
 		private void detailsText(Composite comp) {
 			TextBuilder tb = new TextBuilder(editor, page, toolkit);
 			tb.multiText(comp, M.ReviewDetails,
-					Tooltips.EPD_ReviewDetails, review.details);
+				Tooltips.EPD_ReviewDetails, review.details);
 		}
 
 		private void typeCombo(Composite comp) {
@@ -131,8 +130,7 @@ class ReviewSection {
 				c.setSelection(s);
 			}
 			c.addSelectionChangedListener((e) -> {
-				ReviewType type = Viewers.getFirst(e.getSelection());
-				review.type = type;
+				review.type = Viewers.getFirst(e.getSelection());
 				editor.setDirty();
 			});
 		}
@@ -145,29 +143,20 @@ class ReviewSection {
 		}
 	}
 
-	private class TypeLabel extends LabelProvider {
+	private static class TypeLabel extends LabelProvider {
 
 		@Override
 		public String getText(Object obj) {
-			if (!(obj instanceof ReviewType))
+			if (!(obj instanceof ReviewType type))
 				return null;
-			ReviewType type = (ReviewType) obj;
-			switch (type) {
-			case ACCREDITED_THIRD_PARTY_REVIEW:
-				return M.AccreditedThirdPartyReview;
-			case DEPENDENT_INTERNAL_REVIEW:
-				return M.DependentInternalReview;
-			case INDEPENDENT_EXTERNAL_REVIEW:
-				return M.IndependentExternalReview;
-			case INDEPENDENT_INTERNAL_REVIEW:
-				return M.IndependentInternalReview;
-			case INDEPENDENT_REVIEW_PANEL:
-				return M.IndependentReviewPanel;
-			case NOT_REVIEWED:
-				return M.NotReviewed;
-			default:
-				return null;
-			}
+			return switch (type) {
+				case ACCREDITED_THIRD_PARTY_REVIEW -> M.AccreditedThirdPartyReview;
+				case DEPENDENT_INTERNAL_REVIEW -> M.DependentInternalReview;
+				case INDEPENDENT_EXTERNAL_REVIEW -> M.IndependentExternalReview;
+				case INDEPENDENT_INTERNAL_REVIEW -> M.IndependentInternalReview;
+				case INDEPENDENT_REVIEW_PANEL -> M.IndependentReviewPanel;
+				case NOT_REVIEWED -> M.NotReviewed;
+			};
 		}
 	}
 }

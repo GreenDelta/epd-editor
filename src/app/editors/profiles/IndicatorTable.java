@@ -1,10 +1,19 @@
 package app.editors.profiles;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import app.App;
+import app.M;
+import app.StatusView;
 import app.editors.Editors;
+import app.rcp.Icon;
+import app.store.EpdProfiles;
+import app.util.Actions;
+import app.util.Tables;
+import app.util.UI;
 import app.util.Viewers;
+import epd.model.EpdProfile;
+import epd.model.Indicator;
+import epd.model.Indicator.Type;
+import epd.model.RefStatus;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -12,20 +21,10 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-
-import app.App;
-import app.M;
-import app.StatusView;
-import app.rcp.Icon;
-import app.store.EpdProfiles;
-import app.util.Actions;
-import app.util.Tables;
-import app.util.UI;
-import epd.model.EpdProfile;
-import epd.model.Indicator;
-import epd.model.Indicator.Type;
-import epd.model.RefStatus;
 import org.openlca.ilcd.commons.DataSetType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 class IndicatorTable {
 
@@ -84,7 +83,7 @@ class IndicatorTable {
 				editor.setDirty();
 				if (!errors.isEmpty()) {
 					StatusView.open(M.Error + ": "
-													+ profile.name, errors);
+						+ profile.name, errors);
 				}
 			});
 		}
@@ -110,9 +109,8 @@ class IndicatorTable {
 
 		@Override
 		public String getColumnText(Object obj, int col) {
-			if (!(obj instanceof Indicator))
+			if (!(obj instanceof Indicator indicator))
 				return null;
-			var indicator = (Indicator) obj;
 			return switch (col) {
 				case 0 -> indicator.name;
 				case 1 -> {

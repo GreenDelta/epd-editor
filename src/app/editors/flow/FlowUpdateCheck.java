@@ -1,11 +1,17 @@
 package app.editors.flow;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
-
+import app.App;
+import app.M;
+import app.editors.RefTableLabel;
+import app.rcp.Icon;
+import app.store.Data;
+import app.store.RefTrees;
+import app.util.MsgBox;
+import app.util.Tables;
+import app.util.UI;
+import app.util.Viewers;
+import epd.index.RefSync;
+import epd.util.Strings;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -21,18 +27,11 @@ import org.openlca.ilcd.processes.Process;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import app.App;
-import app.M;
-import app.editors.RefTableLabel;
-import app.rcp.Icon;
-import app.store.Data;
-import app.store.RefTrees;
-import app.util.MsgBox;
-import app.util.Tables;
-import app.util.UI;
-import app.util.Viewers;
-import epd.index.RefSync;
-import epd.util.Strings;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 class FlowUpdateCheck {
 
@@ -43,12 +42,12 @@ class FlowUpdateCheck {
 			return;
 		List<Ref> usages = new ArrayList<>();
 		App.run("Check flow usage ...",
-				() -> findUsages(flow, usages),
-				() -> {
-					if (usages.isEmpty())
-						return;
-					Dialog.show(flow, usages);
-				});
+			() -> findUsages(flow, usages),
+			() -> {
+				if (usages.isEmpty())
+					return;
+				Dialog.show(flow, usages);
+			});
 	}
 
 	private static void findUsages(Flow flow, List<Ref> usages) {
@@ -56,26 +55,26 @@ class FlowUpdateCheck {
 		if (flowID == null)
 			return;
 		App.index().getRefs()
-				.stream()
-				.filter(ref -> ref.type == DataSetType.PROCESS)
-				.forEach(ref -> {
-					try {
-						AtomicBoolean b = new AtomicBoolean(false);
-						RefTrees.get(ref).eachRef(pRef -> {
-							if (b.get())
-								return;
-							if (pRef.type == DataSetType.FLOW
-									&& Objects.equals(flowID, pRef.uuid)) {
-								usages.add(ref);
-								b.set(true);
-							}
-						});
-					} catch (Exception e) {
-						Logger log = LoggerFactory
-								.getLogger(FlowUpdateCheck.class);
-						log.error("Failed to load process/EPD " + ref, e);
-					}
-				});
+			.stream()
+			.filter(ref -> ref.type == DataSetType.PROCESS)
+			.forEach(ref -> {
+				try {
+					AtomicBoolean b = new AtomicBoolean(false);
+					RefTrees.get(ref).eachRef(pRef -> {
+						if (b.get())
+							return;
+						if (pRef.type == DataSetType.FLOW
+							&& Objects.equals(flowID, pRef.uuid)) {
+							usages.add(ref);
+							b.set(true);
+						}
+					});
+				} catch (Exception e) {
+					Logger log = LoggerFactory
+						.getLogger(FlowUpdateCheck.class);
+					log.error("Failed to load process/EPD " + ref, e);
+				}
+			});
 	}
 
 	private static class Dialog extends Wizard {
@@ -150,9 +149,9 @@ class FlowUpdateCheck {
 			private Page() {
 				super("DialogPage", M.UpdateReferences, null);
 				setDescription("The saved flow data set '"
-						+ Strings.cut(App.s(flow.getName()), 25)
-						+ "' is used in the following EPDs. Should these EPDs"
-						+ " be updated as well?");
+					+ Strings.cut(App.s(flow.getName()), 25)
+					+ "' is used in the following EPDs. Should these EPDs"
+					+ " be updated as well?");
 				setPageComplete(true);
 			}
 
@@ -162,9 +161,9 @@ class FlowUpdateCheck {
 				setControl(parent);
 				parent.setLayout(new FillLayout());
 				table = Tables.createViewer(parent,
-						M.DataSet,
-						M.UUID,
-						M.DataSetVersion);
+					M.DataSet,
+					M.UUID,
+					M.DataSetVersion);
 				table.setLabelProvider(new Label());
 				Tables.bindColumnWidths(table, 0.6, 0.2, 0.2);
 				table.setInput(usages);
@@ -186,11 +185,10 @@ class FlowUpdateCheck {
 		private class Label extends RefTableLabel {
 			@Override
 			public Image getColumnImage(Object obj, int col) {
-				if (!(obj instanceof Ref))
+				if (!(obj instanceof Ref ref))
 					return null;
 				if (col != 0)
 					return null;
-				Ref ref = (Ref) obj;
 				if (Boolean.TRUE.equals(selected.get(ref.uuid)))
 					return Icon.CHECK_TRUE.img();
 				else

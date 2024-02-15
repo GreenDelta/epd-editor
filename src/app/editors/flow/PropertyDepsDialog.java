@@ -1,9 +1,14 @@
 package app.editors.flow;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import app.M;
+import app.rcp.Icon;
+import app.store.MaterialProperties;
+import app.util.Tables;
+import app.util.UI;
+import app.util.Viewers;
+import epd.model.EpdProduct;
+import epd.model.MaterialProperty;
+import epd.model.MaterialPropertyValue;
 import epd.util.Strings;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -15,15 +20,9 @@ import org.openlca.ilcd.commons.FlowType;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.util.Flows;
 
-import app.M;
-import app.rcp.Icon;
-import app.store.MaterialProperties;
-import app.util.Tables;
-import app.util.UI;
-import app.util.Viewers;
-import epd.model.EpdProduct;
-import epd.model.MaterialProperty;
-import epd.model.MaterialPropertyValue;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * When a flow property is added to a flow, we open this dialog when we have
@@ -41,7 +40,7 @@ class PropertyDepsDialog extends FormDialog {
 
 	static boolean add(EpdProduct product) {
 		if (product == null || product.flow == null
-				|| Flows.getType(product.flow) != FlowType.PRODUCT_FLOW)
+			|| Flows.getType(product.flow) != FlowType.PRODUCT_FLOW)
 			return false;
 		var config = Config.create(product);
 		if (config.selected.isEmpty())
@@ -65,7 +64,7 @@ class PropertyDepsDialog extends FormDialog {
 		var body = UI.formBody(mform.getForm(), tk);
 
 		UI.formLabel(body, tk,
-				"You may also want to add the following properties?");
+			"You may also want to add the following properties?");
 		var table = Tables.createViewer(body, M.MaterialProperties);
 		Tables.bindColumnWidths(table, 1.0);
 		table.setLabelProvider(new TableLabel());
@@ -98,23 +97,21 @@ class PropertyDepsDialog extends FormDialog {
 	}
 
 	private class TableLabel extends LabelProvider
-			implements ITableLabelProvider {
+		implements ITableLabelProvider {
 
 		@Override
 		public Image getColumnImage(Object obj, int col) {
-			if (!(obj instanceof MaterialProperty))
+			if (!(obj instanceof MaterialProperty prop))
 				return null;
-			var prop = (MaterialProperty) obj;
 			return config.selected.contains(prop)
-					? Icon.CHECK_TRUE.img()
-					: Icon.CHECK_FALSE.img();
+				? Icon.CHECK_TRUE.img()
+				: Icon.CHECK_FALSE.img();
 		}
 
 		@Override
 		public String getColumnText(Object obj, int col) {
-			if (!(obj instanceof MaterialProperty))
+			if (!(obj instanceof MaterialProperty prop))
 				return null;
-			var prop = (MaterialProperty) obj;
 			return prop.name;
 		}
 	}
@@ -134,9 +131,9 @@ class PropertyDepsDialog extends FormDialog {
 
 			// collect non-present properties
 			var usedIDs = product.properties.stream()
-					.filter(val -> val.property != null)
-					.map(val -> val.property.id)
-					.collect(Collectors.toSet());
+				.filter(val -> val.property != null)
+				.map(val -> val.property.id)
+				.collect(Collectors.toSet());
 			for (var prop : MaterialProperties.get()) {
 				if (usedIDs.contains(prop.id))
 					continue;
@@ -148,13 +145,13 @@ class PropertyDepsDialog extends FormDialog {
 			conf.properties.sort((p1, p2) -> Strings.compare(p1.name, p2.name));
 
 			// find new property candidates
-			var pairs = new String[][] {
-					{ "area", "layer thickness" },
-					{ "area", "grammage" },
-					{ "volume", "bulk density" },
-					{ "volume", "gross density" },
-					{ "normal volume", "bulk density" },
-					{ "normal volume", "gross density" },
+			var pairs = new String[][]{
+				{"area", "layer thickness"},
+				{"area", "grammage"},
+				{"volume", "bulk density"},
+				{"volume", "gross density"},
+				{"normal volume", "bulk density"},
+				{"normal volume", "gross density"},
 			};
 			for (var flowProp : Flows.getFlowProperties(product.flow)) {
 				if (flowProp.flowProperty == null)

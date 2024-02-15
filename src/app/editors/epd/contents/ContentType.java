@@ -14,17 +14,11 @@ enum ContentType {
 	SUBSTANCE;
 
 	ContentElement newInstance() {
-		switch (this) {
-		case COMPONENT:
-			return new Component();
-		case MATERIAL:
-			return new Material();
-		case SUBSTANCE:
-			return new Substance();
-		default:
-			throw new IllegalStateException(
-					"unknown content type");
-		}
+		return switch (this) {
+			case COMPONENT -> new Component();
+			case MATERIAL -> new Material();
+			case SUBSTANCE -> new Substance();
+		};
 	}
 
 }

@@ -13,8 +13,8 @@ import app.util.UI;
 
 class VendorSection {
 
-	private FlowEditor editor;
-	private FormToolkit tk;
+	private final FlowEditor editor;
+	private final FormToolkit tk;
 
 	private VendorSection(FlowEditor editor, FormToolkit tk) {
 		this.editor = editor;

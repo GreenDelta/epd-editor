@@ -1,11 +1,10 @@
 package app.editors.locations;
 
+import app.rcp.Icon;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.openlca.ilcd.lists.Location;
-
-import app.rcp.Icon;
 
 class TableLabel extends LabelProvider implements ITableLabelProvider {
 
@@ -18,9 +17,8 @@ class TableLabel extends LabelProvider implements ITableLabelProvider {
 
 	@Override
 	public String getColumnText(Object obj, int col) {
-		if (!(obj instanceof Location))
+		if (!(obj instanceof Location loc))
 			return null;
-		Location loc = (Location) obj;
 		if (col == 0)
 			return loc.code;
 		if (col == 1)

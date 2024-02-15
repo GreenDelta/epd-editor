@@ -1,7 +1,8 @@
 package app.editors.connection;
 
-import java.util.function.Consumer;
-
+import app.M;
+import app.util.Controls;
+import app.util.UI;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -12,9 +13,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.openlca.ilcd.io.SodaConnection;
 
-import app.M;
-import app.util.Controls;
-import app.util.UI;
+import java.util.function.Consumer;
 
 class ConnectionPage extends FormPage {
 
@@ -50,15 +49,13 @@ class ConnectionPage extends FormPage {
 		new DataSection(con).create(body, tk);
 		UI.filler(comp);
 		Button profileBtn = tk.createButton(comp,
-				M.DownloadEPDProfiles, SWT.NONE);
-		Controls.onSelect(profileBtn, e -> {
-			EpdProfileDownload.runInUI(con.url);
-		});
+			M.DownloadEPDProfiles, SWT.NONE);
+		Controls.onSelect(profileBtn, e -> EpdProfileDownload.runInUI(con.url));
 		form.reflow(true);
 	}
 
-	private Text text(Composite comp, String label, String initial,
-			Consumer<String> fn) {
+	private void text(
+		Composite comp, String label, String initial, Consumer<String> fn) {
 		Text t = UI.formText(comp, tk, label);
 		if (initial != null)
 			t.setText(initial);
@@ -66,7 +63,6 @@ class ConnectionPage extends FormPage {
 			fn.accept(t.getText());
 			editor.setDirty();
 		});
-		return t;
 	}
 
 }

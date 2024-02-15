@@ -12,9 +12,9 @@ import epd.model.content.ContentAmount;
 
 class AmountWidget {
 
-	private Text valText;
-	private Text lowText;
-	private Text uppText;
+	private final Text valText;
+	private final Text lowText;
+	private final Text uppText;
 
 	AmountWidget(Composite parent, FormToolkit tk) {
 		Composite comp = tk.createComposite(parent);

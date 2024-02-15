@@ -1,7 +1,11 @@
 package app.editors.connection;
 
-import java.util.Objects;
-
+import app.editors.BaseEditor;
+import app.editors.Editors;
+import app.editors.SimpleEditorInput;
+import app.rcp.Icon;
+import app.store.Connections;
+import epd.util.Strings;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
@@ -11,12 +15,7 @@ import org.openlca.ilcd.io.SodaConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import app.editors.BaseEditor;
-import app.editors.Editors;
-import app.editors.SimpleEditorInput;
-import app.rcp.Icon;
-import app.store.Connections;
-import epd.util.Strings;
+import java.util.Objects;
 
 public class ConnectionEditor extends BaseEditor {
 
@@ -31,7 +30,7 @@ public class ConnectionEditor extends BaseEditor {
 
 	@Override
 	public void init(IEditorSite site, IEditorInput input)
-			throws PartInitException {
+		throws PartInitException {
 		super.init(site, input);
 		setPartName(Strings.cut(input.getName(), 75));
 		try {
@@ -80,9 +79,8 @@ public class ConnectionEditor extends BaseEditor {
 				return false;
 			if (obj == this)
 				return true;
-			if (!(obj instanceof Input))
+			if (!(obj instanceof Input other))
 				return false;
-			Input other = (Input) obj;
 			return Objects.equals(this.con, other.con);
 		}
 	}

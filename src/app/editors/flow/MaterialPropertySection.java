@@ -1,17 +1,5 @@
 package app.editors.flow;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.window.Window;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.Section;
-
 import app.M;
 import app.Tooltips;
 import app.rcp.Icon;
@@ -22,6 +10,17 @@ import app.util.Viewers;
 import app.util.tables.ModifySupport;
 import app.util.tables.TextCellModifier;
 import epd.model.MaterialPropertyValue;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.window.Window;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.Section;
+
+import java.util.ArrayList;
+import java.util.List;
 
 class MaterialPropertySection {
 
@@ -29,7 +28,7 @@ class MaterialPropertySection {
 	private final static String VALUE = M.Value;
 	private final static String UNIT = M.Unit;
 
-	private FlowEditor editor;
+	private final FlowEditor editor;
 	private TableViewer table;
 
 	MaterialPropertySection(FlowEditor editor) {
@@ -54,8 +53,8 @@ class MaterialPropertySection {
 
 	private List<MaterialPropertyValue> properties() {
 		return editor.product == null
-				? new ArrayList<>()
-				: editor.product.properties;
+			? new ArrayList<>()
+			: editor.product.properties;
 	}
 
 	void refresh() {
@@ -64,9 +63,9 @@ class MaterialPropertySection {
 
 	private void bindActions(TableViewer table, Section section) {
 		var add = Actions.create(
-				M.Add, Icon.ADD.des(), this::onAdd);
+			M.Add, Icon.ADD.des(), this::onAdd);
 		var remove = Actions.create(
-				M.Remove, Icon.DELETE.des(), this::onRemove);
+			M.Remove, Icon.DELETE.des(), this::onRemove);
 		Actions.bind(section, add, remove);
 		Actions.bind(table, add, remove);
 	}
@@ -99,7 +98,7 @@ class MaterialPropertySection {
 	}
 
 	private class ValueModifier
-			extends TextCellModifier<MaterialPropertyValue> {
+		extends TextCellModifier<MaterialPropertyValue> {
 
 		@Override
 		protected String getText(MaterialPropertyValue v) {
@@ -116,12 +115,12 @@ class MaterialPropertySection {
 					v.value = val;
 					editor.setDirty();
 				}
-			} catch (NumberFormatException e) {
+			} catch (NumberFormatException ignored) {
 			}
 		}
 	}
 
-	private class Label extends LabelProvider implements ITableLabelProvider {
+	private static class Label extends LabelProvider implements ITableLabelProvider {
 
 		@Override
 		public Image getColumnImage(Object obj, int col) {
@@ -130,20 +129,15 @@ class MaterialPropertySection {
 
 		@Override
 		public String getColumnText(Object obj, int col) {
-			if (!(obj instanceof MaterialPropertyValue))
+			if (!(obj instanceof MaterialPropertyValue val))
 				return null;
-			var val = (MaterialPropertyValue) obj;
 			var prop = val.property;
-			switch (col) {
-			case 0:
-				return prop != null ? prop.name : null;
-			case 1:
-				return Double.toString(val.value);
-			case 2:
-				return prop != null ? prop.unit : null;
-			default:
-				return null;
-			}
+			return switch (col) {
+				case 0 -> prop != null ? prop.name : null;
+				case 1 -> Double.toString(val.value);
+				case 2 -> prop != null ? prop.unit : null;
+				default -> null;
+			};
 		}
 	}
 }

@@ -1,9 +1,15 @@
 package app.editors.connection;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import app.App;
+import app.M;
+import app.editors.io.DownloadDialog;
+import app.rcp.Icon;
+import app.util.Actions;
+import app.util.Controls;
+import app.util.MsgBox;
+import app.util.Tables;
+import app.util.UI;
+import app.util.Viewers;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -27,16 +33,9 @@ import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.sources.Source;
 import org.openlca.ilcd.units.UnitGroup;
 
-import app.App;
-import app.M;
-import app.editors.io.DownloadDialog;
-import app.rcp.Icon;
-import app.util.Actions;
-import app.util.Controls;
-import app.util.MsgBox;
-import app.util.Tables;
-import app.util.UI;
-import app.util.Viewers;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 class DataSection {
 
@@ -59,15 +58,14 @@ class DataSection {
 		Text searchText = tk.createText(comp, "", SWT.BORDER);
 		UI.gridData(searchText, false, false).widthHint = 350;
 		Button button = tk.createButton(comp, M.Search, SWT.NONE);
-		Controls.onSelect(button, e -> {
-			runSearch(typeCombo.selectedType, searchText.getText());
-		});
+		Controls.onSelect(
+			button, e -> runSearch(typeCombo.selectedType, searchText.getText()));
 		searchText.addTraverseListener(e -> {
 			if (e.detail == SWT.TRAVERSE_RETURN)
 				runSearch(typeCombo.selectedType, searchText.getText());
 		});
 		table = Tables.createViewer(parent, M.Name, M.UUID, M.DataSetVersion,
-				M.Comment);
+			M.Comment);
 		Tables.bindColumnWidths(table, 0.3, 0.2, 0.2, 0.3);
 		table.setLabelProvider(new TableLabel());
 		bindDownload();
@@ -98,24 +96,16 @@ class DataSection {
 	private Class<? extends IDataSet> getClass(DataSetType type) {
 		if (type == null)
 			return null;
-		switch (type) {
-		case CONTACT:
-			return Contact.class;
-		case FLOW:
-			return Flow.class;
-		case FLOW_PROPERTY:
-			return FlowProperty.class;
-		case LCIA_METHOD:
-			return LCIAMethod.class;
-		case PROCESS:
-			return Process.class;
-		case SOURCE:
-			return Source.class;
-		case UNIT_GROUP:
-			return UnitGroup.class;
-		default:
-			return null;
-		}
+		return switch (type) {
+			case CONTACT -> Contact.class;
+			case FLOW -> Flow.class;
+			case FLOW_PROPERTY -> FlowProperty.class;
+			case LCIA_METHOD -> LCIAMethod.class;
+			case PROCESS -> Process.class;
+			case SOURCE -> Source.class;
+			case UNIT_GROUP -> UnitGroup.class;
+			default -> null;
+		};
 	}
 
 	private void bindDownload() {
@@ -124,8 +114,8 @@ class DataSection {
 			if (selected.isEmpty())
 				return;
 			List<Ref> refs = selected.stream()
-					.map(d -> d.toRef())
-					.collect(Collectors.toList());
+				.map(Descriptor::toRef)
+				.collect(Collectors.toList());
 			DownloadDialog.open(con, refs);
 		});
 		Actions.bind(table, action);

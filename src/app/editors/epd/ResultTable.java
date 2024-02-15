@@ -1,23 +1,12 @@
 package app.editors.epd;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-
 import app.App;
-import app.editors.Editors;
-import app.rcp.Icon;
-import app.util.Viewers;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Composite;
-
 import app.M;
 import app.Tooltips;
+import app.editors.Editors;
+import app.rcp.Icon;
 import app.util.Tables;
+import app.util.Viewers;
 import app.util.tables.ModifySupport;
 import app.util.tables.TextCellModifier;
 import epd.model.Amount;
@@ -26,7 +15,17 @@ import epd.model.Indicator;
 import epd.model.IndicatorResult;
 import epd.model.Module;
 import epd.util.Strings;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
 import org.openlca.ilcd.commons.DataSetType;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 class ResultTable {
 
@@ -136,9 +135,8 @@ class ResultTable {
 
 		@Override
 		public Image getColumnImage(Object obj, int col) {
-			if (!(obj instanceof ResultRow))
+			if (!(obj instanceof ResultRow row))
 				return null;
-			ResultRow row = (ResultRow) obj;
 			if (col == 2) {
 				var indicator = row.indicator();
 				if (indicator == null)
@@ -155,9 +153,8 @@ class ResultTable {
 
 		@Override
 		public String getColumnText(Object obj, int col) {
-			if (!(obj instanceof ResultRow))
+			if (!(obj instanceof ResultRow row))
 				return null;
-			var row = (ResultRow) obj;
 			var a = row.amount;
 			return switch (col) {
 				case 0 -> a.module == null ? null : a.module.name;

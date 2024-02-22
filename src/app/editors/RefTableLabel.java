@@ -14,7 +14,7 @@ public class RefTableLabel extends LabelProvider implements ITableLabelProvider 
 	public Image getColumnImage(Object obj, int col) {
 		if (col != 0 || !(obj instanceof Ref ref))
 			return null;
-		return Icon.img(ref.type);
+		return Icon.img(ref.getType());
 	}
 
 	@Override
@@ -22,9 +22,9 @@ public class RefTableLabel extends LabelProvider implements ITableLabelProvider 
 		if (!(obj instanceof Ref ref))
 			return null;
 		return switch (col) {
-			case 0 -> LangString.getFirst(ref.name, App.lang());
-			case 1 -> ref.uuid;
-			case 2 -> ref.version;
+			case 0 -> LangString.getFirst(ref.withName(), App.lang());
+			case 1 -> ref.getUUID();
+			case 2 -> ref.getVersion();
 			default -> null;
 		};
 	}

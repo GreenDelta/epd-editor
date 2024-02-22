@@ -31,14 +31,14 @@ public class RefEditorInput implements IEditorInput {
 
 	@Override
 	public ImageDescriptor getImageDescriptor() {
-		return ref == null ? null : Icon.des(ref.type);
+		return ref == null ? null : Icon.des(ref.getType());
 	}
 
 	@Override
 	public String getName() {
 		if (ref == null)
 			return "??";
-		String name = LangString.getFirst(ref.name, App.lang());
+		String name = LangString.getFirst(ref.withName(), App.lang());
 		return name == null ? "??" : name;
 	}
 

@@ -1,15 +1,9 @@
 package app;
 
-import app.editors.BaseEditor;
-import app.editors.Editors;
-import app.editors.SimpleEditorInput;
-import app.rcp.Icon;
-import app.util.Actions;
-import app.util.Tables;
-import app.util.UI;
-import app.util.Viewers;
-import epd.model.RefStatus;
-import epd.util.Strings;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -26,9 +20,16 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import app.editors.BaseEditor;
+import app.editors.Editors;
+import app.editors.SimpleEditorInput;
+import app.rcp.Icon;
+import app.util.Actions;
+import app.util.Tables;
+import app.util.UI;
+import app.util.Viewers;
+import epd.model.RefStatus;
+import epd.util.Strings;
 
 public class StatusView extends BaseEditor {
 
@@ -107,7 +108,7 @@ public class StatusView extends BaseEditor {
 			double maxMsgLen = 0;
 			for (RefStatus stat : stats) {
 				if (stat.ref != null) {
-					String name = App.s(stat.ref.name);
+					String name = App.s(stat.ref.withName());
 					if (name != null) {
 						maxNameLen = Math.max(maxNameLen, name.length());
 					}
@@ -152,7 +153,7 @@ public class StatusView extends BaseEditor {
 			if (!(obj instanceof RefStatus rs))
 				return null;
 			if (col == 0 && rs.ref != null)
-				return Icon.img(rs.ref.type);
+				return Icon.img(rs.ref.getType());
 			if (col != 3)
 				return null;
 			return switch (rs.value) {
@@ -175,9 +176,9 @@ public class StatusView extends BaseEditor {
 			if (rs.ref == null)
 				return null;
 			return switch (col) {
-				case 0 -> App.s(rs.ref.name);
-				case 1 -> rs.ref.uuid;
-				case 2 -> rs.ref.version;
+				case 0 -> App.s(rs.ref.withName());
+				case 1 -> rs.ref.getUUID();
+				case 2 -> rs.ref.getVersion();
 				default -> null;
 			};
 		}

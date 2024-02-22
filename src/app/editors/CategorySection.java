@@ -94,21 +94,21 @@ public class CategorySection {
 			if (!(element instanceof Classification classification))
 				return null;
 			return switch (col) {
-				case 0 -> classification.name;
+				case 0 -> classification.getName();
 				case 1 -> getPath(classification);
 				default -> null;
 			};
 		}
 
 		private String getPath(Classification classification) {
-			List<Category> classes = classification.categories;
-			classification.categories.sort(Comparator.comparingInt(c -> c.level));
+			List<Category> classes = classification.withCategories();
+			classification.withCategories().sort(Comparator.comparingInt(c -> c.getLevel()));
 			StringBuilder path = new StringBuilder();
 			for (int i = 0; i < classes.size(); i++) {
 				Category clazz = classes.get(i);
-				if (clazz.classId != null && clazz.classId.length() < 8)
-					path.append(clazz.classId).append(" ");
-				path.append(clazz.value);
+				if (clazz.getClassId() != null && clazz.getClassId().length() < 8)
+					path.append(clazz.getClassId()).append(" ");
+				path.append(clazz.getValue());
 				if (i < (classes.size() - 1))
 					path.append(" / ");
 			}

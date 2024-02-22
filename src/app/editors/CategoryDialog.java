@@ -1,10 +1,11 @@
 package app.editors;
 
-import app.M;
-import app.rcp.Icon;
-import app.store.CategorySystems;
-import app.util.UI;
-import app.util.Viewers;
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
+
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -24,11 +25,11 @@ import org.openlca.ilcd.lists.CategoryList;
 import org.openlca.ilcd.lists.CategorySystem;
 import org.openlca.ilcd.lists.ContentType;
 
-import java.util.Collections;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
+import app.M;
+import app.rcp.Icon;
+import app.store.CategorySystems;
+import app.util.UI;
+import app.util.Viewers;
 
 public class CategoryDialog extends FormDialog {
 
@@ -52,7 +53,7 @@ public class CategoryDialog extends FormDialog {
 			case CONTACT -> ContentType.CONTACT;
 			case FLOW -> ContentType.FLOW;
 			case FLOW_PROPERTY -> ContentType.FLOW_PROPERTY;
-			case LCIA_METHOD -> ContentType.LCIA_METHOD;
+		case IMPACT_METHOD -> ContentType.LCIA_METHOD;
 			case PROCESS -> ContentType.PROCESS;
 			case SOURCE -> ContentType.SOURCE;
 			case UNIT_GROUP -> ContentType.UNIT_GROUP;
@@ -69,7 +70,7 @@ public class CategoryDialog extends FormDialog {
 		if (selectedSystem == null || selectedCategory == null)
 			return null;
 		Classification classification = new Classification();
-		classification.name = selectedSystem.name;
+		classification.withName(selectedSystem.getName());
 		Map<Category, Category> parentMap = new IdentityHashMap<>();
 		fillParentMap(getRootCategories(selectedSystem), parentMap);
 		Stack<Category> path = getPath(selectedCategory, parentMap);
@@ -77,26 +78,26 @@ public class CategoryDialog extends FormDialog {
 		while (!path.isEmpty()) {
 			Category c = path.pop();
 			org.openlca.ilcd.commons.Category clazz = new org.openlca.ilcd.commons.Category();
-			clazz.classId = c.id;
-			clazz.level = i;
-			clazz.value = c.name;
-			classification.categories.add(clazz);
+			clazz.withClassId(c.getId());
+			clazz.withLevel(i);
+			clazz.withValue(c.getName());
+			classification.withCategories().add(clazz);
 			i++;
 		}
 		return classification;
 	}
 
 	private void fillParentMap(List<Category> rootCategories,
-														 Map<Category, Category> parentMap) {
+			Map<Category, Category> parentMap) {
 		for (Category root : rootCategories) {
-			for (Category child : root.category)
+			for (Category child : root.getCategories())
 				parentMap.put(child, root);
-			fillParentMap(root.category, parentMap);
+			fillParentMap(root.getCategories(), parentMap);
 		}
 	}
 
 	private Stack<Category> getPath(Category category,
-																	Map<Category, Category> parentMap) {
+			Map<Category, Category> parentMap) {
 		Stack<Category> stack = new Stack<>();
 		stack.push(category);
 		Category parent = parentMap.get(category);
@@ -152,9 +153,9 @@ public class CategoryDialog extends FormDialog {
 	private List<Category> getRootCategories(CategorySystem system) {
 		if (system == null)
 			return Collections.emptyList();
-		for (CategoryList list : system.categories) {
-			if (list.type == type)
-				return list.categories;
+		for (CategoryList list : system.withCategories()) {
+			if (list.getType() == type)
+				return list.withCategories();
 		}
 		return Collections.emptyList();
 	}
@@ -165,7 +166,7 @@ public class CategoryDialog extends FormDialog {
 		public String getText(Object element) {
 			if (!(element instanceof CategorySystem system))
 				return null;
-			return system.name != null ? system.name : "<no name>";
+			return system.getName() != null ? system.getName() : "<no name>";
 		}
 
 	}
@@ -184,7 +185,7 @@ public class CategoryDialog extends FormDialog {
 		public Object[] getChildren(Object parentElement) {
 			if (!(parentElement instanceof Category category))
 				return new Object[0];
-			return category.category.toArray();
+			return category.withCategories().toArray();
 		}
 
 		@Override
@@ -196,7 +197,7 @@ public class CategoryDialog extends FormDialog {
 		public boolean hasChildren(Object element) {
 			if (!(element instanceof Category category))
 				return false;
-			return !category.category.isEmpty();
+			return !category.withCategories().isEmpty();
 		}
 	}
 
@@ -211,7 +212,7 @@ public class CategoryDialog extends FormDialog {
 		public String getText(Object element) {
 			if (!(element instanceof Category category))
 				return null;
-			return category.name;
+			return category.getName();
 		}
 	}
 

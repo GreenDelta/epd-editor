@@ -48,9 +48,9 @@ public class Editors {
 	}
 
 	public static void open(Ref ref) {
-		if (ref == null || ref.type == null || ref.uuid == null)
+		if (ref == null || ref.getType() == null || ref.getUUID() == null)
 			return;
-		switch (ref.type) {
+		switch (ref.getType()) {
 		case PROCESS:
 			EpdEditor.open(ref);
 			break;
@@ -69,7 +69,7 @@ public class Editors {
 		case UNIT_GROUP:
 			UnitGroupEditor.open(ref);
 			break;
-		case LCIA_METHOD:
+		case IMPACT_METHOD:
 			MethodEditor.open(ref);
 			break;
 		case MODEL:

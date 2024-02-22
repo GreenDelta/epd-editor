@@ -1,14 +1,5 @@
 package app.editors.epd;
 
-import app.M;
-import app.Tooltips;
-import app.editors.RefLink;
-import app.editors.RefTable;
-import app.rcp.Icon;
-import app.util.Actions;
-import app.util.TextBuilder;
-import app.util.UI;
-import app.util.Viewers;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -26,6 +17,16 @@ import org.openlca.ilcd.processes.Review;
 import org.openlca.ilcd.processes.Validation;
 import org.openlca.ilcd.util.Processes;
 
+import app.M;
+import app.Tooltips;
+import app.editors.RefLink;
+import app.editors.RefTable;
+import app.rcp.Icon;
+import app.util.Actions;
+import app.util.TextBuilder;
+import app.util.UI;
+import app.util.Viewers;
+
 class ReviewSection {
 
 	private final Validation validation;
@@ -37,7 +38,7 @@ class ReviewSection {
 	private ScrolledForm form;
 
 	public ReviewSection(EpdEditor editor, FormPage page) {
-		this.validation = Processes.forceValidation(editor.dataSet.process);
+		this.validation = Processes.getValidation(editor.dataSet.process);
 		this.editor = editor;
 		this.page = page;
 	}
@@ -49,7 +50,7 @@ class ReviewSection {
 		section.setToolTipText(Tooltips.EPD_Review);
 		parent = UI.sectionClient(section, toolkit);
 		UI.gridLayout(parent, 1);
-		for (Review review : validation.reviews) {
+		for (Review review : validation.withReviews()) {
 			new Sec(review);
 		}
 		Action addAction = Actions.create(M.AddReview,
@@ -60,7 +61,7 @@ class ReviewSection {
 
 	private void addReview() {
 		Review review = new Review();
-		validation.reviews.add(review);
+		validation.withReviews().add(review);
 		new Sec(review);
 		form.reflow(true);
 		editor.setDirty();
@@ -77,7 +78,7 @@ class ReviewSection {
 		}
 
 		private void createUi() {
-			int idx = validation.reviews.indexOf(review) + 1;
+			int idx = validation.withReviews().indexOf(review) + 1;
 			section = UI.section(parent, toolkit, M.Review + " " + idx);
 			section.setToolTipText(Tooltips.EPD_Review);
 			Composite body = UI.sectionClient(section, toolkit);
@@ -97,15 +98,15 @@ class ReviewSection {
 			UI.formLabel(comp, toolkit,
 				M.CompleteReviewReport, Tooltips.EPD_ReviewReport);
 			RefLink t = new RefLink(comp, toolkit, DataSetType.SOURCE);
-			t.setRef(review.report);
+			t.setRef(review.withReport());
 			t.onChange(ref -> {
-				review.report = ref;
+				review.withReport(ref);
 				editor.setDirty();
 			});
 		}
 
 		private void createActorTable(Composite comp) {
-			RefTable.create(DataSetType.CONTACT, review.reviewers)
+			RefTable.create(DataSetType.CONTACT, review.withReviewers())
 				.withEditor(editor)
 				.withTitle(M.Reviewer)
 				.withTooltip(Tooltips.EPD_Reviewer)
@@ -115,7 +116,7 @@ class ReviewSection {
 		private void detailsText(Composite comp) {
 			TextBuilder tb = new TextBuilder(editor, page, toolkit);
 			tb.multiText(comp, M.ReviewDetails,
-				Tooltips.EPD_ReviewDetails, review.details);
+					Tooltips.EPD_ReviewDetails, review.withDetails());
 		}
 
 		private void typeCombo(Composite comp) {
@@ -125,18 +126,18 @@ class ReviewSection {
 			c.setContentProvider(ArrayContentProvider.getInstance());
 			c.setLabelProvider(new TypeLabel());
 			c.setInput(ReviewType.values());
-			if (review.type != null) {
-				ISelection s = new StructuredSelection(review.type);
+			if (review.getType() != null) {
+				ISelection s = new StructuredSelection(review.getType());
 				c.setSelection(s);
 			}
 			c.addSelectionChangedListener((e) -> {
-				review.type = Viewers.getFirst(e.getSelection());
+				review.withType(Viewers.getFirst(e.getSelection()));
 				editor.setDirty();
 			});
 		}
 
 		private void delete() {
-			validation.reviews.remove(review);
+			validation.withReviews().remove(review);
 			section.dispose();
 			form.reflow(true);
 			editor.setDirty();

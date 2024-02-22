@@ -43,8 +43,8 @@ class AdminPage extends FormPage {
 		projectSection(body, tk);
 
 		// commissioner
-		var commissioners = Processes
-				.forceCommissionerAndGoal(process).commissioners;
+		var commissioners = Processes.getCommissionerAndGoal(process)
+				.withCommissioners();
 		RefTable.create(DataSetType.CONTACT, commissioners)
 				.withEditor(editor)
 				.withTitle(M.Commissioner)
@@ -55,7 +55,7 @@ class AdminPage extends FormPage {
 		dataEntrySection(body, tk);
 
 		// data set generators
-		var generators = Processes.forceDataGenerator(process).contacts;
+		var generators = Processes.getDataGenerator(process).withContacts();
 		RefTable.create(DataSetType.CONTACT, generators)
 				.withEditor(editor)
 				.withTitle(M.DataSetGeneratorModeller)
@@ -63,7 +63,7 @@ class AdminPage extends FormPage {
 				.render(body, tk);
 
 		// data formats
-		var formats = Processes.forceDataEntry(process).formats;
+		var formats = Processes.getDataEntry(process).withFormats();
 		RefTable.create(DataSetType.SOURCE, formats)
 				.withEditor(editor)
 				.withTitle(M.DataFormats)
@@ -82,7 +82,7 @@ class AdminPage extends FormPage {
 
 		// preceding data version
 		var precedingVersions = Processes
-				.forcePublication(process).precedingVersions;
+				.getPublication(process).withPrecedingVersions();
 		RefTable.create(DataSetType.PROCESS, precedingVersions)
 				.withEditor(editor)
 				.withTitle(M.PrecedingDataSetVersion)
@@ -94,46 +94,46 @@ class AdminPage extends FormPage {
 
 	private void projectSection(Composite body, FormToolkit tk) {
 		var comp = UI.formSection(body, tk, M.Project);
-		var goal = Processes.forceCommissionerAndGoal(process);
+		var goal = Processes.getCommissionerAndGoal(process);
 
 		// project
 		new TextBuilder(editor, this, tk).multiText(
 				comp,
 				M.Project,
 				Tooltips.EPD_Project,
-				goal.project);
+				goal.withProject());
 
 		// intended applications
 		new TextBuilder(editor, this, tk).multiText(
 				comp,
 				M.IntendedApplications,
 				Tooltips.EPD_IntendedApplications,
-				goal.intendedApplications);
+				goal.withIntendedApplications());
 	}
 
 	private void dataEntrySection(Composite body, FormToolkit tk) {
 		var comp = UI.formSection(body, tk,
 				M.DataEntry, Tooltips.EPD_DataEntry);
-		var entry = Processes.forceDataEntry(process);
+		var entry = Processes.getDataEntry(process);
 
 		// last update
 		var lastUpdate = UI.formText(comp, tk,
 				M.LastUpdate, Tooltips.All_LastUpdate);
 		lastUpdate.setEditable(false);
 		editor.onSaved(() -> {
-			XMLGregorianCalendar t = entry.timeStamp;
+			XMLGregorianCalendar t = entry.getTimeStamp();
 			lastUpdate.setText(Xml.toString(t));
 		});
-		if (entry.timeStamp != null) {
-			lastUpdate.setText(Xml.toString(entry.timeStamp));
+		if (entry.getTimeStamp() != null) {
+			lastUpdate.setText(Xml.toString(entry.getTimeStamp()));
 		}
 
 		// documentor
 		UI.formLabel(comp, tk, M.Documentor, Tooltips.EPD_Documentor);
 		var documentor = new RefLink(comp, tk, DataSetType.CONTACT);
-		documentor.setRef(entry.documentor);
+		documentor.setRef(entry.withDocumentor());
 		documentor.onChange(ref -> {
-			entry.documentor = ref;
+			entry.withDocumentor(ref);
 			editor.setDirty();
 		});
 	}
@@ -142,14 +142,14 @@ class AdminPage extends FormPage {
 		var comp = UI.formSection(body, tk,
 				M.PublicationAndOwnership,
 				Tooltips.EPD_PublicationAndOwnership);
-		var pub = Processes.forcePublication(process);
+		var pub = Processes.getPublication(process);
 
 		// version
 		var version = new VersionField(comp, tk);
-		version.setVersion(pub.version);
-		editor.onSaved(() -> version.setVersion(pub.version));
+		version.setVersion(pub.getVersion());
+		editor.onSaved(() -> version.setVersion(pub.getVersion()));
 		version.onChange(v -> {
-			pub.version = v;
+			pub.withVersion(v);
 			editor.setDirty();
 		});
 
@@ -157,42 +157,43 @@ class AdminPage extends FormPage {
 		UI.formLabel(comp, tk, M.RegistrationAuthority,
 				Tooltips.EPD_RegistrationAuthority);
 		var regAuthority = new RefLink(comp, tk, DataSetType.CONTACT);
-		regAuthority.setRef(pub.registrationAuthority);
+		regAuthority.setRef(pub.withRegistrationAuthority());
 		regAuthority.onChange(ref -> {
-			pub.registrationAuthority = ref;
+			pub.withRegistrationAuthority(ref);
 			editor.setDirty();
 		});
 
 		// registration number
 		var regNumber = UI.formText(comp, tk, M.RegistrationNumber,
 				Tooltips.EPD_RegistrationNumber);
-		if (pub.registrationNumber != null) {
-			regNumber.setText(pub.registrationNumber);
+		if (pub.getRegistrationNumber() != null) {
+			regNumber.setText(pub.getRegistrationNumber());
 		}
 		regNumber.addModifyListener(e -> {
 			String number = regNumber.getText();
 			if (Strings.nullOrEmpty(number)) {
-				pub.registrationNumber = null;
+				pub.withRegistrationNumber(null);
 			} else {
-				pub.registrationNumber = number;
+				pub.withRegistrationNumber(number);
 			}
 		});
 
 		// owner
 		UI.formLabel(comp, tk, M.Owner, Tooltips.EPD_Owner);
 		var owner = new RefLink(comp, tk, DataSetType.CONTACT);
-		owner.setRef(pub.owner);
+		owner.setRef(pub.withOwner());
 		owner.onChange(ref -> {
-			pub.owner = ref;
+			pub.withOwner(ref);
 			editor.setDirty();
 		});
 
 		// copyright
 		var copyright = UI.formCheckBox(comp, tk,
 				M.Copyright, Tooltips.EPD_Copyright);
-		copyright.setSelection(pub.copyright != null && pub.copyright);
+		copyright
+				.setSelection(pub.getCopyright() != null && pub.getCopyright());
 		Controls.onSelect(copyright, e -> {
-			pub.copyright = copyright.getSelection();
+			pub.withCopyright(copyright.getSelection());
 			editor.setDirty();
 		});
 
@@ -204,21 +205,21 @@ class AdminPage extends FormPage {
 				comp,
 				M.AccessRestrictions,
 				Tooltips.EPD_AccessRestrictions,
-				pub.accessRestrictions);
+				pub.withAccessRestrictions());
 	}
 
 	private void licenseCombo(Composite comp, FormToolkit tk) {
 		// TODO: labels, translations and tool-tips
 
 		// map the combo items
-		var pub = Processes.forcePublication(process);
+		var pub = Processes.getPublication(process);
 		var types = LicenseType.values();
 		var items = new String[types.length + 1];
 		items[0] = "";
 		int selected = 0;
 		for (int i = 0; i < types.length; i++) {
 			items[i + 1] = types[i].value();
-			if (pub.license == types[i]) {
+			if (pub.getLicense() == types[i]) {
 				selected = i + 1;
 			}
 		}
@@ -231,9 +232,9 @@ class AdminPage extends FormPage {
 		Controls.onSelect(combo, e -> {
 			int i = combo.getSelectionIndex();
 			if (i == 0) {
-				pub.license = null;
+				pub.withLicense(null);
 			} else {
-				pub.license = types[i - 1];
+				pub.withLicense(types[i - 1]);
 			}
 			editor.setDirty();
 		});

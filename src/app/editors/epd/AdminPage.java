@@ -43,7 +43,8 @@ class AdminPage extends FormPage {
 		projectSection(body, tk);
 
 		// commissioner
-		var commissioners = Processes.getCommissionerAndGoal(process)
+		var commissioners = process.withAdminInfo()
+				.withCommissionerAndGoal()
 				.withCommissioners();
 		RefTable.create(DataSetType.CONTACT, commissioners)
 				.withEditor(editor)
@@ -55,7 +56,9 @@ class AdminPage extends FormPage {
 		dataEntrySection(body, tk);
 
 		// data set generators
-		var generators = Processes.getDataGenerator(process).withContacts();
+		var generators = process.withAdminInfo()
+				.withDataGenerator()
+				.withContacts();
 		RefTable.create(DataSetType.CONTACT, generators)
 				.withEditor(editor)
 				.withTitle(M.DataSetGeneratorModeller)
@@ -63,7 +66,9 @@ class AdminPage extends FormPage {
 				.render(body, tk);
 
 		// data formats
-		var formats = Processes.getDataEntry(process).withFormats();
+		var formats = process.withAdminInfo()
+				.withDataEntry()
+				.withFormats();
 		RefTable.create(DataSetType.SOURCE, formats)
 				.withEditor(editor)
 				.withTitle(M.DataFormats)
@@ -94,7 +99,8 @@ class AdminPage extends FormPage {
 
 	private void projectSection(Composite body, FormToolkit tk) {
 		var comp = UI.formSection(body, tk, M.Project);
-		var goal = Processes.getCommissionerAndGoal(process);
+		var goal = process.withAdminInfo()
+				.withCommissionerAndGoal();
 
 		// project
 		new TextBuilder(editor, this, tk).multiText(
@@ -114,7 +120,8 @@ class AdminPage extends FormPage {
 	private void dataEntrySection(Composite body, FormToolkit tk) {
 		var comp = UI.formSection(body, tk,
 				M.DataEntry, Tooltips.EPD_DataEntry);
-		var entry = Processes.getDataEntry(process);
+		var entry = process.withAdminInfo()
+				.withDataEntry();
 
 		// last update
 		var lastUpdate = UI.formText(comp, tk,
@@ -142,7 +149,8 @@ class AdminPage extends FormPage {
 		var comp = UI.formSection(body, tk,
 				M.PublicationAndOwnership,
 				Tooltips.EPD_PublicationAndOwnership);
-		var pub = Processes.getPublication(process);
+		var pub = process.withAdminInfo()
+				.withPublication();
 
 		// version
 		var version = new VersionField(comp, tk);
@@ -212,7 +220,8 @@ class AdminPage extends FormPage {
 		// TODO: labels, translations and tool-tips
 
 		// map the combo items
-		var pub = Processes.getPublication(process);
+		var pub = process.withAdminInfo()
+				.withPublication();
 		var types = LicenseType.values();
 		var items = new String[types.length + 1];
 		items[0] = "";

@@ -52,22 +52,22 @@ class ModelingPage extends FormPage {
 		createModelingSection(body);
 
 		RefTable.create(DataSetType.SOURCE,
-				Processes.getInventoryMethod(process).withSources())
+			process.withModelling().withInventoryMethod().withSources())
 			.withEditor(editor)
 			.withTitle(M.LCAMethodDetails)
 			.withTooltip(Tooltips.EPD_LCAMethodDetails)
 			.render(body, toolkit);
 
 		RefTable.create(DataSetType.SOURCE,
-				Processes.getRepresentativeness(process)
-						.withDataHandlingSources())
+			process.withModelling().withRepresentativeness()
+			.withDataHandlingSources())
 			.withEditor(editor)
 			.withTitle(M.DocumentationDataQualityManagement)
 			.withTooltip(Tooltips.EPD_DocumentationDataQualityManagement)
 			.render(body, toolkit);
 
 		RefTable.create(DataSetType.SOURCE,
-				Processes.getRepresentativeness(process).withSources())
+			process.withModelling().withRepresentativeness().withSources())
 			.withEditor(editor)
 			.withTitle(M.DataSources)
 			.withTooltip(Tooltips.EPD_DataSources)
@@ -93,7 +93,7 @@ class ModelingPage extends FormPage {
 		createSubTypeViewer(comp);
 		TextBuilder tb = new TextBuilder(editor, this, toolkit);
 		tb.multiText(comp, M.UseAdvice, Tooltips.EPD_UseAdvice,
-				Processes.getRepresentativeness(process).withUseAdvice());
+				process.withModelling().withRepresentativeness().withUseAdvice());
 	}
 
 	private void createSubTypeViewer(Composite parent) {
@@ -122,7 +122,7 @@ class ModelingPage extends FormPage {
 
 	private void createComplianceSection(Composite body) {
 		List<Ref> systems = new ArrayList<>();
-		Processes.getComplianceDeclarations(process).forEach(s -> {
+		process.withModelling().withComplianceDeclarations().forEach(s -> {
 			if (s.withSystem() != null)
 				systems.add(s.withSystem());
 		});
@@ -142,7 +142,7 @@ class ModelingPage extends FormPage {
 			var decl = Processes.getComplianceDeclaration(process, system);
 			if (decl == null)
 				return;
-			Processes.getComplianceDeclarations(process).remove(decl);
+			process.withModelling().withComplianceDeclarations().remove(decl);
 			if (process.withModelling().withComplianceDeclarations()
 					.isEmpty()) {
 				process.withModelling().withComplianceDeclarations(null);

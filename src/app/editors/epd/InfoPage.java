@@ -54,7 +54,9 @@ class InfoPage extends FormPage {
 	@Override
 	protected void createFormContent(IManagedForm mForm) {
 		tk = mForm.getToolkit();
-		ProcessName pName = Processes.getProcessName(process);
+		ProcessName pName = process.withProcessInfo()
+				.withDataSetInfo()
+				.withProcessName();
 		Supplier<String> title = () -> M.EPD + ": "
 				+ App.s(pName.withBaseName());
 		ScrolledForm form = UI.formHeader(mForm, title.get());
@@ -65,7 +67,7 @@ class InfoPage extends FormPage {
 		categorySection(body);
 		qRefSection(body);
 		RefTable.create(DataSetType.SOURCE,
-				Processes.getDataSetInfo(process).withExternalDocs())
+				process.withProcessInfo().withDataSetInfo().withExternalDocs())
 				.withEditor(editor)
 				.withTitle(M.ExternalDocumentationSources)
 				.withTooltip(Tooltips.EPD_ExternalDocumentationSources)
@@ -75,7 +77,7 @@ class InfoPage extends FormPage {
 		createGeographySection(body, tb);
 		createTechnologySection(body, tb);
 		RefTable.create(DataSetType.SOURCE,
-				Processes.getTechnology(process).withPictures())
+				process.withProcessInfo().withTechnology().withPictures())
 				.withEditor(editor)
 				.withTitle(M.FlowDiagramsOrPictures)
 				.withTooltip(Tooltips.EPD_FlowDiagramsOrPictures)
@@ -85,18 +87,18 @@ class InfoPage extends FormPage {
 
 	private void infoSection(Composite parent, TextBuilder tb) {
 		Composite comp = UI.infoSection(process, parent, tk);
-		ProcessName pName = Processes.getProcessName(process);
+		ProcessName pName = process.withProcessInfo().withDataSetInfo().withProcessName();
 		tb.text(comp, M.Name, Tooltips.EPD_Name, pName.withBaseName());
 		tb.text(comp, M.QuantitativeProperties,
 				Tooltips.EPD_FurtherProperties, pName.withFlowProperties());
-		DataSetInfo info = Processes.getDataSetInfo(process);
+		DataSetInfo info = process.withProcessInfo().withDataSetInfo();
 		tb.text(comp, M.Synonyms, Tooltips.EPD_Synonyms, info.withSynonyms());
 		tb.multiText(comp, M.Comment, Tooltips.EPD_Comment, info.withComment());
 		UI.fileLink(process, comp, tk);
 	}
 
 	private void categorySection(Composite body) {
-		DataSetInfo info = Processes.getDataSetInfo(process);
+		DataSetInfo info = process.withProcessInfo().withDataSetInfo();
 		CategorySection section = new CategorySection(editor,
 				DataSetType.PROCESS, info.withClassifications());
 		section.render(body, tk);
@@ -172,7 +174,7 @@ class InfoPage extends FormPage {
 	}
 
 	private void createTechnologySection(Composite body, TextBuilder tb) {
-		Technology tech = Processes.getTechnology(process);
+		Technology tech = process.withProcessInfo().withTechnology();
 		Composite comp = UI.formSection(body, tk,
 				M.Technology, Tooltips.EPD_Technology);
 		tb.multiText(comp, M.TechnologyDescription,
@@ -189,7 +191,7 @@ class InfoPage extends FormPage {
 	}
 
 	private void createTimeSection(Composite body, TextBuilder tb) {
-		var time = Processes.getTime(process);
+		var time = process.withProcessInfo().withTime();
 		var comp = UI.formSection(body, tk, M.Time, Tooltips.EPD_Time);
 		intText(comp, M.ReferenceYear, Tooltips.EPD_ReferenceYear,
 				time.getReferenceYear(), val -> time.withReferenceYear(val));
@@ -220,7 +222,7 @@ class InfoPage extends FormPage {
 	}
 
 	private void createGeographySection(Composite body, TextBuilder tb) {
-		Location location = Processes.getLocation(process);
+		Location location = process.withProcessInfo().withGeography().withLocation();
 		Composite comp = UI.formSection(body, tk, M.Geography,
 				Tooltips.EPD_Geography);
 		tk.createLabel(comp, M.Location)

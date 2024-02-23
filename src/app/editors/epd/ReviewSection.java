@@ -38,7 +38,7 @@ class ReviewSection {
 	private ScrolledForm form;
 
 	public ReviewSection(EpdEditor editor, FormPage page) {
-		this.validation = Processes.getValidation(editor.dataSet.process);
+		this.validation = editor.dataSet.process.withModelling().withValidation();
 		this.editor = editor;
 		this.page = page;
 	}

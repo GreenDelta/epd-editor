@@ -54,8 +54,11 @@ class InfoPage extends FormPage {
 	@Override
 	protected void createFormContent(IManagedForm mForm) {
 		tk = mForm.getToolkit();
-		ProcessName pName = Processes.forceProcessName(process);
-		Supplier<String> title = () -> M.EPD + ": " + App.s(pName.name);
+		ProcessName pName = process.withProcessInfo()
+				.withDataSetInfo()
+				.withProcessName();
+		Supplier<String> title = () -> M.EPD + ": "
+				+ App.s(pName.withBaseName());
 		ScrolledForm form = UI.formHeader(mForm, title.get());
 		editor.onSaved(() -> form.setText(title.get()));
 		Composite body = UI.formBody(form, mForm.getToolkit());
@@ -64,7 +67,7 @@ class InfoPage extends FormPage {
 		categorySection(body);
 		qRefSection(body);
 		RefTable.create(DataSetType.SOURCE,
-				Processes.forceDataSetInfo(process).externalDocs)
+				process.withProcessInfo().withDataSetInfo().withExternalDocs())
 				.withEditor(editor)
 				.withTitle(M.ExternalDocumentationSources)
 				.withTooltip(Tooltips.EPD_ExternalDocumentationSources)
@@ -74,7 +77,7 @@ class InfoPage extends FormPage {
 		createGeographySection(body, tb);
 		createTechnologySection(body, tb);
 		RefTable.create(DataSetType.SOURCE,
-				Processes.forceTechnology(process).pictures)
+				process.withProcessInfo().withTechnology().withPictures())
 				.withEditor(editor)
 				.withTitle(M.FlowDiagramsOrPictures)
 				.withTooltip(Tooltips.EPD_FlowDiagramsOrPictures)
@@ -84,20 +87,20 @@ class InfoPage extends FormPage {
 
 	private void infoSection(Composite parent, TextBuilder tb) {
 		Composite comp = UI.infoSection(process, parent, tk);
-		ProcessName pName = Processes.forceProcessName(process);
-		tb.text(comp, M.Name, Tooltips.EPD_Name, pName.name);
+		ProcessName pName = process.withProcessInfo().withDataSetInfo().withProcessName();
+		tb.text(comp, M.Name, Tooltips.EPD_Name, pName.withBaseName());
 		tb.text(comp, M.QuantitativeProperties,
-				Tooltips.EPD_FurtherProperties, pName.flowProperties);
-		DataSetInfo info = Processes.forceDataSetInfo(process);
-		tb.text(comp, M.Synonyms, Tooltips.EPD_Synonyms, info.synonyms);
-		tb.multiText(comp, M.Comment, Tooltips.EPD_Comment, info.comment);
+				Tooltips.EPD_FurtherProperties, pName.withFlowProperties());
+		DataSetInfo info = process.withProcessInfo().withDataSetInfo();
+		tb.text(comp, M.Synonyms, Tooltips.EPD_Synonyms, info.withSynonyms());
+		tb.multiText(comp, M.Comment, Tooltips.EPD_Comment, info.withComment());
 		UI.fileLink(process, comp, tk);
 	}
 
 	private void categorySection(Composite body) {
-		DataSetInfo info = Processes.forceDataSetInfo(process);
+		DataSetInfo info = process.withProcessInfo().withDataSetInfo();
 		CategorySection section = new CategorySection(editor,
-				DataSetType.PROCESS, info.classifications);
+				DataSetType.PROCESS, info.withClassifications());
 		section.render(body, tk);
 	}
 
@@ -107,15 +110,15 @@ class InfoPage extends FormPage {
 		UI.formLabel(comp, tk, M.Product, Tooltips.EPD_DeclaredProduct);
 		RefLink refText = new RefLink(comp, tk, DataSetType.FLOW);
 		Exchange exchange = epd.productExchange();
-		refText.setRef(exchange.flow);
+		refText.setRef(exchange.withFlow());
 		Text amountText = UI.formText(comp, tk,
 				M.Amount, Tooltips.EPD_ProductAmount);
-		amountText.setText(Double.toString(exchange.meanAmount));
+		amountText.setText(Double.toString(exchange.getMeanAmount()));
 		amountText.addModifyListener(e -> {
 			try {
 				double val = Double.parseDouble(amountText.getText());
-				exchange.meanAmount = val;
-				exchange.resultingAmount = val;
+				exchange.withMeanAmount(val);
+				exchange.withResultingAmount(val);
 				amountText.setBackground(Colors.white());
 			} catch (Exception ex) {
 				amountText.setBackground(Colors.errorColor());
@@ -126,7 +129,7 @@ class InfoPage extends FormPage {
 		unitText.setText(RefDeps.getRefUnit(process));
 		unitText.setEditable(false);
 		refText.onChange(ref -> {
-			exchange.flow = ref;
+			exchange.withFlow(ref);
 			unitText.setText(RefDeps.getRefUnit(process));
 			editor.setDirty();
 		});
@@ -171,29 +174,29 @@ class InfoPage extends FormPage {
 	}
 
 	private void createTechnologySection(Composite body, TextBuilder tb) {
-		Technology tech = Processes.forceTechnology(process);
+		Technology tech = process.withProcessInfo().withTechnology();
 		Composite comp = UI.formSection(body, tk,
 				M.Technology, Tooltips.EPD_Technology);
 		tb.multiText(comp, M.TechnologyDescription,
-				Tooltips.EPD_TechnologyDescription, tech.description);
+				Tooltips.EPD_TechnologyDescription, tech.withDescription());
 		tb.multiText(comp, M.TechnologicalApplicability,
-				Tooltips.EPD_TechnicalPrupose, tech.applicability);
+				Tooltips.EPD_TechnicalPrupose, tech.withApplicability());
 		UI.formLabel(comp, tk, M.Pictogram, Tooltips.EPD_Pictogram);
 		RefLink refText = new RefLink(comp, tk, DataSetType.SOURCE);
-		refText.setRef(tech.pictogram);
+		refText.setRef(tech.withPictogram());
 		refText.onChange(ref -> {
-			tech.pictogram = ref;
+			tech.withPictogram(ref);
 			editor.setDirty();
 		});
 	}
 
 	private void createTimeSection(Composite body, TextBuilder tb) {
-		var time = Processes.forceTime(process);
+		var time = process.withProcessInfo().withTime();
 		var comp = UI.formSection(body, tk, M.Time, Tooltips.EPD_Time);
 		intText(comp, M.ReferenceYear, Tooltips.EPD_ReferenceYear,
-				time.referenceYear, val -> time.referenceYear = val);
+				time.getReferenceYear(), val -> time.withReferenceYear(val));
 		intText(comp, M.ValidUntil, Tooltips.EPD_ValidUntil,
-				time.validUntil, val -> time.validUntil = val);
+				time.getValidUntil(), val -> time.withValidUntil(val));
 
 		// publication date
 		tk.createLabel(comp, M.PublicationDate)
@@ -215,22 +218,22 @@ class InfoPage extends FormPage {
 		}));
 
 		tb.multiText(comp, M.TimeDescription,
-				Tooltips.EPD_TimeDescription, time.description);
+				Tooltips.EPD_TimeDescription, time.withDescription());
 	}
 
 	private void createGeographySection(Composite body, TextBuilder tb) {
-		Location location = Processes.forceLocation(process);
+		Location location = process.withProcessInfo().withGeography().withLocation();
 		Composite comp = UI.formSection(body, tk, M.Geography,
 				Tooltips.EPD_Geography);
 		tk.createLabel(comp, M.Location)
 				.setToolTipText(Tooltips.EPD_Location);
 		LocationCombo viewer = new LocationCombo();
-		viewer.create(comp, location.code, code -> {
-			location.code = code;
+		viewer.create(comp, location.getCode(), code -> {
+			location.withCode(code);
 			editor.setDirty();
 		});
 		tb.multiText(comp, M.GeographyDescription,
-				Tooltips.EPD_GeographyDescription, location.description);
+				Tooltips.EPD_GeographyDescription, location.withDescription());
 	}
 
 	private void intText(Composite comp, String label, String tooltip,

@@ -1,14 +1,8 @@
 package app.editors.epd;
 
-import app.M;
-import app.Tooltips;
-import app.editors.RefTable;
-import app.rcp.Labels;
-import app.util.TextBuilder;
-import app.util.UI;
-import app.util.Viewers;
-import epd.model.EpdDataSet;
-import epd.model.SubType;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -24,8 +18,15 @@ import org.openlca.ilcd.processes.ComplianceDeclaration;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.Processes;
 
-import java.util.ArrayList;
-import java.util.List;
+import app.M;
+import app.Tooltips;
+import app.editors.RefTable;
+import app.rcp.Labels;
+import app.util.TextBuilder;
+import app.util.UI;
+import app.util.Viewers;
+import epd.model.EpdDataSet;
+import epd.model.SubType;
 
 class ModelingPage extends FormPage {
 
@@ -51,21 +52,22 @@ class ModelingPage extends FormPage {
 		createModelingSection(body);
 
 		RefTable.create(DataSetType.SOURCE,
-				Processes.forceMethod(process).methodSources)
+			process.withModelling().withInventoryMethod().withSources())
 			.withEditor(editor)
 			.withTitle(M.LCAMethodDetails)
 			.withTooltip(Tooltips.EPD_LCAMethodDetails)
 			.render(body, toolkit);
 
 		RefTable.create(DataSetType.SOURCE,
-				Processes.forceRepresentativeness(process).dataHandlingSources)
+			process.withModelling().withRepresentativeness()
+			.withDataHandlingSources())
 			.withEditor(editor)
 			.withTitle(M.DocumentationDataQualityManagement)
 			.withTooltip(Tooltips.EPD_DocumentationDataQualityManagement)
 			.render(body, toolkit);
 
 		RefTable.create(DataSetType.SOURCE,
-				Processes.forceRepresentativeness(process).sources)
+			process.withModelling().withRepresentativeness().withSources())
 			.withEditor(editor)
 			.withTitle(M.DataSources)
 			.withTooltip(Tooltips.EPD_DataSources)
@@ -91,7 +93,7 @@ class ModelingPage extends FormPage {
 		createSubTypeViewer(comp);
 		TextBuilder tb = new TextBuilder(editor, this, toolkit);
 		tb.multiText(comp, M.UseAdvice, Tooltips.EPD_UseAdvice,
-			Processes.forceRepresentativeness(process).useAdvice);
+				process.withModelling().withRepresentativeness().withUseAdvice());
 	}
 
 	private void createSubTypeViewer(Composite parent) {
@@ -120,9 +122,9 @@ class ModelingPage extends FormPage {
 
 	private void createComplianceSection(Composite body) {
 		List<Ref> systems = new ArrayList<>();
-		Processes.getComplianceDeclarations(process).forEach(s -> {
-			if (s.system != null)
-				systems.add(s.system);
+		process.withModelling().withComplianceDeclarations().forEach(s -> {
+			if (s.withSystem() != null)
+				systems.add(s.withSystem());
 		});
 		RefTable table = RefTable.create(DataSetType.SOURCE, systems)
 			.withTitle(M.ComplianceDeclarations)
@@ -133,16 +135,17 @@ class ModelingPage extends FormPage {
 				process, system);
 			if (decl != null)
 				return;
-			Processes.createComplianceDeclaration(process).system = system;
+			Processes.getComplianceDeclaration(process, system);
 			editor.setDirty();
 		});
 		table.onRemove(system -> {
 			var decl = Processes.getComplianceDeclaration(process, system);
 			if (decl == null)
 				return;
-			Processes.getComplianceDeclarations(process).remove(decl);
-			if (process.modelling.complianceDeclarations.entries.isEmpty()) {
-				process.modelling.complianceDeclarations = null;
+			process.withModelling().withComplianceDeclarations().remove(decl);
+			if (process.withModelling().withComplianceDeclarations()
+					.isEmpty()) {
+				process.withModelling().withComplianceDeclarations(null);
 			}
 			editor.setDirty();
 		});

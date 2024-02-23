@@ -1,7 +1,6 @@
 package app.editors.epd;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -29,8 +28,8 @@ class LocationCombo {
 		int selectedIdx = 0;
 		for (int i = 0; i < locations.size(); i++) {
 			Location loc = locations.get(i);
-			items[i + 1] = loc.name;
-			if (Strings.nullOrEqual(selectedCode, loc.code))
+			items[i + 1] = loc.getName();
+			if (Strings.nullOrEqual(selectedCode, loc.getCode()))
 				selectedIdx = i + 1;
 		}
 		combo.setItems(items);
@@ -42,16 +41,17 @@ class LocationCombo {
 		boolean found = false;
 		for (Location loc : Locations.get()) {
 			locations.add(loc);
-			if (Strings.nullOrEqual(loc.code, selectedCode))
+			if (Strings.nullOrEqual(loc.getCode(), selectedCode))
 				found = true;
 		}
 		if (!found && selectedCode != null) {
 			Location loc = new Location();
-			loc.code = selectedCode;
-			loc.name = selectedCode;
+			loc.withCode(selectedCode);
+			loc.withName(selectedCode);
 			locations.add(loc);
 		}
-		locations.sort((loc1, loc2) -> Strings.compare(loc1.name, loc2.name));
+		locations.sort((loc1, loc2) -> Strings.compare(loc1.getName(),
+				loc2.getName()));
 	}
 
 	private void onSelect(Consumer<String> fn) {
@@ -62,7 +62,7 @@ class LocationCombo {
 				return;
 			}
 			Location location = locations.get(idx - 1);
-			fn.accept(location.code);
+			fn.accept(location.getCode());
 		});
 	}
 

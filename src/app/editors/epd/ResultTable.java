@@ -1,5 +1,17 @@
 package app.editors.epd;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
+import org.openlca.ilcd.commons.DataSetType;
+
 import app.App;
 import app.M;
 import app.Tooltips;
@@ -15,17 +27,6 @@ import epd.model.Indicator;
 import epd.model.IndicatorResult;
 import epd.model.Module;
 import epd.util.Strings;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Composite;
-import org.openlca.ilcd.commons.DataSetType;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
 
 class ResultTable {
 
@@ -143,7 +144,7 @@ class ResultTable {
 					return null;
 				return indicator.type == Indicator.Type.LCI
 					? Icon.img(DataSetType.FLOW)
-					: Icon.img(DataSetType.LCIA_METHOD);
+						: Icon.img(DataSetType.IMPACT_METHOD);
 			}
 
 			if (col == 4)

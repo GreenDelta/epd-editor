@@ -111,11 +111,13 @@ public class EpdEditor extends BaseEditor {
 		try {
 			EpdDataSet clone = dataSet.clone();
 			Process p = clone.process;
-			ProcessName cName = Processes.forceProcessName(p);
-			LangString.set(cName.name, name, App.lang());
-			Processes.forceDataSetInfo(p).uuid = UUID.randomUUID().toString();
-			Processes.forcePublication(p).version = Version.asString(0);
-			Processes.forceDataEntry(p).timeStamp = Xml.now();
+			ProcessName cName = p.withProcessInfo()
+				.withDataSetInfo()
+				.withProcessName();
+			LangString.set(cName.withBaseName(), name, App.lang());
+			p.withProcessInfo().withDataSetInfo().withUUID(UUID.randomUUID().toString());
+			p.withAdminInfo().withPublication().withVersion(Version.asString(0));
+			p.withAdminInfo().withDataEntry().withTimeStamp(Xml.now());
 			Data.save(clone);
 			EpdEditor.open(Ref.of(p));
 		} catch (Exception e) {

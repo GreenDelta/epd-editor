@@ -4,6 +4,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.util.DataSets;
 import org.openlca.ilcd.util.RefTree;
 
 import epd.model.Version;
@@ -36,32 +37,33 @@ public final class RefSync {
 		RefTree.create(ds).eachRef(ref -> {
 			Ref indexRef = index.find(ref);
 			if (isNewer(indexRef, ref)) {
-				ref.name.clear();
-				ref.name.addAll(indexRef.name);
-				ref.uri = indexRef.uri;
-				ref.version = indexRef.version;
+				ref.withUri(indexRef.getUri())
+					.withVersion(indexRef.getVersion())
+					.withName().clear();
+				ref.withName().addAll(indexRef.getName());
 			}
 		});
 	}
 
 	public static void updateSelfRefVersion(IDataSet ds) {
-		if (ds == null)
+		var uuid = DataSets.getUUID(ds);
+		if (uuid == null)
 			return;
 		var selfRef = RefTree.create(ds).getRefs().stream()
-				.filter(ref -> ref.uuid.equals(ds.getUUID()))
-				.findFirst()
-				.orElse(null);
+			.filter(ref -> uuid.equals(ref.getUUID()))
+			.findFirst()
+			.orElse(null);
 		if (selfRef == null)
 			return;
-		selfRef.version = ds.getVersion();
+		selfRef.withVersion(DataSets.getVersion(ds));
 	}
-	
+
 	private static boolean isNewer(Ref indexRef, Ref than) {
 		if (indexRef == null || than == null)
 			return false;
-		Version indexV = Version.fromString(indexRef.version);
-		Version thanV = Version.fromString(than.version);
-		return indexV.compareTo(thanV) > 0;
+		var indexVersion = Version.fromString(indexRef.getVersion());
+		var otherVersion = Version.fromString(than.getVersion());
+		return indexVersion.compareTo(otherVersion) > 0;
 	}
 
 }

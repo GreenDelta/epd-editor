@@ -14,6 +14,7 @@ import org.openlca.ilcd.commons.Classification;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.util.DataSets;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
@@ -43,13 +44,13 @@ public class Index {
 	public void add(IDataSet ds) {
 		if (ds == null)
 			return;
-		add(Ref.of(ds), ds.getClassifications());
+		add(Ref.of(ds), DataSets.getClassifications(ds));
 	}
 
 	public void add(Ref ref, List<Classification> classes) {
 		if (ref == null || !ref.isValid())
 			return;
-		TypeNode root = getNode(ref.type);
+		TypeNode root = getNode(ref.getType());
 		List<CategoryNode> catNodes = root.syncCategories(classes);
 		if (catNodes.isEmpty()) {
 			root.refs.add(ref);
@@ -63,7 +64,7 @@ public class Index {
 	public void remove(Ref ref) {
 		if (ref == null)
 			return;
-		TypeNode root = getNode(ref.type);
+		TypeNode root = getNode(ref.getType());
 		if (root == null)
 			return;
 		root.remove(ref);
@@ -83,7 +84,7 @@ public class Index {
 	public Ref find(Ref ref) {
 		if (ref == null)
 			return null;
-		TypeNode root = getNode(ref.type);
+		TypeNode root = getNode(ref.getType());
 		if (root == null)
 			return null;
 		return root.find(ref);
@@ -188,7 +189,7 @@ public class Index {
 
 			try {
 				// first try by item-value
-				var dsType = DataSetType.fromValue(s);
+				var dsType = DataSetType.fromValue(s).orElse(null);
 				if (dsType != null)
 					return dsType;
 				// then try by item-name

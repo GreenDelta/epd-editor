@@ -25,7 +25,7 @@ public abstract class Node {
 		if (ref == null)
 			return null;
 		for (Ref r : refs) {
-			if (Objects.equals(r.uuid, ref.uuid))
+			if (Objects.equals(r.getUUID(), ref.getUUID()))
 				return r;
 		}
 		for (CategoryNode n : categories) {

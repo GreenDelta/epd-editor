@@ -22,12 +22,14 @@ public class TypeNode extends Node {
 	List<CategoryNode> syncCategories(List<Classification> classes) {
 		if (classes == null || classes.isEmpty())
 			return Collections.emptyList();
-		List<CategoryNode> nodes = new ArrayList<>();
-		for (Classification c : classes) {
-			c.categories.sort(Comparator.comparingInt(cat -> cat.level));
+		var nodes = new ArrayList<CategoryNode>();
+		for (var c : classes) {
+			if (c.getCategories().isEmpty())
+				continue;
+			c.getCategories().sort(Comparator.comparingInt(Category::getLevel));
 			CategoryNode node = null;
 			List<CategoryNode> childs = categories;
-			for (Category cat : c.categories) {
+			for (Category cat : c.getCategories()) {
 				node = sync(cat, childs);
 				childs = node.categories;
 			}
@@ -42,7 +44,7 @@ public class TypeNode extends Node {
 			Category other = node.category;
 			if (other == null)
 				continue;
-			if (Strings.nullOrEqual(category.value, other.value))
+			if (Strings.nullOrEqual(category.getValue(), other.getValue()))
 				return node;
 		}
 		CategoryNode node = new CategoryNode();

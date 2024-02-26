@@ -45,9 +45,9 @@ class DataStockLink {
 	}
 
 	private void fetchStocks(List<DataStock> list, String[] error) {
-		try (SodaClient client = new SodaClient(con)) {
+		try (SodaClient client = SodaClient.of(con)) {
 			client.connect();
-			list.addAll(client.getDataStockList().dataStocks);
+			list.addAll(client.getDataStockList().withDataStocks());
 		} catch (Exception ex) {
 			error[0] = ex.getMessage();
 		}
@@ -61,8 +61,8 @@ class DataStockLink {
 		DataStockDialog dialog = new DataStockDialog(list);
 		if (dialog.open() != Window.OK || dialog.selected == null)
 			return;
-		con.dataStockId = dialog.selected.uuid;
-		con.dataStockName = dialog.selected.shortName;
+		con.dataStockId = dialog.selected.getUUID();
+		con.dataStockName = dialog.selected.getShortName();
 		setLinkText();
 		editor.setDirty();
 	}

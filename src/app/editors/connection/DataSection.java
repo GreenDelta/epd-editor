@@ -28,7 +28,7 @@ import org.openlca.ilcd.flowproperties.FlowProperty;
 import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.io.SodaClient;
 import org.openlca.ilcd.io.SodaConnection;
-import org.openlca.ilcd.methods.LCIAMethod;
+import org.openlca.ilcd.methods.ImpactMethod;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.sources.Source;
 import org.openlca.ilcd.units.UnitGroup;
@@ -78,10 +78,10 @@ class DataSection {
 		String[] error = new String[1];
 		List<Descriptor> result = new ArrayList<>();
 		App.run(M.SearchOnline, () -> {
-			try (SodaClient client = new SodaClient(con)) {
+			try (SodaClient client = SodaClient.of(con)) {
 				client.connect();
 				DescriptorList list = client.search(clazz, name);
-				result.addAll(list.descriptors);
+				result.addAll(list.withDescriptors());
 			} catch (Exception e) {
 				error[0] = e.getMessage();
 			}
@@ -100,7 +100,7 @@ class DataSection {
 			case CONTACT -> Contact.class;
 			case FLOW -> Flow.class;
 			case FLOW_PROPERTY -> FlowProperty.class;
-			case LCIA_METHOD -> LCIAMethod.class;
+			case IMPACT_METHOD -> ImpactMethod.class;
 			case PROCESS -> Process.class;
 			case SOURCE -> Source.class;
 			case UNIT_GROUP -> UnitGroup.class;

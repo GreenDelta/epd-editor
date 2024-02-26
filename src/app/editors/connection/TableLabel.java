@@ -17,7 +17,7 @@ class TableLabel extends LabelProvider implements ITableLabelProvider {
 			return null;
 		if (col != 0)
 			return null;
-		return Icon.img(d.toRef().type);
+		return Icon.img(d.toRef().getType());
 	}
 
 	@Override
@@ -25,11 +25,11 @@ class TableLabel extends LabelProvider implements ITableLabelProvider {
 		if (!(obj instanceof Descriptor d))
 			return null;
 		return switch (col) {
-			case 0 -> LangString.getFirst(d.name, App.lang());
-			case 1 -> d.uuid;
-			case 2 -> d.version;
+			case 0 -> LangString.getFirst(d.withName(), App.lang());
+			case 1 -> d.getUUID();
+			case 2 -> d.getVersion();
 			case 3 -> {
-				String val = LangString.getFirst(d.comment, App.lang());
+				String val = LangString.getFirst(d.withComment(), App.lang());
 				yield Strings.cut(val, 75);
 			}
 			default -> null;

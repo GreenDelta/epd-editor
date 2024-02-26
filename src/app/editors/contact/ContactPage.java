@@ -96,12 +96,12 @@ class ContactPage extends FormPage {
 		VersionField vf = new VersionField(comp, tk);
 		vf.setVersion(contact.getVersion());
 		vf.onChange(v -> {
-			pub.version = v;
+			pub.withVersion(v);
 			editor.setDirty();
 		});
 		editor.onSaved(() -> {
-			vf.setVersion(pub.version);
-			timeT.setText(Xml.toString(entry.timeStamp));
+			vf.setVersion(pub.getVersion());
+			timeT.setText(Xml.toString(entry.getTimeStamp()));
 		});
 	}
 

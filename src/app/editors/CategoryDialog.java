@@ -78,9 +78,9 @@ public class CategoryDialog extends FormDialog {
 		while (!path.isEmpty()) {
 			Category c = path.pop();
 			org.openlca.ilcd.commons.Category clazz = new org.openlca.ilcd.commons.Category();
-			clazz.withClassId(c.getId());
-			clazz.withLevel(i);
-			clazz.withValue(c.getName());
+			clazz.withClassId(c.getId())
+				.withLevel(i)
+				.withValue(c.getName());
 			classification.withCategories().add(clazz);
 			i++;
 		}
@@ -153,9 +153,9 @@ public class CategoryDialog extends FormDialog {
 	private List<Category> getRootCategories(CategorySystem system) {
 		if (system == null)
 			return Collections.emptyList();
-		for (CategoryList list : system.withCategories()) {
+		for (CategoryList list : system.getCategories()) {
 			if (list.getType() == type)
-				return list.withCategories();
+				return list.getCategories();
 		}
 		return Collections.emptyList();
 	}
@@ -185,7 +185,7 @@ public class CategoryDialog extends FormDialog {
 		public Object[] getChildren(Object parentElement) {
 			if (!(parentElement instanceof Category category))
 				return new Object[0];
-			return category.withCategories().toArray();
+			return category.getCategories().toArray();
 		}
 
 		@Override
@@ -197,7 +197,7 @@ public class CategoryDialog extends FormDialog {
 		public boolean hasChildren(Object element) {
 			if (!(element instanceof Category category))
 				return false;
-			return !category.withCategories().isEmpty();
+			return !category.getCategories().isEmpty();
 		}
 	}
 

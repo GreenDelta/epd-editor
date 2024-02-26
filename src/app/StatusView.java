@@ -108,7 +108,7 @@ public class StatusView extends BaseEditor {
 			double maxMsgLen = 0;
 			for (RefStatus stat : stats) {
 				if (stat.ref != null) {
-					String name = App.s(stat.ref.withName());
+					String name = App.s(stat.ref.getName());
 					if (name != null) {
 						maxNameLen = Math.max(maxNameLen, name.length());
 					}
@@ -176,7 +176,7 @@ public class StatusView extends BaseEditor {
 			if (rs.ref == null)
 				return null;
 			return switch (col) {
-				case 0 -> App.s(rs.ref.withName());
+			case 0 -> App.s(rs.ref.getName());
 				case 1 -> rs.ref.getUUID();
 				case 2 -> rs.ref.getVersion();
 				default -> null;

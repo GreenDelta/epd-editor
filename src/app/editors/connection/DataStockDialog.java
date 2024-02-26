@@ -88,8 +88,8 @@ class DataStockDialog extends FormDialog {
 			return switch (col) {
 				case 0 -> stock.getShortName();
 				case 1 -> stock.getUUID();
-				case 2 -> stock.withDescription() == null ? null
-					: LangString.getVal(stock.withDescription(), App.lang());
+				case 2 -> stock.getDescription() == null ? null
+					: LangString.getVal(stock.getDescription(), App.lang());
 				default -> null;
 			};
 		}

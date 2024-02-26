@@ -1,12 +1,7 @@
 package app.editors;
 
-import app.App;
-import app.M;
-import app.rcp.Icon;
-import app.util.Colors;
-import app.util.Trees;
-import app.util.UI;
-import app.util.Viewers;
+import java.util.HashMap;
+
 import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -24,7 +19,13 @@ import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.util.RefTree;
 
-import java.util.HashMap;
+import app.App;
+import app.M;
+import app.rcp.Icon;
+import app.util.Colors;
+import app.util.Trees;
+import app.util.UI;
+import app.util.Viewers;
 
 public class DependencyPage extends FormPage {
 
@@ -134,7 +135,7 @@ public class DependencyPage extends FormPage {
 			if (node.ref == null)
 				return null;
 			return switch (col) {
-				case 1 -> LangString.getFirst(node.ref.withName(), App.lang());
+				case 1 -> LangString.getFirst(node.ref.getName(), App.lang());
 				case 2 -> node.ref.getUUID();
 				case 3 -> node.ref.getVersion();
 				default -> null;

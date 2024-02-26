@@ -22,7 +22,7 @@ public class RefTableLabel extends LabelProvider implements ITableLabelProvider 
 		if (!(obj instanceof Ref ref))
 			return null;
 		return switch (col) {
-			case 0 -> LangString.getFirst(ref.withName(), App.lang());
+			case 0 -> LangString.getFirst(ref.getName(), App.lang());
 			case 1 -> ref.getUUID();
 			case 2 -> ref.getVersion();
 			default -> null;

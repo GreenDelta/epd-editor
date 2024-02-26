@@ -88,7 +88,7 @@ class StatusExport implements Runnable {
 				continue;
 			Row r = sheet.createRow(row++);
 			r.createCell(0).setCellValue(Labels.get(ref.getType()));
-			String name = LangString.getFirst(ref.withName(), App.lang());
+			String name = LangString.getFirst(ref.getName(), App.lang());
 			r.createCell(1).setCellValue(name);
 			r.createCell(2).setCellValue(ref.getUUID());
 			r.createCell(3).setCellValue(ref.getVersion());

@@ -81,7 +81,7 @@ class DataSection {
 			try (SodaClient client = SodaClient.of(con)) {
 				client.connect();
 				DescriptorList list = client.search(clazz, name);
-				result.addAll(list.withDescriptors());
+				result.addAll(list.getDescriptors());
 			} catch (Exception e) {
 				error[0] = e.getMessage();
 			}

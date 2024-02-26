@@ -1,19 +1,5 @@
 package app.editors.flowproperty;
 
-import java.util.function.Supplier;
-
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.IManagedForm;
-import org.eclipse.ui.forms.editor.FormPage;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.ScrolledForm;
-import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.flowproperties.AdminInfo;
-import org.openlca.ilcd.flowproperties.DataSetInfo;
-import org.openlca.ilcd.flowproperties.FlowProperty;
-import org.openlca.ilcd.flowproperties.QuantitativeReference;
-
 import app.App;
 import app.M;
 import app.Tooltips;
@@ -23,6 +9,16 @@ import app.editors.VersionField;
 import app.util.TextBuilder;
 import app.util.UI;
 import epd.model.Xml;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.IManagedForm;
+import org.eclipse.ui.forms.editor.FormPage;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.ScrolledForm;
+import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.flowproperties.FlowProperty;
+import org.openlca.ilcd.util.DataSets;
+
+import java.util.function.Supplier;
 
 class FlowPropertyPage extends FormPage {
 
@@ -39,7 +35,7 @@ class FlowPropertyPage extends FormPage {
 	@Override
 	protected void createFormContent(IManagedForm mform) {
 		Supplier<String> title = () -> M.FlowProperty + ": "
-				+ App.s(property.getName());
+				+ App.s(DataSets.getBaseName(property));
 		ScrolledForm form = UI.formHeader(mform, title.get());
 		editor.onSaved(() -> form.setText(title.get()));
 		tk = mform.getToolkit();
@@ -53,52 +49,61 @@ class FlowPropertyPage extends FormPage {
 
 	private void infoSection(Composite body, TextBuilder tb) {
 		Composite comp = UI.infoSection(property, body, tk);
-		DataSetInfo info = property.flowPropertyInfo.dataSetInfo;
-		tb.text(comp, M.Name, Tooltips.FlowProperty_Name, info.name);
+		var info = property.withFlowPropertyInfo().withDataSetInfo();
+		tb.text(comp, M.Name, Tooltips.FlowProperty_Name, info.withName());
 		tb.text(comp, M.Synonyms,
-				Tooltips.FlowProperty_Synonyms, info.synonyms);
+				Tooltips.FlowProperty_Synonyms, info.withSynonyms());
 		tb.text(comp, M.Description,
-				Tooltips.FlowProperty_Description, info.generalComment);
+				Tooltips.FlowProperty_Description, info.withGeneralComment());
 		UI.fileLink(property, comp, tk);
 	}
 
 	private void categorySection(Composite body) {
-		DataSetInfo info = property.flowPropertyInfo.dataSetInfo;
-		CategorySection section = new CategorySection(editor,
-				DataSetType.FLOW_PROPERTY, info.classifications);
+		var info = property.withFlowPropertyInfo().withDataSetInfo();
+		var section = new CategorySection(editor,
+				DataSetType.FLOW_PROPERTY, info.withClassifications());
 		section.render(body, tk);
 	}
 
 	private void unitGroupSection(Composite body) {
-		Composite comp = UI.formSection(body, tk, M.QuantitativeReference);
-		QuantitativeReference qRef = property.flowPropertyInfo.quantitativeReference;
+		var comp = UI.formSection(body, tk, M.QuantitativeReference);
+		var qRef = property
+			.withFlowPropertyInfo()
+			.withQuantitativeReference();
 		UI.formLabel(comp, tk, M.UnitGroup, Tooltips.FlowProperty_UnitGroup);
 		RefLink refText = new RefLink(comp, tk, DataSetType.UNIT_GROUP);
-		refText.setRef(qRef.unitGroup);
+		refText.setRef(qRef.getUnitGroup());
 		refText.onChange(ref -> {
-			qRef.unitGroup = ref;
+			qRef.withUnitGroup(ref);
 			editor.setDirty();
 		});
 	}
 
 	private void adminSection(Composite body) {
-		Composite comp = UI.formSection(body, tk, M.AdministrativeInformation);
-		AdminInfo info = property.adminInfo;
-		Text timeT = UI.formText(comp, tk,
+		var comp = UI.formSection(body, tk, M.AdministrativeInformation);
+		var timeT = UI.formText(comp, tk,
 				M.LastUpdate, Tooltips.All_LastUpdate);
-		timeT.setText(Xml.toString(info.dataEntry.timeStamp));
-		Text uuidT = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);
-		if (property.getUUID() != null)
-			uuidT.setText(property.getUUID());
-		VersionField vf = new VersionField(comp, tk);
-		vf.setVersion(property.getVersion());
+		timeT.setText(Xml.toString(DataSets.getTimeStamp(property)));
+
+		var uuidT = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);
+		var uuid = DataSets.getUUID(property);
+		if (uuid != null) {
+			uuidT.setText(uuid);
+		}
+
+		var vf = new VersionField(comp, tk);
+		vf.setVersion(DataSets.getVersion(property));
 		vf.onChange(v -> {
-			info.publication.version = v;
+			property
+				.withAdminInfo()
+				.withPublication()
+				.withVersion(v);
 			editor.setDirty();
 		});
+
 		editor.onSaved(() -> {
-			vf.setVersion(info.publication.version);
-			timeT.setText(Xml.toString(info.dataEntry.timeStamp));
+			vf.setVersion(DataSets.getVersion(property));
+			timeT.setText(Xml.toString(DataSets.getTimeStamp(property)));
 		});
 	}
 }

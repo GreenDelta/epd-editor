@@ -29,7 +29,7 @@ class Upload {
 		try {
 			if (client.contains(ref))
 				return RefStatus.info(ref, "#Already on the server");
-			IDataSet ds = App.store().get(ref.getDataSetClass(), ref.uuid);
+			IDataSet ds = App.store().get(ref.getDataSetClass(), ref.getUUID());
 			if (ds == null)
 				return RefStatus.error(ref, "#Data set does not exist");
 			if (ds instanceof Source)

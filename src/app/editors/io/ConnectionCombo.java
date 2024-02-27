@@ -66,7 +66,7 @@ class ConnectionCombo {
 			return null;
 		}
 		try {
-			SodaClient client = new SodaClient(con);
+			SodaClient client = SodaClient.of(con);
 			client.connect();
 			return client;
 		} catch (Exception e) {

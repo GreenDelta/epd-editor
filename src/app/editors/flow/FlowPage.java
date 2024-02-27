@@ -36,7 +36,7 @@ class FlowPage extends FormPage {
 	@Override
 	protected void createFormContent(IManagedForm mform) {
 		Supplier<String> title = () -> M.Flow + ": "
-				+ App.s(product.flow.getName());
+				+ App.s(Flows.getBaseName(product.flow));
 		var form = UI.formHeader(mform, title.get());
 		editor.onSaved(() -> form.setText(title.get()));
 		tk = mform.getToolkit();
@@ -44,7 +44,7 @@ class FlowPage extends FormPage {
 		var tb = new TextBuilder(editor, this, tk);
 		infoSection(body, tb);
 		new CategorySection(editor, DataSetType.FLOW,
-				Flows.classifications(product.flow)).render(body, tk);
+				Flows.getClassifications(product.flow)).render(body, tk);
 		if (Flows.getType(product.flow) == FlowType.PRODUCT_FLOW) {
 			VendorSection.create(body, tk, editor);
 		}
@@ -55,12 +55,12 @@ class FlowPage extends FormPage {
 
 	private void infoSection(Composite body, TextBuilder tb) {
 		var comp = UI.infoSection(product.flow, body, tk);
-		var fName = Flows.flowName(product.flow);
-		tb.text(comp, M.Name, Tooltips.Flow_Name, fName.baseName);
-		var info = Flows.dataSetInfo(product.flow);
-		tb.text(comp, M.Synonyms, Tooltips.Flow_Synonyms, info.synonyms);
+		var fName = product.flow.withFlowInfo().withDataSetInfo().withFlowName();
+		tb.text(comp, M.Name, Tooltips.Flow_Name, fName.getBaseName());
+		var info = product.flow.withFlowInfo().withDataSetInfo();
+		tb.text(comp, M.Synonyms, Tooltips.Flow_Synonyms, info.getSynonyms());
 		tb.text(comp, M.Description,
-				Tooltips.Flow_Description, info.generalComment);
+				Tooltips.Flow_Description, info.getGeneralComment());
 		if (Flows.getType(product.flow) == FlowType.PRODUCT_FLOW) {
 			genericProductLink(comp);
 		}
@@ -92,20 +92,20 @@ class FlowPage extends FormPage {
 		var comp = UI.formSection(body, tk, M.AdministrativeInformation);
 		var time = UI.formText(comp, tk,
 				M.LastUpdate, Tooltips.All_LastUpdate);
-		time.setText(Xml.toString(Flows.dataEntry(flow).timeStamp));
+		time.setText(Xml.toString(flow.withAdminInfo().withDataEntry().getTimeStamp()));
 		var uuid = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);
-		if (flow.getUUID() != null) {
-			uuid.setText(flow.getUUID());
+		if (Flows.getUUID(flow) != null) {
+			uuid.setText(Flows.getUUID(flow));
 		}
 		var version = new VersionField(comp, tk);
 		version.setVersion(flow.getVersion());
 		version.onChange(v -> {
-			Flows.publication(flow).version = v;
+			flow.withAdminInfo().withPublication().withVersion(v);
 			editor.setDirty();
 		});
 		editor.onSaved(() -> {
 			version.setVersion(flow.getVersion());
-			time.setText(Xml.toString(Flows.dataEntry(flow).timeStamp));
+			time.setText(Xml.toString(flow.withAdminInfo().withDataEntry().getTimeStamp()));
 		});
 	}
 }

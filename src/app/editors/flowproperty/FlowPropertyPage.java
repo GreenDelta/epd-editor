@@ -83,7 +83,7 @@ class FlowPropertyPage extends FormPage {
 		var comp = UI.formSection(body, tk, M.AdministrativeInformation);
 		var timeT = UI.formText(comp, tk,
 				M.LastUpdate, Tooltips.All_LastUpdate);
-		timeT.setText(Xml.toString(DataSets.getTimeStamp(property)));
+		timeT.setText(Xml.toString(property.withAdminInfo().withDataEntry().getTimeStamp()));
 
 		var uuidT = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);
 		var uuid = DataSets.getUUID(property);
@@ -103,7 +103,7 @@ class FlowPropertyPage extends FormPage {
 
 		editor.onSaved(() -> {
 			vf.setVersion(DataSets.getVersion(property));
-			timeT.setText(Xml.toString(DataSets.getTimeStamp(property)));
+			timeT.setText(Xml.toString(property.withAdminInfo().withDataEntry().getTimeStamp()));
 		});
 	}
 }

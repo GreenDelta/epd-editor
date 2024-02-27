@@ -10,8 +10,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.methods.DataSetInfo;
-import org.openlca.ilcd.methods.LCIAMethod;
-import org.openlca.ilcd.util.Methods;
+import org.openlca.ilcd.methods.ImpactMethod;
+import org.openlca.ilcd.util.ImpactMethods;
 
 import app.App;
 import app.M;
@@ -25,7 +25,7 @@ import epd.model.Xml;
 
 class InfoPage extends FormPage {
 
-	private final LCIAMethod method;
+	private final ImpactMethod method;
 	private final MethodEditor editor;
 	private FormToolkit tk;
 
@@ -38,7 +38,7 @@ class InfoPage extends FormPage {
 	@Override
 	protected void createFormContent(IManagedForm mform) {
 		Supplier<String> title = () -> M.LCIAMethod + ": "
-				+ App.s(method.getName());
+				+ App.s(ImpactMethods.getName(method));
 		ScrolledForm form = UI.formHeader(mform, title.get());
 		editor.onSaved(() -> form.setText(title.get()));
 		tk = mform.getToolkit();
@@ -51,29 +51,29 @@ class InfoPage extends FormPage {
 	}
 
 	private void infoSection(Composite body, TextBuilder tb) {
-		DataSetInfo info = Methods.forceDataSetInfo(method);
+		DataSetInfo info = method.withMethodInfo().withDataSetInfo();
 		Composite comp = UI.infoSection(method, body, tk);
-		tb.text(comp, M.Name, Tooltips.LCIAMethod_Name, info.name);
+		tb.text(comp, M.Name, Tooltips.LCIAMethod_Name, info.getName());
 		UI.formLabel(comp, tk, "#Methodologies",
 				Tooltips.LCIAMethod_Methodologies);
-		new StringTable(editor, "#Methodology", info.methods).render(comp, tk);
+		new StringTable(editor, "#Methodology", info.getMethods()).render(comp, tk);
 		UI.formLabel(comp, tk, "#Impact Categories",
 				Tooltips.LCIAMethod_ImpactCategories);
-		new StringTable(editor, "#Impact Category", info.impactCategories)
+		new StringTable(editor, "#Impact Category", info.getImpactCategories())
 				.render(comp, tk);
 		tb.text(comp, "#Impact Indicator", Tooltips.LCIAMethod_ImpactIndicator,
-				info.indicator, val -> {
-					info.indicator = val;
+				info.getIndicator(), val -> {
+					info.withIndicator(val);
 					editor.setDirty();
 				});
 		tb.text(comp, M.Description,
-				Tooltips.LCIAMethod_Description, info.comment);
+				Tooltips.LCIAMethod_Description, info.getComment());
 		UI.fileLink(method, comp, tk);
 	}
 
 	private void categorySection(Composite body) {
 		CategorySection section = new CategorySection(editor,
-				DataSetType.LCIA_METHOD, method.getClassifications());
+				DataSetType.IMPACT_METHOD, ImpactMethods.getClassifications(method));
 		section.render(body, tk);
 	}
 
@@ -81,19 +81,19 @@ class InfoPage extends FormPage {
 		Composite comp = UI.formSection(body, tk, M.AdministrativeInformation);
 		Text timeT = UI.formText(comp, tk,
 				M.LastUpdate, Tooltips.All_LastUpdate);
-		timeT.setText(Xml.toString(Methods.forceDataEntry(method).timeStamp));
+		timeT.setText(Xml.toString(method.withAdminInfo().withDataEntry().getTimeStamp()));
 		Text uuidT = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);
-		if (method.getUUID() != null)
-			uuidT.setText(method.getUUID());
+		if (ImpactMethods.getUUID(method) != null)
+			uuidT.setText(ImpactMethods.getUUID(method));
 		VersionField vf = new VersionField(comp, tk);
 		vf.setVersion(method.getVersion());
 		vf.onChange(v -> {
-			Methods.forcePublication(method).version = v;
+			method.withAdminInfo().withPublication().withVersion(v);
 			editor.setDirty();
 		});
 		editor.onSaved(() -> {
 			vf.setVersion(method.getVersion());
-			timeT.setText(Xml.toString(Methods.forceDataEntry(method).timeStamp));
+			timeT.setText(Xml.toString(method.withAdminInfo().withDataEntry().getTimeStamp()));
 		});
 	}
 

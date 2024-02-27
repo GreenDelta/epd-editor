@@ -40,7 +40,7 @@ class ContactPage extends FormPage {
 	@Override
 	protected void createFormContent(IManagedForm mform) {
 		Supplier<String> title = () -> M.Contact + ": "
-				+ App.s(contact.getName());
+				+ App.s(Contacts.getName(contact));
 		ScrolledForm form = UI.formHeader(mform, title.get());
 		editor.onSaved(() -> form.setText(title.get()));
 		tk = mform.getToolkit();
@@ -54,45 +54,45 @@ class ContactPage extends FormPage {
 
 	private void infoSection(Composite body, TextBuilder tb) {
 		Composite comp = UI.infoSection(contact, body, tk);
-		DataSetInfo info = Contacts.dataSetInfo(contact);
-		tb.text(comp, M.ShortName, Tooltips.Contact_ShortName, info.shortName);
-		tb.text(comp, M.Name, Tooltips.Contact_Name, info.name);
-		tb.text(comp, M.Address, Tooltips.Contact_Address, info.contactAddress);
-		tb.text(comp, M.Telephone, Tooltips.Contact_Telephone, info.telephone,
-				t -> info.telephone = t);
-		tb.text(comp, M.Telefax, Tooltips.Contact_Telefax, info.telefax,
-				t -> info.telefax = t);
-		tb.text(comp, M.Website, Tooltips.Contact_Website, info.wwwAddress,
-				t -> info.wwwAddress = t);
+		DataSetInfo info = contact.withContactInfo().withDataSetInfo();
+		tb.text(comp, M.ShortName, Tooltips.Contact_ShortName, info.getShortName());
+		tb.text(comp, M.Name, Tooltips.Contact_Name, info.getName());
+		tb.text(comp, M.Address, Tooltips.Contact_Address, info.getContactAddress());
+		tb.text(comp, M.Telephone, Tooltips.Contact_Telephone, info.getTelephone(),
+				t -> info.withTelephone(t));
+		tb.text(comp, M.Telefax, Tooltips.Contact_Telefax, info.getTelefax(),
+				t -> info.withTelefax(t));
+		tb.text(comp, M.Website, Tooltips.Contact_Website, info.getWebSite(),
+				t -> info.withWebSite(t));
 		UI.formLabel(comp, tk, M.Logo, Tooltips.Contact_Logo);
 		RefLink logo = new RefLink(comp, tk, DataSetType.SOURCE);
-		logo.setRef(info.logo);
+		logo.setRef(info.getLogo());
 		logo.onChange(ref -> {
-			info.logo = ref;
+			info.withLogo(ref);
 			editor.setDirty();
 		});
 		UI.fileLink(contact, comp, tk);
 	}
 
 	private void categorySection(Composite body) {
-		DataSetInfo info = Contacts.dataSetInfo(contact);
+		DataSetInfo info = contact.withContactInfo().withDataSetInfo();
 		CategorySection section = new CategorySection(editor,
-				DataSetType.CONTACT, info.classifications);
+				DataSetType.CONTACT, info.getClassifications());
 		section.render(body, tk);
 	}
 
 	private void adminSection(Composite body) {
-		DataEntry entry = Contacts.dataEntry(contact);
-		Publication pub = Contacts.publication(contact);
+		DataEntry entry = Contacts.getDataEntry(contact);
+		Publication pub = Contacts.getPublication(contact);
 		Composite comp = UI.formSection(body, tk,
 				M.AdministrativeInformation,
 				Tooltips.All_AdministrativeInformation);
 		Text timeT = UI.formText(comp, tk,
 				M.LastUpdate, Tooltips.All_LastUpdate);
-		timeT.setText(Xml.toString(entry.timeStamp));
+		timeT.setText(Xml.toString(entry.getTimeStamp()));
 		Text uuidT = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);
-		if (contact.getUUID() != null)
-			uuidT.setText(contact.getUUID());
+		if (Contacts.getUUID(contact) != null)
+			uuidT.setText(Contacts.getUUID(contact));
 		VersionField vf = new VersionField(comp, tk);
 		vf.setVersion(contact.getVersion());
 		vf.onChange(v -> {

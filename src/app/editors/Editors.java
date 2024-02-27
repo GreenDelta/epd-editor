@@ -15,6 +15,7 @@ import org.eclipse.ui.progress.UIJob;
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.io.SodaConnection;
+import org.openlca.ilcd.util.DataSets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +44,7 @@ public class Editors {
 	public static void setTabTitle(IDataSet ds, BaseEditor editor) {
 		if (ds == null || editor == null)
 			return;
-		String title = App.s(ds.getName());
+		String title = App.s(DataSets.getBaseName(ds));
 		editor.setPartName(Strings.cut(title, 75));
 	}
 

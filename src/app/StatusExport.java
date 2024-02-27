@@ -1,8 +1,12 @@
 package app;
 
-import app.rcp.Labels;
-import app.util.FileChooser;
-import epd.model.RefStatus;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
@@ -15,12 +19,9 @@ import org.openlca.ilcd.commons.Ref;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
-import java.util.List;
+import app.rcp.Labels;
+import app.util.FileChooser;
+import epd.model.RefStatus;
 
 class StatusExport implements Runnable {
 
@@ -86,11 +87,11 @@ class StatusExport implements Runnable {
 			if (stat.ref == null)
 				continue;
 			Row r = sheet.createRow(row++);
-			r.createCell(0).setCellValue(Labels.get(ref.type));
-			String name = LangString.getFirst(ref.name, App.lang());
+			r.createCell(0).setCellValue(Labels.get(ref.getType()));
+			String name = LangString.getFirst(ref.getName(), App.lang());
 			r.createCell(1).setCellValue(name);
-			r.createCell(2).setCellValue(ref.uuid);
-			r.createCell(3).setCellValue(ref.version);
+			r.createCell(2).setCellValue(ref.getUUID());
+			r.createCell(3).setCellValue(ref.getVersion());
 			r.createCell(4).setCellValue(getPrefix(stat) + ": " + stat.message);
 		}
 	}

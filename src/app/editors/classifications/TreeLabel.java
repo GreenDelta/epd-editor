@@ -18,7 +18,7 @@ class TreeLabel extends LabelProvider {
 	@Override
 	public String getText(Object obj) {
 		if (obj instanceof CategoryList cl) {
-			return s(cl.type);
+			return s(cl.getType());
 		}
 		if (obj instanceof Category c) {
 			return s(c);
@@ -43,9 +43,9 @@ class TreeLabel extends LabelProvider {
 	private String s(Category c) {
 		if (c == null)
 			return null;
-		String s = c.name;
-		if (c.id != null && c.id.length() < 6)
-			s = c.id + " " + s;
+		String s = c.getName();
+		if (c.getId() != null && c.getId().length() < 6)
+			s = c.getId() + " " + s;
 		return s;
 	}
 }

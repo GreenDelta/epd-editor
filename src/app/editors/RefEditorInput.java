@@ -1,14 +1,15 @@
 package app.editors;
 
-import app.App;
-import app.rcp.Icon;
+import java.util.Objects;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 
-import java.util.Objects;
+import app.App;
+import app.rcp.Icon;
 
 public class RefEditorInput implements IEditorInput {
 
@@ -31,14 +32,14 @@ public class RefEditorInput implements IEditorInput {
 
 	@Override
 	public ImageDescriptor getImageDescriptor() {
-		return ref == null ? null : Icon.des(ref.type);
+		return ref == null ? null : Icon.des(ref.getType());
 	}
 
 	@Override
 	public String getName() {
 		if (ref == null)
 			return "??";
-		String name = LangString.getFirst(ref.name, App.lang());
+		String name = LangString.getFirst(ref.getName(), App.lang());
 		return name == null ? "??" : name;
 	}
 

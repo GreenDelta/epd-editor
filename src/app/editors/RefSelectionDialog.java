@@ -84,7 +84,7 @@ public class RefSelectionDialog extends FormDialog {
 			case CONTACT -> M.Contact;
 			case FLOW -> M.Flow;
 			case FLOW_PROPERTY -> M.FlowProperty;
-			case LCIA_METHOD -> M.LCIAMethod;
+			case IMPACT_METHOD -> M.LCIAMethod;
 			case PROCESS -> M.EPD;
 			case SOURCE -> M.Source;
 			case UNIT_GROUP -> M.UnitGroup;

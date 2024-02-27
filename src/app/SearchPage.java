@@ -115,7 +115,7 @@ public class SearchPage extends FormEditor {
 			Set<Ref> refs = App.index().getRefs();
 			List<Ref> filtered = new ArrayList<>();
 			for (Ref ref : refs) {
-				String name = LangString.getFirst(ref.name, App.lang());
+				String name = LangString.getFirst(ref.getName(), App.lang());
 				if (name == null)
 					continue;
 				name = name.toLowerCase();
@@ -124,9 +124,9 @@ public class SearchPage extends FormEditor {
 				}
 			}
 			filtered.sort((r1, r2) -> {
-				String n1 = LangString.getFirst(r1.name, App.lang())
+				String n1 = LangString.getFirst(r1.getName(), App.lang())
 						.toLowerCase();
-				String n2 = LangString.getFirst(r2.name, App.lang())
+				String n2 = LangString.getFirst(r2.getName(), App.lang())
 						.toLowerCase();
 				return n1.indexOf(term) - n2.indexOf(term);
 

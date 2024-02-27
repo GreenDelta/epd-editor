@@ -44,7 +44,7 @@ public class ClassificationEditor extends BaseEditor {
 		try {
 			EditorInput ei = (EditorInput) input;
 			system = CategorySystems.get(ei.file);
-			setPartName(M.ClassificationSystem + ": " + system.name);
+			setPartName(M.ClassificationSystem + ": " + system.getName());
 		} catch (Exception e) {
 			throw new PartInitException("Failed to open editor", e);
 		}
@@ -89,7 +89,7 @@ public class ClassificationEditor extends BaseEditor {
 		@Override
 		protected void createFormContent(IManagedForm mform) {
 			ScrolledForm form = UI.formHeader(mform,
-					M.ClassificationSystem + ": " + system.name);
+					M.ClassificationSystem + ": " + system.getName());
 			FormToolkit tk = mform.getToolkit();
 			Composite body = UI.formBody(form, tk);
 			body.setLayout(new FillLayout());

@@ -1,12 +1,7 @@
 package app.editors;
 
-import app.App;
-import app.M;
-import app.rcp.Icon;
-import app.util.Colors;
-import app.util.Trees;
-import app.util.UI;
-import app.util.Viewers;
+import java.util.HashMap;
+
 import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -24,7 +19,13 @@ import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.util.RefTree;
 
-import java.util.HashMap;
+import app.App;
+import app.M;
+import app.rcp.Icon;
+import app.util.Colors;
+import app.util.Trees;
+import app.util.UI;
+import app.util.Viewers;
 
 public class DependencyPage extends FormPage {
 
@@ -67,7 +68,7 @@ public class DependencyPage extends FormPage {
 			if (!ref.isValid())
 				continue;
 			Ref r = App.index().find(ref);
-			indexRefs.put(ref.uuid, r);
+			indexRefs.put(ref.getUUID(), r);
 		}
 		tree.setInput(refTree);
 		tree.expandAll();
@@ -114,14 +115,14 @@ public class DependencyPage extends FormPage {
 			if (col == 0) {
 				if (node.ref == null)
 					return Icon.FOLDER.img();
-				Ref ir = indexRefs.get(node.ref.uuid);
+				Ref ir = indexRefs.get(node.ref.getUUID());
 				if (ir != null)
 					return Icon.OK.img();
 				else
 					return Icon.ERROR.img();
 			}
 			if (col == 1 && node.ref != null)
-				return Icon.img(node.ref.type);
+				return Icon.img(node.ref.getType());
 			return null;
 		}
 
@@ -134,9 +135,9 @@ public class DependencyPage extends FormPage {
 			if (node.ref == null)
 				return null;
 			return switch (col) {
-				case 1 -> LangString.getFirst(node.ref.name, App.lang());
-				case 2 -> node.ref.uuid;
-				case 3 -> node.ref.version;
+				case 1 -> LangString.getFirst(node.ref.getName(), App.lang());
+				case 2 -> node.ref.getUUID();
+				case 3 -> node.ref.getVersion();
 				default -> null;
 			};
 		}

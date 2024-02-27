@@ -11,15 +11,15 @@ class TreeContent implements ITreeContentProvider {
 	public Object[] getElements(Object obj) {
 		if (!(obj instanceof CategorySystem system))
 			return null;
-		return system.categories.toArray();
+		return system.getCategories().toArray();
 	}
 
 	@Override
 	public Object[] getChildren(Object obj) {
 		if (obj instanceof CategoryList list)
-			return list.categories.toArray();
+			return list.getCategories().toArray();
 		if (obj instanceof Category category)
-			return category.category.toArray();
+			return category.getCategories().toArray();
 		return null;
 	}
 
@@ -31,9 +31,9 @@ class TreeContent implements ITreeContentProvider {
 	@Override
 	public boolean hasChildren(Object obj) {
 		if (obj instanceof CategoryList list)
-			return !list.categories.isEmpty();
+			return !list.getCategories().isEmpty();
 		if (obj instanceof Category category)
-			return !category.category.isEmpty();
+			return !category.getCategories().isEmpty();
 		return false;
 	}
 }

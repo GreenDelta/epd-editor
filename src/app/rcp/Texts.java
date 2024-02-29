@@ -12,7 +12,7 @@ public class Texts {
 
 	public static Text set(Text text, String value) {
 		if (text == null)
-			return text;
+			return null;
 		if (value == null)
 			text.setText("");
 		else
@@ -22,7 +22,7 @@ public class Texts {
 
 	public static Text set(Text text, Double d) {
 		if (text == null)
-			return text;
+			return null;
 		if (d == null)
 			text.setText("");
 		else

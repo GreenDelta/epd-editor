@@ -106,7 +106,7 @@ public class ActionBar extends ActionBarAdvisor {
 		fileMenu.add(mm);
 		DataSetType[] types = { DataSetType.PROCESS, DataSetType.CONTACT,
 				DataSetType.SOURCE, DataSetType.FLOW, DataSetType.FLOW_PROPERTY,
-				DataSetType.UNIT_GROUP, DataSetType.LCIA_METHOD };
+				DataSetType.UNIT_GROUP, DataSetType.IMPACT_METHOD };
 		for (DataSetType type : types) {
 			TypeElement navElem = Navigator.getTypeRoot(type);
 			Action a = new NewDataSetAction(navElem);

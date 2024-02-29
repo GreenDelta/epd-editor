@@ -106,7 +106,7 @@ public enum Icon {
 		if (type == null)
 			return null;
 		return switch (type) {
-			case LCIA_METHOD -> METHOD.img();
+			case IMPACT_METHOD -> METHOD.img();
 			case PROCESS -> EPD.img();
 			case CONTACT -> CONTACT.img();
 			case SOURCE -> SOURCE.img();
@@ -127,7 +127,7 @@ public enum Icon {
 			case FLOW -> PRODUCT.des();
 			case FLOW_PROPERTY -> QUANTITY.des();
 			case UNIT_GROUP -> UNIT.des();
-			case LCIA_METHOD -> METHOD.des();
+			case IMPACT_METHOD -> METHOD.des();
 			case EXTERNAL_FILE -> DOCUMENT.des();
 			default -> null;
 		};

@@ -23,14 +23,12 @@ import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.contacts.Contact;
 import org.openlca.ilcd.flowproperties.FlowProperty;
 import org.openlca.ilcd.flows.Flow;
-import org.openlca.ilcd.methods.LCIAMethod;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.sources.Source;
 import org.openlca.ilcd.units.UnitGroup;
 import org.openlca.ilcd.util.Contacts;
 import org.openlca.ilcd.util.FlowProperties;
 import org.openlca.ilcd.util.Flows;
-import org.openlca.ilcd.util.Methods;
 import org.openlca.ilcd.util.Processes;
 import org.openlca.ilcd.util.Sources;
 import org.openlca.ilcd.util.UnitGroups;
@@ -63,8 +61,8 @@ public class NewDataSetAction extends Action {
 			return ((TypeElement) elem).type;
 		if (elem instanceof RefElement) {
 			Ref ref = ((RefElement) elem).ref;
-			if (ref != null && ref.type != null)
-				return ref.type;
+			if (ref != null && ref.getType() != null)
+				return ref.getType();
 		}
 		return getType(elem.getParent());
 	}
@@ -76,7 +74,7 @@ public class NewDataSetAction extends Action {
 			case CONTACT -> M.NewContact;
 			case FLOW -> M.NewProduct;
 			case FLOW_PROPERTY -> M.NewFlowProperty;
-			case LCIA_METHOD -> M.NewLCIAMethod;
+			case IMPACT_METHOD -> M.NewLCIAMethod;
 			case PROCESS -> M.NewEPD;
 			case SOURCE -> M.NewSource;
 			case UNIT_GROUP -> M.NewUnitGroup;
@@ -104,7 +102,7 @@ public class NewDataSetAction extends Action {
 			case CONTACT -> makeContact();
 			case FLOW -> makeFlow();
 			case FLOW_PROPERTY -> makeFlowProperty();
-			case LCIA_METHOD -> makeMethod();
+			case IMPACT_METHOD -> makeMethod();
 			case PROCESS -> makeEpd();
 			case SOURCE -> makeSource();
 			case UNIT_GROUP -> makeUnitGroup();
@@ -113,15 +111,15 @@ public class NewDataSetAction extends Action {
 	}
 
 	private Contact makeContact() {
-		Contact c = new Contact();
-		c.version = "1.1";
-		with(Contacts.dataSetInfo(c), info -> {
-			info.uuid = UUID.randomUUID().toString();
-			LangString.set(info.name, M.NewContact, App.lang());
-			Classification category = getClassification();
-			if (category != null)
-				info.classifications.add(category);
-		});
+		Contact c = new Contact().withVersion("1.1");
+		var info = c.withContactInfo()
+			.withDataSetInfo()
+			.withUUID(UUID.randomUUID().toString());
+		LangString.set(info.withName(), M.NewContact, App.lang());
+		var category = getClassification();
+		if (category != null) {
+			info.withClassifications().add(category);
+		}
 		Contacts.dataEntry(c).timeStamp = Xml.now();
 		Contacts.publication(c).version = "00.00.000";
 		return c;
@@ -226,9 +224,9 @@ public class NewDataSetAction extends Action {
 		categories(parent, cats);
 		if (cats.isEmpty())
 			return null;
-		cats.sort(Comparator.comparingInt(c -> c.level));
-		Classification c = new Classification();
-		c.categories.addAll(cats);
+		cats.sort(Comparator.comparingInt(Category::getLevel));
+		var c = new Classification();
+		c.withCategories().addAll(cats);
 		return c;
 	}
 

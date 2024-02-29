@@ -1,20 +1,16 @@
 package epd.io.conversion;
 
-import java.util.List;
-
+import epd.model.EpdProduct;
+import epd.model.MaterialPropertyValue;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Other;
-import org.openlca.ilcd.flows.DataSetInfo;
 import org.openlca.ilcd.flows.Flow;
-import org.openlca.ilcd.flows.FlowInfo;
-import org.openlca.ilcd.flows.LCIMethod;
-import org.openlca.ilcd.flows.Modelling;
+import org.openlca.ilcd.util.Flows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 
-import epd.model.EpdProduct;
-import epd.model.MaterialPropertyValue;
+import java.util.List;
 
 public class FlowExtensions {
 
@@ -76,14 +72,11 @@ public class FlowExtensions {
 
 	private static void writeInfoExtension(EpdProduct p) {
 		if (p.genericFlow == null && p.properties.isEmpty()) {
+			var info = Flows.getDataSetInfo(p.flow);
 			// clear the extension point
-			if (p.flow == null)
-				return;
-			if (p.flow.flowInfo == null)
-				return;
-			if (p.flow.flowInfo.dataSetInfo == null)
-				return;
-			p.flow.flowInfo.dataSetInfo.other = null;
+			if (info != null) {
+				info.withOther(null);
+			}
 			return;
 		}
 
@@ -93,7 +86,7 @@ public class FlowExtensions {
 		if (p.properties.isEmpty()) {
 			matML.clear();
 		} else {
-			matML.createStructure(LangString.getFirst(p.flow.getName()));
+			matML.createStructure(LangString.getFirst(Flows.getBaseName(p.flow)));
 			for (MaterialPropertyValue value : p.properties) {
 				matML.append(value);
 			}
@@ -114,54 +107,30 @@ public class FlowExtensions {
 		Element e = Dom.getElement(ext, tag);
 		if (e == null) {
 			e = Dom.createElement(Vocab.NS_EPD, tag);
-			ext.any.add(e);
+			ext.withAny().add(e);
 		}
 		e.setTextContent(Boolean.toString(p.vendorSpecific));
 	}
 
 	private static Other getInfoExtension(Flow flow, boolean create) {
-		FlowInfo flowInfo = flow.flowInfo;
-		if (flowInfo == null) {
-			if (!create)
-				return null;
-			flowInfo = new FlowInfo();
-			flow.flowInfo = flowInfo;
-		}
-		DataSetInfo dataInfo = flowInfo.dataSetInfo;
-		if (dataInfo == null) {
-			if (!create)
-				return null;
-			dataInfo = new DataSetInfo();
-			flowInfo.dataSetInfo = dataInfo;
-		}
-		Other other = dataInfo.other;
-		if (other == null && create) {
-			other = new Other();
-			dataInfo.other = other;
-		}
-		return other;
+		if (create)
+			return flow.withFlowInfo()
+				.withDataSetInfo()
+				.withOther();
+		var info = Flows.getDataSetInfo(flow);
+		return info != null
+			? info.getOther()
+			: null;
 	}
 
 	private static Other getMethodExtension(Flow flow, boolean create) {
-		Modelling mav = flow.modelling;
-		if (mav == null) {
-			if (!create)
-				return null;
-			mav = new Modelling();
-			flow.modelling = mav;
-		}
-		LCIMethod method = mav.lciMethod;
-		if (method == null) {
-			if (!create)
-				return null;
-			method = new LCIMethod();
-			mav.lciMethod = method;
-		}
-		Other other = method.other;
-		if (other == null && create) {
-			other = new Other();
-			method.other = other;
-		}
-		return other;
+		if (create)
+			return flow.withModelling()
+				.withInventoryMethod()
+				.withOther();
+		var method = Flows.getInventoryMethod(flow);
+		return method != null
+			? method.getOther()
+			: null;
 	}
 }

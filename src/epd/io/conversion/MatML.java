@@ -37,7 +37,7 @@ class MatML {
 			return;
 		Element root = findRoot();
 		if (root != null)
-			extension.any.remove(root);
+			extension.getAny().remove(root);
 	}
 
 	void createStructure(String materialName) {
@@ -55,7 +55,7 @@ class MatML {
 		materialElem.appendChild(bulkDetails);
 		metaData = doc.createElementNS(NS, "mat:Metadata");
 		root.appendChild(metaData);
-		extension.any.add(root);
+		extension.withAny().add(root);
 	}
 
 	void append(MaterialPropertyValue value) {
@@ -163,7 +163,7 @@ class MatML {
 	private Element findRoot() {
 		if (extension == null)
 			return null;
-		for (Object any : extension.any) {
+		for (Object any : extension.getAny()) {
 			if (!(any instanceof Element element))
 				continue;
 			if (Objects.equals("MatML_Doc", element.getLocalName()))

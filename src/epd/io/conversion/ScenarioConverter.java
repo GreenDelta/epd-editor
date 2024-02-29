@@ -22,7 +22,7 @@ class ScenarioConverter {
 	static List<Scenario> readScenarios(Other other) {
 		if (other == null)
 			return Collections.emptyList();
-		for (Object any : other.any) {
+		for (Object any : other.getAny()) {
 			if (!(any instanceof Element element))
 				continue;
 			if (!isValid(element))
@@ -93,7 +93,7 @@ class ScenarioConverter {
 			if (element != null)
 				root.appendChild(element);
 		}
-		other.any.add(root);
+		other.withAny().add(root);
 	}
 
 	private static Element toElement(Scenario scenario, Document doc) {

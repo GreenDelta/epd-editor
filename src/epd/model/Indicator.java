@@ -53,16 +53,16 @@ public final class Indicator {
 	 * Create a ILCD data set reference for this indicator.
 	 */
 	public Ref getRef(String lang) {
-		Ref ref = new Ref();
-		ref.uuid = uuid;
 		String path = type == Type.LCI
 			? "flows"
 			: "lciamethods";
-		ref.uri = "../" + path + "/" + uuid;
-		ref.type = type == Type.LCI
-			? DataSetType.FLOW
-			: DataSetType.LCIA_METHOD;
-		LangString.set(ref.name, name, lang);
+		Ref ref = new Ref()
+			.withUUID(uuid)
+			.withUri("../" + path + "/" + uuid)
+			.withType(type == Type.LCI
+				? DataSetType.FLOW
+				: DataSetType.IMPACT_METHOD);
+		LangString.set(ref.withName(), name, lang);
 		return ref;
 	}
 
@@ -70,11 +70,11 @@ public final class Indicator {
 	 * Create a ILCD data set reference to the unit group of this indicator.
 	 */
 	public Ref getUnitGroupRef(String lang) {
-		Ref ref = new Ref();
-		ref.uuid = unitGroupUUID;
-		ref.type = DataSetType.UNIT_GROUP;
-		ref.uri = "../unitgroups/" + unitGroupUUID;
-		LangString.set(ref.name, unit, lang);
+		Ref ref = new Ref()
+			.withUUID(unitGroupUUID)
+			.withType(DataSetType.UNIT_GROUP)
+			.withUri("../unitgroups/" + unitGroupUUID);
+		LangString.set(ref.withName(), unit, lang);
 		return ref;
 	}
 

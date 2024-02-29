@@ -78,7 +78,7 @@ public abstract class ContentElement {
 		if (other == null)
 			return;
 		for (LangString n : name) {
-			other.name.add(n.clone());
+			other.name.add(n.copy());
 		}
 		if (massPerc != null) {
 			other.massPerc = massPerc.clone();
@@ -87,7 +87,7 @@ public abstract class ContentElement {
 			other.mass = mass.clone();
 		}
 		for (LangString c : comment) {
-			other.comment.add(c.clone());
+			other.comment.add(c.copy());
 		}
 	}
 

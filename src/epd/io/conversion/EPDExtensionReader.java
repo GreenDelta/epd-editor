@@ -7,7 +7,6 @@ import java.util.Objects;
 
 import epd.util.Strings;
 import org.openlca.ilcd.commons.Other;
-import org.openlca.ilcd.processes.Method;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.Processes;
 import org.slf4j.LoggerFactory;
@@ -47,7 +46,7 @@ class EPDExtensionReader {
 	}
 
 	private void readExtensions(EpdDataSet epd) {
-		epd.profile = process.otherAttributes.get(Vocab.PROFILE_ATTR);
+		epd.profile = process.getOtherAttributes().get(Vocab.PROFILE_ATTR);
 		readSubType(epd);
 		readPublicationDate(epd);
 		PublisherRef.read(epd);
@@ -56,9 +55,9 @@ class EPDExtensionReader {
 
 		// read the extensions that are stored under `dataSetInformation`
 		var info = Processes.getDataSetInfo(process);
-		if (info == null || info.other == null)
+		if (info == null || info.getOther() == null)
 			return;
-		Other other = info.other;
+		Other other = info.getOther();
 		List<Scenario> scenarios = ScenarioConverter.readScenarios(other);
 		epd.scenarios.addAll(scenarios);
 		List<ModuleEntry> modules = ModuleConverter.readModules(other, profile);
@@ -68,12 +67,10 @@ class EPDExtensionReader {
 	}
 
 	private void readSubType(EpdDataSet dataSet) {
-		if (process.modelling == null)
+		var method = Processes.getInventoryMethod(process);
+		if (method == null || method.getOther() == null)
 			return;
-		Method method = process.modelling.method;
-		if (method == null || method.other == null)
-			return;
-		var elem = Dom.getElement(method.other, "subType");
+		var elem = Dom.getElement(method.getOther(), "subType");
 		if (elem != null) {
 			dataSet.subType = SubType.fromLabel(elem.getTextContent());
 		}
@@ -81,9 +78,9 @@ class EPDExtensionReader {
 
 	private void readPublicationDate(EpdDataSet epd) {
 		var time = Processes.getTime(epd.process);
-		if (time == null || time.other == null)
+		if (time == null || time.getOther() == null)
 			return;
-		var elem = Dom.getElement(time.other, "publicationDateOfEPD");
+		var elem = Dom.getElement(time.getOther(), "publicationDateOfEPD");
 		if (elem == null)
 			return;
 		var text = elem.getTextContent();

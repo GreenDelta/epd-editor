@@ -21,86 +21,86 @@ class Cleanup {
 			return;
 
 		var info = Processes.getProcessInfo(epd.process);
-		if (info != null && isEmpty(info.time)) {
-			info.time = null;
+		if (info != null && isEmpty(info.getTime())) {
+			info.withTime(null);
 		}
-		if (info != null && isEmpty(info.geography)) {
-			info.geography = null;
+		if (info != null && isEmpty(info.getGeography())) {
+			info.withGeography(null);
 		}
-		if (info != null && isEmpty(info.technology)) {
-			info.technology = null;
+		if (info != null && isEmpty(info.getTechnology())) {
+			info.withTechnology(null);
 		}
 
 		var adminInfo = Processes.getAdminInfo(epd.process);
 
 		// bug #59, remove empty commissioner and goal types
-		if (adminInfo != null && adminInfo.commissionerAndGoal != null) {
-			var comGoal = adminInfo.commissionerAndGoal;
-			if (isEmpty(comGoal.other)) {
-				comGoal.other = null;
+		if (adminInfo != null && adminInfo.getCommissionerAndGoal() != null) {
+			var comGoal = adminInfo.getCommissionerAndGoal();
+			if (isEmpty(comGoal.getOther())) {
+				comGoal.withOther(null);
 			}
 			if (isEmpty(comGoal)) {
-				adminInfo.commissionerAndGoal = null;
+				adminInfo.withCommissionerAndGoal(null);
 			}
 		}
 
-		if (adminInfo != null && isEmpty(adminInfo.dataGenerator)) {
-			adminInfo.dataGenerator = null;
+		if (adminInfo != null && isEmpty(adminInfo.getDataGenerator())) {
+			adminInfo.withDataGenerator(null);
 		}
 	}
 
 	private static boolean isEmpty(CommissionerAndGoal comGoal) {
 		if (comGoal == null)
 			return true;
-		return comGoal.commissioners.isEmpty()
-					 && comGoal.intendedApplications.isEmpty()
-					 && comGoal.project.isEmpty()
-					 && isEmpty(comGoal.other);
+		return comGoal.getCommissioners().isEmpty()
+			&& comGoal.getIntendedApplications().isEmpty()
+			&& comGoal.getProject().isEmpty()
+			&& isEmpty(comGoal.getOther());
 	}
 
 	private static boolean isEmpty(Time time) {
 		if (time == null)
 			return true;
-		return time.description.isEmpty()
-					 && time.referenceYear == null
-					 && time.validUntil == null
-					 && isEmpty(time.other);
+		return time.getDescription().isEmpty()
+			&& time.getReferenceYear() == null
+			&& time.getValidUntil() == null
+			&& isEmpty(time.getOther());
 	}
 
 	private static boolean isEmpty(Geography geography) {
 		if (geography == null)
 			return true;
-		return isEmpty(geography.location)
-					 && geography.subLocations.isEmpty()
-					 && isEmpty(geography.other);
+		return isEmpty(geography.getLocation())
+			&& geography.getSubLocations().isEmpty()
+			&& isEmpty(geography.getOther());
 	}
 
 	private static boolean isEmpty(Technology technology) {
 		if (technology == null)
 			return true;
-		return technology.applicability.isEmpty()
-					 && technology.description.isEmpty()
-					 && technology.includedProcesses.isEmpty()
-					 && technology.pictogram == null
-					 && technology.pictures.isEmpty();
+		return technology.getApplicability().isEmpty()
+			&& technology.getDescription().isEmpty()
+			&& technology.getIncludedProcesses().isEmpty()
+			&& technology.getPictogram() == null
+			&& technology.getPictures().isEmpty();
 	}
 
 	private static boolean isEmpty(Location location) {
 		if (location == null)
 			return true;
-		return Strings.isNullOrEmpty(location.code)
-					 && location.description.isEmpty()
-					 && isEmpty(location.other);
+		return Strings.isNullOrEmpty(location.getCode())
+			&& location.getDescription().isEmpty()
+			&& isEmpty(location.getOther());
 	}
 
 	private static boolean isEmpty(DataGenerator generator) {
 		if (generator == null)
 			return true;
-		return generator.contacts.isEmpty()
-			&& isEmpty(generator.other);
+		return generator.getContacts().isEmpty()
+			&& isEmpty(generator.getOther());
 	}
 
 	private static boolean isEmpty(Other other) {
-		return other == null || other.any.isEmpty();
+		return other == null || other.getAny().isEmpty();
 	}
 }

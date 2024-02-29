@@ -20,7 +20,7 @@ class SafetyMarginsConverter {
 	static SafetyMargins read(Other other) {
 		if (other == null)
 			return null;
-		for (Object any : other.any) {
+		for (Object any : other.getAny()) {
 			if (!(any instanceof Element element))
 				continue;
 			if (!isValid(element))
@@ -71,7 +71,7 @@ class SafetyMarginsConverter {
 		if (m == null || (m.margins == null && m.description.isEmpty()))
 			return;
 		Element element = toElement(m, doc);
-		other.any.add(element);
+		other.withAny().add(element);
 	}
 
 	private static Element toElement(SafetyMargins margins, Document doc) {

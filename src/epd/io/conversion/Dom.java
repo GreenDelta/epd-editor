@@ -126,7 +126,7 @@ public final class Dom {
 	public static Element getChild(Other other, String name, String ns) {
 		if (other == null || name == null)
 			return null;
-		for (Object any : other.any) {
+		for (Object any : other.getAny()) {
 			if (!(any instanceof Element e))
 				continue;
 			if (matches(e, name, ns))
@@ -190,7 +190,7 @@ public final class Dom {
 	static Element getElement(Other extension, String tagName) {
 		if (extension == null || tagName == null)
 			return null;
-		for (var any : extension.any) {
+		for (var any : extension.getAny()) {
 			if (!(any instanceof Element e))
 				continue;
 			if (Objects.equals(tagName, e.getLocalName()))
@@ -206,24 +206,24 @@ public final class Dom {
 		if (extension == null || tagName == null)
 			return;
 		List<Element> matches = new ArrayList<>();
-		for (Object any : extension.any) {
+		for (Object any : extension.getAny()) {
 			if (!(any instanceof Element e))
 				continue;
 			if (Objects.equals(tagName, e.getLocalName()))
 				matches.add(e);
 		}
-		extension.any.removeAll(matches);
+		if (!matches.isEmpty()) {
+			extension.getAny().removeAll(matches);
+		}
 	}
 
 	/**
 	 * Returns true if the given extension element is null or empty.
 	 */
 	static boolean isEmpty(Other ext) {
-		if (ext == null || ext.any == null)
+		if (ext == null || ext.getAny().isEmpty())
 			return true;
-		if (ext.any.isEmpty())
-			return true;
-		for (Object o : ext.any) {
+		for (Object o : ext.getAny()) {
 			if (o != null)
 				return false;
 		}

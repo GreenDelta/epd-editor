@@ -84,13 +84,13 @@ public class QMetaData {
 			return null;
 		Modelling mod = Processes.getModelling(p);
 		if (mod != null) {
-			QMetaData qmeta = read(mod.other);
+			QMetaData qmeta = read(mod.getOther());
 			if (qmeta != null)
 				return qmeta;
 		}
 		AdminInfo adm = Processes.getAdminInfo(p);
 		if (adm != null) {
-			return read(adm.other);
+			return read(adm.getOther());
 		}
 		return null;
 	}
@@ -127,7 +127,7 @@ public class QMetaData {
 		Element root = Dom.getChild(other, "ILCD-SBE", Vocab.SBE_ILCD);
 		if (root == null) {
 			root = doc.createElementNS(Vocab.SBE_ILCD, "norreq:ILCD-SBE");
-			other.any.add(root);
+			other.withAny().add(root);
 		}
 
 		// remove the old content

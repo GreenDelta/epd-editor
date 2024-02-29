@@ -1,23 +1,22 @@
 package epd.model;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
+import epd.model.content.ContentDeclaration;
+import epd.model.qmeta.QMetaData;
+import org.openlca.ilcd.commons.Copyable;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.QuantitativeReferenceType;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.processes.Exchange;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.ProcessName;
-import org.openlca.ilcd.processes.QuantitativeReference;
 import org.openlca.ilcd.util.Processes;
 
-import epd.model.content.ContentDeclaration;
-import epd.model.qmeta.QMetaData;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
-public class EpdDataSet {
+public class EpdDataSet implements Copyable<EpdDataSet> {
 
 	public final Process process;
 	public String profile;
@@ -54,38 +53,38 @@ public class EpdDataSet {
 	}
 
 	public EpdDescriptor toDescriptor(String lang) {
-		EpdDescriptor d = new EpdDescriptor();
+		var d = new EpdDescriptor();
 		if (process == null)
 			return d;
-		d.refId = process.getUUID();
+		d.refId = Processes.getUUID(process);
 		ProcessName name = Processes.getProcessName(process);
 		if (name != null)
-			d.name = LangString.getFirst(name.name, lang, "en");
+			d.name = LangString.getFirst(name.getBaseName(), lang, "en");
 		return d;
 	}
 
 	@Override
-	public EpdDataSet clone() {
-		var clone = new EpdDataSet(process.clone());
+	public EpdDataSet copy() {
+		var clone = new EpdDataSet(process.copy());
 		clone.profile = profile;
 		clone.subType = subType;
 
 		if (publicationDate != null) {
 			clone.publicationDate = LocalDate.of(
-					publicationDate.getYear(),
-					publicationDate.getMonthValue(),
-					publicationDate.getDayOfMonth());
+				publicationDate.getYear(),
+				publicationDate.getMonthValue(),
+				publicationDate.getDayOfMonth());
 		}
 
 		clone.safetyMargins = safetyMargins != null
-				? safetyMargins.clone()
-				: null;
+			? safetyMargins.copy()
+			: null;
 		clone.contentDeclaration = contentDeclaration != null
-				? contentDeclaration.clone()
-				: null;
+			? contentDeclaration.clone()
+			: null;
 		clone.qMetaData = qMetaData != null
-				? qMetaData.clone()
-				: null;
+			? qMetaData.clone()
+			: null;
 
 		for (var result : results) {
 			clone.results.add(result.clone());
@@ -98,10 +97,10 @@ public class EpdDataSet {
 		}
 
 		for (var ref : publishers) {
-			clone.publishers.add(ref.clone());
+			clone.publishers.add(ref.copy());
 		}
 		for (var ref : originalEPDs) {
-			clone.originalEPDs.add(ref.clone());
+			clone.originalEPDs.add(ref.copy());
 		}
 
 		return clone;
@@ -113,20 +112,22 @@ public class EpdDataSet {
 	 * method is called.
 	 */
 	public Exchange productExchange() {
-		QuantitativeReference qRef = Processes
-				.forceQuantitativeReference(process);
-		qRef.type = QuantitativeReferenceType.REFERENCE_FLOWS;
-		if (qRef.referenceFlows.isEmpty())
-			qRef.referenceFlows.add(1);
-		int id = qRef.referenceFlows.get(0);
-		for (Exchange exchange : process.exchanges) {
-			if (id == exchange.id)
+		var qRef = process.withProcessInfo()
+			.withQuantitativeReference()
+			.withType(QuantitativeReferenceType.REFERENCE_FLOWS);
+		if (qRef.getReferenceFlows().isEmpty()) {
+			qRef.withReferenceFlows().add(1);
+		}
+		int id = qRef.getReferenceFlows().get(0);
+		for (var exchange : process.getExchanges()) {
+			if (id == exchange.getId())
 				return exchange;
 		}
-		Exchange e = Processes.createExchange(process);
-		e.meanAmount = 1d;
-		e.resultingAmount = 1d;
-		e.id = id;
+		var e = new Exchange()
+			.withId(id)
+			.withMeanAmount(1d)
+			.withResultingAmount(1d);
+		process.withExchanges().add(e);
 		return e;
 	}
 }

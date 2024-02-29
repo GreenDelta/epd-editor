@@ -21,7 +21,7 @@ class AmountConverter {
 		if (other == null)
 			return Collections.emptyList();
 		List<Amount> amounts = new ArrayList<>();
-		for (Object any : other.any) {
+		for (Object any : other.getAny()) {
 			if (!(any instanceof Element element)) {
 				continue;
 			}
@@ -77,7 +77,7 @@ class AmountConverter {
 			Element element = toElement(amount, doc);
 			if (element == null)
 				continue;
-			extension.any.add(element);
+			extension.withAny().add(element);
 		}
 	}
 

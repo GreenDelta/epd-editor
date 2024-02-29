@@ -45,11 +45,11 @@ class DataSetRefExtension {
 			return;
 		Element old = Dom.getElement(extension, tag);
 		if (old != null) {
-			extension.any.remove(old);
+			extension.getAny().remove(old);
 		}
 		if (ref == null)
 			return;
-		DataSetRefExtension ext = new DataSetRefExtension(tag, ref.type);
+		DataSetRefExtension ext = new DataSetRefExtension(tag, ref.getType());
 		ext.write(ref, extension);
 	}
 
@@ -77,7 +77,7 @@ class DataSetRefExtension {
 				type = "flow data set";
 				path = "flows";
 				break;
-			case LCIA_METHOD:
+			case IMPACT_METHOD:
 				type = "LCIA method data set";
 				path = "lciamethods";
 				break;
@@ -105,15 +105,15 @@ class DataSetRefExtension {
 		if (element == null)
 			return null;
 		try {
-			Ref ref = new Ref();
-			ref.type = type;
-			ref.uuid = element.getAttribute("refObjectId");
+			Ref ref = new Ref()
+					.withType(type)
+					.withUUID(element.getAttribute("refObjectId"));
 			Element nameElement = Dom.findChild(element,
 				"shortDescription");
 			if (nameElement != null) {
 				String lang = nameElement.getAttribute("xml:lang");
 				String val = nameElement.getTextContent();
-				LangString.set(ref.name, val, lang);
+				LangString.set(ref.withName(), val, lang);
 			}
 			return ref;
 		} catch (Exception e) {
@@ -128,11 +128,11 @@ class DataSetRefExtension {
 			return;
 		Element element = Dom.getElement(other, tagName);
 		if (element != null)
-			other.any.remove(element);
+			other.getAny().remove(element);
 		element = createElement(d);
 		if (element == null)
 			return;
-		other.any.add(element);
+		other.withAny().add(element);
 	}
 
 	private Element createElement(Ref d) {
@@ -141,9 +141,9 @@ class DataSetRefExtension {
 			return null;
 		Element e = doc.createElementNS(Vocab.NS_EPD, "epd:" + tagName);
 		e.setAttribute("type", type);
-		e.setAttribute("refObjectId", d.uuid);
-		e.setAttribute("uri", "../" + path + "/" + d.uuid);
-		for (LangString name : d.name) {
+		e.setAttribute("refObjectId", d.getUUID());
+		e.setAttribute("uri", "../" + path + "/" + d.getUUID());
+		for (LangString name : d.getName()) {
 			Element nameElem = doc.createElementNS(
 				"http://lca.jrc.it/ILCD/Common",
 				"common:shortDescription");

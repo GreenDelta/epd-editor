@@ -23,7 +23,7 @@ class ModuleConverter {
 	static List<ModuleEntry> readModules(Other other, EpdProfile profile) {
 		if (other == null)
 			return Collections.emptyList();
-		for (Object any : other.any) {
+		for (Object any : other.getAny()) {
 			if (!(any instanceof Element element))
 				continue;
 			if (!isValid(element))
@@ -42,7 +42,7 @@ class ModuleConverter {
 	}
 
 	private static List<ModuleEntry> fromElement(Element element,
-																							 EpdProfile profile) {
+		EpdProfile profile) {
 		List<ModuleEntry> modules = new ArrayList<>();
 		NodeList moduleList = element.getElementsByTagNameNS(
 			Vocab.NS_OLCA, "module");
@@ -61,8 +61,8 @@ class ModuleConverter {
 		return modules;
 	}
 
-	private static void setAttributeValue(ModuleEntry e,
-																				String attribute, String value, EpdProfile profile) {
+	private static void setAttributeValue(
+		ModuleEntry e, String attribute, String value, EpdProfile profile) {
 		switch (attribute) {
 			case "name":
 				e.module = profile.module(value);
@@ -83,7 +83,7 @@ class ModuleConverter {
 			if (element != null)
 				root.appendChild(element);
 		}
-		other.any.add(root);
+		other.withAny().add(root);
 	}
 
 	private static boolean shouldWriteEntries(EpdDataSet dataSet) {

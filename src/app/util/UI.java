@@ -29,6 +29,7 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.util.DataSets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,9 +49,10 @@ public class UI {
 				M.GeneralInformation, Tooltips.All_GeneralInformation);
 		Text text = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);
 		text.setEditable(false);
-		String uuid = ds != null ? ds.getUUID() : null;
-		if (uuid != null)
+		var uuid = DataSets.getUUID(ds);
+		if (uuid != null) {
 			text.setText(uuid);
+		}
 		return comp;
 	}
 

@@ -19,7 +19,7 @@ import org.openlca.ilcd.contacts.Contact;
 import org.openlca.ilcd.flowproperties.FlowProperty;
 import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.io.ZipStore;
-import org.openlca.ilcd.methods.LCIAMethod;
+import org.openlca.ilcd.methods.ImpactMethod;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.sources.Source;
 import org.openlca.ilcd.units.UnitGroup;
@@ -123,11 +123,11 @@ public class ZipImport implements IRunnableWithProgress {
 	private Class<?>[] classes() {
 		return new Class<?>[] { Contact.class, Source.class, UnitGroup.class,
 				FlowProperty.class, Flow.class,
-				LCIAMethod.class, Process.class };
+				ImpactMethod.class, Process.class };
 	}
 
 	private String getFileName(Ref ref) {
-		String n = ref.uuid;
+		String n = ref.getUUID();
 		// TODO: add version to XML file when we support multiple versions
 		// if (ref.version != null) {
 		// n += "_" + ref.version;

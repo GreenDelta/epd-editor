@@ -1,8 +1,10 @@
 package app.store;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,14 +35,16 @@ public final class CategorySystems {
 	}
 
 	public static List<CategorySystem> get() {
-		File dir = getDir();
-		List<CategorySystem> list = new ArrayList<>();
-		for (File file : dir.listFiles()) {
+		var list = new ArrayList<CategorySystem>();
+		var files = getDir().listFiles();
+		if (files == null)
+			return list;
+		for (var file : files) {
 			try {
 				var system = JAXB.unmarshal(file, CategorySystem.class);
 				list.add(system);
 			} catch (Exception e) {
-				Logger log = LoggerFactory.getLogger(CategorySystems.class);
+				var log = LoggerFactory.getLogger(CategorySystems.class);
 				log.error("failed to parse category file " + file, e);
 			}
 		}
@@ -50,7 +54,7 @@ public final class CategorySystems {
 	public static void put(CategorySystem system) {
 		if (system == null)
 			return;
-		String name = system.name;
+		String name = system.getName();
 		if (Strings.isNullOrEmpty(name))
 			name = "unknown";
 		try {
@@ -64,11 +68,16 @@ public final class CategorySystems {
 	}
 
 	private static File getDir() {
-		File rootDir = App.store().getRootFolder();
-		File dir = new File(rootDir, "classifications");
-		if (!dir.exists())
-			dir.mkdirs();
+		var rootDir = App.store().getRootFolder();
+		var dir = new File(rootDir, "classifications");
+		if (!dir.exists()) {
+			try {
+				Files.createDirectories(dir.toPath());
+			} catch (IOException e) {
+				LoggerFactory.getLogger(CategorySystems.class)
+					.error("failed to create classifications folder", e);
+			}
+		}
 		return dir;
 	}
-
 }

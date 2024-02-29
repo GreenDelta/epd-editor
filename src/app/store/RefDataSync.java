@@ -12,7 +12,7 @@ import org.openlca.ilcd.flowproperties.FlowProperty;
 import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.io.SodaClient;
 import org.openlca.ilcd.io.SodaConnection;
-import org.openlca.ilcd.methods.LCIAMethod;
+import org.openlca.ilcd.methods.ImpactMethod;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.sources.Source;
 import org.openlca.ilcd.units.UnitGroup;
@@ -74,7 +74,7 @@ public class RefDataSync implements Runnable {
 
 	@SuppressWarnings("unchecked")
 	private void doSync(SodaConnection con) {
-		try (var client = new SodaClient(con)) {
+		try (var client = SodaClient.of(con)) {
 			log.info("Connected to {} (datastock={})", con.url,
 					con.dataStockId);
 			Class<?>[] types = new Class<?>[] {
@@ -84,11 +84,11 @@ public class RefDataSync implements Runnable {
 					FlowProperty.class,
 					Flow.class,
 					Process.class,
-					LCIAMethod.class,
+					ImpactMethod.class,
 			};
 			for (Class<?> type : types) {
 				log.info("Fetch descriptors for type {}", type);
-				List<Descriptor> descriptors = client.getDescriptors(type);
+				var descriptors = client.getDescriptors(type);
 				log.info("Fetch {} descriptors", descriptors.size());
 				sync(client, (Class<? extends IDataSet>) type, descriptors);
 			}
@@ -100,8 +100,8 @@ public class RefDataSync implements Runnable {
 	}
 
 	private void sync(SodaClient client, Class<? extends IDataSet> type,
-			List<Descriptor> descriptors) {
-		for (Descriptor d : descriptors) {
+			List<Descriptor<?>> descriptors) {
+		for (var d : descriptors) {
 			Ref newRef = d.toRef();
 			Ref oldRef = App.index().find(newRef);
 			if (!shouldDownload(newRef, oldRef)) {
@@ -109,7 +109,7 @@ public class RefDataSync implements Runnable {
 				continue;
 			}
 			try {
-				var ds = client.get(type, newRef.uuid);
+				var ds = client.get(type, newRef.getUUID());
 				if (ds == null) {
 					stats.add(RefStatus.error(newRef,
 							"The downloaded thing was not a data set"));
@@ -131,8 +131,8 @@ public class RefDataSync implements Runnable {
 			return false;
 		if (oldRef == null)
 			return true;
-		Version newV = Version.fromString(newRef.version);
-		Version oldV = Version.fromString(oldRef.version);
+		Version newV = Version.fromString(newRef.getVersion());
+		Version oldV = Version.fromString(oldRef.getVersion());
 		if (newV.getMajor() != oldV.getMajor())
 			return newV.getMajor() > oldV.getMajor();
 		if (newV.getMinor() != oldV.getMinor())

@@ -32,7 +32,7 @@ public final class Locations {
 			LocationList list = getList(file);
 			if (list == null)
 				continue;
-			set.addAll(list.locations);
+			set.addAll(list.getLocations());
 		}
 		return set;
 	}

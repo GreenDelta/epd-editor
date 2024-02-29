@@ -13,7 +13,7 @@ import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.contacts.Contact;
 import org.openlca.ilcd.flowproperties.FlowProperty;
 import org.openlca.ilcd.flows.Flow;
-import org.openlca.ilcd.methods.LCIAMethod;
+import org.openlca.ilcd.methods.ImpactMethod;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.sources.Source;
 import org.openlca.ilcd.units.UnitGroup;
@@ -55,7 +55,7 @@ public class IndexBuilder implements IRunnableWithProgress {
 
 	private List<File> folders() {
 		Class<?>[] classes = new Class<?>[]{
-			LCIAMethod.class,
+			ImpactMethod.class,
 			Process.class,
 			Flow.class,
 			FlowProperty.class,

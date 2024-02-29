@@ -67,15 +67,15 @@ public class ValidationDialog extends Wizard {
 		if (ref == null)
 			return;
 		allRefs.add(ref);
-		if (ref.type != DataSetType.PROCESS)
+		if (ref.getType() != DataSetType.PROCESS)
 			return;
 		Process p = RefDeps.load(Process.class, ref);
 		if (p == null)
 			return;
 		Exchange e = RefDeps.getRefExchange(p);
-		if (e == null || e.flow == null)
+		if (e == null || e.getFlow() == null)
 			return;
-		allRefs.add(e.flow);
+		allRefs.add(e.getFlow());
 	}
 
 	@Override
@@ -107,7 +107,7 @@ public class ValidationDialog extends Wizard {
 
 		private Page() {
 			super("ValidationDialogPage",
-				M.ValidateDataSet + ": " + App.header(ref.name, 50), null);
+				M.ValidateDataSet + ": " + App.header(ref.getName(), 50), null);
 			setPageComplete(true);
 		}
 
@@ -154,7 +154,7 @@ public class ValidationDialog extends Wizard {
 						.filter(r -> !EpdProfiles.isProfileRef(r))
 						.forEach(ds -> {
 							Ref next = Ref.of(ds);
-							monitor.subTask(App.header(next.name, 75));
+							monitor.subTask(App.header(next.getName(), 75));
 							allRefs.add(next);
 							ExtensionRefs.of(ds)
 								.stream()

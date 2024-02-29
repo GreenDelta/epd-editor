@@ -1,12 +1,15 @@
 package app.store;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.util.RefTree;
 
 import app.App;
+import org.slf4j.LoggerFactory;
 
 /**
  * Manages the access to cached dependency trees. These trees can be used to
@@ -38,7 +41,12 @@ public final class RefTrees {
 			return;
 		File f = cacheFile(ref);
 		if (f.exists()) {
-			f.delete();
+			try {
+				Files.delete(f.toPath());
+			} catch (IOException e) {
+				LoggerFactory.getLogger(RefTrees.class)
+					.error("failed to delete file " + f, e);
+			}
 		}
 	}
 
@@ -60,13 +68,13 @@ public final class RefTrees {
 	private static File cacheFile(Ref ref) {
 		File dir = new File(
 				App.workspaceFolder(),
-				"cache/refs/" + ref.type.name());
+				"cache/refs/" + ref.getType().name());
 		if (!dir.exists()) {
 			dir.mkdirs();
 		}
 		// we should always cache the current version only
 		// String v = Version.fromString(ref.version).toString();
-		return new File(dir, ref.uuid + ".json");
+		return new File(dir, ref.getUUID() + ".json");
 	}
 
 }

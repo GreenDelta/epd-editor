@@ -45,8 +45,7 @@ class DataStockLink {
 	}
 
 	private void fetchStocks(List<DataStock> list, String[] error) {
-		try (SodaClient client = SodaClient.of(con)) {
-			client.connect();
+		try (var client = SodaClient.of(con)) {
 			list.addAll(client.getDataStockList().getDataStocks());
 		} catch (Exception ex) {
 			error[0] = ex.getMessage();

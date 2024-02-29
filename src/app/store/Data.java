@@ -1,26 +1,5 @@
 package app.store;
 
-import java.util.function.Consumer;
-
-import org.openlca.ilcd.commons.IDataSet;
-import org.openlca.ilcd.commons.Ref;
-import org.openlca.ilcd.contacts.Contact;
-import org.openlca.ilcd.flowproperties.FlowProperty;
-import org.openlca.ilcd.flows.Flow;
-import org.openlca.ilcd.methods.LCIAMethod;
-import org.openlca.ilcd.processes.Process;
-import org.openlca.ilcd.sources.Source;
-import org.openlca.ilcd.units.UnitGroup;
-import org.openlca.ilcd.util.Contacts;
-import org.openlca.ilcd.util.FlowProperties;
-import org.openlca.ilcd.util.Flows;
-import org.openlca.ilcd.util.Methods;
-import org.openlca.ilcd.util.Processes;
-import org.openlca.ilcd.util.Sources;
-import org.openlca.ilcd.util.UnitGroups;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import app.App;
 import app.navi.NaviSync;
 import epd.io.conversion.Extensions;
@@ -30,6 +9,19 @@ import epd.model.EpdProduct;
 import epd.model.EpdProfile;
 import epd.model.Version;
 import epd.model.Xml;
+import org.openlca.ilcd.commons.IDataSet;
+import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.contacts.Contact;
+import org.openlca.ilcd.flowproperties.FlowProperty;
+import org.openlca.ilcd.flows.Flow;
+import org.openlca.ilcd.methods.ImpactMethod;
+import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.sources.Source;
+import org.openlca.ilcd.units.UnitGroup;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.function.Consumer;
 
 public final class Data {
 
@@ -38,7 +30,7 @@ public final class Data {
 
 	public static EpdDataSet getEPD(Ref ref) {
 		try {
-			Process process = App.store().get(Process.class, ref.uuid);
+			Process process = App.store().get(Process.class, ref.getUUID());
 			EpdProfile profile = EpdProfiles.get(process);
 			return Extensions.read(process, profile);
 		} catch (Exception e) {
@@ -98,7 +90,7 @@ public final class Data {
 			return;
 		try {
 			var workspace = App.getWorkspace();
-			workspace.store.delete(ref.getDataSetClass(), ref.uuid);
+			workspace.store.delete(ref.getDataSetClass(), ref.getUUID());
 			workspace.index().remove(ref);
 			workspace.saveIndex();
 			new NaviSync(workspace.index()).run();
@@ -113,7 +105,7 @@ public final class Data {
 			return null;
 		try {
 			var store = App.getWorkspace().store;
-			return store.get(ref.getDataSetClass(), ref.uuid);
+			return store.get(ref.getDataSetClass(), ref.getUUID());
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Data.class);
 			log.error("failed to load data set " + ref, e);
@@ -128,64 +120,87 @@ public final class Data {
 	}
 
 	public static void updateVersion(IDataSet ds) {
-		if (ds instanceof Process p) {
-			with(Processes.forcePublication(p), pub -> {
-				pub.version = Version.fromString(pub.version)
-						.incUpdate().toString();
-			});
-			Processes.forceDataEntry(p).timeStamp = Xml.now();
+		if (ds instanceof Process x) {
+			var pub = x.withAdminInfo().withPublication();
+			var v = Version.fromString(pub.getVersion())
+				.incUpdate()
+				.toString();
+			pub.withVersion(v);
+			x.withAdminInfo()
+				.withDataEntry()
+				.withTimeStamp(Xml.now());
 		}
 
-		if (ds instanceof Flow f) {
-			with(Flows.publication(f), pub -> {
-				pub.version = Version.fromString(pub.version)
-						.incUpdate().toString();
-			});
-			Flows.dataEntry(f).timeStamp = Xml.now();
+		if (ds instanceof Flow x) {
+			var pub = x.withAdminInfo().withPublication();
+			var v = Version.fromString(pub.getVersion())
+				.incUpdate()
+				.toString();
+			pub.withVersion(v);
+			x.withAdminInfo()
+				.withDataEntry()
+				.withTimeStamp(Xml.now());
 		}
 
-		if (ds instanceof FlowProperty fp) {
-			with(FlowProperties.publication(fp), pub -> {
-				pub.version = Version.fromString(pub.version)
-						.incUpdate().toString();
-			});
-			FlowProperties.dataEntry(fp).timeStamp = Xml.now();
+		if (ds instanceof FlowProperty x) {
+			var pub = x.withAdminInfo().withPublication();
+			var v = Version.fromString(pub.getVersion())
+				.incUpdate()
+				.toString();
+			pub.withVersion(v);
+			x.withAdminInfo()
+				.withDataEntry()
+				.withTimeStamp(Xml.now());
 		}
 
-		if (ds instanceof UnitGroup ug) {
-			with(UnitGroups.publication(ug), pub -> {
-				pub.version = Version.fromString(pub.version)
-						.incUpdate().toString();
-			});
-			UnitGroups.dataEntry(ug).timeStamp = Xml.now();
+		if (ds instanceof UnitGroup x) {
+			var pub = x.withAdminInfo().withPublication();
+			var v = Version.fromString(pub.getVersion())
+				.incUpdate()
+				.toString();
+			pub.withVersion(v);
+			x.withAdminInfo()
+				.withDataEntry()
+				.withTimeStamp(Xml.now());
 		}
 
-		if (ds instanceof Contact c) {
-			with(Contacts.publication(c), pub -> {
-				pub.version = Version.fromString(pub.version)
-						.incUpdate().toString();
-			});
-			Contacts.dataEntry(c).timeStamp = Xml.now();
+		if (ds instanceof Contact x) {
+			var pub = x.withAdminInfo().withPublication();
+			var v = Version.fromString(pub.getVersion())
+				.incUpdate()
+				.toString();
+			pub.withVersion(v);
+			x.withAdminInfo()
+				.withDataEntry()
+				.withTimeStamp(Xml.now());
 		}
 
-		if (ds instanceof Source s) {
-			with(Sources.publication(s), pub -> {
-				pub.version = Version.fromString(pub.version)
-						.incUpdate().toString();
-			});
-			Sources.dataEntry(s).timeStamp = Xml.now();
+		if (ds instanceof Source x) {
+			var pub = x.withAdminInfo().withPublication();
+			var v = Version.fromString(pub.getVersion())
+				.incUpdate()
+				.toString();
+			pub.withVersion(v);
+			x.withAdminInfo()
+				.withDataEntry()
+				.withTimeStamp(Xml.now());
 		}
 
-		if (ds instanceof LCIAMethod l) {
-			with(Methods.forcePublication(l), pub -> {
-				pub.version = Version.fromString(pub.version)
-						.incUpdate().toString();
-			});
-			Methods.forceDataEntry(l).timeStamp = Xml.now();
+		if (ds instanceof ImpactMethod x) {
+			var pub = x.withAdminInfo().withPublication();
+			var v = Version.fromString(pub.getVersion())
+				.incUpdate()
+				.toString();
+			pub.withVersion(v);
+			x.withAdminInfo()
+				.withDataEntry()
+				.withTimeStamp(Xml.now());
 		}
 	}
 
-	/** Just a trick to avoid type declarations. */
+	/**
+	 * Just a trick to avoid type declarations.
+	 */
 	private static <T> void with(T obj, Consumer<T> fn) {
 		if (obj != null) {
 			fn.accept(obj);

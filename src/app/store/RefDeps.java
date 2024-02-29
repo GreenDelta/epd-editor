@@ -7,7 +7,6 @@ import org.openlca.ilcd.flowproperties.FlowProperty;
 import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.processes.Exchange;
 import org.openlca.ilcd.processes.Process;
-import org.openlca.ilcd.processes.QuantitativeReference;
 import org.openlca.ilcd.units.Unit;
 import org.openlca.ilcd.units.UnitGroup;
 import org.openlca.ilcd.util.FlowProperties;
@@ -20,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Objects;
 
 /**
- * An utility class for loading references and dependencies. from the local data
+ * A utility class for loading references and dependencies. from the local data
  * store.
  */
 public class RefDeps {
@@ -31,7 +30,7 @@ public class RefDeps {
 	public static String getRefUnit(Ref ref) {
 		if (ref == null || !ref.isValid())
 			return "";
-		return switch (ref.type) {
+		return switch (ref.getType()) {
 			case FLOW -> getRefUnit(load(Flow.class, ref));
 			case FLOW_PROPERTY -> getRefUnit(load(FlowProperty.class, ref));
 			case PROCESS -> getRefUnit(load(Process.class, ref));
@@ -42,7 +41,7 @@ public class RefDeps {
 
 	public static <T extends IDataSet> T load(Class<T> type, Ref ref) {
 		try {
-			return App.store().get(type, ref.uuid);
+			return App.store().get(type, ref.getUUID());
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(RefDeps.class);
 			log.error("failed load data set " + ref, e);
@@ -54,15 +53,17 @@ public class RefDeps {
 		if (p == null)
 			return "";
 		Exchange e = getRefExchange(p);
-		return getRefUnit(e.flow);
+		return e != null
+			? getRefUnit(e.getFlow())
+			: "";
 	}
 
 	public static Exchange getRefExchange(Process p) {
-		QuantitativeReference qRef = Processes.getQuantitativeReference(p);
+		var qRef = Processes.getQuantitativeReference(p);
 		if (qRef == null)
 			return null;
-		for (Exchange e : p.exchanges) {
-			if (qRef.referenceFlows.contains(e.id))
+		for (Exchange e : p.getExchanges()) {
+			if (qRef.getReferenceFlows().contains(e.getId()))
 				return e;
 		}
 		return null;
@@ -79,11 +80,12 @@ public class RefDeps {
 		if (flow == null)
 			return null;
 		var qRef = Flows.getQuantitativeReference(flow);
-		if (qRef == null || qRef.referenceFlowProperty == null)
+		if (qRef == null || qRef.getReferenceFlowProperty() == null)
 			return null;
 		for (var propRef : Flows.getFlowProperties(flow)) {
-			if (Objects.equals(propRef.dataSetInternalID, qRef.referenceFlowProperty))
-				return propRef.flowProperty;
+			if (Objects.equals(
+				propRef.getDataSetInternalID(), qRef.getReferenceFlowProperty()))
+				return propRef.getFlowProperty();
 		}
 		return null;
 	}
@@ -97,7 +99,7 @@ public class RefDeps {
 
 	public static String getRefUnit(UnitGroup group) {
 		Unit unit = UnitGroups.getReferenceUnit(group);
-		return unit == null ? "" : unit.name;
+		return unit == null ? "" : unit.getName();
 	}
 
 }

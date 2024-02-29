@@ -102,7 +102,7 @@ public class CategorySection {
 
 		private String getPath(Classification classification) {
 			List<Category> classes = classification.getCategories();
-			classification.getCategories().sort(Comparator.comparingInt(c -> c.getLevel()));
+			classes.sort(Comparator.comparingInt(Category::getLevel));
 			StringBuilder path = new StringBuilder();
 			for (int i = 0; i < classes.size(); i++) {
 				Category clazz = classes.get(i);

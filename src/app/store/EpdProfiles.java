@@ -14,10 +14,11 @@ import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.flows.FlowName;
-import org.openlca.ilcd.methods.LCIAMethod;
+import org.openlca.ilcd.methods.ImpactMethod;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.units.UnitGroup;
 import org.openlca.ilcd.util.Flows;
+import org.openlca.ilcd.util.ImpactMethods;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -114,7 +115,7 @@ public final class EpdProfiles {
 	public static EpdProfile get(Process p) {
 		if (p == null)
 			return getDefault();
-		String profileID = p.otherAttributes.get(Vocab.PROFILE_ATTR);
+		String profileID = p.getOtherAttributes().get(Vocab.PROFILE_ATTR);
 		EpdProfile profile = EpdProfiles.get(profileID);
 		return profile != null ? profile : getDefault();
 	}
@@ -227,12 +228,12 @@ public final class EpdProfiles {
 	}
 
 	private static RefStatus syncMethod(Indicator i) {
-		LCIAMethod m = App.store().get(LCIAMethod.class, i.uuid);
+		var m = App.store().get(ImpactMethod.class, i.uuid);
 		if (m == null) {
 			return RefStatus.error(i.getRef(App.lang()),
 				"Not found in local store");
 		} else {
-			i.name = App.s(m.getName());
+			i.name = App.s(ImpactMethods.getName(m));
 			return RefStatus.info(i.getRef(App.lang()), "Updated");
 		}
 	}
@@ -245,7 +246,7 @@ public final class EpdProfiles {
 		} else {
 			FlowName flowName = Flows.getFlowName(flow);
 			if (flowName != null) {
-				i.name = App.s(flowName.baseName);
+				i.name = App.s(flowName.getBaseName());
 			}
 			return RefStatus.info(i.getRef(App.lang()), "Updated");
 		}
@@ -341,22 +342,22 @@ public final class EpdProfiles {
 	 * rules regarding upload, validation, etc. apply.
 	 */
 	public static boolean isProfileRef(Ref ref) {
-		if (ref == null || ref.uuid == null)
+		if (ref == null || ref.getUUID() == null)
 			return false;
 		var checkIndicator =
-			ref.type == DataSetType.LCIA_METHOD
-				|| ref.type == DataSetType.FLOW;
-		var checkUnit = ref.type == DataSetType.UNIT_GROUP;
+			ref.getType() == DataSetType.IMPACT_METHOD
+				|| ref.getType() == DataSetType.FLOW;
+		var checkUnit = ref.getType() == DataSetType.UNIT_GROUP;
 		if (!checkIndicator && !checkUnit)
 			return false;
 
 		for (var profile : getAll()) {
 			for (var indicator : profile.indicators) {
 				if (checkIndicator
-					&& Strings.nullOrEqual(indicator.uuid, ref.uuid))
+					&& Strings.nullOrEqual(indicator.uuid, ref.getUUID()))
 					return true;
 				if (checkUnit
-					&& Strings.nullOrEqual(indicator.unitGroupUUID, ref.uuid))
+					&& Strings.nullOrEqual(indicator.unitGroupUUID, ref.getUUID()))
 					return true;
 			}
 		}

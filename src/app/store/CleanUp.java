@@ -11,7 +11,7 @@ import org.openlca.ilcd.contacts.Contact;
 import org.openlca.ilcd.flowproperties.FlowProperty;
 import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.io.FileStore;
-import org.openlca.ilcd.methods.LCIAMethod;
+import org.openlca.ilcd.methods.ImpactMethod;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.sources.Source;
 import org.openlca.ilcd.units.UnitGroup;
@@ -35,12 +35,15 @@ public class CleanUp implements IRunnableWithProgress {
 
 	@Override
 	public void run(IProgressMonitor monitor)
-			throws InvocationTargetException, InterruptedException {
+		throws InvocationTargetException, InterruptedException {
 		try {
-			monitor.beginTask("#Delete data sets", totalWork() + 1);
+			monitor.beginTask("Delete data sets", totalWork() + 1);
 			for (File dir : folders()) {
+				var files = dir.listFiles();
+				if (files == null)
+					continue;
 				monitor.subTask(dir.getName());
-				for (File f : dir.listFiles()) {
+				for (File f : files) {
 					if (monitor.isCanceled())
 						break;
 					if (f.delete()) {
@@ -62,7 +65,10 @@ public class CleanUp implements IRunnableWithProgress {
 	private int totalWork() {
 		int total = 0;
 		for (File dir : folders()) {
-			total += dir.list().length;
+			var files = dir.listFiles();
+			if (files != null) {
+				total += files.length;
+			}
 		}
 		return total;
 	}
@@ -82,10 +88,14 @@ public class CleanUp implements IRunnableWithProgress {
 	}
 
 	private Class<?>[] classes() {
-		return new Class<?>[] {
-				LCIAMethod.class, Process.class, Flow.class,
-				FlowProperty.class, UnitGroup.class,
-				Contact.class, Source.class
+		return new Class<?>[]{
+			ImpactMethod.class,
+			Process.class,
+			Flow.class,
+			FlowProperty.class,
+			UnitGroup.class,
+			Contact.class,
+			Source.class
 		};
 	}
 

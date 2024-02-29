@@ -1,7 +1,6 @@
 package app.store.validation;
 
 import app.App;
-import com.okworx.ilcd.validation.common.DatasetType;
 import com.okworx.ilcd.validation.events.IValidationEvent;
 import com.okworx.ilcd.validation.events.Severity;
 import com.okworx.ilcd.validation.reference.IDatasetReference;
@@ -17,15 +16,16 @@ final class Event {
 	}
 
 	static RefStatus toStatus(IValidationEvent e) {
-		if (e == null)
+		if (e == null || e.getReference() == null)
 			return null;
-		IDatasetReference iRef = e.getReference();
-		Ref ref = new Ref();
-		LangString.set(ref.name, iRef.getName(), App.lang());
-		ref.type = type(iRef.getType());
-		ref.uri = iRef.getUri();
-		ref.uuid = iRef.getUuid();
-		ref.version = iRef.getVersion();
+		var iRef = e.getReference();
+		var ref = new Ref()
+			.withType(typeOf(iRef))
+			.withUUID(iRef.getUuid())
+			.withVersion(iRef.getVersion())
+			.withUri(iRef.getUri());
+		LangString.set(ref.withName(), iRef.getName(), App.lang());
+
 		return new RefStatus(statusValue(e.getSeverity()),
 			ref, e.getAspect()
 			+ (StringUtils.isNotBlank(e.getAspectDescription())
@@ -45,19 +45,19 @@ final class Event {
 		};
 	}
 
-	private static DataSetType type(DatasetType iType) {
-		if (iType == null)
+	private static DataSetType typeOf(IDatasetReference iRef) {
+		if (iRef == null || iRef.getType() == null)
 			return null;
-		return switch (iType) {
+		return switch (iRef.getType()) {
 			case CONTACT -> DataSetType.CONTACT;
 			case EXTERNAL_FILE -> DataSetType.EXTERNAL_FILE;
 			case FLOW -> DataSetType.FLOW;
 			case FLOWPROPERTY -> DataSetType.FLOW_PROPERTY;
-			case LCIAMETHOD -> DataSetType.LCIA_METHOD;
+			case LCIAMETHOD -> DataSetType.IMPACT_METHOD;
 			case PROCESS -> DataSetType.PROCESS;
 			case SOURCE -> DataSetType.SOURCE;
 			case UNITGROUP -> DataSetType.UNIT_GROUP;
-			default -> null;
+			case LCMODEL -> DataSetType.MODEL;
 		};
 	}
 

@@ -13,7 +13,7 @@ class TableLabel extends LabelProvider implements ITableLabelProvider {
 
 	@Override
 	public Image getColumnImage(Object obj, int col) {
-		if (!(obj instanceof Descriptor d))
+		if (!(obj instanceof Descriptor<?> d))
 			return null;
 		if (col != 0)
 			return null;
@@ -22,7 +22,7 @@ class TableLabel extends LabelProvider implements ITableLabelProvider {
 
 	@Override
 	public String getColumnText(Object obj, int col) {
-		if (!(obj instanceof Descriptor d))
+		if (!(obj instanceof Descriptor<?> d))
 			return null;
 		return switch (col) {
 			case 0 -> LangString.getFirst(d.getName(), App.lang());

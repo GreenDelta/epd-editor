@@ -40,7 +40,7 @@ class ContactPage extends FormPage {
 	@Override
 	protected void createFormContent(IManagedForm mform) {
 		Supplier<String> title = () -> M.Contact + ": "
-				+ App.s(contact.getName());
+				+ App.s(Contacts.getName(contact));
 		ScrolledForm form = UI.formHeader(mform, title.get());
 		editor.onSaved(() -> form.setText(title.get()));
 		tk = mform.getToolkit();

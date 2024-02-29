@@ -40,7 +40,7 @@ public class Validation implements IRunnableWithProgress {
 			if (f == null || !f.exists()) {
 				RefStatus message = RefStatus.error(ref,
 						"#Invalid reference");
-				messages.put(ref.uuid,
+				messages.put(ref.getUUID(),
 						Collections.singletonList(message));
 				continue;
 			}
@@ -62,9 +62,9 @@ public class Validation implements IRunnableWithProgress {
 	}
 
 	private void add(RefStatus m) {
-		if (m.ref == null || m.ref.uuid == null)
+		if (m.ref == null || m.ref.getUUID() == null)
 			return;
-		messages.computeIfAbsent(m.ref.uuid, k -> new ArrayList<>())
+		messages.computeIfAbsent(m.ref.getUUID(), k -> new ArrayList<>())
 			.add(m);
 	}
 

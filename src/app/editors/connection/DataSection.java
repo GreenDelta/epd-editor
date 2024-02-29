@@ -23,7 +23,6 @@ import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.contacts.Contact;
 import org.openlca.ilcd.descriptors.Descriptor;
-import org.openlca.ilcd.descriptors.DescriptorList;
 import org.openlca.ilcd.flowproperties.FlowProperty;
 import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.io.SodaClient;
@@ -76,11 +75,10 @@ class DataSection {
 		if (clazz == null)
 			return;
 		String[] error = new String[1];
-		List<Descriptor> result = new ArrayList<>();
+		var result = new ArrayList<Descriptor<?>>();
 		App.run(M.SearchOnline, () -> {
-			try (SodaClient client = SodaClient.of(con)) {
-				client.connect();
-				DescriptorList list = client.search(clazz, name);
+			try (var client = SodaClient.of(con)) {
+				var list = client.search(clazz, name);
 				result.addAll(list.getDescriptors());
 			} catch (Exception e) {
 				error[0] = e.getMessage();
@@ -110,7 +108,7 @@ class DataSection {
 
 	private void bindDownload() {
 		Action action = Actions.create(M.Download, Icon.DOWNLOAD.des(), () -> {
-			List<Descriptor> selected = Viewers.getAllSelected(table);
+			List<Descriptor<?>> selected = Viewers.getAllSelected(table);
 			if (selected.isEmpty())
 				return;
 			List<Ref> refs = selected.stream()

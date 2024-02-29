@@ -24,7 +24,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.io.ZipStore;
 import org.openlca.ilcd.processes.Exchange;
@@ -37,7 +36,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -80,15 +78,15 @@ public class ExportDialog extends Wizard {
 		if (ref == null)
 			return;
 		all.add(ref);
-		if (ref.type != DataSetType.PROCESS)
+		if (ref.getType() != DataSetType.PROCESS)
 			return;
 		Process p = RefDeps.load(Process.class, ref);
 		if (p == null)
 			return;
 		Exchange e = RefDeps.getRefExchange(p);
-		if (e == null || e.flow == null)
+		if (e == null || e.getFlow() == null)
 			return;
-		all.add(e.flow);
+		all.add(e.getFlow());
 	}
 
 	@Override
@@ -130,7 +128,7 @@ public class ExportDialog extends Wizard {
 
 		private Page() {
 			super("ValidationDialogPage", M.ValidateDataSet + ": " +
-				App.header(ref.name, 50), null);
+				App.header(ref.getName(), 50), null);
 			setPageComplete(true);
 		}
 
@@ -151,7 +149,7 @@ public class ExportDialog extends Wizard {
 			Button browseButn = new Button(browseComp, SWT.NONE);
 			browseButn.setText("Browse");
 			Controls.onSelect(browseButn, e -> {
-				String name = App.s(ref.name).replaceAll("\\W", "_");
+				String name = App.s(ref.getName()).replaceAll("\\W", "_");
 				if (Strings.isNullOrEmpty(name)) {
 					name = "dataset";
 				}
@@ -192,7 +190,7 @@ public class ExportDialog extends Wizard {
 					DependencyTraversal.of(App.store(), ref)
 						.forEach(ds -> {
 							Ref next = Ref.of(ds);
-							monitor.subTask(App.header(next.name, 75));
+							monitor.subTask(App.header(next.getName(), 75));
 							all.add(next);
 							all.addAll(ExtensionRefs.of(ds));
 						});
@@ -215,19 +213,17 @@ public class ExportDialog extends Wizard {
 		}
 
 		@Override
-		public void run(IProgressMonitor monitor)
-			throws InvocationTargetException, InterruptedException {
+		public void run(IProgressMonitor monitor) {
 			monitor.beginTask(M.Export, all.size() + 1);
 
 			Set<String> handled = new HashSet<>();
 			for (Ref ref : all) {
 				monitor.worked(1);
-				if (ref.uuid == null || handled.contains(ref.uuid))
+				if (ref.getUUID() == null || handled.contains(ref.getUUID()))
 					continue;
-				handled.add(ref.uuid);
+				handled.add(ref.getUUID());
 
-				IDataSet ds = App.store().get(
-					ref.getDataSetClass(), ref.uuid);
+				var ds = App.store().get(ref.getDataSetClass(), ref.getUUID());
 				if (ds == null)
 					continue;
 				if (!(ds instanceof Source source)) {

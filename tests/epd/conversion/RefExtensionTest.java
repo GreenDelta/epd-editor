@@ -23,7 +23,7 @@ public class RefExtensionTest {
 	public void testPublisherRefs() {
 		var epd = new EpdDataSet();
 		var id = UUID.randomUUID().toString();
-		Processes.forceDataSetInfo(epd.process).uuid = id;
+		Processes.withUUID(epd.process, id);
 		epd.publishers.addAll(makeRefs(DataSetType.CONTACT));
 		Extensions.write(epd);
 		Tests.withStore(store -> {
@@ -39,7 +39,7 @@ public class RefExtensionTest {
 	public void testOriginalEPDRefs() {
 		var epd = new EpdDataSet();
 		var id = UUID.randomUUID().toString();
-		Processes.forceDataSetInfo(epd.process).uuid = id;
+		Processes.withUUID(epd.process, id);
 		epd.originalEPDs.addAll(makeRefs(DataSetType.SOURCE));
 		Extensions.write(epd);
 		Tests.withStore(store -> {
@@ -54,20 +54,21 @@ public class RefExtensionTest {
 	private void checkRefs(List<Ref> refs, DataSetType type) {
 		assertEquals(10, refs.size());
 		for (var r : refs) {
-			assertTrue(r.name.get(0).value.startsWith("test ref"));
-			assertEquals(type, r.type);
+			assertTrue(r.getName().get(0).value.startsWith("test ref"));
+			assertEquals(type, r.getType());
 		}
 	}
 
 	private ArrayList<Ref> makeRefs(DataSetType type) {
 		var refs = new ArrayList<Ref>();
 		for (int i = 0; i < 10; i++) {
-			var ref = new Ref();
-			ref.name.add(LangString.of("test ref " + i, "en"));
-			ref.uuid = UUID.randomUUID().toString();
-			ref.type = type;
-			ref.version = "01.00.000";
-			ref.uri = "../" + ref.uuid + ".xml";
+			var uuid = UUID.randomUUID().toString();
+			var ref = new Ref()
+				.withUUID(uuid)
+				.withType(type)
+				.withVersion("01.00.000")
+				.withUri("../" + uuid + ".xml");
+			ref.withName().add(LangString.of("test ref " + i, "en"));
 			refs.add(ref);
 		}
 		return refs;

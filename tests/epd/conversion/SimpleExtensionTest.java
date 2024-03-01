@@ -24,14 +24,14 @@ public class SimpleExtensionTest {
 	@Test
 	public void testFormatVersion() {
 		var epd = new EpdDataSet();
-		var info = Processes.forceDataSetInfo(epd.process);
-		info.uuid = UUID.randomUUID().toString();
+		var id = UUID.randomUUID().toString();
+		Processes.withUUID(epd.process, id);
 		Extensions.write(epd);
 		Tests.withStore(store -> {
 			store.put(epd.process);
-			var process = store.get(Process.class, info.uuid);
+			var process = store.get(Process.class, id);
 			var qName = "{" + Vocab.NS_EPDv2 + "}epd-version";
-			var version = process.otherAttributes.get(QName.valueOf(qName));
+			var version = process.getOtherAttributes().get(QName.valueOf(qName));
 			assertEquals("1.2", version);
 		});
 	}
@@ -42,11 +42,11 @@ public class SimpleExtensionTest {
 		// API
 		// examples from https://www.w3schools.com/xml/schema_dtypes_date.asp
 		var format = DateTimeFormatter.ISO_DATE;
-		var dates = new String[] {
-				"2002-09-24",
-				"2002-09-24Z",
-				"2002-09-24-06:00",
-				"2002-09-24+06:00"
+		var dates = new String[]{
+			"2002-09-24",
+			"2002-09-24Z",
+			"2002-09-24-06:00",
+			"2002-09-24+06:00"
 		};
 		for (var s : dates) {
 			var date = LocalDate.parse(s, format);
@@ -63,7 +63,7 @@ public class SimpleExtensionTest {
 
 		var epd = new EpdDataSet();
 		var id = UUID.randomUUID().toString();
-		Processes.forceDataSetInfo(epd.process).uuid = id;
+		Processes.withUUID(epd.process, id);
 		epd.publicationDate = LocalDate.now();
 		Extensions.write(epd);
 		Tests.withStore(store -> {
@@ -96,7 +96,7 @@ public class SimpleExtensionTest {
 
 		var epd = new EpdDataSet();
 		var id = UUID.randomUUID().toString();
-		Processes.forceDataSetInfo(epd.process).uuid = id;
+		Processes.withUUID(epd.process, id);
 		epd.subType = SubType.REPRESENTATIVE;
 		Extensions.write(epd);
 

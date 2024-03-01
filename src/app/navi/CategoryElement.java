@@ -59,9 +59,9 @@ public class CategoryElement extends NavigationElement {
 		if (node == null || node.category == null)
 			return null;
 		Category cat = node.category;
-		if (cat.classId != null && cat.classId.length() < 8)
-			return cat.classId + " " + cat.value;
-		return cat.value;
+		if (cat.getClassId() != null && cat.getClassId().length() < 8)
+			return cat.getClassId() + " " + cat.getName();
+		return cat.getName();
 	}
 
 	@Override

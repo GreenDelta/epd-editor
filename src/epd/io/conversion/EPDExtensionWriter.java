@@ -1,14 +1,16 @@
 package epd.io.conversion;
 
-import epd.model.EpdDataSet;
+import java.util.Collections;
+import java.util.List;
+
+import javax.xml.namespace.QName;
+
 import org.openlca.ilcd.commons.Other;
 import org.openlca.ilcd.processes.Modelling;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.Processes;
 
-import javax.xml.namespace.QName;
-import java.util.Collections;
-import java.util.List;
+import epd.model.EpdDataSet;
 
 class EPDExtensionWriter {
 
@@ -36,7 +38,7 @@ class EPDExtensionWriter {
 		// set the format version
 		process.withOtherAttributes().put(
 			new QName(Vocab.NS_EPDv2, "epd-version", "epd2"), "1.2");
-		process.withVersion("1.1");
+		process.withSchemaVersion("1.1");
 		Cleanup.on(epd);
 	}
 

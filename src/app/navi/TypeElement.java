@@ -54,7 +54,7 @@ public class TypeElement extends NavigationElement {
 			case EXTERNAL_FILE -> M.ExternalFiles;
 			case FLOW -> M.Flows;
 			case FLOW_PROPERTY -> M.FlowProperties;
-			case LCIA_METHOD -> M.LCIAMethods;
+			case IMPACT_METHOD -> M.LCIAMethods;
 			case PROCESS -> M.EPDs;
 			case SOURCE -> M.Sources;
 			case UNIT_GROUP -> M.UnitGroups;

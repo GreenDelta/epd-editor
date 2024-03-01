@@ -23,21 +23,18 @@ import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.contacts.Contact;
 import org.openlca.ilcd.flowproperties.FlowProperty;
 import org.openlca.ilcd.flows.Flow;
+import org.openlca.ilcd.methods.ImpactMethod;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.sources.Source;
 import org.openlca.ilcd.units.UnitGroup;
-import org.openlca.ilcd.util.Contacts;
-import org.openlca.ilcd.util.FlowProperties;
+import org.openlca.ilcd.util.DataSets;
 import org.openlca.ilcd.util.Flows;
 import org.openlca.ilcd.util.Processes;
-import org.openlca.ilcd.util.Sources;
-import org.openlca.ilcd.util.UnitGroups;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 public class NewDataSetAction extends Action {
 
@@ -84,14 +81,14 @@ public class NewDataSetAction extends Action {
 
 	@Override
 	public void run() {
-		IDataSet ds = make();
+		var ds = make();
 		if (ds == null)
 			return;
 		try {
 			Data.save(ds);
 			Editors.open(Ref.of(ds));
 		} catch (Exception e) {
-			MsgBox.error("#Failed to create data set", e.getMessage());
+			MsgBox.error("Failed to create data set", e.getMessage());
 		}
 	}
 
@@ -99,124 +96,37 @@ public class NewDataSetAction extends Action {
 		if (type == null)
 			return null;
 		return switch (type) {
-			case CONTACT -> makeContact();
-			case FLOW -> makeFlow();
-			case FLOW_PROPERTY -> makeFlowProperty();
-			case IMPACT_METHOD -> makeMethod();
-			case PROCESS -> makeEpd();
-			case SOURCE -> makeSource();
-			case UNIT_GROUP -> makeUnitGroup();
+			case CONTACT -> init(new Contact());
+			case FLOW -> {
+				var f = init(new Flow());
+				Flows.withInventoryMethod(f)
+					.withFlowType(FlowType.PRODUCT_FLOW);
+				yield f;
+			}
+			case FLOW_PROPERTY -> init(new FlowProperty());
+			case IMPACT_METHOD -> init(new ImpactMethod());
+			case PROCESS -> {
+				var p = init(new Process());
+				Processes.withInventoryMethod(p)
+					.withProcessType(ProcessType.EPD);
+				yield p;
+			}
+			case SOURCE -> init(new Source());
+			case UNIT_GROUP -> init(new UnitGroup());
 			default -> null;
 		};
 	}
 
-	private Contact makeContact() {
-		Contact c = new Contact().withVersion("1.1");
-		var info = c.withContactInfo()
-			.withDataSetInfo()
-			.withUUID(UUID.randomUUID().toString());
-		LangString.set(info.withName(), M.NewContact, App.lang());
+	private <T extends IDataSet> T init(T ds) {
+		DataSets.withUUID(ds, UUID.randomUUID().toString());
+		DataSets.withBaseName(ds, LangString.of(getLabel(), App.lang()));
 		var category = getClassification();
 		if (category != null) {
-			info.withClassifications().add(category);
+			DataSets.withClassifications(ds).add(category);
 		}
-		Contacts.dataEntry(c).timeStamp = Xml.now();
-		Contacts.publication(c).version = "00.00.000";
-		return c;
-	}
-
-	private Flow makeFlow() {
-		Flow f = new Flow();
-		f.version = "1.1";
-		Flows.dataSetInfo(f).uuid = UUID.randomUUID().toString();
-		Classification category = getClassification();
-		if (category != null)
-			Flows.classifications(f).add(category);
-		LangString.set(Flows.flowName(f).baseName, M.NewProduct, App.lang());
-		Flows.inventoryMethod(f).flowType = FlowType.PRODUCT_FLOW;
-		Flows.dataEntry(f).timeStamp = Xml.now();
-		Flows.publication(f).version = "00.00.000";
-		return f;
-	}
-
-	private FlowProperty makeFlowProperty() {
-		FlowProperty fp = new FlowProperty();
-		fp.version = "1.1";
-		with(FlowProperties.dataSetInfo(fp), info -> {
-			info.uuid = UUID.randomUUID().toString();
-			LangString.set(info.name, M.NewFlowProperty, App.lang());
-			Classification category = getClassification();
-			if (category != null)
-				info.classifications.add(category);
-		});
-		FlowProperties.dataEntry(fp).timeStamp = Xml.now();
-		FlowProperties.publication(fp).version = "00.00.000";
-		return fp;
-	}
-
-	private LCIAMethod makeMethod() {
-		LCIAMethod m = new LCIAMethod();
-		m.version = "1.1";
-		with(Methods.forceDataSetInfo(m), info -> {
-			info.uuid = UUID.randomUUID().toString();
-			LangString.set(info.name, M.NewLCIAMethod, App.lang());
-			Classification category = getClassification();
-			if (category != null)
-				info.classifications.add(category);
-		});
-		Methods.forceDataEntry(m).timeStamp = Xml.now();
-		Methods.forcePublication(m).version = "00.00.000";
-		return m;
-	}
-
-	private Process makeEpd() {
-		var p = new Process();
-		p.version = "1.1";
-		with(Processes.forceDataSetInfo(p), info -> {
-			info.uuid = UUID.randomUUID().toString();
-			Classification category = getClassification();
-			if (category != null)
-				info.classifications.add(category);
-		});
-		Processes.forceMethod(p).processType = ProcessType.EPD;
-		LangString.set(Processes.forceProcessName(p).name, M.NewEPD, App.lang());
-		Processes.forceDataEntry(p).timeStamp = Xml.now();
-		Processes.forcePublication(p).version = "00.00.000";
-		return p;
-	}
-
-	private Source makeSource() {
-		Source s = new Source();
-		s.version = "1.1";
-		with(Sources.dataSetInfo(s), info -> {
-			info.uuid = UUID.randomUUID().toString();
-			LangString.set(info.name, M.NewSource, App.lang());
-			Classification category = getClassification();
-			if (category != null)
-				info.classifications.add(category);
-		});
-		Sources.dataEntry(s).timeStamp = Xml.now();
-		Sources.publication(s).version = "00.00.000";
-		return s;
-	}
-
-	private UnitGroup makeUnitGroup() {
-		UnitGroup g = new UnitGroup();
-		g.version = "1.1";
-		with(UnitGroups.dataSetInfo(g), info -> {
-			info.uuid = UUID.randomUUID().toString();
-			LangString.set(info.name, M.NewUnitGroup, App.lang());
-			Classification category = getClassification();
-			if (category != null)
-				info.classifications.add(category);
-		});
-		UnitGroups.dataEntry(g).timeStamp = Xml.now();
-		UnitGroups.publication(g).version = "00.00.000";
-		return g;
-	}
-
-	private <T> void with(T val, Consumer<T> fn) {
-		fn.accept(val);
+		DataSets.withTimeStamp(ds, Xml.now());
+		DataSets.withVersion(ds, "00.00.000");
+		return ds;
 	}
 
 	private Classification getClassification() {

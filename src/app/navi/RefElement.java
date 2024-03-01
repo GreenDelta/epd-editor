@@ -32,12 +32,12 @@ public class RefElement extends NavigationElement {
 
 	@Override
 	public String getLabel() {
-		return LangString.getFirst(ref.name, App.lang());
+		return LangString.getFirst(ref.getName(), App.lang());
 	}
 
 	@Override
 	public Image getImage() {
-		return Icon.img(ref.type);
+		return Icon.img(ref.getType());
 	}
 
 	@Override

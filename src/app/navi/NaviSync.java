@@ -82,7 +82,7 @@ public class NaviSync implements Runnable {
 				continue;
 			if (ca.getCategory() == null)
 				continue;
-			if (Strings.nullOrEqual(ca.getCategory().value, cat.value))
+			if (Strings.nullOrEqual(ca.getCategory().getName(), cat.getName()))
 				return ca;
 		}
 		return null;
@@ -106,7 +106,7 @@ public class NaviSync implements Runnable {
 		for (CategoryNode cn : node.categories) {
 			if (cn.category == null)
 				continue;
-			if (Strings.nullOrEqual(cn.category.value, category.value))
+			if (Strings.nullOrEqual(cn.category.getName(), category.getName()))
 				return true;
 		}
 		return false;

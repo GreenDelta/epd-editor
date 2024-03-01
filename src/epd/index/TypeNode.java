@@ -44,7 +44,7 @@ public class TypeNode extends Node {
 			Category other = node.category;
 			if (other == null)
 				continue;
-			if (Strings.nullOrEqual(category.getValue(), other.getValue()))
+			if (Strings.nullOrEqual(category.getName(), other.getName()))
 				return node;
 		}
 		CategoryNode node = new CategoryNode();

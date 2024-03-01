@@ -13,18 +13,18 @@ public class NavigationRoot extends NavigationElement {
 			return;
 		childs.clear();
 		childs.addAll(Arrays.asList(
-				new TypeElement(this, DataSetType.PROCESS),
-				new TypeElement(this, DataSetType.CONTACT),
-				new TypeElement(this, DataSetType.SOURCE),
-				new TypeElement(this, DataSetType.FLOW),
-				new TypeElement(this, DataSetType.FLOW_PROPERTY),
-				new TypeElement(this, DataSetType.UNIT_GROUP),
-				new TypeElement(this, DataSetType.LCIA_METHOD),
-				new FolderElement(this, FolderType.LOCATION),
-				new FolderElement(this, FolderType.CLASSIFICATION),
-				new FolderElement(this, FolderType.DOC),
-				new ProfileFolder(this),
-				new ConnectionFolder(this)));
+			new TypeElement(this, DataSetType.PROCESS),
+			new TypeElement(this, DataSetType.CONTACT),
+			new TypeElement(this, DataSetType.SOURCE),
+			new TypeElement(this, DataSetType.FLOW),
+			new TypeElement(this, DataSetType.FLOW_PROPERTY),
+			new TypeElement(this, DataSetType.UNIT_GROUP),
+			new TypeElement(this, DataSetType.IMPACT_METHOD),
+			new FolderElement(this, FolderType.LOCATION),
+			new FolderElement(this, FolderType.CLASSIFICATION),
+			new FolderElement(this, FolderType.DOC),
+			new ProfileFolder(this),
+			new ConnectionFolder(this)));
 	}
 
 	@Override

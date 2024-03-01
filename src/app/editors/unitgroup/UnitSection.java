@@ -22,7 +22,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.LangString;
-import org.openlca.ilcd.units.QuantitativeReference;
 import org.openlca.ilcd.units.Unit;
 import org.openlca.ilcd.units.UnitGroup;
 import org.openlca.ilcd.util.UnitGroups;
@@ -56,16 +55,16 @@ class UnitSection {
 
 	private void bindModifiers() {
 		ModifySupport<Unit> modifier = new ModifySupport<>(table);
-		modifier.bind(M.Unit, u -> u.name, (u, name) -> {
-			u.name = name;
+		modifier.bind(M.Unit, Unit::getName, (u, name) -> {
+			u.withName(name);
 			editor.setDirty();
 		});
-		modifier.onDouble(M.ConversionFactor, u -> u.factor, (u, factor) -> {
-			u.factor = factor;
+		modifier.onDouble(M.ConversionFactor, Unit::getFactor, (u, factor) -> {
+			u.withFactor(factor);
 			editor.setDirty();
 		});
-		modifier.bind(M.Comment, u -> App.s(u.comment), (u, comment) -> {
-			LangString.set(u.comment, comment, App.lang());
+		modifier.bind(M.Comment, u -> App.s(u.getComment()), (u, comment) -> {
+			LangString.set(u.withComment(), comment, App.lang());
 			editor.setDirty();
 		});
 	}
@@ -80,14 +79,14 @@ class UnitSection {
 	}
 
 	private void add() {
-		List<Unit> units = UnitGroups.units(group);
-		List<Integer> existingIDs = units.stream().map(u -> u.id).toList();
+		List<Unit> units = group.withUnits();
+		List<Integer> existingIDs = units.stream().map(Unit::getId).toList();
 		Unit u = new Unit();
-		u.id = 0;
-		while (existingIDs.contains(u.id)) {
-			u.id++;
+		u.withId(0);
+		while (existingIDs.contains(u.getId())) {
+			u.withId(u.getId() + 1);
 		}
-		u.name = u.id == 0 ? "unit" : "unit " + u.id;
+		u.withName(u.getId() == 0 ? "unit" : "unit " + u.getId());
 		units.add(u);
 		table.setInput(units);
 		editor.setDirty();
@@ -97,7 +96,7 @@ class UnitSection {
 		Unit u = Viewers.getFirstSelected(table);
 		if (u == null)
 			return;
-		List<Unit> units = UnitGroups.units(group);
+		List<Unit> units = group.withUnits();
 		units.remove(u);
 		table.setInput(units);
 		editor.setDirty();
@@ -107,8 +106,8 @@ class UnitSection {
 		Unit u = Viewers.getFirstSelected(table);
 		if (u == null)
 			return;
-		QuantitativeReference qRef = UnitGroups.quantitativeReference(group);
-		qRef.referenceUnit = u.id;
+		var qRef = UnitGroups.withQuantitativeReference(group);
+		qRef.withReferenceUnit(u.getId());
 		table.refresh();
 		editor.setDirty();
 	}
@@ -126,23 +125,21 @@ class UnitSection {
 			if (!(obj instanceof Unit unit))
 				return null;
 			return switch (col) {
-				case 0 -> unit.name;
-				case 1 -> String.valueOf(unit.factor);
-				case 2 -> App.s(unit.comment);
+				case 0 -> unit.getName();
+				case 1 -> String.valueOf(unit.getFactor());
+				case 2 -> App.s(unit.getComment());
 				default -> null;
 			};
 		}
 
 		@Override
 		public Font getFont(Object obj, int col) {
-			if (!(obj instanceof Unit))
+			if (!(obj instanceof Unit u))
 				return null;
-			QuantitativeReference qRef = UnitGroups
-				.getQuantitativeReference(group);
+			var qRef = UnitGroups.getQuantitativeReference(group);
 			if (qRef == null)
 				return null;
-			Unit u = (Unit) obj;
-			if (u.id == qRef.referenceUnit)
+			if (u.getId() == qRef.getReferenceUnit())
 				return UI.boldFont();
 			return null;
 		}

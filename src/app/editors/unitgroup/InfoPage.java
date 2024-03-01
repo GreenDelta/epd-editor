@@ -1,20 +1,5 @@
 package app.editors.unitgroup;
 
-import java.util.function.Supplier;
-
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.IManagedForm;
-import org.eclipse.ui.forms.editor.FormPage;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.ScrolledForm;
-import org.openlca.ilcd.commons.DataEntry;
-import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.commons.Publication;
-import org.openlca.ilcd.units.DataSetInfo;
-import org.openlca.ilcd.units.UnitGroup;
-import org.openlca.ilcd.util.UnitGroups;
-
 import app.App;
 import app.M;
 import app.Tooltips;
@@ -23,6 +8,17 @@ import app.editors.VersionField;
 import app.util.TextBuilder;
 import app.util.UI;
 import epd.model.Xml;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.forms.IManagedForm;
+import org.eclipse.ui.forms.editor.FormPage;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.ScrolledForm;
+import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.units.UnitGroup;
+import org.openlca.ilcd.util.UnitGroups;
+
+import java.util.function.Supplier;
 
 class InfoPage extends FormPage {
 
@@ -39,7 +35,7 @@ class InfoPage extends FormPage {
 	@Override
 	protected void createFormContent(IManagedForm mform) {
 		Supplier<String> title = () -> M.UnitGroup + ": "
-				+ App.s(unitGroup.getName());
+			+ App.s(UnitGroups.getName(unitGroup));
 		ScrolledForm form = UI.formHeader(mform, title.get());
 		editor.onSaved(() -> form.setText(title.get()));
 		tk = mform.getToolkit();
@@ -54,39 +50,43 @@ class InfoPage extends FormPage {
 
 	private void infoSection(Composite body, TextBuilder tb) {
 		Composite comp = UI.infoSection(unitGroup, body, tk);
-		DataSetInfo info = UnitGroups.dataSetInfo(unitGroup);
-		tb.text(comp, M.Name, Tooltips.UnitGroup_Name, info.name);
+		var info = UnitGroups.withDataSetInfo(unitGroup);
+		tb.text(comp, M.Name, Tooltips.UnitGroup_Name, info.withName());
 		tb.text(comp, M.Description,
-				Tooltips.UnitGroup_Description, info.generalComment);
+			Tooltips.UnitGroup_Description, info.withComment());
 		UI.fileLink(unitGroup, comp, tk);
 	}
 
 	private void categorySection(Composite body) {
-		DataSetInfo info = UnitGroups.dataSetInfo(unitGroup);
-		CategorySection section = new CategorySection(editor,
-				DataSetType.UNIT_GROUP, info.classifications);
+		var info = UnitGroups.withDataSetInfo(unitGroup);
+		var section = new CategorySection(editor,
+			DataSetType.UNIT_GROUP, info.withClassifications());
 		section.render(body, tk);
 	}
 
 	private void adminSection(Composite body) {
-		Composite comp = UI.formSection(body, tk, M.AdministrativeInformation);
-		Publication pub = UnitGroups.publication(unitGroup);
-		DataEntry entry = UnitGroups.dataEntry(unitGroup);
+		var comp = UI.formSection(body, tk, M.AdministrativeInformation);
+
 		Text timeT = UI.formText(comp, tk, M.LastUpdate,
-				Tooltips.All_LastUpdate);
-		timeT.setText(Xml.toString(entry.timeStamp));
+			Tooltips.All_LastUpdate);
+		timeT.setText(Xml.toString(UnitGroups.getTimeStamp(unitGroup)));
+
 		Text uuidT = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);
-		if (unitGroup.getUUID() != null)
-			uuidT.setText(unitGroup.getUUID());
-		VersionField vf = new VersionField(comp, tk);
-		vf.setVersion(unitGroup.getVersion());
+		var uuid = UnitGroups.getUUID(unitGroup);
+		if (uuid != null) {
+			uuidT.setText(uuid);
+		}
+
+		var vf = new VersionField(comp, tk);
+		vf.setVersion(UnitGroups.getVersion(unitGroup));
 		vf.onChange(v -> {
-			pub.version = v;
+			UnitGroups.withVersion(unitGroup, v);
 			editor.setDirty();
 		});
+
 		editor.onSaved(() -> {
-			vf.setVersion(pub.version);
-			timeT.setText(Xml.toString(entry.timeStamp));
+			vf.setVersion(UnitGroups.getVersion(unitGroup));
+			timeT.setText(Xml.toString(UnitGroups.getTimeStamp(unitGroup)));
 		});
 	}
 }

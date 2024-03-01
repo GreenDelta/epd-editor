@@ -36,7 +36,7 @@ public class UnitGroupEditor extends BaseEditor {
 		Editors.setTabTitle(input, this);
 		try {
 			RefEditorInput in = (RefEditorInput) input;
-			unitGroup = App.store().get(UnitGroup.class, in.ref.uuid);
+			unitGroup = App.store().get(UnitGroup.class, in.ref.getUUID());
 			RefCheck.on(unitGroup);
 		} catch (Exception e) {
 			throw new PartInitException(

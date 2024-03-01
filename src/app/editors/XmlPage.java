@@ -12,11 +12,10 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.openlca.ilcd.commons.IDataSet;
-import org.openlca.ilcd.io.XmlBinder;
+import org.openlca.ilcd.io.Xml;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.StringWriter;
 
 public class XmlPage extends FormPage {
 
@@ -44,10 +43,8 @@ public class XmlPage extends FormPage {
 	private void fillText() {
 		if (dataSet == null || text == null)
 			return;
-		StringWriter writer = new StringWriter();
 		try {
-			new XmlBinder().toWriter(dataSet, writer);
-			String xml = writer.toString();
+			var xml = Xml.toString(dataSet);
 			text.setText(xml);
 			styleText(xml);
 		} catch (Exception e) {

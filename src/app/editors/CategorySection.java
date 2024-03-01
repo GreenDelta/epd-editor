@@ -108,7 +108,7 @@ public class CategorySection {
 				Category clazz = classes.get(i);
 				if (clazz.getClassId() != null && clazz.getClassId().length() < 8)
 					path.append(clazz.getClassId()).append(" ");
-				path.append(clazz.getValue());
+				path.append(clazz.getName());
 				if (i < (classes.size() - 1))
 					path.append(" / ");
 			}

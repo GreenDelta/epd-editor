@@ -53,7 +53,7 @@ public class CategoryDialog extends FormDialog {
 			case CONTACT -> ContentType.CONTACT;
 			case FLOW -> ContentType.FLOW;
 			case FLOW_PROPERTY -> ContentType.FLOW_PROPERTY;
-		case IMPACT_METHOD -> ContentType.LCIA_METHOD;
+			case IMPACT_METHOD -> ContentType.LCIA_METHOD;
 			case PROCESS -> ContentType.PROCESS;
 			case SOURCE -> ContentType.SOURCE;
 			case UNIT_GROUP -> ContentType.UNIT_GROUP;
@@ -80,7 +80,7 @@ public class CategoryDialog extends FormDialog {
 			org.openlca.ilcd.commons.Category clazz = new org.openlca.ilcd.commons.Category();
 			clazz.withClassId(c.getId())
 				.withLevel(i)
-				.withValue(c.getName());
+				.withName(c.getName());
 			classification.withCategories().add(clazz);
 			i++;
 		}
@@ -88,7 +88,7 @@ public class CategoryDialog extends FormDialog {
 	}
 
 	private void fillParentMap(List<Category> rootCategories,
-			Map<Category, Category> parentMap) {
+		Map<Category, Category> parentMap) {
 		for (Category root : rootCategories) {
 			for (Category child : root.getCategories())
 				parentMap.put(child, root);
@@ -97,7 +97,7 @@ public class CategoryDialog extends FormDialog {
 	}
 
 	private Stack<Category> getPath(Category category,
-			Map<Category, Category> parentMap) {
+		Map<Category, Category> parentMap) {
 		Stack<Category> stack = new Stack<>();
 		stack.push(category);
 		Category parent = parentMap.get(category);

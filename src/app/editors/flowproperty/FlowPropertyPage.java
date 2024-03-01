@@ -17,6 +17,7 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.flowproperties.FlowProperty;
 import org.openlca.ilcd.util.DataSets;
+import org.openlca.ilcd.util.FlowProperties;
 
 import java.util.function.Supplier;
 
@@ -48,18 +49,18 @@ class FlowPropertyPage extends FormPage {
 	}
 
 	private void infoSection(Composite body, TextBuilder tb) {
-		Composite comp = UI.infoSection(property, body, tk);
-		var info = property.withFlowPropertyInfo().withDataSetInfo();
+		var comp = UI.infoSection(property, body, tk);
+		var info = FlowProperties.withDataSetInfo(property);
 		tb.text(comp, M.Name, Tooltips.FlowProperty_Name, info.withName());
 		tb.text(comp, M.Synonyms,
 				Tooltips.FlowProperty_Synonyms, info.withSynonyms());
 		tb.text(comp, M.Description,
-				Tooltips.FlowProperty_Description, info.withGeneralComment());
+				Tooltips.FlowProperty_Description, info.withComment());
 		UI.fileLink(property, comp, tk);
 	}
 
 	private void categorySection(Composite body) {
-		var info = property.withFlowPropertyInfo().withDataSetInfo();
+		var info = FlowProperties.withDataSetInfo(property);
 		var section = new CategorySection(editor,
 				DataSetType.FLOW_PROPERTY, info.withClassifications());
 		section.render(body, tk);

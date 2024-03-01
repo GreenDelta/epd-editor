@@ -61,17 +61,15 @@ class ConnectionCombo {
 	SodaClient makeClient() {
 		SodaConnection con = selected;
 		if (con == null) {
-			MsgBox.error("#No connection",
-					"#There is no connection selected");
+			MsgBox.error("No connection",
+					"There is no connection selected");
 			return null;
 		}
 		try {
-			SodaClient client = new SodaClient(con);
-			client.connect();
-			return client;
+			return SodaClient.of(con);
 		} catch (Exception e) {
-			MsgBox.error("#Connection failed",
-					"#Connection to client failed: " + e.getMessage());
+			MsgBox.error("Connection failed",
+					"Connection to client failed: " + e.getMessage());
 			return null;
 		}
 	}

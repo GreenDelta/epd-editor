@@ -1,21 +1,5 @@
 package app.editors.source;
 
-import java.util.List;
-import java.util.function.Supplier;
-
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.IManagedForm;
-import org.eclipse.ui.forms.editor.FormPage;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.ScrolledForm;
-import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.commons.Ref;
-import org.openlca.ilcd.sources.AdminInfo;
-import org.openlca.ilcd.sources.DataSetInfo;
-import org.openlca.ilcd.sources.Source;
-import org.openlca.ilcd.util.Sources;
-
 import app.App;
 import app.M;
 import app.Tooltips;
@@ -26,6 +10,18 @@ import app.editors.VersionField;
 import app.util.TextBuilder;
 import app.util.UI;
 import epd.model.Xml;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.forms.IManagedForm;
+import org.eclipse.ui.forms.editor.FormPage;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.sources.Source;
+import org.openlca.ilcd.util.Sources;
+
+import java.util.List;
+import java.util.function.Supplier;
 
 class SourcePage extends FormPage {
 
@@ -42,8 +38,8 @@ class SourcePage extends FormPage {
 	@Override
 	protected void createFormContent(IManagedForm mform) {
 		Supplier<String> title = () -> M.Source + ": "
-				+ App.s(source.getName());
-		ScrolledForm form = UI.formHeader(mform, title.get());
+			+ App.s(Sources.getName(source));
+		var form = UI.formHeader(mform, title.get());
 		editor.onSaved(() -> form.setText(title.get()));
 		tk = mform.getToolkit();
 		Composite body = UI.formBody(form, tk);
@@ -57,58 +53,64 @@ class SourcePage extends FormPage {
 	}
 
 	private void infoSection(Composite body, TextBuilder tb) {
-		Composite comp = UI.infoSection(source, body, tk);
-		DataSetInfo info = Sources.dataSetInfo(source);
-		tb.text(comp, M.ShortName, Tooltips.Source_ShortName, info.name);
+		var comp = UI.infoSection(source, body, tk);
+		var info = Sources.withDataSetInfo(source);
+		tb.text(comp, M.ShortName, Tooltips.Source_ShortName, info.withName());
 		tb.text(comp, M.Citation, Tooltips.Source_Citation,
-				info.citation, t -> info.citation = t);
+			info.getCitation(), info::withCitation);
 		tb.text(comp, M.Description,
-				Tooltips.Source_Description, info.description);
+			Tooltips.Source_Description, info.withDescription());
 		// TODO: source type combo
 		UI.formLabel(comp, tk, M.Logo, Tooltips.Source_Logo);
 		RefLink logo = new RefLink(comp, tk, DataSetType.SOURCE);
-		logo.setRef(info.logo);
+		logo.setRef(info.getLogo());
 		logo.onChange(ref -> {
-			info.logo = ref;
+			info.withLogo(ref);
 			editor.setDirty();
 		});
 		UI.fileLink(source, comp, tk);
 	}
 
 	private void categorySection(Composite body) {
-		DataSetInfo info = Sources.dataSetInfo(source);
-		CategorySection section = new CategorySection(editor,
-				DataSetType.SOURCE, info.classifications);
+		var info = Sources.withDataSetInfo(source);
+		var section = new CategorySection(editor,
+			DataSetType.SOURCE, info.withClassifications());
 		section.render(body, tk);
 	}
 
 	private void contacts(Composite body) {
-		List<Ref> contacts = Sources.dataSetInfo(source).contacts;
+		List<Ref> contacts = Sources.withDataSetInfo(source)
+			.withContacts();
 		RefTable.create(DataSetType.CONTACT, contacts)
-				.withEditor(editor)
-				.withTitle("#Belongs to")
-				.withTooltip(Tooltips.Source_BelongsTo)
-				.render(body, tk);
+			.withEditor(editor)
+			.withTitle("#Belongs to")
+			.withTooltip(Tooltips.Source_BelongsTo)
+			.render(body, tk);
 	}
 
 	private void adminSection(Composite body) {
-		Composite comp = UI.formSection(body, tk, M.AdministrativeInformation);
-		AdminInfo info = source.adminInfo;
+		var comp = UI.formSection(body, tk, M.AdministrativeInformation);
+
 		Text timeT = UI.formText(comp, tk,
-				M.LastUpdate, Tooltips.All_LastUpdate);
-		timeT.setText(Xml.toString(info.dataEntry.timeStamp));
+			M.LastUpdate, Tooltips.All_LastUpdate);
+		timeT.setText(Xml.toString(Sources.getTimeStamp(source)));
+
 		Text uuidT = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);
-		if (source.getUUID() != null)
-			uuidT.setText(source.getUUID());
-		VersionField vf = new VersionField(comp, tk);
-		vf.setVersion(source.getVersion());
+		var uuid = Sources.getUUID(source);
+		if (uuid != null) {
+			uuidT.setText(uuid);
+		}
+
+		var vf = new VersionField(comp, tk);
+		vf.setVersion(Sources.getVersion(source));
 		vf.onChange(v -> {
-			info.publication.version = v;
+			Sources.withVersion(source, v);
 			editor.setDirty();
 		});
+
 		editor.onSaved(() -> {
-			vf.setVersion(info.publication.version);
-			timeT.setText(Xml.toString(info.dataEntry.timeStamp));
+			vf.setVersion(Sources.getVersion(source));
+			timeT.setText(Xml.toString(Sources.getTimeStamp(source)));
 		});
 	}
 

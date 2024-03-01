@@ -102,7 +102,7 @@ class IndicatorTable {
 				var indicator = (Indicator) obj;
 				return indicator.type == Type.LCI
 					? Icon.img(DataSetType.FLOW)
-					: Icon.img(DataSetType.LCIA_METHOD);
+					: Icon.img(DataSetType.IMPACT_METHOD);
 			}
 			return null;
 		}

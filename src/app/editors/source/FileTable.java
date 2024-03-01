@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 import org.openlca.ilcd.sources.FileRef;
+import org.openlca.ilcd.util.Sources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +39,7 @@ class FileTable {
 
 	FileTable(SourceEditor editor) {
 		this.editor = editor;
-		fileRefs = editor.source.sourceInfo.dataSetInfo.files;
+		fileRefs = Sources.withDataSetInfo(editor.source).withFiles();
 	}
 
 	public void render(Composite parent, FormToolkit tk) {
@@ -94,7 +95,7 @@ class FileTable {
 
 		checkCopy(dir, file);
 		FileRef ref = new FileRef();
-		ref.uri = "../external_docs/" + file.getName();
+		ref.withUri( "../external_docs/" + file.getName());
 		fileRefs.add(ref);
 		table.setInput(fileRefs);
 		editor.setDirty();
@@ -145,9 +146,9 @@ class FileTable {
 		public Image getImage(Object obj) {
 			if (!(obj instanceof FileRef ref))
 				return null;
-			if (ref.uri == null)
+			if (ref.getUri() == null)
 				return null;
-			File file = new File(ref.uri);
+			File file = new File(ref.getUri());
 			if (hasNonAsciiChars(file.getName()))
 				return Icon.WARNING.img();
 			return Icon.DOCUMENT.img();
@@ -157,16 +158,16 @@ class FileTable {
 		public String getText(Object obj) {
 			if (!(obj instanceof FileRef ref))
 				return null;
-			return ref.uri;
+			return ref.getUri();
 		}
 
 		@Override
 		public String getToolTipText(Object obj) {
 			if (!(obj instanceof FileRef ref))
 				return null;
-			if (ref.uri == null)
+			if (ref.getUri() == null)
 				return null;
-			File file = new File(ref.uri);
+			File file = new File(ref.getUri());
 			if (!hasNonAsciiChars(file.getName()))
 				return null;
 			return "The name of this file has non-ASCII characters"

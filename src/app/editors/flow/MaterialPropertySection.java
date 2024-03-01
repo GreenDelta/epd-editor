@@ -110,7 +110,7 @@ class MaterialPropertySection {
 			try {
 				if (v == null)
 					return;
-				double val = Double.valueOf(text);
+				double val = Double.parseDouble(text);
 				if (v.value != val) {
 					v.value = val;
 					editor.setDirty();

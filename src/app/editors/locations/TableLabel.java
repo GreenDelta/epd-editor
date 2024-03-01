@@ -20,9 +20,9 @@ class TableLabel extends LabelProvider implements ITableLabelProvider {
 		if (!(obj instanceof Location loc))
 			return null;
 		if (col == 0)
-			return loc.code;
+			return loc.getCode();
 		if (col == 1)
-			return loc.name;
+			return loc.getName();
 		return null;
 	}
 }

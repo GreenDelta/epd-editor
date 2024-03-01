@@ -1,18 +1,16 @@
 package app.editors.io;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.openlca.ilcd.commons.IDataSet;
+import app.App;
+import epd.model.RefStatus;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.io.SodaClient;
 import org.openlca.ilcd.sources.FileRef;
 import org.openlca.ilcd.sources.Source;
 import org.openlca.ilcd.util.Sources;
 
-import app.App;
-import epd.model.RefStatus;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 class Upload {
 
@@ -29,7 +27,7 @@ class Upload {
 		try {
 			if (client.contains(ref))
 				return RefStatus.info(ref, "#Already on the server");
-			IDataSet ds = App.store().get(ref.getDataSetClass(), ref.uuid);
+			var ds = App.store().get(ref.getDataSetClass(), ref.getUUID());
 			if (ds == null)
 				return RefStatus.error(ref, "#Data set does not exist");
 			if (ds instanceof Source)

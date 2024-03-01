@@ -19,6 +19,7 @@ import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.io.SodaClient;
 import org.openlca.ilcd.sources.FileRef;
 import org.openlca.ilcd.sources.Source;
+import org.openlca.ilcd.util.DataSets;
 import org.openlca.ilcd.util.RefTree;
 import org.openlca.ilcd.util.Sources;
 
@@ -52,7 +53,7 @@ public class Download implements IRunnableWithProgress {
 			IDataSet ds = get(ref);
 			if (ds == null)
 				continue;
-			monitor.subTask(M.SaveDataSet + ": " + App.s(ds.getName()));
+			monitor.subTask(M.SaveDataSet + ": " + App.s(DataSets.getBaseName(ds)));
 			save(ref, ds, status);
 			if (ds instanceof Source) {
 				extDocs((Source) ds, client, status);
@@ -81,7 +82,7 @@ public class Download implements IRunnableWithProgress {
 				continue;
 			try {
 				InputStream is = client.getExternalDocument(
-						source.getUUID(), fileName);
+						Sources.getUUID(source), fileName);
 				File target = App.store().getExternalDocument(ref);
 				Files.copy(is, target.toPath(),
 						StandardCopyOption.REPLACE_EXISTING);
@@ -115,11 +116,11 @@ public class Download implements IRunnableWithProgress {
 		}
 		Class<? extends IDataSet> type = ref.getDataSetClass();
 		try {
-			if (!overwriteExisting && App.store().contains(type, ref.uuid)) {
+			if (!overwriteExisting && App.store().contains(type, ref.getUUID())) {
 				status.add(RefStatus.info(ref, M.AlreadyExists));
 				return null;
 			}
-			return client.get(type, ref.uuid);
+			return client.get(type, ref.getUUID());
 		} catch (Exception e) {
 			status.add(RefStatus.error(ref,
 					M.DownloadFailed + ": " + e.getMessage()));

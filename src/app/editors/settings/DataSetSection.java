@@ -1,23 +1,5 @@
 package app.editors.settings;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
-
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.commons.Ref;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import app.App;
 import app.AppSettings;
 import app.M;
@@ -30,6 +12,22 @@ import app.util.UI;
 import epd.model.EpdProfile;
 import epd.model.qmeta.QGroup;
 import epd.util.Strings;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.commons.Ref;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 class DataSetSection {
 
@@ -129,7 +127,7 @@ class DataSetSection {
 			App.run(monitor -> {
 				List<Ref> refs = App.index().getRefs()
 						.stream()
-						.filter(ref -> ref.type == DataSetType.PROCESS)
+						.filter(ref -> ref.getType() == DataSetType.PROCESS)
 						.toList();
 				monitor.beginTask(M.IndexProductRelations, refs.size());
 				for (int i = 0; i < refs.size(); i++) {

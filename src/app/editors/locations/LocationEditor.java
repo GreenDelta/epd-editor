@@ -90,7 +90,7 @@ public class LocationEditor extends BaseEditor {
 			Tables.bindColumnWidths(table, 0.4, 0.6);
 			table.setLabelProvider(new TableLabel());
 			form.reflow(true);
-			table.setInput(list.locations);
+			table.setInput(list.withLocations());
 		}
 	}
 

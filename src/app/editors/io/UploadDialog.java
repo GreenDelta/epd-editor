@@ -68,16 +68,16 @@ public class UploadDialog extends Wizard {
 				monitor.beginTask("Upload", allRefs.size());
 				List<RefStatus> stats = new ArrayList<>();
 				for (Ref ref : allRefs) {
-					monitor.subTask(App.header(ref.name, 50));
+					monitor.subTask(App.header(ref.getName(), 50));
 					stats.add(upload.next(ref));
 					monitor.worked(1);
 				}
 				monitor.done();
-				StatusView.open("#Upload result", stats);
+				StatusView.open("Upload result", stats);
 			});
 			return true;
 		} catch (Exception e) {
-			MsgBox.error("#Upload failed", e.getMessage());
+			MsgBox.error("Upload failed", e.getMessage());
 			return false;
 		}
 	}
@@ -93,7 +93,7 @@ public class UploadDialog extends Wizard {
 
 		private Page() {
 			super("UploadDialogPage",
-				M.UploadDataSet + ": " + App.header(ref.name, 50), null);
+				M.UploadDataSet + ": " + App.header(ref.getName(), 50), null);
 			setPageComplete(true);
 		}
 
@@ -148,7 +148,7 @@ public class UploadDialog extends Wizard {
 						.filter(r -> !EpdProfiles.isProfileRef(r))
 						.forEach(ds -> {
 							Ref next = Ref.of(ds);
-							monitor.subTask(App.header(next.name, 75));
+							monitor.subTask(App.header(next.getName(), 75));
 							allRefs.add(next);
 							ExtensionRefs.of(ds)
 								.stream()

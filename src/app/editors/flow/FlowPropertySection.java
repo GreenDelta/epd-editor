@@ -69,15 +69,15 @@ class FlowPropertySection {
 		// add actions
 		bindActions(section);
 		var modifier = new ModifySupport<FlowPropertyRef>(table);
-		modifier.onDouble(M.ConversionFactor, propRef -> propRef.meanValue,
+		modifier.onDouble(M.ConversionFactor, FlowPropertyRef::getMeanValue,
 			(propRef, value) -> {
-				propRef.meanValue = value;
+				propRef.withMeanValue(value);
 				editor.setDirty();
 			});
 		Tables.onDoubleClick(table, e -> {
 			FlowPropertyRef ref = Viewers.getFirstSelected(table);
 			if (ref != null) {
-				Editors.open(ref.flowProperty);
+				Editors.open(ref.getFlowProperty());
 			}
 		});
 	}
@@ -98,19 +98,19 @@ class FlowPropertySection {
 		var propRef = new FlowPropertyRef();
 		var existingIDs = Flows.getFlowProperties(flow)
 			.stream()
-			.map(pr -> pr.dataSetInternalID)
+			.map(FlowPropertyRef::getDataSetInternalID)
 			.toList();
-		propRef.dataSetInternalID = 0;
-		while (existingIDs.contains(propRef.dataSetInternalID)) {
-			propRef.dataSetInternalID = propRef.dataSetInternalID + 1;
+		propRef.withDataSetInternalID(0);
+		while (existingIDs.contains(propRef.getDataSetInternalID())) {
+			propRef.withDataSetInternalID(propRef.getDataSetInternalID() + 1);
 		}
-		propRef.flowProperty = ref;
-		propRef.meanValue = 1.0;
-		Flows.flowProperties(flow).add(propRef);
+		propRef.withFlowProperty(ref);
+		propRef.withMeanValue(1.0);
+		flow.withFlowProperties().add(propRef);
 		if (Flows.getFlowProperties(flow).size() == 1) {
 			// set it as reference flow property if it is the only one
-			var qRef = Flows.quantitativeReference(flow);
-			qRef.referenceFlowProperty = propRef.dataSetInternalID;
+			var qRef = Flows.withQuantitativeReference(flow);
+			qRef.withReferenceFlowProperty(propRef.getDataSetInternalID());
 		}
 		table.setInput(Flows.getFlowProperties(flow));
 		if (materialPropertySection != null
@@ -125,15 +125,12 @@ class FlowPropertySection {
 		FlowPropertyRef propRef = Viewers.getFirstSelected(table);
 		if (propRef == null)
 			return;
-		var list = Flows.flowProperties(flow);
+		var list = flow.withFlowProperties();
 		list.remove(propRef);
-		if (list.isEmpty()) {
-			flow.flowPropertyList = null;
-		}
 		var qRef = Flows.getQuantitativeReference(flow);
 		if (qRef != null && Objects.equals(
-			qRef.referenceFlowProperty, propRef.dataSetInternalID)) {
-			qRef.referenceFlowProperty = null;
+			qRef.getReferenceFlowProperty(), propRef.getDataSetInternalID())) {
+			qRef.withReferenceFlowProperty(null);
 		}
 		table.setInput(Flows.getFlowProperties(flow));
 		editor.setDirty();
@@ -143,8 +140,8 @@ class FlowPropertySection {
 		FlowPropertyRef propRef = Viewers.getFirstSelected(table);
 		if (propRef == null)
 			return;
-		var qRef = Flows.quantitativeReference(flow);
-		qRef.referenceFlowProperty = propRef.dataSetInternalID;
+		var qRef = Flows.withQuantitativeReference(flow);
+		qRef.withReferenceFlowProperty(propRef.getDataSetInternalID());
 		table.refresh();
 		editor.setDirty();
 	}
@@ -165,14 +162,14 @@ class FlowPropertySection {
 				return null;
 			switch (col) {
 				case 0:
-					Ref propRef = ref.flowProperty;
+					Ref propRef = ref.getFlowProperty();
 					if (propRef == null)
 						return null;
-					return LangString.getFirst(propRef.name, App.lang());
+					return LangString.getFirst(propRef.getName(), App.lang());
 				case 1:
-					return Double.toString(ref.meanValue);
+					return Double.toString(ref.getMeanValue());
 				case 2:
-					return RefDeps.getRefUnit(ref.flowProperty);
+					return RefDeps.getRefUnit(ref.getFlowProperty());
 				default:
 					return null;
 			}
@@ -185,7 +182,7 @@ class FlowPropertySection {
 			var qRef = Flows.getQuantitativeReference(flow);
 			if (qRef == null)
 				return null;
-			return Objects.equals(ref.dataSetInternalID, qRef.referenceFlowProperty)
+			return Objects.equals(ref.getDataSetInternalID(), qRef.getReferenceFlowProperty())
 				? UI.boldFont()
 				: null;
 		}

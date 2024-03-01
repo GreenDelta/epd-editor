@@ -154,9 +154,9 @@ class PropertyDepsDialog extends FormDialog {
 				{"normal volume", "gross density"},
 			};
 			for (var flowProp : Flows.getFlowProperties(product.flow)) {
-				if (flowProp.flowProperty == null)
+				if (flowProp.getFlowProperty() == null)
 					continue;
-				var name = LangString.getVal(flowProp.flowProperty.name, "en");
+				var name = LangString.getVal(flowProp.getFlowProperty().getName(), "en");
 				if (name == null)
 					continue;
 				for (var pair : pairs) {

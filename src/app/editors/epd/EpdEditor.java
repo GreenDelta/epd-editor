@@ -1,21 +1,5 @@
 package app.editors.epd;
 
-import java.util.UUID;
-
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.dialogs.InputDialog;
-import org.eclipse.jface.window.Window;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.PartInitException;
-import org.openlca.ilcd.commons.LangString;
-import org.openlca.ilcd.commons.Ref;
-import org.openlca.ilcd.processes.Process;
-import org.openlca.ilcd.processes.ProcessName;
-import org.openlca.ilcd.util.Processes;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import app.App;
 import app.AppSettings;
 import app.M;
@@ -30,6 +14,20 @@ import app.util.UI;
 import epd.model.EpdDataSet;
 import epd.model.Version;
 import epd.model.Xml;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.window.Window;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.PartInitException;
+import org.openlca.ilcd.commons.LangString;
+import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.processes.ProcessName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.UUID;
 
 public class EpdEditor extends BaseEditor {
 
@@ -87,7 +85,7 @@ public class EpdEditor extends BaseEditor {
 	public void doSave(IProgressMonitor monitor) {
 		try {
 			Data.updateVersion(dataSet);
-			EpdDataSet ds = dataSet.clone();
+			EpdDataSet ds = dataSet.copy();
 			Data.save(ds);
 			for (Runnable handler : saveHandlers) {
 				handler.run();
@@ -109,7 +107,7 @@ public class EpdEditor extends BaseEditor {
 			return;
 		String name = d.getValue();
 		try {
-			EpdDataSet clone = dataSet.clone();
+			EpdDataSet clone = dataSet.copy();
 			Process p = clone.process;
 			ProcessName cName = p.withProcessInfo()
 				.withDataSetInfo()

@@ -24,6 +24,7 @@ import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.util.Flows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,20 +52,20 @@ class FlowUpdateCheck {
 	}
 
 	private static void findUsages(Flow flow, List<Ref> usages) {
-		String flowID = flow.getUUID();
+		String flowID = Flows.getUUID(flow);
 		if (flowID == null)
 			return;
 		App.index().getRefs()
 			.stream()
-			.filter(ref -> ref.type == DataSetType.PROCESS)
+			.filter(ref -> ref.getType() == DataSetType.PROCESS)
 			.forEach(ref -> {
 				try {
 					AtomicBoolean b = new AtomicBoolean(false);
 					RefTrees.get(ref).eachRef(pRef -> {
 						if (b.get())
 							return;
-						if (pRef.type == DataSetType.FLOW
-							&& Objects.equals(flowID, pRef.uuid)) {
+						if (pRef.getType() == DataSetType.FLOW
+							&& Objects.equals(flowID, pRef.getUUID())) {
 							usages.add(ref);
 							b.set(true);
 						}
@@ -94,10 +95,10 @@ class FlowUpdateCheck {
 		private Dialog(Flow flow, List<Ref> usages) {
 			this.flow = flow;
 			usages.sort((r1, r2) -> Strings.compare(
-				App.s(r1.name), App.s(r2.name)));
+				App.s(r1.getName()), App.s(r2.getName())));
 			selected = new HashMap<>();
 			for (Ref ref : usages) {
-				selected.put(ref.uuid, Boolean.TRUE);
+				selected.put(ref.getUUID(), Boolean.TRUE);
 			}
 			this.usages = usages;
 			setNeedsProgressMonitor(true);
@@ -107,7 +108,7 @@ class FlowUpdateCheck {
 		public boolean performFinish() {
 			List<Ref> updates = new ArrayList<>();
 			for (Ref ref : usages) {
-				if (Boolean.TRUE.equals(selected.get(ref.uuid))) {
+				if (Boolean.TRUE.equals(selected.get(ref.getUUID()))) {
 					updates.add(ref);
 				}
 			}
@@ -117,9 +118,9 @@ class FlowUpdateCheck {
 				getContainer().run(true, true, monitor -> {
 					monitor.beginTask("Update data set", updates.size());
 					for (Ref ref : updates) {
-						monitor.subTask(Strings.cut(App.s(ref.name), 25));
+						monitor.subTask(Strings.cut(App.s(ref.getName()), 25));
 						try {
-							Process p = App.store().get(Process.class, ref.uuid);
+							Process p = App.store().get(Process.class, ref.getUUID());
 							RefSync.updateRefs(p, App.index());
 							Data.updateVersion(p);
 							Data.save(p);
@@ -149,7 +150,7 @@ class FlowUpdateCheck {
 			private Page() {
 				super("DialogPage", M.UpdateReferences, null);
 				setDescription("The saved flow data set '"
-					+ Strings.cut(App.s(flow.getName()), 25)
+					+ Strings.cut(App.s(Flows.getBaseName(flow)), 25)
 					+ "' is used in the following EPDs. Should these EPDs"
 					+ " be updated as well?");
 				setPageComplete(true);
@@ -171,11 +172,11 @@ class FlowUpdateCheck {
 					Ref ref = Viewers.getFirstSelected(table);
 					if (ref == null)
 						return;
-					Boolean b = selected.get(ref.uuid);
+					Boolean b = selected.get(ref.getUUID());
 					if (b == null || !b) {
-						selected.put(ref.uuid, Boolean.TRUE);
+						selected.put(ref.getUUID(), Boolean.TRUE);
 					} else {
-						selected.put(ref.uuid, Boolean.FALSE);
+						selected.put(ref.getUUID(), Boolean.FALSE);
 					}
 					table.refresh();
 				});
@@ -189,7 +190,7 @@ class FlowUpdateCheck {
 					return null;
 				if (col != 0)
 					return null;
-				if (Boolean.TRUE.equals(selected.get(ref.uuid)))
+				if (Boolean.TRUE.equals(selected.get(ref.getUUID())))
 					return Icon.CHECK_TRUE.img();
 				else
 					return Icon.CHECK_FALSE.img();

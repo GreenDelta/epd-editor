@@ -81,7 +81,7 @@ public class DuplicateAction extends Action {
 			.withDataSetInfo()
 			.withUUID(UUID.randomUUID().toString())
 			.withName()
-			.add(LangString.of(name, App.lang()));
+			.add(0, LangString.of(name, App.lang()));
 		return contact;
 	}
 
@@ -92,7 +92,7 @@ public class DuplicateAction extends Action {
 			.withUUID(UUID.randomUUID().toString())
 			.withFlowName()
 			.withBaseName()
-			.add(LangString.of(name, App.lang()));
+			.add(0, LangString.of(name, App.lang()));
 		return flow;
 	}
 
@@ -102,7 +102,7 @@ public class DuplicateAction extends Action {
 			.withDataSetInfo()
 			.withUUID(UUID.randomUUID().toString())
 			.withName()
-			.add(LangString.of(name, App.lang()));
+			.add(0, LangString.of(name, App.lang()));
 		return property;
 	}
 
@@ -112,7 +112,7 @@ public class DuplicateAction extends Action {
 			.withDataSetInfo()
 			.withUUID(UUID.randomUUID().toString())
 			.withName()
-			.add(LangString.of(name, App.lang()));
+			.add(0, LangString.of(name, App.lang()));
 		return method;
 	}
 
@@ -123,7 +123,7 @@ public class DuplicateAction extends Action {
 			.withUUID(UUID.randomUUID().toString())
 			.withProcessName()
 			.withBaseName()
-			.add(LangString.of(name, App.lang()));
+			.add(0, LangString.of(name, App.lang()));
 		return process;
 	}
 
@@ -133,7 +133,7 @@ public class DuplicateAction extends Action {
 			.withDataSetInfo()
 			.withUUID(UUID.randomUUID().toString())
 			.withName()
-			.add(LangString.of(name, App.lang()));
+			.add(0, LangString.of(name, App.lang()));
 		return source;
 	}
 
@@ -143,7 +143,7 @@ public class DuplicateAction extends Action {
 			.withDataSetInfo()
 			.withUUID(UUID.randomUUID().toString())
 			.withName()
-			.add(LangString.of(name, App.lang()));
+			.add(0, LangString.of(name, App.lang()));
 		return group;
 	}
 

@@ -21,6 +21,7 @@ import org.openlca.ilcd.methods.ImpactMethod;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.sources.Source;
 import org.openlca.ilcd.units.UnitGroup;
+import org.openlca.ilcd.util.DataSets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,74 +78,58 @@ public class DuplicateAction extends Action {
 
 	private Contact contact(String name, Ref ref) {
 		var contact = App.store().get(Contact.class, ref.getUUID());
-		contact.withContactInfo()
-			.withDataSetInfo()
-			.withUUID(UUID.randomUUID().toString())
-			.withName()
-			.add(0, LangString.of(name, App.lang()));
+		DataSets.withUUID(contact, UUID.randomUUID().toString());
+		updateDataSetName(contact, name, App.lang());
 		return contact;
 	}
 
 	private Flow flow(String name, Ref ref) {
 		var flow = App.store().get(Flow.class, ref.getUUID());
-		flow.withFlowInfo()
-			.withDataSetInfo()
-			.withUUID(UUID.randomUUID().toString())
-			.withFlowName()
-			.withBaseName()
-			.add(0, LangString.of(name, App.lang()));
+		DataSets.withUUID(flow, UUID.randomUUID().toString());
+		updateDataSetName(flow, name, App.lang());
 		return flow;
 	}
 
 	private FlowProperty flowProperty(String name, Ref ref) {
 		var property = App.store().get(FlowProperty.class, ref.getUUID());
-		property.withFlowPropertyInfo()
-			.withDataSetInfo()
-			.withUUID(UUID.randomUUID().toString())
-			.withName()
-			.add(0, LangString.of(name, App.lang()));
+		DataSets.withUUID(property, UUID.randomUUID().toString());
+		updateDataSetName(property, name, App.lang());
 		return property;
 	}
 
 	private ImpactMethod impactMethod(String name, Ref ref) {
 		var method = App.store().get(ImpactMethod.class, ref.getUUID());
-		method.withMethodInfo()
-			.withDataSetInfo()
-			.withUUID(UUID.randomUUID().toString())
-			.withName()
-			.add(0, LangString.of(name, App.lang()));
+		DataSets.withUUID(method, UUID.randomUUID().toString());
+		updateDataSetName(method, name, App.lang());
 		return method;
 	}
 
 	private Process process(String name, Ref ref) {
 		var process = App.store().get(Process.class, ref.getUUID());
-		process.withProcessInfo()
-			.withDataSetInfo()
-			.withUUID(UUID.randomUUID().toString())
-			.withProcessName()
-			.withBaseName()
-			.add(0, LangString.of(name, App.lang()));
+		DataSets.withUUID(process, UUID.randomUUID().toString());
+		updateDataSetName(process, name, App.lang());
 		return process;
 	}
-
+	
 	private Source source(String name, Ref ref) {
 		var source = App.store().get(Source.class, ref.getUUID());
-		source.withSourceInfo()
-			.withDataSetInfo()
-			.withUUID(UUID.randomUUID().toString())
-			.withName()
-			.add(0, LangString.of(name, App.lang()));
+		DataSets.withUUID(source, UUID.randomUUID().toString());
+		updateDataSetName(source, name, App.lang());
 		return source;
 	}
 
 	private UnitGroup unitGroup(String name, Ref ref) {
 		var group = App.store().get(UnitGroup.class, ref.getUUID());
-		group.withUnitGroupInfo()
-			.withDataSetInfo()
-			.withUUID(UUID.randomUUID().toString())
-			.withName()
-			.add(0, LangString.of(name, App.lang()));
+		DataSets.withUUID(group, UUID.randomUUID().toString());
+		updateDataSetName(group, name, App.lang());
 		return group;
 	}
 
+	private void updateDataSetName(IDataSet ds, String name, String lang) {
+		var baseName = DataSets.getBaseName(ds);
+		if (baseName != null) {
+			baseName.removeIf(n -> n.lang.trim().equalsIgnoreCase(App.lang().trim()));
+			baseName.add(LangString.of(name, lang));
+		}
+	}
 }

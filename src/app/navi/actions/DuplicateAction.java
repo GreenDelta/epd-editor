@@ -8,19 +8,13 @@ import app.rcp.Icon;
 import app.store.Data;
 import app.util.MsgBox;
 import app.util.UI;
+import epd.model.Xml;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
-import org.openlca.ilcd.contacts.Contact;
-import org.openlca.ilcd.flowproperties.FlowProperty;
-import org.openlca.ilcd.flows.Flow;
-import org.openlca.ilcd.methods.ImpactMethod;
-import org.openlca.ilcd.processes.Process;
-import org.openlca.ilcd.sources.Source;
-import org.openlca.ilcd.units.UnitGroup;
 import org.openlca.ilcd.util.DataSets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,15 +35,15 @@ public class DuplicateAction extends Action {
 	public void run() {
 		if (e == null || e.ref == null || !e.ref.isValid())
 			return;
-		InputDialog d = new InputDialog(UI.shell(), M.SaveAs,
+		var d = new InputDialog(UI.shell(), M.SaveAs,
 			M.SaveAs_Message + ":", App.s(e.ref.getName()), null);
 		if (d.open() != Window.OK)
 			return;
-		String name = d.getValue();
+		var name = d.getValue();
 		try {
-			IDataSet ds = duplicate(name);
+			var ds = duplicate(name);
 			if (ds == null) {
-				MsgBox.error("#Could not duplicate data set type="
+				MsgBox.error("Could not duplicate data set type="
 					+ e.ref.getType() + " id=" + e.ref.getUUID());
 				return;
 			}
@@ -58,78 +52,20 @@ public class DuplicateAction extends Action {
 		} catch (Exception ex) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("Failed to duplicate data set " + e.ref, ex);
-			MsgBox.error("#Could not duplicate data set type="
+			MsgBox.error("Could not duplicate data set type="
 				+ e.ref.getType() + " id=" + e.ref.getUUID());
 		}
 	}
 
 	private IDataSet duplicate(String name) {
-		return switch (e.ref.getType()) {
-			case CONTACT -> contact(name, e.ref);
-			case FLOW -> flow(name, e.ref);
-			case FLOW_PROPERTY -> flowProperty(name, e.ref);
-			case IMPACT_METHOD -> impactMethod(name, e.ref);
-			case PROCESS -> process(name, e.ref);
-			case SOURCE -> source(name, e.ref);
-			case UNIT_GROUP -> unitGroup(name, e.ref);
-			default -> null;
-		};
-	}
-
-	private Contact contact(String name, Ref ref) {
-		var contact = App.store().get(Contact.class, ref.getUUID());
-		DataSets.withUUID(contact, UUID.randomUUID().toString());
-		updateDataSetName(contact, name, App.lang());
-		return contact;
-	}
-
-	private Flow flow(String name, Ref ref) {
-		var flow = App.store().get(Flow.class, ref.getUUID());
-		DataSets.withUUID(flow, UUID.randomUUID().toString());
-		updateDataSetName(flow, name, App.lang());
-		return flow;
-	}
-
-	private FlowProperty flowProperty(String name, Ref ref) {
-		var property = App.store().get(FlowProperty.class, ref.getUUID());
-		DataSets.withUUID(property, UUID.randomUUID().toString());
-		updateDataSetName(property, name, App.lang());
-		return property;
-	}
-
-	private ImpactMethod impactMethod(String name, Ref ref) {
-		var method = App.store().get(ImpactMethod.class, ref.getUUID());
-		DataSets.withUUID(method, UUID.randomUUID().toString());
-		updateDataSetName(method, name, App.lang());
-		return method;
-	}
-
-	private Process process(String name, Ref ref) {
-		var process = App.store().get(Process.class, ref.getUUID());
-		DataSets.withUUID(process, UUID.randomUUID().toString());
-		updateDataSetName(process, name, App.lang());
-		return process;
-	}
-	
-	private Source source(String name, Ref ref) {
-		var source = App.store().get(Source.class, ref.getUUID());
-		DataSets.withUUID(source, UUID.randomUUID().toString());
-		updateDataSetName(source, name, App.lang());
-		return source;
-	}
-
-	private UnitGroup unitGroup(String name, Ref ref) {
-		var group = App.store().get(UnitGroup.class, ref.getUUID());
-		DataSets.withUUID(group, UUID.randomUUID().toString());
-		updateDataSetName(group, name, App.lang());
-		return group;
-	}
-
-	private void updateDataSetName(IDataSet ds, String name, String lang) {
-		var baseName = DataSets.getBaseName(ds);
-		if (baseName != null) {
-			baseName.removeIf(n -> n.lang.trim().equalsIgnoreCase(App.lang().trim()));
-			baseName.add(LangString.of(name, lang));
-		}
+		var dsClass = e.ref.getType().getDataSetClass();
+		var ds = App.store().get(dsClass, e.ref.getUUID());
+		if (ds == null)
+			return null;
+		DataSets.withUUID(ds, UUID.randomUUID().toString());
+		DataSets.withVersion(ds, "00.00.000");
+		DataSets.withTimeStamp(ds, Xml.now());
+		DataSets.withBaseName(ds, LangString.of(name, App.lang()));
+		return ds;
 	}
 }

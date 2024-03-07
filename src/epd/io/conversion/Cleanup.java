@@ -4,11 +4,12 @@ import com.google.common.base.Strings;
 import epd.model.EpdDataSet;
 import org.openlca.ilcd.commons.CommissionerAndGoal;
 import org.openlca.ilcd.commons.Other;
-import org.openlca.ilcd.commons.Time;
 import org.openlca.ilcd.processes.DataGenerator;
 import org.openlca.ilcd.processes.Geography;
 import org.openlca.ilcd.processes.Location;
 import org.openlca.ilcd.processes.Technology;
+import org.openlca.ilcd.processes.Time;
+import org.openlca.ilcd.processes.epd.EpdTimeExtension;
 import org.openlca.ilcd.util.Processes;
 
 /**
@@ -64,7 +65,7 @@ class Cleanup {
 		return time.getDescription().isEmpty()
 			&& time.getReferenceYear() == null
 			&& time.getValidUntil() == null
-			&& isEmpty(time.getOther());
+			&& isEmpty(time.getEpdExtension());
 	}
 
 	private static boolean isEmpty(Geography geography) {
@@ -98,6 +99,13 @@ class Cleanup {
 			return true;
 		return generator.getContacts().isEmpty()
 			&& isEmpty(generator.getOther());
+	}
+
+	private static boolean isEmpty(EpdTimeExtension ext) {
+		if (ext == null)
+			return true;
+		return ext.getPublicationDate() == null
+			&& ext.getAny().isEmpty();
 	}
 
 	private static boolean isEmpty(Other other) {

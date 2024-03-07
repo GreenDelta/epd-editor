@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Objects;
 
 import epd.util.Strings;
-import org.openlca.ilcd.commons.Other;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.Processes;
 import org.slf4j.LoggerFactory;
@@ -55,9 +54,9 @@ class EPDExtensionReader {
 
 		// read the extensions that are stored under `dataSetInformation`
 		var info = Processes.getDataSetInfo(process);
-		if (info == null || info.getOther() == null)
+		if (info == null || info.getEpdExtension() == null)
 			return;
-		Other other = info.getOther();
+		var other = info.getEpdExtension();
 		List<Scenario> scenarios = ScenarioConverter.readScenarios(other);
 		epd.scenarios.addAll(scenarios);
 		List<ModuleEntry> modules = ModuleConverter.readModules(other, profile);
@@ -68,9 +67,9 @@ class EPDExtensionReader {
 
 	private void readSubType(EpdDataSet dataSet) {
 		var method = Processes.getInventoryMethod(process);
-		if (method == null || method.getOther() == null)
+		if (method == null || method.getEpdExtension() == null)
 			return;
-		var elem = Dom.getElement(method.getOther(), "subType");
+		var elem = Dom.getElement(method.getEpdExtension(), "subType");
 		if (elem != null) {
 			dataSet.subType = SubType.fromLabel(elem.getTextContent());
 		}
@@ -78,9 +77,9 @@ class EPDExtensionReader {
 
 	private void readPublicationDate(EpdDataSet epd) {
 		var time = Processes.getTime(epd.process);
-		if (time == null || time.getOther() == null)
+		if (time == null || time.getEpdExtension() == null)
 			return;
-		var elem = Dom.getElement(time.getOther(), "publicationDateOfEPD");
+		var elem = Dom.getElement(time.getEpdExtension(), "publicationDateOfEPD");
 		if (elem == null)
 			return;
 		var text = elem.getTextContent();

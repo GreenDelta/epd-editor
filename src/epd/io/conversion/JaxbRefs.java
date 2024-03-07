@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.openlca.ilcd.commons.Extension;
 import org.openlca.ilcd.commons.Other;
 import org.openlca.ilcd.commons.Ref;
 import org.slf4j.LoggerFactory;
@@ -34,7 +35,7 @@ final class JaxbRefs {
 		to.withName().addAll(from.getName());
 	}
 
-	static <T extends Ref> void write(Class<T> type, List<T> refs, Other ext) {
+	static <T extends Ref> void write(Class<T> type, List<T> refs, Extension ext) {
 		if (refs.isEmpty() || ext == null)
 			return;
 		ext.withAny().clear();
@@ -55,7 +56,7 @@ final class JaxbRefs {
 		}
 	}
 
-	static <T extends Ref> List<Ref> read(Class<T> type, Other ext) {
+	static <T extends Ref> List<Ref> read(Class<T> type, Extension ext) {
 		if (ext == null || type == null || ext.getAny().isEmpty())
 			return Collections.emptyList();
 		var rootDef = type.getAnnotation(XmlRootElement.class);

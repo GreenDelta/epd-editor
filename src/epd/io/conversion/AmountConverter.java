@@ -3,7 +3,7 @@ package epd.io.conversion;
 import com.google.common.base.Strings;
 import epd.model.Amount;
 import epd.model.EpdProfile;
-import org.openlca.ilcd.commons.Other;
+import org.openlca.ilcd.commons.Extension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -17,7 +17,7 @@ import java.util.Objects;
 
 class AmountConverter {
 
-	static List<Amount> readAmounts(Other other, EpdProfile profile) {
+	static List<Amount> readAmounts(Extension other, EpdProfile profile) {
 		if (other == null)
 			return Collections.emptyList();
 		List<Amount> amounts = new ArrayList<>();
@@ -69,8 +69,8 @@ class AmountConverter {
 		}
 	}
 
-	static void writeAmounts(List<Amount> amounts, Other extension,
-													 Document doc) {
+	static void writeAmounts(
+		List<Amount> amounts, Extension extension, Document doc) {
 		if (amounts == null || extension == null || doc == null)
 			return;
 		for (Amount amount : amounts) {

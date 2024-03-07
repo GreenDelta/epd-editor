@@ -1,6 +1,7 @@
 package epd.io.conversion;
 
 import epd.util.Strings;
+import org.openlca.ilcd.commons.Extension;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Other;
 import org.slf4j.Logger;
@@ -187,7 +188,7 @@ public final class Dom {
 		return s.toString();
 	}
 
-	static Element getElement(Other extension, String tagName) {
+	static Element getElement(Extension extension, String tagName) {
 		if (extension == null || tagName == null)
 			return null;
 		for (var any : extension.getAny()) {
@@ -202,7 +203,7 @@ public final class Dom {
 	/**
 	 * Removes all elements with the given tag-name from the extensions.
 	 */
-	public static void clear(Other extension, String tagName) {
+	public static void clear(Extension extension, String tagName) {
 		if (extension == null || tagName == null)
 			return;
 		List<Element> matches = new ArrayList<>();
@@ -220,7 +221,7 @@ public final class Dom {
 	/**
 	 * Returns true if the given extension element is null or empty.
 	 */
-	static boolean isEmpty(Other ext) {
+	static boolean isEmpty(Extension ext) {
 		if (ext == null || ext.getAny().isEmpty())
 			return true;
 		for (Object o : ext.getAny()) {

@@ -26,14 +26,14 @@ class OriginalEPDRef extends Ref {
 		if (epd.originalEPDs.isEmpty()) {
 			var rep = Processes.getRepresentativeness(epd.process);
 			if (rep != null) {
-				rep.withOther(null);
+				rep.withEpdExtension(null);
 			}
 			return;
 		}
 
 		var other = epd.process.withModelling()
 			.withRepresentativeness()
-			.withOther();
+			.withEpdExtension();
 		other.withAny().clear();
 		var refs = epd.originalEPDs.stream()
 				.map(OriginalEPDRef::wrap)
@@ -45,9 +45,9 @@ class OriginalEPDRef extends Ref {
 		if (epd == null)
 			return;
 		var rep = Processes.getRepresentativeness(epd.process);
-		if (rep == null || rep.getOther() == null)
+		if (rep == null || rep.getEpdExtension() == null)
 			return;
-		var refs = JaxbRefs.read(OriginalEPDRef.class, rep.getOther());
+		var refs = JaxbRefs.read(OriginalEPDRef.class, rep.getEpdExtension());
 		if (refs.isEmpty())
 			return;
 		epd.originalEPDs.addAll(refs);

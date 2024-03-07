@@ -2,6 +2,7 @@ package epd.model.content;
 
 import epd.io.conversion.Dom;
 import epd.io.conversion.Vocab;
+import org.openlca.ilcd.commons.Extension;
 import org.openlca.ilcd.commons.Other;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -28,7 +29,7 @@ public class ContentDeclaration {
 	 * Read a content declaration from the given extension element. May return
 	 * null when the extension is null or when it has no content declaration.
 	 */
-	public static ContentDeclaration read(Other other) {
+	public static ContentDeclaration read(Extension other) {
 		if (other == null)
 			return null;
 
@@ -61,7 +62,7 @@ public class ContentDeclaration {
 	 * Write this content declaration to the given extension element deleting an
 	 * old declaration if it already exists.
 	 */
-	public void write(Other other, Document doc) {
+	public void write(Extension other, Document doc) {
 		if (other == null || doc == null)
 			return;
 		Dom.clear(other, "contentDeclaration");

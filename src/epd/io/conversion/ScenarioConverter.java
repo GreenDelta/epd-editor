@@ -3,6 +3,7 @@ package epd.io.conversion;
 import epd.model.EpdDataSet;
 import epd.model.Scenario;
 import epd.util.Strings;
+import org.openlca.ilcd.commons.Extension;
 import org.openlca.ilcd.commons.Other;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +20,7 @@ import java.util.Objects;
 
 class ScenarioConverter {
 
-	static List<Scenario> readScenarios(Other other) {
+	static List<Scenario> readScenarios(Extension other) {
 		if (other == null)
 			return Collections.emptyList();
 		for (Object any : other.getAny()) {
@@ -81,7 +82,7 @@ class ScenarioConverter {
 		}
 	}
 
-	static void writeScenarios(EpdDataSet dataSet, Other other, Document doc) {
+	static void writeScenarios(EpdDataSet dataSet, Extension other, Document doc) {
 		if (dataSet == null || other == null || doc == null
 			|| dataSet.scenarios.isEmpty())
 			return;

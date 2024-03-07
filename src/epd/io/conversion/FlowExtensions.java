@@ -2,6 +2,7 @@ package epd.io.conversion;
 
 import epd.model.EpdProduct;
 import epd.model.MaterialPropertyValue;
+import org.openlca.ilcd.commons.Extension;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Other;
 import org.openlca.ilcd.flows.Flow;
@@ -25,7 +26,7 @@ public class FlowExtensions {
 	}
 
 	private static void readInfoExtension(EpdProduct p) {
-		Other extension = getInfoExtension(p.flow, false);
+		var extension = getInfoExtension(p.flow, false);
 		if (extension == null)
 			return;
 		MatML matML = new MatML(extension);
@@ -75,12 +76,12 @@ public class FlowExtensions {
 			var info = Flows.getDataSetInfo(p.flow);
 			// clear the extension point
 			if (info != null) {
-				info.withOther(null);
+				info.withEpdExtension(null);
 			}
 			return;
 		}
 
-		Other ext = getInfoExtension(p.flow, true);
+		var ext = getInfoExtension(p.flow, true);
 		DataSetRefExtension.write(p.genericFlow, "isA", ext);
 		MatML matML = new MatML(ext);
 		if (p.properties.isEmpty()) {
@@ -112,14 +113,14 @@ public class FlowExtensions {
 		e.setTextContent(Boolean.toString(p.vendorSpecific));
 	}
 
-	private static Other getInfoExtension(Flow flow, boolean create) {
+	private static Extension getInfoExtension(Flow flow, boolean create) {
 		if (create)
 			return flow.withFlowInfo()
 				.withDataSetInfo()
-				.withOther();
+				.withEpdExtension();
 		var info = Flows.getDataSetInfo(flow);
 		return info != null
-			? info.getOther()
+			? info.getEpdExtension()
 			: null;
 	}
 

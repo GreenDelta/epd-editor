@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
-import org.openlca.ilcd.commons.Other;
 import org.openlca.ilcd.processes.Modelling;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.Processes;
@@ -77,7 +76,7 @@ class EPDExtensionWriter {
 		// write info extensions
 		var info = epd.process.withProcessInfo()
 			.withDataSetInfo();
-		var infoOther = info.withOther();
+		var infoOther = info.getEpdExtension();
 		ModuleConverter.writeModules(epd, infoOther, doc);
 		ScenarioConverter.writeScenarios(epd, infoOther, doc);
 		SafetyMarginsConverter.write(epd, infoOther, doc);
@@ -85,7 +84,7 @@ class EPDExtensionWriter {
 			epd.contentDeclaration.write(infoOther, doc);
 		}
 		if (Dom.isEmpty(infoOther)) {
-			info.withOther(null);
+			info.withEpdExtension(null);
 		}
 
 		writeProfile();
@@ -100,13 +99,12 @@ class EPDExtensionWriter {
 			var m = Processes.getInventoryMethod(epd.process);
 			if (m == null)
 				return;
-			m.withOther(null);
+			m.withEpdExtension(null);
 			return;
 		}
-		var other = new Other();
-		epd.process.withModelling()
+		var other = epd.process.withModelling()
 			.withInventoryMethod()
-			.withOther(other);
+			.withEpdExtension();
 		var elem = Dom.createElement(Vocab.NS_EPD, "subType");
 		if (elem != null) {
 			elem.setTextContent(epd.subType.getLabel());
@@ -134,21 +132,21 @@ class EPDExtensionWriter {
 		var time = t == null
 			? epd.process.withProcessInfo().withTime()
 			: t;
-		if (pubDate == null && time.getOther() == null)
+		if (pubDate == null && time.getEpdExtension() == null)
 			return;
 		var tag = "publicationDateOfEPD";
 
 		// delete it if publication date is null
 		if (pubDate == null) {
-			Dom.clear(time.getOther(), tag);
-			if (Dom.isEmpty(time.getOther())) {
-				time.withOther(null);
+			Dom.clear(time.getEpdExtension(), tag);
+			if (Dom.isEmpty(time.getEpdExtension())) {
+				time.withEpdExtension(null);
 			}
 			return;
 		}
 
 		// create or update the element
-		var elem = Dom.getElement(time.getOther(), tag);
+		var elem = Dom.getElement(time.getEpdExtension(), tag);
 		if (elem != null) {
 			elem.setTextContent(pubDate.toString());
 			return;
@@ -157,6 +155,6 @@ class EPDExtensionWriter {
 		if (newElem == null)
 			return;
 		newElem.setTextContent(pubDate.toString());
-		time.withOther().withAny().add(newElem);
+		time.withEpdExtension().withAny().add(newElem);
 	}
 }

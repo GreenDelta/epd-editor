@@ -4,6 +4,7 @@ import app.App;
 import epd.model.EpdDataSet;
 import epd.model.SafetyMargins;
 import epd.util.Strings;
+import org.openlca.ilcd.commons.Extension;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Other;
 import org.slf4j.Logger;
@@ -17,7 +18,7 @@ import java.util.Objects;
 
 class SafetyMarginsConverter {
 
-	static SafetyMargins read(Other other) {
+	static SafetyMargins read(Extension other) {
 		if (other == null)
 			return null;
 		for (Object any : other.getAny()) {
@@ -63,7 +64,7 @@ class SafetyMarginsConverter {
 		return margins;
 	}
 
-	static void write(EpdDataSet ds, Other other, Document doc) {
+	static void write(EpdDataSet ds, Extension other, Document doc) {
 		if (ds == null || other == null || doc == null)
 			return;
 		Dom.clear(other, "safetyMargins");

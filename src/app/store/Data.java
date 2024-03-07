@@ -45,6 +45,7 @@ public final class Data {
 			return;
 		try {
 			Extensions.write(epd);
+			epd.process.withEpdVersion("1.2");
 			save(epd.process);
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Data.class);

@@ -9,6 +9,9 @@ import org.openlca.ilcd.processes.Geography;
 import org.openlca.ilcd.processes.Location;
 import org.openlca.ilcd.processes.Technology;
 import org.openlca.ilcd.processes.Time;
+import org.openlca.ilcd.processes.epd.EpdContentDeclaration;
+import org.openlca.ilcd.processes.epd.EpdInfoExtension;
+import org.openlca.ilcd.processes.epd.EpdSafetyMargins;
 import org.openlca.ilcd.processes.epd.EpdTimeExtension;
 import org.openlca.ilcd.util.Processes;
 
@@ -111,4 +114,25 @@ class Cleanup {
 	private static boolean isEmpty(Other other) {
 		return other == null || other.getAny().isEmpty();
 	}
+
+	static boolean isEmpty(EpdInfoExtension ext) {
+		if (ext == null)
+			return true;
+		return isEmpty(ext.getContentDeclaration())
+			&& ext.getModules().isEmpty()
+			&& ext.getScenarios().isEmpty()
+			&& isEmpty(ext.getSafetyMargins())
+			&& ext.getAny().isEmpty();
+	}
+
+	private static boolean isEmpty(EpdContentDeclaration dec) {
+		return dec == null || dec.getElements().isEmpty();
+	}
+
+	private static boolean isEmpty(EpdSafetyMargins esm) {
+		if (esm == null)
+			return true;
+		return esm.getValue() == null && esm.getDescription().isEmpty();
+	}
+
 }

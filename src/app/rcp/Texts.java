@@ -5,6 +5,9 @@ import org.eclipse.swt.widgets.Text;
 import app.util.Colors;
 import epd.util.Strings;
 
+import java.util.OptionalDouble;
+import java.util.function.Consumer;
+
 public class Texts {
 
 	private Texts() {
@@ -49,19 +52,25 @@ public class Texts {
 	}
 
 	public static void validateNumber(Text text) {
+		validateNumber(text, $ -> {});
+	}
+
+	public static void validateNumber(Text text, Consumer<OptionalDouble> fn) {
 		if (text == null)
 			return;
 		text.addModifyListener(_e -> {
-			String s = text.getText();
+			var s = text.getText();
 			if (Strings.nullOrEmpty(s)) {
 				text.setBackground(Colors.white());
 				text.setToolTipText(null);
+				fn.accept(OptionalDouble.empty());
 				return;
 			}
 			try {
-				Double.parseDouble(s);
+				var d = 	Double.parseDouble(s);
 				text.setBackground(Colors.white());
 				text.setToolTipText(null);
+				fn.accept(OptionalDouble.of(d));
 			} catch (Exception e) {
 				text.setBackground(Colors.errorColor());
 				text.setToolTipText(s + " is not a number");

@@ -107,6 +107,7 @@ public class NewDataSetAction extends Action {
 			case IMPACT_METHOD -> init(new ImpactMethod());
 			case PROCESS -> {
 				var p = init(new Process());
+				p.withEpdVersion("1.2");
 				Processes.withInventoryMethod(p)
 					.withProcessType(ProcessType.EPD);
 				yield p;

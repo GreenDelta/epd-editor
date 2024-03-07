@@ -13,6 +13,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.openlca.ilcd.processes.epd.EpdScenario;
+import org.openlca.ilcd.util.Epds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +26,6 @@ import epd.model.Indicator;
 import epd.model.IndicatorResult;
 import epd.model.Module;
 import epd.model.ModuleEntry;
-import epd.model.Scenario;
 import epd.util.Strings;
 
 /**
@@ -123,13 +124,13 @@ class ResultImport implements Runnable {
 	private void syncScenario(Amount amount) {
 		if (amount == null || Strings.nullOrEmpty(amount.scenario))
 			return;
-		for (Scenario s : dataSet.scenarios) {
-			if (eq(s.name, amount.scenario))
+		for (var s : Epds.getScenarios(dataSet.process)) {
+			if (eq(s.getName(), amount.scenario))
 				return;
 		}
-		Scenario s = new Scenario();
-		s.name = amount.scenario.trim();
-		dataSet.scenarios.add(s);
+		var scenario = new EpdScenario()
+			.withName(amount.scenario.trim());
+		Epds.withScenarios(dataSet.process).add(scenario);
 	}
 
 	private void addResult(List<IndicatorResult> results, Indicator indicator,

@@ -78,7 +78,6 @@ class EPDExtensionWriter {
 			.withDataSetInfo();
 		var infoOther = info.getEpdExtension();
 		ModuleConverter.writeModules(epd, infoOther, doc);
-		ScenarioConverter.writeScenarios(epd, infoOther, doc);
 		SafetyMarginsConverter.write(epd, infoOther, doc);
 		if (epd.contentDeclaration != null) {
 			epd.contentDeclaration.write(infoOther, doc);

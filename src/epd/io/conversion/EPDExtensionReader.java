@@ -5,7 +5,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 
-import epd.util.Strings;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.Processes;
 import org.slf4j.LoggerFactory;
@@ -15,10 +14,10 @@ import epd.model.EpdDataSet;
 import epd.model.EpdProfile;
 import epd.model.IndicatorResult;
 import epd.model.ModuleEntry;
-import epd.model.Scenario;
 import epd.model.SubType;
 import epd.model.content.ContentDeclaration;
 import epd.model.qmeta.QMetaData;
+import epd.util.Strings;
 
 /**
  * Converts an ILCD process data set to an EPD data set.
@@ -57,8 +56,6 @@ class EPDExtensionReader {
 		if (info == null || info.getEpdExtension() == null)
 			return;
 		var other = info.getEpdExtension();
-		List<Scenario> scenarios = ScenarioConverter.readScenarios(other);
-		epd.scenarios.addAll(scenarios);
 		List<ModuleEntry> modules = ModuleConverter.readModules(other, profile);
 		epd.moduleEntries.addAll(modules);
 		epd.safetyMargins = SafetyMarginsConverter.read(other);

@@ -19,7 +19,6 @@ import epd.model.EpdDataSet;
 import epd.model.EpdProfile;
 import epd.model.Module;
 import epd.model.ModuleEntry;
-import epd.model.Scenario;
 import epd.util.Strings;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -33,6 +32,7 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
+import org.openlca.ilcd.util.Epds;
 
 import java.io.File;
 import java.util.Arrays;
@@ -318,10 +318,11 @@ class ResultPage extends FormPage {
 
 		@Override
 		protected String[] getItems(ModuleEntry element) {
-			List<Scenario> scenarios = epd.scenarios;
+			var scenarios = Epds.getScenarios(epd.process);
 			String[] names = new String[scenarios.size()];
-			for (int i = 0; i < scenarios.size(); i++)
-				names[i] = scenarios.get(i).name;
+			for (int i = 0; i < scenarios.size(); i++) {
+				names[i] = scenarios.get(i).getName();
+			}
 			Arrays.sort(names);
 			return names;
 		}

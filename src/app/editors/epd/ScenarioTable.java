@@ -1,18 +1,6 @@
 package app.editors.epd;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.viewers.BaseLabelProvider;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.Section;
-
+import app.App;
 import app.M;
 import app.Tooltips;
 import app.rcp.Icon;
@@ -23,7 +11,21 @@ import app.util.Viewers;
 import app.util.tables.CheckBoxCellModifier;
 import app.util.tables.ModifySupport;
 import app.util.tables.TextCellModifier;
-import epd.model.Scenario;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.viewers.BaseLabelProvider;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.Section;
+import org.openlca.ilcd.commons.LangString;
+import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.processes.epd.EpdScenario;
+import org.openlca.ilcd.util.Epds;
+
+import java.util.List;
+import java.util.Objects;
 
 class ScenarioTable {
 
@@ -34,11 +36,11 @@ class ScenarioTable {
 
 	private final EpdEditor editor;
 	private final TableViewer table;
-	private final List<Scenario> scenarios;
+	private final Process epd;
 
 	public ScenarioTable(EpdEditor editor, Section section, FormToolkit tk) {
 		this.editor = editor;
-		this.scenarios = editor.dataSet.scenarios;
+		this.epd = editor.dataSet.process;
 		Composite comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
 		table = Tables.createViewer(comp, NAME, GROUP, DESCRIPTION, DEFAULT);
@@ -51,7 +53,7 @@ class ScenarioTable {
 	}
 
 	private void addModifiers() {
-		ModifySupport<Scenario> ms = new ModifySupport<>(table);
+		var ms = new ModifySupport<EpdScenario>(table);
 		ms.bind(NAME, new TextModifier(NAME));
 		ms.bind(GROUP, new TextModifier(GROUP));
 		ms.bind(DESCRIPTION, new TextModifier(DESCRIPTION));
@@ -61,116 +63,117 @@ class ScenarioTable {
 	private void bindActions(Section section) {
 		Action add = Actions.create(M.Add, Icon.ADD.des(), this::onCreate);
 		Action rem = Actions.create(M.Remove, Icon.DELETE.des(),
-				this::onRemove);
+			this::onRemove);
 		Actions.bind(section, add, rem);
 		Actions.bind(table, add, rem);
 	}
 
 	public void setInput() {
-		if (scenarios == null)
-			table.setInput(Collections.emptyList());
-		else
-			table.setInput(scenarios);
+		table.setInput(Epds.getScenarios(epd));
 	}
 
 	protected void onCreate() {
-		Scenario scenario = new Scenario();
-		scenario.name = "New scenario";
-		scenario.defaultScenario = false;
-		scenarios.add(scenario);
+		var scenario = new EpdScenario()
+			.withName("New scenario")
+			.withDefaultScenario(false);
+		Epds.withScenarios(epd).add(scenario);
 		setInput();
 		editor.setDirty();
 	}
 
 	protected void onRemove() {
-		List<Scenario> selection = Viewers.getAllSelected(table);
-		for (Scenario s : selection)
-			scenarios.remove(s);
+		List<EpdScenario> selection = Viewers.getAllSelected(table);
+		for (var s : selection) {
+			Epds.withScenarios(epd).remove(s);
+		}
 		setInput();
 		editor.setDirty();
 	}
 
 	private static class LabelProvider extends BaseLabelProvider implements
-			ITableLabelProvider {
+		ITableLabelProvider {
 
 		@Override
 		public Image getColumnImage(Object obj, int col) {
-			Scenario scenario = (Scenario) obj;
-			if (col != 3)
+			if (!(obj instanceof EpdScenario s) || col != 3)
 				return null;
-			if (scenario.defaultScenario)
-				return Icon.CHECK_TRUE.img();
-			return Icon.CHECK_FALSE.img();
+			return s.isDefaultScenario()
+				? Icon.CHECK_TRUE.img()
+				: Icon.CHECK_FALSE.img();
 		}
 
 		@Override
 		public String getColumnText(Object obj, int col) {
-			Scenario scenario = (Scenario) obj;
-			if (scenario == null)
-				return "";
+			if (!(obj instanceof EpdScenario s))
+				return null;
 			return switch (col) {
-			case 0 -> scenario.name;
-			case 1 -> scenario.group;
-			case 2 -> scenario.description;
-			default -> null;
+				case 0 -> s.getName();
+				case 1 -> s.getGroup();
+				case 2 -> App.s(s.getDescription());
+				default -> null;
 			};
 		}
 	}
 
-	private class TextModifier extends TextCellModifier<Scenario> {
+	private class TextModifier extends TextCellModifier<EpdScenario> {
 
-		private final String type;
+		private final String field;
 
-		public TextModifier(String type) {
-			this.type = type;
+		public TextModifier(String field) {
+			this.field = field;
 		}
 
 		@Override
-		protected String getText(Scenario scenario) {
-			if (NAME.equals(type))
-				return scenario.name;
-			else if (GROUP.equals(type))
-				return scenario.group;
-			else if (DESCRIPTION.equals(type))
-				return scenario.description;
+		protected String getText(EpdScenario s) {
+			if (NAME.equals(field))
+				return s.getName();
+			else if (GROUP.equals(field))
+				return s.getGroup();
+			else if (DESCRIPTION.equals(field))
+				return App.s(s.getDescription());
 			else
 				return "";
 		}
 
 		@Override
-		protected void setText(Scenario scenario, String newText) {
-			if (scenario == null)
+		protected void setText(EpdScenario s, String newText) {
+			if (s == null)
 				return;
-			String oldText = getText(scenario);
+			String oldText = getText(s);
 			if (Objects.equals(oldText, newText))
 				return;
-			if (NAME.equals(type))
-				scenario.name = newText;
-			else if (GROUP.equals(type))
-				scenario.group = newText;
-			else if (DESCRIPTION.equals(type))
-				scenario.description = newText;
+			if (NAME.equals(field)) {
+				s.withName(newText);
+			} else if (GROUP.equals(field)) {
+				s.withGroup(newText);
+			} else if (DESCRIPTION.equals(field)) {
+				LangString.set(s.withDescription(), newText, App.lang());
+			}
 			editor.setDirty();
 		}
 	}
 
-	private class DefaultModifier extends CheckBoxCellModifier<Scenario> {
+	private class DefaultModifier extends CheckBoxCellModifier<EpdScenario> {
 
 		@Override
-		protected boolean isChecked(Scenario element) {
-			return element.defaultScenario;
+		protected boolean isChecked(EpdScenario s) {
+			return s.isDefaultScenario();
 		}
 
 		@Override
-		protected void setChecked(Scenario checked, boolean value) {
-			if (checked == null)
+		protected void setChecked(EpdScenario s, boolean value) {
+			if (s == null)
 				return;
-			var group = checked.group;
-			for (var scenario : scenarios) {
-				if (Objects.equals(scenario, checked)) {
-					scenario.defaultScenario = value;
-				} else if (Objects.equals(group, scenario.group)) {
-					scenario.defaultScenario = false;
+			s.withDefaultScenario(value);
+
+			if (value) {
+				var group = s.getGroup();
+				for (var other : Epds.getScenarios(epd)) {
+					if (Objects.equals(s, other) || !other.isDefaultScenario())
+						continue;
+					if (Objects.equals(group, other.getGroup())) {
+						other.withDefaultScenario(false);
+					}
 				}
 			}
 			table.refresh();

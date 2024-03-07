@@ -86,8 +86,8 @@ class AdminPage extends FormPage {
 				.render(body, tk);
 
 		// preceding data version
-		var precedingVersions = Processes
-				.getPublication(process).withPrecedingVersions();
+		var precedingVersions = Processes.withPublication(process)
+			.withPrecedingVersions();
 		RefTable.create(DataSetType.PROCESS, precedingVersions)
 				.withEditor(editor)
 				.withTitle(M.PrecedingDataSetVersion)

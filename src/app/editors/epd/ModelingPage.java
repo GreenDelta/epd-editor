@@ -130,23 +130,25 @@ class ModelingPage extends FormPage {
 			.withTitle(M.ComplianceDeclarations)
 			.withTooltip(Tooltips.EPD_ComplianceDeclarations);
 		table.render(body, toolkit);
+
 		table.onAdd(system -> {
-			ComplianceDeclaration decl = Processes.getComplianceDeclaration(
-				process, system);
-			if (decl != null)
+			var dec = Processes.getComplianceDeclaration(process, system);
+			if (dec != null)
 				return;
-			Processes.getComplianceDeclaration(process, system);
+			dec = new ComplianceDeclaration();
+			dec.withSystem(system);
+			Processes.withComplianceDeclarations(process).add(dec);
 			editor.setDirty();
 		});
+
 		table.onRemove(system -> {
-			var decl = Processes.getComplianceDeclaration(process, system);
-			if (decl == null)
+			var dec = Processes.getComplianceDeclaration(process, system);
+			if (dec == null)
 				return;
-			process.withModelling().withComplianceDeclarations().remove(decl);
-			if (process.withModelling().withComplianceDeclarations()
-					.isEmpty()) {
-				process.withModelling().withComplianceDeclarations(null);
-			}
+			var dcs = Processes.getComplianceDeclarations(process);
+			if (dcs.isEmpty())
+				return;
+			dcs.remove(dec);
 			editor.setDirty();
 		});
 	}

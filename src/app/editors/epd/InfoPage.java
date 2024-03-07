@@ -1,6 +1,7 @@
 package app.editors.epd;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -19,7 +20,6 @@ import org.openlca.ilcd.processes.Location;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.ProcessName;
 import org.openlca.ilcd.processes.Technology;
-import org.openlca.ilcd.util.Processes;
 
 import app.App;
 import app.M;
@@ -55,10 +55,10 @@ class InfoPage extends FormPage {
 	protected void createFormContent(IManagedForm mForm) {
 		tk = mForm.getToolkit();
 		ProcessName pName = process.withProcessInfo()
-				.withDataSetInfo()
-				.withProcessName();
+			.withDataSetInfo()
+			.withProcessName();
 		Supplier<String> title = () -> M.EPD + ": "
-				+ App.s(pName.withBaseName());
+			+ App.s(pName.withBaseName());
 		ScrolledForm form = UI.formHeader(mForm, title.get());
 		editor.onSaved(() -> form.setText(title.get()));
 		Composite body = UI.formBody(form, mForm.getToolkit());
@@ -68,20 +68,20 @@ class InfoPage extends FormPage {
 		qRefSection(body);
 		RefTable.create(DataSetType.SOURCE,
 				process.withProcessInfo().withDataSetInfo().withExternalDocs())
-				.withEditor(editor)
-				.withTitle(M.ExternalDocumentationSources)
-				.withTooltip(Tooltips.EPD_ExternalDocumentationSources)
-				.render(body, tk);
+			.withEditor(editor)
+			.withTitle(M.ExternalDocumentationSources)
+			.withTooltip(Tooltips.EPD_ExternalDocumentationSources)
+			.render(body, tk);
 		createSafetyMarginsSection(body, tb);
 		createTimeSection(body, tb);
 		createGeographySection(body, tb);
 		createTechnologySection(body, tb);
 		RefTable.create(DataSetType.SOURCE,
 				process.withProcessInfo().withTechnology().withPictures())
-				.withEditor(editor)
-				.withTitle(M.FlowDiagramsOrPictures)
-				.withTooltip(Tooltips.EPD_FlowDiagramsOrPictures)
-				.render(body, tk);
+			.withEditor(editor)
+			.withTitle(M.FlowDiagramsOrPictures)
+			.withTooltip(Tooltips.EPD_FlowDiagramsOrPictures)
+			.render(body, tk);
 		form.reflow(true);
 	}
 
@@ -90,7 +90,7 @@ class InfoPage extends FormPage {
 		ProcessName pName = process.withProcessInfo().withDataSetInfo().withProcessName();
 		tb.text(comp, M.Name, Tooltips.EPD_Name, pName.withBaseName());
 		tb.text(comp, M.QuantitativeProperties,
-				Tooltips.EPD_FurtherProperties, pName.withFlowProperties());
+			Tooltips.EPD_FurtherProperties, pName.withFlowProperties());
 		DataSetInfo info = process.withProcessInfo().withDataSetInfo();
 		tb.text(comp, M.Synonyms, Tooltips.EPD_Synonyms, info.withSynonyms());
 		tb.multiText(comp, M.Comment, Tooltips.EPD_Comment, info.withComment());
@@ -100,19 +100,19 @@ class InfoPage extends FormPage {
 	private void categorySection(Composite body) {
 		DataSetInfo info = process.withProcessInfo().withDataSetInfo();
 		CategorySection section = new CategorySection(editor,
-				DataSetType.PROCESS, info.withClassifications());
+			DataSetType.PROCESS, info.withClassifications());
 		section.render(body, tk);
 	}
 
 	private void qRefSection(Composite parent) {
 		Composite comp = UI.formSection(parent, tk,
-				M.DeclaredProduct, Tooltips.EPD_DeclaredProduct);
+			M.DeclaredProduct, Tooltips.EPD_DeclaredProduct);
 		UI.formLabel(comp, tk, M.Product, Tooltips.EPD_DeclaredProduct);
 		RefLink refText = new RefLink(comp, tk, DataSetType.FLOW);
 		Exchange exchange = epd.productExchange();
 		refText.setRef(exchange.withFlow());
 		Text amountText = UI.formText(comp, tk,
-				M.Amount, Tooltips.EPD_ProductAmount);
+			M.Amount, Tooltips.EPD_ProductAmount);
 		amountText.setText(Double.toString(exchange.getMeanAmount()));
 		amountText.addModifyListener(e -> {
 			try {
@@ -125,7 +125,7 @@ class InfoPage extends FormPage {
 			}
 		});
 		Text unitText = UI.formText(comp, tk,
-				M.Unit, Tooltips.EPD_ProductUnit);
+			M.Unit, Tooltips.EPD_ProductUnit);
 		unitText.setText(RefDeps.getRefUnit(process));
 		unitText.setEditable(false);
 		refText.onChange(ref -> {
@@ -137,21 +137,21 @@ class InfoPage extends FormPage {
 
 	private void createSafetyMarginsSection(Composite parent, TextBuilder tb) {
 		Composite comp = UI.formSection(parent, tk,
-				M.SafetyMargins, Tooltips.EPD_UncertaintyMargins);
+			M.SafetyMargins, Tooltips.EPD_UncertaintyMargins);
 		SafetyMargins margins = epd.safetyMargins;
 		if (margins == null) {
 			margins = new SafetyMargins();
 			epd.safetyMargins = margins;
 		}
 		Text marginsText = UI.formText(comp, tk,
-				M.SafetyMargin, Tooltips.EPD_UncertaintyMargins);
+			M.SafetyMargin, Tooltips.EPD_UncertaintyMargins);
 		if (margins.margins != null) {
 			marginsText.setText(margins.margins.toString());
 		}
 		marginsText.addModifyListener(e -> modifyMargins(marginsText));
 		tb.multiText(comp, M.Description,
-				Tooltips.EPD_UncertaintyMarginsDescription,
-				margins.description);
+			Tooltips.EPD_UncertaintyMarginsDescription,
+			margins.description);
 	}
 
 	private void modifyMargins(Text text) {
@@ -176,11 +176,11 @@ class InfoPage extends FormPage {
 	private void createTechnologySection(Composite body, TextBuilder tb) {
 		Technology tech = process.withProcessInfo().withTechnology();
 		Composite comp = UI.formSection(body, tk,
-				M.Technology, Tooltips.EPD_Technology);
+			M.Technology, Tooltips.EPD_Technology);
 		tb.multiText(comp, M.TechnologyDescription,
-				Tooltips.EPD_TechnologyDescription, tech.withDescription());
+			Tooltips.EPD_TechnologyDescription, tech.withDescription());
 		tb.multiText(comp, M.TechnologicalApplicability,
-				Tooltips.EPD_TechnicalPrupose, tech.withApplicability());
+			Tooltips.EPD_TechnicalPrupose, tech.withApplicability());
 		UI.formLabel(comp, tk, M.Pictogram, Tooltips.EPD_Pictogram);
 		RefLink refText = new RefLink(comp, tk, DataSetType.SOURCE);
 		refText.setRef(tech.withPictogram());
@@ -194,50 +194,55 @@ class InfoPage extends FormPage {
 		var time = process.withProcessInfo().withTime();
 		var comp = UI.formSection(body, tk, M.Time, Tooltips.EPD_Time);
 		intText(comp, M.ReferenceYear, Tooltips.EPD_ReferenceYear,
-				time.getReferenceYear(), val -> time.withReferenceYear(val));
+			time.getReferenceYear(), time::withReferenceYear);
 		intText(comp, M.ValidUntil, Tooltips.EPD_ValidUntil,
-				time.getValidUntil(), val -> time.withValidUntil(val));
+			time.getValidUntil(), time::withValidUntil);
 
 		// publication date
 		tk.createLabel(comp, M.PublicationDate)
-				.setToolTipText(Tooltips.EPD_PublicationDate);
+			.setToolTipText(Tooltips.EPD_PublicationDate);
 		var dateBox = new DateTime(comp, SWT.DATE | SWT.DROP_DOWN);
 		if (epd.publicationDate != null) {
 			var pd = epd.publicationDate;
 			dateBox.setDate(
-					pd.getYear(),
-					pd.getMonthValue() - 1,
-					pd.getDayOfMonth());
+				pd.getYear(),
+				pd.getMonthValue() - 1,
+				pd.getDayOfMonth());
 		}
 		dateBox.addSelectionListener(Controls.onSelect(_e -> {
-			epd.publicationDate = LocalDate.of(
-					dateBox.getYear(),
-					dateBox.getMonth() + 1,
-					dateBox.getDay());
+			// the date-box receives selection events by default,
+			// the check if the value really changed here
+			var next = LocalDate.of(
+				dateBox.getYear(),
+				dateBox.getMonth() + 1,
+				dateBox.getDay());
+			if (Objects.equals(next, epd.publicationDate))
+				return;
+			epd.publicationDate = next;
 			editor.setDirty();
 		}));
 
 		tb.multiText(comp, M.TimeDescription,
-				Tooltips.EPD_TimeDescription, time.withDescription());
+			Tooltips.EPD_TimeDescription, time.withDescription());
 	}
 
 	private void createGeographySection(Composite body, TextBuilder tb) {
 		Location location = process.withProcessInfo().withGeography().withLocation();
 		Composite comp = UI.formSection(body, tk, M.Geography,
-				Tooltips.EPD_Geography);
+			Tooltips.EPD_Geography);
 		tk.createLabel(comp, M.Location)
-				.setToolTipText(Tooltips.EPD_Location);
+			.setToolTipText(Tooltips.EPD_Location);
 		LocationCombo viewer = new LocationCombo();
 		viewer.create(comp, location.getCode(), code -> {
 			location.withCode(code);
 			editor.setDirty();
 		});
 		tb.multiText(comp, M.GeographyDescription,
-				Tooltips.EPD_GeographyDescription, location.withDescription());
+			Tooltips.EPD_GeographyDescription, location.withDescription());
 	}
 
 	private void intText(Composite comp, String label, String tooltip,
-			Integer initial, Consumer<Integer> fn) {
+		Integer initial, Consumer<Integer> fn) {
 		Text text = UI.formText(comp, tk, label, tooltip);
 		if (initial != null)
 			text.setText(initial.toString());

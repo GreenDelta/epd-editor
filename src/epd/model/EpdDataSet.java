@@ -26,8 +26,6 @@ public class EpdDataSet implements Copyable<EpdDataSet> {
 	public ContentDeclaration contentDeclaration;
 	public QMetaData qMetaData;
 
-	public final List<ModuleEntry> moduleEntries = new ArrayList<>();
-
 	public final List<Ref> publishers = new ArrayList<>();
 	public final List<Ref> originalEPDs = new ArrayList<>();
 
@@ -68,10 +66,6 @@ public class EpdDataSet implements Copyable<EpdDataSet> {
 		clone.qMetaData = qMetaData != null
 			? qMetaData.clone()
 			: null;
-
-		for (var entry : moduleEntries) {
-			clone.moduleEntries.add(entry.clone());
-		}
 
 		for (var ref : publishers) {
 			clone.publishers.add(ref.copy());

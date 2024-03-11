@@ -1,7 +1,5 @@
 package epd.io.conversion;
 
-import com.google.common.base.Strings;
-import epd.model.EpdDataSet;
 import org.openlca.ilcd.commons.CommissionerAndGoal;
 import org.openlca.ilcd.commons.Other;
 import org.openlca.ilcd.processes.DataGenerator;
@@ -14,6 +12,10 @@ import org.openlca.ilcd.processes.epd.EpdInfoExtension;
 import org.openlca.ilcd.processes.epd.EpdSafetyMargins;
 import org.openlca.ilcd.processes.epd.EpdTimeExtension;
 import org.openlca.ilcd.util.Processes;
+
+import com.google.common.base.Strings;
+
+import epd.model.EpdDataSet;
 
 /**
  * Remove empty elements so that the data set validation is happy.
@@ -119,7 +121,7 @@ class Cleanup {
 		if (ext == null)
 			return true;
 		return isEmpty(ext.getContentDeclaration())
-			&& ext.getModules().isEmpty()
+			&& ext.getModuleEntries().isEmpty()
 			&& ext.getScenarios().isEmpty()
 			&& isEmpty(ext.getSafetyMargins())
 			&& ext.getAny().isEmpty();

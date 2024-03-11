@@ -18,7 +18,6 @@ import app.util.tables.TextCellModifier;
 import epd.model.EpdDataSet;
 import epd.model.EpdProfile;
 import epd.model.Module;
-import epd.model.ModuleEntry;
 import epd.util.Strings;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -32,6 +31,7 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
+import org.openlca.ilcd.processes.epd.EpdModuleEntry;
 import org.openlca.ilcd.util.Epds;
 
 import java.io.File;
@@ -45,7 +45,7 @@ class ResultPage extends FormPage {
 	private final EpdEditor editor;
 	private FormToolkit toolkit;
 
-	private final List<ModuleEntry> modules;
+	private final List<EpdModuleEntry> modules;
 	private final EpdDataSet epd;
 	private ScenarioTable scenarioTable;
 	private TableViewer moduleTable;
@@ -55,13 +55,12 @@ class ResultPage extends FormPage {
 		super(editor, "ModulesPage", M.EnvironmentalIndicators);
 		this.editor = editor;
 		epd = editor.dataSet;
-		modules = epd.moduleEntries;
+		modules = Epds.withModuleEntries(epd.process);
 		modules.sort((e1, e2) -> {
-			Module m1 = e1.module;
-			Module m2 = e2.module;
-			if (Objects.equals(m1, m2))
-				return Strings.compare(e1.scenario, e2.scenario);
-			return m1.index - m2.index;
+			int c = Strings.compare(e1.getModule(), e2.getModule());
+			return c == 0
+				? Strings.compare(e1.getScenario(), e2.getScenario())
+				: c;
 		});
 	}
 
@@ -96,7 +95,7 @@ class ResultPage extends FormPage {
 				selected = i;
 			} else if (epd.process.getEpdProfile() == null && EpdProfiles.isDefault(p)) {
 				selected = i;
-				epd.process.withEpdProfile( p.id);
+				epd.process.withEpdProfile(p.id);
 			}
 		}
 		combo.setItems(items);
@@ -107,7 +106,7 @@ class ResultPage extends FormPage {
 			int i = combo.getSelectionIndex();
 			EpdProfile p = profiles.get(i);
 			if (p != null) {
-				epd.process.withEpdProfile( p.id);
+				epd.process.withEpdProfile(p.id);
 				editor.setDirty();
 			}
 		});
@@ -132,14 +131,14 @@ class ResultPage extends FormPage {
 		TableViewer table = Tables.createViewer(comp, columns);
 		table.setLabelProvider(new ModuleLabel());
 		table.getTable().setToolTipText(Tooltips.EPD_Modules);
-		Tables.addSorter(table, 0, (ModuleEntry e) -> e.module.name);
-		Tables.addSorter(table, 1, (ModuleEntry e) -> e.scenario);
-		Tables.addSorter(table, 3, (ModuleEntry e) -> e.description);
+		Tables.addSorter(table, 0, EpdModuleEntry::getModule);
+		Tables.addSorter(table, 1, EpdModuleEntry::getScenario);
+		Tables.addSorter(table, 3, EpdModuleEntry::getDescription);
 		Tables.bindColumnWidths(table, 0.25, 0.25, 0.25, 0.25);
 		Action[] actions = createModuleActions();
 		Actions.bind(section, actions);
 		Actions.bind(table, actions);
-		ModifySupport<ModuleEntry> modifiers = new ModifySupport<>(table);
+		var modifiers = new ModifySupport<EpdModuleEntry>(table);
 		modifiers.bind(M.Module, new ModuleModifier());
 		modifiers.bind(M.Scenario, new ScenarioModifier());
 		modifiers.bind(M.Description, new DescriptionModifier());
@@ -149,28 +148,28 @@ class ResultPage extends FormPage {
 	private Action[] createModuleActions() {
 		Action[] actions = new Action[2];
 		actions[0] = Actions.create(
-			M.Add, Icon.ADD.des(), this::createModule);
+			M.Add, Icon.ADD.des(), this::createModuleEntry);
 		actions[1] = Actions.create(
 			M.Remove, Icon.DELETE.des(), this::removeModule);
 		return actions;
 	}
 
-	private void createModule() {
-		ModuleEntry module = new ModuleEntry();
-		module.module = nextModule();
-		modules.add(module);
+	private void createModuleEntry() {
+		var e = new EpdModuleEntry()
+			.withModule(nextModule());
+		modules.add(e);
 		moduleTable.setInput(modules);
 		editor.setDirty();
 	}
 
-	private Module nextModule() {
+	private String nextModule() {
 		Module[] mods = modules();
 		if (mods.length == 0)
 			return null;
 		int selected = 0;
-		for (ModuleEntry e : modules) {
+		for (var e : modules) {
 			for (int i = 0; i < mods.length; i++) {
-				if (!Objects.equals(e.module, mods[i]))
+				if (!Objects.equals(e.getModule(), mods[i].name))
 					continue;
 				if (i >= selected) {
 					selected = i + 1;
@@ -179,16 +178,16 @@ class ResultPage extends FormPage {
 			}
 		}
 		if (selected < mods.length) {
-			return mods[selected];
+			return mods[selected].name;
 		}
-		return mods[0];
+		return mods[0].name;
 	}
 
 	private void removeModule() {
-		ModuleEntry module = Viewers.getFirstSelected(moduleTable);
-		if (module == null)
+		EpdModuleEntry e = Viewers.getFirstSelected(moduleTable);
+		if (e == null)
 			return;
-		modules.remove(module);
+		modules.remove(e);
 		moduleTable.setInput(modules);
 		editor.setDirty();
 	}
@@ -209,7 +208,7 @@ class ResultPage extends FormPage {
 		Action[] actions = new Action[3];
 		actions[0] = Actions.create(M.SynchronizeWithModules,
 			Icon.CHECK_TRUE.des(), () -> {
-				new ResultSync(epd).run();
+				new ResultSync(epd.process).run();
 				resultTable.refresh();
 				editor.setDirty();
 			});
@@ -263,14 +262,13 @@ class ResultPage extends FormPage {
 
 		@Override
 		public String getColumnText(Object element, int col) {
-			if (!(element instanceof ModuleEntry entry))
+			if (!(element instanceof EpdModuleEntry e))
 				return null;
-			Module module = entry.module;
 			return switch (col) {
-				case 0 -> module != null ? module.name : null;
-				case 1 -> entry.scenario;
+				case 0 -> e.getModule();
+				case 1 -> e.getScenario();
 				case 2 -> "";
-				case 3 -> entry.description;
+				case 3 -> e.getDescription();
 				default -> null;
 			};
 		}
@@ -278,44 +276,42 @@ class ResultPage extends FormPage {
 	}
 
 	private class ModuleModifier extends
-		ComboBoxCellModifier<ModuleEntry, Module> {
+		ComboBoxCellModifier<EpdModuleEntry, String> {
 
 		@Override
-		protected Module getItem(ModuleEntry module) {
-			return module.module;
+		protected String getItem(EpdModuleEntry e) {
+			return e.getModule();
 		}
 
 		@Override
-		protected Module[] getItems(ModuleEntry element) {
-			return modules();
+		protected String[] getItems(EpdModuleEntry e) {
+			return Arrays.stream(modules()).map(m -> m.name).toArray(String[]::new);
 		}
 
 		@Override
-		protected String getText(Module module) {
-			if (module == null)
-				return "";
-			return module.name;
+		protected String getText(String s) {
+			return s;
 		}
 
 		@Override
-		protected void setItem(ModuleEntry entry, Module module) {
-			if (Objects.equals(entry.module, module))
+		protected void setItem(EpdModuleEntry e, String module) {
+			if (Objects.equals(e.getModule(), module))
 				return;
-			entry.module = module;
+			e.withModule(module);
 			editor.setDirty();
 		}
 	}
 
 	private class ScenarioModifier extends
-		ComboBoxCellModifier<ModuleEntry, String> {
+		ComboBoxCellModifier<EpdModuleEntry, String> {
 
 		@Override
-		protected String getItem(ModuleEntry module) {
-			return module.scenario;
+		protected String getItem(EpdModuleEntry e) {
+			return e.getScenario();
 		}
 
 		@Override
-		protected String[] getItems(ModuleEntry element) {
+		protected String[] getItems(EpdModuleEntry e) {
 			var scenarios = Epds.getScenarios(epd.process);
 			String[] names = new String[scenarios.size()];
 			for (int i = 0; i < scenarios.size(); i++) {
@@ -331,26 +327,26 @@ class ResultPage extends FormPage {
 		}
 
 		@Override
-		protected void setItem(ModuleEntry module, String scenario) {
-			if (Objects.equals(module.scenario, scenario))
+		protected void setItem(EpdModuleEntry e, String scenario) {
+			if (Objects.equals(e.getScenario(), scenario))
 				return;
-			module.scenario = scenario;
+			e.withScenario(scenario);
 			editor.setDirty();
 		}
 	}
 
-	private class DescriptionModifier extends TextCellModifier<ModuleEntry> {
+	private class DescriptionModifier extends TextCellModifier<EpdModuleEntry> {
 
 		@Override
-		protected String getText(ModuleEntry module) {
-			return module.description;
+		protected String getText(EpdModuleEntry e) {
+			return e.getDescription();
 		}
 
 		@Override
-		protected void setText(ModuleEntry module, String text) {
-			if (Objects.equals(module.description, text))
+		protected void setText(EpdModuleEntry e, String text) {
+			if (Objects.equals(e.getDescription(), text))
 				return;
-			module.description = text;
+			e.withDescription(text);
 			editor.setDirty();
 		}
 	}

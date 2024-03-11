@@ -2,12 +2,13 @@ package app.editors.epd;
 
 import app.App;
 import app.store.EpdProfiles;
-import epd.model.EpdDataSet;
 import epd.model.EpdProfile;
-import epd.model.ModuleEntry;
 import epd.util.Strings;
+import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.processes.epd.EpdModuleEntry;
 import org.openlca.ilcd.processes.epd.EpdResult;
 import org.openlca.ilcd.util.EpdIndicatorResult;
+import org.openlca.ilcd.util.Epds;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,27 +24,28 @@ import java.util.stream.Collectors;
  */
 class ResultSync implements Runnable {
 
-	private final EpdDataSet epd;
+	private final Process epd;
 	private final EpdProfile profile;
 
-	public ResultSync(EpdDataSet epd) {
+	public ResultSync(Process epd) {
 		this.epd = epd;
-		this.profile = EpdProfiles.get(epd.process);
+		this.profile = EpdProfiles.get(epd);
 	}
 
 	@Override
 	public void run() {
 
 		// collect the defined module-scenario pairs
-		var definedMods = epd.moduleEntries.stream()
-			.map(e -> e.module + "/" + e.scenario)
+		var definedMods = Epds.getModuleEntries(epd)
+			.stream()
+			.map(e -> e.getModule() + "/" + e.getScenario())
 			.collect(Collectors.toSet());
 		if (definedMods.isEmpty()) {
-			EpdIndicatorResult.clear(epd.process);
+			EpdIndicatorResult.clear(epd);
 			return;
 		}
 
-		var results = new ArrayList<>(EpdIndicatorResult.allOf(epd.process));
+		var results = new ArrayList<>(EpdIndicatorResult.allOf(epd));
 
 		// remove the results with non-matching or duplicate indicators
 		var index = cleanResults(results);
@@ -60,18 +62,18 @@ class ResultSync implements Runnable {
 
 			// remove & add amounts
 			removeAmounts(definedMods, result);
-			for (var entry : epd.moduleEntries) {
-				var amount = findAmount(result, entry);
+			for (var entry : Epds.getModuleEntries(epd)) {
+				var amount = findValue(result, entry);
 				if (amount != null)
 					continue;
 				amount = new EpdResult()
-					.withModule(entry.module.name)
-					.withScenario(entry.scenario);
+					.withModule(entry.getModule())
+					.withScenario(entry.getScenario());
 				result.values().add(amount);
 			}
 		}
 
-		EpdIndicatorResult.writeClean(epd.process, results);
+		EpdIndicatorResult.writeClean(epd, results);
 	}
 
 	private Map<String, EpdIndicatorResult> cleanResults(
@@ -149,11 +151,11 @@ class ResultSync implements Runnable {
 		result.values().removeAll(removals);
 	}
 
-	private EpdResult findAmount(EpdIndicatorResult result, ModuleEntry entry) {
-		for (var amount : result.values()) {
-			if (Objects.equals(entry.module.name, amount.getModule())
-				&& Strings.nullOrEqual(entry.scenario, amount.getScenario()))
-				return amount;
+	private EpdResult findValue(EpdIndicatorResult result, EpdModuleEntry entry) {
+		for (var v : result.values()) {
+			if (Objects.equals(entry.getModule(), v.getModule())
+				&& Strings.nullOrEqual(entry.getScenario(), v.getScenario()))
+				return v;
 		}
 		return null;
 	}

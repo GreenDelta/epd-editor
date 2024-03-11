@@ -2,7 +2,6 @@ package epd.io.conversion;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.Processes;
@@ -10,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import epd.model.EpdDataSet;
 import epd.model.EpdProfile;
-import epd.model.ModuleEntry;
 import epd.model.SubType;
 import epd.model.content.ContentDeclaration;
 import epd.model.qmeta.QMetaData;
@@ -51,8 +49,6 @@ class EPDExtensionReader {
 		if (info == null || info.getEpdExtension() == null)
 			return;
 		var other = info.getEpdExtension();
-		List<ModuleEntry> modules = ModuleConverter.readModules(other, profile);
-		epd.moduleEntries.addAll(modules);
 		epd.contentDeclaration = ContentDeclaration.read(other);
 	}
 

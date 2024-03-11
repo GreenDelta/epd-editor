@@ -49,7 +49,6 @@ class EPDExtensionWriter {
 		var info = epd.process.withProcessInfo()
 			.withDataSetInfo();
 		var infoOther = info.getEpdExtension();
-		ModuleConverter.writeModules(epd, infoOther, doc);
 		if (epd.contentDeclaration != null) {
 			epd.contentDeclaration.write(infoOther, doc);
 		}

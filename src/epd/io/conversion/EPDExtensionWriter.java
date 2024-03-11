@@ -1,10 +1,6 @@
 package epd.io.conversion;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.openlca.ilcd.processes.Modelling;
-import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.Processes;
 
 import epd.model.EpdDataSet;
@@ -28,26 +24,8 @@ class EPDExtensionWriter {
 	private void write() {
 		if (epd == null)
 			return;
-		var process = epd.process;
-		clearResults(process);
 		writeExtensions();
 		Cleanup.on(epd);
-	}
-
-	/**
-	 * Remove all result exchanges.
-	 */
-	private void clearResults(Process p) {
-		if (p == null)
-			return;
-		p.withImpactResults(null);
-		if (p.getExchanges().isEmpty())
-			return;
-		var qRef = Processes.getQuantitativeReference(p);
-		List<Integer> refFlows = qRef == null
-			? Collections.emptyList()
-			: qRef.getReferenceFlows();
-		p.getExchanges().removeIf(e -> !refFlows.contains(e.getId()));
 	}
 
 	private void writeExtensions() {

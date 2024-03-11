@@ -40,7 +40,6 @@ class EPDExtensionReader {
 	}
 
 	private void readExtensions(EpdDataSet epd) {
-		epd.profile = process.getOtherAttributes().get(Vocab.PROFILE_ATTR);
 		readSubType(epd);
 		readPublicationDate(epd);
 		PublisherRef.read(epd);

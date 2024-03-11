@@ -28,9 +28,7 @@ class ResultSync implements Runnable {
 
 	public ResultSync(EpdDataSet epd) {
 		this.epd = epd;
-		this.profile = Objects.requireNonNullElseGet(
-			EpdProfiles.get(epd.profile),
-			EpdProfiles::getDefault);
+		this.profile = EpdProfiles.get(epd.process);
 	}
 
 	@Override

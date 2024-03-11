@@ -2,6 +2,7 @@ package epd.io.conversion;
 
 import epd.model.EpdProduct;
 import epd.model.MaterialPropertyValue;
+import org.openlca.ilcd.Vocab;
 import org.openlca.ilcd.commons.Extension;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Other;
@@ -107,7 +108,7 @@ public class FlowExtensions {
 		String tag = "vendorSpecificProduct";
 		Element e = Dom.getElement(ext, tag);
 		if (e == null) {
-			e = Dom.createElement(Vocab.NS_EPD, tag);
+			e = Dom.createElement(Vocab.EPD_2013, tag);
 			ext.withAny().add(e);
 		}
 		e.setTextContent(Boolean.toString(p.vendorSpecific));

@@ -1,8 +1,8 @@
 package epd.model.qmeta;
 
 import epd.io.conversion.Dom;
-import epd.io.conversion.Vocab;
 import epd.util.Strings;
+import org.openlca.ilcd.Vocab;
 import org.openlca.ilcd.commons.Other;
 import org.openlca.ilcd.processes.AdminInfo;
 import org.openlca.ilcd.processes.Modelling;

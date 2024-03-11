@@ -92,11 +92,11 @@ class ResultPage extends FormPage {
 		for (int i = 0; i < profiles.size(); i++) {
 			EpdProfile p = profiles.get(i);
 			items[i] = p.name != null ? p.name : "?";
-			if (Objects.equals(p.id, epd.profile)) {
+			if (Objects.equals(p.id, epd.process.getEpdProfile())) {
 				selected = i;
-			} else if (epd.profile == null && EpdProfiles.isDefault(p)) {
+			} else if (epd.process.getEpdProfile() == null && EpdProfiles.isDefault(p)) {
 				selected = i;
-				epd.profile = p.id;
+				epd.process.withEpdProfile( p.id);
 			}
 		}
 		combo.setItems(items);
@@ -107,7 +107,7 @@ class ResultPage extends FormPage {
 			int i = combo.getSelectionIndex();
 			EpdProfile p = profiles.get(i);
 			if (p != null) {
-				epd.profile = p.id;
+				epd.process.withEpdProfile( p.id);
 				editor.setDirty();
 			}
 		});
@@ -247,9 +247,7 @@ class ResultPage extends FormPage {
 	}
 
 	private Module[] modules() {
-		EpdProfile profile = EpdProfiles.get(epd.profile);
-		if (profile == null)
-			profile = EpdProfiles.getDefault();
+		EpdProfile profile = EpdProfiles.get(epd.process);
 		List<Module> modules = profile.modules;
 		modules.sort(Comparator.comparingInt(m -> m.index));
 		return modules.toArray(new Module[0]);

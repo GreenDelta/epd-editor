@@ -10,7 +10,6 @@ import app.util.Viewers;
 import epd.model.content.ContentDeclaration;
 import epd.model.content.ContentElement;
 import epd.model.content.Substance;
-import epd.util.Fn;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.BaseLabelProvider;
@@ -105,8 +104,10 @@ class ContentTree {
 			() -> onAdd(ContentType.SUBSTANCE)));
 		menu.add(Actions.create("Edit", this::onEdit));
 		menu.add(Actions.create(M.Delete, this::onDelete));
-		Fn.with(tree.getTree(),
-			t -> t.setMenu(menu.createContextMenu(t)));
+		if (tree != null) {
+			var t = tree.getTree();
+			t.setMenu(menu.createContextMenu(t));
+		}
 
 	}
 

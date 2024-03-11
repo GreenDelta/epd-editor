@@ -1,5 +1,6 @@
 package epd.io.conversion;
 
+import org.openlca.ilcd.Vocab;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.Extension;
 import org.openlca.ilcd.commons.LangString;
@@ -140,7 +141,7 @@ class DataSetRefExtension {
 		Document doc = Dom.createDocument();
 		if (doc == null || d == null)
 			return null;
-		Element e = doc.createElementNS(Vocab.NS_EPD, "epd:" + tagName);
+		Element e = doc.createElementNS(Vocab.EPD_2013, "epd:" + tagName);
 		e.setAttribute("type", type);
 		e.setAttribute("refObjectId", d.getUUID());
 		e.setAttribute("uri", "../" + path + "/" + d.getUUID());

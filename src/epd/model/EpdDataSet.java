@@ -20,7 +20,6 @@ import epd.model.qmeta.QMetaData;
 public class EpdDataSet implements Copyable<EpdDataSet> {
 
 	public final Process process;
-	public String profile;
 	public SubType subType;
 	public LocalDate publicationDate;
 
@@ -54,7 +53,6 @@ public class EpdDataSet implements Copyable<EpdDataSet> {
 	@Override
 	public EpdDataSet copy() {
 		var clone = new EpdDataSet(process.copy());
-		clone.profile = profile;
 		clone.subType = subType;
 
 		if (publicationDate != null) {

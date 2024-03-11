@@ -4,6 +4,7 @@ import epd.model.EpdDataSet;
 import epd.model.EpdProfile;
 import epd.model.ModuleEntry;
 import epd.util.Strings;
+import org.openlca.ilcd.Vocab;
 import org.openlca.ilcd.commons.Extension;
 import org.openlca.ilcd.commons.Other;
 import org.slf4j.Logger;
@@ -38,7 +39,7 @@ class ModuleConverter {
 		if (element == null)
 			return false;
 		String nsUri = element.getNamespaceURI();
-		return Objects.equals(nsUri, Vocab.NS_OLCA)
+		return Objects.equals(nsUri, Vocab.OLCA)
 			&& Objects.equals(element.getLocalName(), "modules");
 	}
 
@@ -46,7 +47,7 @@ class ModuleConverter {
 		EpdProfile profile) {
 		List<ModuleEntry> modules = new ArrayList<>();
 		NodeList moduleList = element.getElementsByTagNameNS(
-			Vocab.NS_OLCA, "module");
+			Vocab.OLCA, "module");
 		for (int i = 0; i < moduleList.getLength(); i++) {
 			Node node = moduleList.item(i);
 			NamedNodeMap attributes = node.getAttributes();
@@ -77,7 +78,7 @@ class ModuleConverter {
 	static void writeModules(EpdDataSet dataSet, Extension other, Document doc) {
 		if (other == null || doc == null || !shouldWriteEntries(dataSet))
 			return;
-		Element root = doc.createElementNS(Vocab.NS_OLCA,
+		Element root = doc.createElementNS(Vocab.OLCA,
 			"olca:modules");
 		for (ModuleEntry module : dataSet.moduleEntries) {
 			Element element = toElement(module, doc);
@@ -101,7 +102,7 @@ class ModuleConverter {
 		if (document == null)
 			return null;
 		try {
-			String nsUri = Vocab.NS_OLCA;
+			String nsUri = Vocab.OLCA;
 			Element element = document.createElementNS(nsUri, "olca:module");
 			if (module.module != null)
 				element.setAttribute("olca:name", module.module.name);

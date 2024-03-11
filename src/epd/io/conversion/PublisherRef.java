@@ -2,13 +2,14 @@ package epd.io.conversion;
 
 import epd.model.EpdDataSet;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import org.openlca.ilcd.Vocab;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.util.Processes;
 
 import java.util.stream.Collectors;
 
-@XmlRootElement(name = "referenceToPublisher", namespace = Vocab.NS_EPDv2)
+@XmlRootElement(name = "referenceToPublisher", namespace = Vocab.EPD_2019)
 final class PublisherRef extends Ref {
 
 	private static PublisherRef wrap(Ref other) {

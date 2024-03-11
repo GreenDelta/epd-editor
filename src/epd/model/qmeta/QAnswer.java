@@ -1,9 +1,9 @@
 package epd.model.qmeta;
 
+import org.openlca.ilcd.Vocab;
 import org.w3c.dom.Element;
 
 import epd.io.conversion.Dom;
-import epd.io.conversion.Vocab;
 
 public class QAnswer {
 

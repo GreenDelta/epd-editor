@@ -30,7 +30,6 @@ class EPDExtensionWriter {
 			return;
 		var process = epd.process;
 		clearResults(process);
-		ResultConverter.writeResults(epd);
 		writeExtensions();
 		Cleanup.on(epd);
 	}

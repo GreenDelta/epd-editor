@@ -3,16 +3,13 @@ package epd.io.conversion;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Objects;
 
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.Processes;
 import org.slf4j.LoggerFactory;
 
-import epd.model.Amount;
 import epd.model.EpdDataSet;
 import epd.model.EpdProfile;
-import epd.model.IndicatorResult;
 import epd.model.ModuleEntry;
 import epd.model.SubType;
 import epd.model.content.ContentDeclaration;
@@ -39,7 +36,6 @@ class EPDExtensionReader {
 	private EpdDataSet read() {
 		var epd = new EpdDataSet(process);
 		readExtensions(epd);
-		mapResults(epd);
 		return epd;
 	}
 
@@ -90,32 +86,4 @@ class EPDExtensionReader {
 		}
 	}
 
-	private void mapResults(EpdDataSet dataSet) {
-		List<IndicatorResult> results = ResultConverter.readResults(
-			process, profile);
-		dataSet.results.addAll(results);
-		// data sets may not have the module-entry extension, thus we have to
-		// find the module entries for such data sets from the results
-		for (IndicatorResult result : results) {
-			for (Amount amount : result.amounts) {
-				ModuleEntry entry = findModuleEntry(dataSet, amount);
-				if (entry != null)
-					continue;
-				entry = new ModuleEntry();
-				entry.module = amount.module;
-				entry.scenario = amount.scenario;
-				dataSet.moduleEntries.add(entry);
-			}
-		}
-	}
-
-	private ModuleEntry findModuleEntry(EpdDataSet dataSet, Amount amount) {
-		for (ModuleEntry entry : dataSet.moduleEntries) {
-			if (Objects.equals(entry.module, amount.module)
-					&& Objects
-						.equals(entry.scenario, amount.scenario))
-				return entry;
-		}
-		return null;
-	}
 }

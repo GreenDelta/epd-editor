@@ -27,7 +27,6 @@ public class EpdDataSet implements Copyable<EpdDataSet> {
 	public ContentDeclaration contentDeclaration;
 	public QMetaData qMetaData;
 
-	public final List<IndicatorResult> results = new ArrayList<>();
 	public final List<ModuleEntry> moduleEntries = new ArrayList<>();
 
 	public final List<Ref> publishers = new ArrayList<>();
@@ -39,16 +38,6 @@ public class EpdDataSet implements Copyable<EpdDataSet> {
 
 	public EpdDataSet() {
 		this(new Process());
-	}
-
-	public IndicatorResult getResult(Indicator indicator) {
-		if (indicator == null)
-			return null;
-		for (var result : results) {
-			if (Objects.equals(result.indicator, indicator))
-				return result;
-		}
-		return null;
 	}
 
 	public EpdDescriptor toDescriptor(String lang) {
@@ -82,9 +71,6 @@ public class EpdDataSet implements Copyable<EpdDataSet> {
 			? qMetaData.clone()
 			: null;
 
-		for (var result : results) {
-			clone.results.add(result.clone());
-		}
 		for (var entry : moduleEntries) {
 			clone.moduleEntries.add(entry.clone());
 		}

@@ -3,6 +3,7 @@ package epd.model;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.util.EpdIndicatorResult;
 
 import java.util.Objects;
 
@@ -100,6 +101,16 @@ public final class Indicator {
 	public String toString() {
 		return "Indicator [ name=\"" + name
 			+ "\" uuid =\"" + uuid + "\"]";
+	}
+
+	public EpdIndicatorResult createResult(String lang) {
+		var indicatorRef = getRef(lang);
+		var unitGroupRef = getUnitGroupRef(lang);
+		if (type == Type.LCIA)
+			return EpdIndicatorResult.of(indicatorRef, unitGroupRef);
+		return isInput != null && isInput
+			? EpdIndicatorResult.ofInputIndicator(indicatorRef, unitGroupRef)
+			: EpdIndicatorResult.ofOutputIndicator(indicatorRef, unitGroupRef);
 	}
 
 }

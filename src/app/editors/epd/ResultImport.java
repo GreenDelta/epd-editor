@@ -1,32 +1,27 @@
 package app.editors.epd;
 
+import app.App;
+import app.store.EpdProfiles;
+import epd.model.EpdProfile;
+import epd.util.Strings;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.processes.epd.EpdResult;
+import org.openlca.ilcd.processes.epd.EpdScenario;
+import org.openlca.ilcd.util.EpdIndicatorResult;
+import org.openlca.ilcd.util.Epds;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.openlca.ilcd.processes.epd.EpdScenario;
-import org.openlca.ilcd.util.Epds;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import app.store.EpdProfiles;
-import epd.model.Amount;
-import epd.model.EpdDataSet;
-import epd.model.EpdProfile;
-import epd.model.Indicator;
-import epd.model.IndicatorResult;
-import epd.model.Module;
-import epd.model.ModuleEntry;
-import epd.util.Strings;
 
 /**
  * Imports module results from an Excel file.
@@ -35,133 +30,117 @@ class ResultImport implements Runnable {
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
-	private final EpdDataSet dataSet;
+	private final Process epd;
+	private final EpdProfile profile;
 	private final File excelFile;
 
-	public ResultImport(EpdDataSet dataSet, File excelFile) {
-		this.dataSet = dataSet;
+	public ResultImport(Process epd, File excelFile) {
+		this.epd = epd;
+		this.profile = EpdProfiles.get(epd);
 		this.excelFile = excelFile;
 	}
 
 	@Override
 	public void run() {
-		log.trace("import results for {} from {}", dataSet, excelFile);
-		try (FileInputStream fis = new FileInputStream(excelFile)) {
-			Workbook workbook = WorkbookFactory.create(fis);
-			Sheet sheet = workbook.getSheetAt(0);
-			List<IndicatorResult> results = readRows(sheet);
-			dataSet.results.clear();
-			dataSet.results.addAll(results);
+		log.trace("import results for {} from {}", epd, excelFile);
+		try (var fis = new FileInputStream(excelFile)) {
+			var workbook = WorkbookFactory.create(fis);
+			var sheet = workbook.getSheetAt(0);
+			var results = readRows(sheet);
+			EpdIndicatorResult.writeClean(epd, results);
 		} catch (Exception e) {
 			log.error("failed to import results from file " + excelFile, e);
 		}
 	}
 
-	private List<IndicatorResult> readRows(Sheet sheet) {
+	private List<EpdIndicatorResult> readRows(Sheet sheet) {
 		if (sheet == null)
 			return Collections.emptyList();
-		EpdProfile profile = EpdProfiles.get(dataSet.profile);
-		if (profile == null)
-			profile = EpdProfiles.getDefault();
-		List<IndicatorResult> results = new ArrayList<>();
+		var results = new ArrayList<EpdIndicatorResult>();
 		int rowNumber = 1;
 		while (true) {
-			Row row = sheet.getRow(rowNumber);
+			var row = sheet.getRow(rowNumber);
 			rowNumber++;
 			if (row == null)
 				break;
-			Amount amount = getAmount(row, profile);
-			Indicator indicator = getIndicator(row, profile);
-			if (amount == null || indicator == null)
-				break;
-			syncModule(amount);
-			syncScenario(amount);
-			addResult(results, indicator, amount);
+			var result = resultOf(row, results);
+			if (result == null)
+				continue;
+			var value = valueOf(row);
+			if (value == null)
+				continue;
+			result.values().add(value);
+			syncModule(value);
+			syncScenario(value);
 		}
 		return results;
 	}
 
-	private Indicator getIndicator(Row row, EpdProfile profile) {
-		String name = getString(row.getCell(2));
-		if (name == null)
+	private EpdIndicatorResult resultOf(Row row, List<EpdIndicatorResult> results) {
+		// TODO identify indicators by UUID
+		var name = getString(row.getCell(2));
+		if (Strings.nullOrEmpty(name))
 			return null;
-		name = name.trim();
-		for (Indicator indicator : profile.indicators) {
-			if (Objects.equals(indicator.name, name))
-				return indicator;
+
+		// search the indicator in created results
+		for (var r : results) {
+			if (name.equals(App.s(r.indicator().getName())))
+				return r;
 		}
+
+		// search the indicator in the profile
+		for (var i : profile.indicators) {
+			if (!name.equals(i.name))
+				continue;
+			var r = i.createResult(App.lang());
+			results.add(r);
+			return r;
+		}
+
+		log.warn("unknown indicator: {}", name);
 		return null;
 	}
 
-	private Amount getAmount(Row row, EpdProfile profile) {
-		String moduleName = getString(row.getCell(0));
-		Module module = profile.module(moduleName);
-		if (module == null)
+	private EpdResult valueOf(Row row) {
+		var module = getString(row.getCell(0));
+		if (Strings.nullOrEmpty(module))
 			return null;
-		Amount amount = new Amount();
-		amount.module = module;
-		amount.scenario = getString(row.getCell(1));
-		amount.value = getDouble(row.getCell(3));
-		return amount;
+		return new EpdResult()
+			.withModule(module)
+			.withScenario(getString(row.getCell(1)))
+			.withAmount(getDouble(row.getCell(3)));
 	}
 
-	private void syncModule(Amount amount) {
-		if (amount == null || amount.module == null)
+	private void syncModule(EpdResult value) {
+		if (Strings.nullOrEmpty(value.getModule()))
 			return;
-		Module module = amount.module;
-		String scenario = amount.scenario;
-		for (ModuleEntry e : dataSet.moduleEntries) {
-			if (Objects.equals(e.module, module) && eq(e.scenario, scenario))
-				return;
-		}
-		ModuleEntry e = new ModuleEntry();
-		e.module = module;
-		if (!Strings.nullOrEmpty(scenario))
-			e.scenario = scenario;
-		dataSet.moduleEntries.add(e);
+		// TODO: sync module entries
 	}
 
-	private void syncScenario(Amount amount) {
-		if (amount == null || Strings.nullOrEmpty(amount.scenario))
+	private void syncScenario(EpdResult value) {
+		if (Strings.nullOrEmpty(value.getScenario()))
 			return;
-		for (var s : Epds.getScenarios(dataSet.process)) {
-			if (eq(s.getName(), amount.scenario))
+		for (var s : Epds.getScenarios(epd)) {
+			if (eq(s.getName(), value.getScenario()))
 				return;
 		}
 		var scenario = new EpdScenario()
-			.withName(amount.scenario.trim());
-		Epds.withScenarios(dataSet.process).add(scenario);
-	}
-
-	private void addResult(List<IndicatorResult> results, Indicator indicator,
-			Amount amount) {
-		IndicatorResult result = null;
-		for (IndicatorResult r : results) {
-			if (Objects.equals(r.indicator, indicator)) {
-				result = r;
-				break;
-			}
-		}
-		if (result == null) {
-			result = new IndicatorResult();
-			result.indicator = indicator;
-			results.add(result);
-		}
-		result.amounts.add(amount);
+			.withName(value.getScenario().trim());
+		Epds.withScenarios(epd).add(scenario);
 	}
 
 	private String getString(Cell cell) {
 		if (cell == null)
 			return null;
 		return cell.getCellType() != CellType.STRING
-				? null
-				: cell.getStringCellValue();
+			? null
+			: cell.getStringCellValue();
 	}
 
 	private Double getDouble(Cell cell) {
 		if (cell == null
-				|| cell.getCellType() == CellType.STRING
-				|| cell.getCellType() == CellType.BLANK)
+			|| cell.getCellType() == CellType.STRING
+			|| cell.getCellType() == CellType.BLANK)
 			return null;
 		try {
 			return cell.getNumericCellValue();

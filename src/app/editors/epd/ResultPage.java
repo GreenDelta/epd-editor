@@ -199,7 +199,7 @@ class ResultPage extends FormPage {
 		UI.gridData(section, true, true);
 		Composite composite = UI.sectionClient(section, toolkit);
 		UI.gridLayout(composite, 1);
-		var table = new ResultTable(editor, epd);
+		var table = new ResultTable(editor, epd.process);
 		table.create(composite);
 		Actions.bind(section, createResultActions());
 		return table;
@@ -237,7 +237,7 @@ class ResultPage extends FormPage {
 		File file = FileChooser.open("*.xlsx");
 		if (file == null)
 			return;
-		ResultImport resultImport = new ResultImport(epd, file);
+		ResultImport resultImport = new ResultImport(epd.process, file);
 		App.run(M.Import, resultImport, () -> {
 			resultTable.refresh();
 			moduleTable.refresh();

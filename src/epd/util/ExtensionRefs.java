@@ -1,22 +1,21 @@
 package epd.util;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
+import app.store.EpdProfiles;
+import epd.io.conversion.Extensions;
+import epd.io.conversion.FlowExtensions;
 import org.openlca.ilcd.commons.FlowType;
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.util.EpdIndicatorResult;
 import org.openlca.ilcd.util.Flows;
 
-import app.App;
-import app.store.EpdProfiles;
-import epd.io.conversion.Extensions;
-import epd.io.conversion.FlowExtensions;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public final class ExtensionRefs {
 
@@ -39,14 +38,14 @@ public final class ExtensionRefs {
 		var epd = Extensions.read(p, EpdProfiles.get(p));
 		var refs = new HashSet<Ref>();
 
-		for (var result : epd.results) {
-			if (result.indicator == null)
+		for (var result : EpdIndicatorResult.allOf(p)) {
+			if (result.indicator() == null)
 				continue;
-			var iRef = result.indicator.getRef(App.lang());
+			var iRef = result.indicator();
 			if (iRef.isValid()) {
 				refs.add(iRef);
 			}
-			var uRef = result.indicator.getUnitGroupRef(App.lang());
+			var uRef = result.unitGroup();
 			if (uRef.isValid()) {
 				refs.add(iRef);
 			}
@@ -67,9 +66,9 @@ public final class ExtensionRefs {
 			return Collections.emptySet();
 		var product = FlowExtensions.read(f);
 		return Stream.of(
-			product.genericFlow,
-			product.vendor,
-			product.documentation)
+				product.genericFlow,
+				product.vendor,
+				product.documentation)
 			.filter(r -> r != null && r.isValid())
 			.collect(Collectors.toSet());
 	}

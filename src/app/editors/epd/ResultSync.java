@@ -1,17 +1,21 @@
 package app.editors.epd;
 
+import app.App;
+import app.store.EpdProfiles;
+import epd.model.EpdDataSet;
+import epd.model.EpdProfile;
+import epd.model.ModuleEntry;
+import epd.util.Strings;
+import org.openlca.ilcd.processes.epd.EpdResult;
+import org.openlca.ilcd.util.EpdIndicatorResult;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import app.store.EpdProfiles;
-import epd.model.Amount;
-import epd.model.EpdDataSet;
-import epd.model.IndicatorResult;
-import epd.model.ModuleEntry;
-import epd.util.Strings;
 
 /**
  * Initializes indicator results for added modules and removes results for
@@ -20,41 +24,40 @@ import epd.util.Strings;
 class ResultSync implements Runnable {
 
 	private final EpdDataSet epd;
+	private final EpdProfile profile;
 
 	public ResultSync(EpdDataSet epd) {
 		this.epd = epd;
+		this.profile = Objects.requireNonNullElseGet(
+			EpdProfiles.get(epd.profile),
+			EpdProfiles::getDefault);
 	}
 
 	@Override
 	public void run() {
-
-		// load the profile
-		var profile = Objects.requireNonNullElseGet(
-			EpdProfiles.get(epd.profile),
-			EpdProfiles::getDefault);
 
 		// collect the defined module-scenario pairs
 		var definedMods = epd.moduleEntries.stream()
 			.map(e -> e.module + "/" + e.scenario)
 			.collect(Collectors.toSet());
 		if (definedMods.isEmpty()) {
-			epd.results.clear();
+			EpdIndicatorResult.clear(epd.process);
 			return;
 		}
 
-		// remove the results with non-matching or duplicate
-		// indicators
-		removeResults(profile);
+		var results = new ArrayList<>(EpdIndicatorResult.allOf(epd.process));
+
+		// remove the results with non-matching or duplicate indicators
+		var index = cleanResults(results);
 
 		// add new result entries
 		for (var indicator : profile.indicators) {
 
 			// get or create the result
-			var result = epd.getResult(indicator);
+			var result = index.get(indicator.uuid);
 			if (result == null) {
-				result = new IndicatorResult();
-				result.indicator = indicator;
-				epd.results.add(result);
+				result = indicator.createResult(App.lang());
+				results.add(result);
 			}
 
 			// remove & add amounts
@@ -63,28 +66,36 @@ class ResultSync implements Runnable {
 				var amount = findAmount(result, entry);
 				if (amount != null)
 					continue;
-				amount = new Amount();
-				amount.module = entry.module;
-				amount.scenario = entry.scenario;
-				result.amounts.add(amount);
+				amount = new EpdResult()
+					.withModule(entry.module.name)
+					.withScenario(entry.scenario);
+				result.values().add(amount);
 			}
 		}
+
+		EpdIndicatorResult.writeClean(epd.process, results);
 	}
 
-	private void removeResults(epd.model.EpdProfile profile) {
+	private Map<String, EpdIndicatorResult> cleanResults(
+		List<EpdIndicatorResult> results
+	) {
+
 		var indicatorIds = profile.indicators.stream()
 			.map(indicator -> indicator.uuid)
 			.collect(Collectors.toSet());
-		var removals = new ArrayList<IndicatorResult>();
-		var handled = new HashMap<String, IndicatorResult>();
-		for (var r : epd.results) {
-			if (r.indicator == null
-					|| r.indicator.uuid == null
-					|| !indicatorIds.contains(r.indicator.uuid)) {
+
+		var removals = new ArrayList<EpdIndicatorResult>();
+		var handled = new HashMap<String, EpdIndicatorResult>();
+		for (var r : results) {
+
+			if (r.indicator() == null
+				|| r.indicator().getUUID() == null
+				|| !indicatorIds.contains(r.indicator().getUUID())) {
 				removals.add(r);
 				continue;
 			}
-			var id = r.indicator.uuid;
+
+			var id = r.indicator().getUUID();
 			var dup = handled.get(id);
 			if (dup == null) {
 				handled.put(id, r);
@@ -93,10 +104,10 @@ class ResultSync implements Runnable {
 
 			// in case of duplicates try to keep the result with
 			// the highest values
-			var ar = r.amounts.stream().mapToDouble(
-				a -> a.value == null ? 0 : a.value).sum();
-			var adup = dup.amounts.stream().mapToDouble(
-				a -> a.value == null ? 0 : a.value).sum();
+			var ar = r.values().stream().mapToDouble(
+				a -> a.getAmount() == null ? 0 : a.getAmount()).sum();
+			var adup = dup.values().stream().mapToDouble(
+				a -> a.getAmount() == null ? 0 : a.getAmount()).sum();
 			if (ar <= adup) {
 				removals.add(r);
 			} else {
@@ -104,17 +115,18 @@ class ResultSync implements Runnable {
 				handled.put(id, r);
 			}
 		}
-		epd.results.removeAll(removals);
+		results.removeAll(removals);
+		return handled;
 	}
 
 	/**
 	 * Remove outdated amount entries and duplicates.
 	 */
-	private void removeAmounts(Set<String> definedMods, IndicatorResult result) {
-		var handled = new HashMap<String, Amount>();
-		var removals = new ArrayList<Amount>();
-		for (var a : result.amounts) {
-			var key = a.module + "/" + a.scenario;
+	private void removeAmounts(Set<String> definedMods, EpdIndicatorResult result) {
+		var handled = new HashMap<String, EpdResult>();
+		var removals = new ArrayList<EpdResult>();
+		for (var a : result.values()) {
+			var key = a.getModule() + "/" + a.getScenario();
 			if (!definedMods.contains(key)) {
 				removals.add(a);
 				continue;
@@ -126,22 +138,23 @@ class ResultSync implements Runnable {
 			}
 
 			// try to keep the higher value in case of a duplicate
-			if (a.value == null || (dup.value != null && dup.value > a.value)) {
+			if (a.getAmount() == null
+				|| (dup.getAmount() != null && dup.getAmount() > a.getAmount())) {
 				removals.add(a);
-			} else if (dup.value == null || a.value > dup.value) {
+			} else if (dup.getAmount() == null || a.getAmount() > dup.getAmount()) {
 				removals.add(dup);
 				handled.put(key, a);
 			} else {
 				removals.add(a);
 			}
 		}
-		result.amounts.removeAll(removals);
+		result.values().removeAll(removals);
 	}
 
-	private Amount findAmount(IndicatorResult result, ModuleEntry entry) {
-		for (var amount : result.amounts) {
-			if (Objects.equals(entry.module, amount.module)
-					&& Strings.nullOrEqual(entry.scenario, amount.scenario))
+	private EpdResult findAmount(EpdIndicatorResult result, ModuleEntry entry) {
+		for (var amount : result.values()) {
+			if (Objects.equals(entry.module.name, amount.getModule())
+				&& Strings.nullOrEqual(entry.scenario, amount.getScenario()))
 				return amount;
 		}
 		return null;

@@ -17,7 +17,7 @@ public class NavigationTree {
 	 */
 	@SuppressWarnings("deprecation")
 	public static TreeViewer viewer(Composite parent) {
-		TreeViewer viewer = new TreeViewer(parent, SWT.BORDER | SWT.SINGLE);
+		var viewer = new TreeViewer(parent, SWT.BORDER | SWT.SINGLE);
 		viewer.setContentProvider(new NavigationContent());
 		viewer.setLabelProvider(new NavigationLabel());
 		viewer.setSorter(new NavigationSorter());

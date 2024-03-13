@@ -1,6 +1,9 @@
 package app.navi;
 
 import epd.util.Strings;
+
+import java.util.List;
+
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -51,7 +54,8 @@ public class RefTextFilter extends ViewerFilter {
 				return false;
 			return label.toLowerCase().contains(text);
 		}
-		for (NavigationElement child : elem.getChilds())
+		var children = (List<NavigationElement>)elem.getChilds();
+		for (NavigationElement child : children)
 			if (select(child, text))
 				return true;
 		return false;

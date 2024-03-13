@@ -7,17 +7,17 @@ import org.eclipse.swt.graphics.Image;
 import org.openlca.ilcd.commons.Category;
 import org.openlca.ilcd.commons.Ref;
 
-public class CategoryElement extends NavigationElement {
+public class CategoryElement extends NavigationElement<CategoryNode> {
 
-	private final NavigationElement parent;
-	private final CategoryNode node;
+	private final NavigationElement<?> parent;
 
-	public CategoryElement(NavigationElement parent, CategoryNode node) {
+	public CategoryElement(NavigationElement<?> parent, CategoryNode node) {
 		this.parent = parent;
-		this.node = node;
+		this.content = node;
 	}
 
 	public Category getCategory() {
+		var node = getContent();
 		if (node == null)
 			return null;
 		return node.category;
@@ -25,6 +25,7 @@ public class CategoryElement extends NavigationElement {
 
 	@Override
 	public void update() {
+		var node = getContent();
 		if (childs == null)
 			return;
 		childs.clear();
@@ -41,7 +42,7 @@ public class CategoryElement extends NavigationElement {
 	}
 
 	@Override
-	public NavigationElement getParent() {
+	public NavigationElement<?> getParent() {
 		return parent;
 	}
 
@@ -56,6 +57,7 @@ public class CategoryElement extends NavigationElement {
 
 	@Override
 	public String getLabel() {
+		var node = getContent();
 		if (node == null || node.category == null)
 			return null;
 		Category cat = node.category;

@@ -21,6 +21,11 @@ import org.openlca.ilcd.commons.DataSetType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Objects;
+
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class Navigator extends CommonNavigator {
@@ -50,13 +55,13 @@ public class Navigator extends CommonNavigator {
 		viewer.addDoubleClickListener(e -> {
 			Object obj = Viewers.getFirstSelected(viewer);
 			if (obj instanceof RefElement refEl) {
-				Editors.open(refEl.ref);
+				Editors.open(refEl.content);
 			} else if (obj instanceof ConnectionElement conEl) {
-				ConnectionEditor.open(conEl.con);
+				ConnectionEditor.open(conEl.content);
 			} else if (obj instanceof FileElement) {
 				open((FileElement) obj);
 			} else if (obj instanceof ProfileElement pe) {
-				ProfileEditor.open(pe.profile);
+				ProfileEditor.open(pe.content);
 			}
 		});
 	}
@@ -66,13 +71,13 @@ public class Navigator extends CommonNavigator {
 			return;
 		switch (e.getType()) {
 			case DOC:
-				UI.open(e.file);
+				UI.open(e.content);
 				break;
 			case CLASSIFICATION:
-				ClassificationEditor.open(e.file);
+				ClassificationEditor.open(e.content);
 				break;
 			case LOCATION:
-				LocationEditor.open(e.file);
+				LocationEditor.open(e.content);
 				break;
 			default:
 				break;
@@ -87,10 +92,11 @@ public class Navigator extends CommonNavigator {
 		Navigator navigator = getInstance();
 		if (navigator == null || navigator.root == null)
 			return new TypeElement(null, type);
-		for (NavigationElement e : navigator.root.getChilds()) {
+		var children = (List<NavigationElement>)navigator.root.getChilds();
+		for (NavigationElement e : children) {
 			if (!(e instanceof TypeElement te))
 				continue;
-			if (te.type == type)
+			if (te.content == type)
 				return te;
 		}
 		return new TypeElement(null, type);
@@ -128,7 +134,8 @@ public class Navigator extends CommonNavigator {
 			NavigationRoot root = navi.root;
 			if (root == null || root.childs == null)
 				return;
-			for (NavigationElement e : root.childs) {
+			var children = (List<NavigationElement>)root.getChilds();
+			for (NavigationElement e : children) {
 				fn.accept(e);
 			}
 		} catch (Exception e) {
@@ -162,13 +169,51 @@ public class Navigator extends CommonNavigator {
 	}
 
 	public static void refresh(NavigationElement e) {
-		if (e == null)
-			return;
-		e.update();
 		var viewer = getViewer();
-		if (viewer != null) {
-			viewer.refresh(e);
+		if (e == null || viewer == null)
+			return;		
+		var oldExpansion = viewer.getExpandedElements();
+		e.update();
+		viewer.refresh(e);
+		setRefreshedExpansion(viewer, oldExpansion);
+	}
+	
+	private static void setRefreshedExpansion(
+			CommonViewer viewer, Object[] oldExpansion) {
+		if (viewer == null || oldExpansion == null)
+			return;
+		var newExpanded = new ArrayList<NavigationElement>();
+		for (var e : oldExpansion) {
+			if (!(e instanceof NavigationElement oldElem))
+				continue;
+			var newElem = findElement(oldElem.getContent());
+			if (newElem != null) {
+				newExpanded.add(newElem);
+			}
 		}
+		viewer.setExpandedElements(newExpanded.toArray());
+	}
+	
+	public static NavigationElement findElement(Object content) {
+		var root = getNavigationRoot();
+		if (content == null || root == null)
+			return null;
+		var queue = new ArrayDeque<NavigationElement>();
+		queue.add(root);
+		while (!queue.isEmpty()) {
+			var next = queue.poll();
+			if (Objects.equal(next.getContent(), content))
+				return next;
+			queue.addAll(next.getChilds());
+		}
+		return null;
+	}
+	
+	public static NavigationRoot getNavigationRoot() {
+		var navigator = getInstance();
+		return navigator != null
+				? navigator.getRoot()
+				: null;
 	}
 
 	public static CommonViewer getViewer() {

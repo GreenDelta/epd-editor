@@ -22,12 +22,12 @@ public class RefDeleteAction extends Action {
 
 	@Override
 	public void run() {
-		if (e == null || e.ref == null)
+		if (e == null || e.getContent() == null)
 			return;
 		boolean b = MsgBox.ask(M.DeleteDataSet, M.DeleteDataSetQuestion);
 		if (!b)
 			return;
-		Ref ref = e.ref;
+		Ref ref = e.getContent();
 		Editors.close(ref);
 		Data.delete(ref);
 	}

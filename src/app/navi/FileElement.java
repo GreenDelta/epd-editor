@@ -6,13 +6,12 @@ import org.eclipse.swt.graphics.Image;
 
 import java.io.File;
 
-public class FileElement extends NavigationElement {
+public class FileElement extends NavigationElement<File> {
 
-	public final File file;
 	private final FolderElement parent;
 
 	public FileElement(FolderElement parent, File file) {
-		this.file = file;
+		this.content = file;
 		this.parent = parent;
 	}
 
@@ -30,6 +29,7 @@ public class FileElement extends NavigationElement {
 
 	@Override
 	public String getLabel() {
+		var file = getContent();
 		return file == null ? "?" : file.getName();
 	}
 

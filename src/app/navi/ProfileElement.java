@@ -5,14 +5,13 @@ import epd.model.EpdProfile;
 import epd.util.Strings;
 import org.eclipse.swt.graphics.Image;
 
-public class ProfileElement extends NavigationElement {
+public class ProfileElement extends NavigationElement<EpdProfile> {
 
 	private final ProfileFolder parent;
-	final EpdProfile profile;
 
 	public ProfileElement(ProfileFolder parent, EpdProfile profile) {
 		this.parent = parent;
-		this.profile = profile;
+		this.content = profile;
 	}
 
 	@Override
@@ -24,16 +23,16 @@ public class ProfileElement extends NavigationElement {
 	public int compareTo(NavigationElement elem) {
 		if (!(elem instanceof ProfileElement other))
 			return 1;
-		if (this.profile == null || other.profile == null)
+		if (this.content == null || other.content == null)
 			return 0;
-		return Strings.compare(this.profile.name, other.profile.name);
+		return Strings.compare(this.content.name, other.content.name);
 	}
 
 	@Override
 	public String getLabel() {
-		if (this.profile == null)
+		if (this.content == null)
 			return "?";
-		return this.profile.name;
+		return this.content.name;
 	}
 
 	@Override

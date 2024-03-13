@@ -97,9 +97,9 @@ public class NavigationMenu extends CommonActionProvider {
 
 		if (first instanceof ProfileElement pe) {
 			menu.add(Actions.create(M.Open, Icon.OPEN.des(),
-				() -> ProfileEditor.open(pe.profile)));
-			menu.add(new ProfileExportAction(pe.profile));
-			menu.add(new ProfileDeleteAction(pe.profile));
+				() -> ProfileEditor.open(pe.content)));
+			menu.add(new ProfileExportAction(pe.content));
+			menu.add(new ProfileDeleteAction(pe.content));
 		}
 
 		if (first instanceof ConnectionFolder cf) {
@@ -108,10 +108,10 @@ public class NavigationMenu extends CommonActionProvider {
 
 		if (first instanceof ConnectionElement e) {
 			menu.add(Actions.create(M.Open, Icon.OPEN.des(),
-				() -> ConnectionEditor.open(e.con)));
+				() -> ConnectionEditor.open(e.content)));
 			menu.add(Actions.create(M.DownloadEPDProfiles,
 				Icon.DOWNLOAD.des(), () -> {
-					EpdProfileDownload.runInUI(e.con.url);
+					EpdProfileDownload.runInUI(e.content.url);
 				}));
 			menu.add(new ConnectionDeleteAction(e));
 		}
@@ -119,12 +119,12 @@ public class NavigationMenu extends CommonActionProvider {
 
 	private void forRef(RefElement e, IMenuManager menu) {
 		menu.add(Actions.create(M.Open, Icon.OPEN.des(),
-			() -> Editors.open(e.ref)));
+			() -> Editors.open(e.content)));
 		menu.add(Actions.create(M.Validate, Icon.OK.des(),
-			() -> ValidationDialog.open(e.ref)));
+			() -> ValidationDialog.open(e.content)));
 		menu.add(new DuplicateAction(e));
 		menu.add(Actions.create(M.Export, Icon.EXPORT.des(),
-			() -> ExportDialog.open(e.ref)));
+			() -> ExportDialog.open(e.content)));
 		menu.add(new RefDeleteAction(e));
 	}
 
@@ -132,7 +132,7 @@ public class NavigationMenu extends CommonActionProvider {
 		open(e, menu);
 		menu.add(new FileDeletion(e));
 		if (e.getType() == FolderType.CLASSIFICATION) {
-			String name = e.file.getName();
+			String name = e.content.getName();
 			if (name.toLowerCase().endsWith(".xml")) {
 				name = name.substring(0, name.length() - 4);
 			}
@@ -150,18 +150,18 @@ public class NavigationMenu extends CommonActionProvider {
 	}
 
 	private void open(FileElement e, IMenuManager menu) {
-		if (e == null || e.getType() == null || e.file == null)
+		if (e == null || e.getType() == null || e.content == null)
 			return;
 		Runnable fn = null;
 		switch (e.getType()) {
 			case CLASSIFICATION:
-				fn = () -> ClassificationEditor.open(e.file);
+				fn = () -> ClassificationEditor.open(e.content);
 				break;
 			case LOCATION:
-				fn = () -> LocationEditor.open(e.file);
+				fn = () -> LocationEditor.open(e.content);
 				break;
 			case DOC:
-				fn = () -> UI.open(e.file);
+				fn = () -> UI.open(e.content);
 				break;
 			default:
 				break;

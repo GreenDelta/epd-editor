@@ -144,7 +144,7 @@ public class RefSelectionDialog extends FormDialog {
 			NavigationElement e = Viewers.getFirst(evt.getSelection());
 			if (!(e instanceof RefElement refElem))
 				return;
-			selection = refElem.ref;
+			selection = refElem.getContent();
 			getButton(IDialogConstants.OK_ID).setEnabled(selection != null);
 		}
 	}
@@ -156,7 +156,7 @@ public class RefSelectionDialog extends FormDialog {
 			NavigationElement e = Viewers.getFirst(evt.getSelection());
 			if (!(e instanceof RefElement refElem))
 				return;
-			selection = refElem.ref;
+			selection = refElem.getContent();
 			okPressed();
 		}
 	}

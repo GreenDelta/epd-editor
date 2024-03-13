@@ -55,9 +55,9 @@ public class NewDataSetAction extends Action {
 		if (elem == null)
 			return null;
 		if (elem instanceof TypeElement)
-			return ((TypeElement) elem).type;
+			return ((TypeElement) elem).getContent();
 		if (elem instanceof RefElement) {
-			Ref ref = ((RefElement) elem).ref;
+			Ref ref = ((RefElement) elem).getContent();
 			if (ref != null && ref.getType() != null)
 				return ref.getType();
 		}

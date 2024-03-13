@@ -8,18 +8,17 @@ import app.App;
 import app.rcp.Icon;
 import epd.util.Strings;
 
-public class RefElement extends NavigationElement {
+public class RefElement extends NavigationElement<Ref> {
 
-	public Ref ref;
-	private final NavigationElement parent;
+	private final NavigationElement<?> parent;
 
-	public RefElement(NavigationElement parent, Ref ref) {
+	public RefElement(NavigationElement<?> parent, Ref ref) {
 		this.parent = parent;
-		this.ref = ref;
+		this.content = ref;
 	}
 
 	@Override
-	public NavigationElement getParent() {
+	public NavigationElement<?> getParent() {
 		return parent;
 	}
 
@@ -32,12 +31,12 @@ public class RefElement extends NavigationElement {
 
 	@Override
 	public String getLabel() {
-		return LangString.getFirst(ref.getName(), App.lang());
+		return LangString.getFirst(getContent().getName(), App.lang());
 	}
 
 	@Override
 	public Image getImage() {
-		return Icon.img(ref.getType());
+		return Icon.img(getContent().getType());
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import org.openlca.ilcd.commons.Category;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.Ref;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -56,7 +57,7 @@ public class NaviSync implements Runnable {
 		for (Ref ref : node.refs) {
 			RefElement elem = findChild(ref, parent);
 			if (elem != null) {
-				elem.ref = ref;
+				elem.content = ref;
 			} else {
 				elem = new RefElement(parent, ref);
 				parent.childs.add(elem);
@@ -65,10 +66,11 @@ public class NaviSync implements Runnable {
 	}
 
 	private RefElement findChild(Ref ref, NavigationElement parent) {
-		for (NavigationElement child : parent.childs) {
+		var children = (List<NavigationElement>)parent.getChilds();
+		for (NavigationElement child : children) {
 			if (!(child instanceof RefElement re))
 				continue;
-			if (Objects.equals(re.ref, ref))
+			if (Objects.equals(re.content, ref))
 				return re;
 		}
 		return null;
@@ -77,7 +79,8 @@ public class NaviSync implements Runnable {
 	private CategoryElement findChild(Category cat, NavigationElement parent) {
 		if (cat == null)
 			return null;
-		for (NavigationElement child : parent.childs) {
+		var children = (List<NavigationElement>)parent.getChilds();
+		for (NavigationElement child : children) {
 			if (!(child instanceof CategoryElement ca))
 				continue;
 			if (ca.getCategory() == null)
@@ -94,7 +97,7 @@ public class NaviSync implements Runnable {
 				return !contains(node, ce.getCategory());
 			}
 			if (elem instanceof RefElement re) {
-				return !node.refs.contains(re.ref);
+				return !node.refs.contains(re.content);
 			}
 			return false;
 		});

@@ -5,14 +5,13 @@ import org.openlca.ilcd.io.SodaConnection;
 
 import app.rcp.Icon;
 
-public class ConnectionElement extends NavigationElement {
+public class ConnectionElement extends NavigationElement<SodaConnection> {
 
 	private final ConnectionFolder parent;
-	public final SodaConnection con;
 
 	public ConnectionElement(ConnectionFolder parent, SodaConnection con) {
 		this.parent = parent;
-		this.con = con;
+		this.content = con;
 	}
 
 	@Override
@@ -27,7 +26,7 @@ public class ConnectionElement extends NavigationElement {
 
 	@Override
 	public String getLabel() {
-		return con.toString();
+		return getContent().toString();
 	}
 
 	@Override

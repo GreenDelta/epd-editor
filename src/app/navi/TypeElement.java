@@ -10,14 +10,13 @@ import app.rcp.Icon;
 import epd.index.CategoryNode;
 import epd.index.TypeNode;
 
-public class TypeElement extends NavigationElement {
+public class TypeElement extends NavigationElement<DataSetType> {
 
-	public final DataSetType type;
 	private final NavigationRoot parent;
 
 	public TypeElement(NavigationRoot parent, DataSetType type) {
 		this.parent = parent;
-		this.type = type;
+		this.content = type;
 	}
 
 	@Override
@@ -27,7 +26,7 @@ public class TypeElement extends NavigationElement {
 		childs.clear();
 		if (App.index() == null)
 			return;
-		TypeNode node = App.index().getNode(type);
+		TypeNode node = App.index().getNode(getContent());
 		if (node == null)
 			return;
 		for (CategoryNode catNode : node.categories) {
@@ -47,6 +46,7 @@ public class TypeElement extends NavigationElement {
 
 	@Override
 	public String getLabel() {
+		var type = getContent();
 		if (type == null)
 			return "";
 		return switch (type) {

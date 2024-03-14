@@ -1,8 +1,8 @@
 package app.rcp;
 
 import app.M;
-import epd.model.SubType;
 import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.processes.epd.EpdSubType;
 
 public class Labels {
 
@@ -25,15 +25,15 @@ public class Labels {
 		};
 	}
 
-	public static String get(SubType subtype) {
+	public static String get(EpdSubType subtype) {
 		if (subtype == null)
 			return null;
 		return switch (subtype) {
-			case AVERAGE -> M.Average;
-			case GENERIC -> M.Generic;
-			case REPRESENTATIVE -> M.Representative;
-			case SPECIFIC -> M.Specific;
-			case TEMPLATE -> M.Template;
+			case AVERAGE_DATASET -> M.Average;
+			case GENERIC_DATASET -> M.Generic;
+			case REPRESENTATIVE_DATASET -> M.Representative;
+			case SPECIFIC_DATASET -> M.Specific;
+			case TEMPLATE_DATASET -> M.Template;
 		};
 	}
 

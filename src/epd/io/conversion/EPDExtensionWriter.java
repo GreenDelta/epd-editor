@@ -56,28 +56,9 @@ class EPDExtensionWriter {
 			info.withEpdExtension(null);
 		}
 
-		writeSubType();
 		writePublicationDate();
 		PublisherRef.write(epd);
 		OriginalEPDRef.write(epd);
-	}
-
-	private void writeSubType() {
-		if (epd.subType == null) {
-			var m = Processes.getInventoryMethod(epd.process);
-			if (m == null)
-				return;
-			m.withEpdExtension(null);
-			return;
-		}
-		var other = epd.process.withModelling()
-			.withInventoryMethod()
-			.withEpdExtension();
-		var elem = Dom.createElement(Vocab.EPD_2013, "subType");
-		if (elem != null) {
-			elem.setTextContent(epd.subType.getLabel());
-			other.withAny().add(elem);
-		}
 	}
 
 	private void writePublicationDate() {

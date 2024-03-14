@@ -1,14 +1,7 @@
 package app.store;
 
-import app.App;
-import app.navi.NaviSync;
-import epd.io.conversion.Extensions;
-import epd.io.conversion.FlowExtensions;
-import epd.model.EpdDataSet;
-import epd.model.EpdProduct;
-import epd.model.EpdProfile;
-import epd.model.Version;
-import epd.model.Xml;
+import java.util.function.Consumer;
+
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.contacts.Contact;
@@ -21,7 +14,14 @@ import org.openlca.ilcd.units.UnitGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.function.Consumer;
+import app.App;
+import app.navi.NaviSync;
+import epd.io.conversion.Extensions;
+import epd.io.conversion.FlowExtensions;
+import epd.model.EpdDataSet;
+import epd.model.EpdProduct;
+import epd.model.Version;
+import epd.model.Xml;
 
 public final class Data {
 
@@ -31,8 +31,7 @@ public final class Data {
 	public static EpdDataSet getEPD(Ref ref) {
 		try {
 			Process process = App.store().get(Process.class, ref.getUUID());
-			EpdProfile profile = EpdProfiles.get(process);
-			return Extensions.read(process, profile);
+			return Extensions.read(process);
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Data.class);
 			log.error("failed to open EPD data set " + ref, e);

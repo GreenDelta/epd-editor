@@ -1,12 +1,12 @@
 package epd.conversion;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import app.store.EpdProfiles;
-import epd.io.conversion.Extensions;
-import epd.model.EpdDataSet;
 import org.junit.Test;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.LangString;
@@ -14,8 +14,8 @@ import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.Processes;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import epd.io.conversion.Extensions;
+import epd.model.EpdDataSet;
 
 public class RefExtensionTest {
 
@@ -29,8 +29,7 @@ public class RefExtensionTest {
 		Tests.withStore(store -> {
 			store.put(epd.process);
 			var copy = Extensions.read(
-				store.get(Process.class, id),
-				EpdProfiles.getDefault());
+					store.get(Process.class, id));
 			checkRefs(copy.publishers, DataSetType.CONTACT);
 		});
 	}
@@ -45,8 +44,7 @@ public class RefExtensionTest {
 		Tests.withStore(store -> {
 			store.put(epd.process);
 			var copy = Extensions.read(
-				store.get(Process.class, id),
-				EpdProfiles.getDefault());
+					store.get(Process.class, id));
 			checkRefs(copy.originalEPDs, DataSetType.SOURCE);
 		});
 	}

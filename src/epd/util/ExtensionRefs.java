@@ -1,8 +1,11 @@
 package epd.util;
 
-import app.store.EpdProfiles;
-import epd.io.conversion.Extensions;
-import epd.io.conversion.FlowExtensions;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.openlca.ilcd.commons.FlowType;
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
@@ -11,11 +14,8 @@ import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.EpdIndicatorResult;
 import org.openlca.ilcd.util.Flows;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import epd.io.conversion.Extensions;
+import epd.io.conversion.FlowExtensions;
 
 public final class ExtensionRefs {
 
@@ -35,7 +35,7 @@ public final class ExtensionRefs {
 	}
 
 	private static Set<Ref> of(Process p) {
-		var epd = Extensions.read(p, EpdProfiles.get(p));
+		var epd = Extensions.read(p);
 		var refs = new HashSet<Ref>();
 
 		for (var result : EpdIndicatorResult.allOf(p)) {

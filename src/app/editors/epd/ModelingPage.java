@@ -16,6 +16,8 @@ import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.processes.ComplianceDeclaration;
 import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.processes.epd.EpdSubType;
+import org.openlca.ilcd.util.Epds;
 import org.openlca.ilcd.util.Processes;
 
 import app.M;
@@ -26,7 +28,6 @@ import app.util.TextBuilder;
 import app.util.UI;
 import app.util.Viewers;
 import epd.model.EpdDataSet;
-import epd.model.SubType;
 
 class ModelingPage extends FormPage {
 
@@ -52,22 +53,22 @@ class ModelingPage extends FormPage {
 		createModelingSection(body);
 
 		RefTable.create(DataSetType.SOURCE,
-			process.withModelling().withInventoryMethod().withSources())
+				process.withModelling().withInventoryMethod().withSources())
 			.withEditor(editor)
 			.withTitle(M.LCAMethodDetails)
 			.withTooltip(Tooltips.EPD_LCAMethodDetails)
 			.render(body, toolkit);
 
 		RefTable.create(DataSetType.SOURCE,
-			process.withModelling().withRepresentativeness()
-			.withDataHandlingSources())
+				process.withModelling().withRepresentativeness()
+					.withDataHandlingSources())
 			.withEditor(editor)
 			.withTitle(M.DocumentationDataQualityManagement)
 			.withTooltip(Tooltips.EPD_DocumentationDataQualityManagement)
 			.render(body, toolkit);
 
 		RefTable.create(DataSetType.SOURCE,
-			process.withModelling().withRepresentativeness().withSources())
+				process.withModelling().withRepresentativeness().withSources())
 			.withEditor(editor)
 			.withTitle(M.DataSources)
 			.withTooltip(Tooltips.EPD_DataSources)
@@ -87,13 +88,13 @@ class ModelingPage extends FormPage {
 	}
 
 	private void createModelingSection(Composite parent) {
-		Composite comp = UI.formSection(parent, toolkit,
+		var comp = UI.formSection(parent, toolkit,
 			M.ModellingAndValidation, Tooltips.EPD_ModellingAndValidation);
 		UI.formLabel(comp, toolkit, M.Subtype, Tooltips.EPD_Subtype);
 		createSubTypeViewer(comp);
-		TextBuilder tb = new TextBuilder(editor, this, toolkit);
+		var tb = new TextBuilder(editor, this, toolkit);
 		tb.multiText(comp, M.UseAdvice, Tooltips.EPD_UseAdvice,
-				process.withModelling().withRepresentativeness().withUseAdvice());
+			Processes.withRepresentativeness(process).withUseAdvice());
 	}
 
 	private void createSubTypeViewer(Composite parent) {
@@ -103,19 +104,21 @@ class ModelingPage extends FormPage {
 		combo.setLabelProvider(new LabelProvider() {
 			@Override
 			public String getText(Object element) {
-				if (element instanceof SubType subType) {
+				if (element instanceof EpdSubType subType) {
 					return Labels.get(subType);
 				}
 				return super.getText(element);
 			}
 		});
 
-		combo.setInput(SubType.values());
-		if (epd.subType != null) {
-			combo.setSelection(new StructuredSelection(epd.subType));
+		combo.setInput(EpdSubType.values());
+		var current = Epds.getSubType(epd.process);
+		if (current != null) {
+			combo.setSelection(new StructuredSelection(current));
 		}
 		combo.addSelectionChangedListener(e -> {
-			editor.dataSet.subType = Viewers.getFirst(e.getSelection());
+			EpdSubType next = Viewers.getFirst(e.getSelection());
+			Epds.withSubType(epd.process, next);
 			editor.setDirty();
 		});
 	}

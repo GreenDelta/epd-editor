@@ -8,8 +8,6 @@ import org.openlca.ilcd.util.Processes;
 import org.slf4j.LoggerFactory;
 
 import epd.model.EpdDataSet;
-import epd.model.EpdProfile;
-import epd.model.SubType;
 import epd.model.content.ContentDeclaration;
 import epd.model.qmeta.QMetaData;
 import epd.util.Strings;
@@ -20,15 +18,13 @@ import epd.util.Strings;
 class EPDExtensionReader {
 
 	private final Process process;
-	private final EpdProfile profile;
 
-	private EPDExtensionReader(Process process, EpdProfile profile) {
+	private EPDExtensionReader(Process process) {
 		this.process = process;
-		this.profile = profile;
 	}
 
-	static EpdDataSet read(Process process, EpdProfile profile) {
-		return new EPDExtensionReader(process, profile).read();
+	static EpdDataSet read(Process process) {
+		return new EPDExtensionReader(process).read();
 	}
 
 	private EpdDataSet read() {
@@ -38,7 +34,6 @@ class EPDExtensionReader {
 	}
 
 	private void readExtensions(EpdDataSet epd) {
-		readSubType(epd);
 		readPublicationDate(epd);
 		PublisherRef.read(epd);
 		OriginalEPDRef.read(epd);
@@ -50,16 +45,6 @@ class EPDExtensionReader {
 			return;
 		var other = info.getEpdExtension();
 		epd.contentDeclaration = ContentDeclaration.read(other);
-	}
-
-	private void readSubType(EpdDataSet dataSet) {
-		var method = Processes.getInventoryMethod(process);
-		if (method == null || method.getEpdExtension() == null)
-			return;
-		var elem = Dom.getElement(method.getEpdExtension(), "subType");
-		if (elem != null) {
-			dataSet.subType = SubType.fromLabel(elem.getTextContent());
-		}
 	}
 
 	private void readPublicationDate(EpdDataSet epd) {

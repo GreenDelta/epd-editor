@@ -6,10 +6,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.io.Xml;
@@ -21,6 +19,7 @@ public class XmlPage extends FormPage {
 
 	private final IDataSet dataSet;
 	private StyledText text;
+	private ScrolledForm form;
 
 	public XmlPage(BaseEditor editor, IDataSet dataSet) {
 		super(editor, "XmlPage", "XML");
@@ -29,10 +28,10 @@ public class XmlPage extends FormPage {
 	}
 
 	@Override
-	protected void createFormContent(IManagedForm mform) {
-		FormToolkit tk = mform.getToolkit();
-		ScrolledForm form = UI.formHeader(mform, "XML");
-		Composite body = UI.formBody(form, tk);
+	protected void createFormContent(IManagedForm mForm) {
+		var tk = mForm.getToolkit();
+		form = UI.formHeader(mForm, "XML");
+		var body = UI.formBody(form, tk);
 		text = new StyledText(body, SWT.NONE);
 		tk.adapt(text);
 		UI.gridData(text, true, true);
@@ -47,6 +46,7 @@ public class XmlPage extends FormPage {
 			var xml = Xml.toString(dataSet);
 			text.setText(xml);
 			styleText(xml);
+			form.reflow(true);
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to convert data set to XML", e);
@@ -55,9 +55,9 @@ public class XmlPage extends FormPage {
 
 	private void styleText(String xml) {
 		try {
-			XmlTokenizer tokenizer = new XmlTokenizer();
+			var tokenizer = new XmlTokenizer();
 			for (Token token : tokenizer.parse(xml)) {
-				StyleRange range = new StyleRange();
+				var range = new StyleRange();
 				range.start = token.start;
 				range.length = token.end - token.start;
 				range.foreground = color(token.type);

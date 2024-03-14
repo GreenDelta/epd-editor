@@ -7,15 +7,12 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
-import javax.xml.namespace.QName;
-
 import org.junit.Test;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.Processes;
 
 import app.store.EpdProfiles;
 import epd.io.conversion.Extensions;
-import epd.io.conversion.Vocab;
 import epd.model.EpdDataSet;
 import epd.model.SubType;
 
@@ -30,9 +27,7 @@ public class SimpleExtensionTest {
 		Tests.withStore(store -> {
 			store.put(epd.process);
 			var process = store.get(Process.class, id);
-			var qName = "{" + Vocab.NS_EPDv2 + "}epd-version";
-			var version = process.getOtherAttributes().get(QName.valueOf(qName));
-			assertEquals("1.2", version);
+			assertEquals("1.2", process.getEpdVersion());
 		});
 	}
 

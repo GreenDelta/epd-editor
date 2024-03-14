@@ -4,7 +4,6 @@ import app.App;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import epd.io.conversion.Vocab;
 import epd.model.EpdProfile;
 import epd.model.Indicator;
 import epd.model.Indicator.Type;
@@ -115,7 +114,7 @@ public final class EpdProfiles {
 	public static EpdProfile get(Process p) {
 		if (p == null)
 			return getDefault();
-		String profileID = p.getOtherAttributes().get(Vocab.PROFILE_ATTR);
+		String profileID = p.getEpdProfile();
 		EpdProfile profile = EpdProfiles.get(profileID);
 		return profile != null ? profile : getDefault();
 	}

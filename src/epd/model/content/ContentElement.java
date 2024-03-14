@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.openlca.ilcd.Vocab;
 import org.openlca.ilcd.commons.LangString;
 import org.w3c.dom.Element;
 
 import epd.io.conversion.Dom;
-import epd.io.conversion.Vocab;
 
 public abstract class ContentElement {
 
@@ -33,20 +33,20 @@ public abstract class ContentElement {
 	ContentElement read(Element e) {
 		if (e == null)
 			return this;
-		name.addAll(Dom.getChilds(e, "name", Vocab.NS_EPDv2)
+		name.addAll(Dom.getChilds(e, "name", Vocab.EPD_2019)
 				.stream().map(Dom::getLangString)
 				.filter(Objects::nonNull)
 				.toList());
-		comment.addAll(Dom.getChilds(e, "comment", Vocab.NS_EPDv2)
+		comment.addAll(Dom.getChilds(e, "comment", Vocab.EPD_2019)
 				.stream().map(Dom::getLangString)
 				.filter(Objects::nonNull)
 				.toList());
 
-		Element massPercElem = Dom.getChild(e, "weightPerc", Vocab.NS_EPDv2);
+		Element massPercElem = Dom.getChild(e, "weightPerc", Vocab.EPD_2019);
 		if (massPercElem != null) {
 			massPerc = ContentAmount.from(massPercElem);
 		}
-		Element massElem = Dom.getChild(e, "mass", Vocab.NS_EPDv2);
+		Element massElem = Dom.getChild(e, "mass", Vocab.EPD_2019);
 		if (massElem != null) {
 			mass = ContentAmount.from(massElem);
 		}
@@ -57,19 +57,19 @@ public abstract class ContentElement {
 		if (elem == null)
 			return;
 		for (LangString n : name) {
-			Element e = Dom.addChild(elem, "epd2:name", Vocab.NS_EPDv2);
+			Element e = Dom.addChild(elem, "epd2:name", Vocab.EPD_2019);
 			Dom.setLangString(e, n);
 		}
 		if (massPerc != null) {
-			Element e = Dom.addChild(elem, "epd2:weightPerc", Vocab.NS_EPDv2);
+			Element e = Dom.addChild(elem, "epd2:weightPerc", Vocab.EPD_2019);
 			massPerc.write(e);
 		}
 		if (mass != null) {
-			Element e = Dom.addChild(elem, "epd2:mass", Vocab.NS_EPDv2);
+			Element e = Dom.addChild(elem, "epd2:mass", Vocab.EPD_2019);
 			mass.write(e);
 		}
 		for (LangString c : comment) {
-			Element e = Dom.addChild(elem, "epd2:comment", Vocab.NS_EPDv2);
+			Element e = Dom.addChild(elem, "epd2:comment", Vocab.EPD_2019);
 			Dom.setLangString(e, c);
 		}
 	}

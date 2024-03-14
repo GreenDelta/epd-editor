@@ -1,10 +1,19 @@
 package app.editors.epd;
 
-import java.time.LocalDate;
-import java.util.Objects;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-
+import app.App;
+import app.M;
+import app.Tooltips;
+import app.editors.CategorySection;
+import app.editors.RefLink;
+import app.editors.RefTable;
+import app.rcp.Texts;
+import app.store.RefDeps;
+import app.util.Colors;
+import app.util.Controls;
+import app.util.TextBuilder;
+import app.util.UI;
+import epd.model.EpdDataSet;
+import epd.util.Strings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DateTime;
@@ -20,21 +29,12 @@ import org.openlca.ilcd.processes.Location;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.ProcessName;
 import org.openlca.ilcd.processes.Technology;
+import org.openlca.ilcd.util.Epds;
 
-import app.App;
-import app.M;
-import app.Tooltips;
-import app.editors.CategorySection;
-import app.editors.RefLink;
-import app.editors.RefTable;
-import app.store.RefDeps;
-import app.util.Colors;
-import app.util.Controls;
-import app.util.TextBuilder;
-import app.util.UI;
-import epd.model.EpdDataSet;
-import epd.model.SafetyMargins;
-import epd.util.Strings;
+import java.time.LocalDate;
+import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 class InfoPage extends FormPage {
 
@@ -138,39 +138,21 @@ class InfoPage extends FormPage {
 	private void createSafetyMarginsSection(Composite parent, TextBuilder tb) {
 		Composite comp = UI.formSection(parent, tk,
 			M.SafetyMargins, Tooltips.EPD_UncertaintyMargins);
-		SafetyMargins margins = epd.safetyMargins;
-		if (margins == null) {
-			margins = new SafetyMargins();
-			epd.safetyMargins = margins;
-		}
+		var margins = Epds.withSafetyMargins(epd.process);
 		Text marginsText = UI.formText(comp, tk,
 			M.SafetyMargin, Tooltips.EPD_UncertaintyMargins);
-		if (margins.margins != null) {
-			marginsText.setText(margins.margins.toString());
-		}
-		marginsText.addModifyListener(e -> modifyMargins(marginsText));
+		Texts.set(marginsText, margins.getValue());
+		Texts.validateNumber(marginsText, d -> {
+			if (d.isEmpty()) {
+				margins.withValue(null);
+			} else {
+				margins.withValue(d.getAsDouble());
+			}
+			editor.setDirty();
+		});
 		tb.multiText(comp, M.Description,
 			Tooltips.EPD_UncertaintyMarginsDescription,
-			margins.description);
-	}
-
-	private void modifyMargins(Text text) {
-		String t = text.getText();
-		SafetyMargins margins = epd.safetyMargins;
-		if (Strings.nullOrEmpty(t)) {
-			margins.margins = null;
-			editor.setDirty();
-			return;
-		}
-		try {
-			margins.margins = Double.parseDouble(t);
-		} catch (Exception e) {
-			if (margins.margins != null)
-				text.setText(margins.margins.toString());
-			else
-				text.setText("");
-		}
-		editor.setDirty();
+			margins.withDescription());
 	}
 
 	private void createTechnologySection(Composite body, TextBuilder tb) {

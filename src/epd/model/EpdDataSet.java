@@ -1,7 +1,10 @@
 package epd.model;
 
-import epd.model.content.ContentDeclaration;
-import epd.model.qmeta.QMetaData;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 import org.openlca.ilcd.commons.Copyable;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.QuantitativeReferenceType;
@@ -11,25 +14,17 @@ import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.ProcessName;
 import org.openlca.ilcd.util.Processes;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import epd.model.content.ContentDeclaration;
+import epd.model.qmeta.QMetaData;
 
 public class EpdDataSet implements Copyable<EpdDataSet> {
 
 	public final Process process;
-	public String profile;
 	public SubType subType;
 	public LocalDate publicationDate;
 
-	public SafetyMargins safetyMargins;
 	public ContentDeclaration contentDeclaration;
 	public QMetaData qMetaData;
-
-	public final List<IndicatorResult> results = new ArrayList<>();
-	public final List<ModuleEntry> moduleEntries = new ArrayList<>();
-	public final List<Scenario> scenarios = new ArrayList<>();
 
 	public final List<Ref> publishers = new ArrayList<>();
 	public final List<Ref> originalEPDs = new ArrayList<>();
@@ -40,16 +35,6 @@ public class EpdDataSet implements Copyable<EpdDataSet> {
 
 	public EpdDataSet() {
 		this(new Process());
-	}
-
-	public IndicatorResult getResult(Indicator indicator) {
-		if (indicator == null)
-			return null;
-		for (var result : results) {
-			if (Objects.equals(result.indicator, indicator))
-				return result;
-		}
-		return null;
 	}
 
 	public EpdDescriptor toDescriptor(String lang) {
@@ -66,7 +51,6 @@ public class EpdDataSet implements Copyable<EpdDataSet> {
 	@Override
 	public EpdDataSet copy() {
 		var clone = new EpdDataSet(process.copy());
-		clone.profile = profile;
 		clone.subType = subType;
 
 		if (publicationDate != null) {
@@ -76,25 +60,12 @@ public class EpdDataSet implements Copyable<EpdDataSet> {
 				publicationDate.getDayOfMonth());
 		}
 
-		clone.safetyMargins = safetyMargins != null
-			? safetyMargins.copy()
-			: null;
 		clone.contentDeclaration = contentDeclaration != null
 			? contentDeclaration.clone()
 			: null;
 		clone.qMetaData = qMetaData != null
 			? qMetaData.clone()
 			: null;
-
-		for (var result : results) {
-			clone.results.add(result.clone());
-		}
-		for (var entry : moduleEntries) {
-			clone.moduleEntries.add(entry.clone());
-		}
-		for (var scenario : scenarios) {
-			clone.scenarios.add(scenario.clone());
-		}
 
 		for (var ref : publishers) {
 			clone.publishers.add(ref.copy());

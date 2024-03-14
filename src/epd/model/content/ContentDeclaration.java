@@ -1,8 +1,8 @@
 package epd.model.content;
 
 import epd.io.conversion.Dom;
-import epd.io.conversion.Vocab;
-import org.openlca.ilcd.commons.Other;
+import org.openlca.ilcd.Vocab;
+import org.openlca.ilcd.commons.Extension;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -28,7 +28,7 @@ public class ContentDeclaration {
 	 * Read a content declaration from the given extension element. May return
 	 * null when the extension is null or when it has no content declaration.
 	 */
-	public static ContentDeclaration read(Other other) {
+	public static ContentDeclaration read(Extension other) {
 		if (other == null)
 			return null;
 
@@ -37,7 +37,7 @@ public class ContentDeclaration {
 		for (Object any : other.getAny()) {
 			if (!(any instanceof Element e))
 				continue;
-			if (Objects.equals(Vocab.NS_EPDv2, e.getNamespaceURI())
+			if (Objects.equals(Vocab.EPD_2019, e.getNamespaceURI())
 				&& Objects.equals("contentDeclaration", e.getLocalName())) {
 				root = e;
 				break;
@@ -61,14 +61,14 @@ public class ContentDeclaration {
 	 * Write this content declaration to the given extension element deleting an
 	 * old declaration if it already exists.
 	 */
-	public void write(Other other, Document doc) {
+	public void write(Extension other, Document doc) {
 		if (other == null || doc == null)
 			return;
 		Dom.clear(other, "contentDeclaration");
 		if (content.isEmpty())
 			return;
 		Element root = doc.createElementNS(
-			Vocab.NS_EPDv2, "epd2:contentDeclaration");
+			Vocab.EPD_2019, "epd2:contentDeclaration");
 		other.withAny().add(root);
 		for (ContentElement e : content) {
 			writeElement(root, e);
@@ -78,7 +78,7 @@ public class ContentDeclaration {
 	static ContentElement readElement(Element elem) {
 		if (elem == null)
 			return null;
-		if (!Objects.equals(Vocab.NS_EPDv2, elem.getNamespaceURI()))
+		if (!Objects.equals(Vocab.EPD_2019, elem.getNamespaceURI()))
 			return null;
 		return switch (elem.getLocalName()) {
 			case "component" -> new Component().read(elem);
@@ -101,7 +101,7 @@ public class ContentDeclaration {
 		}
 		if (tag == null)
 			return;
-		Element elem = Dom.addChild(parent, "epd2:" + tag, Vocab.NS_EPDv2);
+		Element elem = Dom.addChild(parent, "epd2:" + tag, Vocab.EPD_2019);
 		celem.write(elem);
 	}
 

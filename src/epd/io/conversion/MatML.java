@@ -2,7 +2,7 @@ package epd.io.conversion;
 
 import epd.model.MaterialProperty;
 import epd.model.MaterialPropertyValue;
-import org.openlca.ilcd.commons.Other;
+import org.openlca.ilcd.commons.Extension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -23,12 +23,12 @@ class MatML {
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
-	private final Other extension;
+	private final Extension extension;
 	private Document doc;
 	private Element bulkDetails;
 	private Element metaData;
 
-	MatML(Other extension) {
+	MatML(Extension extension) {
 		this.extension = extension;
 	}
 

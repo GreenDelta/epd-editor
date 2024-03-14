@@ -1,6 +1,8 @@
 package epd.io.conversion;
 
+import org.openlca.ilcd.Vocab;
 import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.commons.Extension;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Other;
 import org.openlca.ilcd.commons.Ref;
@@ -19,7 +21,7 @@ class DataSetRefExtension {
 	private String path;
 	private final String tagName;
 
-	public static Ref readFlow(String tagName, Other extension) {
+	public static Ref readFlow(String tagName, Extension extension) {
 		var ext = new DataSetRefExtension(tagName, DataSetType.FLOW);
 		return ext.read(DataSetType.FLOW, extension);
 	}
@@ -40,7 +42,7 @@ class DataSetRefExtension {
 	 * extension point. If the data set reference is null, it just drops a
 	 * possible old data set reference from that extension.
 	 */
-	public static void write(Ref ref, String tag, Other extension) {
+	public static void write(Ref ref, String tag, Extension extension) {
 		if (tag == null || extension == null)
 			return;
 		Element old = Dom.getElement(extension, tag);
@@ -100,7 +102,7 @@ class DataSetRefExtension {
 		}
 	}
 
-	private Ref read(DataSetType type, Other other) {
+	private Ref read(DataSetType type, Extension other) {
 		Element element = Dom.getElement(other, tagName);
 		if (element == null)
 			return null;
@@ -123,7 +125,7 @@ class DataSetRefExtension {
 		}
 	}
 
-	private void write(Ref d, Other other) {
+	private void write(Ref d, Extension other) {
 		if (other == null)
 			return;
 		Element element = Dom.getElement(other, tagName);
@@ -139,7 +141,7 @@ class DataSetRefExtension {
 		Document doc = Dom.createDocument();
 		if (doc == null || d == null)
 			return null;
-		Element e = doc.createElementNS(Vocab.NS_EPD, "epd:" + tagName);
+		Element e = doc.createElementNS(Vocab.EPD_2013, "epd:" + tagName);
 		e.setAttribute("type", type);
 		e.setAttribute("refObjectId", d.getUUID());
 		e.setAttribute("uri", "../" + path + "/" + d.getUUID());

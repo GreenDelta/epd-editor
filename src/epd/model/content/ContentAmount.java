@@ -1,7 +1,7 @@
 package epd.model.content;
 
-import epd.io.conversion.Vocab;
 import epd.util.Strings;
+import org.openlca.ilcd.Vocab;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
@@ -30,15 +30,15 @@ public class ContentAmount {
 		if (e == null)
 			return a;
 		try {
-			String vStr = e.getAttributeNS(Vocab.NS_EPDv2, "value");
+			String vStr = e.getAttributeNS(Vocab.EPD_2019, "value");
 			if (!Strings.nullOrEmpty(vStr)) {
 				a.value = Double.parseDouble(vStr);
 			}
-			String lStr = e.getAttributeNS(Vocab.NS_EPDv2, "lowerValue");
+			String lStr = e.getAttributeNS(Vocab.EPD_2019, "lowerValue");
 			if (!Strings.nullOrEmpty(lStr)) {
 				a.lowerValue = Double.parseDouble(lStr);
 			}
-			String uStr = e.getAttributeNS(Vocab.NS_EPDv2, "upperValue");
+			String uStr = e.getAttributeNS(Vocab.EPD_2019, "upperValue");
 			if (!Strings.nullOrEmpty(uStr)) {
 				a.upperValue = Double.parseDouble(uStr);
 			}
@@ -54,15 +54,15 @@ public class ContentAmount {
 			return;
 		if (value != null) {
 			e.setAttributeNS(
-				Vocab.NS_EPDv2, "epd2:value", value.toString());
+				Vocab.EPD_2019, "epd2:value", value.toString());
 		}
 		if (lowerValue != null) {
 			e.setAttributeNS(
-				Vocab.NS_EPDv2, "epd2:lowerValue", lowerValue.toString());
+				Vocab.EPD_2019, "epd2:lowerValue", lowerValue.toString());
 		}
 		if (upperValue != null) {
 			e.setAttributeNS(
-				Vocab.NS_EPDv2, "epd2:upperValue", upperValue.toString());
+				Vocab.EPD_2019, "epd2:upperValue", upperValue.toString());
 		}
 	}
 

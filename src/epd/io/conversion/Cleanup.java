@@ -1,15 +1,21 @@
 package epd.io.conversion;
 
-import com.google.common.base.Strings;
-import epd.model.EpdDataSet;
 import org.openlca.ilcd.commons.CommissionerAndGoal;
 import org.openlca.ilcd.commons.Other;
-import org.openlca.ilcd.commons.Time;
 import org.openlca.ilcd.processes.DataGenerator;
 import org.openlca.ilcd.processes.Geography;
 import org.openlca.ilcd.processes.Location;
 import org.openlca.ilcd.processes.Technology;
+import org.openlca.ilcd.processes.Time;
+import org.openlca.ilcd.processes.epd.EpdContentDeclaration;
+import org.openlca.ilcd.processes.epd.EpdInfoExtension;
+import org.openlca.ilcd.processes.epd.EpdSafetyMargins;
+import org.openlca.ilcd.processes.epd.EpdTimeExtension;
 import org.openlca.ilcd.util.Processes;
+
+import com.google.common.base.Strings;
+
+import epd.model.EpdDataSet;
 
 /**
  * Remove empty elements so that the data set validation is happy.
@@ -64,7 +70,7 @@ class Cleanup {
 		return time.getDescription().isEmpty()
 			&& time.getReferenceYear() == null
 			&& time.getValidUntil() == null
-			&& isEmpty(time.getOther());
+			&& isEmpty(time.getEpdExtension());
 	}
 
 	private static boolean isEmpty(Geography geography) {
@@ -100,7 +106,35 @@ class Cleanup {
 			&& isEmpty(generator.getOther());
 	}
 
+	private static boolean isEmpty(EpdTimeExtension ext) {
+		if (ext == null)
+			return true;
+		return ext.getPublicationDate() == null
+			&& ext.getAny().isEmpty();
+	}
+
 	private static boolean isEmpty(Other other) {
 		return other == null || other.getAny().isEmpty();
 	}
+
+	static boolean isEmpty(EpdInfoExtension ext) {
+		if (ext == null)
+			return true;
+		return isEmpty(ext.getContentDeclaration())
+			&& ext.getModuleEntries().isEmpty()
+			&& ext.getScenarios().isEmpty()
+			&& isEmpty(ext.getSafetyMargins())
+			&& ext.getAny().isEmpty();
+	}
+
+	private static boolean isEmpty(EpdContentDeclaration dec) {
+		return dec == null || dec.getElements().isEmpty();
+	}
+
+	private static boolean isEmpty(EpdSafetyMargins esm) {
+		if (esm == null)
+			return true;
+		return esm.getValue() == null && esm.getDescription().isEmpty();
+	}
+
 }

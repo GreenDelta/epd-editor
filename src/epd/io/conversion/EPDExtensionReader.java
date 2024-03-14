@@ -2,24 +2,17 @@ package epd.io.conversion;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Objects;
 
-import epd.util.Strings;
-import org.openlca.ilcd.commons.Other;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.Processes;
 import org.slf4j.LoggerFactory;
 
-import epd.model.Amount;
 import epd.model.EpdDataSet;
 import epd.model.EpdProfile;
-import epd.model.IndicatorResult;
-import epd.model.ModuleEntry;
-import epd.model.Scenario;
 import epd.model.SubType;
 import epd.model.content.ContentDeclaration;
 import epd.model.qmeta.QMetaData;
+import epd.util.Strings;
 
 /**
  * Converts an ILCD process data set to an EPD data set.
@@ -41,12 +34,10 @@ class EPDExtensionReader {
 	private EpdDataSet read() {
 		var epd = new EpdDataSet(process);
 		readExtensions(epd);
-		mapResults(epd);
 		return epd;
 	}
 
 	private void readExtensions(EpdDataSet epd) {
-		epd.profile = process.getOtherAttributes().get(Vocab.PROFILE_ATTR);
 		readSubType(epd);
 		readPublicationDate(epd);
 		PublisherRef.read(epd);
@@ -55,22 +46,17 @@ class EPDExtensionReader {
 
 		// read the extensions that are stored under `dataSetInformation`
 		var info = Processes.getDataSetInfo(process);
-		if (info == null || info.getOther() == null)
+		if (info == null || info.getEpdExtension() == null)
 			return;
-		Other other = info.getOther();
-		List<Scenario> scenarios = ScenarioConverter.readScenarios(other);
-		epd.scenarios.addAll(scenarios);
-		List<ModuleEntry> modules = ModuleConverter.readModules(other, profile);
-		epd.moduleEntries.addAll(modules);
-		epd.safetyMargins = SafetyMarginsConverter.read(other);
+		var other = info.getEpdExtension();
 		epd.contentDeclaration = ContentDeclaration.read(other);
 	}
 
 	private void readSubType(EpdDataSet dataSet) {
 		var method = Processes.getInventoryMethod(process);
-		if (method == null || method.getOther() == null)
+		if (method == null || method.getEpdExtension() == null)
 			return;
-		var elem = Dom.getElement(method.getOther(), "subType");
+		var elem = Dom.getElement(method.getEpdExtension(), "subType");
 		if (elem != null) {
 			dataSet.subType = SubType.fromLabel(elem.getTextContent());
 		}
@@ -78,9 +64,9 @@ class EPDExtensionReader {
 
 	private void readPublicationDate(EpdDataSet epd) {
 		var time = Processes.getTime(epd.process);
-		if (time == null || time.getOther() == null)
+		if (time == null || time.getEpdExtension() == null)
 			return;
-		var elem = Dom.getElement(time.getOther(), "publicationDateOfEPD");
+		var elem = Dom.getElement(time.getEpdExtension(), "publicationDateOfEPD");
 		if (elem == null)
 			return;
 		var text = elem.getTextContent();
@@ -95,32 +81,4 @@ class EPDExtensionReader {
 		}
 	}
 
-	private void mapResults(EpdDataSet dataSet) {
-		List<IndicatorResult> results = ResultConverter.readResults(
-			process, profile);
-		dataSet.results.addAll(results);
-		// data sets may not have the module-entry extension, thus we have to
-		// find the module entries for such data sets from the results
-		for (IndicatorResult result : results) {
-			for (Amount amount : result.amounts) {
-				ModuleEntry entry = findModuleEntry(dataSet, amount);
-				if (entry != null)
-					continue;
-				entry = new ModuleEntry();
-				entry.module = amount.module;
-				entry.scenario = amount.scenario;
-				dataSet.moduleEntries.add(entry);
-			}
-		}
-	}
-
-	private ModuleEntry findModuleEntry(EpdDataSet dataSet, Amount amount) {
-		for (ModuleEntry entry : dataSet.moduleEntries) {
-			if (Objects.equals(entry.module, amount.module)
-					&& Objects
-						.equals(entry.scenario, amount.scenario))
-				return entry;
-		}
-		return null;
-	}
 }

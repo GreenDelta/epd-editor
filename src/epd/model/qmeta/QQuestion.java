@@ -1,8 +1,8 @@
 package epd.model.qmeta;
 
 import epd.io.conversion.Dom;
-import epd.io.conversion.Vocab;
 import epd.util.Strings;
+import org.openlca.ilcd.Vocab;
 import org.w3c.dom.Element;
 
 public class QQuestion {

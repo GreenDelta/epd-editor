@@ -2,13 +2,14 @@ package epd.io.conversion;
 
 import epd.model.EpdDataSet;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import org.openlca.ilcd.Vocab;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.util.Processes;
 
 import java.util.stream.Collectors;
 
-@XmlRootElement(name = "referenceToPublisher", namespace = Vocab.NS_EPDv2)
+@XmlRootElement(name = "referenceToPublisher", namespace = Vocab.EPD_2019)
 final class PublisherRef extends Ref {
 
 	private static PublisherRef wrap(Ref other) {
@@ -32,14 +33,14 @@ final class PublisherRef extends Ref {
 			if (pub != null) {
 				// currently nothing else is written to this extension
 				// point; so we can just drop it
-				pub.withOther(null);
+				pub.withEpdExtension(null);
 			}
 			return;
 		}
 
 		var other = epd.process.withAdminInfo()
 			.withPublication()
-			.withOther();
+			.withEpdExtension();
 		other.withAny().clear();
 		var pubRefs = epd.publishers.stream()
 			.map(PublisherRef::wrap)
@@ -55,9 +56,9 @@ final class PublisherRef extends Ref {
 		if (epd == null)
 			return;
 		var pub = Processes.getPublication(epd.process);
-		if (pub == null || pub.getOther() == null)
+		if (pub == null || pub.getEpdExtension() == null)
 			return;
-		var refs = JaxbRefs.read(PublisherRef.class, pub.getOther());
+		var refs = JaxbRefs.read(PublisherRef.class, pub.getEpdExtension());
 		if (refs.isEmpty())
 			return;
 		epd.publishers.addAll(refs);

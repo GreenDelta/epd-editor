@@ -57,7 +57,6 @@ class EPDExtensionWriter {
 		}
 
 		writePublicationDate();
-		PublisherRef.write(epd);
 	}
 
 	private void writePublicationDate() {

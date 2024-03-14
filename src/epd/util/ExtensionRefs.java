@@ -15,7 +15,6 @@ import org.openlca.ilcd.util.EpdIndicatorResult;
 import org.openlca.ilcd.util.Epds;
 import org.openlca.ilcd.util.Flows;
 
-import epd.io.conversion.Extensions;
 import epd.io.conversion.FlowExtensions;
 
 public final class ExtensionRefs {
@@ -36,7 +35,6 @@ public final class ExtensionRefs {
 	}
 
 	private static Set<Ref> of(Process p) {
-		var epd = Extensions.read(p);
 		var refs = new HashSet<Ref>();
 
 		for (var result : EpdIndicatorResult.allOf(p)) {
@@ -52,11 +50,12 @@ public final class ExtensionRefs {
 			}
 		}
 
-		epd.publishers.stream()
+		Epds.getPublishers(p)
+			.stream()
 			.filter(Ref::isValid)
 			.forEach(refs::add);
-		Epds.getOriginalEpds(epd.process)
-				.stream()
+		Epds.getOriginalEpds(p)
+			.stream()
 			.filter(Ref::isValid)
 			.forEach(refs::add);
 		return refs;

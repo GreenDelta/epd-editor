@@ -1,21 +1,17 @@
 package epd.model;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
+import epd.model.content.ContentDeclaration;
+import epd.model.qmeta.QMetaData;
 import org.openlca.ilcd.commons.Copyable;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.QuantitativeReferenceType;
-import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.processes.Exchange;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.ProcessName;
 import org.openlca.ilcd.util.Processes;
 
-import epd.model.content.ContentDeclaration;
-import epd.model.qmeta.QMetaData;
+import java.time.LocalDate;
+import java.util.Objects;
 
 public class EpdDataSet implements Copyable<EpdDataSet> {
 
@@ -24,8 +20,6 @@ public class EpdDataSet implements Copyable<EpdDataSet> {
 
 	public ContentDeclaration contentDeclaration;
 	public QMetaData qMetaData;
-
-	public final List<Ref> publishers = new ArrayList<>();
 
 	public EpdDataSet(Process process) {
 		this.process = Objects.requireNonNull(process);
@@ -63,10 +57,6 @@ public class EpdDataSet implements Copyable<EpdDataSet> {
 		clone.qMetaData = qMetaData != null
 			? qMetaData.clone()
 			: null;
-
-		for (var ref : publishers) {
-			clone.publishers.add(ref.copy());
-		}
 
 		return clone;
 	}

@@ -25,13 +25,13 @@ public class RefExtensionTest {
 		var epd = new EpdDataSet();
 		var id = UUID.randomUUID().toString();
 		Processes.withUUID(epd.process, id);
-		epd.publishers.addAll(makeRefs(DataSetType.CONTACT));
+		Epds.withPublishers(epd.process).addAll(makeRefs(DataSetType.CONTACT));
 		Extensions.write(epd);
 		Tests.withStore(store -> {
 			store.put(epd.process);
 			var copy = Extensions.read(
 					store.get(Process.class, id));
-			checkRefs(copy.publishers, DataSetType.CONTACT);
+			checkRefs(Epds.getPublishers(copy.process), DataSetType.CONTACT);
 		});
 	}
 

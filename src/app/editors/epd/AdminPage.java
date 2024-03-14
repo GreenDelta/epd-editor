@@ -9,6 +9,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.processes.LicenseType;
 import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.util.Epds;
 import org.openlca.ilcd.util.Processes;
 
 import app.M;
@@ -43,56 +44,50 @@ class AdminPage extends FormPage {
 		projectSection(body, tk);
 
 		// commissioner
-		var commissioners = process.withAdminInfo()
-				.withCommissionerAndGoal()
-				.withCommissioners();
-		RefTable.create(DataSetType.CONTACT, commissioners)
-				.withEditor(editor)
-				.withTitle(M.Commissioner)
-				.withTooltip(Tooltips.EPD_Commissioner)
-				.render(body, tk);
+		RefTable.create(DataSetType.CONTACT,
+				Processes.withCommissionerAndGoal(process).withCommissioners())
+			.withEditor(editor)
+			.withTitle(M.Commissioner)
+			.withTooltip(Tooltips.EPD_Commissioner)
+			.render(body, tk);
 
 		// data entry
 		dataEntrySection(body, tk);
 
 		// data set generators
-		var generators = process.withAdminInfo()
-				.withDataGenerator()
-				.withContacts();
-		RefTable.create(DataSetType.CONTACT, generators)
-				.withEditor(editor)
-				.withTitle(M.DataSetGeneratorModeller)
-				.withTooltip(Tooltips.EPD_DataSetGeneratorModeller)
-				.render(body, tk);
+		RefTable.create(DataSetType.CONTACT,
+				Processes.withDataGenerator(process).withContacts())
+			.withEditor(editor)
+			.withTitle(M.DataSetGeneratorModeller)
+			.withTooltip(Tooltips.EPD_DataSetGeneratorModeller)
+			.render(body, tk);
 
 		// data formats
-		var formats = process.withAdminInfo()
-				.withDataEntry()
-				.withFormats();
-		RefTable.create(DataSetType.SOURCE, formats)
-				.withEditor(editor)
-				.withTitle(M.DataFormats)
-				.withTooltip(Tooltips.EPD_DataFormats)
-				.render(body, tk);
+		RefTable.create(DataSetType.SOURCE,
+				Processes.withDataEntry(process).withFormats())
+			.withEditor(editor)
+			.withTitle(M.DataFormats)
+			.withTooltip(Tooltips.EPD_DataFormats)
+			.render(body, tk);
 
 		// publication and ownership
 		publicationSection(body, tk);
 
 		// publishers
-		RefTable.create(DataSetType.CONTACT, editor.dataSet.publishers)
-				.withEditor(editor)
-				.withTitle(M.Publisher)
-				.withTooltip(Tooltips.EPD_Publisher)
-				.render(body, tk);
+		RefTable.create(DataSetType.CONTACT,
+				Epds.withPublishers(process))
+			.withEditor(editor)
+			.withTitle(M.Publisher)
+			.withTooltip(Tooltips.EPD_Publisher)
+			.render(body, tk);
 
 		// preceding data version
-		var precedingVersions = Processes.withPublication(process)
-			.withPrecedingVersions();
-		RefTable.create(DataSetType.PROCESS, precedingVersions)
-				.withEditor(editor)
-				.withTitle(M.PrecedingDataSetVersion)
-				.withTooltip(Tooltips.EPD_PrecedingDataSetVersion)
-				.render(body, tk);
+		RefTable.create(DataSetType.PROCESS,
+				Processes.withPublication(process).withPrecedingVersions())
+			.withEditor(editor)
+			.withTitle(M.PrecedingDataSetVersion)
+			.withTooltip(Tooltips.EPD_PrecedingDataSetVersion)
+			.render(body, tk);
 
 		form.reflow(true);
 	}
@@ -100,32 +95,32 @@ class AdminPage extends FormPage {
 	private void projectSection(Composite body, FormToolkit tk) {
 		var comp = UI.formSection(body, tk, M.Project);
 		var goal = process.withAdminInfo()
-				.withCommissionerAndGoal();
+			.withCommissionerAndGoal();
 
 		// project
 		new TextBuilder(editor, this, tk).multiText(
-				comp,
-				M.Project,
-				Tooltips.EPD_Project,
-				goal.withProject());
+			comp,
+			M.Project,
+			Tooltips.EPD_Project,
+			goal.withProject());
 
 		// intended applications
 		new TextBuilder(editor, this, tk).multiText(
-				comp,
-				M.IntendedApplications,
-				Tooltips.EPD_IntendedApplications,
-				goal.withIntendedApplications());
+			comp,
+			M.IntendedApplications,
+			Tooltips.EPD_IntendedApplications,
+			goal.withIntendedApplications());
 	}
 
 	private void dataEntrySection(Composite body, FormToolkit tk) {
 		var comp = UI.formSection(body, tk,
-				M.DataEntry, Tooltips.EPD_DataEntry);
+			M.DataEntry, Tooltips.EPD_DataEntry);
 		var entry = process.withAdminInfo()
-				.withDataEntry();
+			.withDataEntry();
 
 		// last update
 		var lastUpdate = UI.formText(comp, tk,
-				M.LastUpdate, Tooltips.All_LastUpdate);
+			M.LastUpdate, Tooltips.All_LastUpdate);
 		lastUpdate.setEditable(false);
 		editor.onSaved(() -> {
 			XMLGregorianCalendar t = entry.getTimeStamp();
@@ -147,10 +142,9 @@ class AdminPage extends FormPage {
 
 	private void publicationSection(Composite body, FormToolkit tk) {
 		var comp = UI.formSection(body, tk,
-				M.PublicationAndOwnership,
-				Tooltips.EPD_PublicationAndOwnership);
-		var pub = process.withAdminInfo()
-				.withPublication();
+			M.PublicationAndOwnership,
+			Tooltips.EPD_PublicationAndOwnership);
+		var pub = Processes.withPublication(process);
 
 		// version
 		var version = new VersionField(comp, tk);
@@ -163,7 +157,7 @@ class AdminPage extends FormPage {
 
 		// registration authority
 		UI.formLabel(comp, tk, M.RegistrationAuthority,
-				Tooltips.EPD_RegistrationAuthority);
+			Tooltips.EPD_RegistrationAuthority);
 		var regAuthority = new RefLink(comp, tk, DataSetType.CONTACT);
 		regAuthority.setRef(pub.withRegistrationAuthority());
 		regAuthority.onChange(ref -> {
@@ -173,7 +167,7 @@ class AdminPage extends FormPage {
 
 		// registration number
 		var regNumber = UI.formText(comp, tk, M.RegistrationNumber,
-				Tooltips.EPD_RegistrationNumber);
+			Tooltips.EPD_RegistrationNumber);
 		if (pub.getRegistrationNumber() != null) {
 			regNumber.setText(pub.getRegistrationNumber());
 		}
@@ -197,9 +191,9 @@ class AdminPage extends FormPage {
 
 		// copyright
 		var copyright = UI.formCheckBox(comp, tk,
-				M.Copyright, Tooltips.EPD_Copyright);
+			M.Copyright, Tooltips.EPD_Copyright);
 		copyright
-				.setSelection(pub.getCopyright() != null && pub.getCopyright());
+			.setSelection(pub.getCopyright() != null && pub.getCopyright());
 		Controls.onSelect(copyright, e -> {
 			pub.withCopyright(copyright.getSelection());
 			editor.setDirty();
@@ -210,10 +204,10 @@ class AdminPage extends FormPage {
 
 		// access restrictions
 		new TextBuilder(editor, this, tk).multiText(
-				comp,
-				M.AccessRestrictions,
-				Tooltips.EPD_AccessRestrictions,
-				pub.withAccessRestrictions());
+			comp,
+			M.AccessRestrictions,
+			Tooltips.EPD_AccessRestrictions,
+			pub.withAccessRestrictions());
 	}
 
 	private void licenseCombo(Composite comp, FormToolkit tk) {
@@ -221,7 +215,7 @@ class AdminPage extends FormPage {
 
 		// map the combo items
 		var pub = process.withAdminInfo()
-				.withPublication();
+			.withPublication();
 		var types = LicenseType.values();
 		var items = new String[types.length + 1];
 		items[0] = "";
@@ -235,7 +229,7 @@ class AdminPage extends FormPage {
 
 		// create the combo
 		var combo = UI.formCombo(comp, tk, M.LicenseType,
-				Tooltips.EPD_LicenseType);
+			Tooltips.EPD_LicenseType);
 		combo.setItems(items);
 		combo.select(selected);
 		Controls.onSelect(combo, e -> {

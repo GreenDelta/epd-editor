@@ -36,7 +36,6 @@ class EPDExtensionReader {
 	private void readExtensions(EpdDataSet epd) {
 		readPublicationDate(epd);
 		PublisherRef.read(epd);
-		OriginalEPDRef.read(epd);
 		epd.qMetaData = QMetaData.read(process);
 
 		// read the extensions that are stored under `dataSetInformation`

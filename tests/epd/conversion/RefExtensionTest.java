@@ -12,6 +12,7 @@ import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.util.Epds;
 import org.openlca.ilcd.util.Processes;
 
 import epd.io.conversion.Extensions;
@@ -39,13 +40,13 @@ public class RefExtensionTest {
 		var epd = new EpdDataSet();
 		var id = UUID.randomUUID().toString();
 		Processes.withUUID(epd.process, id);
-		epd.originalEPDs.addAll(makeRefs(DataSetType.SOURCE));
+		Epds.withOriginalEpds(epd.process).addAll(makeRefs(DataSetType.SOURCE));
 		Extensions.write(epd);
 		Tests.withStore(store -> {
 			store.put(epd.process);
 			var copy = Extensions.read(
 					store.get(Process.class, id));
-			checkRefs(copy.originalEPDs, DataSetType.SOURCE);
+			checkRefs(Epds.getOriginalEpds(copy.process), DataSetType.SOURCE);
 		});
 	}
 

@@ -26,7 +26,6 @@ public class EpdDataSet implements Copyable<EpdDataSet> {
 	public QMetaData qMetaData;
 
 	public final List<Ref> publishers = new ArrayList<>();
-	public final List<Ref> originalEPDs = new ArrayList<>();
 
 	public EpdDataSet(Process process) {
 		this.process = Objects.requireNonNull(process);
@@ -67,9 +66,6 @@ public class EpdDataSet implements Copyable<EpdDataSet> {
 
 		for (var ref : publishers) {
 			clone.publishers.add(ref.copy());
-		}
-		for (var ref : originalEPDs) {
-			clone.originalEPDs.add(ref.copy());
 		}
 
 		return clone;

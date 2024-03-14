@@ -53,22 +53,21 @@ class ModelingPage extends FormPage {
 		createModelingSection(body);
 
 		RefTable.create(DataSetType.SOURCE,
-				process.withModelling().withInventoryMethod().withSources())
+				Processes.withInventoryMethod(process).withSources())
 			.withEditor(editor)
 			.withTitle(M.LCAMethodDetails)
 			.withTooltip(Tooltips.EPD_LCAMethodDetails)
 			.render(body, toolkit);
 
 		RefTable.create(DataSetType.SOURCE,
-				process.withModelling().withRepresentativeness()
-					.withDataHandlingSources())
+				Processes.withRepresentativeness(process).withDataHandlingSources())
 			.withEditor(editor)
 			.withTitle(M.DocumentationDataQualityManagement)
 			.withTooltip(Tooltips.EPD_DocumentationDataQualityManagement)
 			.render(body, toolkit);
 
 		RefTable.create(DataSetType.SOURCE,
-				process.withModelling().withRepresentativeness().withSources())
+				Processes.withRepresentativeness(process).withSources())
 			.withEditor(editor)
 			.withTitle(M.DataSources)
 			.withTooltip(Tooltips.EPD_DataSources)
@@ -76,7 +75,7 @@ class ModelingPage extends FormPage {
 
 		createComplianceSection(body);
 
-		RefTable.create(DataSetType.SOURCE, epd.originalEPDs)
+		RefTable.create(DataSetType.SOURCE, Epds.withOriginalEpds(process))
 			.withEditor(editor)
 			.withTitle(M.ReferenceOriginalEPD)
 			.withTooltip(Tooltips.EPD_ReferenceOriginal)

@@ -12,6 +12,7 @@ import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.EpdIndicatorResult;
+import org.openlca.ilcd.util.Epds;
 import org.openlca.ilcd.util.Flows;
 
 import epd.io.conversion.Extensions;
@@ -54,7 +55,8 @@ public final class ExtensionRefs {
 		epd.publishers.stream()
 			.filter(Ref::isValid)
 			.forEach(refs::add);
-		epd.originalEPDs.stream()
+		Epds.getOriginalEpds(epd.process)
+				.stream()
 			.filter(Ref::isValid)
 			.forEach(refs::add);
 		return refs;

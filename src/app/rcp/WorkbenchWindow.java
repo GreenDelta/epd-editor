@@ -73,6 +73,7 @@ public class WorkbenchWindow extends WorkbenchWindowAdvisor {
 		App.runWithProgress(
 				"Copy reference data",
 				() -> App.getWorkspace().syncFilesFrom(new File("data")));
+		EpdProfiles.syncDefaults();
 		App.run(new IndexBuilder());
 		Navigator.refreshAll();
 

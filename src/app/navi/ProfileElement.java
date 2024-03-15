@@ -16,12 +16,12 @@ public class ProfileElement extends NavigationElement<EpdProfile> {
 	}
 
 	@Override
-	public NavigationElement getParent() {
+	public NavigationElement<?> getParent() {
 		return parent;
 	}
 
 	@Override
-	public int compareTo(NavigationElement elem) {
+	public int compareTo(NavigationElement<?> elem) {
 		if (!(elem instanceof ProfileElement other))
 			return 1;
 		if (this.content == null || other.content == null)

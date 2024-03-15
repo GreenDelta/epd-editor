@@ -1,7 +1,6 @@
 package epd.profiles;
 
 import app.App;
-import app.store.Json;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -26,9 +25,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public final class EpdProfiles {
+
+	private static final String EN_15804 = "EN_15804";
+	private static final String EN_15804_A2 = "EN_15804_A2";
 
 	public static final String DEFAULT = "EN_15804_A2";
 
@@ -72,8 +75,7 @@ public final class EpdProfiles {
 		}
 
 		// no DEFAULT profile in storage -> extract it
-		var stream = EpdProfiles.class.getResourceAsStream(DEFAULT + ".json");
-		p = Json.read(stream, EpdProfile.class);
+		p = getDefault(DEFAULT).orElse(null);
 		save(p);
 
 		if (p == null) {
@@ -96,7 +98,7 @@ public final class EpdProfiles {
 		File f = file(id);
 		if (!f.exists())
 			return null;
-		p = Json.read(f, EpdProfile.class);
+		p = read(f).orElse(null);
 		cache.put(id, p);
 		return p;
 	}
@@ -122,10 +124,9 @@ public final class EpdProfiles {
 		if (files == null)
 			return List.of(defaultProfile);
 		for (var f : files) {
-			var p = Json.read(f, EpdProfile.class);
-			if (p != null) {
-				profiles.add(p);
-			}
+			if (!f.getName().endsWith(".xml"))
+				continue;
+			read(f).ifPresent(profiles::add);
 		}
 		return profiles;
 	}
@@ -285,5 +286,45 @@ public final class EpdProfiles {
 			}
 		}
 		return false;
+	}
+
+	public static void syncDefaults() {
+		var ids = List.of(EN_15804, EN_15804_A2);
+		for (var id : ids) {
+			var file = file(id);
+			if (file.exists())
+				continue;
+			var profile = getDefault(id).orElse(null);
+			if (profile == null)
+				continue;
+			save(profile);
+		}
+	}
+
+	private static Optional<EpdProfile> getDefault(String id) {
+		var stream = EpdProfiles.class.getResourceAsStream(id + ".xml");
+		if (stream == null)
+			return Optional.empty();
+		try (stream) {
+			var profile = JAXB.unmarshal(stream, EpdProfile.class);
+			return Optional.of(profile);
+		} catch (Exception e) {
+			LoggerFactory.getLogger(EpdProfiles.class)
+				.error("failed to read default profile " + id, e);
+			return Optional.empty();
+		}
+	}
+
+	private static Optional<EpdProfile> read(File file) {
+		if (file == null || !file.exists())
+			return Optional.empty();
+		try {
+			var profile = JAXB.unmarshal(file, EpdProfile.class);
+			return Optional.of(profile);
+		} catch (Exception e) {
+			LoggerFactory.getLogger(EpdProfiles.class)
+				.error("failed to read profile from file: " + file, e);
+			return Optional.empty();
+		}
 	}
 }

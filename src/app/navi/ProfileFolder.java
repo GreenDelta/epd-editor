@@ -7,21 +7,21 @@ import app.rcp.Icon;
 import epd.profiles.EpdProfile;
 import epd.profiles.EpdProfiles;
 
-public class ProfileFolder extends NavigationElement {
+public class ProfileFolder extends NavigationElement<Void> {
 
-	private final NavigationElement parent;
+	private final NavigationElement<?> parent;
 
-	public ProfileFolder(NavigationElement parent) {
+	public ProfileFolder(NavigationElement<?> parent) {
 		this.parent = parent;
 	}
 
 	@Override
-	public NavigationElement getParent() {
+	public NavigationElement<?> getParent() {
 		return parent;
 	}
 
 	@Override
-	public int compareTo(NavigationElement other) {
+	public int compareTo(NavigationElement<?> other) {
 		return 0;
 	}
 

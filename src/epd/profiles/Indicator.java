@@ -17,6 +17,9 @@ public class Indicator {
 	@XmlAttribute(name = "isInputIndicator", namespace = EpdProfile2.NS)
 	private Boolean inputIndicator;
 
+	@XmlAttribute(name = "code", namespace = EpdProfile2.NS)
+	private String code;
+
 	@XmlAttribute(name = "group", namespace = EpdProfile2.NS)
 	private String group;
 
@@ -38,6 +41,10 @@ public class Indicator {
 		return group;
 	}
 
+	public String getCode() {
+		return code;
+	}
+
 	public Ref getRef() {
 		return ref;
 	}
@@ -52,6 +59,11 @@ public class Indicator {
 
 	public Indicator withGroup(String group) {
 		this.group = group;
+		return this;
+	}
+
+	public Indicator withCode(String code) {
+		this.code = code;
 		return this;
 	}
 

@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<profile xmlns:common="http://lca.jrc.it/ILCD/Common" xmlns="http://greendelta.com/epd-editor" >
+    <id>EN_15804</id>
+    <name>EN 15804</name>
+    <modules>
+        <module index="0" name="A1"/>
+        <module index="1" name="A2"/>
+        <module index="2" name="A3"/>
+        <module index="3" name="A1-A3"/>
+        <module index="4" name="A4"/>
+        <module index="5" name="A5"/>
+        <module index="6" name="B1"/>
+        <module index="7" name="B2"/>
+        <module index="8" name="B3"/>
+        <module index="9" name="B4"/>
+        <module index="10" name="B5"/>
+        <module index="11" name="B6"/>
+        <module index="12" name="B7"/>
+        <module index="13" name="C1"/>
+        <module index="14" name="C2"/>
+        <module index="15" name="C3"/>
+        <module index="16" name="C4"/>
+        <module index="17" name="D"/>
+    </modules>
+    <indicators>
+        <indicator code="ADPE" group="RESOURCE_USE">
+            <ref type="LCIA method data set" refObjectId="f7c73bb9-ab1a-4249-9c6d-379a0de6f67e" version="01.00.000" uri="../lciamethods/f7c73bb9-ab1a-4249-9c6d-379a0de6f67e.xml">
+                <common:shortDescription xml:lang="en">Abiotic depletion potential for non fossil resources</common:shortDescription>
+            </ref>
+            <unitGroup type="unit group data set" refObjectId="54ccd2d9-a32a-4fc2-923d-f2c8c93e89d4" version="01.00.000" uri="../unitgroups/54ccd2d9-a32a-4fc2-923d-f2c8c93e89d4.xml">
+                <common:shortDescription xml:lang="en">kg Sb-eq.</common:shortDescription>
+            </unitGroup>
+        </indicator>
+        <indicator code="ADPF" group="RESOURCE_USE">
+            <ref type="LCIA method data set" refObjectId="804ebcdf-309d-4098-8ed8-fdaf2f389981" version="01.00.000" uri="../lciamethods/804ebcdf-309d-4098-8ed8-fdaf2f389981.xml">
+                <common:shortDescription xml:lang="en">Abiotic depletion potential for fossil resources</common:shortDescription>
+            </ref>
+            <unitGroup type="unit group data set" refObjectId="93a60a57-a3c8-11da-a746-0800200c9a66" version="01.00.000" uri="../unitgroups/93a60a57-a3c8-11da-a746-0800200c9a66.xml">
+                <common:shortDescription xml:lang="en">MJ</common:shortDescription>
+            </unitGroup>
+        </indicator>
+        <indicator code="AP" group="ENVIRONMENTAL">
+            <ref type="LCIA method data set" refObjectId="b4274add-93b7-4905-a5e4-2e878c4e4216" version="01.00.000" uri="../lciamethods/b4274add-93b7-4905-a5e4-2e878c4e4216.xml">
+                <common:shortDescription xml:lang="en">Acidification potential of soil and water</common:shortDescription>
+            </ref>
+            <unitGroup type="unit group data set" refObjectId="bc50c624-a9bc-45b1-a9b0-e6b10d00476f" version="01.00.000" uri="../unitgroups/bc50c624-a9bc-45b1-a9b0-e6b10d00476f.xml">
+                <common:shortDescription xml:lang="en">kg SO2-eq.</common:shortDescription>
+            </unitGroup>
+        </indicator>
+        <indicator code="CRU" group="OUTPUT_FLOWS">
+            <ref type="flow data set" refObjectId="a2b32f97-3fc7-4af2-b209-525bc6426f33" version="01.00.000" uri="../flows/a2b32f97-3fc7-4af2-b209-525bc6426f33.xml">
+                <common:shortDescription xml:lang="en">Components for re-use</common:shortDescription>
+            </ref>
+            <unitGroup type="unit group data set" refObjectId="ad38d542-3fe9-439d-9b95-2f5f7752acaf" version="01.00.000" uri="../unitgroups/ad38d542-3fe9-439d-9b95-2f5f7752acaf.xml">
+                <common:shortDescription xml:lang="en">kg</common:shortDescription>
+            </unitGroup>
+        </indicator>
+        <indicator code="EP" group="ENVIRONMENTAL">
+            <ref type="LCIA method data set" refObjectId="f58827d0-b407-4ec6-be75-8b69efb98a0f" version="01.00.000" uri="../lciamethods/f58827d0-b407-4ec6-be75-8b69efb98a0f.xml">
+                <common:shortDescription xml:lang="en">Eutrophication potential</common:shortDescription>
+            </ref>
+            <unitGroup type="unit group data set" refObjectId="67b5401d-873c-485f-bcf3-6ae83b918822" version="01.00.000" uri="../unitgroups/67b5401d-873c-485f-bcf3-6ae83b918822.xml">
+                <common:shortDescription xml:lang="en">kg P-eq.</common:shortDescription>
+            </unitGroup>
+        </indicator>
+        <indicator code="EEE" group="OUTPUT_FLOWS">
+            <ref type="flow data set" refObjectId="4da0c987-2b76-40d6-9e9e-82a017aaaf29" version="01.00.000" uri="../flows/4da0c987-2b76-40d6-9e9e-82a017aaaf29.xml">
+                <common:shortDescription xml:lang="en">Exported electrical energy</common:shortDescription>
+            </ref>
+            <unitGroup type="unit group data set" refObjectId="93a60a57-a3c8-11da-a746-0800200c9a66" version="01.00.000" uri="../unitgroups/93a60a57-a3c8-11da-a746-0800200c9a66.xml">
+                <common:shortDescription xml:lang="en">MJ</common:shortDescription>
+            </unitGroup>
+        </indicator>
+        <indicator code="EET" group="OUTPUT_FLOWS">
+            <ref type="flow data set" refObjectId="98daf38a-7a79-46d3-9a37-2b7bd0955810" version="01.00.000" uri="../flows/98daf38a-7a79-46d3-9a37-2b7bd0955810.xml">
+                <common:shortDescription xml:lang="en">Exported thermal energy</common:shortDescription>
+            </ref>
+            <unitGroup type="unit group data set" refObjectId="93a60a57-a3c8-11da-a746-0800200c9a66" version="01.00.000" uri="../unitgroups/93a60a57-a3c8-11da-a746-0800200c9a66.xml">
+                <common:shortDescription xml:lang="en">MJ</common:shortDescription>
+            </unitGroup>
+        </indicator>
+        <indicator code="GWP" group="ENVIRONMENTAL">
+            <ref type="LCIA method data set" refObjectId="77e416eb-a363-4258-a04e-171d843a6460" version="01.00.000" uri="../lciamethods/77e416eb-a363-4258-a04e-171d843a6460.xml">
+                <common:shortDescription xml:lang="en">Global warming potential</common:shortDescription>
+            </ref>
+            <unitGroup type="unit group data set" refObjectId="1ebf3012-d0db-4de2-aefd-ef30cedb0be1" version="01.00.000" uri="../unitgroups/1ebf3012-d0db-4de2-aefd-ef30cedb0be1.xml">
+                <common:shortDescription xml:lang="en">kg CO2-eq.</common:shortDescription>
+            </unitGroup>
+        </indicator>
+        <indicator code="HWD" group="WASTE_DISPOSAL">
+            <ref type="flow data set" refObjectId="430f9e0f-59b2-46a0-8e0d-55e0e84948fc" version="01.00.000" uri="../flows/430f9e0f-59b2-46a0-8e0d-55e0e84948fc.xml">
+                <common:shortDescription xml:lang="en">Hazardous waste disposed</common:shortDescription>
+            </ref>
+            <unitGroup type="unit group data set" refObjectId="ad38d542-3fe9-439d-9b95-2f5f7752acaf" version="01.00.000" uri="../unitgroups/ad38d542-3fe9-439d-9b95-2f5f7752acaf.xml">
+                <common:shortDescription xml:lang="en">kg</common:shortDescription>
+            </unitGroup>
+        </indicator>
+        <indicator code="MER" group="OUTPUT_FLOWS">
+            <ref type="flow data set" refObjectId="59a9181c-3aaf-46ee-8b13-2b3723b6e447" version="01.00.000" uri="../flows/59a9181c-3aaf-46ee-8b13-2b3723b6e447.xml">
+                <common:shortDescription xml:lang="en">Materials for energy recovery</common:shortDescription>
+            </ref>
+            <unitGroup type="unit group data set" refObjectId="ad38d542-3fe9-439d-9b95-2f5f7752acaf" version="01.00.000" uri="../unitgroups/ad38d542-3fe9-439d-9b95-2f5f7752acaf.xml">
+                <common:shortDescription xml:lang="en">kg</common:shortDescription>
+            </unitGroup>
+        </indicator>
+        <indicator code="MFR" group="OUTPUT_FLOWS">
+            <ref type="flow data set" refObjectId="d7fe48a5-4103-49c8-9aae-b0b5dfdbd6ae" version="01.00.000" uri="../flows/d7fe48a5-4103-49c8-9aae-b0b5dfdbd6ae.xml">
+                <common:shortDescription xml:lang="en">Materials for recycling</common:shortDescription>
+            </ref>
+            <unitGroup type="unit group data set" refObjectId="ad38d542-3fe9-439d-9b95-2f5f7752acaf" version="01.00.000" uri="../unitgroups/ad38d542-3fe9-439d-9b95-2f5f7752acaf.xml">
+                <common:shortDescription xml:lang="en">kg</common:shortDescription>
+            </unitGroup>
+        </indicator>
+        <indicator isInputIndicator="true" code="FW" group="RESOURCE_USE">
+            <ref type="flow data set" refObjectId="3cf952c8-f3a4-461d-8c96-96456ca62246" version="01.00.000" uri="../flows/3cf952c8-f3a4-461d-8c96-96456ca62246.xml">
+                <common:shortDescription xml:lang="en">Use of net fresh water</common:shortDescription>
+            </ref>
+            <unitGroup type="unit group data set" refObjectId="cd950537-0a98-4044-9ba7-9f9a68d0a504" version="01.00.000" uri="../unitgroups/cd950537-0a98-4044-9ba7-9f9a68d0a504.xml">
+                <common:shortDescription xml:lang="en">m3</common:shortDescription>
+            </unitGroup>
+        </indicator>
+        <indicator code="NHWD" group="WASTE_DISPOSAL">
+            <ref type="flow data set" refObjectId="b29ef66b-e286-4afa-949f-62f1a7b4d7fa" version="01.00.000" uri="../flows/b29ef66b-e286-4afa-949f-62f1a7b4d7fa.xml">
+                <common:shortDescription xml:lang="en">Non hazardous waste dispose</common:shortDescription>
+            </ref>
+            <unitGroup type="unit group data set" refObjectId="ad38d542-3fe9-439d-9b95-2f5f7752acaf" version="01.00.000" uri="../unitgroups/ad38d542-3fe9-439d-9b95-2f5f7752acaf.xml">
+                <common:shortDescription xml:lang="en">kg</common:shortDescription>
+            </unitGroup>
+        </indicator>
+        <indicator isInputIndicator="true" code="PENRE" group="RESOURCE_USE">
+            <ref type="flow data set" refObjectId="ac857178-2b45-46ec-892a-a9a4332f0372" version="01.00.000" uri="../flows/ac857178-2b45-46ec-892a-a9a4332f0372.xml">
+                <common:shortDescription xml:lang="en">Use of non renewable primary energy</common:shortDescription>
+            </ref>
+            <unitGroup type="unit group data set" refObjectId="93a60a57-a3c8-11da-a746-0800200c9a66" version="01.00.000" uri="../unitgroups/93a60a57-a3c8-11da-a746-0800200c9a66.xml">
+                <common:shortDescription xml:lang="en">MJ</common:shortDescription>
+            </unitGroup>
+        </indicator>
+        <indicator isInputIndicator="true" code="PENRM" group="RESOURCE_USE">
+            <ref type="flow data set" refObjectId="1421caa0-679d-4bf4-b282-0eb850ccae27" version="01.00.000" uri="../flows/1421caa0-679d-4bf4-b282-0eb850ccae27.xml">
+                <common:shortDescription xml:lang="en">Use of non renewable primary energy resources used as raw materials</common:shortDescription>
+            </ref>
+            <unitGroup type="unit group data set" refObjectId="93a60a57-a3c8-11da-a746-0800200c9a66" version="01.00.000" uri="../unitgroups/93a60a57-a3c8-11da-a746-0800200c9a66.xml">
+                <common:shortDescription xml:lang="en">MJ</common:shortDescription>
+            </unitGroup>
+        </indicator>
+        <indicator isInputIndicator="true" code="NRSF" group="RESOURCE_USE">
+            <ref type="flow data set" refObjectId="89def144-d39a-4287-b86f-efde453ddcb2" version="01.00.000" uri="../flows/89def144-d39a-4287-b86f-efde453ddcb2.xml">
+                <common:shortDescription xml:lang="en">Use of non renewable secondary fuels</common:shortDescription>
+            </ref>
+            <unitGroup type="unit group data set" refObjectId="93a60a57-a3c8-11da-a746-0800200c9a66" version="01.00.000" uri="../unitgroups/93a60a57-a3c8-11da-a746-0800200c9a66.xml">
+                <common:shortDescription xml:lang="en">MJ</common:shortDescription>
+            </unitGroup>
+        </indicator>
+        <indicator code="ODP" group="ENVIRONMENTAL">
+            <ref type="LCIA method data set" refObjectId="06dcd26f-025f-401a-a7c1-5e457eb54637" version="01.00.000" uri="../lciamethods/06dcd26f-025f-401a-a7c1-5e457eb54637.xml">
+                <common:shortDescription xml:lang="en">Depletion potential of the stratospheric ozone layer</common:shortDescription>
+            </ref>
+            <unitGroup type="unit group data set" refObjectId="88054749-b0a6-47ea-a82b-dc5b29326512" version="01.00.000" uri="../unitgroups/88054749-b0a6-47ea-a82b-dc5b29326512.xml">
+                <common:shortDescription xml:lang="en">kg CFC-11-eq.</common:shortDescription>
+            </unitGroup>
+        </indicator>
+        <indicator code="POCP" group="ENVIRONMENTAL">
+            <ref type="LCIA method data set" refObjectId="1e84a202-dae6-42aa-9e9d-71ea48b8be00" version="01.00.000" uri="../lciamethods/1e84a202-dae6-42aa-9e9d-71ea48b8be00.xml">
+                <common:shortDescription xml:lang="en">Formation potential of tropospheric ozone</common:shortDescription>
+            </ref>
+            <unitGroup type="unit group data set" refObjectId="01c26c17-9a76-406e-8295-f17b55fd909e" version="01.00.000" uri="../unitgroups/01c26c17-9a76-406e-8295-f17b55fd909e.xml">
+                <common:shortDescription xml:lang="en">kg C2H2-eq.</common:shortDescription>
+            </unitGroup>
+        </indicator>
+        <indicator code="RWD" group="WASTE_DISPOSAL">
+            <ref type="flow data set" refObjectId="3449546e-52ad-4b39-b809-9fb77cea8ff6" version="01.00.000" uri="../flows/3449546e-52ad-4b39-b809-9fb77cea8ff6.xml">
+                <common:shortDescription xml:lang="en">Radioactive waste disposed</common:shortDescription>
+            </ref>
+            <unitGroup type="unit group data set" refObjectId="ad38d542-3fe9-439d-9b95-2f5f7752acaf" version="01.00.000" uri="../unitgroups/ad38d542-3fe9-439d-9b95-2f5f7752acaf.xml">
+                <common:shortDescription xml:lang="en">kg</common:shortDescription>
+            </unitGroup>
+        </indicator>
+        <indicator isInputIndicator="true" code="PERE" group="RESOURCE_USE">
+            <ref type="flow data set" refObjectId="20f32be5-0398-4288-9b6d-accddd195317" version="01.00.000" uri="../flows/20f32be5-0398-4288-9b6d-accddd195317.xml">
+                <common:shortDescription xml:lang="en">Use of renewable primary energy</common:shortDescription>
+            </ref>
+            <unitGroup type="unit group data set" refObjectId="93a60a57-a3c8-11da-a746-0800200c9a66" version="01.00.000" uri="../unitgroups/93a60a57-a3c8-11da-a746-0800200c9a66.xml">
+                <common:shortDescription xml:lang="en">MJ</common:shortDescription>
+            </unitGroup>
+        </indicator>
+        <indicator isInputIndicator="true" code="PERM" group="RESOURCE_USE">
+            <ref type="flow data set" refObjectId="fb3ec0de-548d-4508-aea5-00b73bf6f702" version="01.00.000" uri="../flows/fb3ec0de-548d-4508-aea5-00b73bf6f702.xml">
+                <common:shortDescription xml:lang="en">Use of renewable primary energy resources used as raw materials</common:shortDescription>
+            </ref>
+            <unitGroup type="unit group data set" refObjectId="93a60a57-a3c8-11da-a746-0800200c9a66" version="01.00.000" uri="../unitgroups/93a60a57-a3c8-11da-a746-0800200c9a66.xml">
+                <common:shortDescription xml:lang="en">MJ</common:shortDescription>
+            </unitGroup>
+        </indicator>
+        <indicator isInputIndicator="true" code="RSF" group="RESOURCE_USE">
+            <ref type="flow data set" refObjectId="64333088-a55f-4aa2-9a31-c10b07816787" version="01.00.000" uri="../flows/64333088-a55f-4aa2-9a31-c10b07816787.xml">
+                <common:shortDescription xml:lang="en">Use of renewable secondary fuels</common:shortDescription>
+            </ref>
+            <unitGroup type="unit group data set" refObjectId="93a60a57-a3c8-11da-a746-0800200c9a66" version="01.00.000" uri="../unitgroups/93a60a57-a3c8-11da-a746-0800200c9a66.xml">
+                <common:shortDescription xml:lang="en">MJ</common:shortDescription>
+            </unitGroup>
+        </indicator>
+        <indicator isInputIndicator="true" code="SM" group="RESOURCE_USE">
+            <ref type="flow data set" refObjectId="c6a1f35f-2d09-4f54-8dfb-97e502e1ce92" version="01.00.000" uri="../flows/c6a1f35f-2d09-4f54-8dfb-97e502e1ce92.xml">
+                <common:shortDescription xml:lang="en">Use of secondary material</common:shortDescription>
+            </ref>
+            <unitGroup type="unit group data set" refObjectId="ad38d542-3fe9-439d-9b95-2f5f7752acaf" version="01.00.000" uri="../unitgroups/ad38d542-3fe9-439d-9b95-2f5f7752acaf.xml">
+                <common:shortDescription xml:lang="en">kg</common:shortDescription>
+            </unitGroup>
+        </indicator>
+        <indicator isInputIndicator="true" code="PENRT" group="RESOURCE_USE">
+            <ref type="flow data set" refObjectId="06159210-646b-4c8d-8583-da9b3b95a6c1" version="01.00.000" uri="../flows/06159210-646b-4c8d-8583-da9b3b95a6c1.xml">
+                <common:shortDescription xml:lang="en">Total use of non renewable primary energy resource</common:shortDescription>
+            </ref>
+            <unitGroup type="unit group data set" refObjectId="93a60a57-a3c8-11da-a746-0800200c9a66" version="01.00.000" uri="../unitgroups/93a60a57-a3c8-11da-a746-0800200c9a66.xml">
+                <common:shortDescription xml:lang="en">MJ</common:shortDescription>
+            </unitGroup>
+        </indicator>
+        <indicator isInputIndicator="true" code="PERT" group="RESOURCE_USE">
+            <ref type="flow data set" refObjectId="53f97275-fa8a-4cdd-9024-65936002acd0" version="01.00.000" uri="../flows/53f97275-fa8a-4cdd-9024-65936002acd0.xml">
+                <common:shortDescription xml:lang="en">Total use of renewable primary energy resources</common:shortDescription>
+            </ref>
+            <unitGroup type="unit group data set" refObjectId="93a60a57-a3c8-11da-a746-0800200c9a66" version="01.00.000" uri="../unitgroups/93a60a57-a3c8-11da-a746-0800200c9a66.xml">
+                <common:shortDescription xml:lang="en">MJ</common:shortDescription>
+            </unitGroup>
+        </indicator>
+    </indicators>
+</profile>

@@ -34,7 +34,6 @@ class EPDExtensionReader {
 	}
 
 	private void readExtensions(EpdDataSet epd) {
-		readPublicationDate(epd);
 		epd.qMetaData = QMetaData.read(process);
 
 		// read the extensions that are stored under `dataSetInformation`
@@ -44,24 +43,4 @@ class EPDExtensionReader {
 		var other = info.getEpdExtension();
 		epd.contentDeclaration = ContentDeclaration.read(other);
 	}
-
-	private void readPublicationDate(EpdDataSet epd) {
-		var time = Processes.getTime(epd.process);
-		if (time == null || time.getEpdExtension() == null)
-			return;
-		var elem = Dom.getElement(time.getEpdExtension(), "publicationDateOfEPD");
-		if (elem == null)
-			return;
-		var text = elem.getTextContent();
-		if (Strings.nullOrEmpty(text))
-			return;
-		try {
-			epd.publicationDate = LocalDate.parse(
-				text, DateTimeFormatter.ISO_DATE);
-		} catch (Exception e) {
-			var log = LoggerFactory.getLogger(getClass());
-			log.error("Invalid format for publication date: " + text, e);
-		}
-	}
-
 }

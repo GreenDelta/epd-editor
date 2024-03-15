@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
+import epd.model.Xml;
 import org.junit.Test;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.epd.EpdSubType;
@@ -54,32 +55,30 @@ public class SimpleExtensionTest {
 
 	@Test
 	public void testPublicationDate() {
-		var epd = new EpdDataSet();
+		var epd = new Process();
 		var id = UUID.randomUUID().toString();
-		Processes.withUUID(epd.process, id);
-		epd.publicationDate = LocalDate.now();
-		Extensions.write(epd);
+		Epds.withUUID(epd, id);
+		Epds.withPublicationDate(epd, Xml.now());
 		Tests.withStore(store -> {
 
 			// insert and read
-			store.put(epd.process);
-			var copy = Extensions.read(store.get(Process.class, id));
-			assertEquals(epd.publicationDate, copy.publicationDate);
+			store.put(epd);
+			var copy =store.get(Process.class, id);
+			var pubDate = Epds.getPublicationDate(copy);
+			assertEquals(Epds.getPublicationDate(epd), pubDate);
 
 			// update
-			var next = copy.publicationDate.plusDays(1);
-			copy.publicationDate = next;
-			Extensions.write(copy);
-			store.put(copy.process);
-			copy = Extensions.read(store.get(Process.class, id));
-			assertEquals(next, copy.publicationDate);
+			pubDate.setDay(pubDate.getDay() + 1);
+			Epds.withPublicationDate(copy, pubDate);
+			store.put(copy);
+			copy = store.get(Process.class, id);
+			assertEquals(pubDate, Epds.getPublicationDate(copy));
 
 			// delete
-			copy.publicationDate = null;
-			Extensions.write(copy);
-			store.put(copy.process);
-			copy = Extensions.read(store.get(Process.class, id));
-			assertNull(copy.publicationDate);
+			Epds.withPublicationDate(copy, null);
+			store.put(copy);
+			copy = store.get(Process.class, id);
+			assertNull(Epds.getPublicationDate(copy));
 		});
 	}
 

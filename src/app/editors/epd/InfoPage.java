@@ -1,19 +1,10 @@
 package app.editors.epd;
 
-import app.App;
-import app.M;
-import app.Tooltips;
-import app.editors.CategorySection;
-import app.editors.RefLink;
-import app.editors.RefTable;
-import app.rcp.Texts;
-import app.store.RefDeps;
-import app.util.Colors;
-import app.util.Controls;
-import app.util.TextBuilder;
-import app.util.UI;
-import epd.model.EpdDataSet;
-import epd.util.Strings;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+import javax.xml.datatype.DatatypeFactory;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DateTime;
@@ -31,10 +22,20 @@ import org.openlca.ilcd.processes.ProcessName;
 import org.openlca.ilcd.processes.Technology;
 import org.openlca.ilcd.util.Epds;
 
-import java.time.LocalDate;
-import java.util.Objects;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
+import app.App;
+import app.M;
+import app.Tooltips;
+import app.editors.CategorySection;
+import app.editors.RefLink;
+import app.editors.RefTable;
+import app.rcp.Texts;
+import app.store.RefDeps;
+import app.util.Colors;
+import app.util.Controls;
+import app.util.TextBuilder;
+import app.util.UI;
+import epd.model.EpdDataSet;
+import epd.util.Strings;
 
 class InfoPage extends FormPage {
 
@@ -184,24 +185,28 @@ class InfoPage extends FormPage {
 		tk.createLabel(comp, M.PublicationDate)
 			.setToolTipText(Tooltips.EPD_PublicationDate);
 		var dateBox = new DateTime(comp, SWT.DATE | SWT.DROP_DOWN);
-		if (epd.publicationDate != null) {
-			var pd = epd.publicationDate;
+		var pubDate = Epds.getPublicationDate(epd.process);
+		if (pubDate != null) {
 			dateBox.setDate(
-				pd.getYear(),
-				pd.getMonthValue() - 1,
-				pd.getDayOfMonth());
+				pubDate.getYear(),
+				pubDate.getMonth() - 1,
+				pubDate.getDay());
 		}
 		dateBox.addSelectionListener(Controls.onSelect(_e -> {
 			// the date-box receives selection events by default,
 			// the check if the value really changed here
-			var next = LocalDate.of(
-				dateBox.getYear(),
-				dateBox.getMonth() + 1,
-				dateBox.getDay());
-			if (Objects.equals(next, epd.publicationDate))
-				return;
-			epd.publicationDate = next;
-			editor.setDirty();
+			var next = DatatypeFactory.newDefaultInstance().newXMLGregorianCalendar();
+			next.setYear(dateBox.getYear());
+			next.setMonth(dateBox.getMonth() + 1);
+			next.setDay(dateBox.getDay());
+			var prev = Epds.getPublicationDate(epd.process);
+			if (prev == null
+				|| prev.getYear() != next.getYear()
+				|| prev.getMonth() != next.getMonth()
+				|| prev.getDay() != next.getDay()) {
+				Epds.withPublicationDate(epd.process, next);
+				editor.setDirty();
+			}
 		}));
 
 		tb.multiText(comp, M.TimeDescription,

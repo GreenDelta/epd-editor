@@ -55,41 +55,5 @@ class EPDExtensionWriter {
 		if (Cleanup.isEmpty(infoOther)) {
 			info.withEpdExtension(null);
 		}
-
-		writePublicationDate();
-	}
-
-	private void writePublicationDate() {
-		var t = Processes.getTime(epd.process);
-		var pubDate = epd.publicationDate;
-		if (pubDate == null && t == null)
-			return;
-		var time = t == null
-			? epd.process.withProcessInfo().withTime()
-			: t;
-		if (pubDate == null && time.getEpdExtension() == null)
-			return;
-		var tag = "publicationDateOfEPD";
-
-		// delete it if publication date is null
-		if (pubDate == null) {
-			Dom.clear(time.getEpdExtension(), tag);
-			if (Dom.isEmpty(time.getEpdExtension())) {
-				time.withEpdExtension(null);
-			}
-			return;
-		}
-
-		// create or update the element
-		var elem = Dom.getElement(time.getEpdExtension(), tag);
-		if (elem != null) {
-			elem.setTextContent(pubDate.toString());
-			return;
-		}
-		var newElem = Dom.createElement(Vocab.EPD_2019, tag);
-		if (newElem == null)
-			return;
-		newElem.setTextContent(pubDate.toString());
-		time.withEpdExtension().withAny().add(newElem);
 	}
 }

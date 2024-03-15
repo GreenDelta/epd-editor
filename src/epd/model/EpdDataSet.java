@@ -16,7 +16,6 @@ import java.util.Objects;
 public class EpdDataSet implements Copyable<EpdDataSet> {
 
 	public final Process process;
-	public LocalDate publicationDate;
 
 	public ContentDeclaration contentDeclaration;
 	public QMetaData qMetaData;
@@ -43,21 +42,12 @@ public class EpdDataSet implements Copyable<EpdDataSet> {
 	@Override
 	public EpdDataSet copy() {
 		var clone = new EpdDataSet(process.copy());
-
-		if (publicationDate != null) {
-			clone.publicationDate = LocalDate.of(
-				publicationDate.getYear(),
-				publicationDate.getMonthValue(),
-				publicationDate.getDayOfMonth());
-		}
-
 		clone.contentDeclaration = contentDeclaration != null
 			? contentDeclaration.clone()
 			: null;
 		clone.qMetaData = qMetaData != null
 			? qMetaData.clone()
 			: null;
-
 		return clone;
 	}
 

@@ -3,8 +3,9 @@ package app.editors.profiles;
 import app.M;
 import app.util.Tables;
 import app.util.UI;
-import epd.model.EpdProfile;
-import epd.model.Module;
+import epd.profiles.Module;
+import epd.profiles.EpdProfile;
+
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;

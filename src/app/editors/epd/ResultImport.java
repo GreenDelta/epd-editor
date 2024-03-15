@@ -1,8 +1,8 @@
 package app.editors.epd;
 
 import app.App;
-import app.store.EpdProfiles;
-import epd.model.EpdProfile;
+import epd.profiles.EpdProfile;
+import epd.profiles.EpdProfiles;
 import epd.util.Strings;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;

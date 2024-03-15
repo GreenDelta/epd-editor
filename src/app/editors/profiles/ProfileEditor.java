@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory;
 import app.editors.BaseEditor;
 import app.editors.Editors;
 import app.editors.SimpleEditorInput;
-import app.store.EpdProfiles;
-import epd.model.EpdProfile;
+import epd.profiles.EpdProfile;
+import epd.profiles.EpdProfiles;
 
 public class ProfileEditor extends BaseEditor {
 

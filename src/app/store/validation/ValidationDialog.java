@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import app.editors.RefTable;
-import app.store.EpdProfiles;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
@@ -31,6 +31,7 @@ import app.util.Controls;
 import app.util.MsgBox;
 import app.util.Tables;
 import app.util.UI;
+import epd.profiles.EpdProfiles;
 import epd.util.ExtensionRefs;
 
 public class ValidationDialog extends Wizard {

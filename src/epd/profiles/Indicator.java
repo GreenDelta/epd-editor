@@ -1,4 +1,4 @@
-package epd.model;
+package epd.profiles;
 
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.LangString;

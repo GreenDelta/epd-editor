@@ -8,8 +8,8 @@ import java.io.File;
 
 import org.junit.Test;
 
-import app.store.EpdProfiles;
 import app.store.validation.ValidationProfiles;
+import epd.profiles.EpdProfiles;
 
 public class WorkspaceTest {
 

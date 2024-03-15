@@ -1,7 +1,7 @@
 package app.navi;
 
 import app.rcp.Icon;
-import epd.model.EpdProfile;
+import epd.profiles.EpdProfile;
 import epd.util.Strings;
 import org.eclipse.swt.graphics.Image;
 

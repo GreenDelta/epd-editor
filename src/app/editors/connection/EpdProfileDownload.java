@@ -8,9 +8,9 @@ import org.eclipse.swt.widgets.Display;
 
 import app.M;
 import app.navi.Navigator;
-import app.store.EpdProfiles;
 import app.util.MsgBox;
-import epd.model.EpdProfile;
+import epd.profiles.EpdProfile;
+import epd.profiles.EpdProfiles;
 
 public class EpdProfileDownload {
 

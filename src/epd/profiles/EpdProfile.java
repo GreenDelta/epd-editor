@@ -1,4 +1,4 @@
-package epd.model;
+package epd.profiles;
 
 import epd.util.Strings;
 

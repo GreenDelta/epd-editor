@@ -17,12 +17,12 @@ import app.M;
 import app.StatusView;
 import app.navi.NaviSync;
 import app.navi.Navigator;
-import app.store.EpdProfiles;
 import app.store.IndexBuilder;
 import app.store.RefDataSync;
 import app.util.UI;
-import epd.model.EpdProfile;
 import epd.model.RefStatus;
+import epd.profiles.EpdProfile;
+import epd.profiles.EpdProfiles;
 import epd.util.Strings;
 
 public class WorkbenchWindow extends WorkbenchWindowAdvisor {

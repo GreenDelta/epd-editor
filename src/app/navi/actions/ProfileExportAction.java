@@ -8,7 +8,7 @@ import app.M;
 import app.rcp.Icon;
 import app.store.Json;
 import app.util.FileChooser;
-import epd.model.EpdProfile;
+import epd.profiles.EpdProfile;
 
 public class ProfileExportAction extends Action {
 

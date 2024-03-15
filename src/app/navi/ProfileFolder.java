@@ -4,8 +4,8 @@ import org.eclipse.swt.graphics.Image;
 
 import app.M;
 import app.rcp.Icon;
-import app.store.EpdProfiles;
-import epd.model.EpdProfile;
+import epd.profiles.EpdProfile;
+import epd.profiles.EpdProfiles;
 
 public class ProfileFolder extends NavigationElement {
 

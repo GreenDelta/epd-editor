@@ -7,11 +7,11 @@ import org.eclipse.jface.action.Action;
 import app.M;
 import app.navi.Navigator;
 import app.rcp.Icon;
-import app.store.EpdProfiles;
 import app.store.Json;
 import app.util.FileChooser;
 import app.util.MsgBox;
-import epd.model.EpdProfile;
+import epd.profiles.EpdProfile;
+import epd.profiles.EpdProfiles;
 
 public class ProfileImportAction extends Action {
 

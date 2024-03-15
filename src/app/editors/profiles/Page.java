@@ -16,7 +16,7 @@ import app.store.RefDataSync;
 import app.util.Controls;
 import app.util.MsgBox;
 import app.util.UI;
-import epd.model.EpdProfile;
+import epd.profiles.EpdProfile;
 import epd.util.Strings;
 
 class Page extends FormPage {

@@ -2,8 +2,8 @@ package app;
 
 import java.io.File;
 
-import app.store.EpdProfiles;
 import app.store.Json;
+import epd.profiles.EpdProfiles;
 
 public final class AppSettings implements Cloneable {
 

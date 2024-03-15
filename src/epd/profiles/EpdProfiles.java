@@ -1,25 +1,4 @@
-package app.store;
-
-import app.App;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import epd.model.EpdProfile;
-import epd.model.Indicator;
-import epd.model.Indicator.Type;
-import epd.model.RefStatus;
-import epd.util.Strings;
-import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.commons.Ref;
-import org.openlca.ilcd.flows.Flow;
-import org.openlca.ilcd.flows.FlowName;
-import org.openlca.ilcd.methods.ImpactMethod;
-import org.openlca.ilcd.processes.Process;
-import org.openlca.ilcd.units.UnitGroup;
-import org.openlca.ilcd.util.Flows;
-import org.openlca.ilcd.util.ImpactMethods;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+package epd.profiles;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,6 +15,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+
+import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.flows.Flow;
+import org.openlca.ilcd.flows.FlowName;
+import org.openlca.ilcd.methods.ImpactMethod;
+import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.units.UnitGroup;
+import org.openlca.ilcd.util.Flows;
+import org.openlca.ilcd.util.ImpactMethods;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+
+import app.App;
+import app.store.Json;
+import app.store.RefDeps;
+import epd.profiles.Indicator.Type;
+import epd.model.RefStatus;
+import epd.util.Strings;
 
 public final class EpdProfiles {
 

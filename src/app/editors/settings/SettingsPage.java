@@ -20,8 +20,8 @@ import app.editors.Editors;
 import app.editors.SimpleEditorInput;
 import app.navi.Navigator;
 import app.rcp.IniFile;
-import app.store.EpdProfiles;
 import app.util.UI;
+import epd.profiles.EpdProfiles;
 import epd.util.Strings;
 
 public class SettingsPage extends BaseEditor {

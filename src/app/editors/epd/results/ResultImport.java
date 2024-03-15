@@ -1,28 +1,28 @@
 package app.editors.epd.results;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
+import app.App;
+import epd.profiles.EpdProfile;
+import epd.profiles.EpdProfiles;
+import epd.util.Strings;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.openlca.ilcd.processes.Process;
-import org.openlca.ilcd.processes.epd.EpdResult;
+import org.openlca.ilcd.processes.epd.EpdModuleEntry;
 import org.openlca.ilcd.processes.epd.EpdScenario;
+import org.openlca.ilcd.processes.epd.EpdValue;
 import org.openlca.ilcd.util.EpdIndicatorResult;
 import org.openlca.ilcd.util.Epds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import app.App;
-import epd.profiles.EpdProfile;
-import epd.profiles.EpdProfiles;
-import epd.util.Strings;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Imports module results from an Excel file.
@@ -102,23 +102,34 @@ class ResultImport implements Runnable {
 		return null;
 	}
 
-	private EpdResult valueOf(Row row) {
+	private EpdValue valueOf(Row row) {
 		var module = getString(row.getCell(0));
 		if (Strings.nullOrEmpty(module))
 			return null;
-		return new EpdResult()
+		return new EpdValue()
 			.withModule(module)
 			.withScenario(getString(row.getCell(1)))
 			.withAmount(getDouble(row.getCell(3)));
 	}
 
-	private void syncModule(EpdResult value) {
+	private void syncModule(EpdValue value) {
 		if (Strings.nullOrEmpty(value.getModule()))
 			return;
-		// TODO: sync module entries
+		var modules = Epds.withModuleEntries(epd);
+		for (var mod : modules) {
+			if (eq(mod.getModule(), value.getModule())
+				&& eq(mod.getScenario(), value.getScenario()))
+				return;
+		}
+		var scen = Strings.notEmpty(value.getScenario())
+			? value.getScenario()
+			: null;
+		modules.add(new EpdModuleEntry()
+			.withModule(value.getModule())
+			.withScenario(scen));
 	}
 
-	private void syncScenario(EpdResult value) {
+	private void syncScenario(EpdValue value) {
 		if (Strings.nullOrEmpty(value.getScenario()))
 			return;
 		for (var s : Epds.getScenarios(epd)) {

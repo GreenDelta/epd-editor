@@ -18,7 +18,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.processes.Process;
-import org.openlca.ilcd.processes.epd.EpdResult;
+import org.openlca.ilcd.processes.epd.EpdValue;
 import org.openlca.ilcd.util.EpdIndicatorResult;
 
 import java.util.ArrayList;
@@ -83,7 +83,7 @@ class ResultTable {
 
 	private record ResultRow(
 		EpdIndicatorResult result,
-		EpdResult value
+		EpdValue value
 	) implements Comparable<ResultRow> {
 
 		String module() {
@@ -126,7 +126,7 @@ class ResultTable {
 				return c;
 
 			// compare by indicators
-			return Strings.compare(this.indicator() , other.indicator());
+			return Strings.compare(this.indicator(), other.indicator());
 		}
 	}
 

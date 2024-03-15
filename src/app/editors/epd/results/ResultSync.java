@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.epd.EpdModuleEntry;
-import org.openlca.ilcd.processes.epd.EpdResult;
+import org.openlca.ilcd.processes.epd.EpdValue;
 import org.openlca.ilcd.util.EpdIndicatorResult;
 import org.openlca.ilcd.util.Epds;
 
@@ -67,7 +67,7 @@ class ResultSync implements Runnable {
 				var amount = findValue(result, entry);
 				if (amount != null)
 					continue;
-				amount = new EpdResult()
+				amount = new EpdValue()
 					.withModule(entry.getModule())
 					.withScenario(entry.getScenario());
 				result.values().add(amount);
@@ -124,8 +124,8 @@ class ResultSync implements Runnable {
 	 * Remove outdated amount entries and duplicates.
 	 */
 	private void removeAmounts(Set<String> definedMods, EpdIndicatorResult result) {
-		var handled = new HashMap<String, EpdResult>();
-		var removals = new ArrayList<EpdResult>();
+		var handled = new HashMap<String, EpdValue>();
+		var removals = new ArrayList<EpdValue>();
 		for (var a : result.values()) {
 			var key = a.getModule() + "/" + a.getScenario();
 			if (!definedMods.contains(key)) {
@@ -152,7 +152,7 @@ class ResultSync implements Runnable {
 		result.values().removeAll(removals);
 	}
 
-	private EpdResult findValue(EpdIndicatorResult result, EpdModuleEntry entry) {
+	private EpdValue findValue(EpdIndicatorResult result, EpdModuleEntry entry) {
 		for (var v : result.values()) {
 			if (Objects.equals(entry.getModule(), v.getModule())
 				&& Strings.nullOrEqual(entry.getScenario(), v.getScenario()))

@@ -9,6 +9,7 @@ import jakarta.xml.bind.JAXB;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.util.EpdIndicatorResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -129,6 +130,11 @@ public final class EpdProfiles {
 			read(f).ifPresent(profiles::add);
 		}
 		return profiles;
+	}
+
+	public static List<EpdIndicatorResult> syncResultsOf(Process epd) {
+		var profile = get(epd);
+		return ResultSync.of(epd, profile);
 	}
 
 	/**

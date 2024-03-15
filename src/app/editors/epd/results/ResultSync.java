@@ -46,7 +46,7 @@ class ResultSync implements Runnable {
 			return;
 		}
 
-		var results = new ArrayList<>(EpdIndicatorResult.allOf(epd));
+		var results = new ArrayList<>(EpdProfiles.syncResultsOf(epd));
 
 		// remove the results with non-matching or duplicate indicators
 		var index = cleanResults(results);

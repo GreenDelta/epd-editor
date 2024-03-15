@@ -10,6 +10,7 @@ import app.util.Tables;
 import app.util.Viewers;
 import app.util.tables.ModifySupport;
 import app.util.tables.TextCellModifier;
+import epd.profiles.EpdProfiles;
 import epd.util.Strings;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -72,7 +73,7 @@ class ResultTable {
 
 	public void refresh() {
 		List<ResultRow> rows = new ArrayList<>();
-		for (var result : EpdIndicatorResult.allOf(epd)) {
+		for (var result : EpdProfiles.syncResultsOf(epd)) {
 			for (var amount : result.values()) {
 				rows.add(new ResultRow(result, amount));
 			}

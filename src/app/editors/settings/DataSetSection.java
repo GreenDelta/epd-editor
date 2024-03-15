@@ -1,5 +1,22 @@
 package app.editors.settings;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.commons.Ref;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import app.App;
 import app.AppSettings;
 import app.M;
@@ -12,22 +29,6 @@ import epd.model.qmeta.QGroup;
 import epd.profiles.EpdProfile;
 import epd.profiles.EpdProfiles;
 import epd.util.Strings;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.commons.Ref;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 class DataSetSection {
 
@@ -152,7 +153,7 @@ class DataSetSection {
 		Combo combo = UI.formCombo(comp, tk, M.DefaultEPDProfile);
 		UI.gridData(combo, false, false).widthHint = 300;
 		List<EpdProfile> profiles = EpdProfiles.getAll();
-		profiles.sort((p1, p2) -> Strings.compare(p1.name, p2.name));
+		profiles.sort((p1, p2) -> Strings.compare(p1.getName(), p2.getName()));
 		String[] items = new String[profiles.size()];
 		int selected = -1;
 		for (int i = 0; i < items.length; i++) {
@@ -160,7 +161,7 @@ class DataSetSection {
 			if (EpdProfiles.isDefault(p)) {
 				selected = i;
 			}
-			items[i] = p.name;
+			items[i] = p.getName();
 		}
 		combo.setItems(items);
 		if (selected >= 0) {
@@ -170,7 +171,7 @@ class DataSetSection {
 			int idx = combo.getSelectionIndex();
 			if (idx < 0)
 				return;
-			settings().profile = profiles.get(idx).id;
+			settings().profile = profiles.get(idx).getId();
 			page.setDirty();
 		});
 	}

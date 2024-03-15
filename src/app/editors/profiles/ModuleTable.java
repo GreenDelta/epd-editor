@@ -1,10 +1,6 @@
 package app.editors.profiles;
 
-import app.M;
-import app.util.Tables;
-import app.util.UI;
-import epd.profiles.Module;
-import epd.profiles.EpdProfile;
+import java.util.Comparator;
 
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -14,7 +10,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
-import java.util.Comparator;
+import app.M;
+import app.util.Tables;
+import app.util.UI;
+import epd.profiles.EpdProfile;
+import epd.profiles.Module;
 
 class ModuleTable {
 	private final EpdProfile profile;
@@ -35,8 +35,8 @@ class ModuleTable {
 			M.Name, M.Description);
 		Tables.bindColumnWidths(table, 0.2, 0.3, 0.5);
 		table.setLabelProvider(new Label());
-		profile.modules.sort(Comparator.comparingInt(Module::getIndex));
-		table.setInput(profile.modules);
+		profile.getModules().sort(Comparator.comparingInt(Module::getIndex));
+		table.setInput(profile.getModules());
 	}
 
 	private static class Label extends LabelProvider implements ITableLabelProvider {

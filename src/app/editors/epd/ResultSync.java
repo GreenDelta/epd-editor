@@ -1,15 +1,5 @@
 package app.editors.epd;
 
-import epd.profiles.EpdProfile;
-import epd.profiles.EpdProfiles;
-import epd.profiles.Indicator;
-import epd.util.Strings;
-import org.openlca.ilcd.processes.Process;
-import org.openlca.ilcd.processes.epd.EpdModuleEntry;
-import org.openlca.ilcd.processes.epd.EpdResult;
-import org.openlca.ilcd.util.EpdIndicatorResult;
-import org.openlca.ilcd.util.Epds;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +7,17 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.processes.epd.EpdModuleEntry;
+import org.openlca.ilcd.processes.epd.EpdResult;
+import org.openlca.ilcd.util.EpdIndicatorResult;
+import org.openlca.ilcd.util.Epds;
+
+import epd.profiles.EpdProfile;
+import epd.profiles.EpdProfiles;
+import epd.profiles.Indicator;
+import epd.util.Strings;
 
 /**
  * Initializes indicator results for added modules and removes results for
@@ -51,7 +52,7 @@ class ResultSync implements Runnable {
 		var index = cleanResults(results);
 
 		// add new result entries
-		for (var indicator : profile.indicators) {
+		for (var indicator : profile.getIndicators()) {
 
 			// get or create the result
 			var result = index.get(indicator.getUUID());
@@ -80,7 +81,7 @@ class ResultSync implements Runnable {
 		List<EpdIndicatorResult> results
 	) {
 
-		var indicatorIds = profile.indicators.stream()
+		var indicatorIds = profile.getIndicators().stream()
 			.map(Indicator::getUUID)
 			.collect(Collectors.toSet());
 

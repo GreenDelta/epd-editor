@@ -31,11 +31,11 @@ public class ProfileImportAction extends Action {
 			MsgBox.error("#Could not read EPD profile from " + file.getName());
 			return;
 		}
-		if (profile.id == null || profile.name == null) {
+		if (profile.getId() == null || profile.getName() == null) {
 			MsgBox.error("#An EPD profile must have an ID or name");
 			return;
 		}
-		EpdProfile other = EpdProfiles.get(profile.id);
+		EpdProfile other = EpdProfiles.get(profile.getId());
 		if (other != null) {
 			boolean b = MsgBox.ask("#Overwrite profile?",
 					"A profile with this ID already exists. "

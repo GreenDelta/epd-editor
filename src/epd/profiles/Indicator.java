@@ -1,32 +1,33 @@
 package epd.profiles;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlElement;
+import java.util.Objects;
+
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.util.EpdIndicatorResult;
 
-import java.util.Objects;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlElement;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Indicator {
 
-	@XmlAttribute(name = "isInputIndicator", namespace = EpdProfile2.NS)
+	@XmlAttribute(name = "isInputIndicator", namespace = EpdProfile.NS)
 	private Boolean inputIndicator;
 
-	@XmlAttribute(name = "code", namespace = EpdProfile2.NS)
+	@XmlAttribute(name = "code", namespace = EpdProfile.NS)
 	private String code;
 
-	@XmlAttribute(name = "group", namespace = EpdProfile2.NS)
+	@XmlAttribute(name = "group", namespace = EpdProfile.NS)
 	private String group;
 
-	@XmlElement(name = "ref", namespace = EpdProfile2.NS)
+	@XmlElement(name = "ref", namespace = EpdProfile.NS)
 	private Ref ref;
 
-	@XmlElement(name = "unitGroup", namespace = EpdProfile2.NS)
+	@XmlElement(name = "unitGroup", namespace = EpdProfile.NS)
 	private Ref unit;
 
 	public boolean isInputIndicator() {

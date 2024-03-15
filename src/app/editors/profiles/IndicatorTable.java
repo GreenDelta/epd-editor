@@ -1,5 +1,13 @@
 package app.editors.profiles;
 
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.openlca.ilcd.commons.DataSetType;
+
 import app.App;
 import app.M;
 import app.editors.Editors;
@@ -9,13 +17,6 @@ import app.util.UI;
 import app.util.Viewers;
 import epd.profiles.EpdProfile;
 import epd.profiles.Indicator;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.openlca.ilcd.commons.DataSetType;
 
 class IndicatorTable {
 
@@ -34,7 +35,7 @@ class IndicatorTable {
 			M.DataSetReference, M.UnitReference);
 		Tables.bindColumnWidths(table, 0.4, 0.3, 0.3);
 		table.setLabelProvider(new Label());
-		table.setInput(profile.indicators);
+		table.setInput(profile.getIndicators());
 
 		Tables.onDoubleClick(table, $ -> {
 			Indicator indicator = Viewers.getFirstSelected(table);

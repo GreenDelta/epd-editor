@@ -29,7 +29,7 @@ public class EpdProfileDownload {
 		}
 		String text = M.DownloadedEPDProfiles_Message + ": ";
 		for (int i = 0; i < results.size(); i++) {
-			text += results.get(i).name;
+			text += results.get(i).getName();
 			if (i < results.size() - 1) {
 				text += ", ";
 			}

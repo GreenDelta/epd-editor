@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import epd.util.Strings;
+import jakarta.xml.bind.JAXB;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.processes.Process;
@@ -41,12 +42,12 @@ public final class EpdProfiles {
 	}
 
 	public static boolean isDefault(EpdProfile p) {
-		if (p == null || p.id == null)
+		if (p == null || p.getId() == null)
 			return false;
 		String settingsID = App.settings().profile;
-		if (settingsID == null)
-			return p.id.equals(DEFAULT);
-		return p.id.equals(settingsID);
+		return settingsID != null
+			? settingsID.equals(p.getId())
+			: DEFAULT.equals(p.getId());
 	}
 
 	/**
@@ -77,9 +78,9 @@ public final class EpdProfiles {
 
 		if (p == null) {
 			// this should never happen, but who knows
-			p = new EpdProfile();
-			p.id = DEFAULT;
-			p.name = DEFAULT;
+			p = new EpdProfile()
+				.withId(DEFAULT)
+				.withName(DEFAULT);
 			Logger log = LoggerFactory.getLogger(EpdProfiles.class);
 			log.error("failed to load an EPD profile; even the default");
 		}
@@ -134,11 +135,11 @@ public final class EpdProfiles {
 	 * before it is saved.
 	 */
 	public static void save(EpdProfile profile) {
-		if (profile == null || profile.id == null)
+		if (profile == null || profile.getId() == null)
 			return;
-		File file = file(profile.id);
-		Json.write(profile, file);
-		cache.put(profile.id, profile);
+		File file = file(profile.getId());
+		JAXB.marshal(profile, file);
+		cache.put(profile.getId(), profile);
 	}
 
 	/**
@@ -168,7 +169,7 @@ public final class EpdProfiles {
 					"failed to create profiles dir @" + dir, e);
 			}
 		}
-		return new File(dir, id + ".json");
+		return new File(dir, id + ".xml");
 	}
 
 	/**
@@ -239,13 +240,13 @@ public final class EpdProfiles {
 				return null;
 			}
 			try (InputStream in = con.getInputStream()) {
-				EpdProfile p = Json.read(in, EpdProfile.class);
-				if (p == null || p.id == null) {
+				EpdProfile p = JAXB.unmarshal(in, EpdProfile.class);
+				if (p == null || p.getId() == null) {
 					log.warn("Could not read profile");
 					return null;
 				}
 				save(p);
-				log.info("Saved profile {}", p.id);
+				log.info("Saved profile {}", p.getId());
 				return p;
 			}
 		} catch (Exception e) {
@@ -271,7 +272,7 @@ public final class EpdProfiles {
 			return false;
 
 		for (var profile : getAll()) {
-			for (var indicator : profile.indicators) {
+			for (var indicator : profile.getIndicators()) {
 				if (checkIndicator
 					&& Strings.nullOrEqual(indicator.getUUID(), ref.getUUID()))
 					return true;

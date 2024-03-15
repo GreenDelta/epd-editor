@@ -28,7 +28,7 @@ public class ProfileDeleteAction extends Action {
 			MsgBox.info("#The default EPD profile cannot be deleted.");
 			return;
 		}
-		EpdProfiles.delete(profile.id);
+		EpdProfiles.delete(profile.getId());
 		Navigator.refreshProfiles();
 	}
 

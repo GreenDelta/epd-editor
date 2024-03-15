@@ -87,16 +87,16 @@ class ResultPage extends FormPage {
 			M.EPDProfile, Tooltips.EPD_EPDProfile);
 		int selected = -1;
 		List<EpdProfile> profiles = EpdProfiles.getAll();
-		profiles.sort((p1, p2) -> Strings.compare(p1.name, p2.name));
+		profiles.sort((p1, p2) -> Strings.compare(p1.getName(), p2.getName()));
 		String[] items = new String[profiles.size()];
 		for (int i = 0; i < profiles.size(); i++) {
 			EpdProfile p = profiles.get(i);
-			items[i] = p.name != null ? p.name : "?";
-			if (Objects.equals(p.id, epd.process.getEpdProfile())) {
+			items[i] = p.getName() != null ? p.getName() : "?";
+			if (Objects.equals(p.getId(), epd.process.getEpdProfile())) {
 				selected = i;
 			} else if (epd.process.getEpdProfile() == null && EpdProfiles.isDefault(p)) {
 				selected = i;
-				epd.process.withEpdProfile(p.id);
+				epd.process.withEpdProfile(p.getId());
 			}
 		}
 		combo.setItems(items);
@@ -107,7 +107,7 @@ class ResultPage extends FormPage {
 			int i = combo.getSelectionIndex();
 			EpdProfile p = profiles.get(i);
 			if (p != null) {
-				epd.process.withEpdProfile(p.id);
+				epd.process.withEpdProfile(p.getId());
 				editor.setDirty();
 			}
 		});
@@ -248,7 +248,7 @@ class ResultPage extends FormPage {
 
 	private Module[] modules() {
 		EpdProfile profile = EpdProfiles.get(epd.process);
-		List<Module> modules = profile.modules;
+		List<Module> modules = profile.getModules();
 		modules.sort(Comparator.comparingInt(Module::getIndex));
 		return modules.toArray(new Module[0]);
 	}

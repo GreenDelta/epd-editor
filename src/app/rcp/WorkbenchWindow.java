@@ -85,10 +85,10 @@ public class WorkbenchWindow extends WorkbenchWindowAdvisor {
 		// collect the URLs from the EPD profiles
 		var urls = new ArrayList<String>();
 		for (EpdProfile profile : EpdProfiles.getAll()) {
-			if (Strings.nullOrEmpty(profile.referenceDataUrl))
+			if (Strings.nullOrEmpty(profile.getDataUrl()))
 				continue;
-			if (!urls.contains(profile.referenceDataUrl))
-				urls.add(profile.referenceDataUrl);
+			if (!urls.contains(profile.getDataUrl()))
+				urls.add(profile.getDataUrl());
 		}
 		if (urls.isEmpty())
 			return;

@@ -6,9 +6,9 @@ import org.eclipse.jface.action.Action;
 
 import app.M;
 import app.rcp.Icon;
-import app.store.Json;
 import app.util.FileChooser;
 import epd.profiles.EpdProfile;
+import jakarta.xml.bind.JAXB;
 
 public class ProfileExportAction extends Action {
 
@@ -25,9 +25,9 @@ public class ProfileExportAction extends Action {
 	public void run() {
 		if (profile == null)
 			return;
-		File file = FileChooser.save(profile.id + ".json", "*.json");
+		File file = FileChooser.save(profile.getId() + ".xml", "*.xml");
 		if (file == null)
 			return;
-		Json.write(profile, file);
+		JAXB.marshal(profile, file);
 	}
 }

@@ -24,7 +24,7 @@ public class Conv {
 		var obj = Json.read(is, JsonObject.class);
 		Objects.requireNonNull(obj);
 
-		var profile = new EpdProfile2();
+		var profile = new EpdProfile();
 		profile.withId(str(obj, "id"))
 			.withName(str(obj, "name"))
 			.withDataUrl(str(obj, "referenceDataUrl"));

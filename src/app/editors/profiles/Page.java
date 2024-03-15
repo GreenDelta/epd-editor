@@ -25,7 +25,7 @@ class Page extends FormPage {
 	private final EpdProfile profile;
 
 	Page(ProfileEditor editor, EpdProfile profile) {
-		super(editor, "Page", profile.name);
+		super(editor, "Page", profile.getName());
 		this.editor = editor;
 		this.profile = profile;
 	}
@@ -33,7 +33,7 @@ class Page extends FormPage {
 	@Override
 	protected void createFormContent(IManagedForm mform) {
 		var tk = mform.getToolkit();
-		var form = UI.formHeader(mform, profile.name);
+		var form = UI.formHeader(mform, profile.getName());
 		var body = UI.formBody(form, mform.getToolkit());
 		infoSection(tk, body);
 		new IndicatorTable(profile).render(body, tk);
@@ -47,19 +47,19 @@ class Page extends FormPage {
 
 		// name
 		Text nameText = UI.formText(comp, tk, M.Name);
-		Texts.set(nameText, profile.name).setEditable(false);
+		Texts.set(nameText, profile.getName()).setEditable(false);
 		UI.filler(comp);
 
 		// description
 		Text descrText = UI.formMultiText(comp, tk, M.Description);
-		Texts.set(descrText, profile.description).setEditable(false);
+		Texts.set(descrText, profile.getDescription()).setEditable(false);
 		UI.filler(comp);
 
 		// reference data URL
 		Text urlText = UI.formText(comp, tk, M.ReferenceDataURL);
-		Texts.set(urlText, profile.referenceDataUrl);
+		Texts.set(urlText, profile.getDataUrl());
 		urlText.addModifyListener(e -> {
-			profile.referenceDataUrl = urlText.getText();
+			profile.withDataUrl(urlText.getText());
 			editor.setDirty();
 		});
 

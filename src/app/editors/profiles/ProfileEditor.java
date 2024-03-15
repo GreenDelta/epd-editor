@@ -19,10 +19,10 @@ public class ProfileEditor extends BaseEditor {
 	private EpdProfile profile;
 
 	public static void open(EpdProfile profile) {
-		if (profile == null || profile.id == null)
+		if (profile == null || profile.getId() == null)
 			return;
 		Editors.open(
-				new SimpleEditorInput(profile.name, profile.id),
+				new SimpleEditorInput(profile.getName(), profile.getId()),
 				"epd.profile.editor");
 	}
 

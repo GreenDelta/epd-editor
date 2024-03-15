@@ -48,7 +48,7 @@ public class WorkspaceTest {
 		var profile = EpdProfiles.getDefault();
 		var indicators = 0;
 		var index = ws.index();
-		for (var indicator : profile.indicators) {
+		for (var indicator : profile.getIndicators()) {
 			var ref = index.find(indicator.getRef());
 			assertNotNull("could not find indicator " + indicator.getUUID(), ref);
 			indicators++;

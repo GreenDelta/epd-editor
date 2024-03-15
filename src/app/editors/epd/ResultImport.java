@@ -1,9 +1,11 @@
 package app.editors.epd;
 
-import app.App;
-import epd.profiles.EpdProfile;
-import epd.profiles.EpdProfiles;
-import epd.util.Strings;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
@@ -17,11 +19,10 @@ import org.openlca.ilcd.util.Epds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import app.App;
+import epd.profiles.EpdProfile;
+import epd.profiles.EpdProfiles;
+import epd.util.Strings;
 
 /**
  * Imports module results from an Excel file.
@@ -89,7 +90,7 @@ class ResultImport implements Runnable {
 		}
 
 		// search the indicator in the profile
-		for (var i : profile.indicators) {
+		for (var i : profile.getIndicators()) {
 			if (!name.equals(App.s(i.getRef())))
 				continue;
 			var r = i.createResult();

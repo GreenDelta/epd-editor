@@ -1,9 +1,10 @@
 package app.navi;
 
+import org.eclipse.swt.graphics.Image;
+
 import app.rcp.Icon;
 import epd.profiles.EpdProfile;
 import epd.util.Strings;
-import org.eclipse.swt.graphics.Image;
 
 public class ProfileElement extends NavigationElement<EpdProfile> {
 
@@ -25,14 +26,14 @@ public class ProfileElement extends NavigationElement<EpdProfile> {
 			return 1;
 		if (this.content == null || other.content == null)
 			return 0;
-		return Strings.compare(this.content.name, other.content.name);
+		return Strings.compare(this.content.getName(), other.content.getName());
 	}
 
 	@Override
 	public String getLabel() {
 		if (this.content == null)
 			return "?";
-		return this.content.name;
+		return this.content.getName();
 	}
 
 	@Override

@@ -1,5 +1,9 @@
 package epd.profiles;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlElement;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
@@ -7,83 +11,69 @@ import org.openlca.ilcd.util.EpdIndicatorResult;
 
 import java.util.Objects;
 
-/**
- * Each indicator contains the field values that are necessary for serializing
- * the indicator results into the extended ILCD format. Inventory indicators are
- * serialized as exchanges and impact assessment indicators are serialized as
- * LCIA results in an ILCD data set.
- */
-public final class Indicator {
+@XmlAccessorType(XmlAccessType.FIELD)
+public class Indicator {
 
-	public enum Type {
-		LCI, LCIA
+	@XmlAttribute(name = "isInputIndicator", namespace = EpdProfile2.NS)
+	private Boolean inputIndicator;
+
+	@XmlAttribute(name = "group", namespace = EpdProfile2.NS)
+	private String group;
+
+	@XmlElement(name = "ref", namespace = EpdProfile2.NS)
+	private Ref ref;
+
+	@XmlElement(name = "unitGroup", namespace = EpdProfile2.NS)
+	private Ref unit;
+
+	public boolean isInputIndicator() {
+		return inputIndicator != null && inputIndicator;
 	}
 
-	/**
-	 * The default name of the indicator as loaded from an EPD profile. Note
-	 * that the name for the user interface and serialization should be taken
-	 * from the respective indicator data set (if available).
-	 */
-	public String name;
+	public boolean isInventoryIndicator() {
+		return ref != null && ref.getType() == DataSetType.FLOW;
+	}
 
-	public Type type;
+	public String getGroup() {
+		return group;
+	}
 
-	/**
-	 * This is only relevant for LCI indicators which are exported as exchanges
-	 * in the ILCD format. An LCI indicator is an input indicator if and only if
-	 * this field has the value `true`.
-	 */
-	public Boolean isInput;
-
-	public String group;
-
-	public String unit;
-
-	/**
-	 * The UUID of the ILCD indicator data set.
-	 */
-	public String uuid;
-
-	/**
-	 * The UUID of the ILCD unit group data set. The reference unit of this unit
-	 * group data set is the unit in which is indicator is quantified.
-	 */
-	public String unitGroupUUID;
-
-	/**
-	 * Create a ILCD data set reference for this indicator.
-	 */
-	public Ref getRef(String lang) {
-		String path = type == Type.LCI
-			? "flows"
-			: "lciamethods";
-		Ref ref = new Ref()
-			.withUUID(uuid)
-			.withUri("../" + path + "/" + uuid)
-			.withType(type == Type.LCI
-				? DataSetType.FLOW
-				: DataSetType.IMPACT_METHOD);
-		LangString.set(ref.withName(), name, lang);
+	public Ref getRef() {
 		return ref;
 	}
 
-	/**
-	 * Create a ILCD data set reference to the unit group of this indicator.
-	 */
-	public Ref getUnitGroupRef(String lang) {
-		Ref ref = new Ref()
-			.withUUID(unitGroupUUID)
-			.withType(DataSetType.UNIT_GROUP)
-			.withUri("../unitgroups/" + unitGroupUUID);
-		LangString.set(ref.withName(), unit, lang);
-		return ref;
+	public Ref getUnit() {
+		return unit;
+	}
+
+	public String getUUID() {
+		return ref != null ? ref.getUUID() : null;
+	}
+
+	public Indicator withGroup(String group) {
+		this.group = group;
+		return this;
+	}
+
+	public Indicator withInputIndicator(Boolean inputIndicator) {
+		this.inputIndicator = inputIndicator;
+		return this;
+	}
+
+	public Indicator withRef(Ref ref) {
+		this.ref = ref;
+		return this;
+	}
+
+	public Indicator withUnit(Ref unit) {
+		this.unit = unit;
+		return this;
 	}
 
 	@Override
 	public int hashCode() {
-		if (uuid == null)
-			return super.hashCode();
-		return uuid.hashCode();
+		var id = getUUID();
+		return id != null ? id.hashCode() : super.hashCode();
 	}
 
 	@Override
@@ -92,25 +82,23 @@ public final class Indicator {
 			return true;
 		if (obj == null)
 			return false;
-		if (!(obj instanceof Indicator other))
-			return false;
-		return Objects.equals(this.uuid, other.uuid);
+		return obj instanceof Indicator other
+			&& Objects.equals(this.getUUID(), other.getUUID());
 	}
 
 	@Override
 	public String toString() {
-		return "Indicator [ name=\"" + name
-			+ "\" uuid =\"" + uuid + "\"]";
+		var name = ref != null
+			? LangString.getFirst(ref.getName())
+			: null;
+		return "Indicator [ name=\"" + name + "\" uuid =\"" + getUUID() + "\"]";
 	}
 
-	public EpdIndicatorResult createResult(String lang) {
-		var indicatorRef = getRef(lang);
-		var unitGroupRef = getUnitGroupRef(lang);
-		if (type == Type.LCIA)
-			return EpdIndicatorResult.of(indicatorRef, unitGroupRef);
-		return isInput != null && isInput
-			? EpdIndicatorResult.ofInputIndicator(indicatorRef, unitGroupRef)
-			: EpdIndicatorResult.ofOutputIndicator(indicatorRef, unitGroupRef);
+	public EpdIndicatorResult createResult() {
+		if (isInventoryIndicator())
+			return isInputIndicator()
+				? EpdIndicatorResult.ofInputIndicator(ref, unit)
+				: EpdIndicatorResult.ofOutputIndicator(ref, unit);
+		return EpdIndicatorResult.of(ref, unit);
 	}
-
 }

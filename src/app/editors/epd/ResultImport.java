@@ -90,9 +90,9 @@ class ResultImport implements Runnable {
 
 		// search the indicator in the profile
 		for (var i : profile.indicators) {
-			if (!name.equals(i.name))
+			if (!name.equals(App.s(i.getRef())))
 				continue;
-			var r = i.createResult(App.lang());
+			var r = i.createResult();
 			results.add(r);
 			return r;
 		}

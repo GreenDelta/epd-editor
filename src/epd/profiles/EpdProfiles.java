@@ -1,5 +1,17 @@
 package epd.profiles;
 
+import app.App;
+import app.store.Json;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import epd.util.Strings;
+import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.processes.Process;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,34 +22,10 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-
-import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.commons.Ref;
-import org.openlca.ilcd.flows.Flow;
-import org.openlca.ilcd.flows.FlowName;
-import org.openlca.ilcd.methods.ImpactMethod;
-import org.openlca.ilcd.processes.Process;
-import org.openlca.ilcd.units.UnitGroup;
-import org.openlca.ilcd.util.Flows;
-import org.openlca.ilcd.util.ImpactMethods;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-
-import app.App;
-import app.store.Json;
-import app.store.RefDeps;
-import epd.profiles.Indicator.Type;
-import epd.model.RefStatus;
-import epd.util.Strings;
 
 public final class EpdProfiles {
 
@@ -108,7 +96,6 @@ public final class EpdProfiles {
 		if (!f.exists())
 			return null;
 		p = Json.read(f, EpdProfile.class);
-		sync(p);
 		cache.put(id, p);
 		return p;
 	}
@@ -149,7 +136,6 @@ public final class EpdProfiles {
 	public static void save(EpdProfile profile) {
 		if (profile == null || profile.id == null)
 			return;
-		sync(profile);
 		File file = file(profile.id);
 		Json.write(profile, file);
 		cache.put(profile.id, profile);
@@ -183,74 +169,6 @@ public final class EpdProfiles {
 			}
 		}
 		return new File(dir, id + ".json");
-	}
-
-	/**
-	 * Synchronizes the indicator and unit group references of the given profile
-	 * with the data store of this application.
-	 */
-	public static List<RefStatus> sync(EpdProfile p) {
-		if (p == null)
-			return Collections.emptyList();
-		List<RefStatus> stats = new ArrayList<>();
-		for (Indicator i : p.indicators) {
-			try {
-				syncRefs(i, stats);
-			} catch (Exception e) {
-				stats.add(RefStatus.error(i.getRef(App.lang()),
-					"Failed to lead refs.: " + e.getMessage()));
-			}
-		}
-		return stats;
-	}
-
-	private static void syncRefs(Indicator i, List<RefStatus> stats) {
-		if (i == null)
-			return;
-		if (i.type == Type.LCI) {
-			stats.add(syncFlow(i));
-		} else {
-			stats.add(syncMethod(i));
-		}
-		UnitGroup ug = App.store().get(UnitGroup.class, i.unitGroupUUID);
-		if (ug == null) {
-			stats.add(RefStatus.error(i.getUnitGroupRef(App.lang()),
-				"Not found in local store"));
-			return;
-		}
-		Ref uRef = Ref.of(ug);
-		String unit = RefDeps.getRefUnit(ug);
-		if (Strings.nullOrEmpty(unit)) {
-			stats.add(RefStatus.error(uRef, "No reference unit found"));
-			return;
-		}
-		i.unit = unit;
-		stats.add(RefStatus.info(uRef, "Found"));
-	}
-
-	private static RefStatus syncMethod(Indicator i) {
-		var m = App.store().get(ImpactMethod.class, i.uuid);
-		if (m == null) {
-			return RefStatus.error(i.getRef(App.lang()),
-				"Not found in local store");
-		} else {
-			i.name = App.s(ImpactMethods.getName(m));
-			return RefStatus.info(i.getRef(App.lang()), "Updated");
-		}
-	}
-
-	private static RefStatus syncFlow(Indicator i) {
-		Flow flow = App.store().get(Flow.class, i.uuid);
-		if (flow == null) {
-			return RefStatus.error(i.getRef(App.lang()),
-				"Not found in local store");
-		} else {
-			FlowName flowName = Flows.getFlowName(flow);
-			if (flowName != null) {
-				i.name = App.s(flowName.getBaseName());
-			}
-			return RefStatus.info(i.getRef(App.lang()), "Updated");
-		}
 	}
 
 	/**
@@ -355,10 +273,13 @@ public final class EpdProfiles {
 		for (var profile : getAll()) {
 			for (var indicator : profile.indicators) {
 				if (checkIndicator
-					&& Strings.nullOrEqual(indicator.uuid, ref.getUUID()))
+					&& Strings.nullOrEqual(indicator.getUUID(), ref.getUUID()))
 					return true;
+				var unitGroupUUID = indicator.getUnit() != null
+					? indicator.getUnit().getUUID()
+					: null;
 				if (checkUnit
-					&& Strings.nullOrEqual(indicator.unitGroupUUID, ref.getUUID()))
+					&& Strings.nullOrEqual(unitGroupUUID, ref.getUUID()))
 					return true;
 			}
 		}

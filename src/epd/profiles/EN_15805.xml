@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<profile xmlns="http://greendelta.com/epd-editor"
+				 xmlns:common="http://lca.jrc.it/ILCD/Common">
+	<id>EN_15804</id>
+	<name>EN 15804</name>
+	<description></description>
+	<dataUrl></dataUrl>
+	<modules>
+		<module name="A1" index="0"/>
+	</modules>
+	<indicators>
+		<indicator>
+			<ref></ref>
+			<unitGroupRef>
+
+			</unitGroupRef>
+		</indicator>
+	</indicators>
+</profile>

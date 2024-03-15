@@ -35,7 +35,7 @@ class ModuleTable {
 			M.Name, M.Description);
 		Tables.bindColumnWidths(table, 0.2, 0.3, 0.5);
 		table.setLabelProvider(new Label());
-		profile.modules.sort(Comparator.comparingInt(m -> m.index));
+		profile.modules.sort(Comparator.comparingInt(Module::getIndex));
 		table.setInput(profile.modules);
 	}
 
@@ -51,9 +51,9 @@ class ModuleTable {
 			if (!(obj instanceof Module module))
 				return null;
 			return switch (col) {
-				case 0 -> Integer.toString(module.index);
-				case 1 -> module.name;
-				case 2 -> module.description;
+				case 0 -> Integer.toString(module.getIndex());
+				case 1 -> module.getName();
+				case 2 -> module.getDescription();
 				default -> null;
 			};
 		}

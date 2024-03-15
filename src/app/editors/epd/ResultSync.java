@@ -1,8 +1,8 @@
 package app.editors.epd;
 
-import app.App;
 import epd.profiles.EpdProfile;
 import epd.profiles.EpdProfiles;
+import epd.profiles.Indicator;
 import epd.util.Strings;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.epd.EpdModuleEntry;
@@ -54,9 +54,9 @@ class ResultSync implements Runnable {
 		for (var indicator : profile.indicators) {
 
 			// get or create the result
-			var result = index.get(indicator.uuid);
+			var result = index.get(indicator.getUUID());
 			if (result == null) {
-				result = indicator.createResult(App.lang());
+				result = indicator.createResult();
 				results.add(result);
 			}
 
@@ -81,7 +81,7 @@ class ResultSync implements Runnable {
 	) {
 
 		var indicatorIds = profile.indicators.stream()
-			.map(indicator -> indicator.uuid)
+			.map(Indicator::getUUID)
 			.collect(Collectors.toSet());
 
 		var removals = new ArrayList<EpdIndicatorResult>();

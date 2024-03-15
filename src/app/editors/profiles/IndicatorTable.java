@@ -2,19 +2,13 @@ package app.editors.profiles;
 
 import app.App;
 import app.M;
-import app.StatusView;
 import app.editors.Editors;
 import app.rcp.Icon;
-import app.util.Actions;
 import app.util.Tables;
 import app.util.UI;
 import app.util.Viewers;
-import epd.profiles.Indicator;
-import epd.profiles.Indicator.Type;
 import epd.profiles.EpdProfile;
-import epd.profiles.EpdProfiles;
-import epd.model.RefStatus;
-import org.eclipse.jface.action.Action;
+import epd.profiles.Indicator;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -23,17 +17,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.openlca.ilcd.commons.DataSetType;
 
-import java.util.ArrayList;
-import java.util.List;
-
 class IndicatorTable {
 
-	private final ProfileEditor editor;
 	private final EpdProfile profile;
 	private TableViewer table;
 
-	IndicatorTable(ProfileEditor editor, EpdProfile profile) {
-		this.editor = editor;
+	IndicatorTable(EpdProfile profile) {
 		this.profile = profile;
 	}
 
@@ -51,42 +40,12 @@ class IndicatorTable {
 			Indicator indicator = Viewers.getFirstSelected(table);
 			if (indicator == null)
 				return;
-			var ref = indicator.getRef(App.lang());
+			var ref = indicator.getRef();
 			var indexRef = App.index().find(ref);
 			if (indexRef != null) {
 				Editors.open(indexRef);
 			}
 		});
-
-		Sync sync = new Sync();
-		Actions.bind(section, sync);
-		Actions.bind(table, sync);
-	}
-
-	private class Sync extends Action {
-
-		public Sync() {
-			setText(M.Synchronize);
-			setImageDescriptor(Icon.RELOAD.des());
-		}
-
-		@Override
-		public void run() {
-			List<RefStatus> errors = new ArrayList<>();
-			App.run(M.Synchronize, () -> {
-				List<RefStatus> stats = EpdProfiles.sync(profile);
-				stats.stream()
-					.filter(stat -> stat.value == RefStatus.ERROR)
-					.forEach(errors::add);
-			}, () -> {
-				table.setInput(profile.indicators);
-				editor.setDirty();
-				if (!errors.isEmpty()) {
-					StatusView.open(M.Error + ": "
-						+ profile.name, errors);
-				}
-			});
-		}
 	}
 
 	private static class Label extends LabelProvider
@@ -94,13 +53,12 @@ class IndicatorTable {
 
 		@Override
 		public Image getColumnImage(Object obj, int col) {
-			if (!(obj instanceof Indicator))
+			if (!(obj instanceof Indicator indicator))
 				return null;
 			if (col == 2)
 				return Icon.UNIT.img();
 			if (col == 1) {
-				var indicator = (Indicator) obj;
-				return indicator.type == Type.LCI
+				return indicator.isInventoryIndicator()
 					? Icon.img(DataSetType.FLOW)
 					: Icon.img(DataSetType.IMPACT_METHOD);
 			}
@@ -112,18 +70,16 @@ class IndicatorTable {
 			if (!(obj instanceof Indicator indicator))
 				return null;
 			return switch (col) {
-				case 0 -> indicator.name;
+				case 0 -> App.s(indicator.getRef());
 				case 1 -> {
-					String type = indicator.type == Type.LCI
+					String type = indicator.isInventoryIndicator()
 						? M.Flow
 						: M.LCIAMethod;
-					yield type + ": " + indicator.uuid;
+					yield type + ": " + indicator.getUUID();
 				}
-				case 2 -> indicator.unit;
+				case 2 -> App.s(indicator.getUnit());
 				default -> null;
 			};
 		}
-
 	}
-
 }

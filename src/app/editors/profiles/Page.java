@@ -36,7 +36,7 @@ class Page extends FormPage {
 		var form = UI.formHeader(mform, profile.name);
 		var body = UI.formBody(form, mform.getToolkit());
 		infoSection(tk, body);
-		new IndicatorTable(editor, profile).render(body, tk);
+		new IndicatorTable(profile).render(body, tk);
 		ModuleTable.of(profile).render(body, tk);
 		form.reflow(true);
 	}

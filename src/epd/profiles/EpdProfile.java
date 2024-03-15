@@ -1,10 +1,10 @@
 package epd.profiles;
 
-import epd.util.Strings;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import epd.util.Strings;
 
 public class EpdProfile {
 
@@ -22,7 +22,7 @@ public class EpdProfile {
 		if (uuid == null)
 			return null;
 		for (Indicator i : indicators) {
-			if (Objects.equals(uuid, i.uuid))
+			if (Objects.equals(uuid, i.getUUID()))
 				return i;
 		}
 		return null;
@@ -35,7 +35,7 @@ public class EpdProfile {
 		if (name == null)
 			return null;
 		for (Module module : modules) {
-			if (Strings.nullOrEqual(name, module.name))
+			if (Strings.nullOrEqual(name, module.getName()))
 				return module;
 		}
 		return null;

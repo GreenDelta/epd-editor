@@ -49,8 +49,8 @@ public class WorkspaceTest {
 		var indicators = 0;
 		var index = ws.index();
 		for (var indicator : profile.indicators) {
-			var ref = index.find(indicator.getRef("en"));
-			assertNotNull("could not find indicator " + indicator.name, ref);
+			var ref = index.find(indicator.getRef());
+			assertNotNull("could not find indicator " + indicator.getUUID(), ref);
 			indicators++;
 		}
 		assertTrue(indicators > 0);

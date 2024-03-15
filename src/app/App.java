@@ -11,6 +11,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.ui.PlatformUI;
 import org.openlca.ilcd.commons.LangString;
+import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.io.FileStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,6 +103,12 @@ public class App {
 			return "";
 		String s = LangString.getVal(strings, lang());
 		return s == null ? "" : s;
+	}
+
+	public static String s(Ref ref) {
+		return ref != null
+			? s(ref.getName())
+			: "";
 	}
 
 	public static String header(List<LangString> strings, int length) {

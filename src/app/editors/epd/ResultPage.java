@@ -1,24 +1,11 @@
 package app.editors.epd;
 
-import app.App;
-import app.M;
-import app.Tooltips;
-import app.rcp.Icon;
-import app.util.Actions;
-import app.util.Controls;
-import app.util.FileChooser;
-import app.util.MsgBox;
-import app.util.Tables;
-import app.util.UI;
-import app.util.Viewers;
-import app.util.tables.ComboBoxCellModifier;
-import app.util.tables.ModifySupport;
-import app.util.tables.TextCellModifier;
-import epd.model.EpdDataSet;
-import epd.profiles.Module;
-import epd.profiles.EpdProfile;
-import epd.profiles.EpdProfiles;
-import epd.util.Strings;
+import java.io.File;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -34,11 +21,25 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.openlca.ilcd.processes.epd.EpdModuleEntry;
 import org.openlca.ilcd.util.Epds;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import app.App;
+import app.M;
+import app.Tooltips;
+import app.rcp.Icon;
+import app.util.Actions;
+import app.util.Controls;
+import app.util.FileChooser;
+import app.util.MsgBox;
+import app.util.Tables;
+import app.util.UI;
+import app.util.Viewers;
+import app.util.tables.ComboBoxCellModifier;
+import app.util.tables.ModifySupport;
+import app.util.tables.TextCellModifier;
+import epd.model.EpdDataSet;
+import epd.profiles.EpdProfile;
+import epd.profiles.EpdProfiles;
+import epd.profiles.Module;
+import epd.util.Strings;
 
 class ResultPage extends FormPage {
 
@@ -169,7 +170,7 @@ class ResultPage extends FormPage {
 		int selected = 0;
 		for (var e : modules) {
 			for (int i = 0; i < mods.length; i++) {
-				if (!Objects.equals(e.getModule(), mods[i].name))
+				if (!Objects.equals(e.getModule(), mods[i].getName()))
 					continue;
 				if (i >= selected) {
 					selected = i + 1;
@@ -178,9 +179,9 @@ class ResultPage extends FormPage {
 			}
 		}
 		if (selected < mods.length) {
-			return mods[selected].name;
+			return mods[selected].getName();
 		}
-		return mods[0].name;
+		return mods[0].getName();
 	}
 
 	private void removeModule() {
@@ -248,7 +249,7 @@ class ResultPage extends FormPage {
 	private Module[] modules() {
 		EpdProfile profile = EpdProfiles.get(epd.process);
 		List<Module> modules = profile.modules;
-		modules.sort(Comparator.comparingInt(m -> m.index));
+		modules.sort(Comparator.comparingInt(Module::getIndex));
 		return modules.toArray(new Module[0]);
 	}
 
@@ -285,7 +286,9 @@ class ResultPage extends FormPage {
 
 		@Override
 		protected String[] getItems(EpdModuleEntry e) {
-			return Arrays.stream(modules()).map(m -> m.name).toArray(String[]::new);
+			return Arrays.stream(modules())
+				.map(Module::getName)
+				.toArray(String[]::new);
 		}
 
 		@Override

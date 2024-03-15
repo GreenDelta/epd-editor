@@ -3,12 +3,49 @@ package epd.profiles;
 import java.util.Objects;
 
 import epd.util.Strings;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlElement;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Module implements Comparable<Module> {
 
-	public int index;
-	public String name;
-	public String description;
+	@XmlAttribute(name = "index")
+	private int index;
+
+	@XmlAttribute(name = "name")
+	private String name;
+
+	@XmlElement(name = "description")
+	private String description;
+
+	public int getIndex() {
+		return index;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public Module withIndex(int index) {
+		this.index = index;
+		return this;
+	}
+
+	public Module withName(String name) {
+		this.name = name;
+		return this;
+	}
+
+	public Module withDescription(String description) {
+		this.description = description;
+		return this;
+	}
 
 	@Override
 	public String toString() {
@@ -33,9 +70,8 @@ public class Module implements Comparable<Module> {
 			return false;
 		if (obj == this)
 			return true;
-		if (!(obj instanceof Module))
+		if (!(obj instanceof Module other))
 			return false;
-		Module other = (Module) obj;
 		return Strings.nullOrEqual(this.name, other.name);
 	}
 

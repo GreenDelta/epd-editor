@@ -1,4 +1,4 @@
-package app.editors.epd;
+package app.editors.epd.results;
 
 import java.io.File;
 import java.io.FileInputStream;

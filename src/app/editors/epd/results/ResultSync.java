@@ -1,4 +1,4 @@
-package app.editors.epd;
+package app.editors.epd.results;
 
 import java.util.ArrayList;
 import java.util.HashMap;

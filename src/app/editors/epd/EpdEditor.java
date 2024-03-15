@@ -9,6 +9,7 @@ import app.editors.RefCheck;
 import app.editors.RefEditorInput;
 import app.editors.epd.contents.ContentDeclarationPage;
 import app.editors.epd.qmeta.QMetaDataPage;
+import app.editors.epd.results.ResultPage;
 import app.store.Data;
 import app.util.UI;
 import epd.model.EpdDataSet;

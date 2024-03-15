@@ -1,9 +1,10 @@
-package app.editors.epd;
+package app.editors.epd.results;
 
 import app.App;
 import app.M;
 import app.Tooltips;
 import app.editors.Editors;
+import app.editors.epd.EpdEditor;
 import app.rcp.Icon;
 import app.util.Tables;
 import app.util.Viewers;

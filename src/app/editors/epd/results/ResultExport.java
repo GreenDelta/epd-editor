@@ -1,8 +1,7 @@
-package app.editors.epd;
+package app.editors.epd.results;
 
 import app.App;
 import app.M;
-import epd.model.EpdDataSet;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
@@ -10,6 +9,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.EpdIndicatorResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,12 +24,12 @@ class ResultExport implements Runnable {
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
-	private final EpdDataSet dataSet;
+	private final Process epd;
 	private final File excelFile;
 	private boolean success;
 
-	public ResultExport(EpdDataSet dataSet, File excelFile) {
-		this.dataSet = dataSet;
+	public ResultExport(Process epd, File excelFile) {
+		this.epd = epd;
 		this.excelFile = excelFile;
 	}
 
@@ -40,14 +40,15 @@ class ResultExport implements Runnable {
 	@Override
 	public void run() {
 		success = false;
-		log.trace("export results of {} to {}", dataSet, excelFile);
-		try (FileOutputStream out = new FileOutputStream(excelFile)) {
-			Workbook workbook = new XSSFWorkbook();
-			Sheet sheet = workbook.createSheet("results");
+		log.trace("export results of {} to {}", epd, excelFile);
+		try (var out = new FileOutputStream(excelFile)) {
+			var workbook = new XSSFWorkbook();
+			var sheet = workbook.createSheet("results");
 			createHeaders(workbook, sheet);
 			createRows(sheet);
-			for (int col = 0; col < 5; col++)
+			for (int col = 0; col < 5; col++) {
 				sheet.autoSizeColumn(col);
+			}
 			workbook.write(out);
 			success = true;
 		} catch (Exception e) {
@@ -73,7 +74,7 @@ class ResultExport implements Runnable {
 
 	private void createRows(Sheet sheet) {
 		int rowNumber = 1;
-		for (var r : EpdIndicatorResult.allOf(dataSet.process)) {
+		for (var r : EpdIndicatorResult.allOf(epd)) {
 			if (r.indicator() == null)
 				continue;
 			for (var v : r.values()) {

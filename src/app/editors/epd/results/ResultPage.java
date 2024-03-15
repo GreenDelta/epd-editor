@@ -1,29 +1,9 @@
-package app.editors.epd;
-
-import java.io.File;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.IManagedForm;
-import org.eclipse.ui.forms.editor.FormPage;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.ScrolledForm;
-import org.eclipse.ui.forms.widgets.Section;
-import org.openlca.ilcd.processes.epd.EpdModuleEntry;
-import org.openlca.ilcd.util.Epds;
+package app.editors.epd.results;
 
 import app.App;
 import app.M;
 import app.Tooltips;
+import app.editors.epd.EpdEditor;
 import app.rcp.Icon;
 import app.util.Actions;
 import app.util.Controls;
@@ -35,19 +15,38 @@ import app.util.Viewers;
 import app.util.tables.ComboBoxCellModifier;
 import app.util.tables.ModifySupport;
 import app.util.tables.TextCellModifier;
-import epd.model.EpdDataSet;
 import epd.profiles.EpdProfile;
 import epd.profiles.EpdProfiles;
 import epd.profiles.Module;
 import epd.util.Strings;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.IManagedForm;
+import org.eclipse.ui.forms.editor.FormPage;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.processes.epd.EpdModuleEntry;
+import org.openlca.ilcd.util.EpdIndicatorResult;
+import org.openlca.ilcd.util.Epds;
 
-class ResultPage extends FormPage {
+import java.io.File;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.function.BiFunction;
+
+public class ResultPage extends FormPage {
 
 	private final EpdEditor editor;
-	private FormToolkit toolkit;
 
 	private final List<EpdModuleEntry> modules;
-	private final EpdDataSet epd;
+	private final Process epd;
 	private ScenarioTable scenarioTable;
 	private TableViewer moduleTable;
 	private ResultTable resultTable;
@@ -55,8 +54,29 @@ class ResultPage extends FormPage {
 	public ResultPage(EpdEditor editor) {
 		super(editor, "ModulesPage", M.EnvironmentalIndicators);
 		this.editor = editor;
-		epd = editor.dataSet;
-		modules = Epds.withModuleEntries(epd.process);
+		epd = editor.dataSet.process;
+
+		// add module entries that are not defined yet
+		modules = Epds.withModuleEntries(epd);
+		var modKeys = new HashSet<String>();
+		BiFunction<String, String, Boolean> modFn = (mod, scen) -> {
+			var key = Strings.notEmpty(scen)
+				? mod + "/" + scen
+				: mod;
+			return modKeys.add(key);
+		};
+		modules.forEach(m -> modFn.apply(m.getModule(), m.getScenario()));
+		for (var r : EpdIndicatorResult.allOf(epd)) {
+			for (var v : r.values()) {
+				if (modFn.apply(v.getModule(), v.getScenario())) {
+					var mod = new EpdModuleEntry()
+						.withModule(v.getModule())
+						.withScenario(v.getScenario());
+					modules.add(mod);
+				}
+			}
+		}
+
 		modules.sort((e1, e2) -> {
 			int c = Strings.compare(e1.getModule(), e2.getModule());
 			return c == 0
@@ -66,37 +86,36 @@ class ResultPage extends FormPage {
 	}
 
 	@Override
-	protected void createFormContent(IManagedForm managedForm) {
-		toolkit = managedForm.getToolkit();
-		ScrolledForm form = UI.formHeader(managedForm,
-			M.EnvironmentalIndicators);
-		Composite body = UI.formBody(form, managedForm.getToolkit());
-		createProfileSection(body);
-		createScenarioSection(body);
-		moduleTable = createModuleSection(body);
+	protected void createFormContent(IManagedForm mForm) {
+		var tk = mForm.getToolkit();
+		var form = UI.formHeader(mForm, M.EnvironmentalIndicators);
+		var body = UI.formBody(form, mForm.getToolkit());
+		createProfileSection(body, tk);
+		createScenarioSection(body, tk);
+		moduleTable = createModuleSection(body, tk);
 		moduleTable.setInput(modules);
-		resultTable = createResultSection(body);
+		resultTable = createResultSection(body, tk);
 		resultTable.refresh();
 		form.reflow(true);
 	}
 
-	private void createProfileSection(Composite body) {
-		Composite comp = UI.formSection(body, toolkit,
-			M.EPDProfile, Tooltips.EPD_EPDProfile);
-		Combo combo = UI.formCombo(comp, toolkit,
-			M.EPDProfile, Tooltips.EPD_EPDProfile);
+	private void createProfileSection(Composite body, FormToolkit tk) {
+		var comp = UI.formSection(
+			body, tk, M.EPDProfile, Tooltips.EPD_EPDProfile);
+		var combo = UI.formCombo(
+			comp, tk, M.EPDProfile, Tooltips.EPD_EPDProfile);
 		int selected = -1;
-		List<EpdProfile> profiles = EpdProfiles.getAll();
+		var profiles = EpdProfiles.getAll();
 		profiles.sort((p1, p2) -> Strings.compare(p1.getName(), p2.getName()));
 		String[] items = new String[profiles.size()];
 		for (int i = 0; i < profiles.size(); i++) {
 			EpdProfile p = profiles.get(i);
 			items[i] = p.getName() != null ? p.getName() : "?";
-			if (Objects.equals(p.getId(), epd.process.getEpdProfile())) {
+			if (Objects.equals(p.getId(), epd.getEpdProfile())) {
 				selected = i;
-			} else if (epd.process.getEpdProfile() == null && EpdProfiles.isDefault(p)) {
+			} else if (epd.getEpdProfile() == null && EpdProfiles.isDefault(p)) {
 				selected = i;
-				epd.process.withEpdProfile(p.getId());
+				epd.withEpdProfile(p.getId());
 			}
 		}
 		combo.setItems(items);
@@ -107,35 +126,40 @@ class ResultPage extends FormPage {
 			int i = combo.getSelectionIndex();
 			EpdProfile p = profiles.get(i);
 			if (p != null) {
-				epd.process.withEpdProfile(p.getId());
+				epd.withEpdProfile(p.getId());
 				editor.setDirty();
 			}
 		});
 	}
 
-	private void createScenarioSection(Composite parent) {
-		Section section = UI.section(parent, toolkit, M.Scenarios);
+	private void createScenarioSection(Composite parent, FormToolkit tk) {
+		var section = UI.section(parent, tk, M.Scenarios);
 		section.setToolTipText(Tooltips.EPD_Scenarios);
 		section.setExpanded(false);
 		UI.gridData(section, true, false);
-		scenarioTable = new ScenarioTable(editor, section, toolkit);
+		scenarioTable = new ScenarioTable(editor, section, tk);
 		scenarioTable.setInput();
 	}
 
-	private TableViewer createModuleSection(Composite parent) {
-		Section section = UI.section(parent, toolkit, M.Modules);
+	private TableViewer createModuleSection(Composite parent, FormToolkit tk) {
+		var section = UI.section(parent, tk, M.Modules);
 		section.setToolTipText(Tooltips.EPD_Modules);
-		Composite comp = UI.sectionClient(section, toolkit);
+		var comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
-		String[] columns = new String[]{M.Module, M.Scenario,
-			M.ProductSystem, M.Description};
-		TableViewer table = Tables.createViewer(comp, columns);
+		var columns = new String[]{
+			M.Module,
+			M.Scenario,
+			M.ProductSystem,
+			M.Description};
+
+		var table = Tables.createViewer(comp, columns);
 		table.setLabelProvider(new ModuleLabel());
 		table.getTable().setToolTipText(Tooltips.EPD_Modules);
 		Tables.addSorter(table, 0, EpdModuleEntry::getModule);
 		Tables.addSorter(table, 1, EpdModuleEntry::getScenario);
 		Tables.addSorter(table, 3, EpdModuleEntry::getDescription);
 		Tables.bindColumnWidths(table, 0.25, 0.25, 0.25, 0.25);
+
 		Action[] actions = createModuleActions();
 		Actions.bind(section, actions);
 		Actions.bind(table, actions);
@@ -193,23 +217,23 @@ class ResultPage extends FormPage {
 		editor.setDirty();
 	}
 
-	private ResultTable createResultSection(Composite body) {
-		Section section = UI.section(body, toolkit, M.Results);
+	private ResultTable createResultSection(Composite body, FormToolkit tk) {
+		var section = UI.section(body, tk, M.Results);
 		section.setToolTipText(Tooltips.EPD_Results);
 		UI.gridData(section, true, true);
-		Composite composite = UI.sectionClient(section, toolkit);
+		var composite = UI.sectionClient(section, tk);
 		UI.gridLayout(composite, 1);
-		var table = new ResultTable(editor, epd.process);
+		var table = new ResultTable(editor, epd);
 		table.create(composite);
 		Actions.bind(section, createResultActions());
 		return table;
 	}
 
 	private Action[] createResultActions() {
-		Action[] actions = new Action[3];
+		var actions = new Action[3];
 		actions[0] = Actions.create(M.SynchronizeWithModules,
 			Icon.CHECK_TRUE.des(), () -> {
-				new ResultSync(epd.process).run();
+				new ResultSync(epd).run();
 				resultTable.refresh();
 				editor.setDirty();
 			});
@@ -221,10 +245,10 @@ class ResultPage extends FormPage {
 	}
 
 	private void exportResults() {
-		File file = FileChooser.save("results.xlsx", "*.xlsx");
+		var file = FileChooser.save("results.xlsx", "*.xlsx");
 		if (file == null)
 			return;
-		ResultExport export = new ResultExport(epd, file);
+		var export = new ResultExport(epd, file);
 		App.run(M.Export, export, () -> {
 			if (export.isDoneWithSuccess())
 				return;
@@ -237,7 +261,7 @@ class ResultPage extends FormPage {
 		File file = FileChooser.open("*.xlsx");
 		if (file == null)
 			return;
-		ResultImport resultImport = new ResultImport(epd.process, file);
+		var resultImport = new ResultImport(epd, file);
 		App.run(M.Import, resultImport, () -> {
 			resultTable.refresh();
 			moduleTable.refresh();
@@ -247,7 +271,7 @@ class ResultPage extends FormPage {
 	}
 
 	private Module[] modules() {
-		EpdProfile profile = EpdProfiles.get(epd.process);
+		var profile = EpdProfiles.get(epd);
 		List<Module> modules = profile.getModules();
 		modules.sort(Comparator.comparingInt(Module::getIndex));
 		return modules.toArray(new Module[0]);
@@ -315,7 +339,7 @@ class ResultPage extends FormPage {
 
 		@Override
 		protected String[] getItems(EpdModuleEntry e) {
-			var scenarios = Epds.getScenarios(epd.process);
+			var scenarios = Epds.getScenarios(epd);
 			String[] names = new String[scenarios.size()];
 			for (int i = 0; i < scenarios.size(); i++) {
 				names[i] = scenarios.get(i).getName();

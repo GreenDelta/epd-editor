@@ -78,38 +78,38 @@ class ResultImport implements Runnable {
 	}
 
 	private EpdIndicatorResult resultOf(Row row, List<EpdIndicatorResult> results) {
-		// TODO identify indicators by UUID
-		var name = getString(row.getCell(2));
-		if (Strings.nullOrEmpty(name))
+		var id = getString(row.getCell(0));
+		if (Strings.nullOrEmpty(id))
 			return null;
 
 		// search the indicator in created results
 		for (var r : results) {
-			if (name.equals(App.s(r.indicator().getName())))
+			if (id.equals(r.indicator().getUUID()))
 				return r;
 		}
 
 		// search the indicator in the profile
 		for (var i : profile.getIndicators()) {
-			if (!name.equals(App.s(i.getRef())))
+			if (!id.equals(i.getUUID()))
 				continue;
 			var r = i.createResult();
 			results.add(r);
 			return r;
 		}
 
+		var name = getString(row.getCell(3));
 		log.warn("unknown indicator: {}", name);
 		return null;
 	}
 
 	private EpdValue valueOf(Row row) {
-		var module = getString(row.getCell(0));
+		var module = getString(row.getCell(1));
 		if (Strings.nullOrEmpty(module))
 			return null;
 		return new EpdValue()
 			.withModule(module)
-			.withScenario(getString(row.getCell(1)))
-			.withAmount(getDouble(row.getCell(3)));
+			.withScenario(getString(row.getCell(2)))
+			.withAmount(getDouble(row.getCell(4)));
 	}
 
 	private void syncModule(EpdValue value) {

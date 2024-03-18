@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+				 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<!-- This Maven script just copies the required Java libraries into the 
 		libs folder. It is just for managing the library dependencies. If you want 
@@ -36,7 +36,7 @@
 		<dependency>
 			<groupId>com.okworx.ilcd.validation.profiles</groupId>
 			<artifactId>EPD-1.1-OEKOBAUDAT</artifactId>
-			<version>1.0.41</version>
+			<version>1.0.43</version>
 		</dependency>
 
 		<dependency>
@@ -66,19 +66,19 @@
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
-			<version>4.1.1</version>
+			<version>5.2.4</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
-			<version>3.17</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>stax-api</artifactId>
-					<groupId>stax</groupId>
-				</exclusion>
-			</exclusions>
+			<version>5.2.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.13.0</version>
 		</dependency>
 
 		<dependency>
@@ -108,7 +108,8 @@
 						<configuration>
 							<outputDirectory>${basedir}/libs</outputDirectory>
 							<includeScope>runtime</includeScope>
-							<excludeGroupIds>com.okworx.ilcd.validation.profiles</excludeGroupIds>
+							<excludeGroupIds>com.okworx.ilcd.validation.profiles
+							</excludeGroupIds>
 						</configuration>
 					</execution>
 
@@ -131,8 +132,11 @@
 							<goal>copy-dependencies</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/build/default_data/validation_profiles</outputDirectory>
-							<includeGroupIds>com.okworx.ilcd.validation.profiles</includeGroupIds>
+							<outputDirectory>
+								${basedir}/build/default_data/validation_profiles
+							</outputDirectory>
+							<includeGroupIds>com.okworx.ilcd.validation.profiles
+							</includeGroupIds>
 						</configuration>
 					</execution>
 

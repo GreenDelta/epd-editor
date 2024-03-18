@@ -62,7 +62,7 @@ class ResultExport implements Runnable {
 		font.setBold(true);
 		style.setFont(font);
 		Row row = sheet.createRow(0);
-		String[] columns = new String[]{M.Module, M.Scenario,
+		String[] columns = new String[]{M.UUID, M.Module, M.Scenario,
 			M.Indicator, M.Value, M.Unit};
 		for (int col = 0; col < columns.length; col++) {
 			Cell cell = row.createCell(col);
@@ -81,14 +81,15 @@ class ResultExport implements Runnable {
 				if (v.getModule() == null)
 					continue;
 				Row row = sheet.createRow(rowNumber++);
-				row.createCell(0).setCellValue(v.getModule());
-				row.createCell(1).setCellValue(v.getScenario());
-				row.createCell(2).setCellValue(App.s(r.indicator().getName()));
-				row.createCell(3).setCellValue(v.getAmount());
+				row.createCell(0).setCellValue(r.indicator().getUUID());
+				row.createCell(1).setCellValue(v.getModule());
+				row.createCell(2).setCellValue(v.getScenario());
+				row.createCell(3).setCellValue(App.s(r.indicator().getName()));
+				row.createCell(4).setCellValue(v.getAmount());
 				var unit = r.unitGroup() != null
 					? App.s(r.unitGroup().getName())
 					: "";
-				row.createCell(4).setCellValue(unit);
+				row.createCell(5).setCellValue(unit);
 			}
 		}
 	}

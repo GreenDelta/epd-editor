@@ -39,9 +39,6 @@ public final class Data {
 	public static void save(IDataSet ds) {
 		if (ds == null)
 			return;
-		if (ds instanceof Process p) {
-			p.withEpdVersion("1.2");
-		}
 		try {
 			Ref ref = Ref.of(ds);
 			var workspace = App.getWorkspace();

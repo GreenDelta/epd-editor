@@ -4,9 +4,8 @@ import epd.io.conversion.Dom;
 import epd.util.Strings;
 import org.openlca.ilcd.Vocab;
 import org.openlca.ilcd.commons.Other;
-import org.openlca.ilcd.processes.AdminInfo;
 import org.openlca.ilcd.processes.Process;
-import org.openlca.ilcd.util.Processes;
+import org.openlca.ilcd.util.Epds;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -78,16 +77,16 @@ public class QMetaData {
 	 * extension can be located under the `modellingAndValidation/other` or
 	 * `administrativeInformation/other` elements.
 	 */
-	public static QMetaData read(Process p) {
-		if (p == null)
+	public static QMetaData read(Process epd) {
+		if (epd == null)
 			return null;
-		var mod = Processes.getModelling(p);
+		var mod = Epds.getModelling(epd);
 		if (mod != null) {
-			QMetaData qmeta = read(mod.getOther());
+			var qmeta = read(mod.getOther());
 			if (qmeta != null)
 				return qmeta;
 		}
-		AdminInfo adm = Processes.getAdminInfo(p);
+		var adm = Epds.getAdminInfo(epd);
 		if (adm != null) {
 			return read(adm.getOther());
 		}
@@ -107,7 +106,7 @@ public class QMetaData {
 			return null;
 
 		// add the questions
-		QMetaData qdata = new QMetaData();
+		var qdata = new QMetaData();
 		Dom.eachChild(root, e -> {
 			QQuestion q = QQuestion.read(e);
 			if (q != null) {
@@ -117,10 +116,23 @@ public class QMetaData {
 		return qdata;
 	}
 
-	/**
-	 * Write this Q-Meta data object to the given extension.
-	 */
-	public void write(Other other, Document doc) {
+	public static void write(Process epd, QMetaData data) {
+		if (epd == null)
+			return;
+		var mod = Epds.getModelling(epd);
+		if (mod != null) {
+			mod.withOther(null);
+		}
+		var adm = Epds.getAdminInfo(epd);
+		if (adm != null) {
+			adm.withOther(null);
+		}
+		if (data == null || data.questions.isEmpty())
+			return;
+		data.write(epd.withModelling().withOther(), Dom.createDocument());
+	}
+
+	private void write(Other other, Document doc) {
 		if (other == null || doc == null)
 			return;
 		Element root = Dom.getChild(other, "ILCD-SBE", Vocab.SBE_ILCD);

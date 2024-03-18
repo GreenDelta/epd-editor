@@ -19,9 +19,9 @@ import org.openlca.ilcd.util.Processes;
 /**
  * Remove empty elements so that the data set validation is happy.
  */
-class Cleanup {
+public class Cleanup {
 
-	static void on(Process epd) {
+	public static void on(Process epd) {
 		if (epd == null)
 			return;
 

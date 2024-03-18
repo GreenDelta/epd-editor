@@ -12,6 +12,7 @@ import app.editors.epd.qmeta.QMetaDataPage;
 import app.editors.epd.results.ResultPage;
 import app.store.Data;
 import app.util.UI;
+import epd.io.conversion.Cleanup;
 import epd.model.Version;
 import epd.model.Xml;
 import epd.model.qmeta.QMetaData;
@@ -24,7 +25,7 @@ import org.eclipse.ui.PartInitException;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.processes.Process;
-import org.openlca.ilcd.processes.ProcessName;
+import org.openlca.ilcd.util.Epds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -95,11 +96,9 @@ public class EpdEditor extends BaseEditor {
 	public void doSave(IProgressMonitor monitor) {
 		try {
 			Data.updateVersion(epd);
-			var ds = epd.copy();
+			var ds =createSavableCopy();
 			Data.save(ds);
-			for (Runnable handler : saveHandlers) {
-				handler.run();
-			}
+			saveHandlers.forEach(Runnable::run);
 			dirty = false;
 			editorDirtyStateChanged();
 			Editors.setTabTitle(epd, this);
@@ -110,26 +109,32 @@ public class EpdEditor extends BaseEditor {
 
 	@Override
 	public void doSaveAs() {
-		InputDialog d = new InputDialog(UI.shell(), M.SaveAs,
+		var d = new InputDialog(UI.shell(), M.SaveAs,
 				M.SaveAs_Message + ": ",
 				M.EPD + " " + M.Name, null);
 		if (d.open() != Window.OK)
 			return;
-		String name = d.getValue();
+		var name = d.getValue();
 		try {
-			var p = epd.copy();
-			ProcessName cName = p.withProcessInfo()
-				.withDataSetInfo()
-				.withProcessName();
-			LangString.set(cName.withBaseName(), name, App.lang());
-			p.withProcessInfo().withDataSetInfo().withUUID(UUID.randomUUID().toString());
-			p.withAdminInfo().withPublication().withVersion(Version.asString(0));
-			p.withAdminInfo().withDataEntry().withTimeStamp(Xml.now());
-			Data.save(p);
-			EpdEditor.open(Ref.of(p));
+			var copy = createSavableCopy();
+			LangString.set(
+				Epds.withProcessName(copy).withBaseName(), name, App.lang());
+			Epds.withUUID(copy, UUID.randomUUID().toString());
+			Epds.withVersion(copy, Version.asString(0));
+			Epds.withTimeStamp(copy, Xml.now());
+			Data.save(copy);
+			EpdEditor.open(Ref.of(copy));
 		} catch (Exception e) {
 			log.error("failed to save EPD as new data set", e);
 		}
+	}
+
+	private Process createSavableCopy() {
+		var copy = epd.copy();
+		Cleanup.on(copy);
+		QMetaData.write(copy, qmeta);
+		copy.withEpdVersion("1.2");
+		return copy;
 	}
 
 	@Override

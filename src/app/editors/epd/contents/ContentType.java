@@ -1,9 +1,9 @@
 package app.editors.epd.contents;
 
-import epd.model.content.Component;
-import epd.model.content.ContentElement;
-import epd.model.content.Material;
-import epd.model.content.Substance;
+import org.openlca.ilcd.processes.epd.EpdContentComponent;
+import org.openlca.ilcd.processes.epd.EpdContentElement;
+import org.openlca.ilcd.processes.epd.EpdContentMaterial;
+import org.openlca.ilcd.processes.epd.EpdContentSubstance;
 
 enum ContentType {
 
@@ -13,11 +13,11 @@ enum ContentType {
 
 	SUBSTANCE;
 
-	ContentElement newInstance() {
+	EpdContentElement<?> newInstance() {
 		return switch (this) {
-			case COMPONENT -> new Component();
-			case MATERIAL -> new Material();
-			case SUBSTANCE -> new Substance();
+			case COMPONENT -> new EpdContentComponent();
+			case MATERIAL -> new EpdContentMaterial();
+			case SUBSTANCE -> new EpdContentSubstance();
 		};
 	}
 

@@ -1,43 +1,33 @@
 package app.editors.epd.contents;
 
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.IManagedForm;
-import org.eclipse.ui.forms.editor.FormPage;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.ScrolledForm;
-
 import app.editors.epd.EpdEditor;
 import app.util.UI;
-import epd.model.EpdDataSet;
-import epd.model.content.ContentDeclaration;
+import org.eclipse.ui.forms.IManagedForm;
+import org.eclipse.ui.forms.editor.FormPage;
+import org.openlca.ilcd.processes.epd.EpdContentDeclaration;
+import org.openlca.ilcd.util.Epds;
 
 public class ContentDeclarationPage extends FormPage {
 
-	private final ContentDeclaration decl;
+	private final EpdContentDeclaration decl;
 
 	private final EpdEditor editor;
 
 	public ContentDeclarationPage(EpdEditor editor) {
 		super(editor, "ContentDeclarationPage", "Content declaration");
 		this.editor = editor;
-		EpdDataSet ds = editor.dataSet;
-		if (ds.contentDeclaration != null) {
-			decl = ds.contentDeclaration;
-		} else {
-			decl = new ContentDeclaration();
-			ds.contentDeclaration = decl;
-		}
+		this.decl = Epds.withContentDeclaration(editor.dataSet.process);
 	}
 
 	@Override
 	protected void createFormContent(IManagedForm mform) {
-		FormToolkit tk = mform.getToolkit();
-		ScrolledForm form = UI.formHeader(mform, "Content declaration");
-		Composite body = UI.formBody(form, mform.getToolkit());
-		Content.sort(decl.content);
-		ContentTree contTable = new ContentTree(editor, decl);
+		var tk = mform.getToolkit();
+		var form = UI.formHeader(mform, "Content declaration");
+		var body = UI.formBody(form, mform.getToolkit());
+		Content.sort(decl.getElements());
+		var contTable = new ContentTree(editor, decl);
 		contTable.render(tk, body);
-		ContentTree packTable = new ContentTree(editor, decl);
+		var packTable = new ContentTree(editor, decl);
 		packTable.forPackaging = true;
 		packTable.render(tk, body);
 		form.reflow(true);

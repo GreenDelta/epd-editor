@@ -1,7 +1,7 @@
 package epd.model;
 
-import epd.model.content.ContentDeclaration;
-import epd.model.qmeta.QMetaData;
+import java.util.Objects;
+
 import org.openlca.ilcd.commons.Copyable;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.QuantitativeReferenceType;
@@ -10,14 +10,11 @@ import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.ProcessName;
 import org.openlca.ilcd.util.Processes;
 
-import java.time.LocalDate;
-import java.util.Objects;
+import epd.model.qmeta.QMetaData;
 
 public class EpdDataSet implements Copyable<EpdDataSet> {
 
 	public final Process process;
-
-	public ContentDeclaration contentDeclaration;
 	public QMetaData qMetaData;
 
 	public EpdDataSet(Process process) {
@@ -42,9 +39,6 @@ public class EpdDataSet implements Copyable<EpdDataSet> {
 	@Override
 	public EpdDataSet copy() {
 		var clone = new EpdDataSet(process.copy());
-		clone.contentDeclaration = contentDeclaration != null
-			? contentDeclaration.clone()
-			: null;
 		clone.qMetaData = qMetaData != null
 			? qMetaData.clone()
 			: null;

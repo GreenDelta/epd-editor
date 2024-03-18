@@ -26,10 +26,10 @@ public class Texts {
 	public static Text set(Text text, Double d) {
 		if (text == null)
 			return null;
-		if (d == null)
-			text.setText("");
-		else
-			text.setText(d.toString());
+		var v = d != null
+			? d.toString()
+			: "";
+		text.setText(v);
 		return text;
 	}
 

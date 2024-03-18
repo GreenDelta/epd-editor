@@ -1,6 +1,5 @@
 package epd.io.conversion;
 
-import org.openlca.ilcd.Vocab;
 import org.openlca.ilcd.processes.Modelling;
 import org.openlca.ilcd.util.Processes;
 
@@ -49,9 +48,6 @@ class EPDExtensionWriter {
 		var info = epd.process.withProcessInfo()
 			.withDataSetInfo();
 		var infoOther = info.getEpdExtension();
-		if (epd.contentDeclaration != null) {
-			epd.contentDeclaration.write(infoOther, doc);
-		}
 		if (Cleanup.isEmpty(infoOther)) {
 			info.withEpdExtension(null);
 		}

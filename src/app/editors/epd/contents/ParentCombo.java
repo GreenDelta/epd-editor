@@ -1,38 +1,38 @@
 package app.editors.epd.contents;
 
+import app.App;
+import app.util.Controls;
+import epd.util.Strings;
+import org.eclipse.swt.widgets.Combo;
+import org.openlca.ilcd.processes.epd.EpdContentDeclaration;
+import org.openlca.ilcd.processes.epd.EpdContentElement;
+import scala.collection.mutable.StringBuilder;
+
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
-import org.eclipse.swt.widgets.Combo;
-
-import app.App;
-import app.util.Controls;
-import epd.model.content.ContentDeclaration;
-import epd.model.content.ContentElement;
-import scala.collection.mutable.StringBuilder;
-
 class ParentCombo {
 
-	private final ContentDeclaration decl;
-	private final ContentElement elem;
+	private final EpdContentDeclaration decl;
+	private final EpdContentElement<?> elem;
 
-	private Consumer<ContentElement> listener;
-	private final ArrayList<ContentElement> candidates = new ArrayList<>();
+	private Consumer<EpdContentElement<?>> listener;
+	private final ArrayList<EpdContentElement<?>> candidates = new ArrayList<>();
 	private final ArrayList<Integer> levels = new ArrayList<>();
 
-	ParentCombo(ContentDeclaration decl, ContentElement elem) {
+	ParentCombo(EpdContentDeclaration decl, EpdContentElement<?> elem) {
 		this.decl = decl;
 		this.elem = elem;
 	}
 
-	void onChange(Consumer<ContentElement> fn) {
+	void onChange(Consumer<EpdContentElement<?>> fn) {
 		this.listener = fn;
 	}
 
 	ParentCombo bind(Combo combo) {
 
 		// fill the candidate model
-		for (ContentElement candidate : decl.content) {
+		for (var candidate : decl.getElements()) {
 			put(candidate, 0);
 		}
 		String[] items = new String[candidates.size() + 1];
@@ -42,9 +42,10 @@ class ParentCombo {
 			for (int k = 0; k < levels.get(i); k++) {
 				name.append("    ");
 			}
-			ContentElement candidate = candidates.get(i);
-			if (candidate.name != null) {
-				name.append(App.s(candidates.get(i).name));
+			var candidate = candidates.get(i);
+			var n = App.s(candidate.getName());
+			if (Strings.notEmpty(n)) {
+				name.append(n);
 			}
 			items[i + 1] = name.toString();
 		}
@@ -74,12 +75,12 @@ class ParentCombo {
 		return this;
 	}
 
-	private void put(ContentElement candidate, int level) {
+	private void put(EpdContentElement<?> candidate, int level) {
 		if (!Content.isPossibleParent(elem, candidate))
 			return;
 		candidates.add(candidate);
 		levels.add(level);
-		for (ContentElement child : Content.childs(candidate)) {
+		for (var child : Content.childs(candidate)) {
 			put(child, level + 1);
 		}
 	}

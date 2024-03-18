@@ -7,9 +7,6 @@ import app.util.Actions;
 import app.util.Trees;
 import app.util.UI;
 import app.util.Viewers;
-import epd.model.content.ContentDeclaration;
-import epd.model.content.ContentElement;
-import epd.model.content.Substance;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.BaseLabelProvider;
@@ -24,6 +21,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
+import org.openlca.ilcd.processes.epd.EpdContentAmount;
+import org.openlca.ilcd.processes.epd.EpdContentDeclaration;
+import org.openlca.ilcd.processes.epd.EpdContentElement;
+import org.openlca.ilcd.processes.epd.EpdInnerContentElement;
 
 import java.util.List;
 import java.util.stream.IntStream;
@@ -31,12 +32,12 @@ import java.util.stream.IntStream;
 class ContentTree {
 
 	private final EpdEditor editor;
-	private final ContentDeclaration decl;
+	private final EpdContentDeclaration decl;
 
 	boolean forPackaging;
 	private TreeViewer tree;
 
-	public ContentTree(EpdEditor editor, ContentDeclaration decl) {
+	public ContentTree(EpdEditor editor, EpdContentDeclaration decl) {
 		this.editor = editor;
 		this.decl = decl;
 	}
@@ -76,9 +77,8 @@ class ContentTree {
 
 			@Override
 			public boolean select(Viewer viewer, Object parent, Object obj) {
-				if (!(obj instanceof ContentElement elem))
-					return false;
-				return forPackaging == Content.isPackaging(elem);
+				return obj instanceof EpdContentElement<?> elem
+					&& forPackaging == Content.isPackaging(elem);
 			}
 		});
 
@@ -114,9 +114,9 @@ class ContentTree {
 	private void onAdd(ContentType type) {
 		if (type == null)
 			return;
-		ContentElement elem = type.newInstance();
-		if (elem instanceof Substance) {
-			((Substance) elem).packaging = forPackaging;
+		var elem = type.newInstance();
+		if (elem instanceof EpdInnerContentElement<?> i) {
+			i.withPackaging(forPackaging);
 		}
 		if (ContentDialog.open(decl, elem) != Dialog.OK)
 			return;
@@ -126,7 +126,7 @@ class ContentTree {
 	}
 
 	private void onEdit() {
-		ContentElement elem = Viewers.getFirstSelected(tree);
+		EpdContentElement<?> elem = Viewers.getFirstSelected(tree);
 		if (elem == null)
 			return;
 		if (ContentDialog.open(decl, elem) != Dialog.OK)
@@ -136,7 +136,7 @@ class ContentTree {
 	}
 
 	private void onDelete() {
-		ContentElement elem = Viewers.getFirstSelected(tree);
+		EpdContentElement<?> elem = Viewers.getFirstSelected(tree);
 		if (elem == null)
 			return;
 		Object[] expanded = tree.getExpandedElements();
@@ -151,14 +151,14 @@ class ContentTree {
 
 		@Override
 		public Object[] getElements(Object obj) {
-			if (!(obj instanceof ContentDeclaration decl))
-				return null;
-			return decl.content.toArray();
+			return obj instanceof EpdContentDeclaration dec
+				? dec.getElements().toArray()
+				: null;
 		}
 
 		@Override
 		public Object[] getChildren(Object obj) {
-			if (!(obj instanceof ContentElement elem))
+			if (!(obj instanceof EpdContentElement<?> elem))
 				return null;
 			List<?> childs = Content.childs(elem);
 			return childs.isEmpty() ? null : childs.toArray();
@@ -166,16 +166,15 @@ class ContentTree {
 
 		@Override
 		public Object getParent(Object obj) {
-			if (!(obj instanceof ContentElement elem))
-				return null;
-			return Content.getParent(elem, decl);
+			return obj instanceof EpdContentElement<?> elem
+				? Content.getParent(elem, decl)
+				: null;
 		}
 
 		@Override
 		public boolean hasChildren(Object obj) {
-			if (!(obj instanceof ContentElement elem))
-				return false;
-			return !Content.childs(elem).isEmpty();
+			return obj instanceof EpdContentElement<?> elem
+				&& !Content.childs(elem).isEmpty();
 		}
 
 		@Override
@@ -185,39 +184,42 @@ class ContentTree {
 
 		@Override
 		public String getColumnText(Object obj, int col) {
-			if (!(obj instanceof ContentElement elem))
+			if (!(obj instanceof EpdContentElement<?> elem))
 				return null;
 
-			Substance subst = null;
-			if (elem instanceof Substance) {
-				subst = (Substance) elem;
-			}
+			var inner = elem instanceof EpdInnerContentElement<?> ii
+				? ii : null;
 
 			return switch (col) {
-				case 0 -> App.s(elem.name);
-				case 1 -> elem.massPerc != null
-					? elem.massPerc + " %"
-					: null;
-				case 2 -> elem.mass != null
-					? elem.mass + " kg"
-					: null;
-				case 3 -> subst != null ? subst.casNumber : null;
-				case 4 -> subst != null ? subst.ecNumber : null;
-				case 5 -> subst != null ? subst.guid : null;
-				case 6 -> subst == null ? null
-					: subst.renewable == null
-					? null
-					: subst.renewable + " %";
-				case 7 -> subst == null ? null
-					: subst.recycled == null
-					? null
-					: subst.recycled + " %";
-				case 8 -> subst == null ? null
-					: subst.recyclable == null
-					? null
-					: subst.recyclable + " %";
+				case 0 -> App.s(elem.getName());
+				case 1 -> amount(elem.getWeightPerc(), "%");
+				case 2 -> amount(elem.getMass(), "kg");
+				case 3 -> inner != null ? inner.getCasNumber() : null;
+				case 4 -> inner != null ? inner.getEcNumber() : null;
+				case 5 -> inner != null ? inner.getGuid() : null;
+				case 6 -> inner != null ? perc(inner.getRenewable()) : null;
+				case 7 -> inner != null ? perc(inner.getRecycled()) : null;
+				case 8 -> inner != null ? perc(inner.getRecyclable()) : null;
 				default -> null;
 			};
+		}
+
+		private String amount(EpdContentAmount a, String unit) {
+			if (a == null)
+				return " - ";
+			if (a.getValue() != null)
+				return a.getValue() + " " + unit;
+			if (a.getMin() != null && a.getMax() != null)
+				return a.getMin() + " - " + a.getMax() + " " + unit;
+			if (a.getMin() != null)
+				return "> " + a.getMin() + " " + unit;
+			if (a.getMax() != null)
+				return "< " + a.getMax() + " " + unit;
+			return " - ";
+		}
+
+		private String perc(Double num) {
+			return num != null ? num + " %" : null;
 		}
 	}
 }

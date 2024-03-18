@@ -4,9 +4,6 @@ import app.App;
 import app.M;
 import app.rcp.Texts;
 import app.util.UI;
-import epd.model.content.ContentDeclaration;
-import epd.model.content.ContentElement;
-import epd.model.content.Substance;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
@@ -14,14 +11,17 @@ import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.openlca.ilcd.commons.LangString;
+import org.openlca.ilcd.processes.epd.EpdContentDeclaration;
+import org.openlca.ilcd.processes.epd.EpdContentElement;
+import org.openlca.ilcd.processes.epd.EpdInnerContentElement;
 
 import java.util.Arrays;
 
 class ContentDialog extends FormDialog {
 
-	private final ContentDeclaration decl;
-	private final ContentElement elem;
-	private ContentElement parent;
+	private final EpdContentDeclaration decl;
+	private final EpdContentElement<?> elem;
+	private EpdContentElement<?> parent;
 
 	// UI components
 	private Text nameText;
@@ -35,10 +35,10 @@ class ContentDialog extends FormDialog {
 	private Text recycableText;
 	private Text commentText;
 
-	static int open(ContentDeclaration decl, ContentElement elem) {
+	static int open(EpdContentDeclaration decl, EpdContentElement<?> elem) {
 		if (elem == null)
 			return CANCEL;
-		ContentDialog d = new ContentDialog(decl, elem);
+		var d = new ContentDialog(decl, elem);
 		int code = d.open();
 		if (code != OK)
 			return code;
@@ -48,12 +48,12 @@ class ContentDialog extends FormDialog {
 			added = Content.addChild(d.parent, elem);
 		}
 		if (!added) {
-			decl.content.add(elem);
+			decl.withElements().add(elem);
 		}
 		return OK;
 	}
 
-	ContentDialog(ContentDeclaration decl, ContentElement elem) {
+	ContentDialog(EpdContentDeclaration decl, EpdContentElement<?> elem) {
 		super(UI.shell());
 		this.decl = decl;
 		this.elem = elem;
@@ -81,55 +81,55 @@ class ContentDialog extends FormDialog {
 
 		// name
 		nameText = UI.formText(comp, tk, M.Name);
-		Texts.set(nameText, App.s(elem.name));
+		Texts.set(nameText, App.s(elem.getName()));
 		UI.gridData(nameText, true, false).widthHint = 350;
 		UI.filler(comp, tk);
 
 		// weight percentage
 		UI.formLabel(comp, tk, "Weight percentage");
 		massPercWidget = new AmountWidget(comp, tk);
-		massPercWidget.setAmount(elem.massPerc);
+		massPercWidget.setAmount(elem.getWeightPerc());
 		UI.formLabel(comp, tk, "%");
 
 		// mass
 		UI.formLabel(comp, tk, "Absolute mass");
 		massWidget = new AmountWidget(comp, tk);
-		massWidget.setAmount(elem.mass);
+		massWidget.setAmount(elem.getMass());
 		UI.formLabel(comp, tk, "kg");
 
-		if (elem instanceof Substance subst) {
+		if (elem instanceof EpdInnerContentElement<?> inner) {
 			// CAS
 			casText = UI.formText(comp, tk, "CAS number");
-			Texts.set(casText, subst.casNumber);
+			Texts.set(casText, inner.getCasNumber());
 			UI.filler(comp, tk);
 
 			// EC number
 			ecText = UI.formText(comp, tk, "EC number");
-			Texts.set(ecText, subst.ecNumber);
+			Texts.set(ecText, inner.getEcNumber());
 			UI.filler(comp, tk);
 
 			// GUUID
 			guuidText = UI.formText(comp, tk,
 				"Data dictionary GUUID");
-			Texts.set(guuidText, subst.guid);
+			Texts.set(guuidText, inner.getGuid());
 			UI.filler(comp, tk);
 
 			// renewable resource
 			renewableText = UI.formText(comp, tk,
 				"Percentage of renewable resources");
-			Texts.set(renewableText, subst.renewable);
+			Texts.set(renewableText, inner.getRenewable());
 			UI.formLabel(comp, tk, "%");
 
 			// recycled content
 			recycledText = UI.formText(comp, tk,
 				"Percentage of recycled content");
-			Texts.set(recycledText, subst.recycled);
+			Texts.set(recycledText, inner.getRecycled());
 			UI.formLabel(comp, tk, "%");
 
 			// recyclable content
 			recycableText = UI.formText(comp, tk,
 				"Percentage of recyclable content");
-			Texts.set(recycableText, subst.recyclable);
+			Texts.set(recycableText, inner.getRecyclable());
 			UI.formLabel(comp, tk, "%");
 
 			// add validation
@@ -138,23 +138,23 @@ class ContentDialog extends FormDialog {
 		}
 
 		commentText = UI.formMultiText(comp, tk, "Comment");
-		Texts.set(commentText, App.s(elem.comment));
+		Texts.set(commentText, App.s(elem.withComment()));
 		UI.filler(comp, tk);
 	}
 
 	@Override
 	protected void okPressed() {
-		LangString.set(elem.name, nameText.getText(), App.lang());
-		elem.massPerc = massPercWidget.getAmount();
-		elem.mass = massWidget.getAmount();
-		LangString.set(elem.comment, commentText.getText(), App.lang());
-		if (elem instanceof Substance subst) {
-			subst.casNumber = Texts.getString(casText);
-			subst.ecNumber = Texts.getString(ecText);
-			subst.guid = Texts.getString(guuidText);
-			subst.renewable = Texts.getDouble(renewableText);
-			subst.recycled = Texts.getDouble(recycledText);
-			subst.recyclable = Texts.getDouble(recycableText);
+		LangString.set(elem.withName(), nameText.getText(), App.lang());
+		elem.withWeightPerc(massPercWidget.getAmount())
+			.withMass(massWidget.getAmount());
+		LangString.set(elem.withComment(), commentText.getText(), App.lang());
+		if (elem instanceof EpdInnerContentElement<?> inner) {
+			inner.withCasNumber(Texts.getString(casText))
+				.withEcNumber(Texts.getString(ecText))
+				.withGuid(Texts.getString(guuidText))
+				.withRenewable(Texts.getDouble(renewableText))
+				.withRecycled(Texts.getDouble(recycledText))
+				.withRecyclable(Texts.getDouble(recycableText));
 		}
 		super.okPressed();
 	}

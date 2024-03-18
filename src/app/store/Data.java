@@ -1,7 +1,5 @@
 package app.store;
 
-import java.util.function.Consumer;
-
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.contacts.Contact;
@@ -16,9 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.navi.NaviSync;
-import epd.io.conversion.Extensions;
 import epd.io.conversion.FlowExtensions;
-import epd.model.EpdDataSet;
 import epd.model.EpdProduct;
 import epd.model.Version;
 import epd.model.Xml;
@@ -26,30 +22,6 @@ import epd.model.Xml;
 public final class Data {
 
 	private Data() {
-	}
-
-	public static EpdDataSet getEPD(Ref ref) {
-		try {
-			Process process = App.store().get(Process.class, ref.getUUID());
-			return Extensions.read(process);
-		} catch (Exception e) {
-			Logger log = LoggerFactory.getLogger(Data.class);
-			log.error("failed to open EPD data set " + ref, e);
-			return null;
-		}
-	}
-
-	public static void save(EpdDataSet epd) {
-		if (epd == null)
-			return;
-		try {
-			Extensions.write(epd);
-			epd.process.withEpdVersion("1.2");
-			save(epd.process);
-		} catch (Exception e) {
-			Logger log = LoggerFactory.getLogger(Data.class);
-			log.error("failed to save EPD data set " + epd, e);
-		}
 	}
 
 	public static void save(EpdProduct product) {
@@ -67,6 +39,9 @@ public final class Data {
 	public static void save(IDataSet ds) {
 		if (ds == null)
 			return;
+		if (ds instanceof Process p) {
+			p.withEpdVersion("1.2");
+		}
 		try {
 			Ref ref = Ref.of(ds);
 			var workspace = App.getWorkspace();
@@ -111,12 +86,6 @@ public final class Data {
 			log.error("failed to load data set " + ref, e);
 			return null;
 		}
-	}
-
-	public static void updateVersion(EpdDataSet ds) {
-		if (ds == null || ds.process == null)
-			return;
-		updateVersion(ds.process);
 	}
 
 	public static void updateVersion(IDataSet ds) {
@@ -198,12 +167,4 @@ public final class Data {
 		}
 	}
 
-	/**
-	 * Just a trick to avoid type declarations.
-	 */
-	private static <T> void with(T obj, Consumer<T> fn) {
-		if (obj != null) {
-			fn.accept(obj);
-		}
-	}
 }

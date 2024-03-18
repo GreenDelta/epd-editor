@@ -27,21 +27,18 @@ import app.rcp.Labels;
 import app.util.TextBuilder;
 import app.util.UI;
 import app.util.Viewers;
-import epd.model.EpdDataSet;
 
 class ModelingPage extends FormPage {
 
 	private FormToolkit toolkit;
 
 	private final EpdEditor editor;
-	private final EpdDataSet epd;
-	private final Process process;
+	private final Process epd;
 
 	public ModelingPage(EpdEditor editor) {
 		super(editor, "EpdInfoPage", M.ModellingAndValidation);
 		this.editor = editor;
-		this.epd = editor.dataSet;
-		process = epd.process;
+		this.epd = editor.epd;
 	}
 
 	@Override
@@ -53,21 +50,21 @@ class ModelingPage extends FormPage {
 		createModelingSection(body);
 
 		RefTable.create(DataSetType.SOURCE,
-				Processes.withInventoryMethod(process).withSources())
+				Processes.withInventoryMethod(epd).withSources())
 			.withEditor(editor)
 			.withTitle(M.LCAMethodDetails)
 			.withTooltip(Tooltips.EPD_LCAMethodDetails)
 			.render(body, toolkit);
 
 		RefTable.create(DataSetType.SOURCE,
-				Processes.withRepresentativeness(process).withDataHandlingSources())
+				Processes.withRepresentativeness(epd).withDataHandlingSources())
 			.withEditor(editor)
 			.withTitle(M.DocumentationDataQualityManagement)
 			.withTooltip(Tooltips.EPD_DocumentationDataQualityManagement)
 			.render(body, toolkit);
 
 		RefTable.create(DataSetType.SOURCE,
-				Processes.withRepresentativeness(process).withSources())
+				Processes.withRepresentativeness(epd).withSources())
 			.withEditor(editor)
 			.withTitle(M.DataSources)
 			.withTooltip(Tooltips.EPD_DataSources)
@@ -75,7 +72,7 @@ class ModelingPage extends FormPage {
 
 		createComplianceSection(body);
 
-		RefTable.create(DataSetType.SOURCE, Epds.withOriginalEpds(process))
+		RefTable.create(DataSetType.SOURCE, Epds.withOriginalEpds(epd))
 			.withEditor(editor)
 			.withTitle(M.ReferenceOriginalEPD)
 			.withTooltip(Tooltips.EPD_ReferenceOriginal)
@@ -93,7 +90,7 @@ class ModelingPage extends FormPage {
 		createSubTypeViewer(comp);
 		var tb = new TextBuilder(editor, this, toolkit);
 		tb.multiText(comp, M.UseAdvice, Tooltips.EPD_UseAdvice,
-			Processes.withRepresentativeness(process).withUseAdvice());
+			Processes.withRepresentativeness(epd).withUseAdvice());
 	}
 
 	private void createSubTypeViewer(Composite parent) {
@@ -111,20 +108,20 @@ class ModelingPage extends FormPage {
 		});
 
 		combo.setInput(EpdSubType.values());
-		var current = Epds.getSubType(epd.process);
+		var current = Epds.getSubType(epd);
 		if (current != null) {
 			combo.setSelection(new StructuredSelection(current));
 		}
 		combo.addSelectionChangedListener(e -> {
 			EpdSubType next = Viewers.getFirst(e.getSelection());
-			Epds.withSubType(epd.process, next);
+			Epds.withSubType(epd, next);
 			editor.setDirty();
 		});
 	}
 
 	private void createComplianceSection(Composite body) {
 		List<Ref> systems = new ArrayList<>();
-		process.withModelling().withComplianceDeclarations().forEach(s -> {
+		epd.withModelling().withComplianceDeclarations().forEach(s -> {
 			if (s.withSystem() != null)
 				systems.add(s.withSystem());
 		});
@@ -134,20 +131,20 @@ class ModelingPage extends FormPage {
 		table.render(body, toolkit);
 
 		table.onAdd(system -> {
-			var dec = Processes.getComplianceDeclaration(process, system);
+			var dec = Processes.getComplianceDeclaration(epd, system);
 			if (dec != null)
 				return;
 			dec = new ComplianceDeclaration();
 			dec.withSystem(system);
-			Processes.withComplianceDeclarations(process).add(dec);
+			Processes.withComplianceDeclarations(epd).add(dec);
 			editor.setDirty();
 		});
 
 		table.onRemove(system -> {
-			var dec = Processes.getComplianceDeclaration(process, system);
+			var dec = Processes.getComplianceDeclaration(epd, system);
 			if (dec == null)
 				return;
-			var dcs = Processes.getComplianceDeclarations(process);
+			var dcs = Processes.getComplianceDeclarations(epd);
 			if (dcs.isEmpty())
 				return;
 			dcs.remove(dec);

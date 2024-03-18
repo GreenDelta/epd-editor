@@ -40,10 +40,7 @@ public class QMetaDataPage extends FormPage {
 	public QMetaDataPage(EpdEditor editor) {
 		super(editor, "QMetaDataPage", "Q Metadata");
 		this.editor = editor;
-		if (editor.dataSet.qMetaData == null) {
-			editor.dataSet.qMetaData = new QMetaData();
-		}
-		this.qdata = editor.dataSet.qMetaData;
+		this.qdata = editor.qMetaData();
 	}
 
 	@Override

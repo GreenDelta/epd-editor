@@ -90,7 +90,7 @@ public class DataSetToolBar extends EditorActionBarContributor {
 		if (editor instanceof ContactEditor)
 			return ((ContactEditor) editor).contact;
 		if (editor instanceof EpdEditor)
-			return ((EpdEditor) editor).dataSet.process;
+			return ((EpdEditor) editor).epd;
 		if (editor instanceof FlowEditor)
 			return ((FlowEditor) editor).product.flow;
 		if (editor instanceof FlowPropertyEditor)

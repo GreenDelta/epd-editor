@@ -1,5 +1,19 @@
 package app.editors.epd.results;
 
+import java.util.List;
+import java.util.Objects;
+
+import org.eclipse.jface.viewers.BaseLabelProvider;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.Section;
+import org.openlca.ilcd.commons.LangString;
+import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.processes.epd.EpdScenario;
+import org.openlca.ilcd.util.Epds;
+
 import app.App;
 import app.M;
 import app.Tooltips;
@@ -12,19 +26,6 @@ import app.util.Viewers;
 import app.util.tables.CheckBoxCellModifier;
 import app.util.tables.ModifySupport;
 import app.util.tables.TextCellModifier;
-import org.eclipse.jface.viewers.BaseLabelProvider;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.Section;
-import org.openlca.ilcd.commons.LangString;
-import org.openlca.ilcd.processes.Process;
-import org.openlca.ilcd.processes.epd.EpdScenario;
-import org.openlca.ilcd.util.Epds;
-
-import java.util.List;
-import java.util.Objects;
 
 class ScenarioTable {
 
@@ -39,7 +40,7 @@ class ScenarioTable {
 
 	public ScenarioTable(EpdEditor editor, Section section, FormToolkit tk) {
 		this.editor = editor;
-		this.epd = editor.dataSet.process;
+		this.epd = editor.epd;
 		var comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
 		table = Tables.createViewer(comp, NAME, GROUP, DESCRIPTION, DEFAULT);

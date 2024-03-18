@@ -31,7 +31,7 @@ class AdminPage extends FormPage {
 	public AdminPage(EpdEditor editor) {
 		super(editor, "EpdInfoPage", M.AdministrativeInformation);
 		this.editor = editor;
-		process = editor.dataSet.process;
+		process = editor.epd;
 	}
 
 	@Override

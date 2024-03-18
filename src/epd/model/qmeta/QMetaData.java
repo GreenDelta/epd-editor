@@ -5,7 +5,6 @@ import epd.util.Strings;
 import org.openlca.ilcd.Vocab;
 import org.openlca.ilcd.commons.Other;
 import org.openlca.ilcd.processes.AdminInfo;
-import org.openlca.ilcd.processes.Modelling;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.Processes;
 import org.w3c.dom.Document;
@@ -82,7 +81,7 @@ public class QMetaData {
 	public static QMetaData read(Process p) {
 		if (p == null)
 			return null;
-		Modelling mod = Processes.getModelling(p);
+		var mod = Processes.getModelling(p);
 		if (mod != null) {
 			QMetaData qmeta = read(mod.getOther());
 			if (qmeta != null)

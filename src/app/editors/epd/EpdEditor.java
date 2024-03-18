@@ -12,9 +12,9 @@ import app.editors.epd.qmeta.QMetaDataPage;
 import app.editors.epd.results.ResultPage;
 import app.store.Data;
 import app.util.UI;
-import epd.model.EpdDataSet;
 import epd.model.Version;
 import epd.model.Xml;
+import epd.model.qmeta.QMetaData;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
@@ -36,7 +36,8 @@ public class EpdEditor extends BaseEditor {
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
-	public EpdDataSet dataSet;
+	public Process epd;
+	private QMetaData qmeta;
 
 	public static void open(Ref ref) {
 		if (ref == null)
@@ -51,13 +52,21 @@ public class EpdEditor extends BaseEditor {
 		super.init(s, input);
 		Editors.setTabTitle(input, this);
 		try {
-			RefEditorInput in = (RefEditorInput) input;
-			dataSet = Data.getEPD(in.ref);
-			RefCheck.on(dataSet.process);
+			var in = (RefEditorInput) input;
+			epd = App.store().get(Process.class, in.ref.getUUID());
+			qmeta = QMetaData.read(epd);
+			RefCheck.on(epd);
 		} catch (Exception e) {
 			throw new PartInitException(
 					"Failed to open editor: no correct input", e);
 		}
+	}
+
+	public QMetaData qMetaData() {
+		if (qmeta == null) {
+			qmeta = new QMetaData();
+		}
+		return qmeta;
 	}
 
 	@Override
@@ -76,7 +85,7 @@ public class EpdEditor extends BaseEditor {
 			if (settings.showQMetadata) {
 				addPage(new QMetaDataPage(this));
 			}
-			Editors.addInfoPages(this, dataSet.process);
+			Editors.addInfoPages(this, epd);
 		} catch (Exception e) {
 			log.error("failed to add editor page", e);
 		}
@@ -85,15 +94,15 @@ public class EpdEditor extends BaseEditor {
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		try {
-			Data.updateVersion(dataSet);
-			EpdDataSet ds = dataSet.copy();
+			Data.updateVersion(epd);
+			var ds = epd.copy();
 			Data.save(ds);
 			for (Runnable handler : saveHandlers) {
 				handler.run();
 			}
 			dirty = false;
 			editorDirtyStateChanged();
-			Editors.setTabTitle(dataSet.process, this);
+			Editors.setTabTitle(epd, this);
 		} catch (Exception e) {
 			log.error("failed to save EPD data set", e);
 		}
@@ -108,8 +117,7 @@ public class EpdEditor extends BaseEditor {
 			return;
 		String name = d.getValue();
 		try {
-			EpdDataSet clone = dataSet.copy();
-			Process p = clone.process;
+			var p = epd.copy();
 			ProcessName cName = p.withProcessInfo()
 				.withDataSetInfo()
 				.withProcessName();
@@ -117,7 +125,7 @@ public class EpdEditor extends BaseEditor {
 			p.withProcessInfo().withDataSetInfo().withUUID(UUID.randomUUID().toString());
 			p.withAdminInfo().withPublication().withVersion(Version.asString(0));
 			p.withAdminInfo().withDataEntry().withTimeStamp(Xml.now());
-			Data.save(clone);
+			Data.save(p);
 			EpdEditor.open(Ref.of(p));
 		} catch (Exception e) {
 			log.error("failed to save EPD as new data set", e);

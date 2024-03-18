@@ -1,10 +1,12 @@
 package epd.io.conversion;
 
+import com.google.common.base.Strings;
 import org.openlca.ilcd.commons.CommissionerAndGoal;
 import org.openlca.ilcd.commons.Other;
 import org.openlca.ilcd.processes.DataGenerator;
 import org.openlca.ilcd.processes.Geography;
 import org.openlca.ilcd.processes.Location;
+import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.Technology;
 import org.openlca.ilcd.processes.Time;
 import org.openlca.ilcd.processes.epd.EpdContentDeclaration;
@@ -13,20 +15,17 @@ import org.openlca.ilcd.processes.epd.EpdSafetyMargins;
 import org.openlca.ilcd.processes.epd.EpdTimeExtension;
 import org.openlca.ilcd.util.Processes;
 
-import com.google.common.base.Strings;
-
-import epd.model.EpdDataSet;
 
 /**
  * Remove empty elements so that the data set validation is happy.
  */
 class Cleanup {
 
-	static void on(EpdDataSet epd) {
+	static void on(Process epd) {
 		if (epd == null)
 			return;
 
-		var info = Processes.getProcessInfo(epd.process);
+		var info = Processes.getProcessInfo(epd);
 		if (info != null && isEmpty(info.getTime())) {
 			info.withTime(null);
 		}
@@ -37,7 +36,7 @@ class Cleanup {
 			info.withTechnology(null);
 		}
 
-		var adminInfo = Processes.getAdminInfo(epd.process);
+		var adminInfo = Processes.getAdminInfo(epd);
 
 		// bug #59, remove empty commissioner and goal types
 		if (adminInfo != null && adminInfo.getCommissionerAndGoal() != null) {

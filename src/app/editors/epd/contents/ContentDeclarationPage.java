@@ -1,11 +1,12 @@
 package app.editors.epd.contents;
 
-import app.editors.epd.EpdEditor;
-import app.util.UI;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.openlca.ilcd.processes.epd.EpdContentDeclaration;
 import org.openlca.ilcd.util.Epds;
+
+import app.editors.epd.EpdEditor;
+import app.util.UI;
 
 public class ContentDeclarationPage extends FormPage {
 
@@ -16,7 +17,7 @@ public class ContentDeclarationPage extends FormPage {
 	public ContentDeclarationPage(EpdEditor editor) {
 		super(editor, "ContentDeclarationPage", "Content declaration");
 		this.editor = editor;
-		this.decl = Epds.withContentDeclaration(editor.dataSet.process);
+		this.decl = Epds.withContentDeclaration(editor.epd);
 	}
 
 	@Override

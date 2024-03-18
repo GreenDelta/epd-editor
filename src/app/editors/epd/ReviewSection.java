@@ -1,5 +1,14 @@
 package app.editors.epd;
 
+import app.M;
+import app.Tooltips;
+import app.editors.RefLink;
+import app.editors.RefTable;
+import app.rcp.Icon;
+import app.util.Actions;
+import app.util.TextBuilder;
+import app.util.UI;
+import app.util.Viewers;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -15,17 +24,7 @@ import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.ReviewType;
 import org.openlca.ilcd.processes.Review;
 import org.openlca.ilcd.processes.Validation;
-import org.openlca.ilcd.util.Processes;
-
-import app.M;
-import app.Tooltips;
-import app.editors.RefLink;
-import app.editors.RefTable;
-import app.rcp.Icon;
-import app.util.Actions;
-import app.util.TextBuilder;
-import app.util.UI;
-import app.util.Viewers;
+import org.openlca.ilcd.util.Epds;
 
 class ReviewSection {
 
@@ -38,7 +37,7 @@ class ReviewSection {
 	private ScrolledForm form;
 
 	public ReviewSection(EpdEditor editor, FormPage page) {
-		this.validation = editor.dataSet.process.withModelling().withValidation();
+		this.validation = Epds.withValidation(editor.epd);
 		this.editor = editor;
 		this.page = page;
 	}

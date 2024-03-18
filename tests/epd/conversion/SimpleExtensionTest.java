@@ -1,12 +1,5 @@
 package epd.conversion;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.UUID;
-
 import epd.model.Xml;
 import org.junit.Test;
 import org.openlca.ilcd.processes.Process;
@@ -14,19 +7,21 @@ import org.openlca.ilcd.processes.epd.EpdSubType;
 import org.openlca.ilcd.util.Epds;
 import org.openlca.ilcd.util.Processes;
 
-import epd.io.conversion.Extensions;
-import epd.model.EpdDataSet;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
+
+import static org.junit.Assert.*;
 
 public class SimpleExtensionTest {
 
 	@Test
 	public void testFormatVersion() {
-		var epd = new EpdDataSet();
+		var epd = new Process();
 		var id = UUID.randomUUID().toString();
-		Processes.withUUID(epd.process, id);
-		Extensions.write(epd);
+		Processes.withUUID(epd, id);
 		Tests.withStore(store -> {
-			store.put(epd.process);
+			store.put(epd);
 			var process = store.get(Process.class, id);
 			assertEquals("1.2", process.getEpdVersion());
 		});
@@ -63,7 +58,7 @@ public class SimpleExtensionTest {
 
 			// insert and read
 			store.put(epd);
-			var copy =store.get(Process.class, id);
+			var copy = store.get(Process.class, id);
 			var pubDate = Epds.getPublicationDate(copy);
 			assertEquals(Epds.getPublicationDate(epd), pubDate);
 
@@ -84,17 +79,14 @@ public class SimpleExtensionTest {
 
 	@Test
 	public void testSubType() {
-		var epd = new EpdDataSet();
+		var epd = new Process();
 		var id = UUID.randomUUID().toString();
-		Processes.withUUID(epd.process, id);
-		Epds.withSubType(epd.process, EpdSubType.REPRESENTATIVE_DATASET);
-		Extensions.write(epd);
-
+		Processes.withUUID(epd, id);
+		Epds.withSubType(epd, EpdSubType.REPRESENTATIVE_DATASET);
 		Tests.withStore(store -> {
-			store.put(epd.process);
-			var copy = Extensions.read(store.get(Process.class, id));
-			assertEquals(EpdSubType.REPRESENTATIVE_DATASET,
-					Epds.getSubType(copy.process));
+			store.put(epd);
+			var copy = store.get(Process.class, id);
+			assertEquals(EpdSubType.REPRESENTATIVE_DATASET, Epds.getSubType(copy));
 		});
 	}
 

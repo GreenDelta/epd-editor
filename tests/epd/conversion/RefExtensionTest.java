@@ -1,12 +1,5 @@
 package epd.conversion;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import org.junit.Test;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.LangString;
@@ -15,38 +8,37 @@ import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.Epds;
 import org.openlca.ilcd.util.Processes;
 
-import epd.io.conversion.Extensions;
-import epd.model.EpdDataSet;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import static org.junit.Assert.*;
 
 public class RefExtensionTest {
 
 	@Test
 	public void testPublisherRefs() {
-		var epd = new EpdDataSet();
+		var epd = new Process();
 		var id = UUID.randomUUID().toString();
-		Processes.withUUID(epd.process, id);
-		Epds.withPublishers(epd.process).addAll(makeRefs(DataSetType.CONTACT));
-		Extensions.write(epd);
+		Processes.withUUID(epd, id);
+		Epds.withPublishers(epd).addAll(makeRefs(DataSetType.CONTACT));
 		Tests.withStore(store -> {
-			store.put(epd.process);
-			var copy = Extensions.read(
-					store.get(Process.class, id));
-			checkRefs(Epds.getPublishers(copy.process), DataSetType.CONTACT);
+			store.put(epd);
+			var copy = store.get(Process.class, id);
+			checkRefs(Epds.getPublishers(copy), DataSetType.CONTACT);
 		});
 	}
 
 	@Test
 	public void testOriginalEPDRefs() {
-		var epd = new EpdDataSet();
+		var epd = new Process();
 		var id = UUID.randomUUID().toString();
-		Processes.withUUID(epd.process, id);
-		Epds.withOriginalEpds(epd.process).addAll(makeRefs(DataSetType.SOURCE));
-		Extensions.write(epd);
+		Processes.withUUID(epd, id);
+		Epds.withOriginalEpds(epd).addAll(makeRefs(DataSetType.SOURCE));
 		Tests.withStore(store -> {
-			store.put(epd.process);
-			var copy = Extensions.read(
-					store.get(Process.class, id));
-			checkRefs(Epds.getOriginalEpds(copy.process), DataSetType.SOURCE);
+			store.put(epd);
+			var copy = store.get(Process.class, id);
+			checkRefs(Epds.getOriginalEpds(copy), DataSetType.SOURCE);
 		});
 	}
 

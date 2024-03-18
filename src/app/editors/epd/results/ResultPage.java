@@ -1,5 +1,27 @@
 package app.editors.epd.results;
 
+import java.io.File;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.function.BiFunction;
+
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.IManagedForm;
+import org.eclipse.ui.forms.editor.FormPage;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.processes.epd.EpdModuleEntry;
+import org.openlca.ilcd.util.EpdIndicatorResult;
+import org.openlca.ilcd.util.Epds;
+
 import app.App;
 import app.M;
 import app.Tooltips;
@@ -19,27 +41,6 @@ import epd.profiles.EpdProfile;
 import epd.profiles.EpdProfiles;
 import epd.profiles.Module;
 import epd.util.Strings;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.IManagedForm;
-import org.eclipse.ui.forms.editor.FormPage;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.openlca.ilcd.processes.Process;
-import org.openlca.ilcd.processes.epd.EpdModuleEntry;
-import org.openlca.ilcd.util.EpdIndicatorResult;
-import org.openlca.ilcd.util.Epds;
-
-import java.io.File;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.function.BiFunction;
 
 public class ResultPage extends FormPage {
 
@@ -54,7 +55,7 @@ public class ResultPage extends FormPage {
 	public ResultPage(EpdEditor editor) {
 		super(editor, "ModulesPage", M.EnvironmentalIndicators);
 		this.editor = editor;
-		epd = editor.dataSet.process;
+		epd = editor.epd;
 
 		// add module entries that are not defined yet
 		modules = Epds.withModuleEntries(epd);

@@ -26,7 +26,7 @@ import epd.util.Strings;
 
 public class SettingsPage extends BaseEditor {
 
-	AppSettings settings = App.settings().clone();
+	AppSettings settings = App.settings().copy();
 	IniFile ini = IniFile.read();
 	private final IniFile originalIni = ini.clone();
 

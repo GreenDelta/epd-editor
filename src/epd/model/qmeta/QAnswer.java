@@ -1,11 +1,11 @@
 package epd.model.qmeta;
 
+import epd.io.conversion.Dom;
 import org.openlca.ilcd.Vocab;
+import org.openlca.ilcd.commons.Copyable;
 import org.w3c.dom.Element;
 
-import epd.io.conversion.Dom;
-
-public class QAnswer {
+public class QAnswer implements Copyable<QAnswer> {
 
 	public Boolean yesNo;
 	public String listText;
@@ -25,7 +25,6 @@ public class QAnswer {
 			Dom.addChild(elem,
 					"norreq:QuestionListText", Vocab.SBE_ILCD)
 					.setTextContent(listText);
-			return;
 		}
 	}
 
@@ -50,10 +49,10 @@ public class QAnswer {
 	}
 
 	@Override
-	public QAnswer clone() {
-		QAnswer clone = new QAnswer();
-		clone.yesNo = yesNo;
-		clone.listText = listText;
-		return clone;
+	public QAnswer copy() {
+		var copy = new QAnswer();
+		copy.yesNo = yesNo;
+		copy.listText = listText;
+		return copy;
 	}
 }

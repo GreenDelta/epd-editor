@@ -86,21 +86,21 @@ public class QMetaDataPage extends FormPage {
 	}
 
 	private void oneInList(QGroup group) {
-		Composite root = UI.formSection(body, tk, group.name);
+		var root = UI.formSection(body, tk, group.name);
 		UI.gridLayout(root, 1);
-		Composite comp = tk.createComposite(root);
+		var comp = tk.createComposite(root);
 		UI.gridLayout(comp, 2, 10, 0);
 
-		QQuestion[] config = group.questions.toArray(new QQuestion[0]);
-		AtomicReference<QQuestion> selected = new AtomicReference<>(
-				qdata.getSelected(group));
+		var config = group.questions.toArray(new QQuestion[0]);
+		var selected = new AtomicReference<>(qdata.getSelected(group));
 
-		Button[] buttons = new Button[config.length];
+		var buttons = new Button[config.length];
 		for (int i = 0; i < config.length; i++) {
-			Button button = tk.createButton(comp, "", SWT.RADIO);
+
+			var button = tk.createButton(comp, "", SWT.RADIO);
 			button.setLayoutData(
 					new GridData(SWT.LEFT, SWT.TOP, false, false));
-			Label label = tk.createLabel(
+			var label = tk.createLabel(
 					comp, Strings.wrap(config[i].text, 120));
 			Controls.onClick(label, _e -> {
 				if (button.getSelection())
@@ -110,9 +110,10 @@ public class QMetaDataPage extends FormPage {
 				}
 				button.setSelection(true);
 				button.notifyListeners(SWT.Selection, new Event());
-			});
+				});
+			
 			if (Objects.equals(selected.get(), config[i])) {
-				QQuestion selectedQ = selected.get();
+				var selectedQ = selected.get();
 				if (selectedQ.answer == null) {
 					selectedQ.answer = new QAnswer();
 				}
@@ -124,7 +125,7 @@ public class QMetaDataPage extends FormPage {
 			buttons[i] = button;
 		}
 
-		Text comment = commentText(root, tk);
+		var comment = commentText(root, tk);
 		if (selected.get() != null) {
 			Texts.set(comment, selected.get().comment);
 		}
@@ -140,7 +141,7 @@ public class QMetaDataPage extends FormPage {
 			for (int i = 0; i < buttons.length; i++) {
 				if (!buttons[i].getSelection())
 					continue;
-				QQuestion q = qdata.getQuestion(config[i].id);
+				var q = qdata.getQuestion(config[i].id);
 				q.answer = new QAnswer();
 				q.answer.listText = config[i].text;
 				q.comment = comment.getText();
@@ -151,14 +152,13 @@ public class QMetaDataPage extends FormPage {
 		for (Button b : buttons) {
 			Controls.onSelect(b, _e -> onChange.run());
 		}
-
 	}
 
 	private void multiChecks(QGroup group) {
 		Composite comp = UI.formSection(body, tk, group.name);
 		QQuestion[] config = group.questions.toArray(new QQuestion[0]);
-		for (int i = 0; i < config.length; i++) {
-			QQuestion question = qdata.getQuestion(config[i].id);
+		for (var q : config) {
+			var question = qdata.getQuestion(q.id);
 			question.group = group.name;
 			if (question.answer == null) {
 				question.answer = new QAnswer();
@@ -180,7 +180,7 @@ public class QMetaDataPage extends FormPage {
 
 			// create the label; also react on clicks on the label
 			Label label = tk.createLabel(comp,
-					Strings.wrap(config[i].text, 120));
+					Strings.wrap(q.text, 120));
 			Controls.onClick(label, _e -> {
 				button.setSelection(!button.getSelection());
 				button.notifyListeners(SWT.Selection, new Event());

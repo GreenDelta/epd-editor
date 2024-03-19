@@ -3,6 +3,7 @@ package epd.model.qmeta;
 import epd.io.conversion.Dom;
 import epd.util.Strings;
 import org.openlca.ilcd.Vocab;
+import org.openlca.ilcd.commons.Copyable;
 import org.openlca.ilcd.commons.Other;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.Epds;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class QMetaData {
+public class QMetaData implements Copyable<QMetaData> {
 
 	public List<QQuestion> questions = new ArrayList<>();
 
@@ -158,14 +159,14 @@ public class QMetaData {
 	}
 
 	@Override
-	public QMetaData clone() {
-		QMetaData clone = new QMetaData();
+	public QMetaData copy() {
+		var copy = new QMetaData();
 		for (QQuestion q : questions) {
 			if (q != null) {
-				clone.questions.add(q.clone());
+				copy.questions.add(q.copy());
 			}
 		}
-		return clone;
+		return copy;
 	}
 
 }

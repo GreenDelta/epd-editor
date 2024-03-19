@@ -3,9 +3,10 @@ package epd.model.qmeta;
 import epd.io.conversion.Dom;
 import epd.util.Strings;
 import org.openlca.ilcd.Vocab;
+import org.openlca.ilcd.commons.Copyable;
 import org.w3c.dom.Element;
 
-public class QQuestion {
+public class QQuestion implements Copyable<QQuestion> {
 
 	public String id;
 	public String group;
@@ -64,17 +65,17 @@ public class QQuestion {
 	}
 
 	@Override
-	public QQuestion clone() {
-		QQuestion clone = new QQuestion();
-		clone.id = id;
-		clone.group = group;
-		clone.comment = comment;
+	public QQuestion copy() {
+		var copy = new QQuestion();
+		copy.id = id;
+		copy.group = group;
+		copy.comment = comment;
 		if (answer != null) {
-			clone.answer = answer.clone();
+			copy.answer = answer.copy();
 		}
-		clone.text = text;
-		clone.type = type;
-		return clone;
+		copy.text = text;
+		copy.type = type;
+		return copy;
 	}
 
 	@Override

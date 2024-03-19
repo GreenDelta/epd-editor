@@ -4,8 +4,9 @@ import java.io.File;
 
 import app.store.Json;
 import epd.profiles.EpdProfiles;
+import org.openlca.ilcd.commons.Copyable;
 
-public final class AppSettings implements Cloneable {
+public final class AppSettings implements Copyable<AppSettings> {
 
 	/** The ID of the EPD profile that should be used in the application. */
 	public String profile = EpdProfiles.DEFAULT;
@@ -58,12 +59,10 @@ public final class AppSettings implements Cloneable {
 	}
 
 	@Override
-	public AppSettings clone() {
-		try {
-			return (AppSettings) super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e);
-		}
+	public AppSettings copy() {
+		var copy = new AppSettings();
+		copy.setValues(this);
+		return copy;
 	}
 
 	public void setValues(AppSettings from) {

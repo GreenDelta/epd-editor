@@ -14,7 +14,7 @@ public class AppSettingsTest {
 		settings.showContentDeclarations = false;
 		settings.validationProfile = "some_prf";
 		settings.lang = "en";
-		var clone = settings.clone();
+		var clone = settings.copy();
 		Assert.assertNotSame(settings, clone);
 		for (var field : AppSettings.class.getDeclaredFields()) {
 			var value = field.get(settings);

@@ -12,7 +12,7 @@ public final class EditorVocab {
 	private EditorVocab() {
 	}
 
-	public static QName qNameOf(String localName) {
-		return new QName(NAMESPACE, localName);
+	public static QName referenceYear() {
+		return new QName(NAMESPACE, "referenceYear");
 	}
 }

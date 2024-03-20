@@ -20,8 +20,6 @@ import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.util.DataSets;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.ExclusionStrategy;
-import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
@@ -33,7 +31,6 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 import epd.util.Strings;
-import jakarta.xml.bind.annotation.XmlAnyAttribute;
 
 public class Index {
 
@@ -116,7 +113,6 @@ public class Index {
 			return;
 		try {
 			var json = new GsonBuilder()
-				//.setExclusionStrategies(new AnyAttrExclusion())
 				.registerTypeAdapter(QName.class, new QNameAdapter())
 				.setPrettyPrinting()
 				.create()
@@ -137,7 +133,6 @@ public class Index {
 			var bytes = Files.readAllBytes(file.toPath());
 			var json = new String(bytes, StandardCharsets.UTF_8);
 			var gson = new GsonBuilder()
-				// .setExclusionStrategies(new AnyAttrExclusion())
 				.registerTypeAdapter(QName.class, new QNameAdapter())
 				.registerTypeAdapter(DataSetType.class, new DataSetTypeAdapter())
 				.create();
@@ -150,23 +145,13 @@ public class Index {
 	}
 
 	/**
-	 * An exclusion strategy that skips the extension attributes from the
-	 * categories (otherwise we get an illegal reflective access operation on
-	 * the QName type).
+	 * QName instances cannot be directly serialized (it would throw
+	 * an illegal reflective access exception) thus we need a type
+	 * adapter for them. They are used as keys in maps and Gson
+	 * serializes such keys by simply calling {@code toString()} on
+	 * them. Thus, our type adapter needs to produce and parse the
+	 * exact same format as {@code QName.toString()}.
 	 */
-	private static class AnyAttrExclusion implements ExclusionStrategy {
-
-		@Override
-		public boolean shouldSkipField(FieldAttributes attributes) {
-			return attributes.getAnnotation(XmlAnyAttribute.class) != null;
-		}
-
-		@Override
-		public boolean shouldSkipClass(Class<?> aClass) {
-			return false;
-		}
-	}
-
 	private static class QNameAdapter implements
 		JsonSerializer<QName>, JsonDeserializer<QName> {
 
@@ -175,7 +160,7 @@ public class Index {
 			JsonElement elem, Type type, JsonDeserializationContext ctx
 		) throws JsonParseException {
 			if (!QName.class.equals(type))
-				return new Gson().fromJson(elem ,type);
+				return new Gson().fromJson(elem, type);
 			if (elem == null || !elem.isJsonPrimitive())
 				return null;
 			var prim = elem.getAsJsonPrimitive();
@@ -183,26 +168,19 @@ public class Index {
 				return null;
 
 			var s = prim.getAsString();
-			var parts = s.split(">::<");
-			if (parts.length == 2) {
-				var ns = parts[0].substring(1);
-				var name = parts[1].substring(0, parts[1].length() - 1);
-				return new QName(ns, name);
-			}
-			var name = s.substring(1, s.length() - 1);
-			return new QName(name);
+			var parts = s.split("}");
+			return parts.length == 2
+				? new QName(parts[0].substring(1), parts[1])
+				: new QName(s);
 		}
 
 		@Override
 		public JsonElement serialize(
 			QName qName, Type type, JsonSerializationContext ctx
 		) {
-			if (qName == null)
-				return null;
-			var name = qName.getNamespaceURI() != null
-				? "<" + qName.getNamespaceURI() + ">::<" + qName.getLocalPart() + ">"
-				: "<" + qName.getLocalPart() + ">";
-			return new JsonPrimitive(name);
+			return qName != null
+				? new JsonPrimitive(qName.toString())
+				: null;
 		}
 	}
 

@@ -6,6 +6,7 @@ import org.openlca.ilcd.commons.Ref;
 
 import app.App;
 import app.rcp.Icon;
+import epd.EditorVocab;
 import epd.util.Strings;
 
 public class RefElement extends NavigationElement<Ref> {
@@ -23,7 +24,7 @@ public class RefElement extends NavigationElement<Ref> {
 	}
 
 	@Override
-	public int compareTo(NavigationElement other) {
+	public int compareTo(NavigationElement<?> other) {
 		if (!(other instanceof RefElement))
 			return 1;
 		return Strings.compare(this.getLabel(), other.getLabel());
@@ -31,7 +32,12 @@ public class RefElement extends NavigationElement<Ref> {
 
 	@Override
 	public String getLabel() {
-		return LangString.getFirst(getContent().getName(), App.lang());
+		var ref = getContent();
+		var name = LangString.getFirst(ref.getName(), App.lang());
+		var refYear = ref.getOtherAttributes().get(EditorVocab.referenceYear());
+		return refYear != null
+			? name + " - " + refYear
+			: name;
 	}
 
 	@Override

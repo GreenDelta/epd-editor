@@ -150,7 +150,7 @@ public class RefFetch {
 				return false;
 			case "referenceYear":
 				ref.withOtherAttributes()
-					.put(EditorVocab.qNameOf("referenceYear"), text);
+					.put(EditorVocab.referenceYear(), text);
 				return false;
 			case "permanentDataSetURI":
 				ref.withUri(text);

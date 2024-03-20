@@ -18,12 +18,12 @@ import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.sources.Source;
 import org.openlca.ilcd.units.UnitGroup;
 import org.openlca.ilcd.util.Categories;
-import org.openlca.ilcd.util.Refs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.navi.NaviSync;
+import epd.RefFetch;
 import epd.index.Index;
 
 /**
@@ -87,7 +87,7 @@ public class IndexBuilder implements IRunnableWithProgress {
 		try {
 			Ref ref;
 			try (FileInputStream is = new FileInputStream(f)) {
-				ref = Refs.fetch(is);
+				ref = RefFetch.get(is).orElse(null);
 			}
 			List<Classification> classes;
 			try (FileInputStream is = new FileInputStream(f)) {

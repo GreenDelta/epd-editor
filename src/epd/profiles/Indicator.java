@@ -7,6 +7,7 @@ import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.util.EpdIndicatorResult;
 
+import epd.EditorVocab;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
@@ -15,19 +16,19 @@ import jakarta.xml.bind.annotation.XmlElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Indicator {
 
-	@XmlAttribute(name = "isInputIndicator", namespace = EpdProfile.NS)
+	@XmlAttribute(name = "isInputIndicator", namespace = EditorVocab.NAMESPACE)
 	private Boolean inputIndicator;
 
-	@XmlAttribute(name = "code", namespace = EpdProfile.NS)
+	@XmlAttribute(name = "code", namespace = EditorVocab.NAMESPACE)
 	private String code;
 
-	@XmlAttribute(name = "group", namespace = EpdProfile.NS)
+	@XmlAttribute(name = "group", namespace = EditorVocab.NAMESPACE)
 	private String group;
 
-	@XmlElement(name = "ref", namespace = EpdProfile.NS)
+	@XmlElement(name = "ref", namespace = EditorVocab.NAMESPACE)
 	private Ref ref;
 
-	@XmlElement(name = "unitGroup", namespace = EpdProfile.NS)
+	@XmlElement(name = "unitGroup", namespace = EditorVocab.NAMESPACE)
 	private Ref unit;
 
 	public boolean isInputIndicator() {

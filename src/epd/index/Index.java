@@ -1,22 +1,5 @@
 package epd.index;
 
-import com.google.gson.ExclusionStrategy;
-import com.google.gson.FieldAttributes;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import epd.util.Strings;
-import jakarta.xml.bind.annotation.XmlAnyAttribute;
-import org.openlca.ilcd.commons.Classification;
-import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.commons.IDataSet;
-import org.openlca.ilcd.commons.Ref;
-import org.openlca.ilcd.util.DataSets;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
@@ -27,6 +10,30 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import javax.xml.namespace.QName;
+
+import org.openlca.ilcd.commons.Classification;
+import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.commons.IDataSet;
+import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.util.DataSets;
+import org.slf4j.LoggerFactory;
+
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+
+import epd.util.Strings;
+import jakarta.xml.bind.annotation.XmlAnyAttribute;
 
 public class Index {
 
@@ -109,7 +116,9 @@ public class Index {
 			return;
 		try {
 			var json = new GsonBuilder()
-				.setExclusionStrategies(new AnyAttrExclusion())
+				//.setExclusionStrategies(new AnyAttrExclusion())
+				.registerTypeAdapter(QName.class, new QNameAdapter())
+				.setPrettyPrinting()
 				.create()
 				.toJson(this);
 			Files.writeString(file.toPath(), json,
@@ -128,7 +137,8 @@ public class Index {
 			var bytes = Files.readAllBytes(file.toPath());
 			var json = new String(bytes, StandardCharsets.UTF_8);
 			var gson = new GsonBuilder()
-				.setExclusionStrategies(new AnyAttrExclusion())
+				// .setExclusionStrategies(new AnyAttrExclusion())
+				.registerTypeAdapter(QName.class, new QNameAdapter())
 				.registerTypeAdapter(DataSetType.class, new DataSetTypeAdapter())
 				.create();
 			return gson.fromJson(json, Index.class);
@@ -154,6 +164,45 @@ public class Index {
 		@Override
 		public boolean shouldSkipClass(Class<?> aClass) {
 			return false;
+		}
+	}
+
+	private static class QNameAdapter implements
+		JsonSerializer<QName>, JsonDeserializer<QName> {
+
+		@Override
+		public QName deserialize(
+			JsonElement elem, Type type, JsonDeserializationContext ctx
+		) throws JsonParseException {
+			if (!QName.class.equals(type))
+				return new Gson().fromJson(elem ,type);
+			if (elem == null || !elem.isJsonPrimitive())
+				return null;
+			var prim = elem.getAsJsonPrimitive();
+			if (!prim.isString())
+				return null;
+
+			var s = prim.getAsString();
+			var parts = s.split(">::<");
+			if (parts.length == 2) {
+				var ns = parts[0].substring(1);
+				var name = parts[1].substring(0, parts[1].length() - 1);
+				return new QName(ns, name);
+			}
+			var name = s.substring(1, s.length() - 1);
+			return new QName(name);
+		}
+
+		@Override
+		public JsonElement serialize(
+			QName qName, Type type, JsonSerializationContext ctx
+		) {
+			if (qName == null)
+				return null;
+			var name = qName.getNamespaceURI() != null
+				? "<" + qName.getNamespaceURI() + ">::<" + qName.getLocalPart() + ">"
+				: "<" + qName.getLocalPart() + ">";
+			return new JsonPrimitive(name);
 		}
 	}
 

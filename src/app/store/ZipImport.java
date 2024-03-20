@@ -24,7 +24,6 @@ import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.sources.Source;
 import org.openlca.ilcd.units.UnitGroup;
 import org.openlca.ilcd.util.Categories;
-import org.openlca.ilcd.util.Refs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,6 +31,7 @@ import app.App;
 import app.M;
 import app.StatusView;
 import app.navi.NaviSync;
+import epd.RefFetch;
 import epd.model.RefStatus;
 
 public class ZipImport implements IRunnableWithProgress {
@@ -86,8 +86,8 @@ public class ZipImport implements IRunnableWithProgress {
 			if (monitor.isCanceled())
 				break;
 			byte[] data = Files.readAllBytes(p);
-			ByteArrayInputStream is = new ByteArrayInputStream(data);
-			Ref ref = Refs.fetch(is);
+			var is = new ByteArrayInputStream(data);
+			Ref ref = RefFetch.get(is).orElse(null);
 			if (ref == null || !ref.isValid()) {
 				log.warn("invalid data set {} not imported", p);
 				continue;

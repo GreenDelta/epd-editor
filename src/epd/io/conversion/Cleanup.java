@@ -3,6 +3,8 @@ package epd.io.conversion;
 import com.google.common.base.Strings;
 import org.openlca.ilcd.commons.CommissionerAndGoal;
 import org.openlca.ilcd.commons.Other;
+import org.openlca.ilcd.flows.Flow;
+import org.openlca.ilcd.flows.epd.matml.MaterialDoc;
 import org.openlca.ilcd.processes.DataGenerator;
 import org.openlca.ilcd.processes.Geography;
 import org.openlca.ilcd.processes.Location;
@@ -13,6 +15,7 @@ import org.openlca.ilcd.processes.epd.EpdContentDeclaration;
 import org.openlca.ilcd.processes.epd.EpdInfoExtension;
 import org.openlca.ilcd.processes.epd.EpdSafetyMargins;
 import org.openlca.ilcd.processes.epd.EpdTimeExtension;
+import org.openlca.ilcd.util.Flows;
 import org.openlca.ilcd.util.Processes;
 
 
@@ -20,6 +23,27 @@ import org.openlca.ilcd.util.Processes;
  * Remove empty elements so that the data set validation is happy.
  */
 public class Cleanup {
+
+	public static void on(Flow flow) {
+		if (flow == null)
+			return;
+		var info = Flows.getDataSetInfo(flow);
+		if (info != null && info.getEpdExtension() != null) {
+			var ext = info.getEpdExtension();
+			if (isEmpty(ext.getMaterialDoc())
+				&& ext.getGenericFlow() == null
+				&& ext.getAny().isEmpty()) {
+				info.withEpdExtension(null);
+			}
+		}
+	}
+
+	private static boolean isEmpty(MaterialDoc doc) {
+		if (doc == null)
+			return true;
+		return doc.getMaterials().isEmpty()
+			&& doc.getProperties().isEmpty();
+	}
 
 	public static void on(Process epd) {
 		if (epd == null)

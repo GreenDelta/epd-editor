@@ -1,6 +1,7 @@
 package app.rcp;
 
 import app.App;
+import org.openlca.ilcd.commons.Copyable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,10 +16,10 @@ import java.util.regex.Pattern;
 /**
  * Reads and writes values from and to the *.ini file which is located in the
  * installation directory of the application. Writing is not possible when it is
- * installed in a read-only folder. This class is independent from the user
+ * installed in a read-only folder. This class is independent of the user
  * interface and could be re-used in other packages if needed.
  */
-public class IniFile {
+public class IniFile implements Copyable<IniFile> {
 
 	public String lang = "en";
 	public int maxMemory = 1024;
@@ -110,7 +111,7 @@ public class IniFile {
 	}
 
 	@Override
-	public IniFile clone() {
+	public IniFile copy() {
 		IniFile clone = new IniFile();
 		clone.lang = lang;
 		clone.maxMemory = maxMemory;

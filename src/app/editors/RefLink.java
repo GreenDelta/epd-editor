@@ -90,8 +90,9 @@ public class RefLink extends Composite {
 		String t = M.None;
 		if (ref != null) {
 			String s = LangString.getFirst(ref.getName(), App.lang());
-			if (s != null)
+			if (s != null) {
 				t = s;
+			}
 		}
 		t = Strings.cut(t, 120);
 		link.setText(t);

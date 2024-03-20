@@ -28,7 +28,7 @@ public class SettingsPage extends BaseEditor {
 
 	AppSettings settings = App.settings().copy();
 	IniFile ini = IniFile.read();
-	private final IniFile originalIni = ini.clone();
+	private final IniFile originalIni = ini.copy();
 
 	public static void open() {
 		SimpleEditorInput input = new SimpleEditorInput("app.Settings");

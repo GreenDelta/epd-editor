@@ -19,7 +19,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
-import java.util.ArrayList;
 import java.util.List;
 
 class MaterialPropertySection {
@@ -29,10 +28,12 @@ class MaterialPropertySection {
 	private final static String UNIT = M.Unit;
 
 	private final FlowEditor editor;
+	private final List<MaterialPropertyValue> values;
 	private TableViewer table;
 
 	MaterialPropertySection(FlowEditor editor) {
 		this.editor = editor;
+		this.values = editor.materialProperties;
 	}
 
 	void render(Composite body, FormToolkit tk) {
@@ -48,17 +49,11 @@ class MaterialPropertySection {
 		var mf = new ModifySupport<MaterialPropertyValue>(table);
 		mf.bind(VALUE, new ValueModifier());
 		bindActions(table, section);
-		table.setInput(properties());
-	}
-
-	private List<MaterialPropertyValue> properties() {
-		return editor.product == null
-			? new ArrayList<>()
-			: editor.product.properties;
+		table.setInput(values);
 	}
 
 	void refresh() {
-		table.setInput(properties());
+		table.setInput(values);
 	}
 
 	private void bindActions(TableViewer table, Section section) {
@@ -81,9 +76,9 @@ class MaterialPropertySection {
 			return;
 		var value = new MaterialPropertyValue();
 		value.property = property;
-		value.value = (double) 1;
-		editor.product.properties.add(value);
-		table.setInput(editor.product.properties);
+		value.value = 1;
+		values.add(value);
+		table.setInput(values);
 		editor.setDirty();
 	}
 
@@ -91,9 +86,8 @@ class MaterialPropertySection {
 		MaterialPropertyValue v = Viewers.getFirstSelected(table);
 		if (v == null)
 			return;
-		var props = properties();
-		props.remove(v);
-		table.setInput(props);
+		values.remove(v);
+		table.setInput(values);
 		editor.setDirty();
 	}
 

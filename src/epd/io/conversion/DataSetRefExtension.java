@@ -4,7 +4,6 @@ import org.openlca.ilcd.Vocab;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.Extension;
 import org.openlca.ilcd.commons.LangString;
-import org.openlca.ilcd.commons.Other;
 import org.openlca.ilcd.commons.Ref;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,12 +25,12 @@ class DataSetRefExtension {
 		return ext.read(DataSetType.FLOW, extension);
 	}
 
-	public static Ref readActor(String tagName, Other extension) {
+	public static Ref readActor(String tagName, Extension extension) {
 		var ext = new DataSetRefExtension(tagName, DataSetType.CONTACT);
 		return ext.read(DataSetType.CONTACT, extension);
 	}
 
-	public static Ref readSource(String tagName, Other extension) {
+	public static Ref readSource(String tagName, Extension extension) {
 		DataSetRefExtension ext = new DataSetRefExtension(tagName,
 			DataSetType.SOURCE);
 		return ext.read(DataSetType.SOURCE, extension);

@@ -38,11 +38,13 @@ class PropertyDepsDialog extends FormDialog {
 		this.config = config;
 	}
 
-	static boolean add(EpdProduct product) {
-		if (product == null || product.flow == null
-			|| Flows.getType(product.flow) != FlowType.PRODUCT_FLOW)
+	static boolean add(FlowEditor editor) {
+		if (editor == null
+			|| editor.product == null
+			|| editor.product.flow == null
+			|| Flows.getType(editor.product.flow) != FlowType.PRODUCT_FLOW)
 			return false;
-		var config = Config.create(product);
+		var config = Config.create(editor);
 		if (config.selected.isEmpty())
 			return false;
 		var dialog = new PropertyDepsDialog(config);
@@ -91,7 +93,7 @@ class PropertyDepsDialog extends FormDialog {
 			var val = new MaterialPropertyValue();
 			val.property = prop;
 			val.value = 1.0;
-			config.product.properties.add(val);
+			config.properties.add(val);
 		}
 		super.okPressed();
 	}
@@ -118,19 +120,15 @@ class PropertyDepsDialog extends FormDialog {
 
 	private static class Config {
 
-		EpdProduct product;
+		// EpdProduct product;
 		final List<MaterialProperty> properties = new ArrayList<>();
 		final List<MaterialProperty> selected = new ArrayList<>();
 
-		static Config create(EpdProduct product) {
+		static Config create(FlowEditor editor) {
 			var conf = new Config();
-			if (product == null || product.flow == null)
-				return conf;
-
-			conf.product = product;
 
 			// collect non-present properties
-			var usedIDs = product.properties.stream()
+			var usedIDs = editor.materialProperties.stream()
 				.filter(val -> val.property != null)
 				.map(val -> val.property.id)
 				.collect(Collectors.toSet());
@@ -153,7 +151,7 @@ class PropertyDepsDialog extends FormDialog {
 				{"normal volume", "bulk density"},
 				{"normal volume", "gross density"},
 			};
-			for (var flowProp : Flows.getFlowProperties(product.flow)) {
+			for (var flowProp : Flows.getFlowProperties(editor.product.flow)) {
 				if (flowProp.getFlowProperty() == null)
 					continue;
 				var name = LangString.getVal(flowProp.getFlowProperty().getName(), "en");

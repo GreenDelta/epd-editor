@@ -62,12 +62,14 @@ public final class ExtensionRefs {
 	}
 
 	private static Set<Ref> of(Flow f) {
+		// TODO: this is not needed anymore as extensions
+		// references should be all in our object model
 		var type = Flows.getType(f);
 		if (type != FlowType.PRODUCT_FLOW)
 			return Collections.emptySet();
 		var product = FlowExtensions.read(f);
+
 		return Stream.of(
-				product.genericFlow,
 				product.vendor,
 				product.documentation)
 			.filter(r -> r != null && r.isValid())

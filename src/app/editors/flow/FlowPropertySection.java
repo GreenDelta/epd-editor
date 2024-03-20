@@ -114,7 +114,7 @@ class FlowPropertySection {
 		}
 		table.setInput(Flows.getFlowProperties(flow));
 		if (materialPropertySection != null
-			&& PropertyDepsDialog.add(editor.product)) {
+			&& PropertyDepsDialog.add(editor)) {
 			table.setInput(Flows.getFlowProperties(flow));
 			materialPropertySection.refresh();
 		}

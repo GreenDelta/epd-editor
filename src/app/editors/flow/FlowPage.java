@@ -36,7 +36,7 @@ class FlowPage extends FormPage {
 	@Override
 	protected void createFormContent(IManagedForm mform) {
 		Supplier<String> title = () -> M.Flow + ": "
-				+ App.s(Flows.getBaseName(product.flow));
+			+ App.s(Flows.getBaseName(product.flow));
 		var form = UI.formHeader(mform, title.get());
 		editor.onSaved(() -> form.setText(title.get()));
 		tk = mform.getToolkit();
@@ -44,7 +44,7 @@ class FlowPage extends FormPage {
 		var tb = new TextBuilder(editor, this, tk);
 		infoSection(body, tb);
 		new CategorySection(editor, DataSetType.FLOW,
-				Flows.withClassifications(product.flow)).render(body, tk);
+			Flows.withClassifications(product.flow)).render(body, tk);
 		if (Flows.getType(product.flow) == FlowType.PRODUCT_FLOW) {
 			VendorSection.create(body, tk, editor);
 		}
@@ -60,7 +60,7 @@ class FlowPage extends FormPage {
 		var info = Flows.withDataSetInfo(product.flow);
 		tb.text(comp, M.Synonyms, Tooltips.Flow_Synonyms, info.withSynonyms());
 		tb.text(comp, M.Description,
-				Tooltips.Flow_Description, info.withComment());
+			Tooltips.Flow_Description, info.withComment());
 		if (Flows.getType(product.flow) == FlowType.PRODUCT_FLOW) {
 			genericProductLink(comp);
 		}
@@ -70,9 +70,14 @@ class FlowPage extends FormPage {
 	private void genericProductLink(Composite comp) {
 		UI.formLabel(comp, tk, M.GenericProduct, Tooltips.Flow_GenericProduct);
 		var link = new RefLink(comp, tk, DataSetType.FLOW);
-		link.setRef(product.genericFlow);
+		var info = Flows.getDataSetInfo(product.flow);
+		if (info != null && info.getEpdExtension() != null) {
+			link.setRef(info.getEpdExtension().getGenericFlow());
+		}
 		link.onChange(ref -> {
-			product.genericFlow = ref;
+			Flows.withDataSetInfo(product.flow)
+				.withEpdExtension()
+				.withGenericFlow(ref);
 			editor.setDirty();
 		});
 	}
@@ -91,7 +96,7 @@ class FlowPage extends FormPage {
 		var flow = product.flow;
 		var comp = UI.formSection(body, tk, M.AdministrativeInformation);
 		var time = UI.formText(comp, tk,
-				M.LastUpdate, Tooltips.All_LastUpdate);
+			M.LastUpdate, Tooltips.All_LastUpdate);
 		time.setText(Xml.toString(Flows.getTimeStamp(flow)));
 
 		var uuidT = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);

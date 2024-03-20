@@ -1,5 +1,6 @@
 package app.editors.flow;
 
+import epd.model.MaterialPropertyValue;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
@@ -18,11 +19,15 @@ import app.store.Data;
 import epd.io.conversion.FlowExtensions;
 import epd.model.EpdProduct;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FlowEditor extends BaseEditor {
 
 	private static final String ID = "flow.editor";
 
-	public EpdProduct product;
+	EpdProduct product;
+	List<MaterialPropertyValue> materialProperties;
 
 	public static void open(Ref ref) {
 		if (ref == null)
@@ -37,10 +42,12 @@ public class FlowEditor extends BaseEditor {
 		super.init(s, input);
 		Editors.setTabTitle(input, this);
 		try {
-			RefEditorInput in = (RefEditorInput) input;
-			Flow flow = App.store().get(Flow.class, in.ref.getUUID());
+			var in = (RefEditorInput) input;
+			var flow = App.store().get(Flow.class, in.ref.getUUID());
 			RefCheck.on(flow);
 			product = FlowExtensions.read(flow);
+			materialProperties = new ArrayList<>(
+				MaterialPropertyValue.readFrom(flow));
 		} catch (Exception e) {
 			throw new PartInitException("Failed to open flow editor", e);
 		}
@@ -50,10 +57,9 @@ public class FlowEditor extends BaseEditor {
 	public void doSave(IProgressMonitor monitor) {
 		try {
 			Data.updateVersion(product.flow);
+			MaterialPropertyValue.write(materialProperties, product.flow);
 			Data.save(product);
-			for (Runnable handler : saveHandlers) {
-				handler.run();
-			}
+			saveHandlers.forEach(Runnable::run);
 			dirty = false;
 			editorDirtyStateChanged();
 			Editors.setTabTitle(product.flow, this);

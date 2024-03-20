@@ -1,5 +1,6 @@
 package epd.profiles;
 
+import epd.EditorVocab;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -11,30 +12,28 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-@XmlRootElement(name = "profile", namespace = EpdProfile.NS)
+@XmlRootElement(name = "profile", namespace = EditorVocab.NAMESPACE)
 @XmlAccessorType(XmlAccessType.FIELD)
 public class EpdProfile {
 
-	static final String NS = "http://greendelta.com/epd-editor";
-
-	@XmlElement(name = "id", namespace = NS)
+	@XmlElement(name = "id", namespace = EditorVocab.NAMESPACE)
 	private String id;
 
-	@XmlElement(name = "name", namespace = NS)
+	@XmlElement(name = "name", namespace = EditorVocab.NAMESPACE)
 	private String name;
 
-	@XmlElement(name = "description", namespace = NS)
+	@XmlElement(name = "description", namespace = EditorVocab.NAMESPACE)
 	private String description;
 
-	@XmlElement(name="dataUrl", namespace = NS)
+	@XmlElement(name="dataUrl", namespace = EditorVocab.NAMESPACE)
 	private String dataUrl;
 
-	@XmlElementWrapper(name="modules", namespace = NS)
-	@XmlElement(name ="module", namespace = NS)
+	@XmlElementWrapper(name="modules", namespace = EditorVocab.NAMESPACE)
+	@XmlElement(name ="module", namespace = EditorVocab.NAMESPACE)
 	private List<Module> modules;
 
-	@XmlElementWrapper(name = "indicators", namespace = NS)
-	@XmlElement(name="indicator", namespace = NS)
+	@XmlElementWrapper(name = "indicators", namespace = EditorVocab.NAMESPACE)
+	@XmlElement(name="indicator", namespace = EditorVocab.NAMESPACE)
 	private List<Indicator> indicators;
 
 	public String getId() {

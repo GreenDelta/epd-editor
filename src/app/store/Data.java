@@ -14,26 +14,12 @@ import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.navi.NaviSync;
-import epd.io.conversion.FlowExtensions;
-import epd.model.EpdProduct;
 import epd.model.Version;
 import epd.model.Xml;
 
 public final class Data {
 
 	private Data() {
-	}
-
-	public static void save(EpdProduct product) {
-		if (product == null)
-			return;
-		try {
-			FlowExtensions.write(product);
-			save(product.flow);
-		} catch (Exception e) {
-			Logger log = LoggerFactory.getLogger(Data.class);
-			log.error("failed to save flow " + product, e);
-		}
 	}
 
 	public static void save(IDataSet ds) {

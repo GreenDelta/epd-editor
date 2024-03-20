@@ -43,8 +43,7 @@ class PropertyDepsDialog extends FormDialog {
 	static boolean checkToAdd(FlowEditor editor) {
 		if (editor == null
 			|| editor.product == null
-			|| editor.product.flow == null
-			|| Flows.getType(editor.product.flow) != FlowType.PRODUCT_FLOW)
+			|| Flows.getType(editor.product) != FlowType.PRODUCT_FLOW)
 			return false;
 		var config = DialogData.of(editor);
 		if (config.selected.isEmpty())
@@ -131,7 +130,7 @@ class PropertyDepsDialog extends FormDialog {
 			return new DialogData(
 				editor,
 				unused,
-				defaultSelectionOf(editor.product.flow, unused));
+				defaultSelectionOf(editor.product, unused));
 		}
 
 		/**

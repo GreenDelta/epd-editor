@@ -8,6 +8,7 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.FlowType;
+import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.util.Flows;
 
 import app.App;
@@ -18,25 +19,24 @@ import app.editors.RefLink;
 import app.editors.VersionField;
 import app.util.TextBuilder;
 import app.util.UI;
-import epd.model.EpdProduct;
 import epd.model.Xml;
 
 class FlowPage extends FormPage {
 
-	private final EpdProduct product;
+	private final Flow flow;
 	private final FlowEditor editor;
 	private FormToolkit tk;
 
 	FlowPage(FlowEditor editor) {
 		super(editor, "FlowPage", M.Flow);
 		this.editor = editor;
-		this.product = editor.product;
+		this.flow = editor.product;
 	}
 
 	@Override
 	protected void createFormContent(IManagedForm mform) {
 		Supplier<String> title = () -> M.Flow + ": "
-			+ App.s(Flows.getBaseName(product.flow));
+			+ App.s(Flows.getBaseName(flow));
 		var form = UI.formHeader(mform, title.get());
 		editor.onSaved(() -> form.setText(title.get()));
 		tk = mform.getToolkit();
@@ -44,8 +44,8 @@ class FlowPage extends FormPage {
 		var tb = new TextBuilder(editor, this, tk);
 		infoSection(body, tb);
 		new CategorySection(editor, DataSetType.FLOW,
-			Flows.withClassifications(product.flow)).render(body, tk);
-		if (Flows.getType(product.flow) == FlowType.PRODUCT_FLOW) {
+			Flows.withClassifications(flow)).render(body, tk);
+		if (Flows.getType(flow) == FlowType.PRODUCT_FLOW) {
 			VendorSection.create(body, tk, editor);
 		}
 		propertySections(body);
@@ -54,28 +54,28 @@ class FlowPage extends FormPage {
 	}
 
 	private void infoSection(Composite body, TextBuilder tb) {
-		var comp = UI.infoSection(product.flow, body, tk);
-		var fName = Flows.withFlowName(product.flow);
+		var comp = UI.infoSection(flow, body, tk);
+		var fName = Flows.withFlowName(flow);
 		tb.text(comp, M.Name, Tooltips.Flow_Name, fName.withBaseName());
-		var info = Flows.withDataSetInfo(product.flow);
+		var info = Flows.withDataSetInfo(flow);
 		tb.text(comp, M.Synonyms, Tooltips.Flow_Synonyms, info.withSynonyms());
 		tb.text(comp, M.Description,
 			Tooltips.Flow_Description, info.withComment());
-		if (Flows.getType(product.flow) == FlowType.PRODUCT_FLOW) {
+		if (Flows.getType(flow) == FlowType.PRODUCT_FLOW) {
 			genericProductLink(comp);
 		}
-		UI.fileLink(product.flow, comp, tk);
+		UI.fileLink(flow, comp, tk);
 	}
 
 	private void genericProductLink(Composite comp) {
 		UI.formLabel(comp, tk, M.GenericProduct, Tooltips.Flow_GenericProduct);
 		var link = new RefLink(comp, tk, DataSetType.FLOW);
-		var info = Flows.getDataSetInfo(product.flow);
+		var info = Flows.getDataSetInfo(flow);
 		if (info != null && info.getEpdExtension() != null) {
 			link.setRef(info.getEpdExtension().getGenericFlow());
 		}
 		link.onChange(ref -> {
-			Flows.withDataSetInfo(product.flow)
+			Flows.withDataSetInfo(flow)
 				.withEpdExtension()
 				.withGenericFlow(ref);
 			editor.setDirty();
@@ -85,7 +85,7 @@ class FlowPage extends FormPage {
 	private void propertySections(Composite body) {
 		var flowProps = new FlowPropertySection(editor);
 		flowProps.render(body, tk);
-		if (Flows.getType(product.flow) != FlowType.PRODUCT_FLOW)
+		if (Flows.getType(flow) != FlowType.PRODUCT_FLOW)
 			return;
 		var matProps = new MaterialPropertySection(editor);
 		matProps.render(body, tk);
@@ -93,7 +93,6 @@ class FlowPage extends FormPage {
 	}
 
 	private void adminSection(Composite body) {
-		var flow = product.flow;
 		var comp = UI.formSection(body, tk, M.AdministrativeInformation);
 		var time = UI.formText(comp, tk,
 			M.LastUpdate, Tooltips.All_LastUpdate);

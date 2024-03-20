@@ -92,7 +92,7 @@ public class DataSetToolBar extends EditorActionBarContributor {
 		if (editor instanceof EpdEditor e)
 			return e.epd;
 		if (editor instanceof FlowEditor e)
-			return e.product.flow;
+			return e.product;
 		if (editor instanceof FlowPropertyEditor e)
 			return e.property;
 		if (editor instanceof SourceEditor e)

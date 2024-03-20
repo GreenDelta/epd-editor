@@ -16,8 +16,6 @@ import app.editors.Editors;
 import app.editors.RefCheck;
 import app.editors.RefEditorInput;
 import app.store.Data;
-import epd.io.conversion.FlowExtensions;
-import epd.model.EpdProduct;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +24,7 @@ public class FlowEditor extends BaseEditor {
 
 	private static final String ID = "flow.editor";
 
-	public EpdProduct product;
+	public Flow product;
 	List<MaterialPropertyValue> materialProperties;
 
 	public static void open(Ref ref) {
@@ -43,11 +41,10 @@ public class FlowEditor extends BaseEditor {
 		Editors.setTabTitle(input, this);
 		try {
 			var in = (RefEditorInput) input;
-			var flow = App.store().get(Flow.class, in.ref.getUUID());
-			RefCheck.on(flow);
-			product = FlowExtensions.read(flow);
+			product = App.store().get(Flow.class, in.ref.getUUID());
+			RefCheck.on(product);
 			materialProperties = new ArrayList<>(
-				MaterialPropertyValue.readFrom(flow));
+				MaterialPropertyValue.readFrom(product));
 		} catch (Exception e) {
 			throw new PartInitException("Failed to open flow editor", e);
 		}
@@ -56,14 +53,14 @@ public class FlowEditor extends BaseEditor {
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		try {
-			Data.updateVersion(product.flow);
-			MaterialPropertyValue.write(materialProperties, product.flow);
+			Data.updateVersion(product);
+			MaterialPropertyValue.write(materialProperties, product);
 			Data.save(product);
 			saveHandlers.forEach(Runnable::run);
 			dirty = false;
 			editorDirtyStateChanged();
-			Editors.setTabTitle(product.flow, this);
-			FlowUpdateCheck.with(product.flow);
+			Editors.setTabTitle(product, this);
+			FlowUpdateCheck.with(product);
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to save flow data set", e);
@@ -74,7 +71,7 @@ public class FlowEditor extends BaseEditor {
 	protected void addPages() {
 		try {
 			addPage(new FlowPage(this));
-			Editors.addInfoPages(this, product.flow);
+			Editors.addInfoPages(this, product);
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to add page", e);

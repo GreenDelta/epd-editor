@@ -3,20 +3,17 @@ package epd.util;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import org.openlca.ilcd.commons.FlowType;
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.EpdIndicatorResult;
 import org.openlca.ilcd.util.Epds;
-import org.openlca.ilcd.util.Flows;
 
-import epd.io.conversion.FlowExtensions;
 
+// TODO: this class can be removed once we have the updated reference
+// collection methods
 public final class ExtensionRefs {
 
 	private ExtensionRefs() {
@@ -59,20 +56,5 @@ public final class ExtensionRefs {
 			.filter(Ref::isValid)
 			.forEach(refs::add);
 		return refs;
-	}
-
-	private static Set<Ref> of(Flow f) {
-		// TODO: this is not needed anymore as extensions
-		// references should be all in our object model
-		var type = Flows.getType(f);
-		if (type != FlowType.PRODUCT_FLOW)
-			return Collections.emptySet();
-		var product = FlowExtensions.read(f);
-
-		return Stream.of(
-				product.vendor,
-				product.documentation)
-			.filter(r -> r != null && r.isValid())
-			.collect(Collectors.toSet());
 	}
 }

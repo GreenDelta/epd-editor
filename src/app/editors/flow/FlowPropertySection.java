@@ -45,7 +45,7 @@ class FlowPropertySection {
 
 	FlowPropertySection(FlowEditor editor) {
 		this.editor = editor;
-		this.flow = editor.product.flow;
+		this.flow = editor.product;
 	}
 
 	void render(Composite body, FormToolkit tk) {

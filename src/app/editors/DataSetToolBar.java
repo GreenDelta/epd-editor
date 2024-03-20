@@ -31,18 +31,18 @@ public class DataSetToolBar extends EditorActionBarContributor {
 	@Override
 	public void contributeToToolBar(IToolBarManager manager) {
 		manager.add(Actions.create(M.Reload,
-				Icon.RELOAD.des(), this::reload));
+			Icon.RELOAD.des(), this::reload));
 		manager.add(Actions.create(M.UploadDataSet,
-				Icon.UPLOAD.des(), this::tryUpload));
+			Icon.UPLOAD.des(), this::tryUpload));
 		manager.add(Actions.create(M.ValidateDataSet,
-				Icon.OK.des(), this::tryValidate));
+			Icon.OK.des(), this::tryValidate));
 	}
 
 	private void reload() {
 		with((editor, dataSet) -> {
 			if (editor.isDirty()) {
 				boolean b = MsgBox.ask(
-						M.UnsavedChanges, M.ReloadUnsaved_Message);
+					M.UnsavedChanges, M.ReloadUnsaved_Message);
 				if (!b)
 					return;
 			}
@@ -87,20 +87,20 @@ public class DataSetToolBar extends EditorActionBarContributor {
 	}
 
 	private IDataSet getDataSet(IEditorPart editor) {
-		if (editor instanceof ContactEditor)
-			return ((ContactEditor) editor).contact;
-		if (editor instanceof EpdEditor)
-			return ((EpdEditor) editor).epd;
-		if (editor instanceof FlowEditor)
-			return ((FlowEditor) editor).product.flow;
-		if (editor instanceof FlowPropertyEditor)
-			return ((FlowPropertyEditor) editor).property;
-		if (editor instanceof SourceEditor)
-			return ((SourceEditor) editor).source;
-		if (editor instanceof UnitGroupEditor)
-			return ((UnitGroupEditor) editor).unitGroup;
-		if (editor instanceof MethodEditor)
-			return ((MethodEditor) editor).method;
+		if (editor instanceof ContactEditor e)
+			return e.contact;
+		if (editor instanceof EpdEditor e)
+			return e.epd;
+		if (editor instanceof FlowEditor e)
+			return e.product.flow;
+		if (editor instanceof FlowPropertyEditor e)
+			return e.property;
+		if (editor instanceof SourceEditor e)
+			return e.source;
+		if (editor instanceof UnitGroupEditor e)
+			return e.unitGroup;
+		if (editor instanceof MethodEditor e)
+			return e.method;
 		return null;
 	}
 

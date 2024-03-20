@@ -26,7 +26,7 @@ public class FlowEditor extends BaseEditor {
 
 	private static final String ID = "flow.editor";
 
-	EpdProduct product;
+	public EpdProduct product;
 	List<MaterialPropertyValue> materialProperties;
 
 	public static void open(Ref ref) {

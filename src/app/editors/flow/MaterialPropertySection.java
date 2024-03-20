@@ -66,7 +66,7 @@ class MaterialPropertySection {
 	}
 
 	private void onAdd() {
-		if (editor.product == null)
+		if (editor.flow == null)
 			return;
 		var dialog = new MaterialPropertyDialog();
 		if (dialog.open() != Window.OK)

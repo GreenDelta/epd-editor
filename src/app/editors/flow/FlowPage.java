@@ -30,7 +30,7 @@ class FlowPage extends FormPage {
 	FlowPage(FlowEditor editor) {
 		super(editor, "FlowPage", M.Flow);
 		this.editor = editor;
-		this.flow = editor.product;
+		this.flow = editor.flow;
 	}
 
 	@Override

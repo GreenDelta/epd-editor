@@ -1,5 +1,6 @@
 package app.editors.flow;
 
+import epd.io.conversion.Cleanup;
 import epd.model.MaterialPropertyValue;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IEditorInput;
@@ -24,7 +25,7 @@ public class FlowEditor extends BaseEditor {
 
 	private static final String ID = "flow.editor";
 
-	public Flow product;
+	public Flow flow;
 	List<MaterialPropertyValue> materialProperties;
 
 	public static void open(Ref ref) {
@@ -41,10 +42,10 @@ public class FlowEditor extends BaseEditor {
 		Editors.setTabTitle(input, this);
 		try {
 			var in = (RefEditorInput) input;
-			product = App.store().get(Flow.class, in.ref.getUUID());
-			RefCheck.on(product);
+			flow = App.store().get(Flow.class, in.ref.getUUID());
+			RefCheck.on(flow);
 			materialProperties = new ArrayList<>(
-				MaterialPropertyValue.readFrom(product));
+				MaterialPropertyValue.readFrom(flow));
 		} catch (Exception e) {
 			throw new PartInitException("Failed to open flow editor", e);
 		}
@@ -53,14 +54,17 @@ public class FlowEditor extends BaseEditor {
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		try {
-			Data.updateVersion(product);
-			MaterialPropertyValue.write(materialProperties, product);
-			Data.save(product);
+			Data.updateVersion(flow);
+			var copy = flow.copy();
+			Cleanup.on(copy);
+			MaterialPropertyValue.write(materialProperties, copy);
+			Data.save(copy);
+
 			saveHandlers.forEach(Runnable::run);
 			dirty = false;
 			editorDirtyStateChanged();
-			Editors.setTabTitle(product, this);
-			FlowUpdateCheck.with(product);
+			Editors.setTabTitle(flow, this);
+			FlowUpdateCheck.with(flow);
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to save flow data set", e);
@@ -71,7 +75,7 @@ public class FlowEditor extends BaseEditor {
 	protected void addPages() {
 		try {
 			addPage(new FlowPage(this));
-			Editors.addInfoPages(this, product);
+			Editors.addInfoPages(this, flow);
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to add page", e);

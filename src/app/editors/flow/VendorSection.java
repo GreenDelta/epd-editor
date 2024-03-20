@@ -43,7 +43,7 @@ class VendorSection {
 		Controls.onSelect(check, e -> {
 			// clear to null if it is not vendor specific
 			var b = check.getSelection() ? Boolean.TRUE : null;
-			Flows.withInventoryMethod(editor.product)
+			Flows.withInventoryMethod(editor.flow)
 				.withEpdExtension()
 				.withVendorSpecific(b);
 			editor.setDirty();
@@ -51,7 +51,7 @@ class VendorSection {
 	}
 
 	private boolean isVendorSpecific() {
-		var m = Flows.getInventoryMethod(editor.product);
+		var m = Flows.getInventoryMethod(editor.flow);
 		return m != null
 			&& m.getEpdExtension() != null
 			&& m.getEpdExtension().getVendorSpecific() != null
@@ -80,12 +80,12 @@ class VendorSection {
 		Function<EpdMethodExtension, Ref> get,
 		BiConsumer<EpdMethodExtension, Ref> set
 	) {
-		var m = Flows.getInventoryMethod(editor.product);
+		var m = Flows.getInventoryMethod(editor.flow);
 		if (m != null && m.getEpdExtension() != null) {
 			link.setRef(get.apply(m.getEpdExtension()));
 		}
 		link.onChange(ref -> {
-			var ext = Flows.withInventoryMethod(editor.product)
+			var ext = Flows.withInventoryMethod(editor.flow)
 				.withEpdExtension();
 			set.accept(ext, ref);
 			editor.setDirty();

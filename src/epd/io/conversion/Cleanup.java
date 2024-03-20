@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import org.openlca.ilcd.commons.CommissionerAndGoal;
 import org.openlca.ilcd.commons.Other;
 import org.openlca.ilcd.flows.Flow;
+import org.openlca.ilcd.flows.epd.EpdMethodExtension;
 import org.openlca.ilcd.flows.epd.matml.MaterialDoc;
 import org.openlca.ilcd.processes.DataGenerator;
 import org.openlca.ilcd.processes.Geography;
@@ -36,6 +37,10 @@ public class Cleanup {
 				info.withEpdExtension(null);
 			}
 		}
+		var method = Flows.getInventoryMethod(flow);
+		if (method != null && isEmpty(method.getEpdExtension())) {
+			method.withEpdExtension(null);
+		}
 	}
 
 	private static boolean isEmpty(MaterialDoc doc) {
@@ -43,6 +48,15 @@ public class Cleanup {
 			return true;
 		return doc.getMaterials().isEmpty()
 			&& doc.getProperties().isEmpty();
+	}
+
+	private static boolean isEmpty(EpdMethodExtension ext) {
+		if (ext == null)
+			return true;
+		return ext.getVendorSpecific() == null
+			&& ext.getVendor() == null
+			&& ext.getDocumentation() == null
+			&& ext.getAny().isEmpty();
 	}
 
 	public static void on(Process epd) {

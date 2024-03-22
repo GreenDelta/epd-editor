@@ -14,7 +14,7 @@ import org.w3c.dom.Element;
  * Creates a data set reference element in an extension point (see the generic
  * product or vendor information in the extended product data sets).
  */
-class DataSetRefExtension {
+public class DataSetRefExtension {
 
 	private String type;
 	private String path;

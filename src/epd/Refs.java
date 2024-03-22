@@ -3,20 +3,16 @@ package epd;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
+import java.util.function.Function;
 
+import org.openlca.ilcd.commons.CommissionerAndGoal;
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.flows.Flow;
-import org.openlca.ilcd.processes.ComplianceDeclaration;
-import org.openlca.ilcd.processes.Modelling;
 import org.openlca.ilcd.processes.Process;
-import org.openlca.ilcd.processes.Publication;
-import org.openlca.ilcd.processes.Review;
-import org.openlca.ilcd.processes.Technology;
+import org.openlca.ilcd.processes.*;
 import org.openlca.ilcd.util.Epds;
 import org.openlca.ilcd.util.Flows;
-import org.openlca.ilcd.util.Processes;
 
 public final class Refs {
 
@@ -34,59 +30,104 @@ public final class Refs {
 	public static List<Ref> getAllEditable(Process epd) {
 		var refs = new ArrayList<Ref>();
 
-		refs.addAll(getAllProcessInfo(epd));
+		// general information
 
-		var inventoryMethod = Processes.getInventoryMethod(epd);
-		if (inventoryMethod != null) {
-			refs.addAll(inventoryMethod.getSources());
+		// declared product
+		var refFlows = Epds.getReferenceFlows(epd);
+		for (var e : epd.getExchanges()) {
+			if (refFlows.contains(e.getId())) {
+				add(refs, e, Exchange::getFlow);
+			}
 		}
 
-		var representativeness = Processes.getRepresentativeness(epd);
-		if (representativeness != null) {
-			refs.addAll(representativeness.getDataHandlingSources());
-			refs.addAll(representativeness.getSources());
+		// external documentation
+		addAll(refs, Epds.getDataSetInfo(epd), DataSetInfo::getExternalDocs);
+
+		// technical flow diagrams & pictures
+		add(refs, Epds.getTechnology(epd), Technology::getPictogram);
+		addAll(refs, Epds.getTechnology(epd), Technology::getPictures);
+
+		// modelling & validation
+
+		// LCA method details
+		addAll(refs, Epds.getInventoryMethod(epd), InventoryMethod::getSources);
+
+		// data quality sources
+		addAll(refs, Epds.getRepresentativeness(epd),
+			Representativeness::getDataHandlingSources);
+
+		// data sources
+		addAll(refs, Epds.getRepresentativeness(epd),
+			Representativeness::getSources);
+
+		// compliance declarations
+		for (var dec : Epds.getComplianceDeclarations(epd)) {
+			add(refs, dec, ComplianceDeclaration::getSystem);
 		}
 
-		refs.addAll(Epds.withOriginalEpds(epd));
+		// original EPDs
+		refs.addAll(Epds.getOriginalEpds(epd));
 
-		var modelling = Processes.getModelling(epd);
-		if (modelling != null) {
-			refs.addAll(getAll(modelling));
+		// reviewers & review reports
+		for (var rev : Epds.getReviews(epd)) {
+			addAll(refs, rev, Review::getReviewers);
+			add(refs, rev, Review::getReport);
 		}
 
-		refs.addAll(getAllAdmin(epd));
+		// administrative information
+
+		// commissioners
+		addAll(refs, Epds.getCommissionerAndGoal(epd),
+			CommissionerAndGoal::getCommissioners);
+
+		// documentor
+		add(refs, Epds.getDataEntry(epd), DataEntry::getDocumentor);
+
+		// data generators
+		addAll(refs, Epds.getDataGenerator(epd), DataGenerator::getContacts);
+
+		// data formats
+		addAll(refs, Epds.getDataEntry(epd), DataEntry::getFormats);
+
+		// publication
+		var pub = Epds.getPublication(epd);
+		add(refs, pub, Publication::getRegistrationAuthority);
+		add(refs, pub, Publication::getOwner);
+
+		// publishers
+		refs.addAll(Epds.getPublishers(epd));
+
+		// preceding data sets
+		addAll(refs, pub, Publication::getPrecedingVersions);
 
 		return refs;
 	}
 
+	private static <T> void addAll(
+		List<Ref> refs, T obj, Function<T, List<Ref>> fn
+	) {
+		if (obj == null)
+			return;
+		var list = fn.apply(obj);
+		if (list == null || list.isEmpty())
+			return;
+		refs.addAll(list);
+	}
+
+	private static <T> void add(List<Ref> refs, T obj, Function<T, Ref> fn) {
+		if (obj == null)
+			return;
+		var ref = fn.apply(obj);
+		if (ref != null) {
+			refs.add(ref);
+		}
+	}
 
 	public static List<Ref> getAllEditable(Flow product) {
 		var genericFlow = getGenericFlow(product);
 		return genericFlow != null
 			? Collections.singletonList(genericFlow)
 			: Collections.emptyList();
-	}
-
-	private static List<Ref> getAll(Modelling modelling) {
-		var refs = new ArrayList<Ref>();
-
-		modelling.getComplianceDeclarations().stream()
-			.map(ComplianceDeclaration::getSystem)
-			.filter(Objects::nonNull)
-			.forEach(refs::add);
-
-		var validation = modelling.getValidation();
-		if (validation != null) {
-			validation.getReviews().stream()
-				.map(Review::getReviewers)
-				.forEach(refs::addAll);
-			validation.getReviews().stream()
-				.map(Review::getReport)
-				.filter(Objects::nonNull)
-				.forEach(refs::add);
-		}
-
-		return refs;
 	}
 
 	private static Ref getGenericFlow(Flow product) {
@@ -99,98 +140,6 @@ public final class Refs {
 			return null;
 
 		return extension.getGenericFlow();
-	}
-
-	private static List<Ref> getAllProcessInfo(Process epd) {
-		var refs = new ArrayList<Ref>();
-
-		var dataSetInfo = Epds.getDataSetInfo(epd);
-		if (dataSetInfo != null) {
-			refs.addAll(dataSetInfo.getExternalDocs());
-		}
-
-		var technology = Epds.getTechnology(epd);
-		if (technology != null) {
-			refs.addAll(getAll(technology));
-		}
-
-		return refs;
-	}
-
-	private static List<Ref> getAll(Technology technology) {
-		var refs = new ArrayList<Ref>();
-
-		var pictogram = technology.getPictogram();
-		if (pictogram != null) {
-			refs.add(technology.getPictogram());
-		}
-
-		refs.addAll(technology.getPictures());
-
-		return refs;
-	}
-
-	private static List<Ref> getAllAdmin(Process epd) {
-		var refs = new ArrayList<Ref>();
-
-		var commissionersAndGoals = Processes.getCommissionerAndGoal(epd);
-		if (commissionersAndGoals != null) {
-			refs.addAll(commissionersAndGoals.getCommissioners());
-		}
-
-		var dataEntry = Processes.getDataEntry(epd);
-		if (dataEntry != null) {
-			refs.addAll(dataEntry.getFormats());
-			var documentor = dataEntry.getDocumentor();
-			if (documentor != null) {
-				refs.add(documentor);
-			}
-		}
-
-		var dataGenerator = Processes.getDataGenerator(epd);
-		if (dataGenerator != null) {
-			refs.addAll(dataGenerator.getContacts());
-		}
-
-		var publication = Processes.getPublication(epd);
-		if (publication != null) {
-			refs.addAll(getAll(publication));
-		}
-
-		refs.addAll(Epds.withPublishers(epd));
-
-		return refs;
-	}
-
-	private static List<Ref> getAll(Publication publication) {
-		var refs = new ArrayList<Ref>();
-
-		var registrationAuthority = publication.getRegistrationAuthority();
-		if (registrationAuthority != null) {
-			refs.add(publication.getRegistrationAuthority());
-		}
-
-		var owner = publication.getOwner();
-		if (owner != null) {
-			refs.add(publication.getOwner());
-		}
-
-		var republication = publication.getRepublication();
-		if (republication != null) {
-			refs.add(publication.getRepublication());
-		}
-
-		refs.addAll(publication.getPrecedingVersions());
-
-		return refs;
-	}
-
-
-	private static List<Ref> getAllProductInfo(Flow product) {
-		var refs = new ArrayList<Ref>();
-
-
-		return refs;
 	}
 
 }

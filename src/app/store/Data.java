@@ -2,13 +2,7 @@ package app.store;
 
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
-import org.openlca.ilcd.contacts.Contact;
-import org.openlca.ilcd.flowproperties.FlowProperty;
-import org.openlca.ilcd.flows.Flow;
-import org.openlca.ilcd.methods.ImpactMethod;
-import org.openlca.ilcd.processes.Process;
-import org.openlca.ilcd.sources.Source;
-import org.openlca.ilcd.units.UnitGroup;
+import org.openlca.ilcd.util.DataSets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,82 +66,12 @@ public final class Data {
 	}
 
 	public static void updateVersion(IDataSet ds) {
-		if (ds instanceof Process x) {
-			var pub = x.withAdminInfo().withPublication();
-			var v = Version.fromString(pub.getVersion())
-				.incUpdate()
-				.toString();
-			pub.withVersion(v);
-			x.withAdminInfo()
-				.withDataEntry()
-				.withTimeStamp(Xml.now());
-		}
-
-		if (ds instanceof Flow x) {
-			var pub = x.withAdminInfo().withPublication();
-			var v = Version.fromString(pub.getVersion())
-				.incUpdate()
-				.toString();
-			pub.withVersion(v);
-			x.withAdminInfo()
-				.withDataEntry()
-				.withTimeStamp(Xml.now());
-		}
-
-		if (ds instanceof FlowProperty x) {
-			var pub = x.withAdminInfo().withPublication();
-			var v = Version.fromString(pub.getVersion())
-				.incUpdate()
-				.toString();
-			pub.withVersion(v);
-			x.withAdminInfo()
-				.withDataEntry()
-				.withTimeStamp(Xml.now());
-		}
-
-		if (ds instanceof UnitGroup x) {
-			var pub = x.withAdminInfo().withPublication();
-			var v = Version.fromString(pub.getVersion())
-				.incUpdate()
-				.toString();
-			pub.withVersion(v);
-			x.withAdminInfo()
-				.withDataEntry()
-				.withTimeStamp(Xml.now());
-		}
-
-		if (ds instanceof Contact x) {
-			var pub = x.withAdminInfo().withPublication();
-			var v = Version.fromString(pub.getVersion())
-				.incUpdate()
-				.toString();
-			pub.withVersion(v);
-			x.withAdminInfo()
-				.withDataEntry()
-				.withTimeStamp(Xml.now());
-		}
-
-		if (ds instanceof Source x) {
-			var pub = x.withAdminInfo().withPublication();
-			var v = Version.fromString(pub.getVersion())
-				.incUpdate()
-				.toString();
-			pub.withVersion(v);
-			x.withAdminInfo()
-				.withDataEntry()
-				.withTimeStamp(Xml.now());
-		}
-
-		if (ds instanceof ImpactMethod x) {
-			var pub = x.withAdminInfo().withPublication();
-			var v = Version.fromString(pub.getVersion())
-				.incUpdate()
-				.toString();
-			pub.withVersion(v);
-			x.withAdminInfo()
-				.withDataEntry()
-				.withTimeStamp(Xml.now());
-		}
+		if (ds == null)
+			return;
+		var v = Version.fromString(DataSets.getVersion(ds))
+			.incUpdate()
+			.toString();
+		DataSets.withVersion(ds, v);
+		DataSets.withTimeStamp(ds, Xml.now());
 	}
-
 }

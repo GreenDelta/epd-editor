@@ -9,6 +9,7 @@ import org.openlca.ilcd.io.SodaClient;
 import org.openlca.ilcd.sources.FileRef;
 import org.openlca.ilcd.sources.Source;
 import org.openlca.ilcd.util.Sources;
+import org.slf4j.LoggerFactory;
 
 import app.App;
 import epd.model.RefStatus;
@@ -37,6 +38,8 @@ class Upload {
 				client.put(ds);
 			return RefStatus.ok(ref, "Uploaded");
 		} catch (Exception e) {
+			LoggerFactory.getLogger(getClass())
+				.error("upload of dataset failed: " + ref, e);
 			cancelAll = true;
 			return RefStatus.error(ref, "Upload failed: " + e.getMessage());
 		}

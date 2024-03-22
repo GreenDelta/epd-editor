@@ -20,12 +20,12 @@ import org.openlca.ilcd.io.SodaClient;
 import org.openlca.ilcd.sources.FileRef;
 import org.openlca.ilcd.sources.Source;
 import org.openlca.ilcd.util.DataSets;
-import org.openlca.ilcd.util.RefTree;
 import org.openlca.ilcd.util.Sources;
 
 import app.App;
 import app.M;
 import app.store.RefTrees;
+import epd.refs.Refs;
 import epd.model.RefStatus;
 
 public class Download implements IRunnableWithProgress {
@@ -46,7 +46,7 @@ public class Download implements IRunnableWithProgress {
 	@Override
 	public void run(IProgressMonitor monitor)
 			throws InvocationTargetException, InterruptedException {
-		monitor.beginTask("#Download data sets", IProgressMonitor.UNKNOWN);
+		monitor.beginTask("Download data sets", IProgressMonitor.UNKNOWN);
 		while (!queue.isEmpty()) {
 			Ref ref = queue.poll();
 			handled.add(ref);
@@ -60,7 +60,7 @@ public class Download implements IRunnableWithProgress {
 			}
 			if (!withDependencies)
 				continue;
-			for (Ref next : RefTree.create(ds).getRefs()) {
+			for (var next : Refs.allEditableOf(ds)) {
 				if (handled.contains(next) || queue.contains(next))
 					continue;
 				queue.add(next);

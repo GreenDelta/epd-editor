@@ -1,17 +1,12 @@
 package app.store;
 
-import app.App;
-import app.M;
-import app.editors.RefTable;
-import app.editors.RefTableLabel;
-import app.util.Colors;
-import app.util.Controls;
-import app.util.FileChooser;
-import app.util.MsgBox;
-import app.util.Tables;
-import app.util.UI;
-import com.google.common.base.Strings;
-import epd.util.ExtensionRefs;
+import java.io.File;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.TableViewer;
@@ -30,17 +25,23 @@ import org.openlca.ilcd.processes.Exchange;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.sources.FileRef;
 import org.openlca.ilcd.sources.Source;
-import org.openlca.ilcd.util.DependencyTraversal;
 import org.openlca.ilcd.util.Sources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import com.google.common.base.Strings;
+
+import app.App;
+import app.M;
+import app.editors.RefTable;
+import app.editors.RefTableLabel;
+import app.util.Colors;
+import app.util.Controls;
+import app.util.FileChooser;
+import app.util.MsgBox;
+import app.util.Tables;
+import app.util.UI;
+import epd.refs.Refs;
 
 /**
  * A dialog for exporting single data sets into ILCD zip packages.
@@ -187,13 +188,8 @@ public class ExportDialog extends Wizard {
 					monitor.beginTask(M.SearchDependentDataSets,
 						IProgressMonitor.UNKNOWN);
 					all.clear();
-					DependencyTraversal.of(App.store(), ref)
-						.forEach(ds -> {
-							Ref next = Ref.of(ds);
-							monitor.subTask(App.header(next.getName(), 75));
-							all.add(next);
-							all.addAll(ExtensionRefs.of(ds));
-						});
+					var refs = Refs.allEditableDependenciesOf(App.store(), ref);
+					all.addAll(refs);
 					App.runInUI("update table", () -> table.setInput(all));
 					monitor.done();
 				});

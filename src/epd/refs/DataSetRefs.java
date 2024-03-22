@@ -1,4 +1,4 @@
-package epd;
+package epd.refs;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,26 +23,23 @@ import org.openlca.ilcd.util.FlowProperties;
 import org.openlca.ilcd.util.Flows;
 import org.openlca.ilcd.util.Sources;
 
-public final class Refs {
+class DataSetRefs {
 
-	private Refs() {
-	}
-
-	public static List<Ref> getAllEditable(IDataSet ds) {
+	static List<Ref> allEditableOf(IDataSet ds) {
 		if (ds instanceof Process epd)
-			return getAllEditable(epd);
+			return allEditableOf(epd);
 		else if (ds instanceof Flow product)
-			return getAllEditable(product);
+			return allEditableOf(product);
 		else if (ds instanceof Contact contact)
-			return getAllEditable(contact);
+			return allEditableOf(contact);
 		else if (ds instanceof Source source)
-			return getAllEditable(source);
+			return allEditableOf(source);
 		else if (ds instanceof FlowProperty prop)
-			return getAllEditable(prop);
+			return allEditableOf(prop);
 		else return Collections.emptyList();
 	}
 
-	public static List<Ref> getAllEditable(Process epd) {
+	private static List<Ref> allEditableOf(Process epd) {
 		if (epd == null)
 			return Collections.emptyList();
 
@@ -121,7 +118,7 @@ public final class Refs {
 		return refs;
 	}
 
-	public static List<Ref> getAllEditable(Flow product) {
+	private static List<Ref> allEditableOf(Flow product) {
 		if (product == null)
 			return Collections.emptyList();
 
@@ -146,14 +143,14 @@ public final class Refs {
 		return refs;
 	}
 
-	public static List<Ref> getAllEditable(Contact contact) {
+	private static List<Ref> allEditableOf(Contact contact) {
 		var info = Contacts.getDataSetInfo(contact);
 		return info != null && info.getLogo() != null
 			? Collections.singletonList(info.getLogo())
 			: Collections.emptyList();
 	}
 
-	public static List<Ref> getAllEditable(Source source) {
+	private static List<Ref> allEditableOf(Source source) {
 		var refs = new ArrayList<Ref>();
 		// logo
 		add(refs, Sources.getDataSetInfo(source),
@@ -164,7 +161,7 @@ public final class Refs {
 		return refs;
 	}
 
-	public static List<Ref> getAllEditable(FlowProperty prop) {
+	private static List<Ref> allEditableOf(FlowProperty prop) {
 		var group = FlowProperties.getUnitGroupRef(prop);
 		return group != null
 			? Collections.singletonList(group)

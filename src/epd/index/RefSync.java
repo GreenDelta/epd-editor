@@ -6,7 +6,7 @@ import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.util.DataSets;
 
-import epd.Refs;
+import epd.refs.Refs;
 import epd.model.Version;
 
 /**
@@ -19,7 +19,7 @@ public final class RefSync {
 		if (ds == null || index == null)
 			return false;
 		AtomicBoolean b = new AtomicBoolean(false);
-		Refs.getAllEditable(ds).forEach(ref -> {
+		Refs.allEditableOf(ds).forEach(ref -> {
 			if (b.get()) {
 				return;
 			}
@@ -34,7 +34,7 @@ public final class RefSync {
 	public static void updateRefs(IDataSet ds, Index index) {
 		if (ds == null || index == null)
 			return;
-		Refs.getAllEditable(ds).forEach(ref -> {
+		Refs.allEditableOf(ds).forEach(ref -> {
 			Ref indexRef = index.find(ref);
 			if (isNewer(indexRef, ref)) {
 				ref.withUri(indexRef.getUri())
@@ -49,7 +49,7 @@ public final class RefSync {
 		var uuid = DataSets.getUUID(ds);
 		if (uuid == null)
 			return;
-		var selfRef = Refs.getAllEditable(ds).stream()
+		var selfRef = Refs.allEditableOf(ds).stream()
 			.filter(ref -> uuid.equals(ref.getUUID()))
 			.findFirst()
 			.orElse(null);

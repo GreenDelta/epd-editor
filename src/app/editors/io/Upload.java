@@ -1,16 +1,17 @@
 package app.editors.io;
 
-import app.App;
-import epd.model.RefStatus;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.io.SodaClient;
 import org.openlca.ilcd.sources.FileRef;
 import org.openlca.ilcd.sources.Source;
 import org.openlca.ilcd.util.Sources;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import app.App;
+import epd.model.RefStatus;
 
 class Upload {
 
@@ -23,21 +24,21 @@ class Upload {
 
 	RefStatus next(Ref ref) {
 		if (cancelAll)
-			return RefStatus.cancel(ref, "#Canceled");
+			return RefStatus.cancel(ref, "Canceled");
 		try {
 			if (client.contains(ref))
-				return RefStatus.info(ref, "#Already on the server");
+				return RefStatus.info(ref, "Already on the server");
 			var ds = App.store().get(ref.getDataSetClass(), ref.getUUID());
 			if (ds == null)
-				return RefStatus.error(ref, "#Data set does not exist");
+				return RefStatus.error(ref, "Data set does not exist");
 			if (ds instanceof Source)
 				uploadSource((Source) ds);
 			else
 				client.put(ds);
-			return RefStatus.ok(ref, "#Uploaded");
+			return RefStatus.ok(ref, "Uploaded");
 		} catch (Exception e) {
 			cancelAll = true;
-			return RefStatus.error(ref, "#Upload failed: " + e.getMessage());
+			return RefStatus.error(ref, "Upload failed: " + e.getMessage());
 		}
 	}
 

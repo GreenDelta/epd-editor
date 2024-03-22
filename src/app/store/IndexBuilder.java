@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.navi.NaviSync;
-import epd.RefFetch;
+import epd.refs.RefFetch;
 import epd.index.Index;
 
 /**

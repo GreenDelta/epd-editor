@@ -5,8 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import app.editors.RefTable;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
@@ -18,21 +16,20 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.io.SodaClient;
-import org.openlca.ilcd.util.DependencyTraversal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.M;
 import app.StatusView;
+import app.editors.RefTable;
 import app.editors.RefTableLabel;
 import app.util.Controls;
 import app.util.MsgBox;
 import app.util.Tables;
 import app.util.UI;
 import epd.model.RefStatus;
-import epd.profiles.EpdProfiles;
-import epd.util.ExtensionRefs;
+import epd.refs.Refs;
 
 public class UploadDialog extends Wizard {
 
@@ -141,22 +138,10 @@ public class UploadDialog extends Wizard {
 			try {
 				getContainer().run(true, false, monitor -> {
 					monitor.beginTask(
-						M.SearchDependentDataSets,
-						IProgressMonitor.UNKNOWN);
+						M.SearchDependentDataSets, IProgressMonitor.UNKNOWN);
 					allRefs.clear();
-
-					DependencyTraversal.of(App.store(), ref)
-						.filter(r -> !EpdProfiles.isProfileRef(r))
-						.forEach(ds -> {
-							Ref next = Ref.of(ds);
-							monitor.subTask(App.header(next.getName(), 75));
-							allRefs.add(next);
-							ExtensionRefs.of(ds)
-								.stream()
-								.filter(r -> !EpdProfiles.isProfileRef(r))
-								.forEach(allRefs::add);
-						});
-
+					var refs = Refs.allEditableDependenciesOf(App.store(), ref);
+					allRefs.addAll(refs);
 					App.runInUI("update table", () -> table.setInput(allRefs));
 					monitor.done();
 				});
@@ -164,7 +149,5 @@ public class UploadDialog extends Wizard {
 				log.error("failed to collect references", e);
 			}
 		}
-
-
 	}
 }

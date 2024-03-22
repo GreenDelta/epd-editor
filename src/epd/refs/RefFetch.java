@@ -1,4 +1,4 @@
-package epd;
+package epd.refs;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,6 +15,8 @@ import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 import org.slf4j.LoggerFactory;
+
+import epd.EditorVocab;
 
 public class RefFetch {
 

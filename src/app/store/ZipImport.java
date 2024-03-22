@@ -31,7 +31,7 @@ import app.App;
 import app.M;
 import app.StatusView;
 import app.navi.NaviSync;
-import epd.RefFetch;
+import epd.refs.RefFetch;
 import epd.model.RefStatus;
 
 public class ZipImport implements IRunnableWithProgress {

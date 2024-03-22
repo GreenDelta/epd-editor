@@ -1,6 +1,6 @@
 package app.editors.flow;
 
-import epd.io.conversion.Cleanup;
+import epd.io.Cleanup;
 import epd.model.MaterialPropertyValue;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IEditorInput;

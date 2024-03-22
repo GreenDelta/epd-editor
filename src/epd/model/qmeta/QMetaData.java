@@ -1,6 +1,6 @@
 package epd.model.qmeta;
 
-import epd.io.conversion.Dom;
+import epd.io.Dom;
 import epd.util.Strings;
 import org.openlca.ilcd.Vocab;
 import org.openlca.ilcd.commons.Copyable;

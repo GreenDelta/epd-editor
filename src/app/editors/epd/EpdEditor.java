@@ -12,7 +12,7 @@ import app.editors.epd.qmeta.QMetaDataPage;
 import app.editors.epd.results.ResultPage;
 import app.store.Data;
 import app.util.UI;
-import epd.io.conversion.Cleanup;
+import epd.io.Cleanup;
 import epd.model.Version;
 import epd.model.Xml;
 import epd.model.qmeta.QMetaData;

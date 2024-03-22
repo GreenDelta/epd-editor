@@ -1,17 +1,11 @@
 package app.editors.flow;
 
-import app.App;
-import app.M;
-import app.editors.RefTableLabel;
-import app.rcp.Icon;
-import app.store.Data;
-import app.store.RefTrees;
-import app.util.MsgBox;
-import app.util.Tables;
-import app.util.UI;
-import app.util.Viewers;
-import epd.index.RefSync;
-import epd.util.Strings;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -28,11 +22,18 @@ import org.openlca.ilcd.util.Flows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
+import app.App;
+import app.M;
+import app.editors.RefTableLabel;
+import app.rcp.Icon;
+import app.store.Data;
+import app.store.RefTrees;
+import app.util.MsgBox;
+import app.util.Tables;
+import app.util.UI;
+import app.util.Viewers;
+import epd.refs.RefSync;
+import epd.util.Strings;
 
 class FlowUpdateCheck {
 
@@ -60,8 +61,11 @@ class FlowUpdateCheck {
 			.filter(ref -> ref.getType() == DataSetType.PROCESS)
 			.forEach(ref -> {
 				try {
-					AtomicBoolean b = new AtomicBoolean(false);
-					RefTrees.get(ref).eachRef(pRef -> {
+					var b = new AtomicBoolean(false);
+					var tree = RefTrees.get(ref);
+					if (tree == null)
+						return;
+					tree.eachRef(pRef -> {
 						if (b.get())
 							return;
 						if (pRef.getType() == DataSetType.FLOW
@@ -123,6 +127,7 @@ class FlowUpdateCheck {
 							Process p = App.store().get(Process.class, ref.getUUID());
 							RefSync.updateRefs(p, App.index());
 							Data.updateVersion(p);
+							RefSync.updateSelfRefVersion(p);
 							Data.save(p);
 						} catch (Exception innerE) {
 							throw new RuntimeException(innerE);

@@ -1,4 +1,4 @@
-package epd.io.conversion;
+package epd.io;
 
 import com.google.common.base.Strings;
 import org.openlca.ilcd.commons.CommissionerAndGoal;

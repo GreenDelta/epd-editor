@@ -1,4 +1,4 @@
-package epd.io.conversion;
+package epd.io;
 
 import epd.util.Strings;
 import org.openlca.ilcd.Vocab;

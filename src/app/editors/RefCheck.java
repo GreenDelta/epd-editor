@@ -7,7 +7,7 @@ import app.App;
 import app.M;
 import app.store.Data;
 import app.util.MsgBox;
-import epd.index.RefSync;
+import epd.refs.RefSync;
 
 public class RefCheck {
 
@@ -23,7 +23,6 @@ public class RefCheck {
 				return;
 			RefSync.updateRefs(ds, App.index());
 			Data.updateVersion(ds);
-			// Update the version of the self reference after, to avoid loops.
 			RefSync.updateSelfRefVersion(ds);
 			Data.save(ds);
 			Ref ref = Ref.of(ds);

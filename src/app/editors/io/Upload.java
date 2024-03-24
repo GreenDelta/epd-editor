@@ -50,7 +50,7 @@ class Upload {
 		List<File> files = new ArrayList<>();
 		for (FileRef ref : fileRefs) {
 			File file = App.store().getExternalDocument(ref);
-			if (file == null || !file.exists())
+			if (file == null || !file.isFile())
 				continue;
 			files.add(file);
 		}

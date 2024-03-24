@@ -1,12 +1,38 @@
 package app.rcp;
 
-import app.M;
+import org.openlca.ilcd.commons.Category;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.processes.epd.EpdSubType;
+
+import app.App;
+import app.M;
+import epd.util.Strings;
 
 public class Labels {
 
 	private Labels() {
+	}
+
+	public static String get(Category c) {
+		return c != null
+			? ofCategory(c.getClassId(), c.getName())
+			: null;
+	}
+
+	public static String get(org.openlca.ilcd.lists.Category c) {
+		return c != null
+			? ofCategory(c.getId(), c.getName())
+			: null;
+	}
+
+	private static String ofCategory(String id, String name) {
+		if (Strings.nullOrEmpty(name))
+			return id;
+		if (Strings.nullOrEmpty(id)
+			|| id.length() > 10
+			|| App.settings().hideCategoryIds)
+			return name;
+		return id + " " + name;
 	}
 
 	public static String get(DataSetType type) {

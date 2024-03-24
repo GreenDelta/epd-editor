@@ -43,8 +43,8 @@ class DataSetSection {
 	}
 
 	void render(Composite body, FormToolkit tk) {
-		Composite comp = UI.formSection(body, tk, M.DataSets);
-		LangCombo langCombo = new LangCombo(settings().lang);
+		var comp = UI.formSection(body, tk, M.DataSets);
+		var langCombo = new LangCombo(settings().lang);
 		langCombo.render(comp, tk);
 		langCombo.onChange(lang -> {
 			settings().lang = lang;
@@ -56,12 +56,13 @@ class DataSetSection {
 		syncCheck(comp, tk);
 		productUpdateCheck(comp, tk);
 		contentDeclarationsCheck(comp, tk);
+		hideCategoryIdsCheck(comp, tk);
 		qMetaCheck(comp, tk);
 		qMetaDataFile(comp, tk);
 	}
 
 	private void dependencyCheck(Composite comp, FormToolkit tk) {
-		Button depCheck = UI.formCheckBox(comp, tk,
+		var depCheck = UI.formCheckBox(comp, tk,
 				M.ShowDependenciesInEditors);
 		depCheck.setSelection(settings().showDataSetDependencies);
 		Controls.onSelect(depCheck, e -> {
@@ -72,7 +73,7 @@ class DataSetSection {
 	}
 
 	private void xmlCheck(Composite comp, FormToolkit tk) {
-		Button xmlCheck = UI.formCheckBox(comp, tk,
+		var xmlCheck = UI.formCheckBox(comp, tk,
 				M.ShowXMLInEditors);
 		xmlCheck.setSelection(settings().showDataSetXML);
 		Controls.onSelect(xmlCheck, e -> {
@@ -82,7 +83,7 @@ class DataSetSection {
 	}
 
 	private void syncCheck(Composite comp, FormToolkit tk) {
-		Button check = UI.formCheckBox(comp, tk,
+		var check = UI.formCheckBox(comp, tk,
 				M.SynchronizeReferenceDataOnStartup);
 		check.setSelection(settings().syncRefDataOnStartup);
 		Controls.onSelect(check, e -> {
@@ -92,7 +93,7 @@ class DataSetSection {
 	}
 
 	private void contentDeclarationsCheck(Composite comp, FormToolkit tk) {
-		Button check = UI.formCheckBox(comp, tk,
+		var check = UI.formCheckBox(comp, tk,
 				M.ShowContentDeclarationEditor);
 		check.setSelection(settings().showContentDeclarations);
 		Controls.onSelect(check, e -> {
@@ -102,11 +103,20 @@ class DataSetSection {
 	}
 
 	private void qMetaCheck(Composite comp, FormToolkit tk) {
-		Button check = UI.formCheckBox(comp, tk,
+		var check = UI.formCheckBox(comp, tk,
 				M.ShowQMetadataEditor);
 		check.setSelection(settings().showQMetadata);
 		Controls.onSelect(check, e -> {
 			settings().showQMetadata = check.getSelection();
+			page.setDirty();
+		});
+	}
+
+	private void hideCategoryIdsCheck(Composite comp, FormToolkit tk) {
+		var check = UI.formCheckBox(comp, tk, "Hide category IDs");
+		check.setSelection(settings().hideCategoryIds);
+		Controls.onSelect(check, e -> {
+			settings().hideCategoryIds = check.getSelection();
 			page.setDirty();
 		});
 	}

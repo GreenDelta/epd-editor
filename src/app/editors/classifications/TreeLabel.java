@@ -1,12 +1,14 @@
 package app.editors.classifications;
 
-import app.M;
-import app.rcp.Icon;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.openlca.ilcd.lists.Category;
 import org.openlca.ilcd.lists.CategoryList;
 import org.openlca.ilcd.lists.ContentType;
+
+import app.M;
+import app.rcp.Icon;
+import app.rcp.Labels;
 
 class TreeLabel extends LabelProvider {
 
@@ -21,7 +23,7 @@ class TreeLabel extends LabelProvider {
 			return s(cl.getType());
 		}
 		if (obj instanceof Category c) {
-			return s(c);
+			return Labels.get(c);
 		}
 		return super.getText(obj);
 	}
@@ -38,14 +40,5 @@ class TreeLabel extends LabelProvider {
 			case SOURCE -> M.Sources;
 			case UNIT_GROUP -> M.UnitGroups;
 		};
-	}
-
-	private String s(Category c) {
-		if (c == null)
-			return null;
-		String s = c.getName();
-		if (c.getId() != null && c.getId().length() < 6)
-			s = c.getId() + " " + s;
-		return s;
 	}
 }

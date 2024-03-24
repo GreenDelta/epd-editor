@@ -27,6 +27,7 @@ import org.openlca.ilcd.lists.ContentType;
 
 import app.M;
 import app.rcp.Icon;
+import app.rcp.Labels;
 import app.store.CategorySystems;
 import app.util.UI;
 import app.util.Viewers;
@@ -69,7 +70,7 @@ public class CategoryDialog extends FormDialog {
 	public Classification getSelection() {
 		if (selectedSystem == null || selectedCategory == null)
 			return null;
-		Classification classification = new Classification();
+		var classification = new Classification();
 		classification.withName(selectedSystem.getName());
 		Map<Category, Category> parentMap = new IdentityHashMap<>();
 		fillParentMap(getRootCategories(selectedSystem), parentMap);
@@ -77,7 +78,7 @@ public class CategoryDialog extends FormDialog {
 		int i = 0;
 		while (!path.isEmpty()) {
 			Category c = path.pop();
-			org.openlca.ilcd.commons.Category clazz = new org.openlca.ilcd.commons.Category();
+			var clazz = new org.openlca.ilcd.commons.Category();
 			clazz.withClassId(c.getId())
 				.withLevel(i)
 				.withName(c.getName());
@@ -111,17 +112,17 @@ public class CategoryDialog extends FormDialog {
 	@Override
 	protected void createFormContent(IManagedForm mform) {
 		getShell().setText(M.SelectACategory);
-		FormToolkit tk = mform.getToolkit();
-		Composite body = UI.formBody(mform.getForm(), tk);
+		var tk = mform.getToolkit();
+		var body = UI.formBody(mform.getForm(), tk);
 		createCombo(tk, body);
 		createTree(body);
 	}
 
 	private void createCombo(FormToolkit tk, Composite body) {
-		Composite comp = UI.formComposite(body, tk);
+		var comp = UI.formComposite(body, tk);
 		UI.gridData(comp, true, false);
 		UI.formLabel(comp, tk, M.ClassificationSystem);
-		ComboViewer combo = new ComboViewer(comp);
+		var combo = new ComboViewer(comp);
 		combo.setContentProvider(ArrayContentProvider.getInstance());
 		UI.gridData(combo.getControl(), true, false);
 		combo.setLabelProvider(new ComboLabel());
@@ -203,15 +204,15 @@ public class CategoryDialog extends FormDialog {
 	private static class TreeLabel extends LabelProvider {
 
 		@Override
-		public Image getImage(Object element) {
+		public Image getImage(Object obj) {
 			return Icon.FOLDER.img();
 		}
 
 		@Override
-		public String getText(Object element) {
-			if (!(element instanceof Category category))
-				return null;
-			return category.getName();
+		public String getText(Object obj) {
+			return obj instanceof Category c
+				? Labels.get(c)
+				: null;
 		}
 	}
 

@@ -1,11 +1,13 @@
 package app.navi;
 
-import app.rcp.Icon;
-import epd.index.CategoryNode;
-import epd.util.Strings;
 import org.eclipse.swt.graphics.Image;
 import org.openlca.ilcd.commons.Category;
 import org.openlca.ilcd.commons.Ref;
+
+import app.rcp.Icon;
+import app.rcp.Labels;
+import epd.index.CategoryNode;
+import epd.util.Strings;
 
 public class CategoryElement extends NavigationElement<CategoryNode> {
 
@@ -31,12 +33,12 @@ public class CategoryElement extends NavigationElement<CategoryNode> {
 		childs.clear();
 		if (node == null)
 			return;
-		for (CategoryNode catNode : node.categories) {
-			CategoryElement e = new CategoryElement(this, catNode);
+		for (var catNode : node.categories) {
+			var e = new CategoryElement(this, catNode);
 			childs.add(e);
 		}
 		for (Ref ref : node.refs) {
-			RefElement e = new RefElement(parent, ref);
+			var e = new RefElement(parent, ref);
 			childs.add(e);
 		}
 	}
@@ -47,7 +49,7 @@ public class CategoryElement extends NavigationElement<CategoryNode> {
 	}
 
 	@Override
-	public int compareTo(NavigationElement other) {
+	public int compareTo(NavigationElement<?> other) {
 		if (other == null)
 			return 1;
 		if (!(other instanceof CategoryElement o))
@@ -58,12 +60,9 @@ public class CategoryElement extends NavigationElement<CategoryNode> {
 	@Override
 	public String getLabel() {
 		var node = getContent();
-		if (node == null || node.category == null)
-			return null;
-		Category cat = node.category;
-		if (cat.getClassId() != null && cat.getClassId().length() < 8)
-			return cat.getClassId() + " " + cat.getName();
-		return cat.getName();
+		return node != null
+			? Labels.get(node.category)
+			: null;
 	}
 
 	@Override

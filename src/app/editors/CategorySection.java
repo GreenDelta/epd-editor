@@ -3,7 +3,6 @@ package app.editors;
 import java.util.Comparator;
 import java.util.List;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -19,6 +18,7 @@ import org.openlca.ilcd.commons.DataSetType;
 import app.M;
 import app.Tooltips;
 import app.rcp.Icon;
+import app.rcp.Labels;
 import app.util.Actions;
 import app.util.Tables;
 import app.util.UI;
@@ -30,19 +30,20 @@ public class CategorySection {
 	private final DataSetType type;
 	private final List<Classification> classifications;
 
-	public CategorySection(IEditor editor, DataSetType type,
-												 List<Classification> list) {
+	public CategorySection(
+		IEditor editor, DataSetType type, List<Classification> list
+	) {
 		this.editor = editor;
 		this.type = type;
 		classifications = list;
 	}
 
 	public void render(Composite parent, FormToolkit tk) {
-		Section section = UI.section(parent, tk, M.Classification);
+		var section = UI.section(parent, tk, M.Classification);
 		section.setToolTipText(Tooltips.All_Classification);
-		Composite composite = UI.sectionClient(section, tk);
-		UI.gridLayout(composite, 1);
-		TableViewer table = Tables.createViewer(composite,
+		var comp = UI.sectionClient(section, tk);
+		UI.gridLayout(comp, 1);
+		var table = Tables.createViewer(comp,
 			M.ClassificationSystem,
 			M.CategoryPath);
 		table.getTable().setToolTipText(Tooltips.All_Classification);
@@ -53,9 +54,9 @@ public class CategorySection {
 	}
 
 	private void bindActions(Section section, TableViewer viewer) {
-		Action add = Actions.create(M.Add, Icon.ADD.des(),
+		var add = Actions.create(M.Add, Icon.ADD.des(),
 			() -> addRow(viewer));
-		Action delete = Actions.create(M.Remove, Icon.DELETE.des(),
+		var delete = Actions.create(M.Remove, Icon.DELETE.des(),
 			() -> deleteRow(viewer));
 		Actions.bind(section, add, delete);
 		Actions.bind(viewer, add, delete);
@@ -102,16 +103,18 @@ public class CategorySection {
 		}
 
 		private String getPath(Classification classification) {
-			List<Category> classes = classification.getCategories();
+			var classes = classification.getCategories();
 			classes.sort(Comparator.comparingInt(Category::getLevel));
-			StringBuilder path = new StringBuilder();
+			var path = new StringBuilder();
 			for (int i = 0; i < classes.size(); i++) {
-				Category clazz = classes.get(i);
-				if (clazz.getClassId() != null && clazz.getClassId().length() < 8)
-					path.append(clazz.getClassId()).append(" ");
-				path.append(clazz.getName());
-				if (i < (classes.size() - 1))
+				if (i > 0) {
 					path.append(" / ");
+				}
+				var clazz = classes.get(i);
+				var name = Labels.get(clazz);
+				if (name != null) {
+					path.append(name);
+				}
 			}
 			return path.toString();
 		}

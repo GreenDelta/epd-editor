@@ -2,9 +2,10 @@ package app;
 
 import java.io.File;
 
+import org.openlca.ilcd.commons.Copyable;
+
 import app.store.Json;
 import epd.profiles.EpdProfiles;
-import org.openlca.ilcd.commons.Copyable;
 
 public final class AppSettings implements Copyable<AppSettings> {
 
@@ -35,13 +36,20 @@ public final class AppSettings implements Copyable<AppSettings> {
 	public String validationProfile;
 
 	/**
+	 * If set to {@code true}, the IDs of categories are never shown in the
+	 * navigation and category selection. Otherwise, they are displayed in
+	 * front of the category name if they are reasonable short.
+	 */
+	public boolean hideCategoryIds = false;
+
+	/**
 	 * Indicates whether the editor tab for content declarations should be shown
 	 * in the EPD editor or not.
 	 */
 	public boolean showContentDeclarations = false;
 
 	/**
-	 * Indicates whether the editor tab for Q meta data should be shown in the
+	 * Indicates whether the editor tab for Q metadata should be shown in the
 	 * EPD editor or not.
 	 */
 	public boolean showQMetadata = false;
@@ -75,6 +83,7 @@ public final class AppSettings implements Copyable<AppSettings> {
 		showContentDeclarations = from.showContentDeclarations;
 		showQMetadata = from.showQMetadata;
 		validationProfile = from.validationProfile;
+		hideCategoryIds = from.hideCategoryIds;
 		syncRefDataOnStartup = from.syncRefDataOnStartup;
 		checkEPDsOnProductUpdates = from.checkEPDsOnProductUpdates;
 	}

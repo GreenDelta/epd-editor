@@ -182,7 +182,7 @@ public class M extends NLS {
 	public static String PrecedingDataSetVersion;
 	public static String ProcessInformation;
 	public static String Processes;
-	public static String Product;
+	public static String ProductFlow;
 	public static String ProductSystem;
 	public static String Project;
 	public static String Products;

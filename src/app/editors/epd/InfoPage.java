@@ -104,7 +104,7 @@ class InfoPage extends FormPage {
 	private void qRefSection(Composite parent) {
 		var comp = UI.formSection(parent, tk,
 			M.DeclaredProduct, Tooltips.EPD_DeclaredProduct);
-		UI.formLabel(comp, tk, M.Product, Tooltips.EPD_DeclaredProduct);
+		UI.formLabel(comp, tk, M.ProductFlow, Tooltips.EPD_DeclaredProduct);
 		var refText = new RefLink(comp, tk, DataSetType.FLOW);
 		var exchange = withProductExchange();
 		refText.setRef(exchange.withFlow());

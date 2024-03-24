@@ -1,12 +1,8 @@
 package app.editors;
 
-import app.M;
-import app.Tooltips;
-import app.rcp.Icon;
-import app.util.Actions;
-import app.util.Tables;
-import app.util.UI;
-import app.util.Viewers;
+import java.util.Comparator;
+import java.util.List;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -20,8 +16,13 @@ import org.openlca.ilcd.commons.Category;
 import org.openlca.ilcd.commons.Classification;
 import org.openlca.ilcd.commons.DataSetType;
 
-import java.util.Comparator;
-import java.util.List;
+import app.M;
+import app.Tooltips;
+import app.rcp.Icon;
+import app.util.Actions;
+import app.util.Tables;
+import app.util.UI;
+import app.util.Viewers;
 
 public class CategorySection {
 
@@ -61,10 +62,10 @@ public class CategorySection {
 	}
 
 	private void addRow(TableViewer viewer) {
-		CategoryDialog dialog = new CategoryDialog(type);
+		var dialog = new CategoryDialog(type);
 		if (dialog.open() != Window.OK)
 			return;
-		Classification classification = dialog.getSelection();
+		var classification = dialog.getSelection();
 		if (classification == null)
 			return;
 		classifications.add(classification);

@@ -1,15 +1,8 @@
 package app.editors.source;
 
-import app.App;
-import app.M;
-import app.Tooltips;
-import app.editors.CategorySection;
-import app.editors.RefLink;
-import app.editors.RefTable;
-import app.editors.VersionField;
-import app.util.TextBuilder;
-import app.util.UI;
-import epd.model.Xml;
+import java.util.List;
+import java.util.function.Supplier;
+
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
@@ -20,8 +13,16 @@ import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.sources.Source;
 import org.openlca.ilcd.util.Sources;
 
-import java.util.List;
-import java.util.function.Supplier;
+import app.App;
+import app.M;
+import app.Tooltips;
+import app.editors.CategorySection;
+import app.editors.RefLink;
+import app.editors.RefTable;
+import app.editors.VersionField;
+import app.util.TextBuilder;
+import app.util.UI;
+import epd.model.Xml;
 
 class SourcePage extends FormPage {
 
@@ -83,7 +84,7 @@ class SourcePage extends FormPage {
 			.withContacts();
 		RefTable.create(DataSetType.CONTACT, contacts)
 			.withEditor(editor)
-			.withTitle("#Belongs to")
+			.withTitle("Belongs to")
 			.withTooltip(Tooltips.Source_BelongsTo)
 			.render(body, tk);
 	}

@@ -145,9 +145,8 @@ public class CategoryDialog extends FormDialog {
 		treeViewer.setLabelProvider(new TreeLabel());
 		if (!systems.isEmpty())
 			treeViewer.setInput(systems.get(0));
-		treeViewer.addSelectionChangedListener((e) -> {
-			selectedCategory = Viewers.getFirstSelected(treeViewer);
-		});
+		treeViewer.addSelectionChangedListener(
+			(e) -> selectedCategory = Viewers.getFirstSelected(treeViewer));
 	}
 
 	private List<Category> getRootCategories(CategorySystem system) {

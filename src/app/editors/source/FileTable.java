@@ -1,5 +1,25 @@
 package app.editors.source;
 
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.util.List;
+
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.openlca.ilcd.sources.FileRef;
+import org.openlca.ilcd.util.Sources;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import app.App;
 import app.M;
 import app.Tooltips;
@@ -10,26 +30,6 @@ import app.util.MsgBox;
 import app.util.Tables;
 import app.util.UI;
 import app.util.Viewers;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.Section;
-import org.openlca.ilcd.sources.FileRef;
-import org.openlca.ilcd.util.Sources;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.util.List;
 
 class FileTable {
 
@@ -43,16 +43,15 @@ class FileTable {
 	}
 
 	public void render(Composite parent, FormToolkit tk) {
-		Section section = UI.section(parent, tk,
-			"Links to external files");
+		var section = UI.section(parent, tk, "Links to external files");
 		section.setToolTipText(Tooltips.Source_LinksToExternalFiles);
-		Composite comp = UI.sectionClient(section, tk);
+		var comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
 		table = Tables.createViewer(comp, "File reference");
 		table.getTable().setToolTipText(Tooltips.Source_LinksToExternalFiles);
 		table.setLabelProvider(new Label());
 		ColumnViewerToolTipSupport.enableFor(table);
-		Action[] actions = createActions();
+		var actions = createActions();
 		Actions.bind(section, actions);
 		Actions.bind(table, actions);
 		table.setInput(fileRefs);
@@ -62,14 +61,14 @@ class FileTable {
 	private Action[] createActions() {
 		Action[] actions = new Action[2];
 		actions[0] = Actions.create(M.Add,
-			Icon.ADD.des(), this::add);
+			Icon.ADD.des(), ResourceDialog::show);
 		actions[1] = Actions.create(M.Remove,
 			Icon.DELETE.des(), this::remove);
 		return actions;
 	}
 
 	private void add() {
-		FileDialog dialog = new FileDialog(UI.shell(), SWT.OPEN);
+		var dialog = new FileDialog(UI.shell(), SWT.OPEN);
 		dialog.setText("Open file ...");
 		File dir = new File(App.store().getRootFolder(),
 			"external_docs");
@@ -94,8 +93,9 @@ class FileTable {
 		}
 
 		checkCopy(dir, file);
+
 		FileRef ref = new FileRef();
-		ref.withUri( "../external_docs/" + file.getName());
+		ref.withUri("../external_docs/" + file.getName());
 		fileRefs.add(ref);
 		table.setInput(fileRefs);
 		editor.setDirty();

@@ -147,7 +147,8 @@ public class ValidationDialog extends Wizard {
 						M.SearchDependentDataSets,
 						IProgressMonitor.UNKNOWN);
 					allRefs.clear();
-					var refs = Refs.allEditableDependenciesOf(App.store(), ref);
+					var refs = Refs.allDependenciesOf(
+							App.store(), ref, Refs::allEditableOf);
 					allRefs.addAll(refs);
 					App.runInUI("update table", () -> table.setInput(allRefs));
 					monitor.done();

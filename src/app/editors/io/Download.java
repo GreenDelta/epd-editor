@@ -25,8 +25,8 @@ import org.openlca.ilcd.util.Sources;
 import app.App;
 import app.M;
 import app.store.RefTrees;
-import epd.refs.Refs;
 import epd.model.RefStatus;
+import epd.refs.Refs;
 
 public class Download implements IRunnableWithProgress {
 
@@ -60,7 +60,7 @@ public class Download implements IRunnableWithProgress {
 			}
 			if (!withDependencies)
 				continue;
-			for (var next : Refs.allEditableOf(ds)) {
+			for (var next : Refs.allDownloadableOf(ds)) {
 				if (handled.contains(next) || queue.contains(next))
 					continue;
 				queue.add(next);

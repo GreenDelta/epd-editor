@@ -188,7 +188,8 @@ public class ExportDialog extends Wizard {
 					monitor.beginTask(M.SearchDependentDataSets,
 						IProgressMonitor.UNKNOWN);
 					all.clear();
-					var refs = Refs.allEditableDependenciesOf(App.store(), ref);
+					var refs = Refs.allDependenciesOf(
+							App.store(), ref, Refs::allEditableOf);
 					all.addAll(refs);
 					App.runInUI("update table", () -> table.setInput(all));
 					monitor.done();

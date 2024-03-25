@@ -140,7 +140,8 @@ public class UploadDialog extends Wizard {
 					monitor.beginTask(
 						M.SearchDependentDataSets, IProgressMonitor.UNKNOWN);
 					allRefs.clear();
-					var refs = Refs.allEditableDependenciesOf(App.store(), ref);
+					var refs = Refs.allDependenciesOf(
+							App.store(), ref, Refs::allUploadableOf);
 					allRefs.addAll(refs);
 					App.runInUI("update table", () -> table.setInput(allRefs));
 					monitor.done();

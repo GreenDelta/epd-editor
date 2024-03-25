@@ -17,7 +17,9 @@ import org.openlca.ilcd.commons.Classification;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.DataSets;
+import org.openlca.ilcd.util.Epds;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
@@ -27,6 +29,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
+import epd.EditorVocab;
 import epd.io.QNameJsonAdapter;
 import epd.util.Strings;
 
@@ -46,7 +49,18 @@ public class Index {
 	public void add(IDataSet ds) {
 		if (ds == null)
 			return;
-		add(Ref.of(ds), DataSets.getClassifications(ds));
+		var ref = Ref.of(ds);
+		if (!ref.isValid())
+			return;
+		if (ds instanceof Process epd) {
+			var time = Epds.getTime(epd);
+			if (time.getReferenceYear() != null) {
+				var refYear = Integer.toString(time.getReferenceYear());
+				ref.withOtherAttributes()
+					.put(EditorVocab.referenceYear(), refYear);
+			}
+		}
+		add(ref, DataSets.getClassifications(ds));
 	}
 
 	public void add(Ref ref, List<Classification> classes) {

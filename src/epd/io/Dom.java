@@ -1,6 +1,14 @@
 package epd.io;
 
-import epd.util.Strings;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.openlca.ilcd.Vocab;
 import org.openlca.ilcd.commons.Extension;
 import org.openlca.ilcd.commons.LangString;
@@ -12,13 +20,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Consumer;
+import epd.util.Strings;
 
 /**
  * Utility methods for reading and writing data using the W3C DOM API.
@@ -95,9 +97,9 @@ public final class Dom {
 	public static void setLangString(Element elem, LangString s) {
 		if (elem == null || s == null)
 			return;
-		elem.setTextContent(s.value);
-		if (!Strings.nullOrEmpty(s.lang)) {
-			elem.setAttributeNS(Vocab.XML, "lang", s.lang);
+		elem.setTextContent(s.getValue());
+		if (!Strings.nullOrEmpty(s.getLang())) {
+			elem.setAttributeNS(Vocab.XML, "lang", s.getLang());
 		}
 	}
 

@@ -88,10 +88,7 @@ public class TextBuilder {
 			if (!Strings.nullOrEmpty(value)) {
 				LangString.set(list, value, App.lang());
 			} else {
-				LangString ls = LangString.get(list, App.lang());
-				if (ls != null) {
-					list.remove(ls);
-				}
+				LangString.remove(list, App.lang());
 			}
 			editor.setDirty();
 		});

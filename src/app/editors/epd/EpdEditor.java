@@ -1,5 +1,20 @@
 package app.editors.epd;
 
+import java.util.UUID;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.window.Window;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.PartInitException;
+import org.openlca.ilcd.commons.LangString;
+import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.util.Epds;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import app.App;
 import app.AppSettings;
 import app.M;
@@ -16,20 +31,6 @@ import epd.io.Cleanup;
 import epd.model.Version;
 import epd.model.Xml;
 import epd.model.qmeta.QMetaData;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.dialogs.InputDialog;
-import org.eclipse.jface.window.Window;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.PartInitException;
-import org.openlca.ilcd.commons.LangString;
-import org.openlca.ilcd.commons.Ref;
-import org.openlca.ilcd.processes.Process;
-import org.openlca.ilcd.util.Epds;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.UUID;
 
 public class EpdEditor extends BaseEditor {
 
@@ -54,7 +55,7 @@ public class EpdEditor extends BaseEditor {
 		Editors.setTabTitle(input, this);
 		try {
 			var in = (RefEditorInput) input;
-			epd = App.store().get(Process.class, in.ref.getUUID());
+			epd = App.store().get(Process.class, in.ref().getUUID());
 			qmeta = QMetaData.read(epd);
 			RefCheck.on(epd);
 		} catch (Exception e) {

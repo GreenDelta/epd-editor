@@ -8,7 +8,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
 import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 
 import app.App;
@@ -89,7 +88,7 @@ public class RefLink extends Composite {
 			return;
 		String t = M.None;
 		if (ref != null) {
-			String s = LangString.getFirst(ref.getName(), App.lang());
+			String s = App.s(ref.getName());
 			if (s != null) {
 				t = s;
 			}

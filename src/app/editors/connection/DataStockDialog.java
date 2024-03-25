@@ -1,12 +1,8 @@
 package app.editors.connection;
 
-import app.App;
-import app.M;
-import app.rcp.Icon;
-import app.util.Tables;
-import app.util.UI;
-import app.util.Viewers;
-import epd.util.Strings;
+import java.util.List;
+import java.util.Objects;
+
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -18,11 +14,15 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.descriptors.DataStock;
 
-import java.util.List;
-import java.util.Objects;
+import app.App;
+import app.M;
+import app.rcp.Icon;
+import app.util.Tables;
+import app.util.UI;
+import app.util.Viewers;
+import epd.util.Strings;
 
 class DataStockDialog extends FormDialog {
 
@@ -88,8 +88,9 @@ class DataStockDialog extends FormDialog {
 			return switch (col) {
 				case 0 -> stock.getShortName();
 				case 1 -> stock.getUUID();
-				case 2 -> stock.getDescription() == null ? null
-					: LangString.getVal(stock.getDescription(), App.lang());
+			case 2 -> stock.getDescription() == null
+					? null
+					: App.s(stock.getDescription());
 				default -> null;
 			};
 		}

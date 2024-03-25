@@ -103,7 +103,7 @@ public class Indicator {
 	@Override
 	public String toString() {
 		var name = ref != null
-			? LangString.getFirst(ref.getName())
+				? LangString.getDefault(ref.getName())
 			: null;
 		return "Indicator [ name=\"" + name + "\" uuid =\"" + getUUID() + "\"]";
 	}

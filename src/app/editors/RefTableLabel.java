@@ -1,12 +1,12 @@
 package app.editors;
 
-import app.App;
-import app.rcp.Icon;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
-import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
+
+import app.App;
+import app.rcp.Icon;
 
 public class RefTableLabel extends LabelProvider implements ITableLabelProvider {
 
@@ -22,7 +22,7 @@ public class RefTableLabel extends LabelProvider implements ITableLabelProvider 
 		if (!(obj instanceof Ref ref))
 			return null;
 		return switch (col) {
-			case 0 -> LangString.getFirst(ref.getName(), App.lang());
+			case 0 -> App.s(ref.getName());
 			case 1 -> ref.getUUID();
 			case 2 -> ref.getVersion();
 			default -> null;

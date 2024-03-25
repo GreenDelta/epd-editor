@@ -1,7 +1,8 @@
 package app.editors.flow;
 
-import epd.io.Cleanup;
-import epd.model.MaterialPropertyValue;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
@@ -17,9 +18,8 @@ import app.editors.Editors;
 import app.editors.RefCheck;
 import app.editors.RefEditorInput;
 import app.store.Data;
-
-import java.util.ArrayList;
-import java.util.List;
+import epd.io.Cleanup;
+import epd.model.MaterialPropertyValue;
 
 public class FlowEditor extends BaseEditor {
 
@@ -42,7 +42,7 @@ public class FlowEditor extends BaseEditor {
 		Editors.setTabTitle(input, this);
 		try {
 			var in = (RefEditorInput) input;
-			flow = App.store().get(Flow.class, in.ref.getUUID());
+			flow = App.store().get(Flow.class, in.ref().getUUID());
 			RefCheck.on(flow);
 			materialProperties = new ArrayList<>(
 				MaterialPropertyValue.readFrom(flow));

@@ -1,5 +1,12 @@
 package epd.conversion;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import org.junit.Test;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.LangString;
@@ -7,12 +14,6 @@ import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.Epds;
 import org.openlca.ilcd.util.Processes;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import static org.junit.Assert.*;
 
 public class RefExtensionTest {
 
@@ -45,7 +46,7 @@ public class RefExtensionTest {
 	private void checkRefs(List<Ref> refs, DataSetType type) {
 		assertEquals(10, refs.size());
 		for (var r : refs) {
-			assertTrue(r.getName().get(0).value.startsWith("test ref"));
+			assertTrue(r.getName().get(0).getValue().startsWith("test ref"));
 			assertEquals(type, r.getType());
 		}
 	}

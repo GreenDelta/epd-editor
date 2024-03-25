@@ -14,7 +14,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,7 +87,7 @@ class StatusExport implements Runnable {
 				continue;
 			Row r = sheet.createRow(row++);
 			r.createCell(0).setCellValue(Labels.get(ref.getType()));
-			String name = LangString.getFirst(ref.getName(), App.lang());
+			String name = App.s(ref.getName());
 			r.createCell(1).setCellValue(name);
 			r.createCell(2).setCellValue(ref.getUUID());
 			r.createCell(3).setCellValue(ref.getVersion());

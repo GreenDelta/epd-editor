@@ -1,11 +1,5 @@
 package app.editors.source;
 
-import app.App;
-import app.editors.BaseEditor;
-import app.editors.Editors;
-import app.editors.RefCheck;
-import app.editors.RefEditorInput;
-import app.store.Data;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
@@ -14,6 +8,13 @@ import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.sources.Source;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import app.App;
+import app.editors.BaseEditor;
+import app.editors.Editors;
+import app.editors.RefCheck;
+import app.editors.RefEditorInput;
+import app.store.Data;
 
 public class SourceEditor extends BaseEditor {
 
@@ -35,7 +36,7 @@ public class SourceEditor extends BaseEditor {
 		Editors.setTabTitle(input, this);
 		try {
 			RefEditorInput in = (RefEditorInput) input;
-			source = App.store().get(Source.class, in.ref.getUUID());
+			source = App.store().get(Source.class, in.ref().getUUID());
 			RefCheck.on(source);
 		} catch (Exception e) {
 			throw new PartInitException(

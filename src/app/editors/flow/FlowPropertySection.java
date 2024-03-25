@@ -1,5 +1,22 @@
 package app.editors.flow;
 
+import java.util.Objects;
+
+import org.eclipse.jface.viewers.ITableFontProvider;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.Section;
+import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.flows.Flow;
+import org.openlca.ilcd.flows.FlowPropertyRef;
+import org.openlca.ilcd.util.Flows;
+
 import app.App;
 import app.M;
 import app.Tooltips;
@@ -12,23 +29,6 @@ import app.util.Tables;
 import app.util.UI;
 import app.util.Viewers;
 import app.util.tables.ModifySupport;
-import org.eclipse.jface.viewers.ITableFontProvider;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.Section;
-import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.commons.LangString;
-import org.openlca.ilcd.commons.Ref;
-import org.openlca.ilcd.flows.Flow;
-import org.openlca.ilcd.flows.FlowPropertyRef;
-import org.openlca.ilcd.util.Flows;
-
-import java.util.Objects;
 
 class FlowPropertySection {
 
@@ -160,19 +160,17 @@ class FlowPropertySection {
 		public String getColumnText(Object obj, int col) {
 			if (!(obj instanceof FlowPropertyRef ref))
 				return null;
-			switch (col) {
-				case 0:
+			return switch (col) {
+				case 0 -> {
 					Ref propRef = ref.getFlowProperty();
-					if (propRef == null)
-						return null;
-					return LangString.getFirst(propRef.getName(), App.lang());
-				case 1:
-					return Double.toString(ref.getMeanValue());
-				case 2:
-					return RefDeps.getRefUnit(ref.getFlowProperty());
-				default:
-					return null;
-			}
+					yield propRef != null
+							? App.s(propRef.getName())
+							: null;
+				}
+				case 1 -> Double.toString(ref.getMeanValue());
+				case 2 -> RefDeps.getRefUnit(ref.getFlowProperty());
+				default -> null;
+			};
 		}
 
 		@Override
@@ -182,7 +180,8 @@ class FlowPropertySection {
 			var qRef = Flows.getQuantitativeReference(flow);
 			if (qRef == null)
 				return null;
-			return Objects.equals(ref.getDataSetInternalID(), qRef.getReferenceFlowProperty())
+			return Objects.equals(
+				ref.getDataSetInternalID(), qRef.getReferenceFlowProperty())
 				? UI.boldFont()
 				: null;
 		}

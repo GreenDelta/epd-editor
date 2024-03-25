@@ -36,7 +36,7 @@ public class ContactEditor extends BaseEditor {
 		Editors.setTabTitle(input, this);
 		try {
 			RefEditorInput in = (RefEditorInput) input;
-			contact = App.store().get(Contact.class, in.ref.getUUID());
+			contact = App.store().get(Contact.class, in.ref().getUUID());
 			RefCheck.on(contact);
 		} catch (Exception e) {
 			throw new PartInitException(

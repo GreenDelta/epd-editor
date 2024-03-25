@@ -1,10 +1,9 @@
 package app.editors;
 
-import app.App;
-import app.M;
-import app.util.Colors;
-import app.util.UI;
-import epd.util.Strings;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
@@ -26,9 +25,11 @@ import org.eclipse.ui.part.WorkbenchPart;
 import org.openlca.ilcd.commons.LangString;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import app.App;
+import app.M;
+import app.util.Colors;
+import app.util.UI;
+import epd.util.Strings;
 
 public class TranslationView extends ViewPart implements ISelectionListener {
 
@@ -83,18 +84,18 @@ public class TranslationView extends ViewPart implements ISelectionListener {
 		}
 		if (s.title != null)
 			form.setText(s.title);
-		s.strings.sort((s1, s2) -> Strings.compare(s1.lang, s2.lang));
+		s.strings.sort((s1, s2) -> Strings.compare(s1.getLang(), s2.getLang()));
 		for (LangString ls : s.strings) {
-			String lang = ls.lang == null ? M.None : ls.lang;
+			String lang = ls.getLang() == null ? M.None : ls.getLang();
 			Label label = UI.formLabel(composite, toolkit, lang + ":");
 			controls.add(label);
-			if (Objects.equals(ls.lang, App.lang()))
+			if (Objects.equals(ls.getLang(), App.lang()))
 				label.setFont(UI.boldFont());
 			Text text = UI.formMultiText(composite, toolkit);
 			controls.add(text);
 			text.setEditable(false);
-			if (ls.value != null)
-				text.setText(ls.value);
+			if (ls.getValue() != null)
+				text.setText(ls.getValue());
 		}
 		form.reflow(true);
 	}

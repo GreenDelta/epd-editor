@@ -1,7 +1,6 @@
 package app.navi;
 
 import org.eclipse.swt.graphics.Image;
-import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 
 import app.App;
@@ -33,7 +32,7 @@ public class RefElement extends NavigationElement<Ref> {
 	@Override
 	public String getLabel() {
 		var ref = getContent();
-		var name = LangString.getFirst(ref.getName(), App.lang());
+		var name = App.s(ref.getName());
 		var refYear = ref.getOtherAttributes().get(EditorVocab.referenceYear());
 		return refYear != null
 			? name + " - " + refYear

@@ -1,13 +1,13 @@
 package app.editors.connection;
 
-import app.App;
-import app.rcp.Icon;
-import epd.util.Strings;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
-import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.descriptors.Descriptor;
+
+import app.App;
+import app.rcp.Icon;
+import epd.util.Strings;
 
 class TableLabel extends LabelProvider implements ITableLabelProvider {
 
@@ -25,13 +25,10 @@ class TableLabel extends LabelProvider implements ITableLabelProvider {
 		if (!(obj instanceof Descriptor<?> d))
 			return null;
 		return switch (col) {
-			case 0 -> LangString.getFirst(d.getName(), App.lang());
+			case 0 -> App.s(d.getName());
 			case 1 -> d.getUUID();
 			case 2 -> d.getVersion();
-			case 3 -> {
-				String val = LangString.getFirst(d.getComment(), App.lang());
-				yield Strings.cut(val, 75);
-			}
+			case 3 -> Strings.cut(App.s(d.getComment()), 75);
 			default -> null;
 		};
 	}

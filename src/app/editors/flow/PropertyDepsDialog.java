@@ -1,14 +1,11 @@
 package app.editors.flow;
 
-import app.M;
-import app.rcp.Icon;
-import app.store.MaterialProperties;
-import app.util.Tables;
-import app.util.UI;
-import app.util.Viewers;
-import epd.model.MaterialProperty;
-import epd.model.MaterialPropertyValue;
-import epd.util.Strings;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -20,11 +17,15 @@ import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.util.Flows;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import app.M;
+import app.rcp.Icon;
+import app.store.MaterialProperties;
+import app.util.Tables;
+import app.util.UI;
+import app.util.Viewers;
+import epd.model.MaterialProperty;
+import epd.model.MaterialPropertyValue;
+import epd.util.Strings;
 
 /**
  * When a flow property is added to a flow, we open this dialog when we have
@@ -173,7 +174,8 @@ class PropertyDepsDialog extends FormDialog {
 			for (var flowProp : Flows.getFlowProperties(flow)) {
 				if (flowProp.getFlowProperty() == null)
 					continue;
-				var name = LangString.getVal(flowProp.getFlowProperty().getName(), "en");
+				var name = LangString.get(
+						flowProp.getFlowProperty().getName(), "en");
 				if (name == null)
 					continue;
 				for (var rel : relations) {

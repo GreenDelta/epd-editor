@@ -15,7 +15,6 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.openlca.ilcd.commons.IDataSet;
-import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.util.RefTree;
 
@@ -135,7 +134,7 @@ public class DependencyPage extends FormPage {
 			if (node.ref == null)
 				return null;
 			return switch (col) {
-				case 1 -> LangString.getFirst(node.ref.getName(), App.lang());
+				case 1 -> App.s(node.ref.getName());
 				case 2 -> node.ref.getUUID();
 				case 3 -> node.ref.getVersion();
 				default -> null;

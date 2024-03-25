@@ -5,19 +5,13 @@ import java.util.Objects;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
-import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 
 import app.App;
 import app.rcp.Icon;
+import epd.util.Strings;
 
-public class RefEditorInput implements IEditorInput {
-
-	public final Ref ref;
-
-	public RefEditorInput(Ref ref) {
-		this.ref = ref;
-	}
+public record RefEditorInput(Ref ref) implements IEditorInput {
 
 	@Override
 	@SuppressWarnings({"rawtypes", "unchecked"})
@@ -39,8 +33,8 @@ public class RefEditorInput implements IEditorInput {
 	public String getName() {
 		if (ref == null)
 			return "??";
-		String name = LangString.getFirst(ref.getName(), App.lang());
-		return name == null ? "??" : name;
+		var name = App.s(ref.getName());
+		return Strings.nullOrEmpty(name) ? "??" : name;
 	}
 
 	@Override

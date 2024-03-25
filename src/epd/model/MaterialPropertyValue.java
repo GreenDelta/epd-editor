@@ -1,5 +1,10 @@
 package epd.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+
 import org.openlca.ilcd.commons.Copyable;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.flows.Flow;
@@ -10,11 +15,6 @@ import org.openlca.ilcd.flows.epd.matml.PropertyDetails;
 import org.openlca.ilcd.flows.epd.matml.Unit;
 import org.openlca.ilcd.util.Flows;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
 
 public final class MaterialPropertyValue implements Copyable<MaterialPropertyValue> {
 
@@ -91,7 +91,7 @@ public final class MaterialPropertyValue implements Copyable<MaterialPropertyVal
 		var material = new Material();
 		doc.withMaterials().add(material);
 		var docData = material.withBulkDetails()
-			.withName(LangString.getFirst(Flows.getBaseName(flow)))
+				.withName(LangString.getDefault(Flows.getBaseName(flow)))
 			.withProperties();
 
 		// add property values

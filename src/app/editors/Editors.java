@@ -88,7 +88,7 @@ public class Editors {
 		close(input -> {
 			if (!(input instanceof RefEditorInput))
 				return false;
-			Ref editorRef = ((RefEditorInput) input).ref;
+			Ref editorRef = ((RefEditorInput) input).ref();
 			return Objects.equals(ref, editorRef);
 		});
 	}

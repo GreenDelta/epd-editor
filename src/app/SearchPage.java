@@ -17,8 +17,8 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -115,8 +115,8 @@ public class SearchPage extends FormEditor {
 			Set<Ref> refs = App.index().getRefs();
 			List<Ref> filtered = new ArrayList<>();
 			for (Ref ref : refs) {
-				String name = LangString.getFirst(ref.getName(), App.lang());
-				if (name == null)
+				var name = App.s(ref.getName());
+				if (Strings.nullOrEmpty(name))
 					continue;
 				name = name.toLowerCase();
 				if (name.contains(term)) {
@@ -124,10 +124,8 @@ public class SearchPage extends FormEditor {
 				}
 			}
 			filtered.sort((r1, r2) -> {
-				String n1 = LangString.getFirst(r1.getName(), App.lang())
-						.toLowerCase();
-				String n2 = LangString.getFirst(r2.getName(), App.lang())
-						.toLowerCase();
+				var n1 = App.s(r1.getName()).toLowerCase();
+				var n2 = App.s(r2.getName()).toLowerCase();
 				return n1.indexOf(term) - n2.indexOf(term);
 
 			});

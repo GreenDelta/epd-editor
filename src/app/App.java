@@ -101,7 +101,7 @@ public class App {
 	public static String s(List<LangString> strings) {
 		if (strings == null)
 			return "";
-		String s = LangString.getVal(strings, lang());
+		var s = LangString.getOrDefault(strings, lang());
 		return s == null ? "" : s;
 	}
 
@@ -112,7 +112,7 @@ public class App {
 	}
 
 	public static String header(List<LangString> strings, int length) {
-		String s = LangString.getFirst(strings, lang());
+		String s = LangString.getOrDefault(strings, lang());
 		return s == null ? "" : Strings.cut(s, length);
 	}
 

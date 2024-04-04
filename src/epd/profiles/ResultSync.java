@@ -1,12 +1,13 @@
 package epd.profiles;
 
-import epd.util.Strings;
-import org.openlca.ilcd.processes.Process;
-import org.openlca.ilcd.util.EpdIndicatorResult;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import org.openlca.ilcd.epd.EpdIndicatorResult;
+import org.openlca.ilcd.processes.Process;
+
+import epd.util.Strings;
 
 /**
  * Get the indicator results of an EPD but with the corresponding

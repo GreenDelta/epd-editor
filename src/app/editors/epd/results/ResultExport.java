@@ -1,7 +1,8 @@
 package app.editors.epd.results;
 
-import app.App;
-import app.M;
+import java.io.File;
+import java.io.FileOutputStream;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
@@ -9,13 +10,13 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.openlca.ilcd.epd.EpdIndicatorResult;
 import org.openlca.ilcd.processes.Process;
-import org.openlca.ilcd.util.EpdIndicatorResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import app.App;
+import app.M;
 
 /**
  * Exports the module results of an EPD data set to an Excel file.

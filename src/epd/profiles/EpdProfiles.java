@@ -1,18 +1,5 @@
 package epd.profiles;
 
-import app.App;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import epd.util.Strings;
-import jakarta.xml.bind.JAXB;
-import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.commons.Ref;
-import org.openlca.ilcd.processes.Process;
-import org.openlca.ilcd.util.EpdIndicatorResult;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,6 +15,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
+
+import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.epd.EpdIndicatorResult;
+import org.openlca.ilcd.processes.Process;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+
+import app.App;
+import epd.util.Strings;
+import jakarta.xml.bind.JAXB;
 
 public final class EpdProfiles {
 

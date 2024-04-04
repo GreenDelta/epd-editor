@@ -1,28 +1,28 @@
 package app.editors.epd.results;
 
-import app.App;
-import epd.profiles.EpdProfile;
-import epd.profiles.EpdProfiles;
-import epd.util.Strings;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.openlca.ilcd.processes.Process;
-import org.openlca.ilcd.processes.epd.EpdModuleEntry;
-import org.openlca.ilcd.processes.epd.EpdScenario;
-import org.openlca.ilcd.processes.epd.EpdValue;
-import org.openlca.ilcd.util.EpdIndicatorResult;
-import org.openlca.ilcd.util.Epds;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.openlca.ilcd.epd.EpdIndicatorResult;
+import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.processes.epd.EpdModuleEntry;
+import org.openlca.ilcd.processes.epd.EpdScenario;
+import org.openlca.ilcd.processes.epd.EpdValue;
+import org.openlca.ilcd.util.Epds;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import epd.profiles.EpdProfile;
+import epd.profiles.EpdProfiles;
+import epd.util.Strings;
 
 /**
  * Imports module results from an Excel file.

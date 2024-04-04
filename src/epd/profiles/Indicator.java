@@ -5,7 +5,7 @@ import java.util.Objects;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
-import org.openlca.ilcd.util.EpdIndicatorResult;
+import org.openlca.ilcd.epd.EpdIndicatorResult;
 
 import epd.EditorVocab;
 import jakarta.xml.bind.annotation.XmlAccessType;

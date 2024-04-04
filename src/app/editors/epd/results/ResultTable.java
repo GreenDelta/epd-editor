@@ -1,5 +1,20 @@
 package app.editors.epd.results;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
+import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.epd.EpdIndicatorResult;
+import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.processes.epd.EpdValue;
+
 import app.App;
 import app.M;
 import app.Tooltips;
@@ -12,20 +27,6 @@ import app.util.tables.ModifySupport;
 import app.util.tables.TextCellModifier;
 import epd.profiles.EpdProfiles;
 import epd.util.Strings;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Composite;
-import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.processes.Process;
-import org.openlca.ilcd.processes.epd.EpdValue;
-import org.openlca.ilcd.util.EpdIndicatorResult;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
 
 class ResultTable {
 

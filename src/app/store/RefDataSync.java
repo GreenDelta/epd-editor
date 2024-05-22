@@ -72,35 +72,33 @@ public class RefDataSync implements Runnable {
 		return con;
 	}
 
-	@SuppressWarnings("unchecked")
 	private void doSync(SodaConnection con) {
 		try (var client = SodaClient.of(con)) {
 			log.info("Connected to {} (datastock={})", con.url,
-					con.dataStockId);
-			Class<?>[] types = new Class<?>[] {
-					Contact.class,
-					Source.class,
-					UnitGroup.class,
-					FlowProperty.class,
-					Flow.class,
-					Process.class,
-					ImpactMethod.class,
-			};
-			for (Class<?> type : types) {
+				con.dataStockId);
+			var types = List.of(
+				Contact.class,
+				Source.class,
+				UnitGroup.class,
+				FlowProperty.class,
+				Flow.class,
+				Process.class,
+				ImpactMethod.class);
+			for (var type : types) {
 				log.info("Fetch descriptors for type {}", type);
 				var descriptors = client.getDescriptors(type);
 				log.info("Fetch {} descriptors", descriptors.size());
-				sync(client, (Class<? extends IDataSet>) type, descriptors);
+				sync(client, type, descriptors);
 			}
 		} catch (Exception e) {
 			log.error("Ref. data download failed", e);
 			errors.add("Download failed for " + con.url
-					+ "; datastock=" + con.dataStockId);
+				+ "; datastock=" + con.dataStockId);
 		}
 	}
 
 	private void sync(SodaClient client, Class<? extends IDataSet> type,
-			List<Descriptor<?>> descriptors) {
+		List<Descriptor<?>> descriptors) {
 		for (var d : descriptors) {
 			Ref newRef = d.toRef();
 			Ref oldRef = App.index().find(newRef);
@@ -112,7 +110,7 @@ public class RefDataSync implements Runnable {
 				var ds = client.get(type, newRef.getUUID());
 				if (ds == null) {
 					stats.add(RefStatus.error(newRef,
-							"The downloaded thing was not a data set"));
+						"The downloaded thing was not a data set"));
 					continue;
 				}
 				Download.save(newRef, ds, stats);
@@ -121,7 +119,7 @@ public class RefDataSync implements Runnable {
 				}
 			} catch (Exception e) {
 				stats.add(RefStatus.error(newRef,
-						"Download failed: " + e.getMessage()));
+					"Download failed: " + e.getMessage()));
 			}
 		}
 	}

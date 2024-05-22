@@ -1,19 +1,12 @@
 package app.navi;
 
-import app.editors.Editors;
-import app.editors.classifications.ClassificationEditor;
-import app.editors.connection.ConnectionEditor;
-import app.editors.locations.LocationEditor;
-import app.editors.profiles.ProfileEditor;
-import app.util.UI;
-import app.util.Viewers;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.function.Consumer;
+
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.CommonViewer;
@@ -23,10 +16,13 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Objects;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
+import app.editors.Editors;
+import app.editors.classifications.ClassificationEditor;
+import app.editors.connection.ConnectionEditor;
+import app.editors.locations.LocationEditor;
+import app.editors.profiles.ProfileEditor;
+import app.util.UI;
+import app.util.Viewers;
 
 public class Navigator extends CommonNavigator {
 
@@ -92,8 +88,8 @@ public class Navigator extends CommonNavigator {
 		Navigator navigator = getInstance();
 		if (navigator == null || navigator.root == null)
 			return new TypeElement(null, type);
-		var children = (List<NavigationElement>)navigator.root.getChilds();
-		for (NavigationElement e : children) {
+		var children = navigator.root.getChilds();
+		for (var e : children) {
 			if (!(e instanceof TypeElement te))
 				continue;
 			if (te.content == type)
@@ -126,7 +122,7 @@ public class Navigator extends CommonNavigator {
 		});
 	}
 
-	private static void eachRoot(Consumer<NavigationElement> fn) {
+	private static void eachRoot(Consumer<NavigationElement<?>> fn) {
 		try {
 			Navigator navi = Navigator.getInstance();
 			if (navi == null)
@@ -134,8 +130,7 @@ public class Navigator extends CommonNavigator {
 			NavigationRoot root = navi.root;
 			if (root == null || root.childs == null)
 				return;
-			var children = (List<NavigationElement>)root.getChilds();
-			for (NavigationElement e : children) {
+			for (var e : root.getChilds()) {
 				fn.accept(e);
 			}
 		} catch (Exception e) {
@@ -168,23 +163,23 @@ public class Navigator extends CommonNavigator {
 		refresh(instance.getRoot());
 	}
 
-	public static void refresh(NavigationElement e) {
+	public static void refresh(NavigationElement<?> e) {
 		var viewer = getViewer();
 		if (e == null || viewer == null)
-			return;		
+			return;
 		var oldExpansion = viewer.getExpandedElements();
 		e.update();
 		viewer.refresh(e);
 		setRefreshedExpansion(viewer, oldExpansion);
 	}
-	
+
 	private static void setRefreshedExpansion(
-			CommonViewer viewer, Object[] oldExpansion) {
+		CommonViewer viewer, Object[] oldExpansion) {
 		if (viewer == null || oldExpansion == null)
 			return;
-		var newExpanded = new ArrayList<NavigationElement>();
+		var newExpanded = new ArrayList<NavigationElement<?>>();
 		for (var e : oldExpansion) {
-			if (!(e instanceof NavigationElement oldElem))
+			if (!(e instanceof NavigationElement<?> oldElem))
 				continue;
 			var newElem = findElement(oldElem.getContent());
 			if (newElem != null) {
@@ -193,12 +188,12 @@ public class Navigator extends CommonNavigator {
 		}
 		viewer.setExpandedElements(newExpanded.toArray());
 	}
-	
-	public static NavigationElement findElement(Object content) {
+
+	public static NavigationElement<?> findElement(Object content) {
 		var root = getNavigationRoot();
 		if (content == null || root == null)
 			return null;
-		var queue = new ArrayDeque<NavigationElement>();
+		var queue = new ArrayDeque<NavigationElement<?>>();
 		queue.add(root);
 		while (!queue.isEmpty()) {
 			var next = queue.poll();
@@ -208,12 +203,12 @@ public class Navigator extends CommonNavigator {
 		}
 		return null;
 	}
-	
+
 	public static NavigationRoot getNavigationRoot() {
 		var navigator = getInstance();
 		return navigator != null
-				? navigator.getRoot()
-				: null;
+			? navigator.getRoot()
+			: null;
 	}
 
 	public static CommonViewer getViewer() {
@@ -224,19 +219,19 @@ public class Navigator extends CommonNavigator {
 	}
 
 	public static Navigator getInstance() {
-		IWorkbench workbench = PlatformUI.getWorkbench();
+		var workbench = PlatformUI.getWorkbench();
 		if (workbench == null)
 			return null;
-		IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
+		var window = workbench.getActiveWorkbenchWindow();
 		if (window == null)
 			return null;
-		IWorkbenchPage page = window.getActivePage();
+		var page = window.getActivePage();
 		if (page == null)
 			return null;
-		IViewPart part = page.findView(ID);
-		if (part instanceof Navigator)
-			return (Navigator) part;
-		return null;
+		var part = page.findView(ID);
+		return part instanceof Navigator navi
+			? navi
+			: null;
 	}
 
 }

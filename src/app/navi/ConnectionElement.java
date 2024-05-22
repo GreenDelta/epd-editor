@@ -15,12 +15,12 @@ public class ConnectionElement extends NavigationElement<SodaConnection> {
 	}
 
 	@Override
-	public NavigationElement getParent() {
+	public NavigationElement<?> getParent() {
 		return parent;
 	}
 
 	@Override
-	public int compareTo(NavigationElement other) {
+	public int compareTo(NavigationElement<?> other) {
 		return 0;
 	}
 

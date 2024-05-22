@@ -1,17 +1,15 @@
 package app.navi;
 
-import epd.util.Strings;
-
-import java.util.List;
-
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.TreeItem;
 
+import epd.util.Strings;
+
 /**
- * A class for filtering model elements from an navigation tree via a text
+ * A class for filtering model elements from a navigation tree via a text
  * filter. The filter directly registers a listener on the text field.
  */
 public class RefTextFilter extends ViewerFilter {
@@ -44,18 +42,16 @@ public class RefTextFilter extends ViewerFilter {
 		if (text == null || text.trim().isEmpty())
 			return true;
 		text = text.trim().toLowerCase();
-		return select((NavigationElement) element, text);
+		return select((NavigationElement<?>) element, text);
 	}
 
-	private boolean select(NavigationElement elem, String text) {
+	private boolean select(NavigationElement<?> elem, String text) {
 		if (elem instanceof RefElement e) {
 			String label = e.getLabel();
-			if (Strings.nullOrEmpty(label))
-				return false;
-			return label.toLowerCase().contains(text);
+			return !Strings.nullOrEmpty(label)
+				&& label.toLowerCase().contains(text);
 		}
-		var children = (List<NavigationElement>)elem.getChilds();
-		for (NavigationElement child : children)
+		for (var child : elem.getChilds())
 			if (select(child, text))
 				return true;
 		return false;

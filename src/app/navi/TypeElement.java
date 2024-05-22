@@ -40,7 +40,7 @@ public class TypeElement extends NavigationElement<DataSetType> {
 	}
 
 	@Override
-	public int compareTo(NavigationElement other) {
+	public int compareTo(NavigationElement<?> other) {
 		return 0;
 	}
 
@@ -68,7 +68,7 @@ public class TypeElement extends NavigationElement<DataSetType> {
 	}
 
 	@Override
-	public NavigationElement getParent() {
+	public NavigationElement<?> getParent() {
 		return parent;
 	}
 

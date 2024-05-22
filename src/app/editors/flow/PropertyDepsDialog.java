@@ -44,7 +44,7 @@ class PropertyDepsDialog extends FormDialog {
 	static boolean checkToAdd(FlowEditor editor) {
 		if (editor == null
 			|| editor.flow == null
-			|| Flows.getType(editor.flow) != FlowType.PRODUCT_FLOW)
+			|| Flows.getFlowType(editor.flow) != FlowType.PRODUCT_FLOW)
 			return false;
 		var config = DialogData.of(editor);
 		if (config.selected.isEmpty())

@@ -4,8 +4,6 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.navigator.ICommonContentExtensionSite;
 import org.eclipse.ui.navigator.ICommonContentProvider;
 
-import java.util.List;
-
 public class NavigationContent implements ICommonContentProvider {
 
 	@Override
@@ -15,28 +13,26 @@ public class NavigationContent implements ICommonContentProvider {
 
 	@Override
 	public Object[] getChildren(Object parent) {
-		if (!(parent instanceof NavigationElement e))
+		if (!(parent instanceof NavigationElement<?> e))
 			return new Object[0];
-		List<NavigationElement> childs = e.getChilds();
-		if (childs == null)
-			return new Object[0];
-		else
-			return childs.toArray();
+		var childs = e.getChilds();
+		return childs != null
+			? childs.toArray()
+			: new Object[0];
 	}
 
 	@Override
 	public Object getParent(Object element) {
-		if (element instanceof NavigationElement)
-			return ((NavigationElement) element).getParent();
-		else
-			return null;
+		return element instanceof NavigationElement<?> e
+			? e.getParent()
+			: null;
 	}
 
 	@Override
 	public boolean hasChildren(Object element) {
-		if (!(element instanceof NavigationElement e))
-			return false;
-		return !e.getChilds().isEmpty();
+		return element instanceof NavigationElement<?> e
+			&& e.getChilds() != null
+			&& !e.getChilds().isEmpty();
 	}
 
 	@Override

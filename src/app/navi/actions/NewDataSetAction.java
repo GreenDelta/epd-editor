@@ -1,16 +1,10 @@
 package app.navi.actions;
 
-import app.App;
-import app.M;
-import app.editors.Editors;
-import app.navi.CategoryElement;
-import app.navi.NavigationElement;
-import app.navi.RefElement;
-import app.navi.TypeElement;
-import app.rcp.Icon;
-import app.store.Data;
-import app.util.MsgBox;
-import epd.model.Xml;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
+
 import org.eclipse.jface.action.Action;
 import org.openlca.ilcd.commons.Category;
 import org.openlca.ilcd.commons.Classification;
@@ -31,17 +25,24 @@ import org.openlca.ilcd.util.DataSets;
 import org.openlca.ilcd.util.Flows;
 import org.openlca.ilcd.util.Processes;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import app.App;
+import app.M;
+import app.editors.Editors;
+import app.navi.CategoryElement;
+import app.navi.NavigationElement;
+import app.navi.RefElement;
+import app.navi.TypeElement;
+import app.rcp.Icon;
+import app.store.Data;
+import app.util.MsgBox;
+import epd.model.Xml;
 
 public class NewDataSetAction extends Action {
 
-	private final NavigationElement parent;
+	private final NavigationElement<?> parent;
 	private final DataSetType type;
 
-	public NewDataSetAction(NavigationElement elem) {
+	public NewDataSetAction(NavigationElement<?> elem) {
 		parent = elem instanceof RefElement
 			? elem.getParent()
 			: elem;
@@ -51,7 +52,7 @@ public class NewDataSetAction extends Action {
 		setToolTipText(getLabel());
 	}
 
-	private DataSetType getType(NavigationElement elem) {
+	private DataSetType getType(NavigationElement<?> elem) {
 		if (elem == null)
 			return null;
 		if (elem instanceof TypeElement)
@@ -141,7 +142,7 @@ public class NewDataSetAction extends Action {
 		return c;
 	}
 
-	private void categories(NavigationElement elem, List<Category> list) {
+	private void categories(NavigationElement<?> elem, List<Category> list) {
 		if (!(elem instanceof CategoryElement e))
 			return;
 		if (e.getCategory() == null)

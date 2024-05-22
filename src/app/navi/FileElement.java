@@ -1,10 +1,11 @@
 package app.navi;
 
-import app.rcp.Icon;
-import epd.util.Strings;
+import java.io.File;
+
 import org.eclipse.swt.graphics.Image;
 
-import java.io.File;
+import app.rcp.Icon;
+import epd.util.Strings;
 
 public class FileElement extends NavigationElement<File> {
 
@@ -16,12 +17,12 @@ public class FileElement extends NavigationElement<File> {
 	}
 
 	@Override
-	public NavigationElement getParent() {
+	public NavigationElement<?> getParent() {
 		return parent;
 	}
 
 	@Override
-	public int compareTo(NavigationElement e) {
+	public int compareTo(NavigationElement<?> e) {
 		if (!(e instanceof FileElement other))
 			return 1;
 		return Strings.compare(this.getLabel(), other.getLabel());

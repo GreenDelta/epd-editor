@@ -10,24 +10,22 @@ import org.eclipse.ui.navigator.ICommonContentExtensionSite;
 import org.eclipse.ui.navigator.ICommonLabelProvider;
 
 public class NavigationLabel extends ColumnLabelProvider implements
-		ICommonLabelProvider {
+	ICommonLabelProvider {
 
 	private Font boldFont;
 
 	@Override
 	public String getText(Object element) {
-		if (!(element instanceof NavigationElement))
-			return super.getText(element);
-		else
-			return ((NavigationElement) element).getLabel();
+		return element instanceof NavigationElement<?> e
+			? e.getLabel()
+			: super.getText(element);
 	}
 
 	@Override
 	public Image getImage(Object element) {
-		if (!(element instanceof NavigationElement))
-			return super.getImage(element);
-		else
-			return ((NavigationElement) element).getImage();
+		return element instanceof NavigationElement<?> e
+			? e.getImage()
+			: super.getImage(element);
 	}
 
 	@Override
@@ -57,9 +55,9 @@ public class NavigationLabel extends ColumnLabelProvider implements
 	@Override
 	public Font getFont(Object obj) {
 		if (obj instanceof TypeElement
-				|| obj instanceof FolderElement
-				|| obj instanceof ConnectionFolder
-				|| obj instanceof ProfileFolder)
+			|| obj instanceof FolderElement
+			|| obj instanceof ConnectionFolder
+			|| obj instanceof ProfileFolder)
 			return boldFont;
 		return null;
 	}

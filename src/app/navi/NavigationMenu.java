@@ -1,5 +1,15 @@
 package app.navi;
 
+import java.util.List;
+
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.navigator.CommonActionProvider;
+import org.eclipse.ui.navigator.CommonViewer;
+import org.openlca.ilcd.io.SodaConnection;
+
 import app.M;
 import app.editors.Editors;
 import app.editors.classifications.ClassificationEditor;
@@ -7,7 +17,17 @@ import app.editors.connection.ConnectionEditor;
 import app.editors.connection.EpdProfileDownload;
 import app.editors.locations.LocationEditor;
 import app.editors.profiles.ProfileEditor;
-import app.navi.actions.*;
+import app.navi.actions.ClassificationSync;
+import app.navi.actions.ConnectionDeleteAction;
+import app.navi.actions.DuplicateAction;
+import app.navi.actions.FileDeletion;
+import app.navi.actions.FileImport;
+import app.navi.actions.NewConnectionAction;
+import app.navi.actions.NewDataSetAction;
+import app.navi.actions.ProfileDeleteAction;
+import app.navi.actions.ProfileExportAction;
+import app.navi.actions.ProfileImportAction;
+import app.navi.actions.RefDeleteAction;
 import app.rcp.Icon;
 import app.store.Connections;
 import app.store.ExportDialog;
@@ -15,16 +35,6 @@ import app.store.validation.ValidationDialog;
 import app.util.Actions;
 import app.util.UI;
 import app.util.Viewers;
-import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.actions.ActionContext;
-import org.eclipse.ui.navigator.CommonActionProvider;
-import org.eclipse.ui.navigator.CommonViewer;
-import org.openlca.ilcd.io.SodaConnection;
-
-import java.util.List;
 
 public class NavigationMenu extends CommonActionProvider {
 
@@ -66,13 +76,12 @@ public class NavigationMenu extends CommonActionProvider {
 
 	@Override
 	public void fillContextMenu(IMenuManager menu) {
-		ActionContext con = getContext();
-		IStructuredSelection s = (IStructuredSelection) con
-			.getSelection();
-		List<NavigationElement> elements = Viewers.getAll(s);
+		var con = getContext();
+		var s = (IStructuredSelection) con.getSelection();
+		List<NavigationElement<?>> elements = Viewers.getAll(s);
 		if (elements.isEmpty())
 			return;
-		NavigationElement first = elements.get(0);
+		var first = elements.get(0);
 		if (first instanceof TypeElement e) {
 			menu.add(new NewDataSetAction(e));
 		}
@@ -110,9 +119,8 @@ public class NavigationMenu extends CommonActionProvider {
 			menu.add(Actions.create(M.Open, Icon.OPEN.des(),
 				() -> ConnectionEditor.open(e.content)));
 			menu.add(Actions.create(M.DownloadEPDProfiles,
-				Icon.DOWNLOAD.des(), () -> {
-					EpdProfileDownload.runInUI(e.content.url);
-				}));
+				Icon.DOWNLOAD.des(),
+				() -> EpdProfileDownload.runInUI(e.content.url)));
 			menu.add(new ConnectionDeleteAction(e));
 		}
 	}

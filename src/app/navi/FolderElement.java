@@ -1,30 +1,31 @@
 package app.navi;
 
-import app.App;
-import app.M;
-import app.rcp.Icon;
+import java.io.File;
+
 import org.eclipse.swt.graphics.Image;
 import org.openlca.ilcd.io.FileStore;
 
-import java.io.File;
+import app.App;
+import app.M;
+import app.rcp.Icon;
 
-public class FolderElement extends NavigationElement {
+public class FolderElement extends NavigationElement<Void> {
 
 	public final FolderType type;
-	private final NavigationElement parent;
+	private final NavigationElement<?> parent;
 
-	public FolderElement(NavigationElement parent, FolderType type) {
+	public FolderElement(NavigationElement<?> parent, FolderType type) {
 		this.parent = parent;
 		this.type = type;
 	}
 
 	@Override
-	public NavigationElement getParent() {
+	public NavigationElement<?> getParent() {
 		return parent;
 	}
 
 	@Override
-	public int compareTo(NavigationElement other) {
+	public int compareTo(NavigationElement<?> other) {
 		return 0;
 	}
 
@@ -49,12 +50,15 @@ public class FolderElement extends NavigationElement {
 		if (childs == null)
 			return;
 		childs.clear();
-		File folder = getFolder();
+		var folder = getFolder();
 		if (folder == null || !folder.exists())
 			return;
-		File[] files = folder.listFiles();
-		for (File file : files)
+		var files = folder.listFiles();
+		if (files == null)
+			return;
+		for (var file : files) {
 			childs.add(new FileElement(this, file));
+		}
 	}
 
 	public File getFolder() {
@@ -81,7 +85,6 @@ public class FolderElement extends NavigationElement {
 			case CLASSIFICATION -> "classifications";
 			case LOCATION -> "locations";
 			case DOC -> "external_docs";
-			default -> "other";
 		};
 	}
 

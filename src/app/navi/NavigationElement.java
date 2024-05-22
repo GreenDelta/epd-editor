@@ -16,7 +16,7 @@ public abstract class NavigationElement<T> {
 
 	public final List<NavigationElement<?>> getChilds() {
 		if (childs == null) {
-			childs = new ArrayList<NavigationElement<?>>();
+			childs = new ArrayList<>();
 			update();
 		}
 		return childs;

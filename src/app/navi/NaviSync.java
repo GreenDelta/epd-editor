@@ -1,16 +1,16 @@
 package app.navi;
 
+import java.util.Objects;
+
+import org.openlca.ilcd.commons.Category;
+import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.commons.Ref;
+
 import epd.index.CategoryNode;
 import epd.index.Index;
 import epd.index.Node;
 import epd.index.TypeNode;
 import epd.util.Strings;
-import org.openlca.ilcd.commons.Category;
-import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.commons.Ref;
-
-import java.util.List;
-import java.util.Objects;
 
 /**
  * Synchronizes the navigation with an index.
@@ -38,7 +38,7 @@ public class NaviSync implements Runnable {
 		Navigator.refreshAll();
 	}
 
-	private void sync(Node node, NavigationElement parent) {
+	private void sync(Node node, NavigationElement<?> parent) {
 		if (parent.childs == null)
 			return;
 		remove(node, parent);
@@ -53,7 +53,7 @@ public class NaviSync implements Runnable {
 		}
 	}
 
-	private void syncRefs(Node node, NavigationElement parent) {
+	private void syncRefs(Node node, NavigationElement<?> parent) {
 		for (Ref ref : node.refs) {
 			RefElement elem = findChild(ref, parent);
 			if (elem != null) {
@@ -65,9 +65,9 @@ public class NaviSync implements Runnable {
 		}
 	}
 
-	private RefElement findChild(Ref ref, NavigationElement parent) {
-		var children = (List<NavigationElement>)parent.getChilds();
-		for (NavigationElement child : children) {
+	private RefElement findChild(Ref ref, NavigationElement<?> parent) {
+		var children = parent.getChilds();
+		for (var child : children) {
 			if (!(child instanceof RefElement re))
 				continue;
 			if (Objects.equals(re.content, ref))
@@ -76,11 +76,11 @@ public class NaviSync implements Runnable {
 		return null;
 	}
 
-	private CategoryElement findChild(Category cat, NavigationElement parent) {
+	private CategoryElement findChild(Category cat, NavigationElement<?> parent) {
 		if (cat == null)
 			return null;
-		var children = (List<NavigationElement>)parent.getChilds();
-		for (NavigationElement child : children) {
+		var children = parent.getChilds();
+		for (var child : children) {
 			if (!(child instanceof CategoryElement ca))
 				continue;
 			if (ca.getCategory() == null)
@@ -91,7 +91,7 @@ public class NaviSync implements Runnable {
 		return null;
 	}
 
-	private void remove(Node node, NavigationElement parent) {
+	private void remove(Node node, NavigationElement<?> parent) {
 		parent.childs.removeIf(elem -> {
 			if (elem instanceof CategoryElement ce) {
 				return !contains(node, ce.getCategory());

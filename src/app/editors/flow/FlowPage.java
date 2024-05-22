@@ -45,7 +45,7 @@ class FlowPage extends FormPage {
 		infoSection(body, tb);
 		new CategorySection(editor, DataSetType.FLOW,
 			Flows.withClassifications(flow)).render(body, tk);
-		if (Flows.getType(flow) == FlowType.PRODUCT_FLOW) {
+		if (Flows.getFlowType(flow) == FlowType.PRODUCT_FLOW) {
 			VendorSection.create(body, tk, editor);
 		}
 		propertySections(body);
@@ -61,7 +61,7 @@ class FlowPage extends FormPage {
 		tb.text(comp, M.Synonyms, Tooltips.Flow_Synonyms, info.withSynonyms());
 		tb.text(comp, M.Description,
 			Tooltips.Flow_Description, info.withComment());
-		if (Flows.getType(flow) == FlowType.PRODUCT_FLOW) {
+		if (Flows.getFlowType(flow) == FlowType.PRODUCT_FLOW) {
 			genericProductLink(comp);
 		}
 		UI.fileLink(flow, comp, tk);
@@ -85,7 +85,7 @@ class FlowPage extends FormPage {
 	private void propertySections(Composite body) {
 		var flowProps = new FlowPropertySection(editor);
 		flowProps.render(body, tk);
-		if (Flows.getType(flow) != FlowType.PRODUCT_FLOW)
+		if (Flows.getFlowType(flow) != FlowType.PRODUCT_FLOW)
 			return;
 		var matProps = new MaterialPropertySection(editor);
 		matProps.render(body, tk);

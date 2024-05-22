@@ -11,3 +11,6 @@ indent_size = 4
 [*.{java,xml,json}]
 indent_style = tab
 indent_size = 2
+
+[*.java]
+ij_continuation_indent_size = 4

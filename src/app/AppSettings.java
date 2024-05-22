@@ -10,7 +10,7 @@ import app.store.Json;
 public final class AppSettings implements Copyable<AppSettings> {
 
 	/** The ID of the EPD profile that should be used in the application. */
-	public String profile = EpdProfiles.EN_15804_A2_EF30.name();
+	public String profile = EpdProfiles.EN_15804_A2_EF30.get().getId();
 
 	/**
 	 * If true, synchronize the reference data (defined as data stock URLs in

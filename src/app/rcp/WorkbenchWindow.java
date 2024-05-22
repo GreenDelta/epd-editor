@@ -11,6 +11,7 @@ import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
+import org.openlca.ilcd.epd.EpdProfiles;
 
 import app.App;
 import app.M;
@@ -21,8 +22,6 @@ import app.store.IndexBuilder;
 import app.store.RefDataSync;
 import app.util.UI;
 import epd.model.RefStatus;
-import epd.profiles.EpdProfile;
-import epd.profiles.EpdProfiles;
 import epd.util.Strings;
 
 public class WorkbenchWindow extends WorkbenchWindowAdvisor {
@@ -73,7 +72,6 @@ public class WorkbenchWindow extends WorkbenchWindowAdvisor {
 		App.runWithProgress(
 				"Copy reference data",
 				() -> App.getWorkspace().syncFilesFrom(new File("data")));
-		EpdProfiles.syncDefaults();
 		App.run(new IndexBuilder());
 		Navigator.refreshAll();
 
@@ -85,7 +83,7 @@ public class WorkbenchWindow extends WorkbenchWindowAdvisor {
 
 		// collect the URLs from the EPD profiles
 		var urls = new ArrayList<String>();
-		for (EpdProfile profile : EpdProfiles.getAll()) {
+		for (var profile : EpdProfiles.getAll()) {
 			if (Strings.nullOrEmpty(profile.getDataUrl()))
 				continue;
 			if (!urls.contains(profile.getDataUrl()))

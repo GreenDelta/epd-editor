@@ -1,9 +1,9 @@
 package app.navi;
 
 import org.eclipse.swt.graphics.Image;
+import org.openlca.ilcd.epd.EpdProfile;
 
 import app.rcp.Icon;
-import epd.profiles.EpdProfile;
 import epd.util.Strings;
 
 public class ProfileElement extends NavigationElement<EpdProfile> {

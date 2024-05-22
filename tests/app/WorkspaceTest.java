@@ -1,15 +1,12 @@
 package app;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.File;
 
 import org.junit.Test;
 
 import app.store.validation.ValidationProfiles;
-import epd.profiles.EpdProfiles;
 
 public class WorkspaceTest {
 
@@ -38,22 +35,4 @@ public class WorkspaceTest {
 			assertNotNull(profile);
 		}
 	}
-
-	@Test
-	public void testEPDProfile() {
-		// make sure that at least the default index is loaded
-		Workspace.openDefault()
-				.syncFilesFrom(new File("build/default_data"));
-		var ws = Workspace.openDefault();
-		var profile = EpdProfiles.getDefault();
-		var indicators = 0;
-		var index = ws.index();
-		for (var indicator : profile.getIndicators()) {
-			var ref = index.find(indicator.getRef());
-			assertNotNull("could not find indicator " + indicator.getUUID(), ref);
-			indicators++;
-		}
-		assertTrue(indicators > 0);
-	}
-
 }

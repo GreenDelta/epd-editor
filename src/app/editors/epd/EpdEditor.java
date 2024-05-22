@@ -1,5 +1,6 @@
 package app.editors.epd;
 
+import java.util.Objects;
 import java.util.UUID;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -10,6 +11,8 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.epd.EpdProfile;
+import org.openlca.ilcd.epd.EpdProfiles;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.Epds;
 import org.slf4j.Logger;
@@ -40,12 +43,12 @@ public class EpdEditor extends BaseEditor {
 
 	public Process epd;
 	private QMetaData qmeta;
+	private EpdProfile profile;
 
 	public static void open(Ref ref) {
 		if (ref == null)
 			return;
-		RefEditorInput input = new RefEditorInput(ref);
-		Editors.open(input, ID);
+		Editors.open(new RefEditorInput(ref), ID);
 	}
 
 	@Override
@@ -56,12 +59,18 @@ public class EpdEditor extends BaseEditor {
 		try {
 			var in = (RefEditorInput) input;
 			epd = App.store().get(Process.class, in.ref().getUUID());
+			profile = Objects.requireNonNullElse(
+					EpdProfiles.of(epd), App.getDefaultProfile());
 			qmeta = QMetaData.read(epd);
 			RefCheck.on(epd);
 		} catch (Exception e) {
 			throw new PartInitException(
 					"Failed to open editor: no correct input", e);
 		}
+	}
+
+	public EpdProfile getProfile() {
+		return profile;
 	}
 
 	public QMetaData qMetaData() {
@@ -97,7 +106,7 @@ public class EpdEditor extends BaseEditor {
 	public void doSave(IProgressMonitor monitor) {
 		try {
 			Data.updateVersion(epd);
-			var ds =createSavableCopy();
+			var ds = createSavableCopy();
 			Data.save(ds);
 			saveHandlers.forEach(Runnable::run);
 			dirty = false;
@@ -119,7 +128,7 @@ public class EpdEditor extends BaseEditor {
 		try {
 			var copy = createSavableCopy();
 			LangString.set(
-				Epds.withProcessName(copy).withBaseName(), name, App.lang());
+					Epds.withProcessName(copy).withBaseName(), name, App.lang());
 			Epds.withUUID(copy, UUID.randomUUID().toString());
 			Epds.withVersion(copy, Version.asString(0));
 			Epds.withTimeStamp(copy, Xml.now());

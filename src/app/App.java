@@ -12,6 +12,8 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.ui.PlatformUI;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.epd.EpdProfile;
+import org.openlca.ilcd.epd.EpdProfiles;
 import org.openlca.ilcd.io.FileStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,6 +92,14 @@ public class App {
 		return _settings;
 	}
 
+	public static EpdProfile getDefaultProfile() {
+		var s = settings();
+		var profile = EpdProfiles.get(s.profile);
+		return profile != null
+				? profile
+				: EpdProfiles.EN_15804_A2_EF30.get();
+	}
+
 	public static synchronized void updateIndex(Index index) {
 		getWorkspace().updateIndex(index);
 	}
@@ -107,8 +117,8 @@ public class App {
 
 	public static String s(Ref ref) {
 		return ref != null
-			? s(ref.getName())
-			: "";
+				? s(ref.getName())
+				: "";
 	}
 
 	public static String header(List<LangString> strings, int length) {
@@ -161,7 +171,7 @@ public class App {
 			}
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(App.class);
-			log.error("failed to run " + p.getClass(), e);
+			log.error("failed to run {}", p.getClass(), e);
 		}
 	}
 
@@ -175,7 +185,7 @@ public class App {
 			});
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(App.class);
-			log.error("Error while running progress " + name, e);
+			log.error("Error while running progress {}", name, e);
 		}
 	}
 }

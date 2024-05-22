@@ -25,7 +25,6 @@ import app.util.Tables;
 import app.util.Viewers;
 import app.util.tables.ModifySupport;
 import app.util.tables.TextCellModifier;
-import epd.profiles.EpdProfiles;
 import epd.util.Strings;
 
 class ResultTable {
@@ -42,7 +41,7 @@ class ResultTable {
 
 	public void create(Composite composite) {
 		var columns = new String[]{
-			M.Module, M.Scenario, M.Indicator, M.Value, M.Unit};
+				M.Module, M.Scenario, M.Indicator, M.Value, M.Unit};
 		table = Tables.createViewer(composite, columns);
 		Tables.bindColumnWidths(table, 0.1, 0.2, 0.3, 0.2, 0.2);
 		var modifier = new ModifySupport<ResultRow>(table);
@@ -74,7 +73,7 @@ class ResultTable {
 
 	public void refresh() {
 		List<ResultRow> rows = new ArrayList<>();
-		for (var result : EpdProfiles.syncResultsOf(epd)) {
+		for (var result : Util.syncResults(epd, editor.getProfile())) {
 			for (var amount : result.values()) {
 				rows.add(new ResultRow(result, amount));
 			}
@@ -84,8 +83,8 @@ class ResultTable {
 	}
 
 	private record ResultRow(
-		EpdIndicatorResult result,
-		EpdValue value
+			EpdIndicatorResult result,
+			EpdValue value
 	) implements Comparable<ResultRow> {
 
 		String module() {
@@ -98,14 +97,14 @@ class ResultTable {
 
 		String indicator() {
 			return result.indicator() != null
-				? App.s(result.indicator().getName())
-				: null;
+					? App.s(result.indicator().getName())
+					: null;
 		}
 
 		String unit() {
 			return result.unitGroup() != null
-				? App.s(result.unitGroup().getName())
-				: null;
+					? App.s(result.unitGroup().getName())
+					: null;
 		}
 
 		Double amount() {
@@ -133,7 +132,7 @@ class ResultTable {
 	}
 
 	private static class ResultLabel extends LabelProvider implements
-		ITableLabelProvider {
+			ITableLabelProvider {
 
 		@Override
 		public Image getColumnImage(Object obj, int col) {
@@ -144,8 +143,8 @@ class ResultTable {
 				if (r == null)
 					return null;
 				return r.hasInventoryIndicator()
-					? Icon.img(DataSetType.FLOW)
-					: Icon.img(DataSetType.IMPACT_METHOD);
+						? Icon.img(DataSetType.FLOW)
+						: Icon.img(DataSetType.IMPACT_METHOD);
 			}
 
 			if (col == 4)

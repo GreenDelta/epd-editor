@@ -14,9 +14,7 @@ import app.M;
 import app.editors.Editors;
 import app.editors.classifications.ClassificationEditor;
 import app.editors.connection.ConnectionEditor;
-import app.editors.connection.EpdProfileDownload;
 import app.editors.locations.LocationEditor;
-import app.editors.profiles.ProfileEditor;
 import app.navi.actions.ClassificationSync;
 import app.navi.actions.ConnectionDeleteAction;
 import app.navi.actions.DuplicateAction;
@@ -24,9 +22,6 @@ import app.navi.actions.FileDeletion;
 import app.navi.actions.FileImport;
 import app.navi.actions.NewConnectionAction;
 import app.navi.actions.NewDataSetAction;
-import app.navi.actions.ProfileDeleteAction;
-import app.navi.actions.ProfileExportAction;
-import app.navi.actions.ProfileImportAction;
 import app.navi.actions.RefDeleteAction;
 import app.rcp.Icon;
 import app.store.Connections;
@@ -100,27 +95,13 @@ public class NavigationMenu extends CommonActionProvider {
 			forFile((FileElement) first, menu);
 		}
 
-		if (first instanceof ProfileFolder) {
-			menu.add(new ProfileImportAction());
-		}
-
-		if (first instanceof ProfileElement pe) {
-			menu.add(Actions.create(M.Open, Icon.OPEN.des(),
-				() -> ProfileEditor.open(pe.content)));
-			menu.add(new ProfileExportAction(pe.content));
-			menu.add(new ProfileDeleteAction(pe.content));
-		}
-
 		if (first instanceof ConnectionFolder cf) {
 			menu.add(new NewConnectionAction(cf));
 		}
 
 		if (first instanceof ConnectionElement e) {
 			menu.add(Actions.create(M.Open, Icon.OPEN.des(),
-				() -> ConnectionEditor.open(e.content)));
-			menu.add(Actions.create(M.DownloadEPDProfiles,
-				Icon.DOWNLOAD.des(),
-				() -> EpdProfileDownload.runInUI(e.content.url)));
+					() -> ConnectionEditor.open(e.content)));
 			menu.add(new ConnectionDeleteAction(e));
 		}
 	}

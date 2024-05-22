@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.openlca.ilcd.epd.EpdIndicatorResult;
 import org.openlca.ilcd.epd.EpdProfile;
+import org.openlca.ilcd.epd.EpdProfileIndicator;
 import org.openlca.ilcd.epd.EpdProfiles;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.epd.EpdModuleEntry;
@@ -37,15 +38,15 @@ class ResultSync implements Runnable {
 
 		// collect the defined module-scenario pairs
 		var definedMods = Epds.getModuleEntries(epd)
-			.stream()
-			.map(e -> e.getModule() + "/" + e.getScenario())
-			.collect(Collectors.toSet());
+				.stream()
+				.map(e -> e.getModule() + "/" + e.getScenario())
+				.collect(Collectors.toSet());
 		if (definedMods.isEmpty()) {
 			EpdIndicatorResult.clear(epd);
 			return;
 		}
 
-		var results = new ArrayList<>(EpdProfiles.syncResultsOf(epd));
+		var results = new ArrayList<>(Util.syncResults(epd, profile));
 
 		// remove the results with non-matching or duplicate indicators
 		var index = cleanResults(results);
@@ -67,8 +68,8 @@ class ResultSync implements Runnable {
 				if (amount != null)
 					continue;
 				amount = new EpdValue()
-					.withModule(entry.getModule())
-					.withScenario(entry.getScenario());
+						.withModule(entry.getModule())
+						.withScenario(entry.getScenario());
 				result.values().add(amount);
 			}
 		}
@@ -77,20 +78,20 @@ class ResultSync implements Runnable {
 	}
 
 	private Map<String, EpdIndicatorResult> cleanResults(
-		List<EpdIndicatorResult> results
+			List<EpdIndicatorResult> results
 	) {
 
 		var indicatorIds = profile.getIndicators().stream()
-			.map(Indicator::getUUID)
-			.collect(Collectors.toSet());
+				.map(EpdProfileIndicator::getUUID)
+				.collect(Collectors.toSet());
 
 		var removals = new ArrayList<EpdIndicatorResult>();
 		var handled = new HashMap<String, EpdIndicatorResult>();
 		for (var r : results) {
 
 			if (r.indicator() == null
-				|| r.indicator().getUUID() == null
-				|| !indicatorIds.contains(r.indicator().getUUID())) {
+					|| r.indicator().getUUID() == null
+					|| !indicatorIds.contains(r.indicator().getUUID())) {
 				removals.add(r);
 				continue;
 			}
@@ -105,9 +106,9 @@ class ResultSync implements Runnable {
 			// in case of duplicates try to keep the result with
 			// the highest values
 			var ar = r.values().stream().mapToDouble(
-				a -> a.getAmount() == null ? 0 : a.getAmount()).sum();
+					a -> a.getAmount() == null ? 0 : a.getAmount()).sum();
 			var adup = dup.values().stream().mapToDouble(
-				a -> a.getAmount() == null ? 0 : a.getAmount()).sum();
+					a -> a.getAmount() == null ? 0 : a.getAmount()).sum();
 			if (ar <= adup) {
 				removals.add(r);
 			} else {
@@ -139,7 +140,7 @@ class ResultSync implements Runnable {
 
 			// try to keep the higher value in case of a duplicate
 			if (a.getAmount() == null
-				|| (dup.getAmount() != null && dup.getAmount() > a.getAmount())) {
+					|| (dup.getAmount() != null && dup.getAmount() > a.getAmount())) {
 				removals.add(a);
 			} else if (dup.getAmount() == null || a.getAmount() > dup.getAmount()) {
 				removals.add(dup);
@@ -154,7 +155,7 @@ class ResultSync implements Runnable {
 	private EpdValue findValue(EpdIndicatorResult result, EpdModuleEntry entry) {
 		for (var v : result.values()) {
 			if (Objects.equals(entry.getModule(), v.getModule())
-				&& Strings.nullOrEqual(entry.getScenario(), v.getScenario()))
+					&& Strings.nullOrEqual(entry.getScenario(), v.getScenario()))
 				return v;
 		}
 		return null;

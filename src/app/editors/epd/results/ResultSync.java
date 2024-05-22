@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import org.openlca.ilcd.epd.EpdIndicatorResult;
 import org.openlca.ilcd.epd.EpdProfile;
 import org.openlca.ilcd.epd.EpdProfileIndicator;
-import org.openlca.ilcd.epd.EpdProfiles;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.epd.EpdModuleEntry;
 import org.openlca.ilcd.processes.epd.EpdValue;
@@ -28,9 +27,9 @@ class ResultSync implements Runnable {
 	private final Process epd;
 	private final EpdProfile profile;
 
-	public ResultSync(Process epd) {
+	ResultSync(Process epd, EpdProfile profile) {
 		this.epd = epd;
-		this.profile = EpdProfiles.of(epd);
+		this.profile = profile;
 	}
 
 	@Override

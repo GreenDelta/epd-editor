@@ -18,7 +18,6 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.openlca.ilcd.epd.EpdIndicatorResult;
-import org.openlca.ilcd.epd.EpdProfile;
 import org.openlca.ilcd.epd.EpdProfileModule;
 import org.openlca.ilcd.epd.EpdProfiles;
 import org.openlca.ilcd.processes.Process;
@@ -62,8 +61,8 @@ public class ResultPage extends FormPage {
 		var modKeys = new HashSet<String>();
 		BiFunction<String, String, Boolean> modFn = (mod, scen) -> {
 			var key = Strings.notEmpty(scen)
-				? mod + "/" + scen
-				: mod;
+					? mod + "/" + scen
+					: mod;
 			return modKeys.add(key);
 		};
 		modules.forEach(m -> modFn.apply(m.getModule(), m.getScenario()));
@@ -71,8 +70,8 @@ public class ResultPage extends FormPage {
 			for (var v : r.values()) {
 				if (modFn.apply(v.getModule(), v.getScenario())) {
 					var mod = new EpdModuleEntry()
-						.withModule(v.getModule())
-						.withScenario(v.getScenario());
+							.withModule(v.getModule())
+							.withScenario(v.getScenario());
 					modules.add(mod);
 				}
 			}
@@ -81,8 +80,8 @@ public class ResultPage extends FormPage {
 		modules.sort((e1, e2) -> {
 			int c = Strings.compare(e1.getModule(), e2.getModule());
 			return c == 0
-				? Strings.compare(e1.getScenario(), e2.getScenario())
-				: c;
+					? Strings.compare(e1.getScenario(), e2.getScenario())
+					: c;
 		});
 	}
 
@@ -101,36 +100,27 @@ public class ResultPage extends FormPage {
 	}
 
 	private void createProfileSection(Composite body, FormToolkit tk) {
-
 		var comp = UI.formSection(body, tk, M.EPDProfile, Tooltips.EPD_EPDProfile);
 		var combo = UI.formCombo(comp, tk, M.EPDProfile, Tooltips.EPD_EPDProfile);
 		int selected = -1;
 		var profiles = EpdProfiles.getAll();
 		profiles.sort((p1, p2) -> Strings.compare(p1.getName(), p2.getName()));
 		var items = new String[profiles.size()];
-
 		for (int i = 0; i < profiles.size(); i++) {
 			var profile = profiles.get(i);
 			items[i] = profile.getName() != null ? profile.getName() : "?";
-			if (Objects.equals(profile.getId(), epd.getEpdProfile())) {
+			if (Objects.equals(profile, editor.getProfile())) {
 				selected = i;
-			} else if (epd.getEpdProfile() == null
-				&& EpdProfiles.matches(epd, profile)) {
-				selected = i;
-				epd.withEpdProfile(profile.getId());
 			}
 		}
+
 		combo.setItems(items);
 		if (selected >= 0) {
 			combo.select(selected);
 		}
 		Controls.onSelect(combo, e -> {
 			int i = combo.getSelectionIndex();
-			EpdProfile p = profiles.get(i);
-			if (p != null) {
-				epd.withEpdProfile(p.getId());
-				editor.setDirty();
-			}
+			editor.setProfile(profiles.get(i));
 		});
 	}
 
@@ -149,10 +139,10 @@ public class ResultPage extends FormPage {
 		var comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
 		var columns = new String[]{
-			M.Module,
-			M.Scenario,
-			M.ProductSystem,
-			M.Description};
+				M.Module,
+				M.Scenario,
+				M.ProductSystem,
+				M.Description};
 
 		var table = Tables.createViewer(comp, columns);
 		table.setLabelProvider(new ModuleLabel());
@@ -175,15 +165,15 @@ public class ResultPage extends FormPage {
 	private Action[] createModuleActions() {
 		Action[] actions = new Action[2];
 		actions[0] = Actions.create(
-			M.Add, Icon.ADD.des(), this::createModuleEntry);
+				M.Add, Icon.ADD.des(), this::createModuleEntry);
 		actions[1] = Actions.create(
-			M.Remove, Icon.DELETE.des(), this::removeModule);
+				M.Remove, Icon.DELETE.des(), this::removeModule);
 		return actions;
 	}
 
 	private void createModuleEntry() {
 		var e = new EpdModuleEntry()
-			.withModule(nextModule());
+				.withModule(nextModule());
 		modules.add(e);
 		moduleTable.setInput(modules);
 		editor.setDirty();
@@ -234,15 +224,15 @@ public class ResultPage extends FormPage {
 	private Action[] createResultActions() {
 		var actions = new Action[3];
 		actions[0] = Actions.create(M.SynchronizeWithModules,
-			Icon.CHECK_TRUE.des(), () -> {
-				new ResultSync(epd).run();
-				resultTable.refresh();
-				editor.setDirty();
-			});
+				Icon.CHECK_TRUE.des(), () -> {
+					new ResultSync(epd, editor.getProfile()).run();
+					resultTable.refresh();
+					editor.setDirty();
+				});
 		actions[1] = Actions.create(
-			M.Export, Icon.EXPORT.des(), this::exportResults);
+				M.Export, Icon.EXPORT.des(), this::exportResults);
 		actions[2] = Actions.create(
-			M.Import, Icon.IMPORT.des(), this::importResults);
+				M.Import, Icon.IMPORT.des(), this::importResults);
 		return actions;
 	}
 
@@ -280,7 +270,7 @@ public class ResultPage extends FormPage {
 	}
 
 	private static class ModuleLabel extends LabelProvider implements
-		ITableLabelProvider {
+			ITableLabelProvider {
 
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
@@ -303,7 +293,7 @@ public class ResultPage extends FormPage {
 	}
 
 	private class ModuleModifier extends
-		ComboBoxCellModifier<EpdModuleEntry, String> {
+			ComboBoxCellModifier<EpdModuleEntry, String> {
 
 		@Override
 		protected String getItem(EpdModuleEntry e) {
@@ -313,8 +303,8 @@ public class ResultPage extends FormPage {
 		@Override
 		protected String[] getItems(EpdModuleEntry e) {
 			return Arrays.stream(modules())
-				.map(EpdProfileModule::getName)
-				.toArray(String[]::new);
+					.map(EpdProfileModule::getName)
+					.toArray(String[]::new);
 		}
 
 		@Override
@@ -332,7 +322,7 @@ public class ResultPage extends FormPage {
 	}
 
 	private class ScenarioModifier extends
-		ComboBoxCellModifier<EpdModuleEntry, String> {
+			ComboBoxCellModifier<EpdModuleEntry, String> {
 
 		@Override
 		protected String getItem(EpdModuleEntry e) {

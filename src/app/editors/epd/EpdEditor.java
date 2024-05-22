@@ -69,6 +69,12 @@ public class EpdEditor extends BaseEditor {
 		}
 	}
 
+	public void setProfile(EpdProfile profile) {
+		if (profile == null)
+			return;
+		this.profile = profile;
+	}
+
 	public EpdProfile getProfile() {
 		return profile;
 	}

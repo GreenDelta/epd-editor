@@ -6,6 +6,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.openlca.ilcd.epd.EpdProfile;
 
 import app.App;
 import app.M;
@@ -16,7 +17,6 @@ import app.store.RefDataSync;
 import app.util.Controls;
 import app.util.MsgBox;
 import app.util.UI;
-import epd.profiles.EpdProfile;
 import epd.util.Strings;
 
 class Page extends FormPage {

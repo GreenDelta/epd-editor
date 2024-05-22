@@ -14,6 +14,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.epd.EpdProfile;
+import org.openlca.ilcd.epd.EpdProfiles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,8 +28,6 @@ import app.util.FileChooser;
 import app.util.MsgBox;
 import app.util.UI;
 import epd.model.qmeta.QGroup;
-import epd.profiles.EpdProfile;
-import epd.profiles.EpdProfiles;
 import epd.util.Strings;
 
 class DataSetSection {
@@ -128,12 +128,12 @@ class DataSetSection {
 		Controls.onSelect(check, e -> {
 			boolean b = check.getSelection();
 			if (!b) {
-				check.setSelection(b);
-				settings().checkEPDsOnProductUpdates = b;
+				check.setSelection(false);
+				settings().checkEPDsOnProductUpdates = false;
 				page.setDirty();
 				return;
 			}
-			AtomicBoolean allIndexed = new AtomicBoolean(false);
+			var allIndexed = new AtomicBoolean(false);
 			// index the data sets
 			App.run(monitor -> {
 				List<Ref> refs = App.index().getRefs()

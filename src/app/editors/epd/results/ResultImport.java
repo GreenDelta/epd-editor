@@ -12,6 +12,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.openlca.ilcd.epd.EpdIndicatorResult;
+import org.openlca.ilcd.epd.EpdProfile;
+import org.openlca.ilcd.epd.EpdProfiles;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.epd.EpdModuleEntry;
 import org.openlca.ilcd.processes.epd.EpdScenario;
@@ -20,8 +22,6 @@ import org.openlca.ilcd.util.Epds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import epd.profiles.EpdProfile;
-import epd.profiles.EpdProfiles;
 import epd.util.Strings;
 
 /**
@@ -37,7 +37,7 @@ class ResultImport implements Runnable {
 
 	public ResultImport(Process epd, File excelFile) {
 		this.epd = epd;
-		this.profile = EpdProfiles.get(epd);
+		this.profile = EpdProfiles.of(epd);
 		this.excelFile = excelFile;
 	}
 
@@ -50,7 +50,7 @@ class ResultImport implements Runnable {
 			var results = readRows(sheet);
 			EpdIndicatorResult.writeClean(epd, results);
 		} catch (Exception e) {
-			log.error("failed to import results from file " + excelFile, e);
+			log.error("failed to import results from file {}", excelFile, e);
 		}
 	}
 

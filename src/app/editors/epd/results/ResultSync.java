@@ -9,14 +9,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.openlca.ilcd.epd.EpdIndicatorResult;
+import org.openlca.ilcd.epd.EpdProfile;
+import org.openlca.ilcd.epd.EpdProfiles;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.epd.EpdModuleEntry;
 import org.openlca.ilcd.processes.epd.EpdValue;
 import org.openlca.ilcd.util.Epds;
 
-import epd.profiles.EpdProfile;
-import epd.profiles.EpdProfiles;
-import epd.profiles.Indicator;
 import epd.util.Strings;
 
 /**
@@ -30,7 +29,7 @@ class ResultSync implements Runnable {
 
 	public ResultSync(Process epd) {
 		this.epd = epd;
-		this.profile = EpdProfiles.get(epd);
+		this.profile = EpdProfiles.of(epd);
 	}
 
 	@Override

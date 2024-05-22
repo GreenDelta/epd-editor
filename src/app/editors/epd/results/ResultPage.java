@@ -18,6 +18,9 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.openlca.ilcd.epd.EpdIndicatorResult;
+import org.openlca.ilcd.epd.EpdProfile;
+import org.openlca.ilcd.epd.EpdProfileModule;
+import org.openlca.ilcd.epd.EpdProfiles;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.epd.EpdModuleEntry;
 import org.openlca.ilcd.util.Epds;
@@ -37,9 +40,6 @@ import app.util.Viewers;
 import app.util.tables.ComboBoxCellModifier;
 import app.util.tables.ModifySupport;
 import app.util.tables.TextCellModifier;
-import epd.profiles.EpdProfile;
-import epd.profiles.EpdProfiles;
-import epd.profiles.Module;
 import epd.util.Strings;
 
 public class ResultPage extends FormPage {
@@ -101,22 +101,23 @@ public class ResultPage extends FormPage {
 	}
 
 	private void createProfileSection(Composite body, FormToolkit tk) {
-		var comp = UI.formSection(
-			body, tk, M.EPDProfile, Tooltips.EPD_EPDProfile);
-		var combo = UI.formCombo(
-			comp, tk, M.EPDProfile, Tooltips.EPD_EPDProfile);
+
+		var comp = UI.formSection(body, tk, M.EPDProfile, Tooltips.EPD_EPDProfile);
+		var combo = UI.formCombo(comp, tk, M.EPDProfile, Tooltips.EPD_EPDProfile);
 		int selected = -1;
 		var profiles = EpdProfiles.getAll();
 		profiles.sort((p1, p2) -> Strings.compare(p1.getName(), p2.getName()));
-		String[] items = new String[profiles.size()];
+		var items = new String[profiles.size()];
+
 		for (int i = 0; i < profiles.size(); i++) {
-			EpdProfile p = profiles.get(i);
-			items[i] = p.getName() != null ? p.getName() : "?";
-			if (Objects.equals(p.getId(), epd.getEpdProfile())) {
+			var profile = profiles.get(i);
+			items[i] = profile.getName() != null ? profile.getName() : "?";
+			if (Objects.equals(profile.getId(), epd.getEpdProfile())) {
 				selected = i;
-			} else if (epd.getEpdProfile() == null && EpdProfiles.isDefault(p)) {
+			} else if (epd.getEpdProfile() == null
+				&& EpdProfiles.matches(epd, profile)) {
 				selected = i;
-				epd.withEpdProfile(p.getId());
+				epd.withEpdProfile(profile.getId());
 			}
 		}
 		combo.setItems(items);
@@ -189,7 +190,7 @@ public class ResultPage extends FormPage {
 	}
 
 	private String nextModule() {
-		Module[] mods = modules();
+		var mods = modules();
 		if (mods.length == 0)
 			return null;
 		int selected = 0;
@@ -271,11 +272,11 @@ public class ResultPage extends FormPage {
 		});
 	}
 
-	private Module[] modules() {
-		var profile = EpdProfiles.get(epd);
-		List<Module> modules = profile.getModules();
-		modules.sort(Comparator.comparingInt(Module::getIndex));
-		return modules.toArray(new Module[0]);
+	private EpdProfileModule[] modules() {
+		var profile = EpdProfiles.of(epd);
+		var modules = profile.getModules();
+		modules.sort(Comparator.comparingInt(EpdProfileModule::getIndex));
+		return modules.toArray(new EpdProfileModule[0]);
 	}
 
 	private static class ModuleLabel extends LabelProvider implements
@@ -312,7 +313,7 @@ public class ResultPage extends FormPage {
 		@Override
 		protected String[] getItems(EpdModuleEntry e) {
 			return Arrays.stream(modules())
-				.map(Module::getName)
+				.map(EpdProfileModule::getName)
 				.toArray(String[]::new);
 		}
 

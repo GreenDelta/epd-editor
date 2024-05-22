@@ -9,12 +9,12 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
+import org.openlca.ilcd.epd.EpdProfile;
+import org.openlca.ilcd.epd.EpdProfileModule;
 
 import app.M;
 import app.util.Tables;
 import app.util.UI;
-import epd.profiles.EpdProfile;
-import epd.profiles.Module;
 
 class ModuleTable {
 	private final EpdProfile profile;
@@ -35,7 +35,8 @@ class ModuleTable {
 			M.Name, M.Description);
 		Tables.bindColumnWidths(table, 0.2, 0.3, 0.5);
 		table.setLabelProvider(new Label());
-		profile.getModules().sort(Comparator.comparingInt(Module::getIndex));
+		profile.getModules().sort(
+			Comparator.comparingInt(EpdProfileModule::getIndex));
 		table.setInput(profile.getModules());
 	}
 
@@ -48,7 +49,7 @@ class ModuleTable {
 
 		@Override
 		public String getColumnText(Object obj, int col) {
-			if (!(obj instanceof Module module))
+			if (!(obj instanceof EpdProfileModule module))
 				return null;
 			return switch (col) {
 				case 0 -> Integer.toString(module.getIndex());

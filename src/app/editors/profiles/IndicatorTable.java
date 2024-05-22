@@ -7,6 +7,8 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.epd.EpdProfile;
+import org.openlca.ilcd.epd.EpdProfileIndicator;
 
 import app.App;
 import app.M;
@@ -15,8 +17,6 @@ import app.rcp.Icon;
 import app.util.Tables;
 import app.util.UI;
 import app.util.Viewers;
-import epd.profiles.EpdProfile;
-import epd.profiles.Indicator;
 
 class IndicatorTable {
 
@@ -38,7 +38,7 @@ class IndicatorTable {
 		table.setInput(profile.getIndicators());
 
 		Tables.onDoubleClick(table, $ -> {
-			Indicator indicator = Viewers.getFirstSelected(table);
+			EpdProfileIndicator indicator = Viewers.getFirstSelected(table);
 			if (indicator == null)
 				return;
 			var ref = indicator.getRef();
@@ -54,7 +54,7 @@ class IndicatorTable {
 
 		@Override
 		public Image getColumnImage(Object obj, int col) {
-			if (!(obj instanceof Indicator indicator))
+			if (!(obj instanceof EpdProfileIndicator indicator))
 				return null;
 			if (col == 2)
 				return Icon.UNIT.img();
@@ -68,7 +68,7 @@ class IndicatorTable {
 
 		@Override
 		public String getColumnText(Object obj, int col) {
-			if (!(obj instanceof Indicator indicator))
+			if (!(obj instanceof EpdProfileIndicator indicator))
 				return null;
 			return switch (col) {
 				case 0 -> App.s(indicator.getRef());

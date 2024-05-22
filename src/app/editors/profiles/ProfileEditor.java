@@ -4,14 +4,14 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
+import org.openlca.ilcd.epd.EpdProfile;
+import org.openlca.ilcd.epd.EpdProfiles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.editors.BaseEditor;
 import app.editors.Editors;
 import app.editors.SimpleEditorInput;
-import epd.profiles.EpdProfile;
-import epd.profiles.EpdProfiles;
 
 public class ProfileEditor extends BaseEditor {
 
@@ -47,7 +47,8 @@ public class ProfileEditor extends BaseEditor {
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		EpdProfiles.save(profile);
+		// TODO: we do not save profiles anymore?
+		// EpdProfiles.write(profile);
 		dirty = false;
 		editorDirtyStateChanged();
 	}

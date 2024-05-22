@@ -3,14 +3,14 @@ package app;
 import java.io.File;
 
 import org.openlca.ilcd.commons.Copyable;
+import org.openlca.ilcd.epd.EpdProfiles;
 
 import app.store.Json;
-import epd.profiles.EpdProfiles;
 
 public final class AppSettings implements Copyable<AppSettings> {
 
 	/** The ID of the EPD profile that should be used in the application. */
-	public String profile = EpdProfiles.DEFAULT;
+	public String profile = EpdProfiles.EN_15804_A2_EF30.name();
 
 	/**
 	 * If true, synchronize the reference data (defined as data stock URLs in

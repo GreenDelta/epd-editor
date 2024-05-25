@@ -1,7 +1,9 @@
 package app.editors;
 
-import app.util.Colors;
-import app.util.UI;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.Optional;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
@@ -11,9 +13,13 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.io.Xml;
+import org.openlca.ilcd.util.DataSets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import app.App;
+import app.util.Colors;
+import app.util.UI;
 
 public class XmlPage extends FormPage {
 
@@ -43,13 +49,28 @@ public class XmlPage extends FormPage {
 		if (dataSet == null || text == null)
 			return;
 		try {
-			var xml = Xml.toString(dataSet);
+			var xml = readFile().orElse(Xml.toString(dataSet));
 			text.setText(xml);
 			styleText(xml);
 			form.reflow(true);
 		} catch (Exception e) {
-			Logger log = LoggerFactory.getLogger(getClass());
-			log.error("failed to convert data set to XML", e);
+			LoggerFactory.getLogger(getClass())
+					.error("failed to convert data set to XML", e);
+		}
+	}
+
+	private Optional<String> readFile() {
+		try {
+			var file = App.store().getFile(
+					dataSet.getClass(), DataSets.getUUID(dataSet));
+			if (file == null)
+				return Optional.empty();
+			var xml = Files.readString(file.toPath(), StandardCharsets.UTF_8);
+			return Optional.of(xml);
+		} catch (Exception e) {
+			LoggerFactory.getLogger(getClass())
+					.error("failed to read file of {}", dataSet, e);
+			return Optional.empty();
 		}
 	}
 
@@ -80,5 +101,4 @@ public class XmlPage extends FormPage {
 			default -> Colors.black();
 		};
 	}
-
 }

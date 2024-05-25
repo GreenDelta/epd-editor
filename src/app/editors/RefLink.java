@@ -75,8 +75,9 @@ public class RefLink extends Composite {
 		this.ref = ref;
 		setLinkText();
 		this.pack();
-		if (onChange != null)
+		if (onChange != null) {
 			onChange.accept(ref);
+		}
 	}
 
 	public void onChange(Consumer<Ref> fn) {
@@ -88,8 +89,8 @@ public class RefLink extends Composite {
 			return;
 		String t = M.None;
 		if (ref != null) {
-			String s = App.s(ref.getName());
-			if (s != null) {
+			var s = App.s(ref.getName());
+			if (Strings.notEmpty(s)) {
 				t = s;
 			}
 		}

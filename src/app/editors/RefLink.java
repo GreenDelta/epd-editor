@@ -3,7 +3,6 @@ package app.editors;
 import java.util.function.Consumer;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
@@ -53,7 +52,7 @@ public class RefLink extends Composite {
 	}
 
 	private void createAddButton() {
-		Button btn = toolkit.createButton(this, "", SWT.PUSH);
+		var btn = toolkit.createButton(this, "", SWT.PUSH);
 		btn.setToolTipText(M.SelectDataSet);
 		btn.setImage(Icon.img(type));
 		Controls.onSelect(btn, e -> {
@@ -64,11 +63,11 @@ public class RefLink extends Composite {
 	}
 
 	private void createRemoveLink() {
-		ImageHyperlink l = toolkit.createImageHyperlink(this, SWT.BOTTOM);
-		l.setToolTipText(M.Remove);
-		l.setHoverImage(Icon.DELETE.img());
-		l.setImage(Icon.DELETE_DIS.img());
-		Controls.onClick(l, e -> setRef(null));
+		var link = toolkit.createImageHyperlink(this, SWT.BOTTOM);
+		link.setToolTipText(M.Remove);
+		link.setHoverImage(Icon.DELETE.img());
+		link.setImage(Icon.DELETE_DIS.img());
+		Controls.onClick(link, e -> setRef(null));
 	}
 
 	public void setRef(Ref ref) {

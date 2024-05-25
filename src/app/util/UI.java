@@ -384,7 +384,7 @@ public class UI {
 
 	public static Label formLabel(Composite parent, FormToolkit tk,
 			String label, String tooltip) {
-		Label lab = null;
+		Label lab;
 		if (tk != null)
 			lab = tk.createLabel(parent, label, SWT.NONE);
 		else {

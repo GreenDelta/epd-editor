@@ -29,6 +29,7 @@ import app.rcp.Texts;
 import app.store.RefDeps;
 import app.util.Colors;
 import app.util.Controls;
+import app.util.LangText;
 import app.util.TextBuilder;
 import app.util.UI;
 import epd.util.Strings;
@@ -84,12 +85,34 @@ class InfoPage extends FormPage {
 	private void infoSection(Composite parent, TextBuilder tb) {
 		var comp = UI.infoSection(epd, parent, tk);
 		var pName = Epds.withProcessName(epd);
-		tb.text(comp, M.Name, Tooltips.EPD_Name, pName.withBaseName());
-		tb.text(comp, M.QuantitativeProperties,
-				Tooltips.EPD_FurtherProperties, pName.withFlowProperties());
+		var texts = LangText.builder(editor, tk);
+
+		texts.next(M.Name, Tooltips.EPD_Name)
+				.withInitial(pName.getBaseName())
+				.onEdit(pName::withBaseName)
+				.renderOn(comp);
+		// tb.text(comp, M.Name, Tooltips.EPD_Name, pName.withBaseName());
+
+		texts.next(M.QuantitativeProperties, Tooltips.EPD_FurtherProperties)
+				.withInitial(pName.getFlowProperties())
+				.onEdit(pName::withFlowProperties)
+				.renderOn(comp);
+		// tb.text(comp, , pName.withFlowProperties());
+
 		var info = Epds.withDataSetInfo(epd);
-		tb.text(comp, M.Synonyms, Tooltips.EPD_Synonyms, info.withSynonyms());
-		tb.multiText(comp, M.Comment, Tooltips.EPD_Comment, info.withComment());
+
+		texts.next(M.Synonyms, Tooltips.EPD_Synonyms)
+				.withInitial(info.getSynonyms())
+				.onEdit(info::withSynonyms)
+				.renderOn(comp);
+		// tb.text(comp, , info.withSynonyms());
+
+		texts.nextMultiLine(M.Comment, Tooltips.EPD_Comment)
+				.withInitial(info.getComment())
+				.onEdit(info::withComment)
+				.renderOn(comp);
+		// tb.multiText(comp, , info.withComment());
+
 		UI.fileLink(epd, comp, tk);
 	}
 

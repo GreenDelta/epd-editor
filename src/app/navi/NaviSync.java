@@ -9,7 +9,6 @@ import org.openlca.ilcd.commons.Ref;
 import epd.index.CategoryNode;
 import epd.index.Index;
 import epd.index.Node;
-import epd.index.TypeNode;
 import epd.util.Strings;
 
 /**
@@ -28,9 +27,9 @@ public class NaviSync implements Runnable {
 		if (index == null)
 			return;
 		index.removeEmptyCategories();
-		for (DataSetType type : DataSetType.values()) {
-			TypeElement elem = Navigator.getTypeRoot(type);
-			TypeNode node = index.getNode(type);
+		for (var type : DataSetType.values()) {
+			var elem = Navigator.getTypeRoot(type);
+			var node = index.getNode(type);
 			if (node == null)
 				continue;
 			sync(node, elem);
@@ -43,8 +42,8 @@ public class NaviSync implements Runnable {
 			return;
 		remove(node, parent);
 		syncRefs(node, parent);
-		for (CategoryNode cat : node.categories) {
-			CategoryElement elem = findChild(cat.category, parent);
+		for (var cat : node.categories) {
+			var elem = findChild(cat.category, parent);
 			if (elem == null) {
 				elem = new CategoryElement(parent, cat);
 				parent.childs.add(elem);
@@ -55,7 +54,7 @@ public class NaviSync implements Runnable {
 
 	private void syncRefs(Node node, NavigationElement<?> parent) {
 		for (Ref ref : node.refs) {
-			RefElement elem = findChild(ref, parent);
+			var elem = findChild(ref, parent);
 			if (elem != null) {
 				elem.content = ref;
 			} else {

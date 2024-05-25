@@ -55,10 +55,10 @@ public class NewDataSetAction extends Action {
 	private DataSetType getType(NavigationElement<?> elem) {
 		if (elem == null)
 			return null;
-		if (elem instanceof TypeElement)
-			return ((TypeElement) elem).getContent();
-		if (elem instanceof RefElement) {
-			Ref ref = ((RefElement) elem).getContent();
+		if (elem instanceof TypeElement typeElem)
+			return typeElem.getContent();
+		if (elem instanceof RefElement refElem) {
+			Ref ref = refElem.getContent();
 			if (ref != null && ref.getType() != null)
 				return ref.getType();
 		}

@@ -54,7 +54,7 @@ public class Index {
 			return;
 		if (ds instanceof Process epd) {
 			var time = Epds.getTime(epd);
-			if (time.getReferenceYear() != null) {
+			if (time != null && time.getReferenceYear() != null) {
 				var refYear = Integer.toString(time.getReferenceYear());
 				ref.withOtherAttributes()
 					.put(EditorVocab.referenceYear(), refYear);

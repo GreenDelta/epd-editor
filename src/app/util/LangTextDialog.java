@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.FormDialog;
@@ -14,6 +17,7 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.openlca.ilcd.commons.LangString;
 
+import app.M;
 import epd.util.Strings;
 
 public class LangTextDialog extends FormDialog {
@@ -42,20 +46,36 @@ public class LangTextDialog extends FormDialog {
 
 	@Override
 	protected Point getInitialSize() {
-		return new Point(650, 500);
+		return new Point(800, 500);
 	}
 
 	@Override
 	protected void createFormContent(IManagedForm mForm) {
 		var tk = mForm.getToolkit();
 		var body = UI.formBody(mForm.getForm(), tk);
-		UI.gridLayout(body, 2);
+		var boxComp = tk.createComposite(body);
+		UI.gridData(boxComp, true, false);
+		UI.gridLayout(boxComp, 2);
 
 		strings.stream()
 				.map(s -> LangBox.of(s, strings))
 				.sorted((box1, box2) -> Strings.compare(box1.lang(), box2.lang()))
-				.forEach(box -> box.render(body, tk));
+				.forEach(box -> box.render(boxComp, tk));
 
+		var langComp = tk.createComposite(body);
+		langComp.setLayoutData(
+				new GridData(SWT.CENTER, SWT.BEGINNING, true, false));
+		tk.createLabel(langComp, "Add language");
+		UI.gridLayout(langComp, 3);
+		var combo = new Combo(langComp, SWT.READ_ONLY);
+		var comboGrid = UI.gridData(combo, false, false);
+		comboGrid.widthHint = 200;
+		comboGrid.minimumWidth = 200;
+		var btn = tk.createButton(langComp, M.Add, SWT.NONE);
+		Controls.onSelect(btn, $ -> {
+			new LangBox("pl", "", strings).render(boxComp, tk);
+			mForm.reflow(true);
+		});
 	}
 
 	private record LangBox(

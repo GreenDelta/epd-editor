@@ -68,8 +68,9 @@ public class LangText {
 		var text = tk.createText(innerComp, App.s(initial), flags);
 		var grid = UI.gridData(text, true, false);
 		if (multiLines) {
-			grid.minimumHeight = 50;
-			grid.heightHint = 50;
+			grid.minimumHeight = 100;
+			grid.heightHint = 100;
+			grid.widthHint = 100;
 		}
 
 		text.addModifyListener($ -> {
@@ -97,6 +98,10 @@ public class LangText {
 		var linkGrid = UI.gridData(link, false, false);
 		linkGrid.verticalAlignment = SWT.TOP;
 		linkGrid.verticalIndent = 2;
+
+		Controls.onClick(link, $ -> {
+			LangTextDialog.open(initial);
+		});
 	}
 
 	public static class Builder {

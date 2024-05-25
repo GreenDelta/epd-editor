@@ -347,8 +347,8 @@ public class UI {
 			text.setToolTipText(tooltip);
 		}
 		GridData gd = gridData(text, true, false);
-		gd.minimumHeight = 50;
-		gd.heightHint = 50;
+		gd.minimumHeight = 100;
+		gd.heightHint = 100;
 		gd.widthHint = 100;
 		return text;
 	}

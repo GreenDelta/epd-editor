@@ -1,9 +1,11 @@
 package app.util;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
@@ -77,16 +79,22 @@ public class LangTextDialog extends FormDialog {
 		var langComp = tk.createComposite(body);
 		langComp.setLayoutData(
 				new GridData(SWT.CENTER, SWT.BEGINNING, true, false));
-		tk.createLabel(langComp, "Add language");
 		UI.gridLayout(langComp, 3);
-		var combo = new Combo(langComp, SWT.READ_ONLY);
-		var comboGrid = UI.gridData(combo, false, false);
-		comboGrid.widthHint = 200;
-		comboGrid.minimumWidth = 200;
+		tk.createLabel(langComp, "Add language");
+		var combo = LangCombo.create(langComp);
 		var btn = tk.createButton(langComp, M.Add, SWT.NONE);
+
+		if (contains(boxes, combo.getSelected())) {
+			btn.setEnabled(false);
+		}
+		combo.onChange(code -> btn.setEnabled(!contains(boxes, code)));
 		Controls.onSelect(btn, $ -> {
-			new LangBox("pl", "", strings).render(boxComp, tk, multiLine);
+			var code = combo.getSelected();
+			var box = new LangBox(code, "", strings);
+			boxes.add(box);
+			box.render(boxComp, tk, multiLine);
 			mForm.reflow(true);
+			btn.setEnabled(false);
 		});
 	}
 
@@ -139,7 +147,7 @@ public class LangTextDialog extends FormDialog {
 			text.addModifyListener($ -> {
 				var s = text.getText();
 				if (Strings.notEmpty(s)) {
-					LangString.set(strings, val, lang);
+					LangString.set(strings, s, lang);
 				} else {
 					LangString.remove(strings, lang);
 				}
@@ -161,6 +169,55 @@ public class LangTextDialog extends FormDialog {
 			} catch (Exception e) {
 				return lang;
 			}
+		}
+	}
+
+	private record LangCombo(List<String> codes, Combo combo) {
+
+		static LangCombo create(Composite comp) {
+			var combo = new Combo(comp, SWT.READ_ONLY);
+			var comboGrid = UI.gridData(combo, false, false);
+			comboGrid.widthHint = 200;
+			comboGrid.minimumWidth = 200;
+
+			var codeSet = new HashSet<String>();
+			for (var loc : Locale.getAvailableLocales()) {
+				var code = loc.getLanguage();
+				if (Strings.notEmpty(code)) {
+					codeSet.add(code);
+				}
+			}
+
+			var codes = new ArrayList<>(codeSet);
+			codes.sort(Strings::compare);
+			var items = new String[codes.size()];
+			for (int i = 0; i < codes.size(); i++) {
+				var code = codes.get(i);
+				// we want the default language for the code!
+				var loc = Locale.forLanguageTag(code);
+				items[i] = loc != null
+						? code + " - " + loc.getDisplayLanguage()
+						: code;
+			}
+
+			combo.setItems(items);
+			combo.select(0);
+			return new LangCombo(codes, combo);
+		}
+
+		String getSelected() {
+			int idx = combo.getSelectionIndex();
+			return codes.get(idx);
+		}
+
+		void onChange(Consumer<String> fn) {
+			if (fn == null)
+				return;
+			Controls.onSelect(combo, $ -> {
+				var idx = combo.getSelectionIndex();
+				var code = codes.get(idx);
+				fn.accept(code);
+			});
 		}
 	}
 }

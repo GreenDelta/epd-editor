@@ -1,7 +1,6 @@
 package app.util;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -23,16 +22,29 @@ import epd.util.Strings;
 public class LangTextDialog extends FormDialog {
 
 	private final List<LangString> strings;
+	private final boolean multiLine;
 
-	private LangTextDialog(List<LangString> initial) {
+	private LangTextDialog(List<LangString> strings, boolean multiLine) {
 		super(UI.shell());
-		this.strings = new ArrayList<>(initial);
+		this.strings = strings;
+		this.multiLine = multiLine;
 	}
 
 	static Optional<List<LangString>> open(List<LangString> initial) {
-		var dialog = new LangTextDialog(initial == null
-				? Collections.emptyList()
-				: initial);
+		return open(initial, false);
+	}
+
+	static Optional<List<LangString>> openMultiLine(
+			List<LangString> initial) {
+		return open(initial, true);
+	}
+
+	private static Optional<List<LangString>> open(
+			List<LangString> initial, boolean multiLine) {
+		var strings = initial == null
+				? new ArrayList<LangString>()
+				: new ArrayList<>(initial);
+		var dialog = new LangTextDialog(strings, multiLine);
 		return dialog.open() == OK
 				? Optional.of(dialog.strings)
 				: Optional.empty();
@@ -46,7 +58,8 @@ public class LangTextDialog extends FormDialog {
 
 	@Override
 	protected Point getInitialSize() {
-		return new Point(800, 500);
+		int height = multiLine ? 500 : 350;
+		return new Point(800, height);
 	}
 
 	@Override
@@ -60,7 +73,7 @@ public class LangTextDialog extends FormDialog {
 		strings.stream()
 				.map(s -> LangBox.of(s, strings))
 				.sorted((box1, box2) -> Strings.compare(box1.lang(), box2.lang()))
-				.forEach(box -> box.render(boxComp, tk));
+				.forEach(box -> box.render(boxComp, tk, multiLine));
 
 		var langComp = tk.createComposite(body);
 		langComp.setLayoutData(
@@ -73,7 +86,7 @@ public class LangTextDialog extends FormDialog {
 		comboGrid.minimumWidth = 200;
 		var btn = tk.createButton(langComp, M.Add, SWT.NONE);
 		Controls.onSelect(btn, $ -> {
-			new LangBox("pl", "", strings).render(boxComp, tk);
+			new LangBox("pl", "", strings).render(boxComp, tk, multiLine);
 			mForm.reflow(true);
 		});
 	}
@@ -88,8 +101,10 @@ public class LangTextDialog extends FormDialog {
 			return new LangBox(lang, s.getValue(), strings);
 		}
 
-		void render(Composite comp, FormToolkit tk) {
-			var text = UI.formMultiText(comp, tk, label());
+		void render(Composite comp, FormToolkit tk, boolean multiLine) {
+			var text = multiLine
+					? UI.formMultiText(comp, tk, label())
+					: UI.formText(comp, tk, label());
 			if (val != null) {
 				text.setText(val);
 			}

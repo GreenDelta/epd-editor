@@ -88,13 +88,13 @@ class InfoPage extends FormPage {
 		var texts = LangText.builder(editor, tk);
 
 		texts.next(M.Name, Tooltips.EPD_Name)
-				.withInitial(pName.getBaseName())
+				.withCurrent(pName.getBaseName())
 				.onEdit(pName::withBaseName)
 				.renderOn(comp);
 		// tb.text(comp, M.Name, Tooltips.EPD_Name, pName.withBaseName());
 
 		texts.next(M.QuantitativeProperties, Tooltips.EPD_FurtherProperties)
-				.withInitial(pName.getFlowProperties())
+				.withCurrent(pName.getFlowProperties())
 				.onEdit(pName::withFlowProperties)
 				.renderOn(comp);
 		// tb.text(comp, , pName.withFlowProperties());
@@ -102,13 +102,13 @@ class InfoPage extends FormPage {
 		var info = Epds.withDataSetInfo(epd);
 
 		texts.next(M.Synonyms, Tooltips.EPD_Synonyms)
-				.withInitial(info.getSynonyms())
+				.withCurrent(info.getSynonyms())
 				.onEdit(info::withSynonyms)
 				.renderOn(comp);
 		// tb.text(comp, , info.withSynonyms());
 
 		texts.nextMultiLine(M.Comment, Tooltips.EPD_Comment)
-				.withInitial(info.getComment())
+				.withCurrent(info.getComment())
 				.onEdit(info::withComment)
 				.renderOn(comp);
 		// tb.multiText(comp, , info.withComment());

@@ -20,7 +20,7 @@ public class LangText {
 	private boolean multiLines;
 	private String label;
 	private String toolTip;
-	private List<LangString> initial;
+	private List<LangString> current;
 	private Supplier<List<LangString>> onEdit;
 
 	private LangText(IEditor editor, FormToolkit tk) {
@@ -47,8 +47,8 @@ public class LangText {
 		return this;
 	}
 
-	public LangText withInitial(List<LangString> initial) {
-		this.initial = initial;
+	public LangText withCurrent(List<LangString> current) {
+		this.current = current;
 		return this;
 	}
 
@@ -65,7 +65,7 @@ public class LangText {
 		int flags = multiLines
 				? SWT.BORDER | SWT.V_SCROLL | SWT.WRAP | SWT.MULTI
 				: SWT.BORDER;
-		var text = tk.createText(innerComp, App.s(initial), flags);
+		var text = tk.createText(innerComp, App.s(current), flags);
 		var grid = UI.gridData(text, true, false);
 		if (multiLines) {
 			grid.minimumHeight = 100;
@@ -76,12 +76,12 @@ public class LangText {
 		text.addModifyListener($ -> {
 			if (onEdit == null)
 				return;
-			var s = onEdit.get();
+			this.current = onEdit.get();
 			var value = text.getText();
 			if (Strings.notEmpty(value)) {
-				LangString.set(s, value, App.lang());
+				LangString.set(current, value, App.lang());
 			} else {
-				LangString.remove(s, App.lang());
+				LangString.remove(current, App.lang());
 			}
 			if (editor != null) {
 				editor.setDirty();
@@ -100,7 +100,17 @@ public class LangText {
 		linkGrid.verticalIndent = 2;
 
 		Controls.onClick(link, $ -> {
-			LangTextDialog.open(initial);
+			if (onEdit == null)
+				return;
+			var nextStrings = multiLines
+					? LangTextDialog.openMultiLine(current)
+					: LangTextDialog.open(current);
+			if (nextStrings.isPresent()) {
+				current = onEdit.get();
+				current.clear();
+				current.addAll(nextStrings.get());
+				editor.setDirty();
+			}
 		});
 	}
 

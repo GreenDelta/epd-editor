@@ -1,14 +1,7 @@
 package app.editors.methods;
 
-import app.App;
-import app.M;
-import app.Tooltips;
-import app.editors.CategorySection;
-import app.editors.VersionField;
-import app.util.StringTable;
-import app.util.TextBuilder;
-import app.util.UI;
-import epd.model.Xml;
+import java.util.function.Supplier;
+
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
@@ -19,7 +12,16 @@ import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.methods.ImpactMethod;
 import org.openlca.ilcd.util.ImpactMethods;
 
-import java.util.function.Supplier;
+import app.App;
+import app.M;
+import app.Tooltips;
+import app.editors.CategorySection;
+import app.editors.VersionField;
+import app.util.LangText;
+import app.util.StringTable;
+import app.util.TextBuilder;
+import app.util.UI;
+import epd.model.Xml;
 
 class InfoPage extends FormPage {
 
@@ -36,44 +38,56 @@ class InfoPage extends FormPage {
 	@Override
 	protected void createFormContent(IManagedForm mform) {
 		Supplier<String> title = () -> M.LCIAMethod + ": "
-			+ App.s(ImpactMethods.getName(method));
+				+ App.s(ImpactMethods.getName(method));
 		ScrolledForm form = UI.formHeader(mform, title.get());
 		editor.onSaved(() -> form.setText(title.get()));
 		tk = mform.getToolkit();
 		Composite body = UI.formBody(form, tk);
-		TextBuilder tb = new TextBuilder(editor, this, tk);
-		infoSection(body, tb);
+
+		infoSection(body);
 		categorySection(body);
 		adminSection(body);
 		form.reflow(true);
 	}
 
-	private void infoSection(Composite body, TextBuilder tb) {
+	private void infoSection(Composite body) {
 		var info = method.withMethodInfo().withDataSetInfo();
 		var comp = UI.infoSection(method, body, tk);
-		tb.text(comp, M.Name, Tooltips.LCIAMethod_Name, info.withName());
-		UI.formLabel(comp, tk, "#Methodologies",
-			Tooltips.LCIAMethod_Methodologies);
+		var tb = LangText.builder(editor, tk);
+
+		tb.next(M.Name, Tooltips.LCIAMethod_Name)
+				.val(info.getName())
+				.edit(info::withName)
+				.draw(comp);
+
+		UI.formLabel(comp, tk, "#Methodologies", Tooltips.LCIAMethod_Methodologies);
 		new StringTable(editor, "#Methodology", info.withMethods()).render(comp, tk);
+
 		UI.formLabel(comp, tk, "#Impact Categories",
-			Tooltips.LCIAMethod_ImpactCategories);
+				Tooltips.LCIAMethod_ImpactCategories);
 		new StringTable(editor, "#Impact Category", info.withImpactCategories())
-			.render(comp, tk);
-		tb.text(comp, "#Impact Indicator", Tooltips.LCIAMethod_ImpactIndicator,
-			info.getIndicator(), val -> {
-				info.withIndicator(val);
-				editor.setDirty();
-			});
-		tb.text(comp, M.Description,
-			Tooltips.LCIAMethod_Description, info.withComment());
+				.render(comp, tk);
+
+		new TextBuilder(editor, tk)
+				.text(comp, "#Impact Indicator", Tooltips.LCIAMethod_ImpactIndicator,
+						info.getIndicator(), val -> {
+							info.withIndicator(val);
+							editor.setDirty();
+						});
+
+		tb.next(M.Description, Tooltips.LCIAMethod_Description)
+				.val(info.getComment())
+				.edit(info::withComment)
+				.draw(comp);
+
 		UI.fileLink(method, comp, tk);
 	}
 
 	private void categorySection(Composite body) {
 		new CategorySection(
-			editor,
-			DataSetType.IMPACT_METHOD,
-			method.withMethodInfo().withDataSetInfo().withClassifications()
+				editor,
+				DataSetType.IMPACT_METHOD,
+				method.withMethodInfo().withDataSetInfo().withClassifications()
 		).render(body, tk);
 	}
 

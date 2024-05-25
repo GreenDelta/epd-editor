@@ -1,14 +1,5 @@
 package app.editors.epd;
 
-import app.M;
-import app.Tooltips;
-import app.editors.RefLink;
-import app.editors.RefTable;
-import app.rcp.Icon;
-import app.util.Actions;
-import app.util.TextBuilder;
-import app.util.UI;
-import app.util.Viewers;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -16,7 +7,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
@@ -26,24 +16,32 @@ import org.openlca.ilcd.processes.Review;
 import org.openlca.ilcd.processes.Validation;
 import org.openlca.ilcd.util.Epds;
 
+import app.M;
+import app.Tooltips;
+import app.editors.RefLink;
+import app.editors.RefTable;
+import app.rcp.Icon;
+import app.util.Actions;
+import app.util.LangText;
+import app.util.UI;
+import app.util.Viewers;
+
 class ReviewSection {
 
 	private final Validation validation;
 	private final EpdEditor editor;
-	private final FormPage page;
 
 	private Composite parent;
-	private FormToolkit toolkit;
+	private FormToolkit tk;
 	private ScrolledForm form;
 
-	public ReviewSection(EpdEditor editor, FormPage page) {
+	public ReviewSection(EpdEditor editor) {
 		this.validation = Epds.withValidation(editor.epd);
 		this.editor = editor;
-		this.page = page;
 	}
 
 	public void render(Composite body, FormToolkit toolkit, ScrolledForm form) {
-		this.toolkit = toolkit;
+		this.tk = toolkit;
 		this.form = form;
 		Section section = UI.section(body, toolkit, M.Reviews);
 		section.setToolTipText(Tooltips.EPD_Review);
@@ -53,7 +51,7 @@ class ReviewSection {
 			new Sec(review);
 		}
 		Action addAction = Actions.create(M.AddReview,
-			Icon.ADD.des(), this::addReview);
+				Icon.ADD.des(), this::addReview);
 		Actions.bind(section, addAction);
 		form.reflow(true);
 	}
@@ -78,25 +76,25 @@ class ReviewSection {
 
 		private void createUi() {
 			int idx = validation.withReviews().indexOf(review) + 1;
-			section = UI.section(parent, toolkit, M.Review + " " + idx);
+			section = UI.section(parent, tk, M.Review + " " + idx);
 			section.setToolTipText(Tooltips.EPD_Review);
-			Composite body = UI.sectionClient(section, toolkit);
+			Composite body = UI.sectionClient(section, tk);
 			UI.gridLayout(body, 1);
-			Composite comp = UI.formComposite(body, toolkit);
+			Composite comp = UI.formComposite(body, tk);
 			UI.gridData(comp, true, false);
 			typeCombo(comp);
 			detailsText(comp);
 			createReportText(comp);
 			createActorTable(body);
 			Action deleteAction = Actions.create(M.DeleteReview,
-				Icon.DELETE.des(), this::delete);
+					Icon.DELETE.des(), this::delete);
 			Actions.bind(section, deleteAction);
 		}
 
 		private void createReportText(Composite comp) {
-			UI.formLabel(comp, toolkit,
-				M.CompleteReviewReport, Tooltips.EPD_ReviewReport);
-			RefLink t = new RefLink(comp, toolkit, DataSetType.SOURCE);
+			UI.formLabel(comp, tk,
+					M.CompleteReviewReport, Tooltips.EPD_ReviewReport);
+			RefLink t = new RefLink(comp, tk, DataSetType.SOURCE);
 			t.setRef(review.withReport());
 			t.onChange(ref -> {
 				review.withReport(ref);
@@ -106,20 +104,22 @@ class ReviewSection {
 
 		private void createActorTable(Composite comp) {
 			RefTable.create(DataSetType.CONTACT, review.withReviewers())
-				.withEditor(editor)
-				.withTitle(M.Reviewer)
-				.withTooltip(Tooltips.EPD_Reviewer)
-				.render(comp, toolkit);
+					.withEditor(editor)
+					.withTitle(M.Reviewer)
+					.withTooltip(Tooltips.EPD_Reviewer)
+					.render(comp, tk);
 		}
 
 		private void detailsText(Composite comp) {
-			TextBuilder tb = new TextBuilder(editor, page, toolkit);
-			tb.multiText(comp, M.ReviewDetails,
-					Tooltips.EPD_ReviewDetails, review.withDetails());
+			LangText.builder(editor, tk)
+					.nextMulti(M.ReviewDetails, Tooltips.EPD_ReviewDetails)
+					.val(review.getDetails())
+					.edit(review::withDetails)
+					.draw(comp);
 		}
 
 		private void typeCombo(Composite comp) {
-			UI.formLabel(comp, toolkit, M.ReviewType, Tooltips.EPD_ReviewType);
+			UI.formLabel(comp, tk, M.ReviewType, Tooltips.EPD_ReviewType);
 			ComboViewer c = new ComboViewer(comp);
 			UI.gridData(c.getControl(), true, false);
 			c.setContentProvider(ArrayContentProvider.getInstance());

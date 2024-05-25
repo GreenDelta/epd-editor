@@ -28,8 +28,8 @@ public class LangText {
 		this.tk = tk;
 	}
 
-	public static Builder builder(IEditor editor, FormToolkit tk) {
-		return new Builder(editor, tk);
+	public static TextBuilder builder(IEditor editor, FormToolkit tk) {
+		return new TextBuilder(editor, tk);
 	}
 
 	public LangText withMultiLines() {
@@ -47,17 +47,17 @@ public class LangText {
 		return this;
 	}
 
-	public LangText withCurrent(List<LangString> current) {
+	public LangText val(List<LangString> current) {
 		this.current = current;
 		return this;
 	}
 
-	public LangText onEdit(Supplier<List<LangString>> s) {
+	public LangText edit(Supplier<List<LangString>> s) {
 		this.onEdit = s;
 		return this;
 	}
 
-	public void renderOn(Composite comp) {
+	public void draw(Composite comp) {
 		UI.formLabel(comp, tk, label);
 		var innerComp = tk.createComposite(comp);
 		UI.gridData(innerComp, true, false);
@@ -114,12 +114,12 @@ public class LangText {
 		});
 	}
 
-	public static class Builder {
+	public static class TextBuilder {
 
 		private final IEditor editor;
 		private final FormToolkit tk;
 
-		private Builder(IEditor editor, FormToolkit tk) {
+		private TextBuilder(IEditor editor, FormToolkit tk) {
 			this.editor = editor;
 			this.tk = tk;
 		}
@@ -134,11 +134,11 @@ public class LangText {
 					.withToolTip(toolTip);
 		}
 
-		public LangText nextMultiLine(String label) {
-			return nextMultiLine(label, null);
+		public LangText nextMulti(String label) {
+			return nextMulti(label, null);
 		}
 
-		public LangText nextMultiLine(String label, String toolTip) {
+		public LangText nextMulti(String label, String toolTip) {
 			return new LangText(editor, tk)
 					.withMultiLines()
 					.withLabel(label)

@@ -15,7 +15,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.QuantitativeReferenceType;
 import org.openlca.ilcd.processes.Exchange;
-import org.openlca.ilcd.processes.Location;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.Epds;
 
@@ -30,7 +29,7 @@ import app.store.RefDeps;
 import app.util.Colors;
 import app.util.Controls;
 import app.util.LangText;
-import app.util.TextBuilder;
+import app.util.LangText.TextBuilder;
 import app.util.UI;
 import epd.util.Strings;
 
@@ -56,7 +55,7 @@ class InfoPage extends FormPage {
 		var form = UI.formHeader(mForm, title.get());
 		editor.onSaved(() -> form.setText(title.get()));
 		Composite body = UI.formBody(form, mForm.getToolkit());
-		var tb = new TextBuilder(editor, this, tk);
+		var tb = LangText.builder(editor, tk);
 		infoSection(body, tb);
 		categorySection(body);
 		qRefSection(body);
@@ -82,36 +81,31 @@ class InfoPage extends FormPage {
 		form.reflow(true);
 	}
 
-	private void infoSection(Composite parent, TextBuilder tb) {
+	private void infoSection(Composite parent, TextBuilder b) {
 		var comp = UI.infoSection(epd, parent, tk);
 		var pName = Epds.withProcessName(epd);
-		var texts = LangText.builder(editor, tk);
 
-		texts.next(M.Name, Tooltips.EPD_Name)
-				.withCurrent(pName.getBaseName())
-				.onEdit(pName::withBaseName)
-				.renderOn(comp);
-		// tb.text(comp, M.Name, Tooltips.EPD_Name, pName.withBaseName());
+		b.next(M.Name, Tooltips.EPD_Name)
+				.val(pName.getBaseName())
+				.edit(pName::withBaseName)
+				.draw(comp);
 
-		texts.next(M.QuantitativeProperties, Tooltips.EPD_FurtherProperties)
-				.withCurrent(pName.getFlowProperties())
-				.onEdit(pName::withFlowProperties)
-				.renderOn(comp);
-		// tb.text(comp, , pName.withFlowProperties());
+		b.next(M.QuantitativeProperties, Tooltips.EPD_FurtherProperties)
+				.val(pName.getFlowProperties())
+				.edit(pName::withFlowProperties)
+				.draw(comp);
 
 		var info = Epds.withDataSetInfo(epd);
 
-		texts.next(M.Synonyms, Tooltips.EPD_Synonyms)
-				.withCurrent(info.getSynonyms())
-				.onEdit(info::withSynonyms)
-				.renderOn(comp);
-		// tb.text(comp, , info.withSynonyms());
+		b.next(M.Synonyms, Tooltips.EPD_Synonyms)
+				.val(info.getSynonyms())
+				.edit(info::withSynonyms)
+				.draw(comp);
 
-		texts.nextMultiLine(M.Comment, Tooltips.EPD_Comment)
-				.withCurrent(info.getComment())
-				.onEdit(info::withComment)
-				.renderOn(comp);
-		// tb.multiText(comp, , info.withComment());
+		b.nextMulti(M.Comment, Tooltips.EPD_Comment)
+				.val(info.getComment())
+				.edit(info::withComment)
+				.draw(comp);
 
 		UI.fileLink(epd, comp, tk);
 	}
@@ -190,22 +184,30 @@ class InfoPage extends FormPage {
 			margins.withValue(val);
 			editor.setDirty();
 		});
-		tb.multiText(comp, M.Description,
-				Tooltips.EPD_UncertaintyMarginsDescription,
-				margins.withDescription());
+
+		tb.nextMulti(M.Description, Tooltips.EPD_UncertaintyMarginsDescription)
+				.val(margins.getDescription())
+				.edit(margins::withDescription)
+				.draw(comp);
 	}
 
 	private void createTechnologySection(Composite body, TextBuilder tb) {
 		var tech = epd.withProcessInfo().withTechnology();
 		var comp = UI.formSection(
 				body, tk, M.Technology, Tooltips.EPD_Technology);
-		tb.multiText(comp, M.TechnologyDescription,
-				Tooltips.EPD_TechnologyDescription, tech.withDescription());
-		tb.multiText(comp, M.TechnologicalApplicability,
-				Tooltips.EPD_TechnicalPrupose, tech.withApplicability());
+
+		tb.nextMulti(M.TechnologyDescription, Tooltips.EPD_TechnologyDescription)
+				.val(tech.getDescription())
+				.edit(tech::withDescription)
+				.draw(comp);
+
+		tb.nextMulti(M.TechnologicalApplicability, Tooltips.EPD_TechnicalPrupose)
+				.val(tech.getApplicability())
+				.edit(tech::withApplicability)
+				.draw(comp);
 
 		UI.formLabel(comp, tk, M.Pictogram, Tooltips.EPD_Pictogram);
-		RefLink refText = new RefLink(comp, tk, DataSetType.SOURCE);
+		var refText = new RefLink(comp, tk, DataSetType.SOURCE);
 		refText.setRef(tech.getPictogram());
 		refText.onChange(ref -> {
 			tech.withPictogram(ref);
@@ -249,34 +251,39 @@ class InfoPage extends FormPage {
 			}
 		}));
 
-		tb.multiText(comp, M.TimeDescription,
-				Tooltips.EPD_TimeDescription, time.withDescription());
+		tb.nextMulti(M.TimeDescription, Tooltips.EPD_TimeDescription)
+				.val(time.getDescription())
+				.edit(time::withDescription)
+				.draw(comp);
 	}
 
 	private void createGeographySection(Composite body, TextBuilder tb) {
-		Location location = epd.withProcessInfo().withGeography().withLocation();
-		Composite comp = UI.formSection(body, tk, M.Geography,
-				Tooltips.EPD_Geography);
+		var loc = Epds.withLocation(epd);
+		var comp = UI.formSection(body, tk, M.Geography, Tooltips.EPD_Geography);
 		tk.createLabel(comp, M.Location)
 				.setToolTipText(Tooltips.EPD_Location);
-		LocationCombo viewer = new LocationCombo();
-		viewer.create(comp, location.getCode(), code -> {
-			location.withCode(code);
+		var combo = new LocationCombo();
+		combo.create(comp, loc.getCode(), code -> {
+			loc.withCode(code);
 			editor.setDirty();
 		});
-		tb.multiText(comp, M.GeographyDescription,
-				Tooltips.EPD_GeographyDescription, location.withDescription());
+
+		tb.nextMulti(M.GeographyDescription, Tooltips.EPD_GeographyDescription)
+				.val(loc.getDescription())
+				.edit(loc::withDescription)
+				.draw(comp);
 	}
 
 	private void intText(
 			Composite comp, String label, String tooltip,
 			Integer initial, Consumer<Integer> fn
 	) {
-		Text text = UI.formText(comp, tk, label, tooltip);
-		if (initial != null)
+		var text = UI.formText(comp, tk, label, tooltip);
+		if (initial != null) {
 			text.setText(initial.toString());
+		}
 		text.addModifyListener(e -> {
-			String s = text.getText();
+			var s = text.getText();
 			if (Strings.nullOrEmpty(s)) {
 				fn.accept(null);
 				editor.setDirty();

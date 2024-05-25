@@ -20,6 +20,7 @@ import app.editors.CategorySection;
 import app.editors.RefLink;
 import app.editors.RefTable;
 import app.editors.VersionField;
+import app.util.LangText;
 import app.util.TextBuilder;
 import app.util.UI;
 import epd.model.Xml;
@@ -39,13 +40,12 @@ class SourcePage extends FormPage {
 	@Override
 	protected void createFormContent(IManagedForm mform) {
 		Supplier<String> title = () -> M.Source + ": "
-			+ App.s(Sources.getName(source));
+				+ App.s(Sources.getName(source));
 		var form = UI.formHeader(mform, title.get());
 		editor.onSaved(() -> form.setText(title.get()));
 		tk = mform.getToolkit();
-		Composite body = UI.formBody(form, tk);
-		TextBuilder tb = new TextBuilder(editor, this, tk);
-		infoSection(body, tb);
+		var body = UI.formBody(form, tk);
+		infoSection(body);
 		categorySection(body);
 		contacts(body);
 		new FileTable(editor).render(body, tk);
@@ -53,14 +53,25 @@ class SourcePage extends FormPage {
 		form.reflow(true);
 	}
 
-	private void infoSection(Composite body, TextBuilder tb) {
+	private void infoSection(Composite body) {
 		var comp = UI.infoSection(source, body, tk);
 		var info = Sources.withDataSetInfo(source);
-		tb.text(comp, M.ShortName, Tooltips.Source_ShortName, info.withName());
-		tb.text(comp, M.Citation, Tooltips.Source_Citation,
-			info.getCitation(), info::withCitation);
-		tb.text(comp, M.Description,
-			Tooltips.Source_Description, info.withDescription());
+		var tb = LangText.builder(editor, tk);
+
+		tb.next(M.ShortName, Tooltips.Source_ShortName)
+				.val(info.getName())
+				.edit(info::withName)
+				.draw(comp);
+
+		new TextBuilder(editor, tk)
+				.text(comp, M.Citation, Tooltips.Source_Citation,
+						info.getCitation(), info::withCitation);
+
+		tb.nextMulti(M.Description, Tooltips.Source_Description)
+				.val(info.getDescription())
+				.edit(info::withDescription)
+				.draw(comp);
+
 		// TODO: source type combo
 		UI.formLabel(comp, tk, M.Logo, Tooltips.Source_Logo);
 		RefLink logo = new RefLink(comp, tk, DataSetType.SOURCE);
@@ -75,25 +86,25 @@ class SourcePage extends FormPage {
 	private void categorySection(Composite body) {
 		var info = Sources.withDataSetInfo(source);
 		var section = new CategorySection(editor,
-			DataSetType.SOURCE, info.withClassifications());
+				DataSetType.SOURCE, info.withClassifications());
 		section.render(body, tk);
 	}
 
 	private void contacts(Composite body) {
 		List<Ref> contacts = Sources.withDataSetInfo(source)
-			.withContacts();
+				.withContacts();
 		RefTable.create(DataSetType.CONTACT, contacts)
-			.withEditor(editor)
-			.withTitle("Belongs to")
-			.withTooltip(Tooltips.Source_BelongsTo)
-			.render(body, tk);
+				.withEditor(editor)
+				.withTitle("Belongs to")
+				.withTooltip(Tooltips.Source_BelongsTo)
+				.render(body, tk);
 	}
 
 	private void adminSection(Composite body) {
 		var comp = UI.formSection(body, tk, M.AdministrativeInformation);
 
 		Text timeT = UI.formText(comp, tk,
-			M.LastUpdate, Tooltips.All_LastUpdate);
+				M.LastUpdate, Tooltips.All_LastUpdate);
 		timeT.setText(Xml.toString(Sources.getTimeStamp(source)));
 
 		Text uuidT = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);

@@ -31,6 +31,7 @@ import app.util.Colors;
 import app.util.UI;
 import epd.util.Strings;
 
+@Deprecated
 public class TranslationView extends ViewPart implements ISelectionListener {
 
 	private FormToolkit toolkit;

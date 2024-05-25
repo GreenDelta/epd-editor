@@ -1,24 +1,24 @@
 package app.editors.unitgroup;
 
-import app.App;
-import app.M;
-import app.Tooltips;
-import app.editors.CategorySection;
-import app.editors.VersionField;
-import app.util.TextBuilder;
-import app.util.UI;
-import epd.model.Xml;
+import java.util.function.Supplier;
+
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.units.UnitGroup;
 import org.openlca.ilcd.util.UnitGroups;
 
-import java.util.function.Supplier;
+import app.App;
+import app.M;
+import app.Tooltips;
+import app.editors.CategorySection;
+import app.editors.VersionField;
+import app.util.LangText;
+import app.util.UI;
+import epd.model.Xml;
 
 class InfoPage extends FormPage {
 
@@ -35,32 +35,40 @@ class InfoPage extends FormPage {
 	@Override
 	protected void createFormContent(IManagedForm mform) {
 		Supplier<String> title = () -> M.UnitGroup + ": "
-			+ App.s(UnitGroups.getName(unitGroup));
-		ScrolledForm form = UI.formHeader(mform, title.get());
+				+ App.s(UnitGroups.getName(unitGroup));
+		var form = UI.formHeader(mform, title.get());
 		editor.onSaved(() -> form.setText(title.get()));
 		tk = mform.getToolkit();
-		Composite body = UI.formBody(form, tk);
-		TextBuilder tb = new TextBuilder(editor, this, tk);
-		infoSection(body, tb);
+		var body = UI.formBody(form, tk);
+		infoSection(body);
 		categorySection(body);
 		new UnitSection(editor, unitGroup).render(body, tk);
 		adminSection(body);
 		form.reflow(true);
 	}
 
-	private void infoSection(Composite body, TextBuilder tb) {
-		Composite comp = UI.infoSection(unitGroup, body, tk);
+	private void infoSection(Composite body) {
+		var comp = UI.infoSection(unitGroup, body, tk);
 		var info = UnitGroups.withDataSetInfo(unitGroup);
-		tb.text(comp, M.Name, Tooltips.UnitGroup_Name, info.withName());
-		tb.text(comp, M.Description,
-			Tooltips.UnitGroup_Description, info.withComment());
+		var tb = LangText.builder(editor, tk);
+
+		tb.next(M.Name, Tooltips.UnitGroup_Name)
+				.val(info.getName())
+				.edit(info::withName)
+				.draw(comp);
+
+		tb.next(M.Description, Tooltips.UnitGroup_Description)
+				.val(info.getComment())
+				.edit(info::withComment)
+				.draw(comp);
+
 		UI.fileLink(unitGroup, comp, tk);
 	}
 
 	private void categorySection(Composite body) {
 		var info = UnitGroups.withDataSetInfo(unitGroup);
 		var section = new CategorySection(editor,
-			DataSetType.UNIT_GROUP, info.withClassifications());
+				DataSetType.UNIT_GROUP, info.withClassifications());
 		section.render(body, tk);
 	}
 
@@ -68,7 +76,7 @@ class InfoPage extends FormPage {
 		var comp = UI.formSection(body, tk, M.AdministrativeInformation);
 
 		Text timeT = UI.formText(comp, tk, M.LastUpdate,
-			Tooltips.All_LastUpdate);
+				Tooltips.All_LastUpdate);
 		timeT.setText(Xml.toString(UnitGroups.getTimeStamp(unitGroup)));
 
 		Text uuidT = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);

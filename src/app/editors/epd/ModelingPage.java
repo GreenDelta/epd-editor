@@ -24,13 +24,13 @@ import app.M;
 import app.Tooltips;
 import app.editors.RefTable;
 import app.rcp.Labels;
-import app.util.TextBuilder;
+import app.util.LangText;
 import app.util.UI;
 import app.util.Viewers;
 
 class ModelingPage extends FormPage {
 
-	private FormToolkit toolkit;
+	private FormToolkit tk;
 
 	private final EpdEditor editor;
 	private final Process epd;
@@ -43,54 +43,58 @@ class ModelingPage extends FormPage {
 
 	@Override
 	protected void createFormContent(IManagedForm mform) {
-		toolkit = mform.getToolkit();
+		tk = mform.getToolkit();
 		var form = UI.formHeader(mform, M.ModellingAndValidation);
 		var body = UI.formBody(form, mform.getToolkit());
 
 		createModelingSection(body);
 
 		RefTable.create(DataSetType.SOURCE,
-				Processes.withInventoryMethod(epd).withSources())
-			.withEditor(editor)
-			.withTitle(M.LCAMethodDetails)
-			.withTooltip(Tooltips.EPD_LCAMethodDetails)
-			.render(body, toolkit);
+						Processes.withInventoryMethod(epd).withSources())
+				.withEditor(editor)
+				.withTitle(M.LCAMethodDetails)
+				.withTooltip(Tooltips.EPD_LCAMethodDetails)
+				.render(body, tk);
 
 		RefTable.create(DataSetType.SOURCE,
-				Processes.withRepresentativeness(epd).withDataHandlingSources())
-			.withEditor(editor)
-			.withTitle(M.DocumentationDataQualityManagement)
-			.withTooltip(Tooltips.EPD_DocumentationDataQualityManagement)
-			.render(body, toolkit);
+						Processes.withRepresentativeness(epd).withDataHandlingSources())
+				.withEditor(editor)
+				.withTitle(M.DocumentationDataQualityManagement)
+				.withTooltip(Tooltips.EPD_DocumentationDataQualityManagement)
+				.render(body, tk);
 
 		RefTable.create(DataSetType.SOURCE,
-				Processes.withRepresentativeness(epd).withSources())
-			.withEditor(editor)
-			.withTitle(M.DataSources)
-			.withTooltip(Tooltips.EPD_DataSources)
-			.render(body, toolkit);
+						Processes.withRepresentativeness(epd).withSources())
+				.withEditor(editor)
+				.withTitle(M.DataSources)
+				.withTooltip(Tooltips.EPD_DataSources)
+				.render(body, tk);
 
 		createComplianceSection(body);
 
 		RefTable.create(DataSetType.SOURCE, Epds.withOriginalEpds(epd))
-			.withEditor(editor)
-			.withTitle(M.ReferenceOriginalEPD)
-			.withTooltip(Tooltips.EPD_ReferenceOriginal)
-			.render(body, toolkit);
+				.withEditor(editor)
+				.withTitle(M.ReferenceOriginalEPD)
+				.withTooltip(Tooltips.EPD_ReferenceOriginal)
+				.render(body, tk);
 
-		new ReviewSection(editor, this)
-			.render(body, toolkit, form);
+		new ReviewSection(editor)
+				.render(body, tk, form);
 		form.reflow(true);
 	}
 
 	private void createModelingSection(Composite parent) {
-		var comp = UI.formSection(parent, toolkit,
-			M.ModellingAndValidation, Tooltips.EPD_ModellingAndValidation);
-		UI.formLabel(comp, toolkit, M.Subtype, Tooltips.EPD_Subtype);
+		var comp = UI.formSection(parent, tk,
+				M.ModellingAndValidation, Tooltips.EPD_ModellingAndValidation);
+		UI.formLabel(comp, tk, M.Subtype, Tooltips.EPD_Subtype);
 		createSubTypeViewer(comp);
-		var tb = new TextBuilder(editor, this, toolkit);
-		tb.multiText(comp, M.UseAdvice, Tooltips.EPD_UseAdvice,
-			Processes.withRepresentativeness(epd).withUseAdvice());
+
+		var rep = Epds.withRepresentativeness(epd);
+		LangText.builder(editor, tk)
+				.nextMulti(M.UseAdvice, Tooltips.EPD_UseAdvice)
+				.val(rep.getUseAdvice())
+				.edit(rep::withUseAdvice)
+				.draw(comp);
 	}
 
 	private void createSubTypeViewer(Composite parent) {
@@ -126,9 +130,9 @@ class ModelingPage extends FormPage {
 				systems.add(s.withSystem());
 		});
 		RefTable table = RefTable.create(DataSetType.SOURCE, systems)
-			.withTitle(M.ComplianceDeclarations)
-			.withTooltip(Tooltips.EPD_ComplianceDeclarations);
-		table.render(body, toolkit);
+				.withTitle(M.ComplianceDeclarations)
+				.withTooltip(Tooltips.EPD_ComplianceDeclarations);
+		table.render(body, tk);
 
 		table.onAdd(system -> {
 			var dec = Processes.getComplianceDeclaration(epd, system);

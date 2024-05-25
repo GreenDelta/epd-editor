@@ -16,6 +16,7 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.openlca.ilcd.commons.LangString;
 
+import app.App;
 import app.M;
 import epd.util.Strings;
 
@@ -70,10 +71,8 @@ public class LangTextDialog extends FormDialog {
 		UI.gridData(boxComp, true, false);
 		UI.gridLayout(boxComp, 2);
 
-		strings.stream()
-				.map(s -> LangBox.of(s, strings))
-				.sorted((box1, box2) -> Strings.compare(box1.lang(), box2.lang()))
-				.forEach(box -> box.render(boxComp, tk, multiLine));
+		var boxes = LangBox.allOf(strings);
+		boxes.forEach(box -> box.render(boxComp, tk, multiLine));
 
 		var langComp = tk.createComposite(body);
 		langComp.setLayoutData(
@@ -91,6 +90,14 @@ public class LangTextDialog extends FormDialog {
 		});
 	}
 
+	static boolean contains(List<LangBox> boxes, String lang) {
+		for (var box : boxes) {
+			if (Strings.nullOrEqual(lang, box.lang()))
+				return true;
+		}
+		return false;
+	}
+
 	private record LangBox(
 			String lang, String val, List<LangString> strings) {
 
@@ -99,6 +106,27 @@ public class LangTextDialog extends FormDialog {
 					? "en"
 					: s.getLang();
 			return new LangBox(lang, s.getValue(), strings);
+		}
+
+		static List<LangBox> allOf(List<LangString> strings) {
+			var boxes = new ArrayList<LangBox>();
+			for (var s : strings) {
+				boxes.add(LangBox.of(s, strings));
+			}
+			if (!contains(boxes, App.lang())) {
+				boxes.add(new LangBox(App.lang(), "", strings));
+			}
+			boxes.sort((box1, box2) -> {
+				var lang1 = box1.lang;
+				var lang2 = box2.lang;
+				var appLang = App.lang();
+				if (Strings.nullOrEqual(lang1, appLang))
+					return -1;
+				if (Strings.nullOrEqual(lang2, appLang))
+					return 1;
+				return Strings.compare(lang1, lang2);
+			});
+			return boxes;
 		}
 
 		void render(Composite comp, FormToolkit tk, boolean multiLine) {

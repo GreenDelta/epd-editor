@@ -105,7 +105,10 @@ public class App {
 	}
 
 	public static String lang() {
-		return settings().lang;
+		var lang = settings().lang;
+		return Strings.notEmpty(lang)
+				? lang
+				: "en";
 	}
 
 	public static String s(List<LangString> strings) {

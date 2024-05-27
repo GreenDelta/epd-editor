@@ -11,7 +11,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.openlca.ilcd.commons.DataSetType;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Objects;
@@ -38,7 +37,7 @@ public class Navigator extends CommonNavigator {
 
 	@Override
 	protected CommonViewer createCommonViewerObject(Composite parent) {
-		CommonViewer viewer = super.createCommonViewerObject(parent);
+		var viewer = super.createCommonViewerObject(parent);
 		viewer.setUseHashlookup(true);
 		return viewer;
 	}
@@ -85,7 +84,7 @@ public class Navigator extends CommonNavigator {
 	}
 
 	public static TypeElement getTypeRoot(DataSetType type) {
-		Navigator navigator = getInstance();
+		var navigator = getInstance();
 		if (navigator == null || navigator.root == null)
 			return new TypeElement(null, type);
 		var children = navigator.root.getChilds();
@@ -124,17 +123,17 @@ public class Navigator extends CommonNavigator {
 
 	private static void eachRoot(Consumer<NavigationElement<?>> fn) {
 		try {
-			Navigator navi = Navigator.getInstance();
+			var navi = Navigator.getInstance();
 			if (navi == null)
 				return;
-			NavigationRoot root = navi.root;
+			var root = navi.root;
 			if (root == null || root.childs == null)
 				return;
 			for (var e : root.getChilds()) {
 				fn.accept(e);
 			}
 		} catch (Exception e) {
-			Logger log = LoggerFactory.getLogger(Navigator.class);
+			var log = LoggerFactory.getLogger(Navigator.class);
 			log.error("eachRoot failed", e);
 		}
 	}
@@ -212,7 +211,7 @@ public class Navigator extends CommonNavigator {
 	}
 
 	public static CommonViewer getViewer() {
-		Navigator navi = getInstance();
+		var navi = getInstance();
 		return navi == null
 			? null
 			: navi.getCommonViewer();

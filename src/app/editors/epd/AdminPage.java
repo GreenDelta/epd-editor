@@ -18,7 +18,7 @@ import app.editors.RefLink;
 import app.editors.RefTable;
 import app.editors.VersionField;
 import app.util.Controls;
-import app.util.TextBuilder;
+import app.util.LangText;
 import app.util.UI;
 import epd.model.Xml;
 import epd.util.Strings;
@@ -26,12 +26,12 @@ import epd.util.Strings;
 class AdminPage extends FormPage {
 
 	private final EpdEditor editor;
-	private final Process process;
+	private final Process epd;
 
 	public AdminPage(EpdEditor editor) {
 		super(editor, "EpdInfoPage", M.AdministrativeInformation);
 		this.editor = editor;
-		process = editor.epd;
+		epd = editor.epd;
 	}
 
 	@Override
@@ -45,7 +45,7 @@ class AdminPage extends FormPage {
 
 		// commissioner
 		RefTable.create(DataSetType.CONTACT,
-				Processes.withCommissionerAndGoal(process).withCommissioners())
+				Processes.withCommissionerAndGoal(epd).withCommissioners())
 			.withEditor(editor)
 			.withTitle(M.Commissioner)
 			.withTooltip(Tooltips.EPD_Commissioner)
@@ -56,7 +56,7 @@ class AdminPage extends FormPage {
 
 		// data set generators
 		RefTable.create(DataSetType.CONTACT,
-				Processes.withDataGenerator(process).withContacts())
+				Processes.withDataGenerator(epd).withContacts())
 			.withEditor(editor)
 			.withTitle(M.DataSetGeneratorModeller)
 			.withTooltip(Tooltips.EPD_DataSetGeneratorModeller)
@@ -64,7 +64,7 @@ class AdminPage extends FormPage {
 
 		// data formats
 		RefTable.create(DataSetType.SOURCE,
-				Processes.withDataEntry(process).withFormats())
+				Processes.withDataEntry(epd).withFormats())
 			.withEditor(editor)
 			.withTitle(M.DataFormats)
 			.withTooltip(Tooltips.EPD_DataFormats)
@@ -75,7 +75,7 @@ class AdminPage extends FormPage {
 
 		// publishers
 		RefTable.create(DataSetType.CONTACT,
-				Epds.withPublishers(process))
+				Epds.withPublishers(epd))
 			.withEditor(editor)
 			.withTitle(M.Publisher)
 			.withTooltip(Tooltips.EPD_Publisher)
@@ -83,7 +83,7 @@ class AdminPage extends FormPage {
 
 		// preceding data version
 		RefTable.create(DataSetType.PROCESS,
-				Processes.withPublication(process).withPrecedingVersions())
+				Processes.withPublication(epd).withPrecedingVersions())
 			.withEditor(editor)
 			.withTitle(M.PrecedingDataSetVersion)
 			.withTooltip(Tooltips.EPD_PrecedingDataSetVersion)
@@ -94,28 +94,26 @@ class AdminPage extends FormPage {
 
 	private void projectSection(Composite body, FormToolkit tk) {
 		var comp = UI.formSection(body, tk, M.Project);
-		var goal = process.withAdminInfo()
-			.withCommissionerAndGoal();
+		var goal = Epds.withCommissionerAndGoal(epd);
+		var tb = LangText.builder(editor, tk);
 
 		// project
-		new TextBuilder(editor, this, tk).multiText(
-			comp,
-			M.Project,
-			Tooltips.EPD_Project,
-			goal.withProject());
+		tb.nextMulti(M.Project, Tooltips.EPD_Project)
+				.val(goal.getProject())
+				.edit(goal::withProject)
+				.draw(comp);
 
 		// intended applications
-		new TextBuilder(editor, this, tk).multiText(
-			comp,
-			M.IntendedApplications,
-			Tooltips.EPD_IntendedApplications,
-			goal.withIntendedApplications());
+		tb.nextMulti(M.IntendedApplications, Tooltips.EPD_IntendedApplications)
+				.val(goal.getIntendedApplications())
+				.edit(goal::withIntendedApplications)
+				.draw(comp);
 	}
 
 	private void dataEntrySection(Composite body, FormToolkit tk) {
 		var comp = UI.formSection(body, tk,
 			M.DataEntry, Tooltips.EPD_DataEntry);
-		var entry = process.withAdminInfo()
+		var entry = epd.withAdminInfo()
 			.withDataEntry();
 
 		// last update
@@ -144,7 +142,7 @@ class AdminPage extends FormPage {
 		var comp = UI.formSection(body, tk,
 			M.PublicationAndOwnership,
 			Tooltips.EPD_PublicationAndOwnership);
-		var pub = Processes.withPublication(process);
+		var pub = Processes.withPublication(epd);
 
 		// version
 		var version = new VersionField(comp, tk);
@@ -203,18 +201,18 @@ class AdminPage extends FormPage {
 		licenseCombo(comp, tk);
 
 		// access restrictions
-		new TextBuilder(editor, this, tk).multiText(
-			comp,
-			M.AccessRestrictions,
-			Tooltips.EPD_AccessRestrictions,
-			pub.withAccessRestrictions());
+		LangText.builder(editor, tk)
+				.nextMulti(M.AccessRestrictions, Tooltips.EPD_AccessRestrictions)
+				.val(pub.getAccessRestrictions())
+				.edit(pub::withAccessRestrictions)
+				.draw(comp);
 	}
 
 	private void licenseCombo(Composite comp, FormToolkit tk) {
 		// TODO: labels, translations and tool-tips
 
 		// map the combo items
-		var pub = process.withAdminInfo()
+		var pub = epd.withAdminInfo()
 			.withPublication();
 		var types = LicenseType.values();
 		var items = new String[types.length + 1];

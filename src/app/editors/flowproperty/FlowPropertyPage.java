@@ -1,25 +1,25 @@
 package app.editors.flowproperty;
 
+import java.util.function.Supplier;
+
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.IManagedForm;
+import org.eclipse.ui.forms.editor.FormPage;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.flowproperties.FlowProperty;
+import org.openlca.ilcd.util.DataSets;
+import org.openlca.ilcd.util.FlowProperties;
+
 import app.App;
 import app.M;
 import app.Tooltips;
 import app.editors.CategorySection;
 import app.editors.RefLink;
 import app.editors.VersionField;
-import app.util.TextBuilder;
+import app.util.LangText;
 import app.util.UI;
 import epd.model.Xml;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.IManagedForm;
-import org.eclipse.ui.forms.editor.FormPage;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.ScrolledForm;
-import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.flowproperties.FlowProperty;
-import org.openlca.ilcd.util.DataSets;
-import org.openlca.ilcd.util.FlowProperties;
-
-import java.util.function.Supplier;
 
 class FlowPropertyPage extends FormPage {
 
@@ -37,25 +37,36 @@ class FlowPropertyPage extends FormPage {
 	protected void createFormContent(IManagedForm mform) {
 		Supplier<String> title = () -> M.FlowProperty + ": "
 				+ App.s(DataSets.getBaseName(property));
-		ScrolledForm form = UI.formHeader(mform, title.get());
+		var form = UI.formHeader(mform, title.get());
 		editor.onSaved(() -> form.setText(title.get()));
 		tk = mform.getToolkit();
-		Composite body = UI.formBody(form, tk);
-		TextBuilder tb = new TextBuilder(editor, this, tk);
-		infoSection(body, tb);
+		var body = UI.formBody(form, tk);
+		infoSection(body);
 		categorySection(body);
 		unitGroupSection(body);
 		adminSection(body);
 	}
 
-	private void infoSection(Composite body, TextBuilder tb) {
+	private void infoSection(Composite body) {
 		var comp = UI.infoSection(property, body, tk);
 		var info = FlowProperties.withDataSetInfo(property);
-		tb.text(comp, M.Name, Tooltips.FlowProperty_Name, info.withName());
-		tb.text(comp, M.Synonyms,
-				Tooltips.FlowProperty_Synonyms, info.withSynonyms());
-		tb.text(comp, M.Description,
-				Tooltips.FlowProperty_Description, info.withComment());
+		var tb = LangText.builder(editor, tk);
+
+		tb.next(M.Name, Tooltips.FlowProperty_Name)
+				.val(info.getName())
+				.edit(info::withName)
+				.draw(comp);
+
+		tb.next(M.Synonyms, Tooltips.FlowProperty_Synonyms)
+				.val(info.getSynonyms())
+				.edit(info::withSynonyms)
+				.draw(comp);
+
+		tb.nextMulti(M.Description, Tooltips.FlowProperty_Description)
+				.val(info.getComment())
+				.edit(info::withComment)
+				.draw(comp);
+
 		UI.fileLink(property, comp, tk);
 	}
 
@@ -69,8 +80,8 @@ class FlowPropertyPage extends FormPage {
 	private void unitGroupSection(Composite body) {
 		var comp = UI.formSection(body, tk, M.QuantitativeReference);
 		var qRef = property
-			.withFlowPropertyInfo()
-			.withQuantitativeReference();
+				.withFlowPropertyInfo()
+				.withQuantitativeReference();
 		UI.formLabel(comp, tk, M.UnitGroup, Tooltips.FlowProperty_UnitGroup);
 		RefLink refText = new RefLink(comp, tk, DataSetType.UNIT_GROUP);
 		refText.setRef(qRef.getUnitGroup());
@@ -96,9 +107,9 @@ class FlowPropertyPage extends FormPage {
 		vf.setVersion(DataSets.getVersion(property));
 		vf.onChange(v -> {
 			property
-				.withAdminInfo()
-				.withPublication()
-				.withVersion(v);
+					.withAdminInfo()
+					.withPublication()
+					.withVersion(v);
 			editor.setDirty();
 		});
 

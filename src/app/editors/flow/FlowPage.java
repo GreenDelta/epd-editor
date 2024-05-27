@@ -17,7 +17,7 @@ import app.Tooltips;
 import app.editors.CategorySection;
 import app.editors.RefLink;
 import app.editors.VersionField;
-import app.util.TextBuilder;
+import app.util.LangText;
 import app.util.UI;
 import epd.model.Xml;
 
@@ -36,15 +36,15 @@ class FlowPage extends FormPage {
 	@Override
 	protected void createFormContent(IManagedForm mform) {
 		Supplier<String> title = () -> M.Flow + ": "
-			+ App.s(Flows.getBaseName(flow));
+				+ App.s(Flows.getBaseName(flow));
 		var form = UI.formHeader(mform, title.get());
 		editor.onSaved(() -> form.setText(title.get()));
 		tk = mform.getToolkit();
 		var body = UI.formBody(form, tk);
-		var tb = new TextBuilder(editor, this, tk);
-		infoSection(body, tb);
+
+		infoSection(body);
 		new CategorySection(editor, DataSetType.FLOW,
-			Flows.withClassifications(flow)).render(body, tk);
+				Flows.withClassifications(flow)).render(body, tk);
 		if (Flows.getFlowType(flow) == FlowType.PRODUCT_FLOW) {
 			VendorSection.create(body, tk, editor);
 		}
@@ -53,14 +53,27 @@ class FlowPage extends FormPage {
 		form.reflow(true);
 	}
 
-	private void infoSection(Composite body, TextBuilder tb) {
+	private void infoSection(Composite body) {
 		var comp = UI.infoSection(flow, body, tk);
-		var fName = Flows.withFlowName(flow);
-		tb.text(comp, M.Name, Tooltips.Flow_Name, fName.withBaseName());
+		var name = Flows.withFlowName(flow);
+		var tb = LangText.builder(editor, tk);
+
+		tb.next(M.Name, Tooltips.Flow_Name)
+				.val(name.getBaseName())
+				.edit(name::withBaseName)
+				.draw(comp);
+
 		var info = Flows.withDataSetInfo(flow);
-		tb.text(comp, M.Synonyms, Tooltips.Flow_Synonyms, info.withSynonyms());
-		tb.text(comp, M.Description,
-			Tooltips.Flow_Description, info.withComment());
+		tb.next(M.Synonyms, Tooltips.Flow_Synonyms)
+				.val(info.getSynonyms())
+				.edit(info::withSynonyms)
+				.draw(comp);
+
+		tb.nextMulti(M.Description, Tooltips.Flow_Description)
+				.val(info.getComment())
+				.edit(info::withComment)
+				.draw(comp);
+
 		if (Flows.getFlowType(flow) == FlowType.PRODUCT_FLOW) {
 			genericProductLink(comp);
 		}
@@ -76,8 +89,8 @@ class FlowPage extends FormPage {
 		}
 		link.onChange(ref -> {
 			Flows.withDataSetInfo(flow)
-				.withEpdExtension()
-				.withGenericFlow(ref);
+					.withEpdExtension()
+					.withGenericFlow(ref);
 			editor.setDirty();
 		});
 	}
@@ -95,7 +108,7 @@ class FlowPage extends FormPage {
 	private void adminSection(Composite body) {
 		var comp = UI.formSection(body, tk, M.AdministrativeInformation);
 		var time = UI.formText(comp, tk,
-			M.LastUpdate, Tooltips.All_LastUpdate);
+				M.LastUpdate, Tooltips.All_LastUpdate);
 		time.setText(Xml.toString(Flows.getTimeStamp(flow)));
 
 		var uuidT = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);

@@ -28,7 +28,6 @@ import app.App;
 import app.M;
 import app.SearchPage;
 import app.StatusView;
-import app.editors.TranslationView;
 import app.editors.matprops.MaterialPropertyEditor;
 import app.editors.settings.SettingsPage;
 import app.navi.Navigator;
@@ -89,8 +88,6 @@ public class ActionBar extends ActionBarAdvisor {
 				IWorkbenchActionConstants.M_EDIT);
 		m.add(Actions.create(M.Settings,
 				Icon.SETTINGS.des(), SettingsPage::open));
-		m.add(Actions.create(M.TranslationView,
-				Icon.MESSAGE.des(), TranslationView::open));
 		m.add(Actions.create(M.MaterialProperties,
 				Icon.QUANTITY.des(), MaterialPropertyEditor::open));
 		m.add(new Separator());

@@ -218,6 +218,7 @@ public class ResultPage extends FormPage {
 		var table = new ResultTable(editor, epd);
 		table.create(composite);
 		Actions.bind(section, createResultActions());
+		new ResultMatrix(editor, composite).render(modules);
 		return table;
 	}
 

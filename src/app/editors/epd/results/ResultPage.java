@@ -28,6 +28,7 @@ import app.App;
 import app.M;
 import app.Tooltips;
 import app.editors.epd.EpdEditor;
+import app.editors.epd.results.matrix.ResultMatrix;
 import app.rcp.Icon;
 import app.util.Actions;
 import app.util.Controls;

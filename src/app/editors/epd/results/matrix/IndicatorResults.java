@@ -131,8 +131,8 @@ class IndicatorResults {
 
 		static boolean isElem(ImpactResult r) {
 			return r != null
-					&& r.getMethod() == null
-					&& r.getMethod().getUUID() == null;
+					&& r.getMethod() != null
+					&& r.getMethod().getUUID() != null;
 		}
 
 		@Override

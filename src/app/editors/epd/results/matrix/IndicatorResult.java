@@ -34,12 +34,15 @@ interface IndicatorResult {
 	default String getIndicatorUnit() {
 		var pi = profileIndicator();
 		return pi != null && pi.getUnit() != null
-				? App.s(pi.getRef())
+				? App.s(pi.getUnit())
 				: App.s(ext().getUnitGroup());
 	}
 
 	default Double getModValueAt(int i) {
-		return modValues()[i];
+		var vals = modValues();
+		return i >= 0 && i < vals.length
+				? vals[i]
+				: null;
 	}
 
 	default List<EpdValue> getValues() {

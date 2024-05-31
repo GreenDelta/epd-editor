@@ -1,6 +1,7 @@
 package app.editors.epd.results.matrix;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -14,6 +15,8 @@ import app.M;
 import app.editors.epd.EpdEditor;
 import app.rcp.Icon;
 import app.util.Tables;
+import app.util.tables.ModifySupport;
+import app.util.tables.TextCellModifier;
 
 public class ResultMatrix {
 
@@ -54,8 +57,53 @@ public class ResultMatrix {
 		}
 		Tables.bindColumnWidths(table, widths);
 
+		// bind modifiers
+		var modifiers = new ModifySupport<IndicatorResult>(table);
+		for (int i = 0; i < mods.length; i++) {
+			var mod = mods[i];
+			modifiers.bind(mod.key(), new ValueModifier(mod, i));
+		}
+
 		table.setLabelProvider(new ResultLabel());
 		table.setInput(results);
+	}
+
+	private class ValueModifier extends TextCellModifier<IndicatorResult> {
+
+		private final Mod mod;
+		private final int idx;
+
+		private ValueModifier(Mod mod, int idx) {
+			this.mod = mod;
+			this.idx = idx;
+		}
+
+		@Override
+		protected String getText(IndicatorResult r) {
+			if (r == null)
+				return "!ERROR!";
+			var v = r.getModValueAt(idx);
+			return v != null
+					? v.toString()
+					: "";
+		}
+
+		@Override
+		protected void setText(IndicatorResult r, String text) {
+			if (r == null)
+				return;
+			Double newVal;
+			try {
+				newVal = Double.parseDouble(text);
+			} catch (Exception e) {
+				newVal = null;
+			}
+			var oldVal = r.getModValueAt(idx);
+			if (Objects.equals(newVal, oldVal))
+				return;
+			r.setValue(mod, idx, newVal);
+			editor.setDirty();
+		}
 	}
 
 	private static class ResultLabel extends LabelProvider

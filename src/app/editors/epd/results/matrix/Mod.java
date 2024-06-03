@@ -50,11 +50,17 @@ record Mod(String module, String scenario) {
 				: "?";
 	}
 
+	static String key(EpdModuleEntry e) {
+		return e != null
+				? key(e.getModule(), e.getScenario())
+				: "?";
+	}
+
 	static String key(String module, String scenario) {
 		if (Strings.nullOrEmpty(module))
 			return "?";
 		return Strings.notEmpty(scenario)
-				? module + " - " + scenario
+				? module + " / " + scenario
 				: module;
 	}
 

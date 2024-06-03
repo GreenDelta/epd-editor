@@ -49,11 +49,11 @@ public class ResultMatrix {
 		table = Tables.createViewer(comp, columns);
 
 		var widths = new double[3 + mods.length];
-		widths[0] = 0.1;
-		widths[1] = 0.3;
-		widths[2] = 0.1;
+		widths[0] = 0.05;
+		widths[1] = 0.2;
+		widths[2] = 0.05;
 		for (int i = 0; i < mods.length; i++) {
-			widths[3 + i] = 0.5 / mods.length;
+			widths[3 + i] = 0.7 / mods.length;
 		}
 		Tables.bindColumnWidths(table, widths);
 
@@ -66,6 +66,7 @@ public class ResultMatrix {
 
 		table.setLabelProvider(new ResultLabel());
 		table.setInput(results);
+		comp.layout();
 	}
 
 	private class ValueModifier extends TextCellModifier<IndicatorResult> {

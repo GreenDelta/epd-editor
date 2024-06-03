@@ -3,10 +3,8 @@ package app.editors.epd.results;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.BiFunction;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -17,7 +15,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.openlca.ilcd.epd.EpdIndicatorResult;
 import org.openlca.ilcd.epd.EpdProfileModule;
 import org.openlca.ilcd.epd.EpdProfiles;
 import org.openlca.ilcd.processes.Process;
@@ -28,6 +25,7 @@ import app.App;
 import app.M;
 import app.Tooltips;
 import app.editors.epd.EpdEditor;
+import app.editors.epd.results.matrix.ExcelExport;
 import app.editors.epd.results.matrix.ResultMatrix;
 import app.rcp.Icon;
 import app.util.Actions;
@@ -50,40 +48,14 @@ public class ResultPage extends FormPage {
 	private final Process epd;
 	private ScenarioTable scenarioTable;
 	private TableViewer moduleTable;
-	private ResultTable resultTable;
+	//private ResultTable resultTable;
+	private ResultMatrix resultMatrix;
 
 	public ResultPage(EpdEditor editor) {
 		super(editor, "ModulesPage", M.EnvironmentalIndicators);
 		this.editor = editor;
 		epd = editor.epd;
-
-		// add module entries that are not defined yet
-		modules = Epds.withModuleEntries(epd);
-		var modKeys = new HashSet<String>();
-		BiFunction<String, String, Boolean> modFn = (mod, scen) -> {
-			var key = Strings.notEmpty(scen)
-					? mod + "/" + scen
-					: mod;
-			return modKeys.add(key);
-		};
-		modules.forEach(m -> modFn.apply(m.getModule(), m.getScenario()));
-		for (var r : EpdIndicatorResult.allOf(epd)) {
-			for (var v : r.values()) {
-				if (modFn.apply(v.getModule(), v.getScenario())) {
-					var mod = new EpdModuleEntry()
-							.withModule(v.getModule())
-							.withScenario(v.getScenario());
-					modules.add(mod);
-				}
-			}
-		}
-
-		modules.sort((e1, e2) -> {
-			int c = Strings.compare(e1.getModule(), e2.getModule());
-			return c == 0
-					? Strings.compare(e1.getScenario(), e2.getScenario())
-					: c;
-		});
+		modules = EpdModuleEntries.withAllOf(epd);
 	}
 
 	@Override
@@ -95,8 +67,9 @@ public class ResultPage extends FormPage {
 		createScenarioSection(body, tk);
 		moduleTable = createModuleSection(body, tk);
 		moduleTable.setInput(modules);
-		resultTable = createResultSection(body, tk);
-		resultTable.refresh();
+		//resultTable = createResultSection(body, tk);
+		//resultTable.refresh();
+		resultMatrix = createResultSection(body, tk);
 		form.reflow(true);
 	}
 
@@ -153,7 +126,7 @@ public class ResultPage extends FormPage {
 		Tables.addSorter(table, 3, EpdModuleEntry::getDescription);
 		Tables.bindColumnWidths(table, 0.25, 0.25, 0.25, 0.25);
 
-		Action[] actions = createModuleActions();
+		var actions = createModuleActions();
 		Actions.bind(section, actions);
 		Actions.bind(table, actions);
 		var modifiers = new ModifySupport<EpdModuleEntry>(table);
@@ -164,7 +137,7 @@ public class ResultPage extends FormPage {
 	}
 
 	private Action[] createModuleActions() {
-		Action[] actions = new Action[2];
+		var actions = new Action[2];
 		actions[0] = Actions.create(
 				M.Add, Icon.ADD.des(), this::createModuleEntry);
 		actions[1] = Actions.create(
@@ -173,8 +146,7 @@ public class ResultPage extends FormPage {
 	}
 
 	private void createModuleEntry() {
-		var e = new EpdModuleEntry()
-				.withModule(nextModule());
+		var e = new EpdModuleEntry().withModule(nextModule());
 		modules.add(e);
 		moduleTable.setInput(modules);
 		editor.setDirty();
@@ -210,17 +182,18 @@ public class ResultPage extends FormPage {
 		editor.setDirty();
 	}
 
-	private ResultTable createResultSection(Composite body, FormToolkit tk) {
+	private ResultMatrix createResultSection(Composite body, FormToolkit tk) {
 		var section = UI.section(body, tk, M.Results);
 		section.setToolTipText(Tooltips.EPD_Results);
 		UI.gridData(section, true, true);
 		var composite = UI.sectionClient(section, tk);
 		UI.gridLayout(composite, 1);
-		var table = new ResultTable(editor, epd);
-		table.create(composite);
+		// var table = new ResultTable(editor, epd);
+		// table.create(composite);
 		Actions.bind(section, createResultActions());
-		new ResultMatrix(editor, composite).render(modules);
-		return table;
+		var matrix = new ResultMatrix(editor, composite);
+		matrix.render(modules);
+		return matrix;
 	}
 
 	private Action[] createResultActions() {
@@ -228,7 +201,8 @@ public class ResultPage extends FormPage {
 		actions[0] = Actions.create(M.SynchronizeWithModules,
 				Icon.CHECK_TRUE.des(), () -> {
 					new ResultSync(epd, editor.getProfile()).run();
-					resultTable.refresh();
+					// resultTable.refresh();
+					resultMatrix.render(modules);
 					editor.setDirty();
 				});
 		actions[1] = Actions.create(
@@ -242,7 +216,7 @@ public class ResultPage extends FormPage {
 		var file = FileChooser.save("results.xlsx", "*.xlsx");
 		if (file == null)
 			return;
-		var export = new ResultExport(epd, file);
+		var export = ExcelExport.of(epd, editor.getProfile(), file);
 		App.run(M.Export, export, () -> {
 			if (export.isDoneWithSuccess())
 				return;
@@ -257,9 +231,10 @@ public class ResultPage extends FormPage {
 			return;
 		var resultImport = new ResultImport(epd, file);
 		App.run(M.Import, resultImport, () -> {
-			resultTable.refresh();
+			// resultTable.refresh();
 			moduleTable.refresh();
 			scenarioTable.setInput();
+			resultMatrix.render(modules);
 			editor.setDirty();
 		});
 	}

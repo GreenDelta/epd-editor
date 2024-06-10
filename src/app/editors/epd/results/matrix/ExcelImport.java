@@ -15,11 +15,14 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.openlca.ilcd.epd.EpdIndicatorResult;
 import org.openlca.ilcd.epd.EpdProfile;
+import org.openlca.ilcd.epd.EpdProfileIndicator;
 import org.openlca.ilcd.epd.EpdProfileModule;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.epd.EpdModuleEntry;
 import org.openlca.ilcd.processes.epd.EpdValue;
+import org.slf4j.LoggerFactory;
 
 import app.editors.epd.results.EpdModuleEntries;
 import epd.util.Strings;
@@ -36,15 +39,71 @@ public class ExcelImport implements Runnable {
 		this.file = file;
 	}
 
+	public static ExcelImport of(Process epd, EpdProfile profile, File file) {
+		return new ExcelImport(epd, profile, file);
+	}
+
 	@Override
 	public void run() {
 		try (var wb = WorkbookFactory.create(file)) {
 			var sheet = wb.getSheetAt(0);
-
-
+			var slots = syncModuleEntries(sheet);
+			var results = new ArrayList<EpdIndicatorResult>();
+			for (int i = 1; ; i++) {
+				var row = sheet.getRow(i);
+				if (row == null)
+					break;
+				var indicator = findIndicatorOf(row);
+				if (indicator == null)
+					continue;
+				var r = indicator.createResult();
+				for (var slot : slots) {
+					var value = slot.read(row).orElse(null);
+					if (value == null)
+						continue;
+					r.values().add(value);
+				}
+				if (!r.values().isEmpty()) {
+					results.add(r);
+				}
+			}
+			EpdIndicatorResult.writeClean(epd, results);
 		} catch (Exception e) {
-
+			LoggerFactory.getLogger(getClass())
+					.error("import failed", e);
 		}
+	}
+
+	private EpdProfileIndicator findIndicatorOf(Row row) {
+		if (row == null)
+			return null;
+		var id = str(row.getCell(0));
+		var code = str(row.getCell(1));
+		var name = str(row.getCell(2));
+
+		for (var i : profile.getIndicators()) {
+
+			if (Strings.notEmpty(id)) {
+				if (id.equals(i.getUUID()))
+					return i;
+				continue;
+			}
+
+			if (Strings.notEmpty(code)) {
+				if (code.equals(i.getCode()))
+					return i;
+				continue;
+			}
+
+			if (Strings.notEmpty(name) && i.getRef() != null) {
+				for (var refName : i.getRef().getName()) {
+					if (name.equals(refName.getValue()))
+						return i;
+				}
+			}
+		}
+
+		return null;
 	}
 
 	private List<ValSlot> syncModuleEntries(Sheet sheet) {
@@ -139,5 +198,4 @@ public class ExcelImport implements Runnable {
 			}
 		}
 	}
-
 }

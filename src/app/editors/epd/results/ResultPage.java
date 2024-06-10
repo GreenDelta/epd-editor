@@ -1,6 +1,5 @@
 package app.editors.epd.results;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -26,6 +25,7 @@ import app.M;
 import app.Tooltips;
 import app.editors.epd.EpdEditor;
 import app.editors.epd.results.matrix.ExcelExport;
+import app.editors.epd.results.matrix.ExcelImport;
 import app.editors.epd.results.matrix.ResultMatrix;
 import app.rcp.Icon;
 import app.util.Actions;
@@ -226,10 +226,10 @@ public class ResultPage extends FormPage {
 	}
 
 	private void importResults() {
-		File file = FileChooser.open("*.xlsx");
+		var file = FileChooser.open("*.xlsx");
 		if (file == null)
 			return;
-		var resultImport = new ResultImport(epd, file);
+		var resultImport = ExcelImport.of(epd, editor.getProfile(), file);
 		App.run(M.Import, resultImport, () -> {
 			// resultTable.refresh();
 			moduleTable.refresh();

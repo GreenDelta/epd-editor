@@ -95,7 +95,7 @@ class ReviewSection {
 			UI.formLabel(comp, tk,
 					M.CompleteReviewReport, Tooltips.EPD_ReviewReport);
 			RefLink t = new RefLink(comp, tk, DataSetType.SOURCE);
-			t.setRef(review.withReport());
+			t.setRef(review.getReport());
 			t.onChange(ref -> {
 				review.withReport(ref);
 				editor.setDirty();

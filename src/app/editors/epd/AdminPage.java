@@ -131,7 +131,7 @@ class AdminPage extends FormPage {
 		// documentor
 		UI.formLabel(comp, tk, M.Documentor, Tooltips.EPD_Documentor);
 		var documentor = new RefLink(comp, tk, DataSetType.CONTACT);
-		documentor.setRef(entry.withDocumentor());
+		documentor.setRef(entry.getDocumentor());
 		documentor.onChange(ref -> {
 			entry.withDocumentor(ref);
 			editor.setDirty();
@@ -157,7 +157,7 @@ class AdminPage extends FormPage {
 		UI.formLabel(comp, tk, M.RegistrationAuthority,
 			Tooltips.EPD_RegistrationAuthority);
 		var regAuthority = new RefLink(comp, tk, DataSetType.CONTACT);
-		regAuthority.setRef(pub.withRegistrationAuthority());
+		regAuthority.setRef(pub.getRegistrationAuthority());
 		regAuthority.onChange(ref -> {
 			pub.withRegistrationAuthority(ref);
 			editor.setDirty();
@@ -181,7 +181,7 @@ class AdminPage extends FormPage {
 		// owner
 		UI.formLabel(comp, tk, M.Owner, Tooltips.EPD_Owner);
 		var owner = new RefLink(comp, tk, DataSetType.CONTACT);
-		owner.setRef(pub.withOwner());
+		owner.setRef(pub.getOwner());
 		owner.onChange(ref -> {
 			pub.withOwner(ref);
 			editor.setDirty();

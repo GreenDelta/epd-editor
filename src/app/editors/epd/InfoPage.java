@@ -123,7 +123,7 @@ class InfoPage extends FormPage {
 		UI.formLabel(comp, tk, M.ProductFlow, Tooltips.EPD_DeclaredProduct);
 		var refText = new RefLink(comp, tk, DataSetType.FLOW);
 		var exchange = withProductExchange();
-		refText.setRef(exchange.withFlow());
+		refText.setRef(exchange.getFlow());
 		Text amountText = UI.formText(comp, tk,
 				M.Amount, Tooltips.EPD_ProductAmount);
 

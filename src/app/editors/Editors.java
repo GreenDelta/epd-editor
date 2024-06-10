@@ -51,32 +51,18 @@ public class Editors {
 	public static void open(Ref ref) {
 		if (ref == null || ref.getType() == null || ref.getUUID() == null)
 			return;
+		var b = App.store().contains(ref.getDataSetClass(), ref.getUUID());
+		if (!b)
+			return;
 		switch (ref.getType()) {
-		case PROCESS:
-			EpdEditor.open(ref);
-			break;
-		case FLOW:
-			FlowEditor.open(ref);
-			break;
-		case CONTACT:
-			ContactEditor.open(ref);
-			break;
-		case SOURCE:
-			SourceEditor.open(ref);
-			break;
-		case FLOW_PROPERTY:
-			FlowPropertyEditor.open(ref);
-			break;
-		case UNIT_GROUP:
-			UnitGroupEditor.open(ref);
-			break;
-		case IMPACT_METHOD:
-			MethodEditor.open(ref);
-			break;
-		case MODEL:
-		case EXTERNAL_FILE:
-			// we have no editor for these things
-			break;
+			case PROCESS -> EpdEditor.open(ref);
+			case FLOW -> FlowEditor.open(ref);
+			case CONTACT -> ContactEditor.open(ref);
+			case SOURCE -> SourceEditor.open(ref);
+			case FLOW_PROPERTY -> FlowPropertyEditor.open(ref);
+			case UNIT_GROUP -> UnitGroupEditor.open(ref);
+			case IMPACT_METHOD -> MethodEditor.open(ref);
+			case MODEL, EXTERNAL_FILE -> {}
 		}
 	}
 
@@ -172,7 +158,7 @@ public class Editors {
 				return Status.OK_STATUS;
 			} catch (Exception e) {
 				Logger log = LoggerFactory.getLogger(getClass());
-				log.error("Open editor " + editorId + " failed.", e);
+				log.error("Open editor {} failed.", editorId, e);
 				return Status.CANCEL_STATUS;
 			}
 		}

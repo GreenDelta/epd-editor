@@ -1,4 +1,4 @@
-package app.editors.epd.results.matrix;
+package app.editors.epd.results;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -14,7 +14,6 @@ import org.openlca.ilcd.processes.Process;
 import org.slf4j.LoggerFactory;
 
 import app.M;
-import app.editors.epd.results.EpdModuleEntries;
 import epd.util.Strings;
 
 public class ExcelExport implements Runnable {

@@ -1,4 +1,4 @@
-package app.editors.epd.results.matrix;
+package app.editors.epd.results;
 
 import java.util.List;
 import java.util.Objects;

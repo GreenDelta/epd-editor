@@ -1,4 +1,4 @@
-package app.editors.epd.results.matrix;
+package app.editors.epd.results;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -21,10 +21,11 @@ import org.openlca.ilcd.epd.EpdProfileIndicator;
 import org.openlca.ilcd.epd.EpdProfileModule;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.epd.EpdModuleEntry;
+import org.openlca.ilcd.processes.epd.EpdScenario;
 import org.openlca.ilcd.processes.epd.EpdValue;
+import org.openlca.ilcd.util.Epds;
 import org.slf4j.LoggerFactory;
 
-import app.editors.epd.results.EpdModuleEntries;
 import epd.util.Strings;
 
 public class ExcelImport implements Runnable {
@@ -48,6 +49,7 @@ public class ExcelImport implements Runnable {
 		try (var wb = WorkbookFactory.create(file)) {
 			var sheet = wb.getSheetAt(0);
 			var slots = syncModuleEntries(sheet);
+			syncScenarios(slots);
 			var results = new ArrayList<EpdIndicatorResult>();
 			for (int i = 1; ; i++) {
 				var row = sheet.getRow(i);
@@ -71,6 +73,23 @@ public class ExcelImport implements Runnable {
 		} catch (Exception e) {
 			LoggerFactory.getLogger(getClass())
 					.error("import failed", e);
+		}
+	}
+
+	private void syncScenarios(List<ValSlot> slots) {
+		var scenarios = new HashSet<String>();
+		for (var scen : Epds.getScenarios(epd)) {
+			if (Strings.notEmpty(scen.getName())) {
+				scenarios.add(scen.getName().strip());
+			}
+		}
+		for (var s : slots) {
+			var scenario = s.entry.getScenario();
+			if (Strings.notEmpty(scenario)
+					&& !scenarios.contains(scenario)) {
+				Epds.withScenarios(epd)
+						.add(new EpdScenario().withName(scenario));
+			}
 		}
 	}
 

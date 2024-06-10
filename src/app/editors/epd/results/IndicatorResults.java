@@ -1,4 +1,4 @@
-package app.editors.epd.results.matrix;
+package app.editors.epd.results;
 
 import java.util.ArrayList;
 import java.util.HashMap;

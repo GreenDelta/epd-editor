@@ -21,7 +21,6 @@ import app.navi.Navigator;
 import app.store.IndexBuilder;
 import app.store.RefDataSync;
 import app.util.UI;
-import epd.model.RefStatus;
 import epd.util.Strings;
 
 public class WorkbenchWindow extends WorkbenchWindowAdvisor {
@@ -101,8 +100,8 @@ public class WorkbenchWindow extends WorkbenchWindowAdvisor {
 			// update the navigation and display possible updates
 			new NaviSync(App.index()).run();
 			boolean didUpdates = false;
-			for (RefStatus stat : sync.stats) {
-				if (stat.value == RefStatus.DOWNLOADED) {
+			for (var stat : sync.stats) {
+				if (stat.isDownloaded()) {
 					didUpdates = true;
 					break;
 				}

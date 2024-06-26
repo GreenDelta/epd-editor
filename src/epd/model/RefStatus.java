@@ -2,7 +2,7 @@ package epd.model;
 
 import org.openlca.ilcd.commons.Ref;
 
-public class RefStatus {
+public record RefStatus(int value, Ref ref, String message) {
 
 	public static final int OK = 0;
 	public static final int INFO = 1;
@@ -10,16 +10,6 @@ public class RefStatus {
 	public static final int ERROR = 4;
 	public static final int CANCEL = 8;
 	public static final int DOWNLOADED = 16;
-
-	public final int value;
-	public final Ref ref;
-	public final String message;
-
-	public RefStatus(int value, Ref ref, String message) {
-		this.value = value;
-		this.ref = ref;
-		this.message = message;
-	}
 
 	public static RefStatus ok(Ref ref, String message) {
 		return new RefStatus(OK, ref, message);
@@ -43,5 +33,29 @@ public class RefStatus {
 
 	public static RefStatus downloaded(Ref ref, String message) {
 		return new RefStatus(DOWNLOADED, ref, message);
+	}
+
+	public boolean isOk() {
+		return this.value == OK;
+	}
+
+	public boolean isInfo() {
+		return this.value == INFO;
+	}
+
+	public boolean isWarning() {
+		return this.value == WARNING;
+	}
+
+	public boolean isError() {
+		return this.value == ERROR;
+	}
+
+	public boolean isCanceled() {
+		return this.value == CANCEL;
+	}
+
+	public boolean isDownloaded() {
+		return this.value == DOWNLOADED;
 	}
 }

@@ -1,14 +1,15 @@
 package app.store.validation;
 
-import app.App;
-import com.okworx.ilcd.validation.events.IValidationEvent;
-import com.okworx.ilcd.validation.events.Severity;
-import com.okworx.ilcd.validation.reference.IDatasetReference;
-import epd.model.RefStatus;
-import org.apache.commons.lang3.StringUtils;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
+
+import com.okworx.ilcd.validation.events.IValidationEvent;
+import com.okworx.ilcd.validation.events.Severity;
+import com.okworx.ilcd.validation.reference.IDatasetReference;
+
+import app.App;
+import epd.model.RefStatus;
 
 final class Event {
 
@@ -20,18 +21,16 @@ final class Event {
 			return null;
 		var iRef = e.getReference();
 		var ref = new Ref()
-			.withType(typeOf(iRef))
-			.withUUID(iRef.getUuid())
-			.withVersion(iRef.getVersion())
-			.withUri(iRef.getUri());
+				.withType(typeOf(iRef))
+				.withUUID(iRef.getUuid())
+				.withVersion(iRef.getVersion())
+				.withUri(iRef.getUri());
 		LangString.set(ref.withName(), iRef.getName(), App.lang());
 
-		return new RefStatus(statusValue(e.getSeverity()),
-			ref, e.getAspect()
-			+ (StringUtils.isNotBlank(e.getAspectDescription())
-			? " (" + e.getAspectDescription() + ")"
-			: "")
-			+ ": " + e.getMessage());
+		return new RefStatus(
+				statusValue(e.getSeverity()),
+				ref,
+				e.getMessage());
 	}
 
 	static int statusValue(Severity s) {

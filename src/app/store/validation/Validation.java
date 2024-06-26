@@ -15,9 +15,6 @@ import org.openlca.ilcd.commons.Ref;
 import com.okworx.ilcd.validation.SchemaValidator;
 import com.okworx.ilcd.validation.ValidatorChain;
 import com.okworx.ilcd.validation.XSLTStylesheetValidator;
-import com.okworx.ilcd.validation.events.EventsList;
-import com.okworx.ilcd.validation.events.IValidationEvent;
-import com.okworx.ilcd.validation.profile.Profile;
 import com.okworx.ilcd.validation.reference.IDatasetReference;
 import com.okworx.ilcd.validation.reference.ReferenceBuilder;
 
@@ -35,11 +32,10 @@ public class Validation implements IRunnableWithProgress {
 	}
 
 	public Validation(Collection<Ref> refs) {
-		for (Ref ref : refs) {
-			File f = App.store().getFile(ref);
+		for (var ref : refs) {
+			var f = App.store().getFile(ref);
 			if (f == null || !f.exists()) {
-				RefStatus message = RefStatus.error(ref,
-						"#Invalid reference");
+				var message = RefStatus.error(ref, "Invalid reference");
 				messages.put(ref.getUUID(),
 						Collections.singletonList(message));
 				continue;
@@ -51,34 +47,42 @@ public class Validation implements IRunnableWithProgress {
 	@Override
 	public void run(IProgressMonitor monitor)
 			throws InvocationTargetException, InterruptedException {
-		ValidatorChain validator = getValidator();
+		var validator = getValidator();
 		validator.validate();
-		EventsList events = validator.getEventsList();
-		for (IValidationEvent e : events.getEvents()) {
+		var events = validator.getEventsList();
+		for (var e : events.getEvents()) {
 			if (e == null || e.getReference() == null)
 				continue;
 			add(Event.toStatus(e));
 		}
 	}
 
-	private void add(RefStatus m) {
-		if (m.ref == null || m.ref.getUUID() == null)
+	private void add(RefStatus s) {
+		if (s.ref() == null || s.ref().getUUID() == null)
 			return;
-		messages.computeIfAbsent(m.ref.getUUID(), k -> new ArrayList<>())
-			.add(m);
+		var list = messages.computeIfAbsent(
+				s.ref().getUUID(), k -> new ArrayList<>());
+		if (list.isEmpty()) {
+			list.add(s);
+			return;
+		}
+		if (s.isInfo() || s.isOk())
+			return;
+		list.removeIf(si -> si.isOk() || si.isInfo());
+		list.add(s);
 	}
 
 	private ValidatorChain getValidator() throws InvocationTargetException {
 		try {
-			Profile profile = ValidationProfiles.getActive();
-			ValidatorChain chain = new ValidatorChain();
+			var profile = ValidationProfiles.getActive();
+			var chain = new ValidatorChain();
 			chain.add(new SchemaValidator());
 			chain.add(new XSLTStylesheetValidator());
 			chain.setProfile(profile);
 			chain.setReportSuccesses(true);
-			HashMap<String, IDatasetReference> valRefs = new HashMap<>();
+			var valRefs = new HashMap<String, IDatasetReference>();
 			for (File f : files) {
-				ReferenceBuilder refBuild = new ReferenceBuilder();
+				var refBuild = new ReferenceBuilder();
 				refBuild.build(f);
 				valRefs.putAll(refBuild.getReferences());
 			}
@@ -91,12 +95,11 @@ public class Validation implements IRunnableWithProgress {
 	}
 
 	public List<RefStatus> getStatus() {
-		List<RefStatus> all = new ArrayList<>();
-		for (List<RefStatus> list : messages.values()) {
+		var all = new ArrayList<RefStatus>();
+		for (var list : messages.values()) {
 			boolean filterInfos = hasIssues(list);
-			for (RefStatus s : list) {
-				boolean isInfo = s.value == RefStatus.OK ||
-						s.value == RefStatus.INFO;
+			for (var s : list) {
+				boolean isInfo = s.isOk() || s.isInfo();
 				if (isInfo && filterInfos)
 					continue;
 				all.add(s);
@@ -107,8 +110,7 @@ public class Validation implements IRunnableWithProgress {
 
 	private boolean hasIssues(List<RefStatus> list) {
 		for (RefStatus s : list) {
-			if (s.value == RefStatus.ERROR
-					|| s.value == RefStatus.WARNING) {
+			if (s.isError() || s.isWarning()) {
 				return true;
 			}
 		}

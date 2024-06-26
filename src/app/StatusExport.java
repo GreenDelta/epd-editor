@@ -14,7 +14,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.openlca.ilcd.commons.Ref;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +59,7 @@ class StatusExport implements Runnable {
 				sheet.autoSizeColumn(col);
 			workbook.write(out);
 		} catch (Exception e) {
-			log.error("failed to export status to " + file, e);
+			log.error("failed to export status to {}", file, e);
 		}
 	}
 
@@ -81,9 +80,9 @@ class StatusExport implements Runnable {
 
 	private void createRows(Sheet sheet) {
 		int row = 1;
-		for (RefStatus stat : stats) {
-			Ref ref = stat.ref;
-			if (stat.ref == null)
+		for (var stat : stats) {
+			var ref = stat.ref();
+			if (stat.ref() == null)
 				continue;
 			Row r = sheet.createRow(row++);
 			r.createCell(0).setCellValue(Labels.get(ref.getType()));
@@ -91,14 +90,14 @@ class StatusExport implements Runnable {
 			r.createCell(1).setCellValue(name);
 			r.createCell(2).setCellValue(ref.getUUID());
 			r.createCell(3).setCellValue(ref.getVersion());
-			r.createCell(4).setCellValue(getPrefix(stat) + ": " + stat.message);
+			r.createCell(4).setCellValue(getPrefix(stat) + ": " + stat.message());
 		}
 	}
 
 	private String getPrefix(RefStatus stat) {
 		if (stat == null)
 			return "";
-		return switch (stat.value) {
+		return switch (stat.value()) {
 			case RefStatus.CANCEL -> "CANCELED";
 			case RefStatus.ERROR -> "ERROR";
 			case RefStatus.INFO -> "INFO";

@@ -96,8 +96,8 @@ public class StatusView extends BaseEditor {
 			table.setInput(stats);
 			table.addDoubleClickListener(e -> {
 				RefStatus rs = Viewers.getFirstSelected(table);
-				if (rs != null && rs.ref != null)
-					Editors.open(rs.ref);
+				if (rs != null && rs.ref() != null)
+					Editors.open(rs.ref());
 			});
 		}
 
@@ -107,14 +107,12 @@ public class StatusView extends BaseEditor {
 			double maxNameLen = 0;
 			double maxMsgLen = 0;
 			for (RefStatus stat : stats) {
-				if (stat.ref != null) {
-					String name = App.s(stat.ref.getName());
-					if (name != null) {
-						maxNameLen = Math.max(maxNameLen, name.length());
-					}
+				if (stat.ref() != null) {
+					String name = App.s(stat.ref().getName());
+					maxNameLen = Math.max(maxNameLen, name.length());
 				}
-				if (stat.message != null) {
-					maxMsgLen = Math.max(maxMsgLen, stat.message.length());
+				if (stat.message() != null) {
+					maxMsgLen = Math.max(maxMsgLen, stat.message().length());
 				}
 			}
 			double totalLen = maxNameLen + maxMsgLen;
@@ -152,11 +150,11 @@ public class StatusView extends BaseEditor {
 		public Image getColumnImage(Object obj, int col) {
 			if (!(obj instanceof RefStatus rs))
 				return null;
-			if (col == 0 && rs.ref != null)
-				return Icon.img(rs.ref.getType());
+			if (col == 0 && rs.ref() != null)
+				return Icon.img(rs.ref().getType());
 			if (col != 3)
 				return null;
-			return switch (rs.value) {
+			return switch (rs.value()) {
 				case RefStatus.CANCEL -> Icon.CANCELED.img();
 				case RefStatus.ERROR -> Icon.ERROR.img();
 				case RefStatus.INFO -> Icon.INFO.img();
@@ -172,13 +170,13 @@ public class StatusView extends BaseEditor {
 			if (!(obj instanceof RefStatus rs))
 				return null;
 			if (col == 3)
-				return rs.message;
-			if (rs.ref == null)
+				return rs.message();
+			if (rs.ref() == null)
 				return null;
 			return switch (col) {
-			case 0 -> App.s(rs.ref.getName());
-				case 1 -> rs.ref.getUUID();
-				case 2 -> rs.ref.getVersion();
+			case 0 -> App.s(rs.ref().getName());
+				case 1 -> rs.ref().getUUID();
+				case 2 -> rs.ref().getVersion();
 				default -> null;
 			};
 		}

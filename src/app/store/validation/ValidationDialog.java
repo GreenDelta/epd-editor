@@ -83,7 +83,7 @@ public class ValidationDialog extends Wizard {
 			return false;
 		}
 		try {
-			Validation v = new Validation(allRefs);
+			var v = new Validation(allRefs);
 			getContainer().run(true, false, v);
 			StatusView.open(M.Validation, v.getStatus());
 			return true;

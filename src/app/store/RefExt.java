@@ -9,11 +9,19 @@ import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.Epds;
 import org.openlca.ilcd.util.Strings;
 
-import epd.EditorVocab;
-
 public class RefExt {
 
+	public static final String NAMESPACE = "http://greendelta.com/epd-editor";
+
 	private RefExt() {
+	}
+
+	private static QName referenceYear() {
+		return new QName(NAMESPACE, "referenceYear");
+	}
+
+	private static QName database() {
+		return new QName(NAMESPACE, "database");
 	}
 
 	public static void add(Process epd, Ref ref) {
@@ -23,20 +31,26 @@ public class RefExt {
 		var time = Epds.getTime(epd);
 		if (time != null && time.getReferenceYear() != null) {
 			var refYear = Integer.toString(time.getReferenceYear());
-			ref.withOtherAttributes()
-					.put(EditorVocab.referenceYear(), refYear);
+			ref.withOtherAttributes().put(referenceYear(), refYear);
 		}
 
 		var rep = Epds.getRepresentativeness(epd);
 		if (rep != null) {
 			for (var ds : rep.getSources()) {
-				if (checkAddDatabase(ref, ds.getUUID()))
+				if (putDatabase(ref, ds.getUUID()))
 					break;
 			}
 		}
 	}
 
-	public static boolean checkAddDatabase(Ref ref, String sourceId) {
+	public static boolean putReferenceYear(Ref ref, String year) {
+		if (ref == null || Strings.nullOrEmpty(year))
+			return false;
+		ref.withOtherAttributes().put(referenceYear(), year);
+		return true;
+	}
+
+	public static boolean putDatabase(Ref ref, String sourceId) {
 		if (ref == null || Strings.nullOrEmpty(sourceId))
 			return false;
 		var db = switch (sourceId) {
@@ -46,17 +60,16 @@ public class RefExt {
 		};
 		if (db == null)
 			return false;
-		ref.withOtherAttributes()
-				.put(EditorVocab.database(), db);
+		ref.withOtherAttributes().put(database(), db);
 		return true;
 	}
 
 	public static Optional<String> getReferenceYear(Ref ref) {
-		return getAttribute(ref, EditorVocab.referenceYear());
+		return getAttribute(ref, referenceYear());
 	}
 
 	public static Optional<String> getDatabase(Ref ref) {
-		return getAttribute(ref, EditorVocab.database());
+		return getAttribute(ref, database());
 	}
 
 	private static Optional<String> getAttribute(Ref ref, QName attr) {

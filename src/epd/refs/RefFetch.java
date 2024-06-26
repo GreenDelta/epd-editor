@@ -17,7 +17,6 @@ import org.openlca.ilcd.commons.Ref;
 import org.slf4j.LoggerFactory;
 
 import app.store.RefExt;
-import epd.EditorVocab;
 
 public class RefFetch {
 
@@ -119,7 +118,7 @@ public class RefFetch {
 				return;
 			case "referenceToDataSource":
 				var sourceId = reader.getAttributeValue(null, "refObjectId");
-				RefExt.checkAddDatabase(ref, sourceId);
+				RefExt.putDatabase(ref, sourceId);
 				return;
 		}
 		if (matchName(reader.getName())) {
@@ -156,8 +155,7 @@ public class RefFetch {
 				ref.withVersion(text);
 				return false;
 			case "referenceYear":
-				ref.withOtherAttributes()
-						.put(EditorVocab.referenceYear(), text);
+				RefExt.putReferenceYear(ref, text);
 				return false;
 			case "permanentDataSetURI":
 				ref.withUri(text);

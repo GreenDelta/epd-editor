@@ -13,6 +13,9 @@ import org.openlca.ilcd.processes.Technology;
 import org.openlca.ilcd.processes.Time;
 import org.openlca.ilcd.processes.epd.EpdContentDeclaration;
 import org.openlca.ilcd.processes.epd.EpdInfoExtension;
+import org.openlca.ilcd.processes.epd.EpdInventoryMethodExtension;
+import org.openlca.ilcd.processes.epd.EpdPublicationExtension;
+import org.openlca.ilcd.processes.epd.EpdRepresentativenessExtension;
 import org.openlca.ilcd.processes.epd.EpdSafetyMargins;
 import org.openlca.ilcd.processes.epd.EpdTimeExtension;
 import org.openlca.ilcd.util.Epds;
@@ -65,10 +68,15 @@ public class Cleanup {
 		if (epd == null)
 			return;
 
-		var info = Processes.getProcessInfo(epd);
+		var info = Epds.getProcessInfo(epd);
 		if (info != null && isEmpty(info.getTime())) {
 			info.withTime(null);
 		}
+		var time = Epds.getTime(epd);
+		if (time != null && isEmpty(time.getEpdExtension())) {
+			time.withEpdExtension(null);
+		}
+
 		if (info != null && isEmpty(info.getGeography())) {
 			info.withGeography(null);
 		}
@@ -106,6 +114,21 @@ public class Cleanup {
 
 		if (adminInfo != null && isEmpty(adminInfo.getDataGenerator())) {
 			adminInfo.withDataGenerator(null);
+		}
+
+		var rep = Epds.getRepresentativeness(epd);
+		if (rep != null && isEmpty(rep.getEpdExtension())) {
+			rep.withEpdExtension(null);
+		}
+
+		var method = Epds.getInventoryMethod(epd);
+		if (method != null && isEmpty(method.getEpdExtension())) {
+			method.withEpdExtension(null);
+		}
+
+		var pub = Epds.getPublication(epd);
+		if (pub != null && isEmpty(pub.getEpdExtension())) {
+			pub.withEpdExtension(null);
 		}
 	}
 
@@ -189,6 +212,27 @@ public class Cleanup {
 		if (esm == null)
 			return true;
 		return esm.getValue() == null && esm.getDescription().isEmpty();
+	}
+
+	private static boolean isEmpty(EpdRepresentativenessExtension ext) {
+		if (ext == null)
+			return true;
+		return ext.getOriginalEpds().isEmpty()
+				&& ext.getAny().isEmpty();
+	}
+
+	private static boolean isEmpty(EpdInventoryMethodExtension ext) {
+		if (ext == null)
+			return true;
+		return ext.getSubType() == null
+				&& ext.getAny().isEmpty();
+	}
+
+	private static boolean isEmpty(EpdPublicationExtension ext) {
+		if (ext == null)
+			return true;
+		return ext.getPublishers().isEmpty()
+				&& ext.getAny().isEmpty();
 	}
 
 }

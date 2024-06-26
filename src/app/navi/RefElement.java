@@ -5,7 +5,7 @@ import org.openlca.ilcd.commons.Ref;
 
 import app.App;
 import app.rcp.Icon;
-import epd.EditorVocab;
+import app.store.RefExt;
 import epd.util.Strings;
 
 public class RefElement extends NavigationElement<Ref> {
@@ -33,10 +33,15 @@ public class RefElement extends NavigationElement<Ref> {
 	public String getLabel() {
 		var ref = getContent();
 		var name = App.s(ref.getName());
-		var refYear = ref.getOtherAttributes().get(EditorVocab.referenceYear());
-		return refYear != null
-			? name + " - " + refYear
-			: name;
+		var db = RefExt.getDatabase(ref);
+		if (db.isPresent()) {
+			name += " - " + db.get();
+		}
+		var refYear = RefExt.getReferenceYear(ref);
+		if (refYear.isPresent()) {
+			name += " - " + refYear.get();
+		}
+		return name;
 	}
 
 	@Override

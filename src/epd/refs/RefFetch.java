@@ -16,6 +16,7 @@ import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 import org.slf4j.LoggerFactory;
 
+import app.store.RefExt;
 import epd.EditorVocab;
 
 public class RefFetch {
@@ -39,7 +40,7 @@ public class RefFetch {
 			return get(stream);
 		} catch (Exception e) {
 			LoggerFactory.getLogger(RefFetch.class)
-				.error("failed to fetch reference from " + file, e);
+					.error("failed to fetch reference from {}", file, e);
 			return Optional.empty();
 		}
 	}
@@ -49,15 +50,15 @@ public class RefFetch {
 			return Optional.empty();
 		try {
 			var reader = XMLInputFactory.newFactory()
-				.createXMLStreamReader(stream);
+					.createXMLStreamReader(stream);
 			var fetch = new RefFetch(reader);
 			fetch.parse();
 			return fetch.ref.isValid()
-				? Optional.of(fetch.ref)
-				: Optional.empty();
+					? Optional.of(fetch.ref)
+					: Optional.empty();
 		} catch (Exception e) {
 			LoggerFactory.getLogger(RefFetch.class)
-				.error("failed to fetch reference", e);
+					.error("failed to fetch reference", e);
 			return Optional.empty();
 		}
 	}
@@ -116,6 +117,10 @@ public class RefFetch {
 			case "referenceYear":
 				textBuff = new StringBuilder();
 				return;
+			case "referenceToDataSource":
+				var sourceId = reader.getAttributeValue(null, "refObjectId");
+				RefExt.checkAddDatabase(ref, sourceId);
+				return;
 		}
 		if (matchName(reader.getName())) {
 			lang = reader.getAttributeValue(Vocab.XML, "lang");
@@ -138,9 +143,9 @@ public class RefFetch {
 	private boolean end() {
 		if (textBuff == null)
 			return false;
-		String text = textBuff.toString().trim();
+		var text = textBuff.toString().trim();
 		textBuff = null;
-		String element = reader.getLocalName();
+		var element = reader.getLocalName();
 		if (element == null)
 			return false;
 		switch (element) {
@@ -152,7 +157,7 @@ public class RefFetch {
 				return false;
 			case "referenceYear":
 				ref.withOtherAttributes()
-					.put(EditorVocab.referenceYear(), text);
+						.put(EditorVocab.referenceYear(), text);
 				return false;
 			case "permanentDataSetURI":
 				ref.withUri(text);
@@ -168,12 +173,12 @@ public class RefFetch {
 		var type = ref.getType();
 		return switch (name.getLocalPart()) {
 			case "name" -> isCommon(name) && (
-				type == DataSetType.CONTACT
-					|| type == DataSetType.FLOW_PROPERTY
-					|| type == DataSetType.UNIT_GROUP
-					|| type == DataSetType.IMPACT_METHOD);
+					type == DataSetType.CONTACT
+							|| type == DataSetType.FLOW_PROPERTY
+							|| type == DataSetType.UNIT_GROUP
+							|| type == DataSetType.IMPACT_METHOD);
 			case "baseName" -> type == DataSetType.FLOW
-				|| type == DataSetType.PROCESS;
+					|| type == DataSetType.PROCESS;
 			case "shortName" -> type == DataSetType.SOURCE;
 			default -> false;
 		};
@@ -181,6 +186,6 @@ public class RefFetch {
 
 	private boolean isCommon(QName name) {
 		return name != null
-			&& Vocab.COMMON.equalsIgnoreCase(name.getNamespaceURI());
+				&& Vocab.COMMON.equalsIgnoreCase(name.getNamespaceURI());
 	}
 }

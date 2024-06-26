@@ -23,8 +23,8 @@ import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.navi.NaviSync;
-import epd.refs.RefFetch;
 import epd.index.Index;
+import epd.refs.RefFetch;
 
 /**
  * Creates a new data set index from the data sets in the local data store.
@@ -86,16 +86,16 @@ public class IndexBuilder implements IRunnableWithProgress {
 	private void add(File f, Index index) {
 		try {
 			Ref ref;
-			try (FileInputStream is = new FileInputStream(f)) {
+			try (var is = new FileInputStream(f)) {
 				ref = RefFetch.get(is).orElse(null);
 			}
 			List<Classification> classes;
-			try (FileInputStream is = new FileInputStream(f)) {
+			try (var is = new FileInputStream(f)) {
 				classes = Categories.read(is);
 			}
 			index.add(ref, classes);
 		} catch (Exception e) {
-			log.error("failed to read reference and class from file " + f, e);
+			log.error("failed to read reference and class from file {}", f, e);
 		}
 	}
 }

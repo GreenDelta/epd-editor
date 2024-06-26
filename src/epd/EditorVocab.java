@@ -15,4 +15,8 @@ public final class EditorVocab {
 	public static QName referenceYear() {
 		return new QName(NAMESPACE, "referenceYear");
 	}
+
+	public static QName database() {
+		return new QName(NAMESPACE, "database");
+	}
 }

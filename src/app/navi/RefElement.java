@@ -1,5 +1,7 @@
 package app.navi;
 
+import java.util.Objects;
+
 import org.eclipse.swt.graphics.Image;
 import org.openlca.ilcd.commons.Ref;
 
@@ -51,5 +53,16 @@ public class RefElement extends NavigationElement<Ref> {
 
 	@Override
 	public void update() {
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof RefElement other))
+			return false;
+		return Objects.equals(this.content, other.content);
 	}
 }

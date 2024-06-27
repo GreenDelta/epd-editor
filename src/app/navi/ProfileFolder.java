@@ -43,4 +43,9 @@ public class ProfileFolder extends NavigationElement<Void> {
 			childs.add(new ProfileElement(this, p));
 		}
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof ProfileFolder;
+	}
 }

@@ -44,4 +44,9 @@ public class ConnectionFolder extends NavigationElement<Void> {
 			childs.add(new ConnectionElement(this, con));
 		}
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof ConnectionFolder;
+	}
 }

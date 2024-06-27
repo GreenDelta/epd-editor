@@ -47,4 +47,8 @@ public class NavigationRoot extends NavigationElement<Void> {
 		return null;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof NavigationRoot;
+	}
 }

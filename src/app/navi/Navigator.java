@@ -173,7 +173,8 @@ public class Navigator extends CommonNavigator {
 	}
 
 	private static void setRefreshedExpansion(
-		CommonViewer viewer, Object[] oldExpansion) {
+		CommonViewer viewer, Object[] oldExpansion
+	) {
 		if (viewer == null || oldExpansion == null)
 			return;
 		var newExpanded = new ArrayList<NavigationElement<?>>();
@@ -188,7 +189,7 @@ public class Navigator extends CommonNavigator {
 		viewer.setExpandedElements(newExpanded.toArray());
 	}
 
-	public static NavigationElement<?> findElement(Object content) {
+	private static NavigationElement<?> findElement(Object content) {
 		var root = getNavigationRoot();
 		if (content == null || root == null)
 			return null;

@@ -1,6 +1,7 @@
 package app.navi;
 
 import java.io.File;
+import java.util.Objects;
 
 import org.eclipse.swt.graphics.Image;
 
@@ -45,6 +46,17 @@ public class FileElement extends NavigationElement<File> {
 
 	public FolderType getType() {
 		return parent == null ? null : parent.type;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof FileElement other))
+			return false;
+		return Objects.equals(this.content, other.content);
 	}
 
 }

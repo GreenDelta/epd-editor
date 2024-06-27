@@ -88,4 +88,14 @@ public class FolderElement extends NavigationElement<Void> {
 		};
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof FolderElement other))
+			return false;
+		return this.type == other.type;
+	}
 }

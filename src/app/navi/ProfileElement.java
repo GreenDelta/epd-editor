@@ -44,4 +44,21 @@ public class ProfileElement extends NavigationElement<EpdProfile> {
 	@Override
 	public void update() {
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof ProfileElement other))
+			return false;
+		var p1 = this.content;
+		var p2 = other.content;
+		if (p1 == null && p2 == null)
+			return true;
+		if (p1 == null || p2 == null)
+			return false;
+		return Strings.nullOrEqual(p1.getName(), p2.getName());
+	}
 }

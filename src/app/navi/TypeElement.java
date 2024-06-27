@@ -72,4 +72,15 @@ public class TypeElement extends NavigationElement<DataSetType> {
 		return parent;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof TypeElement other))
+			return false;
+		return this.content == other.content;
+	}
+
 }

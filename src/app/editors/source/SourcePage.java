@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -17,13 +16,12 @@ import app.App;
 import app.M;
 import app.Tooltips;
 import app.editors.CategorySection;
+import app.editors.CommonAdminSection;
 import app.editors.RefLink;
 import app.editors.RefTable;
-import app.editors.VersionField;
 import app.util.LangText;
 import app.util.TextBuilder;
 import app.util.UI;
-import epd.model.Xml;
 
 class SourcePage extends FormPage {
 
@@ -49,7 +47,7 @@ class SourcePage extends FormPage {
 		categorySection(body);
 		contacts(body);
 		new FileTable(editor).render(body, tk);
-		adminSection(body);
+		CommonAdminSection.of(editor, source).render(body, tk);
 		form.reflow(true);
 	}
 
@@ -99,31 +97,4 @@ class SourcePage extends FormPage {
 				.withTooltip(Tooltips.Source_BelongsTo)
 				.render(body, tk);
 	}
-
-	private void adminSection(Composite body) {
-		var comp = UI.formSection(body, tk, M.AdministrativeInformation);
-
-		Text timeT = UI.formText(comp, tk,
-				M.LastUpdate, Tooltips.All_LastUpdate);
-		timeT.setText(Xml.toString(Sources.getTimeStamp(source)));
-
-		Text uuidT = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);
-		var uuid = Sources.getUUID(source);
-		if (uuid != null) {
-			uuidT.setText(uuid);
-		}
-
-		var vf = new VersionField(comp, tk);
-		vf.setVersion(Sources.getVersion(source));
-		vf.onChange(v -> {
-			Sources.withVersion(source, v);
-			editor.setDirty();
-		});
-
-		editor.onSaved(() -> {
-			vf.setVersion(Sources.getVersion(source));
-			timeT.setText(Xml.toString(Sources.getTimeStamp(source)));
-		});
-	}
-
 }

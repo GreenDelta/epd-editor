@@ -15,11 +15,10 @@ import app.App;
 import app.M;
 import app.Tooltips;
 import app.editors.CategorySection;
+import app.editors.CommonAdminSection;
 import app.editors.RefLink;
-import app.editors.VersionField;
 import app.util.LangText;
 import app.util.UI;
-import epd.model.Xml;
 
 class FlowPage extends FormPage {
 
@@ -49,7 +48,7 @@ class FlowPage extends FormPage {
 			VendorSection.create(body, tk, editor);
 		}
 		propertySections(body);
-		adminSection(body);
+		CommonAdminSection.of(editor, flow).render(body, tk);
 		form.reflow(true);
 	}
 
@@ -103,30 +102,5 @@ class FlowPage extends FormPage {
 		var matProps = new MaterialPropertySection(editor);
 		matProps.render(body, tk);
 		flowProps.materialPropertySection = matProps;
-	}
-
-	private void adminSection(Composite body) {
-		var comp = UI.formSection(body, tk, M.AdministrativeInformation);
-		var time = UI.formText(comp, tk,
-				M.LastUpdate, Tooltips.All_LastUpdate);
-		time.setText(Xml.toString(Flows.getTimeStamp(flow)));
-
-		var uuidT = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);
-		var uuid = Flows.getUUID(flow);
-		if (uuid != null) {
-			uuidT.setText(uuid);
-		}
-
-		var version = new VersionField(comp, tk);
-		version.setVersion(Flows.getVersion(flow));
-		version.onChange(v -> {
-			Flows.withVersion(flow, v);
-			editor.setDirty();
-		});
-
-		editor.onSaved(() -> {
-			version.setVersion(Flows.getVersion(flow));
-			time.setText(Xml.toString(Flows.getTimeStamp(flow)));
-		});
 	}
 }

@@ -3,7 +3,6 @@ package app.editors.unitgroup;
 import java.util.function.Supplier;
 
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -15,10 +14,9 @@ import app.App;
 import app.M;
 import app.Tooltips;
 import app.editors.CategorySection;
-import app.editors.VersionField;
+import app.editors.CommonAdminSection;
 import app.util.LangText;
 import app.util.UI;
-import epd.model.Xml;
 
 class InfoPage extends FormPage {
 
@@ -43,7 +41,7 @@ class InfoPage extends FormPage {
 		infoSection(body);
 		categorySection(body);
 		new UnitSection(editor, unitGroup).render(body, tk);
-		adminSection(body);
+		CommonAdminSection.of(editor, unitGroup).render(body, tk);
 		form.reflow(true);
 	}
 
@@ -70,31 +68,5 @@ class InfoPage extends FormPage {
 		var section = new CategorySection(editor,
 				DataSetType.UNIT_GROUP, info.withClassifications());
 		section.render(body, tk);
-	}
-
-	private void adminSection(Composite body) {
-		var comp = UI.formSection(body, tk, M.AdministrativeInformation);
-
-		Text timeT = UI.formText(comp, tk, M.LastUpdate,
-				Tooltips.All_LastUpdate);
-		timeT.setText(Xml.toString(UnitGroups.getTimeStamp(unitGroup)));
-
-		Text uuidT = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);
-		var uuid = UnitGroups.getUUID(unitGroup);
-		if (uuid != null) {
-			uuidT.setText(uuid);
-		}
-
-		var vf = new VersionField(comp, tk);
-		vf.setVersion(UnitGroups.getVersion(unitGroup));
-		vf.onChange(v -> {
-			UnitGroups.withVersion(unitGroup, v);
-			editor.setDirty();
-		});
-
-		editor.onSaved(() -> {
-			vf.setVersion(UnitGroups.getVersion(unitGroup));
-			timeT.setText(Xml.toString(UnitGroups.getTimeStamp(unitGroup)));
-		});
 	}
 }

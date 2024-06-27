@@ -3,11 +3,9 @@ package app.editors.methods;
 import java.util.function.Supplier;
 
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.methods.ImpactMethod;
 import org.openlca.ilcd.util.ImpactMethods;
@@ -16,12 +14,11 @@ import app.App;
 import app.M;
 import app.Tooltips;
 import app.editors.CategorySection;
-import app.editors.VersionField;
+import app.editors.CommonAdminSection;
 import app.util.LangText;
 import app.util.StringTable;
 import app.util.TextBuilder;
 import app.util.UI;
-import epd.model.Xml;
 
 class InfoPage extends FormPage {
 
@@ -39,14 +36,13 @@ class InfoPage extends FormPage {
 	protected void createFormContent(IManagedForm mform) {
 		Supplier<String> title = () -> M.LCIAMethod + ": "
 				+ App.s(ImpactMethods.getName(method));
-		ScrolledForm form = UI.formHeader(mform, title.get());
+		var form = UI.formHeader(mform, title.get());
 		editor.onSaved(() -> form.setText(title.get()));
 		tk = mform.getToolkit();
-		Composite body = UI.formBody(form, tk);
-
+		var body = UI.formBody(form, tk);
 		infoSection(body);
 		categorySection(body);
-		adminSection(body);
+		CommonAdminSection.of(editor, method).render(body, tk);
 		form.reflow(true);
 	}
 
@@ -90,29 +86,4 @@ class InfoPage extends FormPage {
 				method.withMethodInfo().withDataSetInfo().withClassifications()
 		).render(body, tk);
 	}
-
-	private void adminSection(Composite body) {
-		var comp = UI.formSection(body, tk, M.AdministrativeInformation);
-		var timeT = UI.formText(comp, tk, M.LastUpdate, Tooltips.All_LastUpdate);
-		timeT.setText(Xml.toString(ImpactMethods.getTimeStamp(method)));
-
-		Text uuidT = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);
-		var uuid = ImpactMethods.getUUID(method);
-		if (uuid != null) {
-			uuidT.setText(uuid);
-		}
-
-		var vf = new VersionField(comp, tk);
-		vf.setVersion(ImpactMethods.getVersion(method));
-		vf.onChange(v -> {
-			method.withAdminInfo().withPublication().withVersion(v);
-			editor.setDirty();
-		});
-
-		editor.onSaved(() -> {
-			vf.setVersion(ImpactMethods.getVersion(method));
-			timeT.setText(Xml.toString(ImpactMethods.getTimeStamp(method)));
-		});
-	}
-
 }

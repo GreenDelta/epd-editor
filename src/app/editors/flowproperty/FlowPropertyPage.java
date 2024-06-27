@@ -15,11 +15,10 @@ import app.App;
 import app.M;
 import app.Tooltips;
 import app.editors.CategorySection;
+import app.editors.CommonAdminSection;
 import app.editors.RefLink;
-import app.editors.VersionField;
 import app.util.LangText;
 import app.util.UI;
-import epd.model.Xml;
 
 class FlowPropertyPage extends FormPage {
 
@@ -44,7 +43,7 @@ class FlowPropertyPage extends FormPage {
 		infoSection(body);
 		categorySection(body);
 		unitGroupSection(body);
-		adminSection(body);
+		CommonAdminSection.of(editor, property).render(body, tk);
 	}
 
 	private void infoSection(Composite body) {
@@ -88,34 +87,6 @@ class FlowPropertyPage extends FormPage {
 		refText.onChange(ref -> {
 			qRef.withUnitGroup(ref);
 			editor.setDirty();
-		});
-	}
-
-	private void adminSection(Composite body) {
-		var comp = UI.formSection(body, tk, M.AdministrativeInformation);
-		var timeT = UI.formText(comp, tk,
-				M.LastUpdate, Tooltips.All_LastUpdate);
-		timeT.setText(Xml.toString(DataSets.getTimeStamp(property)));
-
-		var uuidT = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);
-		var uuid = DataSets.getUUID(property);
-		if (uuid != null) {
-			uuidT.setText(uuid);
-		}
-
-		var vf = new VersionField(comp, tk);
-		vf.setVersion(DataSets.getVersion(property));
-		vf.onChange(v -> {
-			property
-					.withAdminInfo()
-					.withPublication()
-					.withVersion(v);
-			editor.setDirty();
-		});
-
-		editor.onSaved(() -> {
-			vf.setVersion(DataSets.getVersion(property));
-			timeT.setText(Xml.toString(DataSets.getTimeStamp(property)));
 		});
 	}
 }

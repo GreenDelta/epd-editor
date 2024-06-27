@@ -3,7 +3,6 @@ package app.editors.contact;
 import java.util.function.Supplier;
 
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -15,12 +14,11 @@ import app.App;
 import app.M;
 import app.Tooltips;
 import app.editors.CategorySection;
+import app.editors.CommonAdminSection;
 import app.editors.RefLink;
-import app.editors.VersionField;
 import app.util.LangText;
 import app.util.TextBuilder;
 import app.util.UI;
-import epd.model.Xml;
 
 class ContactPage extends FormPage {
 
@@ -41,11 +39,10 @@ class ContactPage extends FormPage {
 		var form = UI.formHeader(mform, title.get());
 		editor.onSaved(() -> form.setText(title.get()));
 		tk = mform.getToolkit();
-		Composite body = UI.formBody(form, tk);
-
+		var body = UI.formBody(form, tk);
 		infoSection(body);
 		categorySection(body);
-		adminSection(body);
+		CommonAdminSection.of(editor, contact).render(body, tk);
 		form.reflow(true);
 	}
 
@@ -92,33 +89,4 @@ class ContactPage extends FormPage {
 				DataSetType.CONTACT, info.withClassifications());
 		section.render(body, tk);
 	}
-
-	private void adminSection(Composite body) {
-		var comp = UI.formSection(body, tk,
-				M.AdministrativeInformation,
-				Tooltips.All_AdministrativeInformation);
-
-		Text timeT = UI.formText(comp, tk,
-				M.LastUpdate, Tooltips.All_LastUpdate);
-		timeT.setText(Xml.toString(Contacts.getTimeStamp(contact)));
-
-		Text uuidT = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);
-		var uuid = Contacts.getUUID(contact);
-		if (uuid != null) {
-			uuidT.setText(uuid);
-		}
-
-		var vf = new VersionField(comp, tk);
-		vf.setVersion(Contacts.getVersion(contact));
-		vf.onChange(v -> {
-			Contacts.withVersion(contact, v);
-			editor.setDirty();
-		});
-
-		editor.onSaved(() -> {
-			vf.setVersion(Contacts.getVersion(contact));
-			timeT.setText(Xml.toString(Contacts.getTimeStamp(contact)));
-		});
-	}
-
 }

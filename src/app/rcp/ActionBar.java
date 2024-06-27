@@ -119,8 +119,8 @@ public class ActionBar extends ActionBarAdvisor {
 	}
 
 	private void cleanUp() {
-		boolean b = MsgBox.ask("#Really delete all data sets?",
-				"#Do you really want to delete all data sets?");
+		boolean b = MsgBox.ask("Really delete all data sets?",
+				"Do you really want to delete all data sets?");
 		if (!b)
 			return;
 		App.run(new CleanUp());
@@ -141,7 +141,7 @@ public class ActionBar extends ActionBarAdvisor {
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to import data sets", e);
-			MsgBox.error("#Data export failed: " + e.getMessage());
+			MsgBox.error("Data export failed: " + e.getMessage());
 		}
 	}
 
@@ -155,7 +155,7 @@ public class ActionBar extends ActionBarAdvisor {
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to export data sets", e);
-			MsgBox.error("#Data export failed: " + e.getMessage());
+			MsgBox.error("Data export failed: " + e.getMessage());
 		}
 	}
 
@@ -172,7 +172,7 @@ public class ActionBar extends ActionBarAdvisor {
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to validate data sets", e);
-			MsgBox.error("#Data validation failed: " + e.getMessage());
+			MsgBox.error("Data validation failed: " + e.getMessage());
 		}
 	}
 }

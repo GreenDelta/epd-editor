@@ -217,7 +217,7 @@ public class ResultPage extends FormPage {
 		App.run(M.Export, export, () -> {
 			if (export.isDoneWithSuccess())
 				return;
-			String message = "#Export failed. Is the file already opened?";
+			String message = "Export failed. Is the file already opened?";
 			MsgBox.error(M.ExportFailed, message);
 		});
 	}

@@ -22,8 +22,8 @@ public class ConnectionDeleteAction extends Action {
 	public void run() {
 		if (e == null || e.connection() == null)
 			return;
-		boolean b = MsgBox.ask("#Delete connection?",
-				"#Do you really want to delete the"
+		boolean b = MsgBox.ask("Delete connection?",
+				"Do you really want to delete the"
 						+ " selected connection?");
 		if (!b)
 			return;

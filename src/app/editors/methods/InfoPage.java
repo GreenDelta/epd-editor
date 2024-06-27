@@ -27,7 +27,7 @@ class InfoPage extends FormPage {
 	private FormToolkit tk;
 
 	InfoPage(MethodEditor editor) {
-		super(editor, "#MethodInfoPage", M.LCIAMethod);
+		super(editor, "MethodInfoPage", M.LCIAMethod);
 		this.editor = editor;
 		this.method = editor.method;
 	}
@@ -56,16 +56,16 @@ class InfoPage extends FormPage {
 				.edit(info::withName)
 				.draw(comp);
 
-		UI.formLabel(comp, tk, "#Methodologies", Tooltips.LCIAMethod_Methodologies);
-		new StringTable(editor, "#Methodology", info.withMethods()).render(comp, tk);
+		UI.formLabel(comp, tk, "Methodologies", Tooltips.LCIAMethod_Methodologies);
+		new StringTable(editor, "Methodology", info.withMethods()).render(comp, tk);
 
-		UI.formLabel(comp, tk, "#Impact Categories",
+		UI.formLabel(comp, tk, "Impact Categories",
 				Tooltips.LCIAMethod_ImpactCategories);
-		new StringTable(editor, "#Impact Category", info.withImpactCategories())
+		new StringTable(editor, "Impact Category", info.withImpactCategories())
 				.render(comp, tk);
 
 		new TextBuilder(editor, tk)
-				.text(comp, "#Impact Indicator", Tooltips.LCIAMethod_ImpactIndicator,
+				.text(comp, "Impact Indicator", Tooltips.LCIAMethod_ImpactIndicator,
 						info.getIndicator(), val -> {
 							info.withIndicator(val);
 							editor.setDirty();

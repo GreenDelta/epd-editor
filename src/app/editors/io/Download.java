@@ -88,7 +88,7 @@ public class Download implements IRunnableWithProgress {
 						StandardCopyOption.REPLACE_EXISTING);
 			} catch (Exception e) {
 				stats.add(RefStatus.error(Ref.of(source),
-						"#Failed to get external doc.: " + fileName));
+						"Failed to get external doc.: " + fileName));
 			}
 		}
 	}

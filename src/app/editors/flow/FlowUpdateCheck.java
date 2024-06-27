@@ -136,7 +136,7 @@ class FlowUpdateCheck {
 					}
 				});
 			} catch (Exception e) {
-				MsgBox.error("#Update failed", e.getMessage());
+				MsgBox.error("Update failed", e.getMessage());
 				return false;
 			}
 			return true;

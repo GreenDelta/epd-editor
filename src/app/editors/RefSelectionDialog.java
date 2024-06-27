@@ -69,7 +69,7 @@ public class RefSelectionDialog extends FormDialog {
 		Label filterLabel = UI.formLabel(body, form.getToolkit(), M.Filter);
 		filterLabel.setFont(UI.boldFont());
 		filterText = UI.formText(body);
-		Section section = UI.section(body, tk, "#Content");
+		Section section = UI.section(body, tk, "Content");
 		addSectionActions(section);
 		UI.gridData(section, true, true);
 		Composite composite = UI.sectionClient(section, tk);
@@ -118,11 +118,11 @@ public class RefSelectionDialog extends FormDialog {
 
 	private void addSectionActions(Section section) {
 		Action expand = Actions.create(
-				"#Expand all",
+				"Expand all",
 				Icon.EXPAND.des(),
 				() -> viewer.expandAll());
 		Action collapse = Actions.create(
-				"#Collapse all",
+				"Collapse all",
 				Icon.COLLAPSE.des(),
 				() -> viewer.collapseAll());
 		Actions.bind(section, expand, collapse);

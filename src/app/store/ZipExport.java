@@ -33,7 +33,7 @@ public class ZipExport implements IRunnableWithProgress {
 		if (zipFile == null)
 			return;
 		this.monitor = monitor;
-		monitor.beginTask("#Package data folder", countFiles());
+		monitor.beginTask("Package data folder", countFiles());
 		try {
 			String uriStr = zipFile.toURI().toASCIIString();
 			URI uri = URI.create("jar:" + uriStr);

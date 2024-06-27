@@ -1,16 +1,13 @@
 package app.editors.settings;
 
-import app.M;
-import app.rcp.Icon;
-import app.store.validation.ValidationProfiles;
-import app.util.Actions;
-import app.util.FileChooser;
-import app.util.MsgBox;
-import app.util.Tables;
-import app.util.UI;
-import app.util.Viewers;
-import com.okworx.ilcd.validation.profile.Profile;
-import epd.util.Strings;
+import java.io.File;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.jar.Attributes;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ITableFontProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -24,13 +21,18 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.jar.Attributes;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
+import com.okworx.ilcd.validation.profile.Profile;
+
+import app.M;
+import app.rcp.Icon;
+import app.store.validation.ValidationProfiles;
+import app.util.Actions;
+import app.util.FileChooser;
+import app.util.MsgBox;
+import app.util.Tables;
+import app.util.UI;
+import app.util.Viewers;
+import epd.util.Strings;
 
 class ValidationSection {
 
@@ -73,7 +75,7 @@ class ValidationSection {
 			return;
 		if (ValidationProfiles.contains(file)) {
 			MsgBox.error(M.AlreadyExists,
-				"#A profile with this name already exists.");
+				"A profile with this name already exists.");
 			return;
 		}
 		file = ValidationProfiles.put(file);
@@ -88,7 +90,7 @@ class ValidationSection {
 		if (info == null)
 			return;
 		boolean b = MsgBox.ask(M.Delete,
-			"#Delete selected validation profile?");
+			"Delete selected validation profile?");
 		if (!b)
 			return;
 		infos.remove(info);
@@ -129,7 +131,7 @@ class ValidationSection {
 				}
 			} catch (Exception e) {
 				Logger log = LoggerFactory.getLogger(getClass());
-				log.error("failed to load profile " + file, e);
+				log.error("failed to load profile {}", file, e);
 			}
 			profile = p;
 		}

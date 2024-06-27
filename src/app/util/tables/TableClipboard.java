@@ -49,7 +49,7 @@ public final class TableClipboard {
 			}
 		});
 		ImageDescriptor image = Icon.COPY.des();
-		return Actions.create("#Copy", image, () -> copy(table));
+		return Actions.create("Copy", image, () -> copy(table));
 	}
 
 	/**
@@ -63,7 +63,7 @@ public final class TableClipboard {
 			}
 		});
 		ImageDescriptor image = Icon.PASTE.des();
-		return Actions.create("#Paste", image, () -> paste(table, fn));
+		return Actions.create("Paste", image, () -> paste(table, fn));
 	}
 
 	private static void copy(Table table) {

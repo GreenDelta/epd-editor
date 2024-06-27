@@ -1,5 +1,17 @@
 package app.editors.matprops;
 
+import java.util.List;
+import java.util.Objects;
+
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.viewers.BaseLabelProvider;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.Section;
+
 import app.M;
 import app.rcp.Icon;
 import app.util.Actions;
@@ -11,17 +23,6 @@ import app.util.tables.ModifySupport;
 import app.util.tables.TextCellModifier;
 import epd.model.MaterialProperty;
 import epd.util.Strings;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.viewers.BaseLabelProvider;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.Section;
-
-import java.util.List;
-import java.util.Objects;
 
 class Table {
 
@@ -130,18 +131,18 @@ class Table {
 			if (Objects.equals(p.id, text))
 				return;
 			if (Strings.nullOrEmpty(text)) {
-				MsgBox.error("#Invalid ID", "The ID cannot be empty.");
+				MsgBox.error("Invalid ID", "The ID cannot be empty.");
 				return;
 			}
 			String id = text.trim();
 			if (idExists(id)) {
-				MsgBox.error("#ID already exists",
-					"#A material property with the given ID already exists.");
+				MsgBox.error("ID already exists",
+					"A material property with the given ID already exists.");
 				return;
 			}
 			if (!isValid(id)) {
-				MsgBox.error("#Invalid ID",
-					"#It must start with a letter followed by letters and digits only.");
+				MsgBox.error("Invalid ID",
+					"It must start with a letter followed by letters and digits only.");
 				return;
 			}
 			p.id = id;

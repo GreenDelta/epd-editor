@@ -128,8 +128,8 @@ public class ModifySupport<T> {
 					double val = Double.parseDouble(text.trim());
 					setter.accept(elem, val);
 				} catch (Exception e) {
-					MsgBox.error("#Invalid number format",
-							"#Invalid number format: " + text);
+					MsgBox.error("Invalid number format",
+							"Invalid number format: " + text);
 				}
 			}
 		};

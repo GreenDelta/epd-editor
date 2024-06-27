@@ -88,7 +88,7 @@ public class ValidationDialog extends Wizard {
 			StatusView.open(M.Validation, v.getStatus());
 			return true;
 		} catch (Exception e) {
-			MsgBox.error("#Error in validation", e.getMessage());
+			MsgBox.error("Error in validation", e.getMessage());
 			log.error("validation failed", e);
 			return false;
 		}

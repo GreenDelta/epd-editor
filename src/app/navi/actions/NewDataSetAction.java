@@ -39,10 +39,10 @@ import epd.model.Xml;
 
 public class NewDataSetAction extends Action {
 
-	private final NavigationElement<?> parent;
+	private final NavigationElement parent;
 	private final DataSetType type;
 
-	public NewDataSetAction(NavigationElement<?> elem) {
+	public NewDataSetAction(NavigationElement elem) {
 		parent = elem instanceof RefElement
 			? elem.getParent()
 			: elem;
@@ -52,13 +52,13 @@ public class NewDataSetAction extends Action {
 		setToolTipText(getLabel());
 	}
 
-	private DataSetType getType(NavigationElement<?> elem) {
+	private DataSetType getType(NavigationElement elem) {
 		if (elem == null)
 			return null;
 		if (elem instanceof TypeElement typeElem)
-			return typeElem.getContent();
+			return typeElem.type();
 		if (elem instanceof RefElement refElem) {
-			Ref ref = refElem.getContent();
+			Ref ref = refElem.ref();
 			if (ref != null && ref.getType() != null)
 				return ref.getType();
 		}
@@ -142,7 +142,7 @@ public class NewDataSetAction extends Action {
 		return c;
 	}
 
-	private void categories(NavigationElement<?> elem, List<Category> list) {
+	private void categories(NavigationElement elem, List<Category> list) {
 		if (!(elem instanceof CategoryElement e))
 			return;
 		if (e.getCategory() == null)

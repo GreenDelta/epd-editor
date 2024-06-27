@@ -1,14 +1,7 @@
 package app.navi.actions;
 
-import app.App;
-import app.M;
-import app.editors.Editors;
-import app.navi.RefElement;
-import app.rcp.Icon;
-import app.store.Data;
-import app.util.MsgBox;
-import app.util.UI;
-import epd.model.Xml;
+import java.util.UUID;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
@@ -19,7 +12,15 @@ import org.openlca.ilcd.util.DataSets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.UUID;
+import app.App;
+import app.M;
+import app.editors.Editors;
+import app.navi.RefElement;
+import app.rcp.Icon;
+import app.store.Data;
+import app.util.MsgBox;
+import app.util.UI;
+import epd.model.Xml;
 
 public class DuplicateAction extends Action {
 
@@ -33,10 +34,10 @@ public class DuplicateAction extends Action {
 
 	@Override
 	public void run() {
-		if (e == null || e.getContent() == null || !e.getContent().isValid())
+		if (e == null || e.ref() == null || !e.ref().isValid())
 			return;
 		var d = new InputDialog(UI.shell(), M.SaveAs,
-			M.SaveAs_Message + ":", App.s(e.getContent().getName()), null);
+			M.SaveAs_Message + ":", App.s(e.ref().getName()), null);
 		if (d.open() != Window.OK)
 			return;
 		var name = d.getValue();
@@ -44,22 +45,22 @@ public class DuplicateAction extends Action {
 			var ds = duplicate(name);
 			if (ds == null) {
 				MsgBox.error("Could not duplicate data set type="
-					+ e.getContent().getType() + " id=" + e.getContent().getUUID());
+					+ e.ref().getType() + " id=" + e.ref().getUUID());
 				return;
 			}
 			Data.save(ds);
 			Editors.open(Ref.of(ds));
 		} catch (Exception ex) {
 			Logger log = LoggerFactory.getLogger(getClass());
-			log.error("Failed to duplicate data set " + e.getContent(), ex);
+			log.error("Failed to duplicate data set {}", e.ref(), ex);
 			MsgBox.error("Could not duplicate data set type="
-				+ e.getContent().getType() + " id=" + e.getContent().getUUID());
+				+ e.ref().getType() + " id=" + e.ref().getUUID());
 		}
 	}
 
 	private IDataSet duplicate(String name) {
-		var dsClass = e.getContent().getType().getDataSetClass();
-		var ds = App.store().get(dsClass, e.getContent().getUUID());
+		var dsClass = e.ref().getType().getDataSetClass();
+		var ds = App.store().get(dsClass, e.ref().getUUID());
 		if (ds == null)
 			return null;
 		DataSets.withUUID(ds, UUID.randomUUID().toString());

@@ -16,14 +16,14 @@ public class NavigationLabel extends ColumnLabelProvider implements
 
 	@Override
 	public String getText(Object element) {
-		return element instanceof NavigationElement<?> e
+		return element instanceof NavigationElement e
 			? e.getLabel()
 			: super.getText(element);
 	}
 
 	@Override
 	public Image getImage(Object element) {
-		return element instanceof NavigationElement<?> e
+		return element instanceof NavigationElement e
 			? e.getImage()
 			: super.getImage(element);
 	}

@@ -50,13 +50,13 @@ public class Navigator extends CommonNavigator {
 		viewer.addDoubleClickListener(e -> {
 			Object obj = Viewers.getFirstSelected(viewer);
 			if (obj instanceof RefElement refEl) {
-				Editors.open(refEl.content);
+				Editors.open(refEl.ref());
 			} else if (obj instanceof ConnectionElement conEl) {
-				ConnectionEditor.open(conEl.content);
+				ConnectionEditor.open(conEl.connection());
 			} else if (obj instanceof FileElement) {
 				open((FileElement) obj);
 			} else if (obj instanceof ProfileElement pe) {
-				ProfileEditor.open(pe.content);
+				ProfileEditor.open(pe.profile());
 			}
 		});
 	}
@@ -66,13 +66,13 @@ public class Navigator extends CommonNavigator {
 			return;
 		switch (e.getType()) {
 			case DOC:
-				UI.open(e.content);
+				UI.open(e.file());
 				break;
 			case CLASSIFICATION:
-				ClassificationEditor.open(e.content);
+				ClassificationEditor.open(e.file());
 				break;
 			case LOCATION:
-				LocationEditor.open(e.content);
+				LocationEditor.open(e.file());
 				break;
 			default:
 				break;
@@ -91,7 +91,7 @@ public class Navigator extends CommonNavigator {
 		for (var e : children) {
 			if (!(e instanceof TypeElement te))
 				continue;
-			if (te.content == type)
+			if (te.type() == type)
 				return te;
 		}
 		return new TypeElement(null, type);
@@ -121,7 +121,7 @@ public class Navigator extends CommonNavigator {
 		});
 	}
 
-	private static void eachRoot(Consumer<NavigationElement<?>> fn) {
+	private static void eachRoot(Consumer<NavigationElement> fn) {
 		try {
 			var navi = Navigator.getInstance();
 			if (navi == null)
@@ -162,7 +162,7 @@ public class Navigator extends CommonNavigator {
 		refresh(instance.getRoot());
 	}
 
-	public static void refresh(NavigationElement<?> e) {
+	public static void refresh(NavigationElement e) {
 		var viewer = getViewer();
 		if (e == null || viewer == null)
 			return;
@@ -177,11 +177,11 @@ public class Navigator extends CommonNavigator {
 	) {
 		if (viewer == null || oldExpansion == null)
 			return;
-		var newExpanded = new ArrayList<NavigationElement<?>>();
+		var newExpanded = new ArrayList<NavigationElement>();
 		for (var e : oldExpansion) {
-			if (!(e instanceof NavigationElement<?> oldElem))
+			if (!(e instanceof NavigationElement oldElem))
 				continue;
-			var newElem = findElement(oldElem.getContent());
+			var newElem = findEq(oldElem);
 			if (newElem != null) {
 				newExpanded.add(newElem);
 			}
@@ -189,15 +189,15 @@ public class Navigator extends CommonNavigator {
 		viewer.setExpandedElements(newExpanded.toArray());
 	}
 
-	private static NavigationElement<?> findElement(Object content) {
+	private static NavigationElement findEq(NavigationElement oldElem) {
 		var root = getNavigationRoot();
-		if (content == null || root == null)
+		if (oldElem == null || root == null)
 			return null;
-		var queue = new ArrayDeque<NavigationElement<?>>();
+		var queue = new ArrayDeque<NavigationElement>();
 		queue.add(root);
 		while (!queue.isEmpty()) {
 			var next = queue.poll();
-			if (Objects.equal(next.getContent(), content))
+			if (Objects.equal(next, oldElem))
 				return next;
 			queue.addAll(next.getChilds());
 		}

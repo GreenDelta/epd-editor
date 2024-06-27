@@ -7,28 +7,33 @@ import org.openlca.ilcd.io.SodaConnection;
 
 import app.rcp.Icon;
 
-public class ConnectionElement extends NavigationElement<SodaConnection> {
+public class ConnectionElement extends NavigationElement {
 
 	private final ConnectionFolder parent;
+	private final SodaConnection con;
 
 	public ConnectionElement(ConnectionFolder parent, SodaConnection con) {
 		this.parent = parent;
-		this.content = con;
+		this.con = con;
+	}
+
+	public SodaConnection connection() {
+		return con;
 	}
 
 	@Override
-	public NavigationElement<?> getParent() {
+	public NavigationElement getParent() {
 		return parent;
 	}
 
 	@Override
-	public int compareTo(NavigationElement<?> other) {
+	public int compareTo(NavigationElement other) {
 		return 0;
 	}
 
 	@Override
 	public String getLabel() {
-		return getContent().toString();
+		return con.toString();
 	}
 
 	@Override
@@ -48,6 +53,6 @@ public class ConnectionElement extends NavigationElement<SodaConnection> {
 			return false;
 		if (!(obj instanceof ConnectionElement other))
 			return false;
-		return Objects.equals(this.content, other.content);
+		return Objects.equals(this.con, other.con);
 	}
 }

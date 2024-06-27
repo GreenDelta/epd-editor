@@ -11,25 +11,24 @@ import app.rcp.Labels;
 import epd.index.CategoryNode;
 import epd.util.Strings;
 
-public class CategoryElement extends NavigationElement<CategoryNode> {
+public class CategoryElement extends NavigationElement {
 
-	private final NavigationElement<?> parent;
+	private final NavigationElement parent;
+	private final CategoryNode node;
 
-	public CategoryElement(NavigationElement<?> parent, CategoryNode node) {
+	public CategoryElement(NavigationElement parent, CategoryNode node) {
 		this.parent = parent;
-		this.content = node;
+		this.node = node;
 	}
 
 	public Category getCategory() {
-		var node = getContent();
-		if (node == null)
-			return null;
-		return node.category;
+		return node != null
+				? node.category
+				: null;
 	}
 
 	@Override
 	public void update() {
-		var node = getContent();
 		if (childs == null)
 			return;
 		childs.clear();
@@ -46,12 +45,12 @@ public class CategoryElement extends NavigationElement<CategoryNode> {
 	}
 
 	@Override
-	public NavigationElement<?> getParent() {
+	public NavigationElement getParent() {
 		return parent;
 	}
 
 	@Override
-	public int compareTo(NavigationElement<?> other) {
+	public int compareTo(NavigationElement other) {
 		if (other == null)
 			return 1;
 		if (!(other instanceof CategoryElement o))
@@ -61,7 +60,6 @@ public class CategoryElement extends NavigationElement<CategoryNode> {
 
 	@Override
 	public String getLabel() {
-		var node = getContent();
 		return node != null
 			? Labels.get(node.category)
 			: null;
@@ -80,6 +78,6 @@ public class CategoryElement extends NavigationElement<CategoryNode> {
 			return false;
 		if (!(obj instanceof CategoryElement other))
 			return false;
-		return Objects.equals(this.content, other.content);
+		return Objects.equals(this.node, other.node);
 	}
 }

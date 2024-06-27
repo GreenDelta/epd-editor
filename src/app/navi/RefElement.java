@@ -10,22 +10,31 @@ import app.rcp.Icon;
 import app.store.RefExt;
 import epd.util.Strings;
 
-public class RefElement extends NavigationElement<Ref> {
+public class RefElement extends NavigationElement {
 
-	private final NavigationElement<?> parent;
+	private final NavigationElement parent;
+	private Ref ref;
 
-	public RefElement(NavigationElement<?> parent, Ref ref) {
+	public RefElement(NavigationElement parent, Ref ref) {
 		this.parent = parent;
-		this.content = ref;
+		this.ref = ref;
+	}
+
+	public Ref ref() {
+		return ref;
+	}
+
+	public void setRef(Ref ref) {
+		this.ref = ref;
 	}
 
 	@Override
-	public NavigationElement<?> getParent() {
+	public NavigationElement getParent() {
 		return parent;
 	}
 
 	@Override
-	public int compareTo(NavigationElement<?> other) {
+	public int compareTo(NavigationElement other) {
 		if (!(other instanceof RefElement))
 			return 1;
 		return Strings.compare(this.getLabel(), other.getLabel());
@@ -33,7 +42,6 @@ public class RefElement extends NavigationElement<Ref> {
 
 	@Override
 	public String getLabel() {
-		var ref = getContent();
 		var name = App.s(ref.getName());
 		var db = RefExt.getDatabase(ref);
 		if (db.isPresent()) {
@@ -48,7 +56,7 @@ public class RefElement extends NavigationElement<Ref> {
 
 	@Override
 	public Image getImage() {
-		return Icon.img(getContent().getType());
+		return Icon.img(ref.getType());
 	}
 
 	@Override
@@ -63,6 +71,6 @@ public class RefElement extends NavigationElement<Ref> {
 			return false;
 		if (!(obj instanceof RefElement other))
 			return false;
-		return Objects.equals(this.content, other.content);
+		return Objects.equals(this.ref, other.ref);
 	}
 }

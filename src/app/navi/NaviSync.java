@@ -37,7 +37,7 @@ public class NaviSync implements Runnable {
 		Navigator.refreshAll();
 	}
 
-	private void sync(Node node, NavigationElement<?> parent) {
+	private void sync(Node node, NavigationElement parent) {
 		if (parent.childs == null)
 			return;
 		remove(node, parent);
@@ -52,11 +52,11 @@ public class NaviSync implements Runnable {
 		}
 	}
 
-	private void syncRefs(Node node, NavigationElement<?> parent) {
+	private void syncRefs(Node node, NavigationElement parent) {
 		for (Ref ref : node.refs) {
 			var elem = findChild(ref, parent);
 			if (elem != null) {
-				elem.content = ref;
+				elem.setRef(ref);
 			} else {
 				elem = new RefElement(parent, ref);
 				parent.childs.add(elem);
@@ -64,18 +64,18 @@ public class NaviSync implements Runnable {
 		}
 	}
 
-	private RefElement findChild(Ref ref, NavigationElement<?> parent) {
+	private RefElement findChild(Ref ref, NavigationElement parent) {
 		var children = parent.getChilds();
 		for (var child : children) {
 			if (!(child instanceof RefElement re))
 				continue;
-			if (Objects.equals(re.content, ref))
+			if (Objects.equals(re.ref(), ref))
 				return re;
 		}
 		return null;
 	}
 
-	private CategoryElement findChild(Category cat, NavigationElement<?> parent) {
+	private CategoryElement findChild(Category cat, NavigationElement parent) {
 		if (cat == null)
 			return null;
 		var children = parent.getChilds();
@@ -90,13 +90,13 @@ public class NaviSync implements Runnable {
 		return null;
 	}
 
-	private void remove(Node node, NavigationElement<?> parent) {
+	private void remove(Node node, NavigationElement parent) {
 		parent.childs.removeIf(elem -> {
 			if (elem instanceof CategoryElement ce) {
 				return !contains(node, ce.getCategory());
 			}
 			if (elem instanceof RefElement re) {
-				return !node.refs.contains(re.content);
+				return !node.refs.contains(re.ref());
 			}
 			return false;
 		});

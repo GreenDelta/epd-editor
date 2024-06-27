@@ -5,7 +5,7 @@ import java.util.Arrays;
 import org.eclipse.swt.graphics.Image;
 import org.openlca.ilcd.commons.DataSetType;
 
-public class NavigationRoot extends NavigationElement<Void> {
+public class NavigationRoot extends NavigationElement {
 
 	@Override
 	public void update() {
@@ -33,7 +33,7 @@ public class NavigationRoot extends NavigationElement<Void> {
 	}
 
 	@Override
-	public int compareTo(NavigationElement<?> other) {
+	public int compareTo(NavigationElement other) {
 		return 0;
 	}
 
@@ -43,7 +43,7 @@ public class NavigationRoot extends NavigationElement<Void> {
 	}
 
 	@Override
-	public NavigationElement<?> getParent() {
+	public NavigationElement getParent() {
 		return null;
 	}
 

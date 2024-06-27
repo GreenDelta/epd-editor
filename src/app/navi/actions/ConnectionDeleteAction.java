@@ -20,14 +20,14 @@ public class ConnectionDeleteAction extends Action {
 
 	@Override
 	public void run() {
-		if (e == null || e.getContent() == null)
+		if (e == null || e.connection() == null)
 			return;
 		boolean b = MsgBox.ask("#Delete connection?",
 				"#Do you really want to delete the"
 						+ " selected connection?");
 		if (!b)
 			return;
-		Connections.delete(e.getContent());
+		Connections.delete(e.connection());
 	}
 
 }

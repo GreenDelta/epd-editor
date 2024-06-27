@@ -9,23 +9,23 @@ import app.App;
 import app.M;
 import app.rcp.Icon;
 
-public class FolderElement extends NavigationElement<Void> {
+public class FolderElement extends NavigationElement {
 
 	public final FolderType type;
-	private final NavigationElement<?> parent;
+	private final NavigationElement parent;
 
-	public FolderElement(NavigationElement<?> parent, FolderType type) {
+	public FolderElement(NavigationElement parent, FolderType type) {
 		this.parent = parent;
 		this.type = type;
 	}
 
 	@Override
-	public NavigationElement<?> getParent() {
+	public NavigationElement getParent() {
 		return parent;
 	}
 
 	@Override
-	public int compareTo(NavigationElement<?> other) {
+	public int compareTo(NavigationElement other) {
 		return 0;
 	}
 
@@ -64,8 +64,8 @@ public class FolderElement extends NavigationElement<Void> {
 	public File getFolder() {
 		FileStore store = App.store();
 		File root = store == null
-			? new File("data/ILCD")
-			: store.getRootFolder();
+				? new File("data/ILCD")
+				: store.getRootFolder();
 		return new File(root, getFolderName());
 	}
 

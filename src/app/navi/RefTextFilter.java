@@ -42,10 +42,10 @@ public class RefTextFilter extends ViewerFilter {
 		if (text == null || text.trim().isEmpty())
 			return true;
 		text = text.trim().toLowerCase();
-		return select((NavigationElement<?>) element, text);
+		return select((NavigationElement) element, text);
 	}
 
-	private boolean select(NavigationElement<?> elem, String text) {
+	private boolean select(NavigationElement elem, String text) {
 		if (elem instanceof RefElement e) {
 			String label = e.getLabel();
 			return !Strings.nullOrEmpty(label)

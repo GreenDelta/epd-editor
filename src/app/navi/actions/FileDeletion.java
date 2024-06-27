@@ -24,17 +24,17 @@ public class FileDeletion extends Action {
 
 	@Override
 	public void run() {
-		if (e == null || e.getContent() == null || !e.getContent().exists())
+		if (e == null || e.file() == null || !e.file().exists())
 			return;
 		boolean b = MsgBox.ask(M.DeleteFile, M.DeleteFileQuestion);
 		if (!b)
 			return;
 		try {
-			Files.delete(e.getContent().toPath());
+			Files.delete(e.file().toPath());
 			Navigator.refresh(e.getParent());
 		} catch (Exception ex) {
 			Logger log = LoggerFactory.getLogger(getClass());
-			log.error("failed to delete file " + e.getContent(), ex);
+			log.error("failed to delete file {}", e.file(), ex);
 		}
 	}
 }

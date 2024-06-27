@@ -6,34 +6,39 @@ import org.openlca.ilcd.epd.EpdProfile;
 import app.rcp.Icon;
 import epd.util.Strings;
 
-public class ProfileElement extends NavigationElement<EpdProfile> {
+public class ProfileElement extends NavigationElement {
 
 	private final ProfileFolder parent;
+	private final EpdProfile profile;
 
 	public ProfileElement(ProfileFolder parent, EpdProfile profile) {
 		this.parent = parent;
-		this.content = profile;
+		this.profile = profile;
+	}
+
+	public EpdProfile profile() {
+		return profile;
 	}
 
 	@Override
-	public NavigationElement<?> getParent() {
+	public NavigationElement getParent() {
 		return parent;
 	}
 
 	@Override
-	public int compareTo(NavigationElement<?> elem) {
+	public int compareTo(NavigationElement elem) {
 		if (!(elem instanceof ProfileElement other))
 			return 1;
-		if (this.content == null || other.content == null)
+		if (this.profile == null || other.profile == null)
 			return 0;
-		return Strings.compare(this.content.getName(), other.content.getName());
+		return Strings.compare(this.profile.getName(), other.profile.getName());
 	}
 
 	@Override
 	public String getLabel() {
-		if (this.content == null)
-			return "?";
-		return this.content.getName();
+		return this.profile != null
+				? profile.getName()
+				: "?";
 	}
 
 	@Override
@@ -53,8 +58,8 @@ public class ProfileElement extends NavigationElement<EpdProfile> {
 			return false;
 		if (!(obj instanceof ProfileElement other))
 			return false;
-		var p1 = this.content;
-		var p2 = other.content;
+		var p1 = this.profile;
+		var p2 = other.profile;
 		if (p1 == null && p2 == null)
 			return true;
 		if (p1 == null || p2 == null)

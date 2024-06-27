@@ -73,7 +73,7 @@ public class NavigationMenu extends CommonActionProvider {
 	public void fillContextMenu(IMenuManager menu) {
 		var con = getContext();
 		var s = (IStructuredSelection) con.getSelection();
-		List<NavigationElement<?>> elements = Viewers.getAll(s);
+		List<NavigationElement> elements = Viewers.getAll(s);
 		if (elements.isEmpty())
 			return;
 		var first = elements.get(0);
@@ -101,19 +101,19 @@ public class NavigationMenu extends CommonActionProvider {
 
 		if (first instanceof ConnectionElement e) {
 			menu.add(Actions.create(M.Open, Icon.OPEN.des(),
-					() -> ConnectionEditor.open(e.content)));
+					() -> ConnectionEditor.open(e.connection())));
 			menu.add(new ConnectionDeleteAction(e));
 		}
 	}
 
 	private void forRef(RefElement e, IMenuManager menu) {
 		menu.add(Actions.create(M.Open, Icon.OPEN.des(),
-			() -> Editors.open(e.content)));
+			() -> Editors.open(e.ref())));
 		menu.add(Actions.create(M.Validate, Icon.OK.des(),
-			() -> ValidationDialog.open(e.content)));
+			() -> ValidationDialog.open(e.ref())));
 		menu.add(new DuplicateAction(e));
 		menu.add(Actions.create(M.Export, Icon.EXPORT.des(),
-			() -> ExportDialog.open(e.content)));
+			() -> ExportDialog.open(e.ref())));
 		menu.add(new RefDeleteAction(e));
 	}
 
@@ -121,7 +121,7 @@ public class NavigationMenu extends CommonActionProvider {
 		open(e, menu);
 		menu.add(new FileDeletion(e));
 		if (e.getType() == FolderType.CLASSIFICATION) {
-			String name = e.content.getName();
+			var name = e.file().getName();
 			if (name.toLowerCase().endsWith(".xml")) {
 				name = name.substring(0, name.length() - 4);
 			}
@@ -139,18 +139,18 @@ public class NavigationMenu extends CommonActionProvider {
 	}
 
 	private void open(FileElement e, IMenuManager menu) {
-		if (e == null || e.getType() == null || e.content == null)
+		if (e == null || e.getType() == null || e.file() == null)
 			return;
 		Runnable fn = null;
 		switch (e.getType()) {
 			case CLASSIFICATION:
-				fn = () -> ClassificationEditor.open(e.content);
+				fn = () -> ClassificationEditor.open(e.file());
 				break;
 			case LOCATION:
-				fn = () -> LocationEditor.open(e.content);
+				fn = () -> LocationEditor.open(e.file());
 				break;
 			case DOC:
-				fn = () -> UI.open(e.content);
+				fn = () -> UI.open(e.file());
 				break;
 			default:
 				break;

@@ -6,21 +6,21 @@ import org.openlca.ilcd.epd.EpdProfiles;
 import app.M;
 import app.rcp.Icon;
 
-public class ProfileFolder extends NavigationElement<Void> {
+public class ProfileFolder extends NavigationElement {
 
-	private final NavigationElement<?> parent;
+	private final NavigationElement parent;
 
-	public ProfileFolder(NavigationElement<?> parent) {
+	public ProfileFolder(NavigationElement parent) {
 		this.parent = parent;
 	}
 
 	@Override
-	public NavigationElement<?> getParent() {
+	public NavigationElement getParent() {
 		return parent;
 	}
 
 	@Override
-	public int compareTo(NavigationElement<?> other) {
+	public int compareTo(NavigationElement other) {
 		return 0;
 	}
 

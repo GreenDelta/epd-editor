@@ -8,22 +8,27 @@ import org.eclipse.swt.graphics.Image;
 import app.rcp.Icon;
 import epd.util.Strings;
 
-public class FileElement extends NavigationElement<File> {
+public class FileElement extends NavigationElement {
 
 	private final FolderElement parent;
+	private final File file;
 
 	public FileElement(FolderElement parent, File file) {
-		this.content = file;
+		this.file = file;
 		this.parent = parent;
 	}
 
+	public File file() {
+		return file;
+	}
+
 	@Override
-	public NavigationElement<?> getParent() {
+	public NavigationElement getParent() {
 		return parent;
 	}
 
 	@Override
-	public int compareTo(NavigationElement<?> e) {
+	public int compareTo(NavigationElement e) {
 		if (!(e instanceof FileElement other))
 			return 1;
 		return Strings.compare(this.getLabel(), other.getLabel());
@@ -31,7 +36,6 @@ public class FileElement extends NavigationElement<File> {
 
 	@Override
 	public String getLabel() {
-		var file = getContent();
 		return file == null ? "?" : file.getName();
 	}
 
@@ -56,7 +60,7 @@ public class FileElement extends NavigationElement<File> {
 			return false;
 		if (!(obj instanceof FileElement other))
 			return false;
-		return Objects.equals(this.content, other.content);
+		return Objects.equals(this.file, other.file);
 	}
 
 }

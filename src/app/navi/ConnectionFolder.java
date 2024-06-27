@@ -7,21 +7,21 @@ import app.M;
 import app.rcp.Icon;
 import app.store.Connections;
 
-public class ConnectionFolder extends NavigationElement<Void> {
+public class ConnectionFolder extends NavigationElement {
 
-	private final NavigationElement<?> parent;
+	private final NavigationElement parent;
 
-	public ConnectionFolder(NavigationElement<?> parent) {
+	public ConnectionFolder(NavigationElement parent) {
 		this.parent = parent;
 	}
 
 	@Override
-	public NavigationElement<?> getParent() {
+	public NavigationElement getParent() {
 		return parent;
 	}
 
 	@Override
-	public int compareTo(NavigationElement<?> other) {
+	public int compareTo(NavigationElement other) {
 		return 0;
 	}
 

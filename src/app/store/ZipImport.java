@@ -19,7 +19,6 @@ import org.openlca.ilcd.contacts.Contact;
 import org.openlca.ilcd.flowproperties.FlowProperty;
 import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.io.ZipStore;
-import org.openlca.ilcd.methods.ImpactMethod;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.sources.Source;
 import org.openlca.ilcd.units.UnitGroup;
@@ -31,8 +30,8 @@ import app.App;
 import app.M;
 import app.StatusView;
 import app.navi.NaviSync;
-import epd.refs.RefFetch;
 import epd.model.RefStatus;
+import epd.refs.RefFetch;
 
 public class ZipImport implements IRunnableWithProgress {
 
@@ -106,7 +105,7 @@ public class ZipImport implements IRunnableWithProgress {
 
 	private void extDocs(IProgressMonitor monitor) throws Exception {
 		monitor.subTask("external_docs");
-		File targetDir = new File(App.store().getRootFolder(), "external_docs");
+		var targetDir = new File(App.store().getRootFolder(), "external_docs");
 		if (!targetDir.exists())
 			targetDir.mkdirs();
 		for (Path doc : zip.getEntries("external_docs")) {
@@ -121,9 +120,14 @@ public class ZipImport implements IRunnableWithProgress {
 	}
 
 	private Class<?>[] classes() {
-		return new Class<?>[] { Contact.class, Source.class, UnitGroup.class,
-				FlowProperty.class, Flow.class,
-				ImpactMethod.class, Process.class };
+		return new Class<?>[] {
+				Contact.class,
+				Source.class,
+				UnitGroup.class,
+				FlowProperty.class,
+				Flow.class,
+				Process.class,
+		};
 	}
 
 	private String getFileName(Ref ref) {

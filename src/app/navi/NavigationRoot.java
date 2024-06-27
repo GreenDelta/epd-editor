@@ -19,7 +19,7 @@ public class NavigationRoot extends NavigationElement {
 			new TypeElement(this, DataSetType.FLOW),
 			new TypeElement(this, DataSetType.FLOW_PROPERTY),
 			new TypeElement(this, DataSetType.UNIT_GROUP),
-			new TypeElement(this, DataSetType.IMPACT_METHOD),
+			// new TypeElement(this, DataSetType.IMPACT_METHOD),
 			new FolderElement(this, FolderType.LOCATION),
 			new FolderElement(this, FolderType.CLASSIFICATION),
 			new FolderElement(this, FolderType.DOC),

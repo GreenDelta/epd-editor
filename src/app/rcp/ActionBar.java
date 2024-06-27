@@ -1,7 +1,5 @@
 package app.rcp;
 
-import java.io.File;
-
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
@@ -18,7 +16,6 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
-import org.eclipse.ui.progress.IProgressService;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.io.ZipStore;
 import org.slf4j.Logger;
@@ -65,7 +62,7 @@ public class ActionBar extends ActionBarAdvisor {
 	@Override
 	protected void fillMenuBar(IMenuManager menuBar) {
 		super.fillMenuBar(menuBar);
-		MenuManager fileMenu = new MenuManager(M.File,
+		var fileMenu = new MenuManager(M.File,
 				IWorkbenchActionConstants.M_FILE);
 		addNewMenu(fileMenu);
 		fileMenu.add(Actions.create(M.ValidateDataSets,
@@ -133,17 +130,16 @@ public class ActionBar extends ActionBarAdvisor {
 	}
 
 	private void importZip() {
-		File zipFile = FileChooser.open("*.zip");
+		var zipFile = FileChooser.open("*.zip");
 		if (zipFile == null)
 			return;
-		boolean b = MsgBox.ask("#Import data sets?", "#Should we import all "
+		boolean b = MsgBox.ask("Import data sets?", "Should we import all "
 				+ "data sets from the selected file?");
 		if (!b)
 			return;
-		IProgressService progress = PlatformUI.getWorkbench()
-				.getProgressService();
 		try {
-			ZipStore zip = new ZipStore(zipFile);
+			var progress = PlatformUI.getWorkbench().getProgressService();
+			var zip = new ZipStore(zipFile);
 			progress.run(true, true, new ZipImport(zip));
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
@@ -153,12 +149,11 @@ public class ActionBar extends ActionBarAdvisor {
 	}
 
 	private void exportZip() {
-		File zipFile = FileChooser.save("ILCD_package", "*.zip");
+		var zipFile = FileChooser.save("ILCD_package", "*.zip");
 		if (zipFile == null)
 			return;
-		IProgressService progress = PlatformUI.getWorkbench()
-				.getProgressService();
 		try {
+			var progress = PlatformUI.getWorkbench().getProgressService();
 			progress.run(true, true, new ZipExport(zipFile));
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
@@ -172,10 +167,9 @@ public class ActionBar extends ActionBarAdvisor {
 			MsgBox.error(M.NoValidationProfile, M.NoValidationProfile_Error);
 			return;
 		}
-		IProgressService progress = PlatformUI.getWorkbench()
-				.getProgressService();
 		try {
-			Validation v = new Validation();
+			var progress = PlatformUI.getWorkbench().getProgressService();
+			var v = new Validation();
 			progress.run(true, true, v);
 			StatusView.open(M.Validation, v.getStatus());
 		} catch (Exception e) {

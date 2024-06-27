@@ -77,7 +77,7 @@ class FlowUpdateCheck {
 				} catch (Exception e) {
 					Logger log = LoggerFactory
 						.getLogger(FlowUpdateCheck.class);
-					log.error("Failed to load process/EPD " + ref, e);
+					log.error("Failed to load process/EPD {}", ref, e);
 				}
 			});
 	}
@@ -124,7 +124,7 @@ class FlowUpdateCheck {
 					for (Ref ref : updates) {
 						monitor.subTask(Strings.cut(App.s(ref.getName()), 25));
 						try {
-							Process p = App.store().get(Process.class, ref.getUUID());
+							var p = App.store().get(Process.class, ref.getUUID());
 							RefSync.updateRefs(p, App.index());
 							Data.updateVersion(p);
 							RefSync.updateSelfRefVersion(p);

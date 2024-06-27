@@ -15,7 +15,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.openlca.ilcd.commons.Ref;
-import org.openlca.ilcd.io.SodaClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,16 +47,16 @@ public class UploadDialog extends Wizard {
 	public static int open(Ref ref) {
 		if (ref == null)
 			return Window.CANCEL;
-		UploadDialog d = new UploadDialog(ref);
+		var d = new UploadDialog(ref);
 		d.setWindowTitle(M.UploadDataSet);
-		WizardDialog dialog = new WizardDialog(UI.shell(), d);
+		var dialog = new WizardDialog(UI.shell(), d);
 		dialog.setPageSize(150, 300);
 		return dialog.open();
 	}
 
 	@Override
 	public boolean performFinish() {
-		SodaClient client = conCombo.makeClient();
+		var client = conCombo.makeClient();
 		if (client == null)
 			return false;
 		try {

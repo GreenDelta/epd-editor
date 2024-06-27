@@ -56,18 +56,7 @@ public class WorkbenchWindow extends WorkbenchWindowAdvisor {
 			return;
 		}
 
-		// copy possible new reference data
-		// TODO: we currently do not ask the user?
-		/*
-		var b = MsgBox.ask(
-				"Update reference data?",
-				"Seems that you use a new editor version. " +
-						"Do you want to update the reference data?");
-		if (!b)
-			return;
-		*/
-
-		// copy the files
+			// copy the files
 		App.runWithProgress(
 				"Copy reference data",
 				() -> App.getWorkspace().syncFilesFrom(new File("data")));

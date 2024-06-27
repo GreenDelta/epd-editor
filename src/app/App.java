@@ -4,6 +4,8 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Supplier;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
@@ -190,5 +192,27 @@ public class App {
 			Logger log = LoggerFactory.getLogger(App.class);
 			log.error("Error while running progress {}", name, e);
 		}
+	}
+
+	/**
+	 * Shows a progress indicator while running the given function in a separate
+	 * thread. The calling thread is blocked while the given function is
+	 * executed. It returns the result of the given function or `null` when
+	 * calling that function failed.
+	 */
+	public static <T> T exec(String task, Supplier<T> fn) {
+		var ref = new AtomicReference<T>();
+		try {
+			PlatformUI.getWorkbench().getProgressService()
+					.busyCursorWhile((monitor) -> {
+						monitor.beginTask(task, IProgressMonitor.UNKNOWN);
+						ref.set(fn.get());
+						monitor.done();
+					});
+		} catch (Exception e) {
+			LoggerFactory.getLogger(App.class)
+					.error("failed to execute task {}", task, e);
+		}
+		return ref.get();
 	}
 }

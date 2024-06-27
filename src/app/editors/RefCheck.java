@@ -21,14 +21,17 @@ public class RefCheck {
 					M.UpdateDataSetRefs_Question);
 			if (!b)
 				return;
-			RefSync.updateRefs(ds, App.index());
-			Data.updateVersion(ds);
-			RefSync.updateSelfRefVersion(ds);
-			Data.save(ds);
-			Ref ref = Ref.of(ds);
-			Editors.close(ref);
-			Editors.open(ref);
+			updateAndReopen(ds);
 		});
 	}
 
+	public static void updateAndReopen(IDataSet ds) {
+		RefSync.updateRefs(ds, App.index());
+		Data.updateVersion(ds);
+		RefSync.updateSelfRefVersion(ds);
+		Data.save(ds);
+		Ref ref = Ref.of(ds);
+		Editors.close(ref);
+		Editors.open(ref);
+	}
 }

@@ -10,6 +10,7 @@ import org.openlca.ilcd.commons.Ref;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import app.App;
 import app.M;
 import app.editors.contact.ContactEditor;
 import app.editors.epd.EpdEditor;
@@ -23,6 +24,7 @@ import app.rcp.Icon;
 import app.store.validation.ValidationDialog;
 import app.util.Actions;
 import app.util.MsgBox;
+import epd.refs.RefSync;
 
 public class DataSetToolBar extends EditorActionBarContributor {
 
@@ -58,6 +60,20 @@ public class DataSetToolBar extends EditorActionBarContributor {
 				MsgBox.error(M.UnsavedChanges, M.UnsavedChanges_Message);
 				return;
 			}
+
+			boolean hasOutdatedRefs = App.exec(
+					"Check references ...",
+					() -> RefSync.hasOutdatedRefs(dataSet,  App.index()));
+			if (!hasOutdatedRefs) {
+				UploadDialog.open(Ref.of(dataSet));
+				return;
+			}
+
+			boolean b = MsgBox.ask(M.UpdateReferences + "?",
+					M.UpdateDataSetRefs_Question);
+			if (!b)
+				return;
+			RefCheck.updateAndReopen(dataSet);
 			UploadDialog.open(Ref.of(dataSet));
 		});
 	}

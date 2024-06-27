@@ -3,7 +3,6 @@ package app.rcp;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ICoolBarManager;
 import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.ToolBarContributionItem;
@@ -77,7 +76,6 @@ public class ActionBar extends ActionBarAdvisor {
 				IWorkbenchActionConstants.M_HELP);
 		helpMenu.add(about);
 		menuBar.add(helpMenu);
-
 	}
 
 	private MenuManager extrasMenu() {
@@ -111,14 +109,13 @@ public class ActionBar extends ActionBarAdvisor {
 	@Override
 	protected void fillCoolBar(ICoolBarManager coolBar) {
 		super.fillCoolBar(coolBar);
-		IToolBarManager toolbar = new ToolBarManager(SWT.FLAT | SWT.LEFT);
+		var toolbar = new ToolBarManager(SWT.FLAT | SWT.LEFT);
 		coolBar.add(new ToolBarContributionItem(toolbar, "main"));
 		toolbar.add(Actions.create(M.Search, Icon.SEARCH.des(),
 				SearchPage::open));
 		toolbar.add(save);
 		toolbar.add(saveAs);
 		toolbar.add(saveAll);
-
 	}
 
 	private void cleanUp() {

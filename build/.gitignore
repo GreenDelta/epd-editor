@@ -1,8 +1,10 @@
-# 7zip
-7za.exe
+__pycache__/
 
-# java runtime
-jre/
+# IDE settings
+/.idea
+/tmp
+*.iml
 
-# build folder
-build/
+*.list
+
+.DS_Store

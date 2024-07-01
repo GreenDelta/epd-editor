@@ -4,17 +4,17 @@ wizard. Click on the `epd-editor` project and then on `Export...` from the conte
 menu. Select `Plug-in Development > Eclipse Product` from the export wizard and
 select the following options in the export dialog:
 
-* Configuration: `/epd-editor/openLCA.product` (should be the default)
-* Root directory: `openLCA`
+* Configuration: `/epd-editor/EPDEditor.product` (should be the default)
+* Root directory: `EPD Editor`
 * Synchronize before exporting: yes [x]
-* Destination directory: choose the `olca-app-build/build` folder of this project
+* Destination directory: choose the `epd-editor/build/build` folder of this project
 * Generate p2 repository: no [ ] (would be just overhead)
 * Export for multiple platforms: yes [x]
 * (take the defaults for the others)
 
 In the next page, select the platforms for which you want to build the product.
-After the export, you need to run the package script `package.py` to copy
-resources like the Java runtime, the native math libraries, etc. to the
+After the export, you need to run the package module `package` to copy
+resources like the Java runtime, the default data, etc. to the
 application folder and to create the installers.
 
 The packager script can build distribution packages for the following platforms
@@ -25,8 +25,7 @@ simply ignored in the package script):
 * macOS cocoa x86_64
 * Windows win32 x86_64
 
-The packager script may download build tools (7zip, NSIS on Windows), the JRE,
-and native libraries if these are missing.
+The packager script may download build tools (7zip, NSIS on Windows), the JRE if these are missing.
 
 -------------
 
@@ -34,25 +33,15 @@ and native libraries if these are missing.
 
 #### Export and package the release (Win, Linux, macOS)
 
-1. Check that the `olca-app` and `olca-modules` repositories are on the master
-   branch and are in sync with our GitHub repository.
+1. Check that the `epd-editor` repository is on the master branch and are in sync with our GitHub repository.
 
-2. Run the `prepare-release.py` script that updates the olca-modules libraries
-   in the olca-app, creates fresh database templates, updates the html-pages,
-   creates the Jython bindings from the current modules, etc.:
+2. Run the PDE export as described above.
 
-   ```bash
-   cd olca-app
-   python prepare-release.py
-   ```
-
-3. Run the PDE export as described above.
-
-4. Run the packaging script `package.py`.
+5. Run the packaging module `package`.
 
    ```bash
-   cd olca-app-build
-   python package.py
+   cd build
+   python -m package
    ```
 
 -------------
@@ -97,7 +86,7 @@ Prerequisites:
   the disk image:
 
     ```bash
-    cd olca-app-build
+    cd build
     ./mac_dist.sh --dev-id-app <certificate full name> dmg
     ```
 
@@ -138,7 +127,7 @@ Prerequisites:
    Store:
 
     ```bash
-    cd olca-app-build
+    cd build
     ./mac_dist.sh \
       --store-id-app <application certificate full name> \
       --store-id-installer <installer certificate full name> \

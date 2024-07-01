@@ -4,3 +4,5 @@ libs-test/
 .idea/
 *.iml
 classes/
+
+*THIRD-PARTY.txt

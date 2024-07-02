@@ -31,7 +31,6 @@ Visit https://github.com/GreenDelta/epd-editor
 
    <windowImages i16="/epd-editor/icons/logo/16_32bit.png" i32="/epd-editor/icons/logo/32_32bit.png" i48="/epd-editor/icons/logo/48_32bit.png" i64="/epd-editor/icons/logo/64_32bit.png" i128="/epd-editor/icons/logo/128_32bit.png" i256="/epd-editor/icons/logo/256_32bit.png"/>
 
-
    <launcher name="EPD Editor">
       <macosx icon="/epd-editor/icons/logo/logo.icns"/>
       <win useIco="true">
@@ -39,7 +38,6 @@ Visit https://github.com/GreenDelta/epd-editor
          <bmp/>
       </win>
    </launcher>
-
 
    <vm>
       <windows include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17</windows>
@@ -129,6 +127,21 @@ Visit https://github.com/GreenDelta/epd-editor
       <plugin id="org.eclipse.ui.navigator"/>
       <plugin id="org.eclipse.ui.workbench"/>
       <plugin id="org.eclipse.urischeme"/>
+      <plugin id="org.osgi.service.cm"/>
+      <plugin id="org.osgi.service.component"/>
+      <plugin id="org.osgi.service.device"/>
+      <plugin id="org.osgi.service.event"/>
+      <plugin id="org.osgi.service.metatype"/>
+      <plugin id="org.osgi.service.prefs"/>
+      <plugin id="org.osgi.service.provisioning"/>
+      <plugin id="org.osgi.service.upnp"/>
+      <plugin id="org.osgi.service.useradmin"/>
+      <plugin id="org.osgi.service.wireadmin"/>
+      <plugin id="org.osgi.util.function"/>
+      <plugin id="org.osgi.util.measurement"/>
+      <plugin id="org.osgi.util.position"/>
+      <plugin id="org.osgi.util.promise"/>
+      <plugin id="org.osgi.util.xml"/>
       <plugin id="org.w3c.css.sac"/>
       <plugin id="org.w3c.dom.events"/>
       <plugin id="org.w3c.dom.smil"/>

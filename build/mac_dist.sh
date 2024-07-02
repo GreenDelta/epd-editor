@@ -1,13 +1,13 @@
 #!/bin/bash
 
-DIST="EPD_Editor_macOS_x64_5.0.0_$(date '+%Y-%m-%d')"
+APP_SUFFIX=$(python3 -m package.dist -v)
 APP_ID="org.epd.editor.app"
 JRE_ID="org.epd.editor.jre"
 APP_DMG="build/tmp/macosx.cocoa.x86_64/EPDEditor_dmg/EPD Editor.app"
 APP_PKG="build/tmp/macosx.cocoa.x86_64/EPDEditor_pkg/EPD Editor.app"
-APP_UNSIGNED="build/macosx.cocoa.x86_64/EPD Editor/EPD Editor.app"
-DMG="build/dist/${DIST}.dmg"
-PKG="build/dist/${DIST}.pkg"
+APP_UNSIGNED="build/EPD Editor.app"
+DMG="./build/dist/EPDEditor_macOS_x64_${APP_SUFFIX}.dmg"
+PKG="./build/dist/EPDEditor_macOS_x64_${APP_SUFFIX}.pkg"
 ENTITLEMENTS_DMG="resources/dmg.entitlements"
 ENTITLEMENTS_PKG="resources/pkg.entitlements"
 KEY_NOTARYTOOL="notarytool"
@@ -141,10 +141,10 @@ build_dmg() {
 
   printf "\nNotarization of the DMG...\n"
   xcrun notarytool submit "$NOTARIZATION_DMG" \
-   --keychain-profile "$KEY_NOTARYTOOL" --wait
+   --keychain-profile "$KEY_NOTARYTOOL" --wait  || exit 1
 
   printf "\nStapling the app...\n"
-  xcrun stapler staple "$APP"
+  xcrun stapler staple "$APP" || exit 1
 
   printf "\nCreating the disk image installer file to be distributed...\n"
   create-dmg \

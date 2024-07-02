@@ -5,4 +5,4 @@ libs-test/
 *.iml
 classes/
 
-*THIRD-PARTY.txt
+target/

@@ -1,0 +1,15 @@
+# the product builds
+linux.*/
+macosx.*/
+win32.*/
+EPD Editor.app
+
+# potential error logs
+logs.zip
+
+# the distribution packages
+dist/
+
+temp/
+
+.DS_Store

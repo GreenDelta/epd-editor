@@ -35,14 +35,14 @@
 
 		<dependency>
 			<groupId>com.okworx.ilcd.validation.profiles</groupId>
-			<artifactId>EPD-1.1-OEKOBAUDAT</artifactId>
-			<version>1.0.43</version>
+			<artifactId>EPD-1.2-OEKOBAUDAT</artifactId>
+			<version>3.1.1</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.okworx.ilcd.validation.profiles</groupId>
-			<artifactId>EPD-1.1-Generic</artifactId>
-			<version>1.0.3</version>
+			<artifactId>EPD-1.2-Generic-EN15804</artifactId>
+			<version>2.0.5</version>
 		</dependency>
 
 		<dependency>

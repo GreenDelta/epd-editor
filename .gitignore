@@ -4,5 +4,6 @@ libs-test/
 .idea/
 *.iml
 classes/
+**/.DS_Store
 
 target/

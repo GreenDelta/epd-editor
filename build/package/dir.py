@@ -63,7 +63,8 @@ class BuildDir:
             return
 
         # copy the default data directory
-        shutil.copytree(default_data, self.default_data, ignore=shutil.ignore_patterns(".gitignore"))
+        shutil.copytree(default_data, self.default_data,
+                        ignore=shutil.ignore_patterns(".gitignore"))
 
     @staticmethod
     def unjar_plugins(plugin_dir: Path):

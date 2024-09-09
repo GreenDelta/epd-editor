@@ -45,9 +45,9 @@ final class Event {
 	}
 
 	private static DataSetType typeOf(IDatasetReference iRef) {
-		if (iRef == null || iRef.getType() == null)
+		if (iRef == null || iRef.getDatasetType() == null)
 			return null;
-		return switch (iRef.getType()) {
+		return switch (iRef.getDatasetType()) {
 			case CONTACT -> DataSetType.CONTACT;
 			case EXTERNAL_FILE -> DataSetType.EXTERNAL_FILE;
 			case FLOW -> DataSetType.FLOW;

@@ -128,7 +128,7 @@ public class ExportDialog extends Wizard {
 		private String filePath;
 
 		private Page() {
-			super("ValidationDialogPage", M.ValidateDataSet + ": " +
+			super("ExportDialogPage", M.ExportDataSet + ": " +
 				App.header(ref.getName(), 50), null);
 			setPageComplete(true);
 		}

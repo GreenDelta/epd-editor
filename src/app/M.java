@@ -92,6 +92,7 @@ public class M extends NLS {
 	public static String Error;
 	public static String Export;
 	public static String ExportDataPackage;
+	public static String ExportDataSet;
 	public static String ExportFailed;
 	public static String ExternalDocumentationSources;
 	public static String ExternalFile;

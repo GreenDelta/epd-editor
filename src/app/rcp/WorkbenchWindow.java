@@ -56,10 +56,10 @@ public class WorkbenchWindow extends WorkbenchWindowAdvisor {
 			return;
 		}
 
-			// copy the files
-		App.runWithProgress(
-				"Copy reference data",
-				() -> App.getWorkspace().syncFilesFrom(new File("data")));
+		// copy the files
+		var data = new File(App.getInstallLocation(), "data");
+		App.runWithProgress("Copy reference data",
+				() -> App.getWorkspace().syncFilesFrom(data));
 		App.run(new IndexBuilder());
 		Navigator.refreshAll();
 

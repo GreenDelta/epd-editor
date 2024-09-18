@@ -34,11 +34,11 @@
 		"name": "linear density",
 		"unit": "kg/m",
 		"unitDescription": "kilograms per metre"
-        },
-        {
-                "id": "pr7",
-                "name": "weight per piece",
-                "unit": "kg",
-                "unitDescription": "kilograms"
-        }
+  },
+  {
+    "id": "pr7",
+    "name": "weight per piece",
+    "unit": "kg",
+    "unitDescription": "kilograms"
+  }
 ]

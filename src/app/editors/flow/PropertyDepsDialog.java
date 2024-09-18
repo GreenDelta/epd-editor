@@ -168,7 +168,7 @@ class PropertyDepsDialog extends FormDialog {
 				{"volume", "gross density"},
 				{"normal volume", "bulk density"},
 				{"normal volume", "gross density"},
-        {"number of pieces", "weight per piece"},
+				{"number of pieces", "weight per piece"},
 			};
 
 			var selection = new HashSet<MaterialProperty>();

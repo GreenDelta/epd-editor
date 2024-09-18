@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sourceDataSet xmlns:common="http://lca.jrc.it/ILCD/Common" xmlns="http://lca.jrc.it/ILCD/Source" version="1.1">
+    <sourceInformation>
+        <dataSetInformation>
+            <common:UUID>4b368ada-d799-4afc-9d41-f371f2b23781</common:UUID>
+            <common:shortName xml:lang="en">GaBi Database Edition 2020, CUP 2020.02</common:shortName>
+            <classificationInformation>
+                <common:classification>
+                    <common:class level="0" classId="ca877255-4278-4aae-960e-1f1951367f8d">Databases</common:class>
+                </common:classification>
+            </classificationInformation>
+            <sourceCitation>thinkstep AG; LBP-GaBi, University of Stuttgart: GaBi Software System, Leinfelden-Echterdingen / Germany</sourceCitation>
+            <publicationType>Software or database</publicationType>
+            <sourceDescriptionOrComment xml:lang="en">This dataset represents the GaBi Database Edition 2020, CUP 2020.02.
+http://www.gabi-software.com/support/gabi/gabi-lci-documentation/data-sets-by-database-modules/</sourceDescriptionOrComment>
+            <referenceToContact refObjectId="d7fa0337-f279-430d-becf-7f3111a85010" version="38.00.000" type="contact data set" uri="../contacts/d7fa0337-f279-430d-becf-7f3111a85010.xml">
+                <common:shortDescription xml:lang="en">thinkstep</common:shortDescription>
+            </referenceToContact>
+        </dataSetInformation>
+    </sourceInformation>
+    <administrativeInformation>
+        <dataEntryBy>
+            <common:timeStamp>2022-05-10T12:22:42.971+02:00</common:timeStamp>
+            <common:referenceToDataSetFormat type="source data set" refObjectId="a97a0155-0234-4b87-b4ce-a45da52f2a40" version="01.01.000" uri="../sources/a97a0155-0234-4b87-b4ce-a45da52f2a40_01.01.000.xml">
+                <common:shortDescription xml:lang="en">ILCD format</common:shortDescription>
+            </common:referenceToDataSetFormat>
+        </dataEntryBy>
+        <publicationAndOwnership>
+            <common:dataSetVersion>00.01.000</common:dataSetVersion>
+        </publicationAndOwnership>
+    </administrativeInformation>
+</sourceDataSet>

@@ -68,7 +68,7 @@ public class IniFile implements Copyable<IniFile> {
 
 	private static File getIniFile() {
 		var dir = App.getInstallLocation();
-		return new File(dir, "EPDEditor.ini");
+		return new File(dir, "EPD Editor.ini");
 	}
 
 	private static IniFile parseFile(File iniFile) throws Exception {

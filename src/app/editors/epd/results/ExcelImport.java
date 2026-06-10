@@ -80,15 +80,14 @@ public class ExcelImport implements Runnable {
 			}
 			EpdIndicatorResult.writeClean(epd, results);
 		} catch (Exception e) {
-			LoggerFactory.getLogger(getClass())
-					.error("import failed", e);
+			LoggerFactory.getLogger(getClass()).error("import failed", e);
 		}
 	}
 
 	private void syncScenarios(Workbook wb, List<ValSlot> slots) {
 
 		Function<String, String> keyFn =
-				s -> s != null ? s.strip().toLowerCase(Locale.US) : null;
+			s -> s != null ? s.strip().toLowerCase(Locale.US) : null;
 
 		// collect existing scenarios
 		var scenarios = new HashMap<String, EpdScenario>();
@@ -114,9 +113,9 @@ public class ExcelImport implements Runnable {
 					continue;
 
 				var scen = new EpdScenario()
-						.withName(name)
-						.withGroup(str(row.getCell(1)))
-						.withDefaultScenario(bool(row.getCell(3)));
+					.withName(name)
+					.withGroup(str(row.getCell(1)))
+					.withDefaultScenario(bool(row.getCell(3)));
 				var desc = str(row.getCell(2));
 				if (Strings.notEmpty(desc)) {
 					scen.withDescription().add(LangString.of(desc, App.lang()));
@@ -178,9 +177,9 @@ public class ExcelImport implements Runnable {
 			return Collections.emptyList();
 
 		var knownMods = profile.getModules()
-				.stream()
-				.map(EpdProfileModule::getName)
-				.collect(Collectors.toSet());
+			.stream()
+			.map(EpdProfileModule::getName)
+			.collect(Collectors.toSet());
 		var entries = EpdModuleEntries.withAllOf(epd);
 		var oldEntries = new HashMap<String, EpdModuleEntry>();
 		for (var e : entries) {
@@ -217,38 +216,53 @@ public class ExcelImport implements Runnable {
 		return slots;
 	}
 
-	private EpdModuleEntry parseModuleKey(
-			String label, Set<String> knownMods
-	) {
+	private EpdModuleEntry parseModuleKey(String label, Set<String> mods) {
 		if (Strings.nullOrEmpty(label))
 			return null;
-		var parts = label.split("/");
-		var mod = parts[0].strip();
-		if (!knownMods.contains(mod))
+		int splitIdx = label.indexOf('/');
+		if (splitIdx <= 0) {
+			var mod = label.strip();
+			return mods.contains(mod)
+				? new EpdModuleEntry().withModule(mod)
+				: null;
+		}
+
+		var mod = label.substring(0, splitIdx).strip();
+		if (!mods.contains(mod))
 			return null;
-		var e = new EpdModuleEntry().withModule(mod);
-		if (parts.length == 1)
-			return e;
-		var sce = parts[1].strip();
-		return Strings.notEmpty(sce)
-				? e.withScenario(sce)
-				: e;
+		var scenario = label.substring(splitIdx + 1).strip();
+		return Strings.notEmpty(scenario)
+			? new EpdModuleEntry().withModule(mod).withScenario(scenario)
+			: new EpdModuleEntry().withModule(mod);
 	}
 
 	private String str(Cell cell) {
 		return cell != null && cell.getCellType() == CellType.STRING
-				? cell.getStringCellValue()
-				: null;
+			? cell.getStringCellValue()
+			: null;
 	}
 
 	private boolean bool(Cell cell) {
-		return cell != null
-				&& cell.getCellType() == CellType.BOOLEAN
-				&& cell.getBooleanCellValue();
+		if (cell == null) return false;
+		if (cell.getCellType() == CellType.BOOLEAN)
+			return cell.getBooleanCellValue();
+		if (cell.getCellType() == CellType.NUMERIC)
+			return cell.getNumericCellValue() != 0;
+		if (cell.getCellType() != CellType.STRING)
+			return false;
+		var s = cell.getStringCellValue();
+		if (Strings.nullOrEmpty(s))
+			return false;
+		s = s.strip().toLowerCase(Locale.ROOT);
+		return s.startsWith("y")
+			|| s.startsWith("j")
+			|| s.startsWith("t")
+			|| s.startsWith("w")
+			|| !s.equals("0");
 	}
 
 	private Sheet findSheetOrDefault(
-			Workbook wb, String label, boolean selectDefault
+		Workbook wb, String label, boolean selectDefault
 	) {
 		var count = wb != null ? wb.getNumberOfSheets() : 0;
 		if (count == 0)
@@ -273,14 +287,14 @@ public class ExcelImport implements Runnable {
 			if (cell == null)
 				return Optional.empty();
 			if (cell.getCellType() != CellType.NUMERIC
-					&& cell.getCellType() != CellType.FORMULA)
+				&& cell.getCellType() != CellType.FORMULA)
 				return Optional.empty();
 			try {
 				double num = cell.getNumericCellValue();
 				var val = new EpdValue()
-						.withModule(entry.getModule())
-						.withScenario(entry.getScenario())
-						.withAmount(num);
+					.withModule(entry.getModule())
+					.withScenario(entry.getScenario())
+					.withAmount(num);
 				return Optional.of(val);
 			} catch (Exception e) {
 				return Optional.empty();

@@ -43,7 +43,7 @@ class LangCombo {
 		for (int i = 0; i < codes.length; i++) {
 			String code = codes[i];
 			items[i] = getDisplayLanguage(code);
-			if (epd.util.Strings.nullOrEqual(initial, code))
+			if (org.openlca.commons.Strings.equalsIgnoreCase(initial, code))
 				selected = i;
 		}
 		combo.setItems(items);
@@ -58,7 +58,7 @@ class LangCombo {
 
 	private String getDisplayLanguage(String code) {
 		for (Locale loc : Locale.getAvailableLocales()) {
-			if (epd.util.Strings.nullOrEqual(code, loc.getLanguage()))
+			if (org.openlca.commons.Strings.equalsIgnoreCase(code, loc.getLanguage()))
 				return loc.getDisplayLanguage();
 		}
 		return M.Unknown;

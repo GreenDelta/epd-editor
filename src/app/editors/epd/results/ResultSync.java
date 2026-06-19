@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.epd.EpdIndicatorResult;
 import org.openlca.ilcd.epd.EpdProfile;
 import org.openlca.ilcd.epd.EpdProfileIndicator;
@@ -15,8 +16,6 @@ import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.epd.EpdModuleEntry;
 import org.openlca.ilcd.processes.epd.EpdValue;
 import org.openlca.ilcd.util.Epds;
-
-import epd.util.Strings;
 
 /**
  * Initializes indicator results for added modules and removes results for
@@ -154,7 +153,7 @@ class ResultSync implements Runnable {
 	private EpdValue findValue(EpdIndicatorResult result, EpdModuleEntry entry) {
 		for (var v : result.values()) {
 			if (Objects.equals(entry.getModule(), v.getModule())
-					&& Strings.nullOrEqual(entry.getScenario(), v.getScenario()))
+					&& Strings.equalsIgnoreCase(entry.getScenario(), v.getScenario()))
 				return v;
 		}
 		return null;

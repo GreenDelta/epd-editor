@@ -11,6 +11,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
+import org.openlca.commons.Strings;
 
 import app.M;
 import app.rcp.Icon;
@@ -22,7 +23,6 @@ import app.util.Viewers;
 import app.util.tables.ModifySupport;
 import app.util.tables.TextCellModifier;
 import epd.model.MaterialProperty;
-import epd.util.Strings;
 
 class Table {
 
@@ -91,7 +91,7 @@ class Table {
 
 	private boolean idExists(String id) {
 		for (MaterialProperty p : properties) {
-			if (Strings.nullOrEqual(id, p.id))
+			if (Strings.equalsIgnoreCase(id, p.id))
 				return true;
 		}
 		return false;
@@ -130,7 +130,7 @@ class Table {
 		protected void setText(MaterialProperty p, String text) {
 			if (Objects.equals(p.id, text))
 				return;
-			if (org.openlca.commons.Strings.isBlank(text)) {
+			if (Strings.isBlank(text)) {
 				MsgBox.error("Invalid ID", "The ID cannot be empty.");
 				return;
 			}

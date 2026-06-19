@@ -7,12 +7,12 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.openlca.commons.Strings;
 
 import app.M;
 import app.editors.BaseEditor;
 import app.rcp.Icon;
 import app.util.tables.ModifySupport;
-import epd.util.Strings;
 
 public class StringTable {
 
@@ -39,7 +39,7 @@ public class StringTable {
 		ms.bind(property, s -> s, (oldVal, newVal) -> {
 			int idx = viewer.getTable().getSelectionIndex();
 			if (idx < values.size()
-					&& Strings.nullOrEqual(values.get(idx), oldVal)) {
+					&& Strings.equalsIgnoreCase(values.get(idx), oldVal)) {
 				values.set(idx, newVal);
 				editor.setDirty();
 			}

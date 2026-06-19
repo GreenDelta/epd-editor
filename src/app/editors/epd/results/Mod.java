@@ -3,11 +3,10 @@ package app.editors.epd.results;
 import java.util.HashMap;
 import java.util.List;
 
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.epd.EpdProfile;
 import org.openlca.ilcd.processes.epd.EpdModuleEntry;
 import org.openlca.ilcd.processes.epd.EpdValue;
-
-import epd.util.Strings;
 
 record Mod(String module, String scenario) {
 
@@ -28,9 +27,9 @@ record Mod(String module, String scenario) {
 						return 1;
 					if (i1 != null && i2 == null)
 						return -1;
-					int c = org.openlca.commons.Strings.compareIgnoreCase(mod1.module, mod2.module);
+					int c = Strings.compareIgnoreCase(mod1.module, mod2.module);
 					return c == 0
-							? org.openlca.commons.Strings.compareIgnoreCase(mod1.scenario, mod2.scenario)
+							? Strings.compareIgnoreCase(mod1.scenario, mod2.scenario)
 							: c;
 				})
 				.toArray(Mod[]::new);
@@ -57,9 +56,9 @@ record Mod(String module, String scenario) {
 	}
 
 	static String key(String module, String scenario) {
-		if (org.openlca.commons.Strings.isBlank(module))
+		if (Strings.isBlank(module))
 			return "?";
-		return org.openlca.commons.Strings.isNotBlank(scenario)
+		return Strings.isNotBlank(scenario)
 				? module + " / " + scenario
 				: module;
 	}
@@ -83,7 +82,7 @@ record Mod(String module, String scenario) {
 	boolean matches(EpdValue value) {
 		if (value == null)
 			return false;
-		return Strings.nullOrEqual(module, value.getModule())
-				&& Strings.nullOrEqual(scenario, value.getScenario());
+		return Strings.equalsIgnoreCase(module, value.getModule())
+				&& Strings.equalsIgnoreCase(scenario, value.getScenario());
 	}
 }

@@ -1,11 +1,11 @@
 package epd.model.qmeta;
 
 import org.openlca.commons.Copyable;
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.Vocab;
 import org.w3c.dom.Element;
 
 import epd.io.Dom;
-import epd.util.Strings;
 
 public class QQuestion implements Copyable<QQuestion> {
 
@@ -87,6 +87,6 @@ public class QQuestion implements Copyable<QQuestion> {
 			return true;
 		if (!(obj instanceof QQuestion other))
 			return false;
-		return Strings.nullOrEqual(this.id, other.id);
+		return Strings.equalsIgnoreCase(this.id, other.id);
 	}
 }

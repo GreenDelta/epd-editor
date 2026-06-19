@@ -1,10 +1,10 @@
 package app.navi;
 
 import org.eclipse.swt.graphics.Image;
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.epd.EpdProfile;
 
 import app.rcp.Icon;
-import epd.util.Strings;
 
 public class ProfileElement extends NavigationElement {
 
@@ -31,7 +31,7 @@ public class ProfileElement extends NavigationElement {
 			return 1;
 		if (this.profile == null || other.profile == null)
 			return 0;
-		return org.openlca.commons.Strings.compareIgnoreCase(this.profile.getName(), other.profile.getName());
+		return Strings.compareIgnoreCase(this.profile.getName(), other.profile.getName());
 	}
 
 	@Override
@@ -64,6 +64,6 @@ public class ProfileElement extends NavigationElement {
 			return true;
 		if (p1 == null || p2 == null)
 			return false;
-		return Strings.nullOrEqual(p1.getName(), p2.getName());
+		return Strings.equalsIgnoreCase(p1.getName(), p2.getName());
 	}
 }

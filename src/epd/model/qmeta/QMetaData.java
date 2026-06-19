@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.openlca.commons.Copyable;
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.Vocab;
 import org.openlca.ilcd.commons.Other;
 import org.openlca.ilcd.processes.Process;
@@ -14,7 +15,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import epd.io.Dom;
-import epd.util.Strings;
 
 public class QMetaData implements Copyable<QMetaData> {
 
@@ -26,7 +26,7 @@ public class QMetaData implements Copyable<QMetaData> {
 	 */
 	public QQuestion getQuestion(String id) {
 		QQuestion q = questions.stream()
-			.filter(e -> Strings.nullOrEqual(e.id, id))
+			.filter(e -> Strings.equalsIgnoreCase(e.id, id))
 			.findFirst().orElse(null);
 		if (q != null)
 			return q;

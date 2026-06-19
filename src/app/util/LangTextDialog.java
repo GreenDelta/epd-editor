@@ -100,7 +100,7 @@ public class LangTextDialog extends FormDialog {
 
 	static boolean contains(List<LangBox> boxes, String lang) {
 		for (var box : boxes) {
-			if (epd.util.Strings.nullOrEqual(lang, box.lang()))
+			if (Strings.equalsIgnoreCase(lang, box.lang()))
 				return true;
 		}
 		return false;
@@ -128,9 +128,9 @@ public class LangTextDialog extends FormDialog {
 				var lang1 = box1.lang;
 				var lang2 = box2.lang;
 				var appLang = App.lang();
-				if (epd.util.Strings.nullOrEqual(lang1, appLang))
+				if (Strings.equalsIgnoreCase(lang1, appLang))
 					return -1;
-				if (epd.util.Strings.nullOrEqual(lang2, appLang))
+				if (Strings.equalsIgnoreCase(lang2, appLang))
 					return 1;
 				return Strings.compareIgnoreCase(lang1, lang2);
 			});

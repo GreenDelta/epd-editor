@@ -2,9 +2,8 @@ package epd.index;
 
 import java.util.Objects;
 
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.commons.Category;
-
-import epd.util.Strings;
 
 public class CategoryNode extends Node {
 
@@ -26,7 +25,7 @@ public class CategoryNode extends Node {
 			return false;
 		if (c1.getLevel() != c2.getLevel())
 			return false;
-		if (!Strings.nullOrEqual(c1.getClassId(), c2.getClassId()))
+		if (!Strings.equalsIgnoreCase(c1.getClassId(), c2.getClassId()))
 			return false;
 		return Objects.equals(c1.getName(), c2.getName());
 	}

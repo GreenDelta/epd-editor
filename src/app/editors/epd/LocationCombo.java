@@ -7,12 +7,12 @@ import java.util.function.Consumer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.lists.Location;
 
 import app.store.Locations;
 import app.util.Controls;
 import app.util.UI;
-import epd.util.Strings;
 
 class LocationCombo {
 
@@ -29,7 +29,7 @@ class LocationCombo {
 		for (int i = 0; i < locations.size(); i++) {
 			Location loc = locations.get(i);
 			items[i + 1] = loc.getName();
-			if (Strings.nullOrEqual(selectedCode, loc.getCode()))
+			if (Strings.equalsIgnoreCase(selectedCode, loc.getCode()))
 				selectedIdx = i + 1;
 		}
 		combo.setItems(items);
@@ -41,7 +41,7 @@ class LocationCombo {
 		boolean found = false;
 		for (Location loc : Locations.get()) {
 			locations.add(loc);
-			if (Strings.nullOrEqual(loc.getCode(), selectedCode))
+			if (Strings.equalsIgnoreCase(loc.getCode(), selectedCode))
 				found = true;
 		}
 		if (!found && selectedCode != null) {
@@ -50,7 +50,7 @@ class LocationCombo {
 			loc.withName(selectedCode);
 			locations.add(loc);
 		}
-		locations.sort((loc1, loc2) -> org.openlca.commons.Strings.compareIgnoreCase(loc1.getName(),
+		locations.sort((loc1, loc2) -> Strings.compareIgnoreCase(loc1.getName(),
 				loc2.getName()));
 	}
 

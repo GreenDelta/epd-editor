@@ -9,6 +9,7 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
+import org.openlca.commons.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +22,6 @@ import app.editors.SimpleEditorInput;
 import app.navi.Navigator;
 import app.rcp.IniFile;
 import app.util.UI;
-import epd.util.Strings;
 
 public class SettingsPage extends BaseEditor {
 
@@ -53,7 +53,7 @@ public class SettingsPage extends BaseEditor {
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		boolean langChange = !Strings.nullOrEqual(
+		boolean langChange = !Strings.equalsIgnoreCase(
 				App.settings().lang, settings.lang);
 		App.settings().setValues(settings);
 		App.settings().save(App.getWorkspace());

@@ -2,7 +2,7 @@ package app;
 
 import java.io.File;
 
-import org.openlca.ilcd.commons.Copyable;
+import org.openlca.commons.Copyable;
 import org.openlca.ilcd.epd.EpdProfiles;
 
 import app.store.Json;

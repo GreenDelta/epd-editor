@@ -1,8 +1,9 @@
 package epd.model;
 
-import org.openlca.ilcd.commons.Copyable;
 
 import java.util.Objects;
+
+import org.openlca.commons.Copyable;
 
 public final class MaterialProperty implements Copyable<MaterialProperty> {
 

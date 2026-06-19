@@ -5,11 +5,6 @@ public class Strings {
 	private Strings() {
 	}
 
-	public static boolean nullOrEqual(String string1, String string2) {
-		return (string1 == null && string2 == null)
-			|| (string1 != null && string1.equals(string2));
-	}
-
 	public static String wrap(String text, int len) {
 		if (text == null)
 			return "";

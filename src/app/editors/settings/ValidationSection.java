@@ -18,6 +18,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
+import org.openlca.commons.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +33,6 @@ import app.util.MsgBox;
 import app.util.Tables;
 import app.util.UI;
 import app.util.Viewers;
-import epd.util.Strings;
 
 class ValidationSection {
 
@@ -46,7 +46,7 @@ class ValidationSection {
 			infos.add(new ProfileInfo(file));
 		}
 		infos.sort((i1, i2) -> Strings
-			.compare(i1.profile.getName(), i2.profile.getName()));
+				.compareIgnoreCase(i1.profile.getName(), i2.profile.getName()));
 	}
 
 	void render(Composite body, FormToolkit tk) {
@@ -94,7 +94,7 @@ class ValidationSection {
 		if (!b)
 			return;
 		infos.remove(info);
-		if (Strings.nullOrEqual(page.settings.validationProfile,
+		if (Strings.equalsIgnoreCase(page.settings.validationProfile,
 			info.file.getName())) {
 			page.settings.validationProfile = null;
 			page.setDirty();
@@ -169,7 +169,7 @@ class ValidationSection {
 		public Font getFont(Object obj, int col) {
 			if (!(obj instanceof ProfileInfo pi))
 				return null;
-			if (Strings.nullOrEqual(page.settings.validationProfile,
+			if (Strings.equalsIgnoreCase(page.settings.validationProfile,
 				pi.file.getName()))
 				return UI.boldFont();
 			return null;

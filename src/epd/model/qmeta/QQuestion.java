@@ -1,10 +1,11 @@
 package epd.model.qmeta;
 
+import org.openlca.commons.Copyable;
+import org.openlca.ilcd.Vocab;
+import org.w3c.dom.Element;
+
 import epd.io.Dom;
 import epd.util.Strings;
-import org.openlca.ilcd.Vocab;
-import org.openlca.ilcd.commons.Copyable;
-import org.w3c.dom.Element;
 
 public class QQuestion implements Copyable<QQuestion> {
 

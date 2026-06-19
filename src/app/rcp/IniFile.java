@@ -1,10 +1,5 @@
 package app.rcp;
 
-import app.App;
-import org.openlca.ilcd.commons.Copyable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -12,6 +7,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.openlca.commons.Copyable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import app.App;
 
 /**
  * Reads and writes values from and to the *.ini file which is located in the

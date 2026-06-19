@@ -1,19 +1,19 @@
-package epd.util;
+package app.editors.epd.qmeta;
 
-public class Strings {
+class QLabel {
 
-	private Strings() {
+	private QLabel() {
 	}
 
-	public static String wrap(String text, int len) {
+	static String wrap(String text) {
 		if (text == null)
 			return "";
-		String[] words = text.split("\\s");
-		StringBuilder s = new StringBuilder();
-		StringBuilder line = new StringBuilder();
+		var words = text.split("\\s");
+		var s = new StringBuilder();
+		var line = new StringBuilder();
 		for (String w : words) {
 			if (!line.isEmpty()
-				&& (line.length() + w.length() > len)) {
+				&& (line.length() + w.length() > 120)) {
 				if (!s.isEmpty()) {
 					s.append('\n');
 				}

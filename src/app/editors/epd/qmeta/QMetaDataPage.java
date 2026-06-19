@@ -27,7 +27,6 @@ import epd.model.qmeta.QGroup;
 import epd.model.qmeta.QMetaData;
 import epd.model.qmeta.QQuestion;
 import epd.model.qmeta.QQuestionType;
-import epd.util.Strings;
 
 public class QMetaDataPage extends FormPage {
 
@@ -101,7 +100,7 @@ public class QMetaDataPage extends FormPage {
 			button.setLayoutData(
 					new GridData(SWT.LEFT, SWT.TOP, false, false));
 			var label = tk.createLabel(
-					comp, Strings.wrap(config[i].text, 120));
+					comp, QLabel.wrap(config[i].text));
 			Controls.onClick(label, _e -> {
 				if (button.getSelection())
 					return;
@@ -180,7 +179,7 @@ public class QMetaDataPage extends FormPage {
 
 			// create the label; also react on clicks on the label
 			Label label = tk.createLabel(comp,
-					Strings.wrap(q.text, 120));
+					QLabel.wrap(q.text));
 			Controls.onClick(label, _e -> {
 				button.setSelection(!button.getSelection());
 				button.notifyListeners(SWT.Selection, new Event());

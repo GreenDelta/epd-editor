@@ -144,14 +144,14 @@ class InfoPage extends FormPage {
 		unitText.setText(RefDeps.getRefUnit(epd));
 		unitText.setEditable(false);
 
-		var productIdTable = new ProductIdTable(editor, comp, tk);
-		productIdTable.setInput();
-
 		refText.onChange(ref -> {
 			exchange.withFlow(ref);
 			unitText.setText(RefDeps.getRefUnit(epd));
 			editor.setDirty();
 		});
+
+		var productIdTable = new ProductIdTable(editor, comp, tk);
+		productIdTable.setInput();
 	}
 
 	public Exchange withProductExchange() {

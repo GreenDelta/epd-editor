@@ -143,6 +143,10 @@ class InfoPage extends FormPage {
 				M.Unit, Tooltips.EPD_ProductUnit);
 		unitText.setText(RefDeps.getRefUnit(epd));
 		unitText.setEditable(false);
+
+		var productIdTable = new ProductIdTable(editor, comp, tk);
+		productIdTable.setInput();
+
 		refText.onChange(ref -> {
 			exchange.withFlow(ref);
 			unitText.setText(RefDeps.getRefUnit(epd));

@@ -184,6 +184,7 @@ public class M extends NLS {
 	public static String ProcessInformation;
 	public static String Processes;
 	public static String ProductFlow;
+	public static String ProductIds;
 	public static String ProductSystem;
 	public static String Project;
 	public static String Products;
@@ -287,6 +288,7 @@ public class M extends NLS {
 	public static String UploadDataSet;
 	public static String UploadDataSet_Question;
 	public static String Uploads;
+	public static String Type;
 	public static String UseAdvice;
 	public static String User;
 

@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="tests"/>
-	<classpathentry exported="true" kind="lib" path="libs/angus-activation-2.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/angus-activation-2.0.3.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/annotations-3.0.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/aopalliance-repackaged-3.0.5.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/bcprov-jdk18on-1.78.jar"/>
@@ -23,15 +23,15 @@
 	<classpathentry exported="true" kind="lib" path="libs/hk2-utils-3.0.5.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/ilcd-validation-2.7.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/j2objc-annotations-3.0.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jakarta.activation-api-2.1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jakarta.activation-api-2.1.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/jakarta.annotation-api-2.1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/jakarta.inject-api-2.0.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/jakarta.ws.rs-api-3.1.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jakarta.xml.bind-api-4.0.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jakarta.xml.bind-api-4.0.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/javassist-3.29.2-GA.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/javax.inject-1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jaxb-core-4.0.4.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/jaxb-impl-4.0.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jaxb-core-4.0.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/jaxb-impl-4.0.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/jersey-client-3.1.5.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/jersey-common-3.1.5.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/jersey-hk2-3.1.5.jar"/>
@@ -44,7 +44,8 @@
 	<classpathentry exported="true" kind="lib" path="libs/logback-classic-1.2.13.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/logback-core-1.2.13.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/mimepull-1.9.15.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/olca-ilcd-3.0.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/olca-commons-1.0.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/olca-ilcd-3.2.0-SNAPSHOT.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/osgi-resource-locator-1.0.3.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/poi-5.2.5.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/poi-ooxml-5.2.5.jar"/>

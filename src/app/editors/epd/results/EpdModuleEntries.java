@@ -9,7 +9,8 @@ import org.openlca.ilcd.epd.EpdIndicatorResult;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.epd.EpdModuleEntry;
 import org.openlca.ilcd.util.Epds;
-import org.openlca.ilcd.util.Strings;
+
+import epd.util.Strings;
 
 public final class EpdModuleEntries {
 

@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.epd.EpdProfiles;
@@ -27,7 +28,6 @@ import app.util.FileChooser;
 import app.util.MsgBox;
 import app.util.UI;
 import epd.model.qmeta.QGroup;
-import epd.util.Strings;
 
 class DataSetSection {
 
@@ -162,7 +162,7 @@ class DataSetSection {
 		var combo = UI.formCombo(comp, tk, M.DefaultEPDProfile);
 		UI.gridData(combo, false, false).widthHint = 300;
 		var profiles = EpdProfiles.getAll();
-		profiles.sort((p1, p2) -> Strings.compare(p1.getName(), p2.getName()));
+		profiles.sort((p1, p2) -> Strings.compareIgnoreCase(p1.getName(), p2.getName()));
 		var items = new String[profiles.size()];
 		int selected = -1;
 		for (int i = 0; i < items.length; i++) {

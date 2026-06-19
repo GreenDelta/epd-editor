@@ -13,6 +13,7 @@ import java.util.Set;
 
 import javax.xml.namespace.QName;
 
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.commons.Classification;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.IDataSet;
@@ -30,7 +31,6 @@ import com.google.gson.JsonParseException;
 
 import app.store.RefExt;
 import epd.io.QNameJsonAdapter;
-import epd.util.Strings;
 
 public class Index {
 
@@ -177,7 +177,7 @@ public class Index {
 				return null;
 
 			var s = prim.getAsString();
-			if (Strings.nullOrEmpty(s))
+			if (Strings.isBlank(s))
 				return null;
 
 			try {

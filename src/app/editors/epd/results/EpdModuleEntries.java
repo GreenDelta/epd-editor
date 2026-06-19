@@ -5,12 +5,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.function.BiFunction;
 
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.epd.EpdIndicatorResult;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.epd.EpdModuleEntry;
 import org.openlca.ilcd.util.Epds;
-
-import epd.util.Strings;
 
 public final class EpdModuleEntries {
 
@@ -30,7 +29,7 @@ public final class EpdModuleEntries {
 		var modules = Epds.withModuleEntries(epd);
 		var modKeys = new HashSet<String>();
 		BiFunction<String, String, Boolean> modFn = (mod, scen) -> {
-			var key = Strings.notEmpty(scen)
+			var key = Strings.isNotBlank(scen)
 					? mod + "/" + scen
 					: mod;
 			return modKeys.add(key);
@@ -51,9 +50,9 @@ public final class EpdModuleEntries {
 
 		// sort the module entries
 		modules.sort((e1, e2) -> {
-			int c = Strings.compare(e1.getModule(), e2.getModule());
+			int c = Strings.compareIgnoreCase(e1.getModule(), e2.getModule());
 			return c == 0
-					? Strings.compare(e1.getScenario(), e2.getScenario())
+					? Strings.compareIgnoreCase(e1.getScenario(), e2.getScenario())
 					: c;
 		});
 

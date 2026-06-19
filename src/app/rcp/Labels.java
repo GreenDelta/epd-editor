@@ -1,12 +1,12 @@
 package app.rcp;
 
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.commons.Category;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.processes.epd.EpdSubType;
 
 import app.App;
 import app.M;
-import epd.util.Strings;
 
 public class Labels {
 
@@ -26,9 +26,9 @@ public class Labels {
 	}
 
 	private static String ofCategory(String id, String name) {
-		if (Strings.nullOrEmpty(name))
+		if (Strings.isBlank(name))
 			return id;
-		if (Strings.nullOrEmpty(id)
+		if (Strings.isBlank(id)
 			|| id.length() > 10
 			|| App.settings().hideCategoryIds)
 			return name;

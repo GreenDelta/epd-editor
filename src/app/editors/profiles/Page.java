@@ -6,6 +6,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.epd.EpdProfile;
 
 import app.App;
@@ -17,7 +18,6 @@ import app.store.RefDataSync;
 import app.util.Controls;
 import app.util.MsgBox;
 import app.util.UI;
-import epd.util.Strings;
 
 class Page extends FormPage {
 
@@ -68,7 +68,7 @@ class Page extends FormPage {
 	}
 
 	private void syncRefData(String url) {
-		if (Strings.nullOrEmpty(url)) {
+		if (Strings.isBlank(url)) {
 			MsgBox.error("No URL given.");
 			return;
 		}

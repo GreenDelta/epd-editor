@@ -1,16 +1,16 @@
 package app.editors.settings;
 
-import app.M;
-import app.util.Controls;
-import app.util.UI;
-import epd.util.Strings;
+import java.util.Locale;
+import java.util.TreeSet;
+import java.util.function.Consumer;
+
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import java.util.Locale;
-import java.util.TreeSet;
-import java.util.function.Consumer;
+import app.M;
+import app.util.Controls;
+import app.util.UI;
 
 class LangCombo {
 
@@ -25,7 +25,7 @@ class LangCombo {
 		TreeSet<String> set = new TreeSet<>();
 		for (Locale loc : Locale.getAvailableLocales()) {
 			String lang = loc.getLanguage();
-			if (!Strings.nullOrEmpty(lang))
+			if (!org.openlca.commons.Strings.isBlank(lang))
 				set.add(lang);
 		}
 		codes = set.toArray(new String[0]);
@@ -43,7 +43,7 @@ class LangCombo {
 		for (int i = 0; i < codes.length; i++) {
 			String code = codes[i];
 			items[i] = getDisplayLanguage(code);
-			if (Strings.nullOrEqual(initial, code))
+			if (epd.util.Strings.nullOrEqual(initial, code))
 				selected = i;
 		}
 		combo.setItems(items);
@@ -58,7 +58,7 @@ class LangCombo {
 
 	private String getDisplayLanguage(String code) {
 		for (Locale loc : Locale.getAvailableLocales()) {
-			if (Strings.nullOrEqual(code, loc.getLanguage()))
+			if (epd.util.Strings.nullOrEqual(code, loc.getLanguage()))
 				return loc.getDisplayLanguage();
 		}
 		return M.Unknown;

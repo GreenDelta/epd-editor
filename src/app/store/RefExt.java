@@ -4,10 +4,10 @@ import java.util.Optional;
 
 import javax.xml.namespace.QName;
 
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.Epds;
-import org.openlca.ilcd.util.Strings;
 
 public class RefExt {
 
@@ -44,14 +44,14 @@ public class RefExt {
 	}
 
 	public static boolean putReferenceYear(Ref ref, String year) {
-		if (ref == null || Strings.nullOrEmpty(year))
+		if (ref == null || Strings.isBlank(year))
 			return false;
 		ref.withOtherAttributes().put(referenceYear(), year);
 		return true;
 	}
 
 	public static boolean putDatabase(Ref ref, String sourceId) {
-		if (ref == null || Strings.nullOrEmpty(sourceId))
+		if (ref == null || Strings.isBlank(sourceId))
 			return false;
 		var db = switch (sourceId) {
 			case "28d74cc0-db8b-4d7e-bc44-5f6d56ce0c4a" -> "GaBi";

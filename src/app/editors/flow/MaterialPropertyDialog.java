@@ -1,11 +1,5 @@
 package app.editors.flow;
 
-import app.M;
-import app.store.MaterialProperties;
-import app.util.UI;
-import app.util.Viewers;
-import epd.model.MaterialProperty;
-import epd.util.Strings;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -17,8 +11,15 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.openlca.commons.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import app.M;
+import app.store.MaterialProperties;
+import app.util.UI;
+import app.util.Viewers;
+import epd.model.MaterialProperty;
 
 class MaterialPropertyDialog extends Dialog {
 
@@ -58,7 +59,7 @@ class MaterialPropertyDialog extends Dialog {
 	private void setInput(ComboViewer combo) {
 		try {
 			var props = MaterialProperties.get();
-			props.sort((p1, p2) -> Strings.compare(p1.name, p2.name));
+			props.sort((p1, p2) -> Strings.compareIgnoreCase(p1.name, p2.name));
 			combo.setInput(props);
 			if (!props.isEmpty()) {
 				selectedProperty = props.get(0);

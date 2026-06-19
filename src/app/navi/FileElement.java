@@ -4,9 +4,9 @@ import java.io.File;
 import java.util.Objects;
 
 import org.eclipse.swt.graphics.Image;
+import org.openlca.commons.Strings;
 
 import app.rcp.Icon;
-import epd.util.Strings;
 
 public class FileElement extends NavigationElement {
 
@@ -31,7 +31,7 @@ public class FileElement extends NavigationElement {
 	public int compareTo(NavigationElement e) {
 		if (!(e instanceof FileElement other))
 			return 1;
-		return Strings.compare(this.getLabel(), other.getLabel());
+		return Strings.compareIgnoreCase(this.getLabel(), other.getLabel());
 	}
 
 	@Override

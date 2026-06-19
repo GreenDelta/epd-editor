@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.io.SodaConnection;
+import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.editors.Editors;
 import app.navi.Navigator;
-import epd.util.Strings;
-import org.slf4j.LoggerFactory;
 
 public class Connections {
 
@@ -36,7 +36,7 @@ public class Connections {
 				list.add(con);
 			}
 		}
-		list.sort((c1, c2) -> Strings.compare(c1.toString(), c2.toString()));
+		list.sort((c1, c2) -> Strings.compareIgnoreCase(c1.toString(), c2.toString()));
 		return list;
 	}
 

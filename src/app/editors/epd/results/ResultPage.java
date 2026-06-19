@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.epd.EpdProfileModule;
 import org.openlca.ilcd.epd.EpdProfiles;
 import org.openlca.ilcd.processes.Process;
@@ -35,7 +36,6 @@ import app.util.Viewers;
 import app.util.tables.ComboBoxCellModifier;
 import app.util.tables.ModifySupport;
 import app.util.tables.TextCellModifier;
-import epd.util.Strings;
 
 public class ResultPage extends FormPage {
 
@@ -75,7 +75,7 @@ public class ResultPage extends FormPage {
 		var combo = UI.formCombo(comp, tk, M.EPDProfile, Tooltips.EPD_EPDProfile);
 		int selected = -1;
 		var profiles = EpdProfiles.getAll();
-		profiles.sort((p1, p2) -> Strings.compare(p1.getName(), p2.getName()));
+		profiles.sort((p1, p2) -> Strings.compareIgnoreCase(p1.getName(), p2.getName()));
 		var items = new String[profiles.size()];
 		for (int i = 0; i < profiles.size(); i++) {
 			var profile = profiles.get(i);

@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.QuantitativeReferenceType;
 import org.openlca.ilcd.processes.Exchange;
@@ -31,7 +32,6 @@ import app.util.Controls;
 import app.util.LangText;
 import app.util.LangText.TextBuilder;
 import app.util.UI;
-import epd.util.Strings;
 
 class InfoPage extends FormPage {
 
@@ -288,7 +288,7 @@ class InfoPage extends FormPage {
 		}
 		text.addModifyListener(e -> {
 			var s = text.getText();
-			if (Strings.nullOrEmpty(s)) {
+			if (Strings.isBlank(s)) {
 				fn.accept(null);
 				editor.setDirty();
 				return;

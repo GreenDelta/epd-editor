@@ -130,7 +130,7 @@ class Table {
 		protected void setText(MaterialProperty p, String text) {
 			if (Objects.equals(p.id, text))
 				return;
-			if (Strings.nullOrEmpty(text)) {
+			if (org.openlca.commons.Strings.isBlank(text)) {
 				MsgBox.error("Invalid ID", "The ID cannot be empty.");
 				return;
 			}

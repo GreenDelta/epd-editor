@@ -11,6 +11,7 @@ import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.epd.EpdProfiles;
 
 import app.App;
@@ -21,7 +22,6 @@ import app.navi.Navigator;
 import app.store.IndexBuilder;
 import app.store.RefDataSync;
 import app.util.UI;
-import epd.util.Strings;
 
 public class WorkbenchWindow extends WorkbenchWindowAdvisor {
 
@@ -72,7 +72,7 @@ public class WorkbenchWindow extends WorkbenchWindowAdvisor {
 		// collect the URLs from the EPD profiles
 		var urls = new ArrayList<String>();
 		for (var profile : EpdProfiles.getAll()) {
-			if (Strings.nullOrEmpty(profile.getDataUrl()))
+			if (Strings.isBlank(profile.getDataUrl()))
 				continue;
 			if (!urls.contains(profile.getDataUrl()))
 				urls.add(profile.getDataUrl());

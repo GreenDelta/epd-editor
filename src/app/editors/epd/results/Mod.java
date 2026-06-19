@@ -28,9 +28,9 @@ record Mod(String module, String scenario) {
 						return 1;
 					if (i1 != null && i2 == null)
 						return -1;
-					int c = Strings.compare(mod1.module, mod2.module);
+					int c = org.openlca.commons.Strings.compareIgnoreCase(mod1.module, mod2.module);
 					return c == 0
-							? Strings.compare(mod1.scenario, mod2.scenario)
+							? org.openlca.commons.Strings.compareIgnoreCase(mod1.scenario, mod2.scenario)
 							: c;
 				})
 				.toArray(Mod[]::new);
@@ -57,9 +57,9 @@ record Mod(String module, String scenario) {
 	}
 
 	static String key(String module, String scenario) {
-		if (Strings.nullOrEmpty(module))
+		if (org.openlca.commons.Strings.isBlank(module))
 			return "?";
-		return Strings.notEmpty(scenario)
+		return org.openlca.commons.Strings.isNotBlank(scenario)
 				? module + " / " + scenario
 				: module;
 	}

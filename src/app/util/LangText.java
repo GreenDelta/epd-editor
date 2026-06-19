@@ -9,11 +9,11 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.commons.LangString;
 
 import app.App;
 import app.editors.IEditor;
-import epd.util.Strings;
 
 public class LangText {
 
@@ -87,7 +87,7 @@ public class LangText {
 			applySystemFont(text);
 			this.current = onEdit.get();
 			var value = text.getText();
-			if (Strings.notEmpty(value)) {
+			if (Strings.isNotBlank(value)) {
 				LangString.set(current, value, App.lang());
 			} else {
 				LangString.remove(current, App.lang());
@@ -97,7 +97,7 @@ public class LangText {
 			}
 		});
 
-		if (Strings.notEmpty(toolTip)) {
+		if (Strings.isNotBlank(toolTip)) {
 			text.setToolTipText(toolTip);
 		}
 
@@ -135,12 +135,12 @@ public class LangText {
 		var lang = App.lang();
 
 		var val = LangString.get(current, lang);
-		if (Strings.notEmpty(val)) {
+		if (Strings.isNotBlank(val)) {
 			text.setText(val);
 			applySystemFont(text);
 		} else {
 			var defaultVal = LangString.getDefault(current);
-			if (Strings.notEmpty(defaultVal)) {
+			if (Strings.isNotBlank(defaultVal)) {
 				text.setText(defaultVal);
 				applyItalicFont(text);
 			} else {

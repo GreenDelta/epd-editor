@@ -18,6 +18,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.epd.EpdIndicatorResult;
 import org.openlca.ilcd.epd.EpdProfile;
@@ -31,7 +32,6 @@ import org.openlca.ilcd.util.Epds;
 import org.slf4j.LoggerFactory;
 
 import app.App;
-import epd.util.Strings;
 
 public class ExcelImport implements Runnable {
 
@@ -106,7 +106,7 @@ public class ExcelImport implements Runnable {
 				if (row == null)
 					break;
 				var name = str(row.getCell(0));
-				if (Strings.nullOrEmpty(name))
+				if (Strings.isBlank(name))
 					continue;
 				var key = keyFn.apply(name);
 				if (scenarios.containsKey(key))
@@ -117,7 +117,7 @@ public class ExcelImport implements Runnable {
 					.withGroup(str(row.getCell(1)))
 					.withDefaultScenario(bool(row.getCell(3)));
 				var desc = str(row.getCell(2));
-				if (Strings.notEmpty(desc)) {
+				if (Strings.isNotBlank(desc)) {
 					scen.withDescription().add(LangString.of(desc, App.lang()));
 				}
 				Epds.withScenarios(epd).add(scen);
@@ -128,7 +128,7 @@ public class ExcelImport implements Runnable {
 		// add scenarios from module entries
 		for (var s : slots) {
 			var name = s.entry.getScenario();
-			if (Strings.nullOrEmpty(name))
+			if (Strings.isBlank(name))
 				continue;
 			var key = keyFn.apply(name);
 			if (scenarios.containsKey(key))
@@ -148,19 +148,19 @@ public class ExcelImport implements Runnable {
 
 		for (var i : profile.getIndicators()) {
 
-			if (Strings.notEmpty(id)) {
+			if (Strings.isNotBlank(id)) {
 				if (id.equals(i.getUUID()))
 					return i;
 				continue;
 			}
 
-			if (Strings.notEmpty(code)) {
+			if (Strings.isNotBlank(code)) {
 				if (code.equals(i.getCode()))
 					return i;
 				continue;
 			}
 
-			if (Strings.notEmpty(name) && i.getRef() != null) {
+			if (Strings.isNotBlank(name) && i.getRef() != null) {
 				for (var refName : i.getRef().getName()) {
 					if (name.equals(refName.getValue()))
 						return i;
@@ -193,7 +193,7 @@ public class ExcelImport implements Runnable {
 		Cell cell;
 		while ((cell = row.getCell(pos)) != null) {
 			var s = str(cell);
-			if (Strings.nullOrEmpty(s))
+			if (Strings.isBlank(s))
 				break;
 			pos++;
 
@@ -217,7 +217,7 @@ public class ExcelImport implements Runnable {
 	}
 
 	private EpdModuleEntry parseModuleKey(String label, Set<String> mods) {
-		if (Strings.nullOrEmpty(label))
+		if (Strings.isBlank(label))
 			return null;
 		int splitIdx = label.indexOf('/');
 		if (splitIdx <= 0) {
@@ -231,7 +231,7 @@ public class ExcelImport implements Runnable {
 		if (!mods.contains(mod))
 			return null;
 		var scenario = label.substring(splitIdx + 1).strip();
-		return Strings.notEmpty(scenario)
+		return Strings.isNotBlank(scenario)
 			? new EpdModuleEntry().withModule(mod).withScenario(scenario)
 			: new EpdModuleEntry().withModule(mod);
 	}
@@ -251,7 +251,7 @@ public class ExcelImport implements Runnable {
 		if (cell.getCellType() != CellType.STRING)
 			return false;
 		var s = cell.getStringCellValue();
-		if (Strings.nullOrEmpty(s))
+		if (Strings.isBlank(s))
 			return false;
 		s = s.strip().toLowerCase(Locale.ROOT);
 		return s.startsWith("y")
@@ -270,7 +270,7 @@ public class ExcelImport implements Runnable {
 		for (int i = 0; i < count; i++) {
 			var sheet = wb.getSheetAt(i);
 			var name = sheet.getSheetName();
-			if (Strings.nullOrEmpty(name))
+			if (Strings.isBlank(name))
 				continue;
 			if (name.strip().equalsIgnoreCase(label))
 				return sheet;

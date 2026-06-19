@@ -12,6 +12,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.commons.FlowType;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.flows.Flow;
@@ -25,7 +26,6 @@ import app.util.UI;
 import app.util.Viewers;
 import epd.model.MaterialProperty;
 import epd.model.MaterialPropertyValue;
-import epd.util.Strings;
 
 /**
  * When a flow property is added to a flow, we open this dialog when we have
@@ -148,7 +148,7 @@ class PropertyDepsDialog extends FormDialog {
 					continue;
 				props.add(prop);
 			}
-			props.sort((p1, p2) -> Strings.compare(p1.name, p2.name));
+			props.sort((p1, p2) -> Strings.compareIgnoreCase(p1.name, p2.name));
 			return props;
 		}
 

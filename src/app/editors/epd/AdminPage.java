@@ -6,6 +6,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.processes.LicenseType;
 import org.openlca.ilcd.processes.Process;
@@ -21,7 +22,6 @@ import app.util.Controls;
 import app.util.LangText;
 import app.util.UI;
 import epd.model.Xml;
-import epd.util.Strings;
 
 class AdminPage extends FormPage {
 
@@ -171,7 +171,7 @@ class AdminPage extends FormPage {
 		}
 		regNumber.addModifyListener(e -> {
 			String number = regNumber.getText();
-			if (Strings.nullOrEmpty(number)) {
+			if (Strings.isBlank(number)) {
 				pub.withRegistrationNumber(null);
 			} else {
 				pub.withRegistrationNumber(number);

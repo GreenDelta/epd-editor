@@ -6,7 +6,7 @@ import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.TreeItem;
 
-import epd.util.Strings;
+import org.openlca.commons.Strings;
 
 /**
  * A class for filtering model elements from a navigation tree via a text
@@ -48,7 +48,7 @@ public class RefTextFilter extends ViewerFilter {
 	private boolean select(NavigationElement elem, String text) {
 		if (elem instanceof RefElement e) {
 			String label = e.getLabel();
-			return !Strings.nullOrEmpty(label)
+			return !Strings.isBlank(label)
 				&& label.toLowerCase().contains(text);
 		}
 		for (var child : elem.getChilds())

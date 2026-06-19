@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.descriptors.DataStock;
 
 import app.App;
@@ -22,7 +23,6 @@ import app.rcp.Icon;
 import app.util.Tables;
 import app.util.UI;
 import app.util.Viewers;
-import epd.util.Strings;
 
 class DataStockDialog extends FormDialog {
 
@@ -32,7 +32,7 @@ class DataStockDialog extends FormDialog {
 	DataStockDialog(List<DataStock> dataStocks) {
 		super(UI.shell());
 		this.dataStocks = dataStocks;
-		dataStocks.sort((s1, s2) -> Strings.compare(s1.getShortName(), s2.getShortName()));
+		dataStocks.sort((s1, s2) -> Strings.compareIgnoreCase(s1.getShortName(), s2.getShortName()));
 		setBlockOnOpen(true);
 	}
 

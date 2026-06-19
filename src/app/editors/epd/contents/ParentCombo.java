@@ -1,15 +1,16 @@
 package app.editors.epd.contents;
 
-import app.App;
-import app.util.Controls;
-import epd.util.Strings;
-import org.eclipse.swt.widgets.Combo;
-import org.openlca.ilcd.processes.epd.EpdContentDeclaration;
-import org.openlca.ilcd.processes.epd.EpdContentElement;
-import scala.collection.mutable.StringBuilder;
-
 import java.util.ArrayList;
 import java.util.function.Consumer;
+
+import org.eclipse.swt.widgets.Combo;
+import org.openlca.commons.Strings;
+import org.openlca.ilcd.processes.epd.EpdContentDeclaration;
+import org.openlca.ilcd.processes.epd.EpdContentElement;
+
+import app.App;
+import app.util.Controls;
+import scala.collection.mutable.StringBuilder;
 
 class ParentCombo {
 
@@ -44,7 +45,7 @@ class ParentCombo {
 			}
 			var candidate = candidates.get(i);
 			var n = App.s(candidate.getName());
-			if (Strings.notEmpty(n)) {
+			if (Strings.isNotBlank(n)) {
 				name.append(n);
 			}
 			items[i + 1] = name.toString();

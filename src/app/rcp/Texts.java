@@ -1,12 +1,12 @@
 package app.rcp;
 
-import org.eclipse.swt.widgets.Text;
-
-import app.util.Colors;
-import epd.util.Strings;
-
 import java.util.OptionalDouble;
 import java.util.function.Consumer;
+
+import org.eclipse.swt.widgets.Text;
+import org.openlca.commons.Strings;
+
+import app.util.Colors;
 
 public class Texts {
 
@@ -37,7 +37,7 @@ public class Texts {
 		if (text == null)
 			return null;
 		String s = text.getText();
-		return Strings.nullOrEmpty(s) ? null : s.trim();
+		return Strings.isBlank(s) ? null : s.trim();
 	}
 
 	public static Double getDouble(Text text) {
@@ -60,7 +60,7 @@ public class Texts {
 			return;
 		text.addModifyListener(_e -> {
 			var s = text.getText();
-			if (Strings.nullOrEmpty(s)) {
+			if (Strings.isBlank(s)) {
 				text.setBackground(Colors.white());
 				text.setToolTipText(null);
 				fn.accept(OptionalDouble.empty());

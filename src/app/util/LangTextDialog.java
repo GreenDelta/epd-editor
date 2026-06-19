@@ -16,11 +16,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.commons.LangString;
 
 import app.App;
 import app.M;
-import epd.util.Strings;
 
 public class LangTextDialog extends FormDialog {
 
@@ -100,7 +100,7 @@ public class LangTextDialog extends FormDialog {
 
 	static boolean contains(List<LangBox> boxes, String lang) {
 		for (var box : boxes) {
-			if (Strings.nullOrEqual(lang, box.lang()))
+			if (epd.util.Strings.nullOrEqual(lang, box.lang()))
 				return true;
 		}
 		return false;
@@ -110,7 +110,7 @@ public class LangTextDialog extends FormDialog {
 			String lang, String val, List<LangString> strings) {
 
 		static LangBox of(LangString s, List<LangString> strings) {
-			var lang = Strings.nullOrEmpty(s.getLang())
+			var lang = Strings.isBlank(s.getLang())
 					? "en"
 					: s.getLang();
 			return new LangBox(lang, s.getValue(), strings);
@@ -128,11 +128,11 @@ public class LangTextDialog extends FormDialog {
 				var lang1 = box1.lang;
 				var lang2 = box2.lang;
 				var appLang = App.lang();
-				if (Strings.nullOrEqual(lang1, appLang))
+				if (epd.util.Strings.nullOrEqual(lang1, appLang))
 					return -1;
-				if (Strings.nullOrEqual(lang2, appLang))
+				if (epd.util.Strings.nullOrEqual(lang2, appLang))
 					return 1;
-				return Strings.compare(lang1, lang2);
+				return Strings.compareIgnoreCase(lang1, lang2);
 			});
 			return boxes;
 		}
@@ -146,7 +146,7 @@ public class LangTextDialog extends FormDialog {
 			}
 			text.addModifyListener($ -> {
 				var s = text.getText();
-				if (Strings.notEmpty(s)) {
+				if (Strings.isNotBlank(s)) {
 					LangString.set(strings, s, lang);
 				} else {
 					LangString.remove(strings, lang);
@@ -163,7 +163,7 @@ public class LangTextDialog extends FormDialog {
 				if (loc == null)
 					return lang;
 				var name = loc.getDisplayLanguage();
-				return Strings.notEmpty(name)
+				return Strings.isNotBlank(name)
 						? lang + " - " + name
 						: lang;
 			} catch (Exception e) {
@@ -183,13 +183,13 @@ public class LangTextDialog extends FormDialog {
 			var codeSet = new HashSet<String>();
 			for (var loc : Locale.getAvailableLocales()) {
 				var code = loc.getLanguage();
-				if (Strings.notEmpty(code)) {
+				if (Strings.isNotBlank(code)) {
 					codeSet.add(code);
 				}
 			}
 
 			var codes = new ArrayList<>(codeSet);
-			codes.sort(Strings::compare);
+			codes.sort(Strings::compareIgnoreCase);
 			var items = new String[codes.size()];
 			for (int i = 0; i < codes.size(); i++) {
 				var code = codes.get(i);

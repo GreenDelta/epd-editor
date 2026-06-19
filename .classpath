@@ -44,7 +44,7 @@
 	<classpathentry exported="true" kind="lib" path="libs/logback-classic-1.2.13.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/logback-core-1.2.13.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/mimepull-1.9.15.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/olca-commons-1.0.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/olca-commons-1.1.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/olca-ilcd-3.2.0-SNAPSHOT.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/osgi-resource-locator-1.0.3.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/poi-5.2.5.jar"/>

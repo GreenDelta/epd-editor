@@ -10,6 +10,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.epd.EpdProfile;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.util.Epds;
@@ -17,7 +18,6 @@ import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.M;
-import epd.util.Strings;
 
 public class ExcelExport implements Runnable {
 
@@ -112,7 +112,7 @@ public class ExcelExport implements Runnable {
 
 		for (int i = 0; i < scenarios.size(); i++) {
 			var scenario = scenarios.get(i);
-			if (Strings.nullOrEmpty(scenario.getName()))
+			if (Strings.isBlank(scenario.getName()))
 				continue;
 			var row = sheet.createRow(i + 1);
 			cell(row, 0, scenario.getName());
@@ -125,7 +125,7 @@ public class ExcelExport implements Runnable {
 	}
 
 	private Cell cell(Row row, int col, String val) {
-		if (Strings.nullOrEmpty(val))
+		if (Strings.isBlank(val))
 			return null;
 		var cell = row.createCell(col);
 		cell.setCellValue(val);

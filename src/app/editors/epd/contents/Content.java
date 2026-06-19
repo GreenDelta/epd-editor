@@ -1,7 +1,11 @@
 package app.editors.epd.contents;
 
-import app.App;
-import epd.util.Strings;
+import java.util.ArrayDeque;
+import java.util.Collections;
+import java.util.List;
+import java.util.Queue;
+
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.processes.epd.EpdContentComponent;
 import org.openlca.ilcd.processes.epd.EpdContentDeclaration;
 import org.openlca.ilcd.processes.epd.EpdContentElement;
@@ -9,10 +13,7 @@ import org.openlca.ilcd.processes.epd.EpdContentMaterial;
 import org.openlca.ilcd.processes.epd.EpdContentSubstance;
 import org.openlca.ilcd.processes.epd.EpdInnerContentElement;
 
-import java.util.ArrayDeque;
-import java.util.Collections;
-import java.util.List;
-import java.util.Queue;
+import app.App;
 
 final class Content {
 
@@ -134,7 +135,7 @@ final class Content {
 	static void sort(List<? extends EpdContentElement<?>> elems) {
 		if (elems == null || elems.isEmpty())
 			return;
-		elems.sort((e1, e2) -> Strings.compare(App.s(e1.getName()), App.s(e2.getName())));
+		elems.sort((e1, e2) -> Strings.compareIgnoreCase(App.s(e1.getName()), App.s(e2.getName())));
 		for (var e : elems) {
 			sort(childs(e));
 		}

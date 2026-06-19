@@ -6,6 +6,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.Ref;
 
@@ -15,7 +16,6 @@ import app.rcp.Icon;
 import app.util.Colors;
 import app.util.Controls;
 import app.util.UI;
-import epd.util.Strings;
 
 public class RefLink extends Composite {
 
@@ -89,11 +89,11 @@ public class RefLink extends Composite {
 		String t = M.None;
 		if (ref != null) {
 			var s = App.s(ref.getName());
-			if (Strings.notEmpty(s)) {
+			if (Strings.isNotBlank(s)) {
 				t = s;
 			}
 		}
-		t = Strings.cut(t, 120);
+		t = Strings.cutEnd(t, 120);
 		link.setText(t);
 	}
 

@@ -12,6 +12,7 @@ import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.UIJob;
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.io.SodaConnection;
@@ -30,7 +31,6 @@ import app.editors.flowproperty.FlowPropertyEditor;
 import app.editors.methods.MethodEditor;
 import app.editors.source.SourceEditor;
 import app.editors.unitgroup.UnitGroupEditor;
-import epd.util.Strings;
 
 public class Editors {
 
@@ -38,14 +38,14 @@ public class Editors {
 		if (input == null || editor == null)
 			return;
 		String title = input.getName();
-		editor.setPartName(Strings.cut(title, 75));
+		editor.setPartName(Strings.cutEnd(title, 75));
 	}
 
 	public static void setTabTitle(IDataSet ds, BaseEditor editor) {
 		if (ds == null || editor == null)
 			return;
 		String title = App.s(DataSets.getBaseName(ds));
-		editor.setPartName(Strings.cut(title, 75));
+		editor.setPartName(Strings.cutEnd(title, 75));
 	}
 
 	public static void open(Ref ref) {

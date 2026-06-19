@@ -50,7 +50,7 @@ class LocationCombo {
 			loc.withName(selectedCode);
 			locations.add(loc);
 		}
-		locations.sort((loc1, loc2) -> Strings.compare(loc1.getName(),
+		locations.sort((loc1, loc2) -> org.openlca.commons.Strings.compareIgnoreCase(loc1.getName(),
 				loc2.getName()));
 	}
 

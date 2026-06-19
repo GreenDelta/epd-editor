@@ -3,13 +3,13 @@ package app.navi;
 import java.util.Objects;
 
 import org.eclipse.swt.graphics.Image;
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.commons.Category;
 import org.openlca.ilcd.commons.Ref;
 
 import app.rcp.Icon;
 import app.rcp.Labels;
 import epd.index.CategoryNode;
-import epd.util.Strings;
 
 public class CategoryElement extends NavigationElement {
 
@@ -55,7 +55,7 @@ public class CategoryElement extends NavigationElement {
 			return 1;
 		if (!(other instanceof CategoryElement o))
 			return -1;
-		return Strings.compare(getLabel(), o.getLabel());
+		return Strings.compareIgnoreCase(getLabel(), o.getLabel());
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.contacts.Contact;
@@ -23,7 +24,6 @@ import app.App;
 import app.editors.io.Download;
 import epd.model.RefStatus;
 import epd.model.Version;
-import epd.util.Strings;
 
 /**
  * Synchronize reference data from a data stock URL with the local data store.
@@ -57,7 +57,7 @@ public class RefDataSync implements Runnable {
 	}
 
 	private SodaConnection makeConnection(String url) {
-		if (Strings.nullOrEmpty(url))
+		if (Strings.isBlank(url))
 			return null;
 		String baseUrl = url;
 		String dataStock = null;

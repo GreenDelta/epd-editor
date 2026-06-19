@@ -12,6 +12,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.ui.PlatformUI;
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.epd.EpdProfile;
@@ -22,7 +23,6 @@ import org.slf4j.LoggerFactory;
 
 import app.rcp.Activator;
 import epd.index.Index;
-import epd.util.Strings;
 
 public class App {
 
@@ -108,7 +108,7 @@ public class App {
 
 	public static String lang() {
 		var lang = settings().lang;
-		return Strings.notEmpty(lang)
+		return Strings.isNotBlank(lang)
 				? lang
 				: "en";
 	}
@@ -128,7 +128,7 @@ public class App {
 
 	public static String header(List<LangString> strings, int length) {
 		String s = LangString.getOrDefault(strings, lang());
-		return s == null ? "" : Strings.cut(s, length);
+		return s == null ? "" : Strings.cutEnd(s, length);
 	}
 
 	public static Job runInUI(String name, Runnable runnable) {

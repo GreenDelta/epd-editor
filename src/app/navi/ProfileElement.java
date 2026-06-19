@@ -31,7 +31,7 @@ public class ProfileElement extends NavigationElement {
 			return 1;
 		if (this.profile == null || other.profile == null)
 			return 0;
-		return Strings.compare(this.profile.getName(), other.profile.getName());
+		return org.openlca.commons.Strings.compareIgnoreCase(this.profile.getName(), other.profile.getName());
 	}
 
 	@Override

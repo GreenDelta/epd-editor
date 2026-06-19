@@ -17,6 +17,7 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
+import org.openlca.commons.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +30,6 @@ import app.util.Tables;
 import app.util.UI;
 import app.util.Viewers;
 import epd.model.RefStatus;
-import epd.util.Strings;
 
 public class StatusView extends BaseEditor {
 
@@ -51,7 +51,7 @@ public class StatusView extends BaseEditor {
 	public void init(IEditorSite site, IEditorInput input)
 		throws PartInitException {
 		super.init(site, input);
-		setPartName(Strings.cut(input.getName(), 75));
+		setPartName(Strings.cutEnd(input.getName(), 75));
 		try {
 			ViewInput vi = (ViewInput) input;
 			title = vi.getName();

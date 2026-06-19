@@ -14,6 +14,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.flows.Flow;
@@ -33,7 +34,6 @@ import app.util.Tables;
 import app.util.UI;
 import app.util.Viewers;
 import epd.refs.RefSync;
-import epd.util.Strings;
 
 class FlowUpdateCheck {
 
@@ -98,7 +98,7 @@ class FlowUpdateCheck {
 
 		private Dialog(Flow flow, List<Ref> usages) {
 			this.flow = flow;
-			usages.sort((r1, r2) -> Strings.compare(
+			usages.sort((r1, r2) -> Strings.compareIgnoreCase(
 				App.s(r1.getName()), App.s(r2.getName())));
 			selected = new HashMap<>();
 			for (Ref ref : usages) {
@@ -122,7 +122,7 @@ class FlowUpdateCheck {
 				getContainer().run(true, true, monitor -> {
 					monitor.beginTask("Update data set", updates.size());
 					for (Ref ref : updates) {
-						monitor.subTask(Strings.cut(App.s(ref.getName()), 25));
+						monitor.subTask(Strings.cutEnd(App.s(ref.getName()), 25));
 						try {
 							var p = App.store().get(Process.class, ref.getUUID());
 							RefSync.updateRefs(p, App.index());
@@ -155,7 +155,7 @@ class FlowUpdateCheck {
 			private Page() {
 				super("DialogPage", M.UpdateReferences, null);
 				setDescription("The saved flow data set '"
-					+ Strings.cut(App.s(Flows.getBaseName(flow)), 25)
+					+ Strings.cutEnd(App.s(Flows.getBaseName(flow)), 25)
 					+ "' is used in the following EPDs. Should these EPDs"
 					+ " be updated as well?");
 				setPageComplete(true);

@@ -5,11 +5,11 @@ import java.util.Objects;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.commons.Ref;
 
 import app.App;
 import app.rcp.Icon;
-import epd.util.Strings;
 
 public record RefEditorInput(Ref ref) implements IEditorInput {
 
@@ -34,7 +34,7 @@ public record RefEditorInput(Ref ref) implements IEditorInput {
 		if (ref == null)
 			return "??";
 		var name = App.s(ref.getName());
-		return Strings.nullOrEmpty(name) ? "??" : name;
+		return Strings.isBlank(name) ? "??" : name;
 	}
 
 	@Override

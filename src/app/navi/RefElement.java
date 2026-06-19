@@ -3,12 +3,12 @@ package app.navi;
 import java.util.Objects;
 
 import org.eclipse.swt.graphics.Image;
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.commons.Ref;
 
 import app.App;
 import app.rcp.Icon;
 import app.store.RefExt;
-import epd.util.Strings;
 
 public class RefElement extends NavigationElement {
 
@@ -37,7 +37,7 @@ public class RefElement extends NavigationElement {
 	public int compareTo(NavigationElement other) {
 		if (!(other instanceof RefElement))
 			return 1;
-		return Strings.compare(this.getLabel(), other.getLabel());
+		return Strings.compareIgnoreCase(this.getLabel(), other.getLabel());
 	}
 
 	@Override

@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.epd.EpdIndicatorResult;
 import org.openlca.ilcd.epd.EpdProfile;
 import org.openlca.ilcd.epd.EpdProfileIndicator;
 import org.openlca.ilcd.processes.Process;
-import org.openlca.ilcd.util.Strings;
 
 class Util {
 
@@ -31,7 +31,7 @@ class Util {
 		var mapped = new ArrayList<EpdIndicatorResult>();
 		for (var r : results) {
 			var ref = r.indicator();
-			if (ref == null || Strings.nullOrEmpty(ref.getUUID())) {
+			if (ref == null || Strings.isBlank(ref.getUUID())) {
 				mapped.add(r);
 				continue;
 			}

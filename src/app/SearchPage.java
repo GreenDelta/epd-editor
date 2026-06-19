@@ -17,8 +17,8 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.commons.Ref;
-import org.openlca.ilcd.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -116,7 +116,7 @@ public class SearchPage extends FormEditor {
 			List<Ref> filtered = new ArrayList<>();
 			for (Ref ref : refs) {
 				var name = App.s(ref.getName());
-				if (Strings.nullOrEmpty(name))
+				if (Strings.isBlank(name))
 					continue;
 				name = name.toLowerCase();
 				if (name.contains(term)) {

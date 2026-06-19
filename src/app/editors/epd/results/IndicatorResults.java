@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.ExchangeFunction;
 import org.openlca.ilcd.commons.Ref;
@@ -13,8 +14,6 @@ import org.openlca.ilcd.processes.Exchange;
 import org.openlca.ilcd.processes.ImpactResult;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.epd.EpdResultExtension;
-
-import epd.util.Strings;
 
 class IndicatorResults {
 
@@ -79,11 +78,11 @@ class IndicatorResults {
 			// then try by code
 			var c1 = r1.getIndicatorCode();
 			var c2 = r2.getIndicatorCode();
-			if (Strings.notEmpty(c1) && Strings.notEmpty(c2))
-				return Strings.compare(c1, c2);
+			if (Strings.isNotBlank(c1) && Strings.isNotBlank(c2))
+				return Strings.compareIgnoreCase(c1, c2);
 
 			// finally compare by name
-			return Strings.compare(
+			return Strings.compareIgnoreCase(
 					r1.getIndicatorName(), r2.getIndicatorName());
 		});
 	}

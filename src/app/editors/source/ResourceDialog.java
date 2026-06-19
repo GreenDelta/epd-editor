@@ -10,8 +10,8 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.sources.FileRef;
-import org.openlca.ilcd.util.Strings;
 import org.slf4j.LoggerFactory;
 
 import app.App;
@@ -37,7 +37,7 @@ class ResourceDialog extends FormDialog {
 				.withUri(dialog.file.getName());
 			return Optional.of(ref);
 		} else {
-			return Strings.notEmpty(dialog.url)
+			return Strings.isNotBlank(dialog.url)
 				? Optional.of(new FileRef().withUri(dialog.url))
 				: Optional.empty();
 		}

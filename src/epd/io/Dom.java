@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.Vocab;
 import org.openlca.ilcd.commons.Extension;
 import org.openlca.ilcd.commons.LangString;
@@ -19,8 +20,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import epd.util.Strings;
 
 /**
  * Utility methods for reading and writing data using the W3C DOM API.
@@ -88,7 +87,7 @@ public final class Dom {
 		if (text == null)
 			return null;
 		String lang = getAttribute(elem, "lang");
-		if (Strings.nullOrEmpty(lang)) {
+		if (Strings.isBlank(lang)) {
 			lang = "en";
 		}
 		return LangString.of(text, lang);
@@ -98,7 +97,7 @@ public final class Dom {
 		if (elem == null || s == null)
 			return;
 		elem.setTextContent(s.getValue());
-		if (!Strings.nullOrEmpty(s.getLang())) {
+		if (!Strings.isBlank(s.getLang())) {
 			elem.setAttributeNS(Vocab.XML, "lang", s.getLang());
 		}
 	}

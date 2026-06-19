@@ -1,21 +1,22 @@
 package app.editors.connection;
 
-import app.editors.BaseEditor;
-import app.editors.Editors;
-import app.editors.SimpleEditorInput;
-import app.rcp.Icon;
-import app.store.Connections;
-import epd.util.Strings;
+import java.util.Objects;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.io.SodaConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Objects;
+import app.editors.BaseEditor;
+import app.editors.Editors;
+import app.editors.SimpleEditorInput;
+import app.rcp.Icon;
+import app.store.Connections;
 
 public class ConnectionEditor extends BaseEditor {
 
@@ -32,7 +33,7 @@ public class ConnectionEditor extends BaseEditor {
 	public void init(IEditorSite site, IEditorInput input)
 		throws PartInitException {
 		super.init(site, input);
-		setPartName(Strings.cut(input.getName(), 75));
+		setPartName(Strings.cutEnd(input.getName(), 75));
 		try {
 			Input i = (Input) input;
 			con = i.con;
@@ -56,7 +57,7 @@ public class ConnectionEditor extends BaseEditor {
 		Connections.save(con);
 		dirty = false;
 		editorDirtyStateChanged();
-		setPartName(Strings.cut(con.toString(), 75));
+		setPartName(Strings.cutEnd(con.toString(), 75));
 	}
 
 	public static class Input extends SimpleEditorInput {

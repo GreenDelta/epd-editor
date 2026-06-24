@@ -1,4 +1,5 @@
 import os
+import ssl
 import urllib.request
 
 from pathlib import Path
@@ -45,7 +46,11 @@ class JRE:
             f"download/jdk-17.0.5%2B8/{zip_name}"
         )
         print(f"  Fetching JRE from {url}...")
-        urllib.request.urlretrieve(url, zf)
+        context = ssl._create_unverified_context()
+        with urllib.request.urlopen(url, context=context) as u, open(
+            zf, "wb"
+        ) as f:
+            f.write(u.read())
         if not os.path.exists(zf):
             raise AssertionError(f"Warning: JRE download failed; url={url}")
         return zf
@@ -67,7 +72,9 @@ class JRE:
             if not tar.exists():
                 Zip.unzip(zf, zf.parent)
                 if not tar.exists():
-                    raise AssertionError(f"Warning: could not find the JRE tar {tar}.")
+                    raise AssertionError(
+                        f"Warning: could not find the JRE tar {tar}."
+                    )
             Zip.unzip(tar, build_dir.app)
 
         # rename the JRE folder if required

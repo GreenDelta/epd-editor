@@ -1,7 +1,15 @@
-import os
-import ssl
-import urllib.request
+"""
+This module handles fetching and extracting the JRE needed for the application.
 
+You can get the URLs of the latest JRE releases from the Adoptium GitHub
+repository:
+
+  curl -s https://api.github.com/repos/adoptium/temurin25-binaries/releases/latest
+    | jq -r '.assets[].browser_download_url'
+"""
+
+import os
+import urllib.request
 from pathlib import Path
 
 from package import PROJECT_DIR
@@ -11,7 +19,6 @@ from package.zipio import Zip
 
 
 class JRE:
-
     @staticmethod
     def zip_name(osa: OsArch) -> str:
         suffix = "zip" if osa == OsArch.WINDOWS_X64 else "tar.gz"
@@ -25,7 +32,7 @@ class JRE:
             name = "x64_windows"
         else:
             raise ValueError(f"Warning: Unsupported OS + arch: {osa}.")
-        return f"OpenJDK21U-jre_{name}_hotspot_21.0.11_10.{suffix}"
+        return f"OpenJDK25U-jre_{name}_hotspot_25.0.3_9.{suffix}"
 
     @staticmethod
     def cache_dir() -> Path:
@@ -42,15 +49,11 @@ class JRE:
         if os.path.exists(zf):
             return zf
         url = (
-            "https://github.com/adoptium/temurin21-binaries/releases/"
-            f"download/jdk-21.0.11%2B10/{zip_name}"
+            "https://github.com/adoptium/temurin25-binaries/releases/"
+            f"download/jdk-25.0.3%2B9/{zip_name}"
         )
-        print(f"  Fetching JRE from {url}...")
-        context = ssl._create_unverified_context()
-        with urllib.request.urlopen(url, context=context) as u, open(
-            zf, "wb"
-        ) as f:
-            f.write(u.read())
+        print(f"  Fetching JRE from {url} ...")
+        urllib.request.urlretrieve(url, zf)
         if not os.path.exists(zf):
             raise AssertionError(f"Warning: JRE download failed; url={url}")
         return zf

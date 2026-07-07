@@ -89,7 +89,7 @@ public class ResultPage extends FormPage {
 		if (selected >= 0) {
 			combo.select(selected);
 		}
-		Controls.onSelect(combo, e -> {
+		Controls.onSelect(combo, _ -> {
 			int i = combo.getSelectionIndex();
 			editor.setProfile(profiles.get(i));
 		});

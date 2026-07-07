@@ -37,14 +37,14 @@ class TypeCombo {
 			MenuItem item = new MenuItem(menu, SWT.NONE);
 			item.setText(Labels.get(type));
 			item.setImage(Icon.img(type));
-			Controls.onSelect(item, e -> {
+			Controls.onSelect(item, _ -> {
 				selectedType = type;
 				button.setImage(Icon.img(type));
 				button.setToolTipText(Labels.get(selectedType));
 			});
 		}
 		button.setMenu(menu);
-		Controls.onSelect(button, e -> menu.setVisible(true));
+		Controls.onSelect(button, _ -> menu.setVisible(true));
 	}
 
 }

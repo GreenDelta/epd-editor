@@ -128,7 +128,7 @@ class InfoPage extends FormPage {
 				M.Amount, Tooltips.EPD_ProductAmount);
 
 		amountText.setText(Double.toString(exchange.getMeanAmount()));
-		amountText.addModifyListener(e -> {
+		amountText.addModifyListener(_ -> {
 			try {
 				double val = Double.parseDouble(amountText.getText());
 				exchange.withMeanAmount(val);
@@ -238,7 +238,7 @@ class InfoPage extends FormPage {
 					pubDate.getMonth() - 1,
 					pubDate.getDay());
 		}
-		dateBox.addSelectionListener(Controls.onSelect(_e -> {
+		dateBox.addSelectionListener(Controls.onSelect(_ -> {
 			// the date-box receives selection events by default,
 			// the check if the value really changed here
 			var next = DatatypeFactory.newDefaultInstance().newXMLGregorianCalendar();
@@ -286,7 +286,7 @@ class InfoPage extends FormPage {
 		if (initial != null) {
 			text.setText(initial.toString());
 		}
-		text.addModifyListener(e -> {
+		text.addModifyListener(_ -> {
 			var s = text.getText();
 			if (Strings.isBlank(s)) {
 				fn.accept(null);

@@ -169,7 +169,7 @@ class AdminPage extends FormPage {
 		if (pub.getRegistrationNumber() != null) {
 			regNumber.setText(pub.getRegistrationNumber());
 		}
-		regNumber.addModifyListener(e -> {
+		regNumber.addModifyListener(_ -> {
 			String number = regNumber.getText();
 			if (Strings.isBlank(number)) {
 				pub.withRegistrationNumber(null);
@@ -192,7 +192,7 @@ class AdminPage extends FormPage {
 			M.Copyright, Tooltips.EPD_Copyright);
 		copyright
 			.setSelection(pub.getCopyright() != null && pub.getCopyright());
-		Controls.onSelect(copyright, e -> {
+		Controls.onSelect(copyright, _ -> {
 			pub.withCopyright(copyright.getSelection());
 			editor.setDirty();
 		});
@@ -230,7 +230,7 @@ class AdminPage extends FormPage {
 			Tooltips.EPD_LicenseType);
 		combo.setItems(items);
 		combo.select(selected);
-		Controls.onSelect(combo, e -> {
+		Controls.onSelect(combo, _ -> {
 			int i = combo.getSelectionIndex();
 			if (i == 0) {
 				pub.withLicense(null);

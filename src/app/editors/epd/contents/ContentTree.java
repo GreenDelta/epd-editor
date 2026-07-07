@@ -1,12 +1,8 @@
 package app.editors.epd.contents;
 
-import app.App;
-import app.M;
-import app.editors.epd.EpdEditor;
-import app.util.Actions;
-import app.util.Trees;
-import app.util.UI;
-import app.util.Viewers;
+import java.util.List;
+import java.util.stream.IntStream;
+
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.BaseLabelProvider;
@@ -26,8 +22,13 @@ import org.openlca.ilcd.processes.epd.EpdContentDeclaration;
 import org.openlca.ilcd.processes.epd.EpdContentElement;
 import org.openlca.ilcd.processes.epd.EpdInnerContentElement;
 
-import java.util.List;
-import java.util.stream.IntStream;
+import app.App;
+import app.M;
+import app.editors.epd.EpdEditor;
+import app.util.Actions;
+import app.util.Trees;
+import app.util.UI;
+import app.util.Viewers;
 
 class ContentTree {
 
@@ -87,7 +88,7 @@ class ContentTree {
 			.forEach(i -> t.getColumn(i).setAlignment(SWT.RIGHT));
 		double w = 0.8 / 9;
 		Trees.bindColumnWidths(t, 0.2, w, w, w, w, w, w, w, w, w);
-		Trees.onDoubleClick(tree, _e -> onEdit());
+		Trees.onDoubleClick(tree, _ -> onEdit());
 	}
 
 	private void createMenu() {

@@ -62,7 +62,7 @@ class ParentCombo {
 		combo.select(selection);
 
 		// handle selections
-		Controls.onSelect(combo, _e -> {
+		Controls.onSelect(combo, _ -> {
 			if (listener == null)
 				return;
 			int i = combo.getSelectionIndex();

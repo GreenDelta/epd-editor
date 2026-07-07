@@ -55,7 +55,7 @@ class LocationCombo {
 	}
 
 	private void onSelect(Consumer<String> fn) {
-		Controls.onSelect(combo, e -> {
+		Controls.onSelect(combo, _ -> {
 			int idx = combo.getSelectionIndex();
 			if (idx <= 0) {
 				fn.accept(null);

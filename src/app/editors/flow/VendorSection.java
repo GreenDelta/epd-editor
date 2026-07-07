@@ -1,20 +1,20 @@
 package app.editors.flow;
 
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.flows.epd.EpdMethodExtension;
+import org.openlca.ilcd.util.Flows;
 
 import app.M;
 import app.Tooltips;
 import app.editors.RefLink;
 import app.util.Controls;
 import app.util.UI;
-import org.openlca.ilcd.commons.Ref;
-import org.openlca.ilcd.flows.epd.EpdMethodExtension;
-import org.openlca.ilcd.util.Flows;
-
-import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 class VendorSection {
 
@@ -40,7 +40,7 @@ class VendorSection {
 		var check = UI.formCheckBox(comp, tk,
 			M.IsVendorSpecific, Tooltips.Flow_IsVendorSpecific);
 		check.setSelection(isVendorSpecific());
-		Controls.onSelect(check, e -> {
+		Controls.onSelect(check, _ -> {
 			// clear to null if it is not vendor specific
 			var b = check.getSelection() ? Boolean.TRUE : null;
 			Flows.withInventoryMethod(editor.flow)

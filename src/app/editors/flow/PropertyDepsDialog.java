@@ -75,7 +75,7 @@ class PropertyDepsDialog extends FormDialog {
 		table.setInput(data.unusedProps);
 
 		// handle selection changes
-		Tables.onClick(table, e -> {
+		Tables.onClick(table, _ -> {
 			MaterialProperty prop = Viewers.getFirstSelected(table);
 			if (prop == null)
 				return;

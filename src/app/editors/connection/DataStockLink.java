@@ -34,7 +34,7 @@ class DataStockLink {
 		UI.formLabel(comp, tk, M.DataStock);
 		link = tk.createImageHyperlink(comp, SWT.NONE);
 		link.setForeground(Colors.linkBlue());
-		Controls.onClick(link, e -> {
+		Controls.onClick(link, _ -> {
 			String[] error = new String[1];
 			List<DataStock> list = new ArrayList<>();
 			App.run("Get data stocks...",

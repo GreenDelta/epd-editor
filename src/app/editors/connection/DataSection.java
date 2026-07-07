@@ -1,15 +1,9 @@
 package app.editors.connection;
 
-import app.App;
-import app.M;
-import app.editors.io.DownloadDialog;
-import app.rcp.Icon;
-import app.util.Actions;
-import app.util.Controls;
-import app.util.MsgBox;
-import app.util.Tables;
-import app.util.UI;
-import app.util.Viewers;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -32,9 +26,16 @@ import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.sources.Source;
 import org.openlca.ilcd.units.UnitGroup;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import app.App;
+import app.M;
+import app.editors.io.DownloadDialog;
+import app.rcp.Icon;
+import app.util.Actions;
+import app.util.Controls;
+import app.util.MsgBox;
+import app.util.Tables;
+import app.util.UI;
+import app.util.Viewers;
 
 class DataSection {
 
@@ -58,7 +59,8 @@ class DataSection {
 		UI.gridData(searchText, false, false).widthHint = 350;
 		Button button = tk.createButton(comp, M.Search, SWT.NONE);
 		Controls.onSelect(
-			button, e -> runSearch(typeCombo.selectedType, searchText.getText()));
+				button,
+				_ -> runSearch(typeCombo.selectedType, searchText.getText()));
 		searchText.addTraverseListener(e -> {
 			if (e.detail == SWT.TRAVERSE_RETURN)
 				runSearch(typeCombo.selectedType, searchText.getText());

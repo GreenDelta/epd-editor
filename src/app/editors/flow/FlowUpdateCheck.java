@@ -173,7 +173,7 @@ class FlowUpdateCheck {
 				table.setLabelProvider(new Label());
 				Tables.bindColumnWidths(table, 0.6, 0.2, 0.2);
 				table.setInput(usages);
-				table.addSelectionChangedListener(e -> {
+				table.addSelectionChangedListener(_ -> {
 					Ref ref = Viewers.getFirstSelected(table);
 					if (ref == null)
 						return;

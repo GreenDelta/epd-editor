@@ -101,7 +101,7 @@ public class QMetaDataPage extends FormPage {
 					new GridData(SWT.LEFT, SWT.TOP, false, false));
 			var label = tk.createLabel(
 					comp, QLabel.wrap(config[i].text));
-			Controls.onClick(label, _e -> {
+			Controls.onClick(label, _ -> {
 				if (button.getSelection())
 					return;
 				for (Button other : buttons) {
@@ -128,7 +128,7 @@ public class QMetaDataPage extends FormPage {
 		if (selected.get() != null) {
 			Texts.set(comment, selected.get().comment);
 		}
-		comment.addModifyListener(e -> {
+		comment.addModifyListener(_ -> {
 			if (selected.get() != null) {
 				selected.get().comment = comment.getText();
 				editor.setDirty();
@@ -149,7 +149,7 @@ public class QMetaDataPage extends FormPage {
 			editor.setDirty();
 		};
 		for (Button b : buttons) {
-			Controls.onSelect(b, _e -> onChange.run());
+			Controls.onSelect(b, _ -> onChange.run());
 		}
 	}
 
@@ -172,7 +172,7 @@ public class QMetaDataPage extends FormPage {
 					SWT.LEFT, SWT.TOP, false, false));
 			button.setSelection(question.answer.yesNo != null
 					&& question.answer.yesNo);
-			Controls.onSelect(button, _e -> {
+			Controls.onSelect(button, _ -> {
 				question.answer.yesNo = button.getSelection();
 				editor.setDirty();
 			});
@@ -180,7 +180,7 @@ public class QMetaDataPage extends FormPage {
 			// create the label; also react on clicks on the label
 			Label label = tk.createLabel(comp,
 					QLabel.wrap(q.text));
-			Controls.onClick(label, _e -> {
+			Controls.onClick(label, _ -> {
 				button.setSelection(!button.getSelection());
 				button.notifyListeners(SWT.Selection, new Event());
 			});
@@ -188,7 +188,7 @@ public class QMetaDataPage extends FormPage {
 
 			Text comment = commentText(comp, tk);
 			Texts.set(comment, question.comment);
-			comment.addModifyListener(e -> {
+			comment.addModifyListener(_ -> {
 				question.comment = comment.getText();
 				editor.setDirty();
 			});

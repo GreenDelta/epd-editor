@@ -38,7 +38,7 @@ class ConnectionPage extends FormPage {
 		// password
 		UI.formLabel(comp, tk, M.Password);
 		Text pwText = tk.createText(comp, con.password, SWT.PASSWORD);
-		pwText.addModifyListener(e -> {
+		pwText.addModifyListener(_ -> {
 			con.password = pwText.getText();
 			editor.setDirty();
 		});
@@ -54,7 +54,7 @@ class ConnectionPage extends FormPage {
 		Text t = UI.formText(comp, tk, label);
 		if (initial != null)
 			t.setText(initial);
-		t.addModifyListener(e -> {
+		t.addModifyListener(_ -> {
 			fn.accept(t.getText());
 			editor.setDirty();
 		});

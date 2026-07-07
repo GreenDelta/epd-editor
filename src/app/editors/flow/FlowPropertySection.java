@@ -74,7 +74,7 @@ class FlowPropertySection {
 				propRef.withMeanValue(value);
 				editor.setDirty();
 			});
-		Tables.onDoubleClick(table, e -> {
+		Tables.onDoubleClick(table, _ -> {
 			FlowPropertyRef ref = Viewers.getFirstSelected(table);
 			if (ref != null) {
 				Editors.open(ref.getFlowProperty());

@@ -48,7 +48,7 @@ class DataStockDialog extends FormDialog {
 		tk.adapt(table.getTable());
 		Tables.bindColumnWidths(table, 0.2, 0.2, 0.6);
 		table.setInput(dataStocks);
-		table.addSelectionChangedListener(e -> {
+		table.addSelectionChangedListener(_ -> {
 			selected = Viewers.getFirstSelected(table);
 			getButton(IDialogConstants.OK_ID).setEnabled(selected != null);
 			table.refresh();

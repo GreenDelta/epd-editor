@@ -25,9 +25,6 @@ import app.util.tables.TextCellModifier;
 
 class ProductIdTable {
 
-	private static final String TYPE = M.Type;
-	private static final String VALUE = M.Value;
-
 	private final EpdEditor editor;
 	private final TableViewer table;
 	private final Process epd;
@@ -36,21 +33,15 @@ class ProductIdTable {
 		this.editor = editor;
 		this.epd = editor.epd;
 		UI.formLabel(parent, tk, M.ProductIds, Tooltips.EPD_ProductIds);
-		table = Tables.createViewer(parent, TYPE, VALUE);
+		table = Tables.createViewer(parent, M.Type, M.Value);
+		UI.gridData(table.getControl(), true, true).heightHint = 100;
 		table.setLabelProvider(new LabelProvider());
 		Tables.bindColumnWidths(table, 0.4, 0.6);
-		addModifiers();
-		UI.gridData(table.getControl(), true, true).heightHint = 100;
-		bindActions();
-	}
 
-	private void addModifiers() {
 		var ms = new ModifySupport<EpdProductId>(table);
-		ms.bind(TYPE, new TextModifier(TYPE));
-		ms.bind(VALUE, new TextModifier(VALUE));
-	}
+		ms.bind(M.Type, new TypeModifier());
+		ms.bind(M.Value, new ValueModifier());
 
-	private void bindActions() {
 		var add = Actions.create(M.Add, Icon.ADD.des(), this::onCreate);
 		var rem = Actions.create(M.Remove, Icon.DELETE.des(), this::onRemove);
 		Actions.bind(table, add, rem);
@@ -61,8 +52,7 @@ class ProductIdTable {
 	}
 
 	protected void onCreate() {
-		var id = new EpdProductId()
-			.withType("GTIN");
+		var id = new EpdProductId();
 		Epds.withProductIds(epd).add(id);
 		setInput();
 		editor.setDirty();
@@ -97,36 +87,38 @@ class ProductIdTable {
 		}
 	}
 
-	private class TextModifier extends TextCellModifier<EpdProductId> {
-
-		private final String field;
-
-		public TextModifier(String field) {
-			this.field = field;
-		}
+	private class TypeModifier extends TextCellModifier<EpdProductId> {
 
 		@Override
 		protected String getText(EpdProductId id) {
-			if (TYPE.equals(field))
-				return id.getType();
-			else if (VALUE.equals(field))
-				return id.getValue();
-			else
-				return "";
+			return id.getType();
 		}
 
 		@Override
 		protected void setText(EpdProductId id, String newText) {
 			if (id == null)
 				return;
-			String oldText = getText(id);
-			if (Objects.equals(oldText, newText))
+			if (Objects.equals(id.getType(), newText))
 				return;
-			if (TYPE.equals(field)) {
-				id.withType(newText);
-			} else if (VALUE.equals(field)) {
-				id.withValue(newText);
-			}
+			id.withType(newText);
+			editor.setDirty();
+		}
+	}
+
+	private class ValueModifier extends TextCellModifier<EpdProductId> {
+
+		@Override
+		protected String getText(EpdProductId id) {
+			return id.getValue();
+		}
+
+		@Override
+		protected void setText(EpdProductId id, String newText) {
+			if (id == null)
+				return;
+			if (Objects.equals(id.getValue(), newText))
+				return;
+			id.withValue(newText);
 			editor.setDirty();
 		}
 	}

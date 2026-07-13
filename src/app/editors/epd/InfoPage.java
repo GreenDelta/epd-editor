@@ -150,8 +150,7 @@ class InfoPage extends FormPage {
 			editor.setDirty();
 		});
 
-		var productIdTable = new ProductIdTable(editor, comp, tk);
-		productIdTable.setInput();
+		new ProductIdTable(editor, comp, tk).setInput();
 	}
 
 	public Exchange withProductExchange() {
@@ -161,7 +160,7 @@ class InfoPage extends FormPage {
 		if (qRef.getReferenceFlows().isEmpty()) {
 			qRef.withReferenceFlows().add(1);
 		}
-		int id = qRef.getReferenceFlows().get(0);
+		int id = qRef.getReferenceFlows().getFirst();
 		for (var exchange : epd.getExchanges()) {
 			if (id == exchange.getId())
 				return exchange;

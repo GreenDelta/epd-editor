@@ -21,8 +21,8 @@ import org.slf4j.LoggerFactory;
 import app.App;
 import app.M;
 import app.StatusView;
+import app.editors.refs.RefComparator;
 import app.editors.refs.RefTableLabel;
-import app.editors.refs.RefTableSection;
 import app.util.Controls;
 import app.util.MsgBox;
 import app.util.Tables;
@@ -128,7 +128,7 @@ public class UploadDialog extends Wizard {
 			table = Tables.createViewer(parent, M.DataSet, M.UUID,
 				M.DataSetVersion);
 			table.setLabelProvider(new RefTableLabel());
-			table.setComparator(RefTableSection.comparator());
+			table.setComparator(RefComparator.get());
 			Tables.bindColumnWidths(table, 0.6, 0.2, 0.2);
 			table.setInput(allRefs);
 		}

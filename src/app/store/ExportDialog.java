@@ -33,8 +33,8 @@ import com.google.common.base.Strings;
 
 import app.App;
 import app.M;
+import app.editors.refs.RefComparator;
 import app.editors.refs.RefTableLabel;
-import app.editors.refs.RefTableSection;
 import app.util.Colors;
 import app.util.Controls;
 import app.util.FileChooser;
@@ -177,7 +177,7 @@ public class ExportDialog extends Wizard {
 			table = Tables.createViewer(comp,
 				M.DataSet, M.UUID, M.DataSetVersion);
 			table.setLabelProvider(new RefTableLabel());
-			table.setComparator(RefTableSection.comparator());
+			table.setComparator(RefComparator.get());
 			Tables.bindColumnWidths(table, 0.6, 0.2, 0.2);
 			table.setInput(all);
 		}

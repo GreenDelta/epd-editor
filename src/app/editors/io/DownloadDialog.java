@@ -16,7 +16,7 @@ import org.openlca.ilcd.io.SodaConnection;
 import app.App;
 import app.M;
 import app.StatusView;
-import app.editors.RefTableLabel;
+import app.editors.refs.RefTableLabel;
 import app.navi.NaviSync;
 import app.util.MsgBox;
 import app.util.Tables;

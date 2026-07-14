@@ -29,6 +29,7 @@ import app.editors.epd.EpdEditor;
 import app.editors.flow.FlowEditor;
 import app.editors.flowproperty.FlowPropertyEditor;
 import app.editors.methods.MethodEditor;
+import app.editors.refs.RefEditorInput;
 import app.editors.source.SourceEditor;
 import app.editors.unitgroup.UnitGroupEditor;
 

@@ -16,7 +16,7 @@ import app.M;
 import app.Tooltips;
 import app.editors.CategorySection;
 import app.editors.CommonAdminSection;
-import app.editors.RefLink;
+import app.editors.refs.RefLink;
 import app.util.LangText;
 import app.util.UI;
 

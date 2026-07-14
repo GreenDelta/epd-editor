@@ -18,6 +18,7 @@ import app.editors.flow.FlowEditor;
 import app.editors.flowproperty.FlowPropertyEditor;
 import app.editors.io.UploadDialog;
 import app.editors.methods.MethodEditor;
+import app.editors.refs.RefCheck;
 import app.editors.source.SourceEditor;
 import app.editors.unitgroup.UnitGroupEditor;
 import app.rcp.Icon;

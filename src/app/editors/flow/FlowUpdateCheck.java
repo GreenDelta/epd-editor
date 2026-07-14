@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.M;
-import app.editors.RefTableLabel;
+import app.editors.refs.RefTableLabel;
 import app.rcp.Icon;
 import app.store.Data;
 import app.store.RefTrees;

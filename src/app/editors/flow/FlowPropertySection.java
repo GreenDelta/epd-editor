@@ -21,7 +21,7 @@ import app.App;
 import app.M;
 import app.Tooltips;
 import app.editors.Editors;
-import app.editors.RefSelectionDialog;
+import app.editors.refs.RefSelectionDialog;
 import app.rcp.Icon;
 import app.store.RefDeps;
 import app.util.Actions;

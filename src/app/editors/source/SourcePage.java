@@ -17,8 +17,8 @@ import app.M;
 import app.Tooltips;
 import app.editors.CategorySection;
 import app.editors.CommonAdminSection;
-import app.editors.RefLink;
-import app.editors.RefTable;
+import app.editors.refs.RefLink;
+import app.editors.refs.RefTableSection;
 import app.util.LangText;
 import app.util.TextBuilder;
 import app.util.UI;
@@ -91,7 +91,7 @@ class SourcePage extends FormPage {
 	private void contacts(Composite body) {
 		List<Ref> contacts = Sources.withDataSetInfo(source)
 				.withContacts();
-		RefTable.create(DataSetType.CONTACT, contacts)
+		RefTableSection.create(DataSetType.CONTACT, contacts)
 				.withEditor(editor)
 				.withTitle("Belongs to")
 				.withTooltip(Tooltips.Source_BelongsTo)

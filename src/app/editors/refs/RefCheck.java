@@ -1,10 +1,11 @@
-package app.editors;
+package app.editors.refs;
 
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
 
 import app.App;
 import app.M;
+import app.editors.Editors;
 import app.store.Data;
 import app.util.MsgBox;
 import epd.refs.RefSync;

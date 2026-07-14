@@ -23,8 +23,8 @@ import app.App;
 import app.M;
 import app.Tooltips;
 import app.editors.CategorySection;
-import app.editors.RefLink;
-import app.editors.RefTable;
+import app.editors.refs.RefLink;
+import app.editors.refs.RefTableSection;
 import app.rcp.Texts;
 import app.store.RefDeps;
 import app.util.Colors;
@@ -60,7 +60,7 @@ class InfoPage extends FormPage {
 		categorySection(body);
 		qRefSection(body);
 
-		RefTable.create(DataSetType.SOURCE,
+		RefTableSection.create(DataSetType.SOURCE,
 						Epds.withDataSetInfo(epd).withExternalDocs())
 				.withEditor(editor)
 				.withTitle(M.ExternalDocumentationSources)
@@ -72,7 +72,7 @@ class InfoPage extends FormPage {
 		createGeographySection(body, tb);
 		createTechnologySection(body, tb);
 
-		RefTable.create(DataSetType.SOURCE,
+		RefTableSection.create(DataSetType.SOURCE,
 						Epds.withTechnology(epd).withPictures())
 				.withEditor(editor)
 				.withTitle(M.FlowDiagramsOrPictures)

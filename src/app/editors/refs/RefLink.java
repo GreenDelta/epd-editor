@@ -1,4 +1,4 @@
-package app.editors;
+package app.editors.refs;
 
 import java.util.function.Consumer;
 
@@ -12,6 +12,7 @@ import org.openlca.ilcd.commons.Ref;
 
 import app.App;
 import app.M;
+import app.editors.Editors;
 import app.rcp.Icon;
 import app.util.Colors;
 import app.util.Controls;

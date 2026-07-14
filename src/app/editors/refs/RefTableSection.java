@@ -1,4 +1,4 @@
-package app.editors;
+package app.editors.refs;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -9,11 +9,12 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.Section;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.Ref;
 
 import app.M;
+import app.editors.Editors;
+import app.editors.IEditor;
 import app.rcp.Icon;
 import app.rcp.Labels;
 import app.util.Actions;
@@ -21,7 +22,7 @@ import app.util.Tables;
 import app.util.UI;
 import app.util.Viewers;
 
-public class RefTable {
+public class RefTableSection {
 
 	private final DataSetType type;
 	private final List<Ref> refs;
@@ -33,47 +34,48 @@ public class RefTable {
 	private Consumer<Ref> onAdd;
 	private Consumer<Ref> onRemove;
 
-	private RefTable(DataSetType type, List<Ref> refs) {
+	private RefTableSection(DataSetType type, List<Ref> refs) {
 		this.type = type;
 		this.refs = refs;
 	}
 
-	public static RefTable create(DataSetType type, List<Ref> refs) {
-		return new RefTable(type, refs);
+	public static RefTableSection create(DataSetType type, List<Ref> refs) {
+		return new RefTableSection(type, refs);
 	}
 
-	public RefTable withEditor(IEditor editor) {
+	public RefTableSection withEditor(IEditor editor) {
 		this.editor = editor;
 		return this;
 	}
 
-	public RefTable withTitle(String title) {
+	public RefTableSection withTitle(String title) {
 		this.title = title;
 		return this;
 	}
 
-	public RefTable withTooltip(String tooltip) {
+	public RefTableSection withTooltip(String tooltip) {
 		this.tooltip = tooltip;
 		return this;
 	}
 
-	public RefTable onAdd(Consumer<Ref> fn) {
+	public RefTableSection onAdd(Consumer<Ref> fn) {
 		this.onAdd = fn;
 		return this;
 	}
 
-	public RefTable onRemove(Consumer<Ref> fn) {
+	public RefTableSection onRemove(Consumer<Ref> fn) {
 		this.onRemove = fn;
 		return this;
 	}
 
 	public void render(Composite parent, FormToolkit tk) {
-		Section section = UI.section(parent, tk, title);
+		var section = UI.section(parent, tk, title);
 		if (tooltip != null) {
 			section.setToolTipText(tooltip);
 		}
 		var comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
+
 		var table = Tables.createViewer(comp, Labels.get(type));
 		table.setLabelProvider(new RefTableLabel());
 		table.setComparator(comparator());

@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 import app.App;
 import app.editors.BaseEditor;
 import app.editors.Editors;
-import app.editors.RefCheck;
-import app.editors.RefEditorInput;
+import app.editors.refs.RefCheck;
+import app.editors.refs.RefEditorInput;
 import app.store.Data;
 
 public class ContactEditor extends BaseEditor {

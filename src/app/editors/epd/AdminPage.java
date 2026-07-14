@@ -15,9 +15,9 @@ import org.openlca.ilcd.util.Processes;
 
 import app.M;
 import app.Tooltips;
-import app.editors.RefLink;
-import app.editors.RefTable;
 import app.editors.VersionField;
+import app.editors.refs.RefLink;
+import app.editors.refs.RefTableSection;
 import app.util.Controls;
 import app.util.LangText;
 import app.util.UI;
@@ -44,7 +44,7 @@ class AdminPage extends FormPage {
 		projectSection(body, tk);
 
 		// commissioner
-		RefTable.create(DataSetType.CONTACT,
+		RefTableSection.create(DataSetType.CONTACT,
 				Processes.withCommissionerAndGoal(epd).withCommissioners())
 			.withEditor(editor)
 			.withTitle(M.Commissioner)
@@ -55,7 +55,7 @@ class AdminPage extends FormPage {
 		dataEntrySection(body, tk);
 
 		// data set generators
-		RefTable.create(DataSetType.CONTACT,
+		RefTableSection.create(DataSetType.CONTACT,
 				Processes.withDataGenerator(epd).withContacts())
 			.withEditor(editor)
 			.withTitle(M.DataSetGeneratorModeller)
@@ -63,7 +63,7 @@ class AdminPage extends FormPage {
 			.render(body, tk);
 
 		// data formats
-		RefTable.create(DataSetType.SOURCE,
+		RefTableSection.create(DataSetType.SOURCE,
 				Processes.withDataEntry(epd).withFormats())
 			.withEditor(editor)
 			.withTitle(M.DataFormats)
@@ -74,7 +74,7 @@ class AdminPage extends FormPage {
 		publicationSection(body, tk);
 
 		// publishers
-		RefTable.create(DataSetType.CONTACT,
+		RefTableSection.create(DataSetType.CONTACT,
 				Epds.withPublishers(epd))
 			.withEditor(editor)
 			.withTitle(M.Publisher)
@@ -82,7 +82,7 @@ class AdminPage extends FormPage {
 			.render(body, tk);
 
 		// preceding data version
-		RefTable.create(DataSetType.PROCESS,
+		RefTableSection.create(DataSetType.PROCESS,
 				Processes.withPublication(epd).withPrecedingVersions())
 			.withEditor(editor)
 			.withTitle(M.PrecedingDataSetVersion)

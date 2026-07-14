@@ -18,8 +18,8 @@ import org.openlca.ilcd.util.Epds;
 
 import app.M;
 import app.Tooltips;
-import app.editors.RefLink;
-import app.editors.RefTable;
+import app.editors.refs.RefLink;
+import app.editors.refs.RefTableSection;
 import app.rcp.Icon;
 import app.util.Actions;
 import app.util.LangText;
@@ -103,7 +103,7 @@ class ReviewSection {
 		}
 
 		private void createActorTable(Composite comp) {
-			RefTable.create(DataSetType.CONTACT, review.withReviewers())
+			RefTableSection.create(DataSetType.CONTACT, review.withReviewers())
 					.withEditor(editor)
 					.withTitle(M.Reviewer)
 					.withTooltip(Tooltips.EPD_Reviewer)

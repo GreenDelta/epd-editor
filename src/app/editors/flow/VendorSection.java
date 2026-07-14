@@ -12,7 +12,7 @@ import org.openlca.ilcd.util.Flows;
 
 import app.M;
 import app.Tooltips;
-import app.editors.RefLink;
+import app.editors.refs.RefLink;
 import app.util.Controls;
 import app.util.UI;
 

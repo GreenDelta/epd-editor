@@ -22,7 +22,7 @@ import org.openlca.ilcd.util.Processes;
 
 import app.M;
 import app.Tooltips;
-import app.editors.RefTable;
+import app.editors.refs.RefTableSection;
 import app.rcp.Labels;
 import app.util.LangText;
 import app.util.UI;
@@ -49,21 +49,21 @@ class ModelingPage extends FormPage {
 
 		createModelingSection(body);
 
-		RefTable.create(DataSetType.SOURCE,
+		RefTableSection.create(DataSetType.SOURCE,
 						Processes.withInventoryMethod(epd).withSources())
 				.withEditor(editor)
 				.withTitle(M.LCAMethodDetails)
 				.withTooltip(Tooltips.EPD_LCAMethodDetails)
 				.render(body, tk);
 
-		RefTable.create(DataSetType.SOURCE,
+		RefTableSection.create(DataSetType.SOURCE,
 						Processes.withRepresentativeness(epd).withDataHandlingSources())
 				.withEditor(editor)
 				.withTitle(M.DocumentationDataQualityManagement)
 				.withTooltip(Tooltips.EPD_DocumentationDataQualityManagement)
 				.render(body, tk);
 
-		RefTable.create(DataSetType.SOURCE,
+		RefTableSection.create(DataSetType.SOURCE,
 						Processes.withRepresentativeness(epd).withSources())
 				.withEditor(editor)
 				.withTitle(M.DataSources)
@@ -72,7 +72,7 @@ class ModelingPage extends FormPage {
 
 		createComplianceSection(body);
 
-		RefTable.create(DataSetType.SOURCE, Epds.withOriginalEpds(epd))
+		RefTableSection.create(DataSetType.SOURCE, Epds.withOriginalEpds(epd))
 				.withEditor(editor)
 				.withTitle(M.ReferenceOriginalEPD)
 				.withTooltip(Tooltips.EPD_ReferenceOriginal)
@@ -129,7 +129,7 @@ class ModelingPage extends FormPage {
 			if (s.withSystem() != null)
 				systems.add(s.withSystem());
 		});
-		RefTable table = RefTable.create(DataSetType.SOURCE, systems)
+		RefTableSection table = RefTableSection.create(DataSetType.SOURCE, systems)
 				.withTitle(M.ComplianceDeclarations)
 				.withTooltip(Tooltips.EPD_ComplianceDeclarations);
 		table.render(body, tk);

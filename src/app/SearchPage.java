@@ -23,8 +23,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.editors.Editors;
-import app.editors.RefTableLabel;
 import app.editors.SimpleEditorInput;
+import app.editors.refs.RefTableLabel;
 import app.rcp.Icon;
 import app.util.Controls;
 import app.util.Tables;

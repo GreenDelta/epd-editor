@@ -5,34 +5,42 @@ import org.eclipse.swt.SWT;
 public interface ICellModifier<T> {
 
 	enum CellEditingType {
-		TEXTBOX, COMBOBOX, CHECKBOX;
+		TEXTBOX, COMBOBOX, CHECKBOX
 	}
-
-	boolean canModify(T element);
 
 	Object getValue(T element);
 
 	void modify(T element, Object value);
 
+	CellEditingType getCellEditingType();
+
+	default boolean canModify(T element) {
+		return element != null;
+	}
+
 	/**
 	 * Only valid for combo-boxes: returns the list of items that can be
 	 * selected for the given row element.
 	 */
-	Object[] getValues(T element);
+	default Object[] getValues(T element) {
+		return null;
+	}
 
 	/**
 	 * Only valid for combo-boxes: returns the list of labels for the items that
 	 * can be selected for the given element. This list must be in the same
 	 * order as the list given by the method {@link #getValues(Object)}.
 	 */
-	String[] getStringValues(T element);
+	default String[] getStringValues(T element) {
+		return null;
+	}
 
-	CellEditingType getCellEditingType();
-
-	boolean affectsOtherElements();
+	default boolean affectsOtherElements() {
+		return false;
+	}
 
 	default int getStyle() {
 		return SWT.NONE;
-	};
+	}
 
 }

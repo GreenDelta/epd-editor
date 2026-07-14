@@ -1,5 +1,6 @@
 package app.util.tables;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -10,10 +11,11 @@ import java.util.function.ToDoubleFunction;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
+import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
-import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.widgets.Composite;
@@ -32,50 +34,47 @@ import app.util.tables.ICellModifier.CellEditingType;
  * is important that the viewer is configured with column properties that are
  * used for the binding of cell modifiers. Thus, you have to call
  * <code>viewer.setColumnProperties(aStringArray)</code> <b>before</b> you
- * create the modify support.
+ * create the modify-support.
  */
 public class ModifySupport<T> {
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
-	private Map<String, ICellModifier<T>> cellModifiers;
-	private CellEditor[] editors;
-	private String[] columnProperties;
-	private final TableViewer viewer;
+	private final ColumnViewer viewer;
+	private final Map<String, ICellModifier<T>> cellModifiers;
 
-	public ModifySupport(TableViewer viewer) {
+	public ModifySupport(ColumnViewer viewer) {
 		this.viewer = viewer;
-		initCellEditors();
-	}
-
-	private void initCellEditors() {
-		columnProperties = (String[]) viewer.getColumnProperties();
-		viewer.setCellModifier(new CellModifier());
-		editors = new CellEditor[columnProperties.length];
 		this.cellModifiers = new HashMap<>();
-		viewer.setCellEditors(editors);
+		var props = viewer.getColumnProperties();
+		if (props != null) {
+			viewer.setCellModifier(new CellModifier());
+			var editors = new CellEditor[props.length];
+			viewer.setCellEditors(editors);
+		}
 	}
 
-	/**
-	 * Binds a dialog cell editor to the given property. It is assumed that the
-	 * editor directly operates on the values in the respective table and that
-	 * the values are set in the respective editor.
-	 */
-	public void bind(String property, DialogCellEditor dialog) {
+	/// Directly binds a cell editor to a given property. The editor should
+	/// then handle the value editing then completely. The activation of the
+	/// editor can be controlled by setting a validator to the editor that
+	/// returns non-null (the validation error) if the respective value is
+	/// invalid, the editor is not activated then.
+	public ModifySupport<T> bind(String property, CellEditor editor) {
 		int idx = findIndex(property);
 		if (idx == -1)
-			return;
-		editors[idx] = dialog;
+			return this;
+		var editors = ensureEditors(idx);
+		editors[idx] = editor;
+		return this;
 	}
 
 	/**
-	 * Binds the given getter and setter to the given table property. Null
-	 * values for the getter are allowed. The setter is only called if text was
-	 * changed.
+	 * Binds the given getter and setter to the given table property. Null values
+	 * for the getter are allowed. The setter is only called if text was changed.
 	 */
-	public void bind(String property, Function<T, String> getter,
+	public ModifySupport<T> bind(String property, Function<T, String> getter,
 			BiConsumer<T, String> setter) {
-		TextCellModifier<T> modifier = new TextCellModifier<T>() {
+		var modifier = new TextCellModifier<T>() {
 			@Override
 			protected String getText(T element) {
 				if (getter == null)
@@ -94,7 +93,7 @@ public class ModifySupport<T> {
 				setter.accept(element, text);
 			}
 		};
-		bind(property, modifier);
+		return bind(property, modifier);
 	}
 
 	/**
@@ -102,9 +101,9 @@ public class ModifySupport<T> {
 	 * shown if the number format is not correct. No values are passed in this
 	 * case to the setter.
 	 */
-	public void onDouble(String property, ToDoubleFunction<T> getter,
+	public ModifySupport<T> onDouble(String property, ToDoubleFunction<T> getter,
 			ObjDoubleConsumer<T> setter) {
-		TextCellModifier<T> modifier = new TextCellModifier<T>() {
+		var modifier = new TextCellModifier<T>() {
 			@Override
 			protected String getText(T elem) {
 				if (getter == null)
@@ -133,72 +132,104 @@ public class ModifySupport<T> {
 				}
 			}
 		};
-		bind(property, modifier);
+		return bind(property, modifier);
 	}
 
 	/**
 	 * Binds the given modifier to the given property of the viewer.
 	 */
-	public void bind(String property, ICellModifier<T> modifier) {
+	public ModifySupport<T> bind(String property, ICellModifier<T> modifier) {
 		int index = findIndex(property);
 		if (index == -1)
-			return;
-		cellModifiers.put(columnProperties[index], modifier);
+			return this;
+		cellModifiers.put(property, modifier);
 		setEditor(modifier, index);
+		return this;
+	}
+
+	/**
+	 * Removes a possible cell editor for the given property from this modifier.
+	 *
+	 * @param property the property which cell editor should be removed
+	 */
+	public void unbind(String property) {
+		if (property == null)
+			return;
+		cellModifiers.remove(property);
+		var index = findIndex(property);
+		if (index < 0)
+			return;
+		var editors = viewer.getCellEditors();
+		if (editors != null && editors.length > index) {
+			editors[index] = null;
+		}
 	}
 
 	private int findIndex(String property) {
-		int index = -1;
-		for (int i = 0; i < columnProperties.length; i++) {
-			if (Objects.equals(columnProperties[i], property)) {
-				index = i;
-				break;
-			}
+		var props = viewer.getColumnProperties();
+		if (props == null)
+			return -1;
+		for (int i = 0; i < props.length; i++) {
+			if (Objects.equals(props[i], property))
+				return i;
 		}
-		if (index == -1)
-			log.warn("Property {} is not a column property", property);
-		return index;
+		log.warn("Property {} is not a column property", property);
+		return -1;
+	}
+
+	private Composite getComponent() {
+		if (viewer instanceof TableViewer)
+			return ((TableViewer) viewer).getTable();
+		else if (viewer instanceof TreeViewer)
+			return ((TreeViewer) viewer).getTree();
+		return null;
 	}
 
 	private void setEditor(ICellModifier<T> modifier, int index) {
-		switch (modifier.getCellEditingType()) {
-		case TEXTBOX:
-			if (modifier.getStyle() != SWT.NONE)
-				editors[index] = new TextCellEditor(viewer.getTable(),
-						modifier.getStyle());
-			else
-				editors[index] = new TextCellEditor(viewer.getTable());
-			break;
-		case COMBOBOX:
-			editors[index] = new ComboEditor(viewer.getTable(), new String[0]);
-			break;
-		case CHECKBOX:
-			if (modifier.getStyle() != SWT.NONE)
-				editors[index] = new CheckboxCellEditor(viewer.getTable(),
-						modifier.getStyle());
-			else
-				editors[index] = new CheckboxCellEditor(viewer.getTable());
-			break;
-		default:
-			break;
-		}
+		var editors = ensureEditors(index);
+		editors[index] = switch (modifier.getCellEditingType()) {
+			case TEXTBOX -> modifier.getStyle() != SWT.NONE
+					? new TextCellEditor(getComponent(), modifier.getStyle())
+					: new TextCellEditor(getComponent());
+			case COMBOBOX -> new ComboEditor(getComponent(), new String[0]);
+			case CHECKBOX -> modifier.getStyle() != SWT.NONE
+					? new CheckboxCellEditor(getComponent(), modifier.getStyle())
+					: new CheckboxCellEditor(getComponent());
+		};
 	}
 
 	private CellEditor getCellEditor(String property) {
 		int idx = findIndex(property);
-		if (idx == -1)
+		if (idx < 0)
 			return null;
+		var editors = ensureEditors(idx);
 		return editors[idx];
 	}
 
 	private void refresh(T value) {
-		for (String property : cellModifiers.keySet()) {
-			ICellModifier<T> modifier = cellModifiers.get(property);
+		for (var property : cellModifiers.keySet()) {
+			var modifier = cellModifiers.get(property);
 			if (modifier.getCellEditingType() == CellEditingType.COMBOBOX) {
-				((ComboBoxCellEditor) getCellEditor(property))
-						.setItems(modifier.getStringValues(value));
+				var editor = getCellEditor(property);
+				if (editor instanceof ComboBoxCellEditor combo) {
+					combo.setItems(modifier.getStringValues(value));
+				}
 			}
 		}
+	}
+
+	private CellEditor[] ensureEditors(int withIdx) {
+		var editors = viewer.getCellEditors();
+		if (editors == null) {
+			editors = new CellEditor[withIdx + 1];
+			viewer.setCellEditors(editors);
+			return editors;
+		}
+		if (editors.length <= withIdx) {
+			editors = Arrays.copyOf(editors, withIdx + 1);
+			viewer.setCellEditors(editors);
+		}
+		return editors;
 	}
 
 	private class CellModifier implements
@@ -209,47 +240,42 @@ public class ModifySupport<T> {
 		public boolean canModify(Object element, String property) {
 			if (element == null || property == null)
 				return false;
-			if (cellModifiers.containsKey(property)) {
-				ICellModifier<T> modifier = cellModifiers.get(property);
-				return modifier != null && modifier.canModify((T) element);
-			}
-			CellEditor editor = getCellEditor(property);
-			return editor instanceof DialogCellEditor;
+
+			// check if there is a registered modifier
+			var modifier = cellModifiers.get(property);
+			if (modifier != null)
+				return modifier.canModify((T) element);
+
+			// check if there is a cell editor with a validator
+			// registered
+			var editor = getCellEditor(property);
+			if (editor == null)
+				return false;
+			var validator = editor.getValidator();
+			if (validator == null)
+				return true;
+			return validator.isValid(element) == null;
 		}
 
 		@Override
-		public Object getValue(Object element, String property) {
-			ICellModifier<T> modifier = cellModifiers.get(property);
-			if (modifier != null)
-				return getModifierValue(element, modifier);
-			CellEditor editor = getCellEditor(property);
-			if (editor != null)
-				return element;
-			return null;
-		}
-
 		@SuppressWarnings("unchecked")
-		private Object getModifierValue(Object element,
-				ICellModifier<T> modifier) {
-			T elem = (T) element;
-			Object value = modifier.getValue(elem);
-			switch (modifier.getCellEditingType()) {
-			case TEXTBOX:
-				return value != null ? value.toString() : "";
-			case COMBOBOX:
-				return getComboIndex(modifier, elem, value);
-			case CHECKBOX:
-				if (value instanceof Boolean)
-					return value;
-				else
-					return false;
-			default:
-				return element;
+		public Object getValue(Object element, String property) {
+			var modifier = cellModifiers.get(property);
+			if (modifier != null) {
+				var elem = (T) element;
+				var value = modifier.getValue(elem);
+				return switch (modifier.getCellEditingType()) {
+					case TEXTBOX -> value != null ? value.toString() : "";
+					case COMBOBOX -> getComboIndex(modifier, elem, value);
+					case CHECKBOX -> value instanceof Boolean ? value : false;
+				};
 			}
+			var editor = getCellEditor(property);
+			return editor != null ? element : null;
 		}
 
-		private Object getComboIndex(ICellModifier<T> modifier, T elem,
-				Object value) {
+		private Object getComboIndex(
+				ICellModifier<T> modifier, T elem, Object value) {
 			refresh(elem);
 			Object[] values = modifier.getValues(elem);
 			if (values == null)
@@ -263,17 +289,22 @@ public class ModifySupport<T> {
 
 		@Override
 		public void modify(Object element, String property, Object value) {
-			if (element instanceof Item)
-				element = ((Item) element).getData();
-			ICellModifier<T> modifier = cellModifiers.get(property);
+			var widget = element instanceof Item
+					? ((Item) element).getData()
+					: element;
+			var modifier = cellModifiers.get(property);
 			if (modifier != null) {
-				T elem = setModifierValue(element, value, modifier);
+				T elem = setModifierValue(widget, value, modifier);
 				refresh(elem);
 			}
-			if (modifier != null && modifier.affectsOtherElements())
+			// update the viewer
+			if (viewer.getControl().isDisposed())
+				return;
+			if (modifier != null && modifier.affectsOtherElements()) {
 				viewer.refresh(true);
-			else
-				viewer.refresh(element, true);
+			} else {
+				viewer.refresh(widget, true);
+			}
 		}
 
 		@SuppressWarnings("unchecked")
@@ -281,17 +312,9 @@ public class ModifySupport<T> {
 				ICellModifier<T> modifier) {
 			T elem = (T) element;
 			switch (modifier.getCellEditingType()) {
-			case TEXTBOX:
-				modifier.modify(elem, value.toString());
-				break;
-			case COMBOBOX:
-				setComboValue(modifier, elem, value);
-				break;
-			case CHECKBOX:
-				modifier.modify(elem, value);
-				break;
-			default:
-				break;
+				case TEXTBOX -> modifier.modify(elem, value.toString());
+				case COMBOBOX -> setComboValue(modifier, elem, value);
+				case CHECKBOX -> modifier.modify(elem, value);
 			}
 			return elem;
 		}
@@ -312,10 +335,10 @@ public class ModifySupport<T> {
 
 	/**
 	 * Overwrites the getValue method from the JFace combo editor so that also
-	 * entered strings that are elements of the respective combo-items are
-	 * accepted as user input.
+	 * entered strings that are elements of the respective combo-items are accepted
+	 * as user input.
 	 */
-	private class ComboEditor extends ComboBoxCellEditor {
+	private static class ComboEditor extends ComboBoxCellEditor {
 
 		public ComboEditor(Composite parent, String[] items) {
 			super(parent, items);
@@ -344,8 +367,8 @@ public class ModifySupport<T> {
 		private Integer getIndexForText(String cellText) {
 			if (cellText == null)
 				return -1;
-			var term = cellText.trim();
-			var items = getItems();
+			String term = cellText.trim();
+			String[] items = getItems();
 			for (int i = 0; i < items.length; i++) {
 				if (term.equals(items[i]))
 					return i;

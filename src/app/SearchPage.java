@@ -86,7 +86,7 @@ public class SearchPage extends FormEditor {
 			table = Tables.createViewer(comp, M.Name, M.UUID, M.Version);
 			table.setLabelProvider(new RefTableLabel());
 			Tables.bindColumnWidths(table, 0.6, 0.2, 0.2);
-			Tables.onDoubleClick(table, e -> {
+			Tables.onDoubleClick(table, _ -> {
 				Ref ref = Viewers.getFirstSelected(table);
 				if (ref != null) {
 					Editors.open(ref);
@@ -107,7 +107,7 @@ public class SearchPage extends FormEditor {
 			Button b = new Button(comp, SWT.NONE);
 			b.setImage(Icon.SEARCH.img());
 			b.setToolTipText(M.Search);
-			Controls.onSelect(b, e -> doIt());
+			Controls.onSelect(b, _ -> doIt());
 		}
 
 		private void doIt() {

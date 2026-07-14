@@ -39,7 +39,8 @@ class ConnectionCombo {
 			combo.select(0);
 			selected = cons[0];
 		}
-		Controls.onSelect(combo, e -> selected = cons[combo.getSelectionIndex()]);
+		Controls.onSelect(combo,
+				_ -> selected = cons[combo.getSelectionIndex()]);
 	}
 
 	void select(SodaConnection con) {

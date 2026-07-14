@@ -58,13 +58,13 @@ class Page extends FormPage {
 		// reference data URL
 		Text urlText = UI.formText(comp, tk, M.ReferenceDataURL);
 		Texts.set(urlText, profile.getDataUrl());
-		urlText.addModifyListener(e -> {
+		urlText.addModifyListener(_ -> {
 			profile.withDataUrl(urlText.getText());
 			editor.setDirty();
 		});
 
 		var button = tk.createButton(comp, M.DownloadDataSets, SWT.NONE);
-		Controls.onSelect(button, e -> syncRefData(urlText.getText()));
+		Controls.onSelect(button, _ -> syncRefData(urlText.getText()));
 	}
 
 	private void syncRefData(String url) {

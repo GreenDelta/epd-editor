@@ -28,7 +28,7 @@ class AppSection {
 		Text memText = UI.formText(comp, tk, M.Memory + " [MB]");
 		memText.setText(Integer.toString(page.ini.maxMemory));
 		UI.gridData(memText, false, false).widthHint = 315;
-		memText.addModifyListener(e -> {
+		memText.addModifyListener(_ -> {
 			String s = memText.getText().trim();
 			try {
 				page.ini.maxMemory = Integer.parseInt(s);

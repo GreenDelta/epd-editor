@@ -89,7 +89,7 @@ public class Editors {
 	}
 
 	public static void closeAll() {
-		close(input -> true);
+		close(_ -> true);
 	}
 
 	private static void close(Predicate<IEditorInput> fn) {

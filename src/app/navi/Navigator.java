@@ -47,7 +47,7 @@ public class Navigator extends CommonNavigator {
 		super.initListeners(viewer);
 		viewer.setUseHashlookup(true);
 		ColumnViewerToolTipSupport.enableFor(viewer);
-		viewer.addDoubleClickListener(e -> {
+		viewer.addDoubleClickListener(_ -> {
 			Object obj = Viewers.getFirstSelected(viewer);
 			if (obj instanceof RefElement refEl) {
 				Editors.open(refEl.ref());

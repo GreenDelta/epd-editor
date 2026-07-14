@@ -37,7 +37,7 @@ class IndicatorTable {
 		table.setLabelProvider(new Label());
 		table.setInput(profile.getIndicators());
 
-		Tables.onDoubleClick(table, $ -> {
+		Tables.onDoubleClick(table, _ -> {
 			EpdProfileIndicator indicator = Viewers.getFirstSelected(table);
 			if (indicator == null)
 				return;

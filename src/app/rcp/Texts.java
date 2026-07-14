@@ -52,13 +52,14 @@ public class Texts {
 	}
 
 	public static void validateNumber(Text text) {
-		validateNumber(text, $ -> {});
+		validateNumber(text, _ -> {
+		});
 	}
 
 	public static void validateNumber(Text text, Consumer<OptionalDouble> fn) {
 		if (text == null)
 			return;
-		text.addModifyListener(_e -> {
+		text.addModifyListener(_ -> {
 			var s = text.getText();
 			if (Strings.isBlank(s)) {
 				text.setBackground(Colors.white());

@@ -81,7 +81,7 @@ public class LangText {
 		}
 		setValue(text);
 
-		text.addModifyListener($ -> {
+		text.addModifyListener(_ -> {
 			if (skipModifyEvents.get() || onEdit == null)
 				return;
 			applySystemFont(text);
@@ -108,7 +108,7 @@ public class LangText {
 		linkGrid.verticalAlignment = SWT.TOP;
 		linkGrid.verticalIndent = 2;
 
-		Controls.onClick(link, $ -> {
+		Controls.onClick(link, _ -> {
 			if (onEdit == null)
 				return;
 			var nextStrings = multiLines
@@ -159,7 +159,7 @@ public class LangText {
 	private void applyItalicFont(Text text) {
 		if (italic == null) {
 			italic = UI.italicFont(text);
-			text.addDisposeListener(e -> {
+			text.addDisposeListener(_ -> {
 				if (italic != null) {
 					italic.dispose();
 				}

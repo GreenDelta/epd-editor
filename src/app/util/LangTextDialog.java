@@ -88,7 +88,7 @@ public class LangTextDialog extends FormDialog {
 			btn.setEnabled(false);
 		}
 		combo.onChange(code -> btn.setEnabled(!contains(boxes, code)));
-		Controls.onSelect(btn, $ -> {
+		Controls.onSelect(btn, _ -> {
 			var code = combo.getSelected();
 			var box = new LangBox(code, "", strings);
 			boxes.add(box);
@@ -144,7 +144,7 @@ public class LangTextDialog extends FormDialog {
 			if (val != null) {
 				text.setText(val);
 			}
-			text.addModifyListener($ -> {
+			text.addModifyListener(_ -> {
 				var s = text.getText();
 				if (Strings.isNotBlank(s)) {
 					LangString.set(strings, s, lang);
@@ -213,7 +213,7 @@ public class LangTextDialog extends FormDialog {
 		void onChange(Consumer<String> fn) {
 			if (fn == null)
 				return;
-			Controls.onSelect(combo, $ -> {
+			Controls.onSelect(combo, _ -> {
 				var idx = combo.getSelectionIndex();
 				var code = codes.get(idx);
 				fn.accept(code);

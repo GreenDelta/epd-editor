@@ -72,7 +72,7 @@ public class UI {
 		if (path.length() > 80)
 			path = "..." + path.substring(path.length() - 75);
 		link.setText(path);
-		Controls.onClick(link, e -> UI.open(f));
+		Controls.onClick(link, _ -> UI.open(f));
 	}
 
 	public static void open(File file) {

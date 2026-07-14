@@ -94,7 +94,7 @@ public class StatusView extends BaseEditor {
 			bindColumnWidths(table);
 			table.setLabelProvider(new Label());
 			table.setInput(stats);
-			table.addDoubleClickListener(e -> {
+			table.addDoubleClickListener(_ -> {
 				RefStatus rs = Viewers.getFirstSelected(table);
 				if (rs != null && rs.ref() != null)
 					Editors.open(rs.ref());

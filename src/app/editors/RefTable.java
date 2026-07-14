@@ -1,12 +1,8 @@
 package app.editors;
 
-import app.M;
-import app.rcp.Icon;
-import app.rcp.Labels;
-import app.util.Actions;
-import app.util.Tables;
-import app.util.UI;
-import app.util.Viewers;
+import java.util.List;
+import java.util.function.Consumer;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.ViewerComparator;
@@ -17,8 +13,13 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.Ref;
 
-import java.util.List;
-import java.util.function.Consumer;
+import app.M;
+import app.rcp.Icon;
+import app.rcp.Labels;
+import app.util.Actions;
+import app.util.Tables;
+import app.util.UI;
+import app.util.Viewers;
 
 public class RefTable {
 
@@ -84,7 +85,7 @@ public class RefTable {
 		if (tooltip != null) {
 			table.getTable().setToolTipText(tooltip);
 		}
-		Tables.onDoubleClick(table, _e -> {
+		Tables.onDoubleClick(table, _ -> {
 			var item = Viewers.getFirstSelected(table);
 			if (item instanceof Ref) {
 				Editors.open((Ref) item);

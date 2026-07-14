@@ -150,10 +150,10 @@ class InfoPage extends FormPage {
 			editor.setDirty();
 		});
 
-		new ProductIdTable(editor, comp, tk).setInput();
+		ProductIdTable.create(editor, comp, tk);
 	}
 
-	public Exchange withProductExchange() {
+	private Exchange withProductExchange() {
 		var qRef = epd.withProcessInfo()
 				.withQuantitativeReference()
 				.withType(QuantitativeReferenceType.REFERENCE_FLOWS);

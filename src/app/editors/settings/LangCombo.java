@@ -49,7 +49,7 @@ class LangCombo {
 		combo.setItems(items);
 		if (selected > -1)
 			combo.select(selected);
-		Controls.onSelect(combo, e -> {
+		Controls.onSelect(combo, _ -> {
 			if (changeFn == null)
 				return;
 			changeFn.accept(codes[combo.getSelectionIndex()]);

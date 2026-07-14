@@ -61,7 +61,7 @@ public class Validation implements IRunnableWithProgress {
 		if (s.ref() == null || s.ref().getUUID() == null)
 			return;
 		var list = messages.computeIfAbsent(
-				s.ref().getUUID(), k -> new ArrayList<>());
+				s.ref().getUUID(), _ -> new ArrayList<>());
 		if (list.isEmpty()) {
 			list.add(s);
 			return;

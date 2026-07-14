@@ -79,15 +79,15 @@ class ResourceDialog extends FormDialog {
 		UI.gridData(urlText, true, false).minimumWidth = 400;
 		urlText.setEnabled(false);
 
-		Controls.onSelect(fileCheck, $ -> {
+		Controls.onSelect(fileCheck, _ -> {
 			isFile = fileCheck.getSelection();
 			fileText.setEnabled(isFile);
 			fileBtn.setEnabled(isFile);
 			urlText.setEnabled(!isFile);
 		});
 
-		urlText.addModifyListener($ -> url = urlText.getText().strip());
-		Controls.onSelect(fileBtn, $ -> {
+		urlText.addModifyListener(_ -> url = urlText.getText().strip());
+		Controls.onSelect(fileBtn, _ -> {
 			selectFile();
 			if (file != null) {
 				fileText.setText(file.getName());

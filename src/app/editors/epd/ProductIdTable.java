@@ -29,7 +29,7 @@ class ProductIdTable {
 	private final TableViewer table;
 	private final Process epd;
 
-	public ProductIdTable(EpdEditor editor, Composite parent, FormToolkit tk) {
+	private ProductIdTable(EpdEditor editor, Composite parent, FormToolkit tk) {
 		this.editor = editor;
 		this.epd = editor.epd;
 		UI.formLabel(parent, tk, M.ProductIds, Tooltips.EPD_ProductIds);
@@ -45,9 +45,14 @@ class ProductIdTable {
 		var add = Actions.create(M.Add, Icon.ADD.des(), this::onCreate);
 		var rem = Actions.create(M.Remove, Icon.DELETE.des(), this::onRemove);
 		Actions.bind(table, add, rem);
+		setInput();
 	}
 
-	public void setInput() {
+	static void create(EpdEditor editor, Composite parent, FormToolkit tk) {
+		new ProductIdTable(editor, parent, tk);
+	}
+
+	private void setInput() {
 		table.setInput(Epds.getProductIds(epd));
 	}
 

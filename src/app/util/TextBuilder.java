@@ -27,7 +27,7 @@ public class TextBuilder {
 		Text t = UI.formText(comp, tk, label, tooltip);
 		if (initial != null)
 			t.setText(initial);
-		t.addModifyListener(e -> {
+		t.addModifyListener(_ -> {
 			fn.accept(t.getText());
 			editor.setDirty();
 		});

@@ -64,7 +64,7 @@ class DataSetSection {
 		var depCheck = UI.formCheckBox(comp, tk,
 				M.ShowDependenciesInEditors);
 		depCheck.setSelection(settings().showDataSetDependencies);
-		Controls.onSelect(depCheck, e -> {
+		Controls.onSelect(depCheck, _ -> {
 			settings().showDataSetDependencies = depCheck
 					.getSelection();
 			page.setDirty();
@@ -75,7 +75,7 @@ class DataSetSection {
 		var xmlCheck = UI.formCheckBox(comp, tk,
 				M.ShowXMLInEditors);
 		xmlCheck.setSelection(settings().showDataSetXML);
-		Controls.onSelect(xmlCheck, e -> {
+		Controls.onSelect(xmlCheck, _ -> {
 			settings().showDataSetXML = xmlCheck.getSelection();
 			page.setDirty();
 		});
@@ -85,7 +85,7 @@ class DataSetSection {
 		var check = UI.formCheckBox(comp, tk,
 				M.SynchronizeReferenceDataOnStartup);
 		check.setSelection(settings().syncRefDataOnStartup);
-		Controls.onSelect(check, e -> {
+		Controls.onSelect(check, _ -> {
 			settings().syncRefDataOnStartup = check.getSelection();
 			page.setDirty();
 		});
@@ -95,7 +95,7 @@ class DataSetSection {
 		var check = UI.formCheckBox(comp, tk,
 				M.ShowContentDeclarationEditor);
 		check.setSelection(settings().showContentDeclarations);
-		Controls.onSelect(check, e -> {
+		Controls.onSelect(check, _ -> {
 			settings().showContentDeclarations = check.getSelection();
 			page.setDirty();
 		});
@@ -105,7 +105,7 @@ class DataSetSection {
 		var check = UI.formCheckBox(comp, tk,
 				M.ShowQMetadataEditor);
 		check.setSelection(settings().showQMetadata);
-		Controls.onSelect(check, e -> {
+		Controls.onSelect(check, _ -> {
 			settings().showQMetadata = check.getSelection();
 			page.setDirty();
 		});
@@ -114,7 +114,7 @@ class DataSetSection {
 	private void hideCategoryIdsCheck(Composite comp, FormToolkit tk) {
 		var check = UI.formCheckBox(comp, tk, "Hide category IDs");
 		check.setSelection(settings().hideCategoryIds);
-		Controls.onSelect(check, e -> {
+		Controls.onSelect(check, _ -> {
 			settings().hideCategoryIds = check.getSelection();
 			page.setDirty();
 		});
@@ -124,7 +124,7 @@ class DataSetSection {
 		Button check = UI.formCheckBox(comp, tk,
 				M.CheckEPDsOnProductUpdates);
 		check.setSelection(settings().checkEPDsOnProductUpdates);
-		Controls.onSelect(check, e -> {
+		Controls.onSelect(check, _ -> {
 			boolean b = check.getSelection();
 			if (!b) {
 				check.setSelection(false);
@@ -177,7 +177,7 @@ class DataSetSection {
 			combo.select(selected);
 		}
 
-		Controls.onSelect(combo, e -> {
+		Controls.onSelect(combo, _ -> {
 			int idx = combo.getSelectionIndex();
 			if (idx < 0)
 				return;
@@ -204,7 +204,7 @@ class DataSetSection {
 		}
 
 		Button btn = tk.createButton(inner, "Browse ...", SWT.NONE);
-		Controls.onSelect(btn, _e -> {
+		Controls.onSelect(btn, _ -> {
 			File impFile = FileChooser.open("*.json");
 			if (impFile == null)
 				return;

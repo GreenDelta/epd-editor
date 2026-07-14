@@ -149,7 +149,7 @@ public class ExportDialog extends Wizard {
 			UI.gridData(text, true, false);
 			Button browseButn = new Button(browseComp, SWT.NONE);
 			browseButn.setText("Browse");
-			Controls.onSelect(browseButn, e -> {
+			Controls.onSelect(browseButn, _ -> {
 				String name = App.s(ref.getName()).replaceAll("\\W", "_");
 				if (Strings.isNullOrEmpty(name)) {
 					name = "dataset";
@@ -164,7 +164,7 @@ public class ExportDialog extends Wizard {
 			// the dependency check
 			Button depsCheck = new Button(comp, SWT.CHECK);
 			depsCheck.setText(M.IncludeDependentDataSets);
-			Controls.onSelect(depsCheck, e -> {
+			Controls.onSelect(depsCheck, _ -> {
 				if (depsCheck.getSelection()) {
 					collectRefs();
 				} else {

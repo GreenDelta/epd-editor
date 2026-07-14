@@ -131,7 +131,7 @@ public class CategoryDialog extends FormDialog {
 			selectedSystem = systems.get(0);
 			combo.setSelection(new StructuredSelection(selectedSystem));
 		}
-		combo.addSelectionChangedListener((e) -> {
+		combo.addSelectionChangedListener(_ -> {
 			selectedSystem = Viewers.getFirstSelected(combo);
 			if (selectedSystem == null)
 				return;
@@ -147,7 +147,7 @@ public class CategoryDialog extends FormDialog {
 		if (!systems.isEmpty())
 			treeViewer.setInput(systems.get(0));
 		treeViewer.addSelectionChangedListener(
-			(e) -> selectedCategory = Viewers.getFirstSelected(treeViewer));
+				_ -> selectedCategory = Viewers.getFirstSelected(treeViewer));
 	}
 
 	private List<Category> getRootCategories(CategorySystem system) {

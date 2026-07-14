@@ -121,7 +121,7 @@ public class ValidationDialog extends Wizard {
 		private void createCheck(Composite comp) {
 			Button check = new Button(comp, SWT.CHECK);
 			check.setText(M.IncludeDependentDataSets);
-			Controls.onSelect(check, e -> {
+			Controls.onSelect(check, _ -> {
 				if (check.getSelection()) {
 					collectRefs();
 				} else {

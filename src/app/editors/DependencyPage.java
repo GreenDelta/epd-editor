@@ -53,7 +53,7 @@ public class DependencyPage extends FormPage {
 		form.reflow(true);
 		setInput(tree);
 		editor.onSaved(() -> setInput(tree));
-		tree.addDoubleClickListener(e -> {
+		tree.addDoubleClickListener(_ -> {
 			RefTree.Node node = Viewers.getFirstSelected(tree);
 			if (node != null && node.ref != null)
 				Editors.open(node.ref);

@@ -113,7 +113,7 @@ public class UploadDialog extends Wizard {
 			Button check = new Button(comp, SWT.CHECK);
 			check.setText(M.SynchronizeDependentDataSets);
 			check.setSelection(true);
-			Controls.onSelect(check, e -> {
+			Controls.onSelect(check, _ -> {
 				if (check.getSelection()) {
 					collectRefs();
 				} else {

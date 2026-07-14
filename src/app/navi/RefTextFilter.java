@@ -5,7 +5,6 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.TreeItem;
-
 import org.openlca.commons.Strings;
 
 /**
@@ -18,7 +17,7 @@ public class RefTextFilter extends ViewerFilter {
 
 	public RefTextFilter(Text filterText, final TreeViewer viewer) {
 		this.filterText = filterText;
-		filterText.addModifyListener((e) -> {
+		filterText.addModifyListener(_ -> {
 			viewer.refresh();
 			expand(viewer);
 		});

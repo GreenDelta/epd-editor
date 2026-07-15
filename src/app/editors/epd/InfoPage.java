@@ -71,6 +71,10 @@ class InfoPage extends FormPage {
 		createTimeSection(body, tb);
 		createGeographySection(body, tb);
 		createTechnologySection(body, tb);
+
+		ServiceLifeSection.reference(editor, body, tk);
+		ServiceLifeSection.estimated(editor, body, tk);
+
 		form.reflow(true);
 	}
 

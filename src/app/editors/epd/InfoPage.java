@@ -24,6 +24,7 @@ import app.M;
 import app.Tooltips;
 import app.editors.CategorySection;
 import app.editors.refs.RefLink;
+import app.editors.refs.RefTable;
 import app.editors.refs.RefTableSection;
 import app.rcp.Texts;
 import app.store.RefDeps;
@@ -71,13 +72,6 @@ class InfoPage extends FormPage {
 		createTimeSection(body, tb);
 		createGeographySection(body, tb);
 		createTechnologySection(body, tb);
-
-		RefTableSection.create(DataSetType.SOURCE,
-						Epds.withTechnology(epd).withPictures())
-				.withEditor(editor)
-				.withTitle(M.FlowDiagramsOrPictures)
-				.withTooltip(Tooltips.EPD_FlowDiagramsOrPictures)
-				.render(body, tk);
 		form.reflow(true);
 	}
 
@@ -199,23 +193,34 @@ class InfoPage extends FormPage {
 		var comp = UI.formSection(
 				body, tk, M.Technology, Tooltips.EPD_Technology);
 
+		// description
 		tb.nextMulti(M.TechnologyDescription, Tooltips.EPD_TechnologyDescription)
 				.val(tech.getDescription())
 				.edit(tech::withDescription)
 				.draw(comp);
 
+		// purpose
 		tb.nextMulti(M.TechnologicalApplicability, Tooltips.EPD_TechnicalPrupose)
 				.val(tech.getApplicability())
 				.edit(tech::withApplicability)
 				.draw(comp);
 
+		// pictogram
 		UI.formLabel(comp, tk, M.Pictogram, Tooltips.EPD_Pictogram);
-		var refText = new RefLink(comp, tk, DataSetType.SOURCE);
-		refText.setRef(tech.getPictogram());
-		refText.onChange(ref -> {
+		var pictoLink = new RefLink(comp, tk, DataSetType.SOURCE);
+		pictoLink.setRef(tech.getPictogram());
+		pictoLink.onChange(ref -> {
 			tech.withPictogram(ref);
 			editor.setDirty();
 		});
+
+		// other pictures
+		UI.formLabel(
+			comp, tk, M.FlowDiagramsOrPictures, Tooltips.EPD_FlowDiagramsOrPictures);
+		RefTable.create(DataSetType.SOURCE, Epds.withTechnology(epd).withPictures())
+			.withEditor(editor)
+			.withTooltip(Tooltips.EPD_FlowDiagramsOrPictures)
+			.render(comp, tk);
 	}
 
 	private void createTimeSection(Composite body, TextBuilder tb) {

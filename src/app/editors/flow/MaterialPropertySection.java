@@ -1,15 +1,7 @@
 package app.editors.flow;
 
-import app.M;
-import app.Tooltips;
-import app.rcp.Icon;
-import app.util.Actions;
-import app.util.Tables;
-import app.util.UI;
-import app.util.Viewers;
-import app.util.tables.ModifySupport;
-import app.util.tables.TextCellModifier;
-import epd.model.MaterialPropertyValue;
+import java.util.List;
+
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -19,7 +11,16 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
-import java.util.List;
+import app.M;
+import app.Tooltips;
+import app.rcp.Icon;
+import app.util.Actions;
+import app.util.Tables;
+import app.util.UI;
+import app.util.Viewers;
+import app.util.tables.ModifySupport;
+import app.util.tables.TextModifier;
+import epd.model.MaterialPropertyValue;
 
 class MaterialPropertySection {
 
@@ -92,7 +93,7 @@ class MaterialPropertySection {
 	}
 
 	private class ValueModifier
-		extends TextCellModifier<MaterialPropertyValue> {
+		extends TextModifier<MaterialPropertyValue> {
 
 		@Override
 		protected String getText(MaterialPropertyValue v) {

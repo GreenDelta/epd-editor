@@ -23,9 +23,8 @@ import app.util.Actions;
 import app.util.Tables;
 import app.util.UI;
 import app.util.Viewers;
-import app.util.tables.CheckBoxCellModifier;
+import app.util.tables.CheckModifier;
 import app.util.tables.ModifySupport;
-import app.util.tables.TextCellModifier;
 
 class ScenarioTable {
 
@@ -114,7 +113,7 @@ class ScenarioTable {
 		}
 	}
 
-	private class TextModifier extends TextCellModifier<EpdScenario> {
+	private class TextModifier extends app.util.tables.TextModifier<EpdScenario> {
 
 		private final String field;
 
@@ -152,7 +151,7 @@ class ScenarioTable {
 		}
 	}
 
-	private class DefaultModifier extends CheckBoxCellModifier<EpdScenario> {
+	private class DefaultModifier extends CheckModifier<EpdScenario> {
 
 		@Override
 		protected boolean isChecked(EpdScenario s) {

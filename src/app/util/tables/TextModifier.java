@@ -1,6 +1,6 @@
 package app.util.tables;
 
-public abstract class TextCellModifier<T> implements ICellModifier<T> {
+public abstract class TextModifier<T> implements ICellModifier<T> {
 
 	@Override
 	public boolean canModify(T element) {
@@ -18,11 +18,6 @@ public abstract class TextCellModifier<T> implements ICellModifier<T> {
 	}
 
 	@Override
-	public String[] getStringValues(T element) {
-		return null;
-	}
-
-	@Override
 	public Object getValue(T element) {
 		return getText(element);
 	}
@@ -32,11 +27,6 @@ public abstract class TextCellModifier<T> implements ICellModifier<T> {
 		setText(element,
 				value != null ? !value.toString().isEmpty() ? value.toString()
 						: null : null);
-	}
-
-	@Override
-	public boolean affectsOtherElements() {
-		return false;
 	}
 
 	protected abstract String getText(T element);

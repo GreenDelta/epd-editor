@@ -10,7 +10,7 @@ package app.util.tables;
  * @param <C>
  *            the type of items in the combo-box
  */
-public abstract class ComboBoxCellModifier<R, C> implements ICellModifier<R> {
+public abstract class ComboModifier<R, C> implements ICellModifier<R> {
 
 	@Override
 	public boolean canModify(R element) {
@@ -45,11 +45,6 @@ public abstract class ComboBoxCellModifier<R, C> implements ICellModifier<R> {
 	@Override
 	public final void modify(R element, Object value) {
 		setItem(element, (C) value);
-	}
-
-	@Override
-	public boolean affectsOtherElements() {
-		return false;
 	}
 
 	protected abstract C[] getItems(R element);

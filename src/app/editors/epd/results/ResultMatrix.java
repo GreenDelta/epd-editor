@@ -16,7 +16,7 @@ import app.editors.epd.EpdEditor;
 import app.rcp.Icon;
 import app.util.Tables;
 import app.util.tables.ModifySupport;
-import app.util.tables.TextCellModifier;
+import app.util.tables.TextModifier;
 
 public class ResultMatrix {
 
@@ -69,7 +69,7 @@ public class ResultMatrix {
 		comp.layout();
 	}
 
-	private class ValueModifier extends TextCellModifier<IndicatorResult> {
+	private class ValueModifier extends TextModifier<IndicatorResult> {
 
 		private final Mod mod;
 		private final int idx;

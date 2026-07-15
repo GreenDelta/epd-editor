@@ -33,9 +33,9 @@ import app.util.MsgBox;
 import app.util.Tables;
 import app.util.UI;
 import app.util.Viewers;
-import app.util.tables.ComboBoxCellModifier;
+import app.util.tables.ComboModifier;
 import app.util.tables.ModifySupport;
-import app.util.tables.TextCellModifier;
+import app.util.tables.TextModifier;
 
 public class ResultPage extends FormPage {
 
@@ -267,7 +267,7 @@ public class ResultPage extends FormPage {
 	}
 
 	private class ModuleModifier extends
-			ComboBoxCellModifier<EpdModuleEntry, String> {
+		ComboModifier<EpdModuleEntry, String> {
 
 		@Override
 		protected String getItem(EpdModuleEntry e) {
@@ -296,7 +296,7 @@ public class ResultPage extends FormPage {
 	}
 
 	private class ScenarioModifier extends
-			ComboBoxCellModifier<EpdModuleEntry, String> {
+		ComboModifier<EpdModuleEntry, String> {
 
 		@Override
 		protected String getItem(EpdModuleEntry e) {
@@ -328,7 +328,7 @@ public class ResultPage extends FormPage {
 		}
 	}
 
-	private class DescriptionModifier extends TextCellModifier<EpdModuleEntry> {
+	private class DescriptionModifier extends TextModifier<EpdModuleEntry> {
 
 		@Override
 		protected String getText(EpdModuleEntry e) {

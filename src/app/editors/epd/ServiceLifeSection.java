@@ -110,10 +110,12 @@ class ServiceLifeSection {
 		}
 
 		// TODO: for the table viewer
-		// add modifiers
-		// category -> combo box
+		// add modifiers, see ModifySupport
+		// category -> ComboBoxCellModifier
 		// grades -> string to int, int to string | null
-		// comment -> DialogModifier
+		// comment -> DialogModifier wich opens the LangTextDialog
+
+		// add actions for adding and removing condition factors
 	}
 
 

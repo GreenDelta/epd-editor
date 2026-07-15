@@ -21,7 +21,7 @@ import app.util.Tables;
 import app.util.UI;
 import app.util.Viewers;
 import app.util.tables.ModifySupport;
-import app.util.tables.TextCellModifier;
+import app.util.tables.TextModifier;
 import epd.model.MaterialProperty;
 
 class Table {
@@ -119,7 +119,7 @@ class Table {
 		}
 	}
 
-	private class IdModifier extends TextCellModifier<MaterialProperty> {
+	private class IdModifier extends TextModifier<MaterialProperty> {
 
 		@Override
 		protected String getText(MaterialProperty p) {
@@ -165,7 +165,7 @@ class Table {
 		}
 	}
 
-	private class NameModifier extends TextCellModifier<MaterialProperty> {
+	private class NameModifier extends TextModifier<MaterialProperty> {
 
 		@Override
 		protected String getText(MaterialProperty p) {
@@ -181,7 +181,7 @@ class Table {
 		}
 	}
 
-	private class UnitModifier extends TextCellModifier<MaterialProperty> {
+	private class UnitModifier extends TextModifier<MaterialProperty> {
 
 		@Override
 		protected String getText(MaterialProperty p) {
@@ -198,7 +198,7 @@ class Table {
 	}
 
 	private class DescriptionModifier extends
-		TextCellModifier<MaterialProperty> {
+            TextModifier<MaterialProperty> {
 
 		@Override
 		protected String getText(MaterialProperty p) {

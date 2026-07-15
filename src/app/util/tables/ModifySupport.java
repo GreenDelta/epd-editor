@@ -74,7 +74,7 @@ public class ModifySupport<T> {
 	 */
 	public ModifySupport<T> bind(String property, Function<T, String> getter,
 			BiConsumer<T, String> setter) {
-		var modifier = new TextCellModifier<T>() {
+		var modifier = new TextModifier<T>() {
 			@Override
 			protected String getText(T element) {
 				if (getter == null)
@@ -103,7 +103,7 @@ public class ModifySupport<T> {
 	 */
 	public ModifySupport<T> onDouble(String property, ToDoubleFunction<T> getter,
 			ObjDoubleConsumer<T> setter) {
-		var modifier = new TextCellModifier<T>() {
+		var modifier = new TextModifier<T>() {
 			@Override
 			protected String getText(T elem) {
 				if (getter == null)

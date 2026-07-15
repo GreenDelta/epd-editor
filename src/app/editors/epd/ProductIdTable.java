@@ -21,7 +21,7 @@ import app.util.Tables;
 import app.util.UI;
 import app.util.Viewers;
 import app.util.tables.ModifySupport;
-import app.util.tables.TextCellModifier;
+import app.util.tables.TextModifier;
 
 class ProductIdTable {
 
@@ -92,7 +92,7 @@ class ProductIdTable {
 		}
 	}
 
-	private class TypeModifier extends TextCellModifier<EpdProductId> {
+	private class TypeModifier extends TextModifier<EpdProductId> {
 
 		@Override
 		protected String getText(EpdProductId id) {
@@ -110,7 +110,7 @@ class ProductIdTable {
 		}
 	}
 
-	private class ValueModifier extends TextCellModifier<EpdProductId> {
+	private class ValueModifier extends TextModifier<EpdProductId> {
 
 		@Override
 		protected String getText(EpdProductId id) {

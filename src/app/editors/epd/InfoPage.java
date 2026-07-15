@@ -1,6 +1,5 @@
 package app.editors.epd;
 
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import javax.xml.datatype.DatatypeFactory;
@@ -12,7 +11,6 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.openlca.commons.Strings;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.QuantitativeReferenceType;
 import org.openlca.ilcd.processes.Exchange;
@@ -30,6 +28,7 @@ import app.rcp.Texts;
 import app.store.RefDeps;
 import app.util.Colors;
 import app.util.Controls;
+import app.util.IntText;
 import app.util.LangText;
 import app.util.LangText.TextBuilder;
 import app.util.UI;
@@ -226,10 +225,18 @@ class InfoPage extends FormPage {
 	private void createTimeSection(Composite body, TextBuilder tb) {
 		var time = epd.withProcessInfo().withTime();
 		var comp = UI.formSection(body, tk, M.Time, Tooltips.EPD_Time);
-		intText(comp, M.ReferenceYear, Tooltips.EPD_ReferenceYear,
-				time.getReferenceYear(), time::withReferenceYear);
-		intText(comp, M.ValidUntil, Tooltips.EPD_ValidUntil,
-				time.getValidUntil(), time::withValidUntil);
+		IntText.on(editor, comp, tk)
+				.withLabel(M.ReferenceYear)
+				.withTooltip(Tooltips.EPD_ReferenceYear)
+				.withInitial(time.getReferenceYear())
+				.onChange(time::withReferenceYear)
+				.render();
+		IntText.on(editor, comp, tk)
+				.withLabel(M.ValidUntil)
+				.withTooltip(Tooltips.EPD_ValidUntil)
+				.withInitial(time.getValidUntil())
+				.onChange(time::withValidUntil)
+				.render();
 
 		// publication date
 		tk.createLabel(comp, M.PublicationDate)
@@ -282,29 +289,4 @@ class InfoPage extends FormPage {
 				.draw(comp);
 	}
 
-	private void intText(
-			Composite comp, String label, String tooltip,
-			Integer initial, Consumer<Integer> fn
-	) {
-		var text = UI.formText(comp, tk, label, tooltip);
-		if (initial != null) {
-			text.setText(initial.toString());
-		}
-		text.addModifyListener(_ -> {
-			var s = text.getText();
-			if (Strings.isBlank(s)) {
-				fn.accept(null);
-				editor.setDirty();
-				return;
-			}
-			try {
-				int i = Integer.parseInt(s.trim());
-				fn.accept(i);
-				text.setBackground(Colors.white());
-			} catch (Exception ex) {
-				text.setBackground(Colors.errorColor());
-			}
-			editor.setDirty();
-		});
-	}
 }

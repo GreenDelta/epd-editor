@@ -1,13 +1,20 @@
 package app.editors.epd;
 
+import org.eclipse.jface.viewers.BaseLabelProvider;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.processes.epd.EpdConditionFactor;
 import org.openlca.ilcd.processes.epd.EpdServiceLife;
 import org.openlca.ilcd.util.Epds;
 
+import app.editors.refs.RefTable;
 import app.util.DoubleText;
 import app.util.LangText;
+import app.util.Tables;
 import app.util.UI;
 
 class ServiceLifeSection {
@@ -77,5 +84,61 @@ class ServiceLifeSection {
 			.val(obj != null ? obj.getComments() : null)
 			.edit(() -> withObject().withComments())
 			.draw(top);
+
+		UI.formLabel(top, tk, "Used standard(s)");
+		RefTable.create(DataSetType.SOURCE)
+			.withEditor(editor)
+			.withInitial(obj == null ? null : obj.getStandards())
+			.withSupplier(() -> withObject().withStandards())
+			.render(top, tk);
+
+		UI.formLabel(top, tk, "Documentation");
+		RefTable.create(DataSetType.SOURCE)
+			.withEditor(editor)
+			.withInitial(obj == null ? null : obj.getStandards())
+			.withSupplier(() -> withObject().withStandards())
+			.render(top, tk);
+
+		var table = Tables.createViewer(comp,
+			"Use conditions - category",
+			"Object specific grade",
+			"Reference grade",
+			"Comment");
+		table.setLabelProvider(new FactorLabel());
+		if (obj != null) {
+			table.setInput(obj.getConditionFactors());
+		}
+
 	}
+
+
+	private static class FactorLabel extends BaseLabelProvider
+	implements ITableLabelProvider {
+
+		@Override
+		public Image getColumnImage(Object o, int i) {
+			return null;
+		}
+
+		@Override
+		public String getColumnText(Object o, int i) {
+			if (!(o instanceof EpdConditionFactor f))
+				return null;
+			return switch (i) {
+				case 0 -> f.getCategory() != null
+					? f.getCategory().value()
+					: null;
+
+				case 1 -> f.getObjectSpecificGrade() != null
+					? f.getObjectSpecificGrade().toString()
+					: null;
+
+				// TODO: complete other columns
+
+				default -> null;
+			};
+		}
+	}
+
+
 }

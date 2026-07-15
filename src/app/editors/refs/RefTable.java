@@ -1,7 +1,10 @@
 package app.editors.refs;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TableViewer;
@@ -23,7 +26,8 @@ import app.util.Viewers;
 public class RefTable {
 
 	private final DataSetType type;
-	private final List<Ref> refs;
+	private List<Ref> refs;
+	private Supplier<List<Ref>> supplier;
 	private final Action[] actions;
 
 	private IEditor editor;
@@ -32,9 +36,8 @@ public class RefTable {
 	private Consumer<Ref> onAdd;
 	private Consumer<Ref> onRemove;
 
-	private RefTable(DataSetType type, List<Ref> refs) {
+	private RefTable(DataSetType type) {
 		this.type = type;
-		this.refs = refs;
 		this.actions = new Action[2];
 		actions[0] = Actions.create(
 			M.Add, Icon.ADD.des(), this::add);
@@ -42,8 +45,22 @@ public class RefTable {
 			M.Remove, Icon.DELETE.des(), this::remove);
 	}
 
+	public RefTable withInitial(List<Ref> refs) {
+		this.refs = refs;
+		return this;
+	}
+
+	public RefTable withSupplier(Supplier<List<Ref>> supplier) {
+		this.supplier = supplier;
+		return this;
+	}
+
+	public static RefTable create(DataSetType type) {
+		return new RefTable(type);
+	}
+
 	public static RefTable create(DataSetType type, List<Ref> refs) {
-		return new RefTable(type, refs);
+		return new RefTable(type).withInitial(refs);
 	}
 
 	public RefTable withEditor(IEditor editor) {
@@ -76,7 +93,9 @@ public class RefTable {
 		table.setComparator(RefComparator.get());
 
 		Actions.bind(table, actions);
-		table.setInput(refs);
+		if (refs != null) {
+			table.setInput(refs);
+		}
 		Tables.bindColumnWidths(table, 1.0);
 		if (tooltip != null) {
 			table.getTable().setToolTipText(tooltip);
@@ -102,10 +121,13 @@ public class RefTable {
 		if (table == null)
 			return;
 		var ref = RefSelectionDialog.select(type);
-		if (ref == null || refs.contains(ref))
+		if (ref == null)
 			return;
-		refs.add(ref);
-		table.setInput(refs);
+		var list = withRefs();
+		if (list.contains(ref))
+			return;
+		list.add(ref);
+		table.setInput(list);
 		if (onAdd != null) {
 			onAdd.accept(ref);
 		}
@@ -120,14 +142,34 @@ public class RefTable {
 		Ref ref = Viewers.getFirstSelected(table);
 		if (ref == null)
 			return;
-		refs.remove(ref);
-		table.setInput(refs);
+		var list = withRefs();
+		list.remove(ref);
+		table.setInput(list);
 		if (onRemove != null) {
 			onRemove.accept(ref);
 		}
 		if (editor != null) {
 			editor.setDirty();
 		}
+	}
+
+	private List<Ref> withRefs() {
+		if (supplier != null)
+			return supplier.get();
+
+		if (isImmutable(refs)) {
+			refs = new ArrayList<>();
+			return refs;
+		}
+		return refs;
+	}
+
+	private boolean isImmutable(List<Ref> list) {
+		if (list == null)
+			return true;
+		return list.isEmpty()
+			&& !(list instanceof ArrayList)
+			&& !(list instanceof LinkedList);
 	}
 
 }

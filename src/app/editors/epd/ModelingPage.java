@@ -1,7 +1,6 @@
 package app.editors.epd;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -57,7 +56,8 @@ class ModelingPage extends FormPage {
 				.render(body, tk);
 
 		RefTableSection.create(DataSetType.SOURCE)
-				.withSupplier(() -> Processes.withRepresentativeness(epd).withDataHandlingSources())
+				.withSupplier(
+					() -> Processes.withRepresentativeness(epd).withDataHandlingSources())
 				.withEditor(editor)
 				.withTitle(M.DocumentationDataQualityManagement)
 				.withTooltip(Tooltips.EPD_DocumentationDataQualityManagement)
@@ -125,15 +125,13 @@ class ModelingPage extends FormPage {
 	}
 
 	private void createComplianceSection(Composite body) {
+		var systems = new ArrayList<Ref>();
+		epd.withModelling().withComplianceDeclarations().forEach(s -> {
+			if (s.withSystem() != null)
+				systems.add(s.withSystem());
+		});
 		RefTableSection table = RefTableSection.create(DataSetType.SOURCE)
-				.withSupplier(() -> {
-					List<Ref> systems = new ArrayList<>();
-					epd.withModelling().withComplianceDeclarations().forEach(s -> {
-						if (s.withSystem() != null)
-							systems.add(s.withSystem());
-					});
-					return systems;
-				})
+				.withSupplier(() -> systems)
 				.withTitle(M.ComplianceDeclarations)
 				.withTooltip(Tooltips.EPD_ComplianceDeclarations);
 		table.render(body, tk);

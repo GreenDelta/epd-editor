@@ -33,11 +33,11 @@ public class LangTextDialog extends FormDialog {
 		this.multiLine = multiLine;
 	}
 
-	static Optional<List<LangString>> open(List<LangString> initial) {
+	public static Optional<List<LangString>> open(List<LangString> initial) {
 		return open(initial, false);
 	}
 
-	static Optional<List<LangString>> openMultiLine(
+	public static Optional<List<LangString>> openMultiLine(
 			List<LangString> initial) {
 		return open(initial, true);
 	}

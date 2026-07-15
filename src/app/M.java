@@ -90,6 +90,7 @@ public class M extends NLS {
 	public static String EPDs;
 	public static String EnvironmentalIndicators;
 	public static String Error;
+	public static String EstimatedServiceLife;
 	public static String Export;
 	public static String ExportDataPackage;
 	public static String ExportDataSet;
@@ -156,6 +157,8 @@ public class M extends NLS {
 
 	public static String Name;
 	public static String NetworkConnectionFailed;
+	public static String NumberOfYears;
+	public static String ObjectSpecificGrade;
 	public static String New;
 	public static String NewContact;
 	public static String NewEPD;
@@ -207,6 +210,8 @@ public class M extends NLS {
 	public static String Remove;
 	public static String Representative;
 	public static String ResourceParameters;
+	public static String ReferenceGrade;
+	public static String ReferenceServiceLife;
 	public static String ResultValueMustBeANumber;
 	public static String Results;
 	public static String Review;
@@ -285,6 +290,8 @@ public class M extends NLS {
 	public static String UpdateReferences;
 	public static String UpdateMajorVersion;
 	public static String UpdateMinorVersion;
+	public static String UseConditions;
+	public static String UsedStandards;
 	public static String UploadDataSet;
 	public static String UploadDataSet_Question;
 	public static String Uploads;

@@ -1,6 +1,5 @@
 package app.editors.source;
 
-import java.util.List;
 import java.util.function.Supplier;
 
 import org.eclipse.swt.widgets.Composite;
@@ -8,7 +7,6 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.openlca.ilcd.commons.DataSetType;
-import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.sources.Source;
 import org.openlca.ilcd.util.Sources;
 
@@ -89,9 +87,8 @@ class SourcePage extends FormPage {
 	}
 
 	private void contacts(Composite body) {
-		List<Ref> contacts = Sources.withDataSetInfo(source)
-				.withContacts();
-		RefTableSection.create(DataSetType.CONTACT, contacts)
+		RefTableSection.create(DataSetType.CONTACT)
+				.withSupplier(() -> Sources.withDataSetInfo(source).withContacts())
 				.withEditor(editor)
 				.withTitle("Belongs to")
 				.withTooltip(Tooltips.Source_BelongsTo)

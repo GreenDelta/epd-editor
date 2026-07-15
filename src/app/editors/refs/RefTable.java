@@ -1,7 +1,5 @@
 package app.editors.refs;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -23,10 +21,15 @@ import app.util.Actions;
 import app.util.Tables;
 import app.util.Viewers;
 
+/// A table for displaying and editing lists of dataset references. Supports
+/// lazy initialization: accepts a read-only or null initial value, and uses a
+/// list supplier to instantiate mutable structures only when modified.
+/// Providing the initial value is optional, if it is not provided, the supplier
+/// is also for the table initialization.
 public class RefTable {
 
 	private final DataSetType type;
-	private List<Ref> refs;
+	private List<Ref> initial;
 	private Supplier<List<Ref>> supplier;
 	private final Action[] actions;
 
@@ -45,8 +48,8 @@ public class RefTable {
 			M.Remove, Icon.DELETE.des(), this::remove);
 	}
 
-	public RefTable withInitial(List<Ref> refs) {
-		this.refs = refs;
+	public RefTable withInitial(List<Ref> initial) {
+		this.initial = initial;
 		return this;
 	}
 
@@ -57,10 +60,6 @@ public class RefTable {
 
 	public static RefTable create(DataSetType type) {
 		return new RefTable(type);
-	}
-
-	public static RefTable create(DataSetType type, List<Ref> refs) {
-		return new RefTable(type).withInitial(refs);
 	}
 
 	public RefTable withEditor(IEditor editor) {
@@ -91,11 +90,16 @@ public class RefTable {
 		table = Tables.createViewer(comp, Labels.get(type));
 		table.setLabelProvider(new RefTableLabel());
 		table.setComparator(RefComparator.get());
-
-		Actions.bind(table, actions);
-		if (refs != null) {
-			table.setInput(refs);
+		if (supplier != null) {
+			Actions.bind(table, actions);
 		}
+
+		if (initial != null) {
+			table.setInput(initial);
+		} else if (supplier != null) {
+			table.setInput(supplier.get());
+		}
+
 		Tables.bindColumnWidths(table, 1.0);
 		if (tooltip != null) {
 			table.getTable().setToolTipText(tooltip);
@@ -118,12 +122,12 @@ public class RefTable {
 	}
 
 	private void add() {
-		if (table == null)
+		if (table == null || supplier == null)
 			return;
 		var ref = RefSelectionDialog.select(type);
 		if (ref == null)
 			return;
-		var list = withRefs();
+		var list = supplier.get();
 		if (list.contains(ref))
 			return;
 		list.add(ref);
@@ -137,12 +141,12 @@ public class RefTable {
 	}
 
 	private void remove() {
-		if (table == null)
+		if (table == null || supplier == null)
 			return;
 		Ref ref = Viewers.getFirstSelected(table);
 		if (ref == null)
 			return;
-		var list = withRefs();
+		var list = supplier.get();
 		list.remove(ref);
 		table.setInput(list);
 		if (onRemove != null) {
@@ -152,24 +156,4 @@ public class RefTable {
 			editor.setDirty();
 		}
 	}
-
-	private List<Ref> withRefs() {
-		if (supplier != null)
-			return supplier.get();
-
-		if (isImmutable(refs)) {
-			refs = new ArrayList<>();
-			return refs;
-		}
-		return refs;
-	}
-
-	private boolean isImmutable(List<Ref> list) {
-		if (list == null)
-			return true;
-		return list.isEmpty()
-			&& !(list instanceof ArrayList)
-			&& !(list instanceof LinkedList);
-	}
-
 }

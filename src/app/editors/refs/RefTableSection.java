@@ -28,10 +28,6 @@ public class RefTableSection {
 		return new RefTableSection(type);
 	}
 
-	public static RefTableSection create(DataSetType type, List<Ref> refs) {
-		return new RefTableSection(type).withInitial(refs);
-	}
-
 	public RefTableSection withInitial(List<Ref> refs) {
 		table.withInitial(refs);
 		return this;

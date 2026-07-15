@@ -44,8 +44,9 @@ class AdminPage extends FormPage {
 		projectSection(body, tk);
 
 		// commissioner
-		RefTableSection.create(DataSetType.CONTACT,
-				Processes.withCommissionerAndGoal(epd).withCommissioners())
+		RefTableSection.create(DataSetType.CONTACT)
+			.withSupplier(
+				() -> Processes.withCommissionerAndGoal(epd).withCommissioners())
 			.withEditor(editor)
 			.withTitle(M.Commissioner)
 			.withTooltip(Tooltips.EPD_Commissioner)
@@ -55,16 +56,16 @@ class AdminPage extends FormPage {
 		dataEntrySection(body, tk);
 
 		// data set generators
-		RefTableSection.create(DataSetType.CONTACT,
-				Processes.withDataGenerator(epd).withContacts())
+		RefTableSection.create(DataSetType.CONTACT)
+			.withSupplier(() -> Processes.withDataGenerator(epd).withContacts())
 			.withEditor(editor)
 			.withTitle(M.DataSetGeneratorModeller)
 			.withTooltip(Tooltips.EPD_DataSetGeneratorModeller)
 			.render(body, tk);
 
 		// data formats
-		RefTableSection.create(DataSetType.SOURCE,
-				Processes.withDataEntry(epd).withFormats())
+		RefTableSection.create(DataSetType.SOURCE)
+			.withSupplier(() -> Processes.withDataEntry(epd).withFormats())
 			.withEditor(editor)
 			.withTitle(M.DataFormats)
 			.withTooltip(Tooltips.EPD_DataFormats)
@@ -74,16 +75,16 @@ class AdminPage extends FormPage {
 		publicationSection(body, tk);
 
 		// publishers
-		RefTableSection.create(DataSetType.CONTACT,
-				Epds.withPublishers(epd))
+		RefTableSection.create(DataSetType.CONTACT)
+			.withSupplier(() -> Epds.withPublishers(epd))
 			.withEditor(editor)
 			.withTitle(M.Publisher)
 			.withTooltip(Tooltips.EPD_Publisher)
 			.render(body, tk);
 
 		// preceding data version
-		RefTableSection.create(DataSetType.PROCESS,
-				Processes.withPublication(epd).withPrecedingVersions())
+		RefTableSection.create(DataSetType.PROCESS)
+			.withSupplier(() -> Processes.withPublication(epd).withPrecedingVersions())
 			.withEditor(editor)
 			.withTitle(M.PrecedingDataSetVersion)
 			.withTooltip(Tooltips.EPD_PrecedingDataSetVersion)
@@ -99,15 +100,15 @@ class AdminPage extends FormPage {
 
 		// project
 		tb.nextMulti(M.Project, Tooltips.EPD_Project)
-				.val(goal.getProject())
-				.edit(goal::withProject)
-				.draw(comp);
+			.val(goal.getProject())
+			.edit(goal::withProject)
+			.draw(comp);
 
 		// intended applications
 		tb.nextMulti(M.IntendedApplications, Tooltips.EPD_IntendedApplications)
-				.val(goal.getIntendedApplications())
-				.edit(goal::withIntendedApplications)
-				.draw(comp);
+			.val(goal.getIntendedApplications())
+			.edit(goal::withIntendedApplications)
+			.draw(comp);
 	}
 
 	private void dataEntrySection(Composite body, FormToolkit tk) {
@@ -202,10 +203,10 @@ class AdminPage extends FormPage {
 
 		// access restrictions
 		LangText.builder(editor, tk)
-				.nextMulti(M.AccessRestrictions, Tooltips.EPD_AccessRestrictions)
-				.val(pub.getAccessRestrictions())
-				.edit(pub::withAccessRestrictions)
-				.draw(comp);
+			.nextMulti(M.AccessRestrictions, Tooltips.EPD_AccessRestrictions)
+			.val(pub.getAccessRestrictions())
+			.edit(pub::withAccessRestrictions)
+			.draw(comp);
 	}
 
 	private void licenseCombo(Composite comp, FormToolkit tk) {

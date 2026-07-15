@@ -60,8 +60,8 @@ class InfoPage extends FormPage {
 		categorySection(body);
 		qRefSection(body);
 
-		RefTableSection.create(DataSetType.SOURCE,
-						Epds.withDataSetInfo(epd).withExternalDocs())
+		RefTableSection.create(DataSetType.SOURCE)
+				.withSupplier(() -> Epds.withDataSetInfo(epd).withExternalDocs())
 				.withEditor(editor)
 				.withTitle(M.ExternalDocumentationSources)
 				.withTooltip(Tooltips.EPD_ExternalDocumentationSources)
@@ -220,7 +220,8 @@ class InfoPage extends FormPage {
 		// other pictures
 		UI.formLabel(
 			comp, tk, M.FlowDiagramsOrPictures, Tooltips.EPD_FlowDiagramsOrPictures);
-		RefTable.create(DataSetType.SOURCE, Epds.withTechnology(epd).withPictures())
+		RefTable.create(DataSetType.SOURCE)
+			.withSupplier(() -> Epds.withTechnology(epd).withPictures())
 			.withEditor(editor)
 			.withTooltip(Tooltips.EPD_FlowDiagramsOrPictures)
 			.render(comp, tk);

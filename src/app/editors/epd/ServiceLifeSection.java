@@ -109,6 +109,11 @@ class ServiceLifeSection {
 			table.setInput(obj.getConditionFactors());
 		}
 
+		// TODO: for the table viewer
+		// add modifiers
+		// category -> combo box
+		// grades -> string to int, int to string | null
+		// comment -> DialogModifier
 	}
 
 

@@ -49,22 +49,22 @@ class ModelingPage extends FormPage {
 
 		createModelingSection(body);
 
-		RefTableSection.create(DataSetType.SOURCE,
-						Processes.withInventoryMethod(epd).withSources())
+		RefTableSection.create(DataSetType.SOURCE)
+				.withSupplier(() -> Processes.withInventoryMethod(epd).withSources())
 				.withEditor(editor)
 				.withTitle(M.LCAMethodDetails)
 				.withTooltip(Tooltips.EPD_LCAMethodDetails)
 				.render(body, tk);
 
-		RefTableSection.create(DataSetType.SOURCE,
-						Processes.withRepresentativeness(epd).withDataHandlingSources())
+		RefTableSection.create(DataSetType.SOURCE)
+				.withSupplier(() -> Processes.withRepresentativeness(epd).withDataHandlingSources())
 				.withEditor(editor)
 				.withTitle(M.DocumentationDataQualityManagement)
 				.withTooltip(Tooltips.EPD_DocumentationDataQualityManagement)
 				.render(body, tk);
 
-		RefTableSection.create(DataSetType.SOURCE,
-						Processes.withRepresentativeness(epd).withSources())
+		RefTableSection.create(DataSetType.SOURCE)
+				.withSupplier(() -> Processes.withRepresentativeness(epd).withSources())
 				.withEditor(editor)
 				.withTitle(M.DataSources)
 				.withTooltip(Tooltips.EPD_DataSources)
@@ -72,7 +72,8 @@ class ModelingPage extends FormPage {
 
 		createComplianceSection(body);
 
-		RefTableSection.create(DataSetType.SOURCE, Epds.withOriginalEpds(epd))
+		RefTableSection.create(DataSetType.SOURCE)
+				.withSupplier(() -> Epds.withOriginalEpds(epd))
 				.withEditor(editor)
 				.withTitle(M.ReferenceOriginalEPD)
 				.withTooltip(Tooltips.EPD_ReferenceOriginal)
@@ -124,12 +125,15 @@ class ModelingPage extends FormPage {
 	}
 
 	private void createComplianceSection(Composite body) {
-		List<Ref> systems = new ArrayList<>();
-		epd.withModelling().withComplianceDeclarations().forEach(s -> {
-			if (s.withSystem() != null)
-				systems.add(s.withSystem());
-		});
-		RefTableSection table = RefTableSection.create(DataSetType.SOURCE, systems)
+		RefTableSection table = RefTableSection.create(DataSetType.SOURCE)
+				.withSupplier(() -> {
+					List<Ref> systems = new ArrayList<>();
+					epd.withModelling().withComplianceDeclarations().forEach(s -> {
+						if (s.withSystem() != null)
+							systems.add(s.withSystem());
+					});
+					return systems;
+				})
 				.withTitle(M.ComplianceDeclarations)
 				.withTooltip(Tooltips.EPD_ComplianceDeclarations);
 		table.render(body, tk);

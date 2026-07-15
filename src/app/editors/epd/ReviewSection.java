@@ -103,11 +103,12 @@ class ReviewSection {
 		}
 
 		private void createActorTable(Composite comp) {
-			RefTableSection.create(DataSetType.CONTACT, review.withReviewers())
-					.withEditor(editor)
-					.withTitle(M.Reviewer)
-					.withTooltip(Tooltips.EPD_Reviewer)
-					.render(comp, tk);
+		RefTableSection.create(DataSetType.CONTACT)
+				.withSupplier(review::withReviewers)
+				.withEditor(editor)
+				.withTitle(M.Reviewer)
+				.withTooltip(Tooltips.EPD_Reviewer)
+				.render(comp, tk);
 		}
 
 		private void detailsText(Composite comp) {

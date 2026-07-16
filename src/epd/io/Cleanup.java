@@ -225,6 +225,8 @@ public class Cleanup {
 		if (ext == null)
 			return true;
 		return ext.getSubType() == null
+				&& ext.getPcrCompliance() == null
+				&& ext.getVariability() == null
 				&& ext.getAny().isEmpty();
 	}
 

@@ -1,25 +1,24 @@
 package app.editors.epd.results;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.openlca.commons.Strings;
-import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.epd.EpdEolData;
 import org.openlca.ilcd.processes.epd.EpdScenario;
 import org.openlca.ilcd.processes.epd.EpdUseStageData;
 import org.openlca.ilcd.util.Epds;
 
-import app.App;
 import app.M;
 import app.editors.epd.EpdEditor;
 import app.util.Colors;
 import app.util.Controls;
+import app.util.LangText;
 import app.util.UI;
 
 class ScenarioDataSection {
@@ -54,7 +53,7 @@ class ScenarioDataSection {
 		if (combo.getItemCount() == 0)
 			return;
 		int idx = indexOf(old);
-		combo.select(idx >= 0 ? idx : 0);
+		combo.select(Math.max(idx, 0));
 		renderDetail();
 	}
 
@@ -83,35 +82,25 @@ class ScenarioDataSection {
 		int idx = combo.getSelectionIndex();
 		if (idx < 0)
 			return;
-		var scenarioName = combo.getItem(idx);
-		if (scenarioName == null)
+		var scenario = combo.getItem(idx);
+		if (scenario == null)
 			return;
-		renderUseStage(scenarioName);
-		renderEol(scenarioName);
+		renderUseStage(scenario);
+		renderEol(scenario);
 		detailComp.getParent().layout(true, true);
 	}
 
-	private void renderUseStage(String scenarioName) {
-		var useData = useStageOf(scenarioName);
-		var text = UI.formMultiText(detailComp, tk,
-			M.ImpactsOnSoilAndWater);
-		var val = LangString.get(useData.getSoilAndWaterImpacts(), App.lang());
-		if (val != null) {
-			text.setText(val);
-		}
-		text.addModifyListener(_ -> {
-			var s = text.getText();
-			if (s.isBlank()) {
-				useData.withSoilAndWaterImpacts(List.of());
-			} else {
-				LangString.set(useData.withSoilAndWaterImpacts(), s, App.lang());
-			}
-			editor.setDirty();
-		});
+	private void renderUseStage(String scenario) {
+		var useData = useStageOf(scenario);
+		LangText.builder(editor, tk)
+			.nextMulti(M.ImpactsOnSoilAndWater)
+			.val(useData.getSoilAndWaterImpacts())
+			.edit(useData::withSoilAndWaterImpacts)
+			.draw(detailComp);
 	}
 
-	private void renderEol(String scenarioName) {
-		var eol = eolOf(scenarioName);
+	private void renderEol(String scenario) {
+		var eol = eolOf(scenario);
 
 		UI.formLabel(detailComp, tk, M.WasteCollection);
 		amountField(detailComp, M.SeparatelyCollectedPart,
@@ -138,8 +127,9 @@ class ScenarioDataSection {
 			val -> eol.withDisposal().withFinalDeposition(val));
 	}
 
-	private void amountField(Composite parent, String label,
-		Double initial, java.util.function.Consumer<Double> onChange) {
+	private void amountField(
+		Composite parent, String label,	Double initial, Consumer<Double> onChange
+	) {
 		var comp = tk.createComposite(parent);
 		UI.gridData(comp, true, false);
 		UI.gridLayout(comp, 3);
@@ -167,38 +157,38 @@ class ScenarioDataSection {
 		});
 	}
 
-	private EpdUseStageData useStageOf(String scenarioName) {
-		if (scenarioName == null)
+	private EpdUseStageData useStageOf(String scenario) {
+		if (scenario == null)
 			return null;
 		var data = Epds.withScenarioData(editor.epd);
 		for (var d : data.withUseStageData()) {
-			if (Objects.equals(d.getScenario(), scenarioName))
+			if (Objects.equals(d.getScenario(), scenario))
 				return d;
 		}
-		var d = new EpdUseStageData().withScenario(scenarioName);
+		var d = new EpdUseStageData().withScenario(scenario);
 		data.withUseStageData().add(d);
 		return d;
 	}
 
-	private EpdEolData eolOf(String scenarioName) {
-		if (scenarioName == null)
+	private EpdEolData eolOf(String scenario) {
+		if (scenario == null)
 			return null;
 		var data = Epds.withScenarioData(editor.epd);
 		for (var d : data.withEolData()) {
-			if (Objects.equals(d.getScenario(), scenarioName))
+			if (Objects.equals(d.getScenario(), scenario))
 				return d;
 		}
-		var d = new EpdEolData().withScenario(scenarioName);
+		var d = new EpdEolData().withScenario(scenario);
 		data.withEolData().add(d);
 		return d;
 	}
 
-	static void removeDataFor(Process epd, String scenarioName) {
-		if (scenarioName == null)
+	static void removeDataFor(Process epd, String scenario) {
+		if (scenario == null)
 			return;
 		var data = Epds.withScenarioData(epd);
-		data.withUseStageData().removeIf(d -> Objects.equals(d.getScenario(), scenarioName));
-		data.withEolData().removeIf(d -> Objects.equals(d.getScenario(), scenarioName));
+		data.withUseStageData().removeIf(d -> Objects.equals(d.getScenario(), scenario));
+		data.withEolData().removeIf(d -> Objects.equals(d.getScenario(), scenario));
 	}
 
 	static void renameDataFor(Process epd, String oldName, String newName) {

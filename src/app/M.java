@@ -106,6 +106,10 @@ public class M extends NLS {
 	public static String Flow;
 	public static String FlowDiagramsOrPictures;
 	public static String FlowInformation;
+	public static String ForEnergyRecovery;
+	public static String ForFinalDeposition;
+	public static String ForRecycling;
+	public static String ForReUse;
 	public static String FlowProperties;
 	public static String FlowProperty;
 	public static String Flows;
@@ -125,6 +129,7 @@ public class M extends NLS {
 	public static String ImportDataPackage;
 	public static String ImportFile;
 	public static String Imported;
+	public static String ImpactsOnSoilAndWater;
 	public static String IncludeDependentDataSets;
 	public static String IndependentExternalReview;
 	public static String IndependentInternalReview;
@@ -203,11 +208,13 @@ public class M extends NLS {
 
 	public static String QuantitativeProperties;
 	public static String QuantitativeReference;
+	public static String QuantitativeScenarioData;
 
 	public static String ReferenceDataURL;
 	public static String ReferenceOriginalEPD;
 	public static String ReferenceYear;
 	public static String RegistrationAuthority;
+	public static String ResourceRecovery;
 	public static String RegistrationNumber;
 	public static String Reload;
 	public static String ReloadNavigation;
@@ -227,10 +234,12 @@ public class M extends NLS {
 
 	public static String SafetyMargin;
 	public static String SafetyMargins;
+	public static String SeparatelyCollectedPart;
 	public static String SaveAs;
 	public static String SaveAs_Message;
 	public static String SaveDataSet;
 	public static String Scenario;
+	public static String ScenarioData;
 	public static String Scenarios;
 	public static String Search;
 	public static String SearchDependentDataSets;
@@ -316,8 +325,11 @@ public class M extends NLS {
 	public static String Version;
 
 	public static String Warning;
+	public static String WasteCollection;
+	public static String WasteDisposal;
 	public static String WasteParameters;
 	public static String Website;
+	public static String WithMixedWaste;
 
 	public static String XMLField;
 

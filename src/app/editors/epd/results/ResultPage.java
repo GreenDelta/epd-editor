@@ -44,6 +44,7 @@ public class ResultPage extends FormPage {
 	private final List<EpdModuleEntry> modules;
 	private final Process epd;
 	private ScenarioTable scenarioTable;
+	private ScenarioDataSection scenarioData;
 	private TableViewer moduleTable;
 	//private ResultTable resultTable;
 	private ResultMatrix resultMatrix;
@@ -62,6 +63,7 @@ public class ResultPage extends FormPage {
 		var body = UI.formBody(form, mForm.getToolkit());
 		createProfileSection(body, tk);
 		createScenarioSection(body, tk);
+		scenarioData = new ScenarioDataSection(editor, body, tk);
 		moduleTable = createModuleSection(body, tk);
 		moduleTable.setInput(modules);
 		//resultTable = createResultSection(body, tk);
@@ -101,6 +103,7 @@ public class ResultPage extends FormPage {
 		section.setExpanded(false);
 		UI.gridData(section, true, false);
 		scenarioTable = new ScenarioTable(editor, section, tk);
+		scenarioTable.onChanged(() -> scenarioData.refresh());
 		scenarioTable.setInput();
 	}
 
@@ -231,6 +234,7 @@ public class ResultPage extends FormPage {
 			// resultTable.refresh();
 			moduleTable.refresh();
 			scenarioTable.setInput();
+			scenarioData.refresh();
 			resultMatrix.render(modules);
 			editor.setDirty();
 		});

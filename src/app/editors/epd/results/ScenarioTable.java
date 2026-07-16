@@ -37,6 +37,8 @@ class ScenarioTable {
 	private final TableViewer table;
 	private final Process epd;
 
+	private Runnable onChanged;
+
 	public ScenarioTable(EpdEditor editor, Section section, FormToolkit tk) {
 		this.editor = editor;
 		this.epd = editor.epd;
@@ -66,6 +68,10 @@ class ScenarioTable {
 		Actions.bind(table, add, rem);
 	}
 
+	public void onChanged(Runnable onChanged) {
+		this.onChanged = onChanged;
+	}
+
 	public void setInput() {
 		table.setInput(Epds.getScenarios(epd));
 	}
@@ -77,15 +83,20 @@ class ScenarioTable {
 		Epds.withScenarios(epd).add(scenario);
 		setInput();
 		editor.setDirty();
+		if (onChanged != null)
+			onChanged.run();
 	}
 
 	protected void onRemove() {
 		List<EpdScenario> selection = Viewers.getAllSelected(table);
 		for (var s : selection) {
 			Epds.withScenarios(epd).remove(s);
+			ScenarioDataSection.removeDataFor(epd, s.getName());
 		}
 		setInput();
 		editor.setDirty();
+		if (onChanged != null)
+			onChanged.run();
 	}
 
 	private static class LabelProvider extends BaseLabelProvider implements
@@ -141,6 +152,7 @@ class ScenarioTable {
 			if (Objects.equals(oldText, newText))
 				return;
 			if (NAME.equals(field)) {
+				ScenarioDataSection.renameDataFor(epd, oldText, newText);
 				s.withName(newText);
 			} else if (GROUP.equals(field)) {
 				s.withGroup(newText);
@@ -148,6 +160,8 @@ class ScenarioTable {
 				LangString.set(s.withDescription(), newText, App.lang());
 			}
 			editor.setDirty();
+			if (onChanged != null)
+				onChanged.run();
 		}
 	}
 

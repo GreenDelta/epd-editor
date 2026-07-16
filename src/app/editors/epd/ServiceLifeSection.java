@@ -1,11 +1,13 @@
 package app.editors.epd;
 
+import java.util.EnumSet;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -112,13 +114,19 @@ class ServiceLifeSection {
 
 		var table = Tables.createViewer(comp,
 			M.UseConditions,
+			M.Value,
 			M.ObjectSpecificGrade,
 			M.ReferenceGrade,
 			M.Comment);
 		table.setLabelProvider(new FactorLabel());
+		Tables.bindColumnWidths(table, 0.2, 0.2, 0.2, 0.2, 0.2);
 
 		var ms = new ModifySupport<EpdConditionFactor>(table);
 		ms.bind(M.UseConditions, new CategoryModifier());
+		ms.onDouble(M.Value, EpdConditionFactor::getValue, (f, val) -> {
+			f.withValue(val);
+			editor.setDirty();
+		});
 		ms.bind(M.ObjectSpecificGrade, new GradeModifier(
 			EpdConditionFactor::getObjectSpecificGrade,
 			EpdConditionFactor::withObjectSpecificGrade));
@@ -127,28 +135,54 @@ class ServiceLifeSection {
 			EpdConditionFactor::withReferenceGrade));
 		ms.bind(M.Comment, new CommentModifier());
 
-		var add = Actions.create(M.Add, Icon.ADD.des(), () -> {
-			var f = new EpdConditionFactor();
-			withObject().withConditionFactors().add(f);
-			table.setInput(withObject().getConditionFactors());
-			editor.setDirty();
-		});
-		var rem = Actions.create(M.Remove, Icon.DELETE.des(), () -> {
-			var list = withObject().getConditionFactors();
-			if (list.isEmpty()) return;
-			for (var s : Viewers.getAllSelected(table)) {
-				if (s instanceof EpdConditionFactor f) {
-					list.remove(f);
-				}
-			}
-			table.setInput(list);
-			editor.setDirty();
-		});
+		var add = Actions.create(
+			M.Add, Icon.ADD.des(), () -> onAdd(table));
+		var rem = Actions.create(
+			M.Remove, Icon.DELETE.des(), () -> onRemove(table));
 		Actions.bind(table, add, rem);
 
 		if (obj != null) {
 			table.setInput(obj.getConditionFactors());
 		}
+	}
+
+	private void onAdd(TableViewer table) {
+		var list = withObject().withConditionFactors();
+		var used = EnumSet.noneOf(EpdConditionCategory.class);
+		for (var other : list) {
+			if (other.getCategory() != null) {
+				used.add(other.getCategory());
+			}
+		}
+
+		// try to set an initial category that was not used yet
+		var f = new EpdConditionFactor();
+		for (var category : EpdConditionCategory.values()) {
+			if (used.contains(category))
+				continue;
+			f.withCategory(category);
+			break;
+		}
+		if (f.getCategory() == null) {
+			f.withCategory(EpdConditionCategory.values()[0]);
+		}
+
+		list.add(f);
+		table.setInput(list);
+		editor.setDirty();
+	}
+
+	private void onRemove(TableViewer table) {
+		var list = withObject().getConditionFactors();
+		if (list.isEmpty())
+			return;
+		for (var s : Viewers.getAllSelected(table)) {
+			if (s instanceof EpdConditionFactor f) {
+				list.remove(f);
+			}
+		}
+		table.setInput(list);
+		editor.setDirty();
 	}
 
 	private static class FactorLabel extends BaseLabelProvider
@@ -168,15 +202,17 @@ class ServiceLifeSection {
 					? f.getCategory().value()
 					: null;
 
-				case 1 -> f.getObjectSpecificGrade() != null
+				case 1 -> Double.toString(f.getValue());
+
+				case 2 -> f.getObjectSpecificGrade() != null
 					? f.getObjectSpecificGrade().toString()
 					: null;
 
-				case 2 -> f.getReferenceGrade() != null
+				case 3 -> f.getReferenceGrade() != null
 					? f.getReferenceGrade().toString()
 					: null;
 
-				case 3 -> f.getComments() != null
+				case 4 -> f.getComments() != null
 					? App.s(f.getComments())
 					: null;
 
@@ -247,7 +283,9 @@ class ServiceLifeSection {
 
 		@Override
 		protected void setItem(EpdConditionFactor f, String grade) {
-			Integer val = grade.isEmpty() ? null : Integer.parseInt(grade);
+			Integer val = grade.isEmpty()
+				? null
+				: Integer.parseInt(grade);
 			if (Objects.equals(getter.apply(f), val))
 				return;
 			setter.accept(f, val);

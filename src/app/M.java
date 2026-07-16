@@ -179,6 +179,11 @@ public class M extends NLS {
 	public static String OpenEditor;
 	public static String OutputParameters;
 	public static String OverwriteExistingDataSets;
+
+	public static String PcrAllocation;
+	public static String PcrCompliance;
+	public static String PcrCutOffRules;
+	public static String PcrUpstreamDataDeviating;
 	public static String Owner;
 
 	public static String Password;

@@ -44,9 +44,9 @@ public class UI {
 	}
 
 	public static Composite infoSection(IDataSet ds, Composite parent,
-			FormToolkit tk) {
+		FormToolkit tk) {
 		Composite comp = UI.formSection(parent, tk,
-				M.GeneralInformation, Tooltips.All_GeneralInformation);
+			M.GeneralInformation, Tooltips.All_GeneralInformation);
 		Text text = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);
 		text.setEditable(false);
 		var uuid = DataSets.getUUID(ds);
@@ -82,7 +82,7 @@ public class UI {
 			Desktop.getDesktop().open(file);
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(UI.class);
-			log.error("failed to open file natively: " + file, e);
+			log.error("failed to open file natively: {}", file, e);
 		}
 	}
 
@@ -90,8 +90,7 @@ public class UI {
 		// first, we try to get the shell from the active workbench window
 		Shell shell = null;
 		try {
-			var wb = PlatformUI.getWorkbench()
-					.getActiveWorkbenchWindow();
+			var wb = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 			if (wb != null) {
 				shell = wb.getShell();
 			}
@@ -111,18 +110,18 @@ public class UI {
 		if (shell != null)
 			return shell;
 		return display != null
-				? new Shell(display)
-				: new Shell();
+			? new Shell(display)
+			: new Shell();
 	}
 
 	public static Font boldFont() {
 		return JFaceResources.getFontRegistry().getBold(
-				JFaceResources.DEFAULT_FONT);
+			JFaceResources.DEFAULT_FONT);
 	}
 
 	public static Font italicFont() {
-		return JFaceResources.getFontRegistry().getItalic(
-				JFaceResources.DEFAULT_FONT);
+		return JFaceResources.getFontRegistry()
+			.getItalic(JFaceResources.DEFAULT_FONT);
 	}
 
 	public static Font defautlFont() {
@@ -158,8 +157,9 @@ public class UI {
 		toolkit.paintBordersFor(composite);
 	}
 
-	public static GridData gridData(Control control, boolean hFill,
-			boolean vFill) {
+	public static GridData gridData(
+		Control control, boolean hFill, boolean vFill
+	) {
 		int hStyle = hFill ? SWT.FILL : SWT.LEFT;
 		int vStyle = vFill ? SWT.FILL : SWT.CENTER;
 		GridData data = new GridData(hStyle, vStyle, hFill, vFill);
@@ -173,36 +173,41 @@ public class UI {
 		return data;
 	}
 
-	/** Creates a nice form header with the given title and returns the form. */
+	/**
+	 * Creates a nice form header with the given title and returns the form.
+	 */
 	public static ScrolledForm formHeader(IManagedForm mform, String title) {
 		ScrolledForm form = mform.getForm();
 		FormToolkit tk = mform.getToolkit();
 		tk.getHyperlinkGroup().setHyperlinkUnderlineMode(
-				HyperlinkSettings.UNDERLINE_HOVER);
+			HyperlinkSettings.UNDERLINE_HOVER);
 		form.setText(title);
 		form.getForm().setForeground(Colors.get(70, 70, 70));
 		return form;
 	}
 
-	public static Composite formSection(Composite comp, FormToolkit tk,
-			String label) {
+	public static Composite formSection(
+		Composite comp, FormToolkit tk, String label
+	) {
 		return formSection(comp, tk, label, null);
 	}
 
-	public static Composite formSection(Composite comp, FormToolkit tk,
-			String label, String tooltip) {
+	public static Composite formSection(
+		Composite comp, FormToolkit tk, String label, String tooltip
+	) {
 		Section section = section(comp, tk, label);
 		section.setToolTipText(tooltip);
 		return sectionClient(section, tk);
 	}
 
-	public static Section section(Composite parent, FormToolkit tk,
-			String label) {
+	public static Section section(
+		Composite parent, FormToolkit tk, String label
+	) {
 		Section s = tk.createSection(parent,
-				ExpandableComposite.TITLE_BAR
-						| ExpandableComposite.FOCUS_TITLE
-						| ExpandableComposite.EXPANDED
-						| ExpandableComposite.TWISTIE);
+			ExpandableComposite.TITLE_BAR
+				| ExpandableComposite.FOCUS_TITLE
+				| ExpandableComposite.EXPANDED
+				| ExpandableComposite.TWISTIE);
 		s.setTitleBarBackground(Colors.get(245, 245, 245));
 		s.setTitleBarBorderColor(Colors.get(170, 170, 170));
 		s.setTitleBarForeground(Colors.get(70, 70, 70));
@@ -216,26 +221,25 @@ public class UI {
 	 * Creates a composite and sets it as section client of the given section.
 	 * The created composite gets a 2-column grid-layout.
 	 */
-	public static Composite sectionClient(Section section,
-			FormToolkit toolkit) {
-		Composite composite = toolkit.createComposite(section);
+	public static Composite sectionClient(Section section, FormToolkit tk) {
+		var composite = tk.createComposite(section);
 		section.setClient(composite);
 		gridLayout(composite, 2);
 		return composite;
 	}
 
-	public static Composite formBody(ScrolledForm form, FormToolkit toolkit) {
-		Composite body = form.getBody();
-		GridLayout bodyLayout = new GridLayout();
-		bodyLayout.marginRight = 10;
-		bodyLayout.marginLeft = 10;
-		bodyLayout.horizontalSpacing = 10;
-		bodyLayout.marginBottom = 10;
-		bodyLayout.marginTop = 10;
-		bodyLayout.verticalSpacing = 10;
-		bodyLayout.numColumns = 1;
-		body.setLayout(bodyLayout);
-		toolkit.paintBordersFor(body);
+	public static Composite formBody(ScrolledForm form, FormToolkit tk) {
+		var body = form.getBody();
+		var layout = new GridLayout();
+		layout.marginRight = 10;
+		layout.marginLeft = 10;
+		layout.horizontalSpacing = 10;
+		layout.marginBottom = 10;
+		layout.marginTop = 10;
+		layout.verticalSpacing = 10;
+		layout.numColumns = 1;
+		body.setLayout(layout);
+		tk.paintBordersFor(body);
 		gridData(body, true, true);
 		return body;
 	}
@@ -248,8 +252,9 @@ public class UI {
 		return gridLayout(composite, columns, 5, 0);
 	}
 
-	public static GridLayout gridLayout(Composite composite, int columns,
-			int spacing, int margin) {
+	public static GridLayout gridLayout(
+		Composite composite, int columns, int spacing, int margin
+	) {
 		GridLayout layout = new GridLayout(columns, false);
 		layout.verticalSpacing = spacing;
 		layout.marginWidth = margin;
@@ -274,16 +279,16 @@ public class UI {
 	}
 
 	public static Button formCheckBox(Composite comp, FormToolkit tk,
-			String label) {
+		String label) {
 		return formCheckBox(comp, tk, label, null);
 	}
 
 	public static Button formCheckBox(Composite comp, FormToolkit tk,
-			String label, String tooltip) {
+		String label, String tooltip) {
 		formLabel(comp, tk, label, tooltip);
 		Button button = tk != null
-				? tk.createButton(comp, null, SWT.CHECK)
-				: new Button(comp, SWT.CHECK);
+			? tk.createButton(comp, null, SWT.CHECK)
+			: new Button(comp, SWT.CHECK);
 		if (tooltip != null) {
 			button.setToolTipText(tooltip);
 		}
@@ -300,23 +305,21 @@ public class UI {
 		return formText(parent, null, label);
 	}
 
-	public static Text formText(Composite comp, FormToolkit tk,
-			String label) {
+	public static Text formText(
+		Composite comp, FormToolkit tk, String label
+	) {
 		return formText(comp, tk, label, null);
 	}
 
 	public static Text formText(
-			Composite comp, FormToolkit tk,
-			String label, String tooltip) {
+		Composite comp, FormToolkit tk, String label, String tooltip
+	) {
 		if (label != null) {
 			formLabel(comp, tk, label, tooltip);
 		}
-		Text text = null;
-		if (tk != null) {
-			text = tk.createText(comp, null, SWT.BORDER);
-		} else {
-			text = new Text(comp, SWT.BORDER);
-		}
+		var text = tk != null
+			? tk.createText(comp, null, SWT.BORDER)
+			: new Text(comp, SWT.BORDER);
 		if (tooltip != null) {
 			text.setToolTipText(tooltip);
 		}
@@ -328,20 +331,21 @@ public class UI {
 		return formMultiText(comp, tk, null);
 	}
 
-	public static Text formMultiText(Composite comp, FormToolkit tk,
-			String label) {
+	public static Text formMultiText(
+		Composite comp, FormToolkit tk, String label
+	) {
 		return formMultiText(comp, tk, label, null);
 	}
 
 	public static Text formMultiText(Composite comp, FormToolkit tk,
-			String label, String tooltip) {
+		String label, String tooltip) {
 		if (label != null) {
 			formLabel(comp, tk, label, tooltip);
 		}
 		int flags = SWT.BORDER | SWT.V_SCROLL | SWT.WRAP | SWT.MULTI;
 		Text text = tk != null
-				? tk.createText(comp, null, flags)
-				: new Text(comp, flags);
+			? tk.createText(comp, null, flags)
+			: new Text(comp, flags);
 		if (tooltip != null) {
 			text.setToolTipText(tooltip);
 		}
@@ -357,12 +361,12 @@ public class UI {
 	}
 
 	public static Combo formCombo(Composite comp, FormToolkit tk,
-			String label) {
+		String label) {
 		return formCombo(comp, tk, label, null);
 	}
 
 	public static Combo formCombo(Composite comp, FormToolkit tk,
-			String label, String tooltip) {
+		String label, String tooltip) {
 		formLabel(comp, tk, label, tooltip);
 		Combo combo = new Combo(comp, SWT.READ_ONLY);
 		if (tooltip != null) {
@@ -377,12 +381,12 @@ public class UI {
 	}
 
 	public static Label formLabel(Composite parent, FormToolkit tk,
-			String label) {
+		String label) {
 		return formLabel(parent, tk, label, null);
 	}
 
 	public static Label formLabel(Composite parent, FormToolkit tk,
-			String label, String tooltip) {
+		String label, String tooltip) {
 		Label lab;
 		if (tk != null)
 			lab = tk.createLabel(parent, label, SWT.NONE);

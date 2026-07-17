@@ -234,7 +234,7 @@ public class M extends NLS {
 
 	public static String SafetyMargin;
 	public static String SafetyMargins;
-	public static String SeparatelyCollectedPart;
+	public static String SeparatelyCollected;
 	public static String SaveAs;
 	public static String SaveAs_Message;
 	public static String SaveDataSet;

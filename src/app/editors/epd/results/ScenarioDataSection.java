@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -102,44 +103,75 @@ class ScenarioDataSection {
 	private void renderEol(String scenario) {
 		var eol = eolOf(scenario);
 
-		UI.formLabel(detailComp, tk, M.WasteCollection);
-		amountField(detailComp, M.SeparatelyCollectedPart,
+		var comp = tk.createComposite(detailComp);
+		UI.gridData(comp, true, false);
+		UI.innerGrid(comp, 7);
+
+		// Row 0: Waste collection
+		boldCell(comp, M.WasteCollection);
+		amountCell(comp, M.SeparatelyCollected,
 			eol.getCollection() != null ? eol.getCollection().getSeparate() : null,
 			val -> eol.withCollection().withSeparate(val));
-		amountField(detailComp, M.WithMixedWaste,
+		amountCell(comp, M.WithMixedWaste,
 			eol.getCollection() != null ? eol.getCollection().getWithMixedWaste() : null,
 			val -> eol.withCollection().withWithMixedWaste(val));
 
-		UI.formLabel(detailComp, tk, M.ResourceRecovery);
-		amountField(detailComp, M.ForReUse,
+		// Row 1: Resource recovery (vertical span 2, covers row 2's col 0)
+		boldCell(comp, M.ResourceRecovery, 2);
+		amountCell(comp, M.ForReUse,
 			eol.getRecovery() != null ? eol.getRecovery().getReuse() : null,
 			val -> eol.withRecovery().withReuse(val));
-		amountField(detailComp, M.ForRecycling,
+		amountCell(comp, M.ForRecycling,
 			eol.getRecovery() != null ? eol.getRecovery().getRecycling() : null,
 			val -> eol.withRecovery().withRecycling(val));
-		amountField(detailComp, M.ForEnergyRecovery,
+
+		// Row 2: For energy recovery (col 0 covered by resource recovery vspan)
+		amountCell(comp, M.ForEnergyRecovery,
 			eol.getRecovery() != null ? eol.getRecovery().getEnergyRecovery() : null,
 			val -> eol.withRecovery().withEnergyRecovery(val));
+		UI.filler(comp, tk);
+		UI.filler(comp, tk);
+		UI.filler(comp, tk);
 
-		UI.formLabel(detailComp, tk, M.WasteDisposal);
-		amountField(detailComp, M.ForFinalDeposition,
+		// Row 3: Waste disposal
+		boldCell(comp, M.WasteDisposal);
+		amountCell(comp, M.ForFinalDeposition,
 			eol.getDisposal() != null ? eol.getDisposal().getFinalDeposition() : null,
 			val -> eol.withDisposal().withFinalDeposition(val));
+		UI.filler(comp, tk);
+		UI.filler(comp, tk);
+		UI.filler(comp, tk);
 	}
 
-	private void amountField(
-		Composite parent, String label,	Double initial, Consumer<Double> onChange
-	) {
-		var comp = tk.createComposite(parent);
-		UI.gridData(comp, true, false);
-		UI.gridLayout(comp, 3);
-		UI.formLabel(comp, tk, label);
-		var text = tk.createText(comp, "", SWT.BORDER);
+	private void boldCell(Composite parent, String text) {
+		var label = tk.createLabel(parent, text, SWT.NONE);
+		label.setFont(UI.boldFont());
+		var gd = new GridData(SWT.LEFT, SWT.CENTER, false, false);
+		label.setLayoutData(gd);
+	}
+
+	private void boldCell(Composite parent, String text, int vspan) {
+		var label = tk.createLabel(parent, text, SWT.NONE);
+		label.setFont(UI.boldFont());
+		var gd = new GridData(SWT.LEFT, SWT.CENTER, false, false);
+		gd.verticalSpan = vspan;
+		label.setLayoutData(gd);
+	}
+
+	private void amountCell(Composite parent, String label,
+		Double initial, Consumer<Double> onChange) {
+		var subLabel = tk.createLabel(parent, label, SWT.NONE);
+		var gd = new GridData(SWT.LEFT, SWT.TOP, false, false);
+		gd.verticalIndent = 2;
+		subLabel.setLayoutData(gd);
+
+		var text = tk.createText(parent, "", SWT.BORDER);
 		UI.gridData(text, true, false);
 		if (initial != null) {
 			text.setText(Double.toString(initial));
 		}
-		tk.createLabel(comp, "kg");
+		tk.createLabel(parent, "kg");
+
 		text.addModifyListener(_ -> {
 			var s = text.getText().trim();
 			if (Strings.isBlank(s)) {

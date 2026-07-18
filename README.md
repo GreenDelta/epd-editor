@@ -1,24 +1,16 @@
 # EPD Editor
-This is an editor for [ILCD](http://eplca.jrc.ec.europa.eu/LCDN/developer.xhtml)
-data sets with [EPD format extensions](http://www.oekobaudat.de/en/info/working-group-indata.html). 
+
+The EPD Editor is a desktop application for editing data sets in the [ILCD+EPD Format](https://github.com/InDataWG/ILCD-EPD-Data-Format), validating and sharing them as ILCD packages or via [soda4LCA](https://bitbucket.org/okusche/soda4lca/).
 
 ## Building from source
-The EPD editor is an [Eclipse RCP](https://wiki.eclipse.org/Rich_Client_Platform)
-application. To compile it from source you need to have the following tools
-installed:
+The EPD editor is an [EclipseRCP](https://wiki.eclipse.org/Rich_Client_Platform) application. To compile it from source you need to have the following tools installed:
 
-* a [Java Development Kit >= 14](https://adoptopenjdk.net/)
+* a [Java Development Kit >= 25](https://adoptopenjdk.net/)
 * [Maven](http://maven.apache.org/)
 * the [Eclipse package for RCP developers](https://www.eclipse.org/downloads/)
 
-When you have these tools installed you can build the application from source
-via the following steps:
-
-#### Install the openLCA core modules
-The EPD Editor uses the current version of the 
-[openLCA core modules](https://github.com/GreenDelta/olca-modules) for reading
-and writing ILCD data sets. It is a plain Maven project and can be
-installed via `mvn install`. See its documentation for more information.
+When you have these tools installed you can build the application from
+source via the following steps:
 
 #### Get the source code of the application
 We recommend to use Git to manage the source code, but you can also download the

@@ -153,6 +153,8 @@ public class M extends NLS {
 	public static String Locations;
 	public static String Logo;
 
+	public static String Manufacturers;
+	public static String ManufacturingSites;
 	public static String MaterialProperties;
 	public static String MaterialProperties_Description;
 	public static String Memory;

@@ -124,6 +124,7 @@ class ManufacturerSection {
 				"OLC Location code");
 			siteTable.setLabelProvider(new SiteLabel());
 			Tables.bindColumnWidths(siteTable, 0.2, 0.2, 0.2, 0.2, 0.2);
+			UI.gridData(siteTable.getControl(), true, true).heightHint = 100;
 
 			var ms = new ModifySupport<EpdSite>(siteTable);
 			ms.bind("Name", new SiteModifier(SiteModifier.NAME, m));
@@ -136,11 +137,11 @@ class ManufacturerSection {
 			ms.bind("OLC Location code",
 				new SiteModifier(SiteModifier.OLC, m));
 
-			var addSite = Actions.create(
-				M.Add, Icon.ADD.des(), () -> addSite());
-			var remSite = Actions.create(
-				M.Remove, Icon.DELETE.des(), () -> removeSites());
-			Actions.bind(siteTable, addSite, remSite);
+			var add = Actions.create(
+				M.Add, Icon.ADD.des(), this::addSite);
+			var rem = Actions.create(
+				M.Remove, Icon.DELETE.des(), this::removeSites);
+			Actions.bind(siteTable, add, rem);
 
 			siteTable.setInput(m.getSites());
 		}

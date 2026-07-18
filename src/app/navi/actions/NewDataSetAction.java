@@ -53,16 +53,17 @@ public class NewDataSetAction extends Action {
 	}
 
 	private DataSetType getType(NavigationElement elem) {
-		if (elem == null)
-			return null;
-		if (elem instanceof TypeElement typeElem)
-			return typeElem.type();
-		if (elem instanceof RefElement refElem) {
-			Ref ref = refElem.ref();
-			if (ref != null && ref.getType() != null)
-				return ref.getType();
-		}
-		return getType(elem.getParent());
+		return switch (elem) {
+			case null -> null;
+			case TypeElement e -> e.type();
+			case RefElement e -> {
+				Ref ref = e.ref();
+				yield ref != null && ref.getType() != null
+					? ref.getType()
+					: getType(elem.getParent());
+			}
+			default -> getType(elem.getParent());
+		};
 	}
 
 	private String getLabel() {
@@ -108,7 +109,7 @@ public class NewDataSetAction extends Action {
 			case IMPACT_METHOD -> init(new ImpactMethod());
 			case PROCESS -> {
 				var p = init(new Process());
-				p.withEpdVersion("1.2");
+				p.withEpdVersion("1.3");
 				Processes.withInventoryMethod(p)
 					.withProcessType(ProcessType.EPD);
 				yield p;

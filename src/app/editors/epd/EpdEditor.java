@@ -149,7 +149,7 @@ public class EpdEditor extends BaseEditor {
 		var copy = epd.copy();
 		Cleanup.on(copy);
 		QMetaData.write(copy, qmeta);
-		copy.withEpdVersion("1.2");
+		copy.withEpdVersion("1.3");
 		return copy;
 	}
 

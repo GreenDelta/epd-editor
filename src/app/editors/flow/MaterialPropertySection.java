@@ -40,7 +40,7 @@ class MaterialPropertySection {
 	void render(Composite body, FormToolkit tk) {
 		var section = UI.section(body, tk, M.MaterialProperties);
 		section.setToolTipText(Tooltips.Flow_MaterialProperties);
-		UI.gridData(section, true, false);
+		UI.stretchX(section);
 		var comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
 		table = Tables.createViewer(comp, PROPERTY, VALUE, UNIT);

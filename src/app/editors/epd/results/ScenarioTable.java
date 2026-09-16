@@ -49,7 +49,7 @@ class ScenarioTable {
 		table.getTable().setToolTipText(Tooltips.EPD_Scenarios);
 		Tables.bindColumnWidths(table, 0.25, 0.25, 0.25, 0.25);
 		addModifiers();
-		UI.gridData(table.getControl(), true, true).heightHint = 150;
+		UI.stretchXY(table.getControl()).heightHint = 150;
 		bindActions(section);
 	}
 

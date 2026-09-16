@@ -84,7 +84,7 @@ class ServiceLifeSection {
 		var obj = getObject();
 
 		var top = UI.formComposite(comp, tk);
-		UI.gridData(top, true, false);
+		UI.stretchX(top);
 
 		DoubleText.on(editor, top, tk)
 			.withLabel(M.NumberOfYears)

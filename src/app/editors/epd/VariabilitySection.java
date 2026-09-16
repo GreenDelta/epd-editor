@@ -126,7 +126,7 @@ class VariabilitySection {
 
 		UI.formLabel(comp, tk, M.VariabilityDescription);
 		var textComp = tk.createComposite(comp);
-		UI.gridData(textComp, true, false).horizontalSpan = 2;
+		UI.stretchX(textComp).horizontalSpan = 2;
 		UI.innerGrid(textComp, 2);
 
 		var descriptions = v != null ? v.getDescriptions() : null;
@@ -148,7 +148,7 @@ class VariabilitySection {
 	) {
 
 		var combo = new ComboViewer(comp, SWT.READ_ONLY);
-		UI.gridData(combo.getControl(), true, false);
+		UI.stretchX(combo.getControl());
 		combo.setContentProvider(
 			ArrayContentProvider.getInstance());
 

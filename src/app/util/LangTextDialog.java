@@ -70,7 +70,7 @@ public class LangTextDialog extends FormDialog {
 		var tk = mForm.getToolkit();
 		var body = UI.formBody(mForm.getForm(), tk);
 		var boxComp = tk.createComposite(body);
-		UI.gridData(boxComp, true, false);
+		UI.stretchX(boxComp);
 		UI.gridLayout(boxComp, 2);
 
 		var boxes = LangBox.allOf(strings);

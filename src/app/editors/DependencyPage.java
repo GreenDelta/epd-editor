@@ -48,7 +48,7 @@ public class DependencyPage extends FormPage {
 		tree.getTree().setLinesVisible(false);
 		tree.setContentProvider(new ContentProvider());
 		tree.setLabelProvider(new Label());
-		UI.gridData(tree.getTree(), true, true);
+		UI.stretchXY(tree.getTree());
 		Trees.bindColumnWidths(tree.getTree(), 0.3, 0.5, 0.1, 0.1);
 		form.reflow(true);
 		setInput(tree);

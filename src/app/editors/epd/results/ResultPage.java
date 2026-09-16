@@ -84,7 +84,7 @@ public class ResultPage extends FormPage {
 		var section = UI.section(parent, tk, M.Scenarios);
 		section.setToolTipText(Tooltips.EPD_Scenarios);
 		section.setExpanded(false);
-		UI.gridData(section, true, false);
+		UI.stretchX(section);
 		scenarioTable = new ScenarioTable(editor, section, tk);
 		scenarioTable.onChanged(() -> {
 			scenarioData.refresh();
@@ -96,7 +96,7 @@ public class ResultPage extends FormPage {
 	private ResultMatrix createResultSection(Composite body, FormToolkit tk) {
 		var section = UI.section(body, tk, M.Results);
 		section.setToolTipText(Tooltips.EPD_Results);
-		UI.gridData(section, true, true);
+		UI.stretchXY(section);
 		var composite = UI.sectionClient(section, tk);
 		UI.gridLayout(composite, 1);
 		Actions.bind(section, createResultActions());

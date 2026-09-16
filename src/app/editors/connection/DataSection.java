@@ -48,11 +48,11 @@ class DataSection {
 
 	void create(Composite body, FormToolkit tk) {
 		Section section = UI.section(body, tk, M.Data);
-		UI.gridData(section, true, true);
+		UI.stretchXY(section);
 		Composite parent = UI.sectionClient(section, tk);
 		UI.gridLayout(parent, 1);
 		Composite comp = tk.createComposite(parent);
-		UI.gridData(comp, true, false);
+		UI.stretchX(comp);
 		UI.innerGrid(comp, 3);
 		TypeCombo typeCombo = TypeCombo.create(comp, tk);
 		Text searchText = tk.createText(comp, "", SWT.BORDER);

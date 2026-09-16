@@ -33,7 +33,7 @@ class Page extends FormPage {
 	private void createTable(Composite parent) {
 		Section section = UI.section(parent, toolkit,
 				M.MaterialProperties);
-		UI.gridData(section, true, true);
+		UI.stretchXY(section);
 		new Table(editor, section, toolkit);
 	}
 

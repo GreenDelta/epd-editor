@@ -48,7 +48,7 @@ class ContentTree {
 			? "Packaging materials"
 			: "Components and materials";
 		Section section = UI.section(body, tk, title);
-		UI.gridData(section, true, true);
+		UI.stretchXY(section);
 		Composite comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
 		createTree(comp);

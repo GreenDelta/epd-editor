@@ -81,7 +81,7 @@ class ReviewSection {
 			Composite body = UI.sectionClient(section, tk);
 			UI.gridLayout(body, 1);
 			Composite comp = UI.formComposite(body, tk);
-			UI.gridData(comp, true, false);
+			UI.stretchX(comp);
 			typeCombo(comp);
 			detailsText(comp);
 			createReportText(comp);
@@ -122,7 +122,7 @@ class ReviewSection {
 		private void typeCombo(Composite comp) {
 			UI.formLabel(comp, tk, M.ReviewType, Tooltips.EPD_ReviewType);
 			ComboViewer c = new ComboViewer(comp);
-			UI.gridData(c.getControl(), true, false);
+			UI.stretchX(c.getControl());
 			c.setContentProvider(ArrayContentProvider.getInstance());
 			c.setLabelProvider(new TypeLabel());
 			c.setInput(ReviewType.values());

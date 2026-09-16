@@ -34,7 +34,7 @@ class ProductIdTable {
 		this.epd = editor.epd;
 		UI.formLabel(parent, tk, M.ProductIds, Tooltips.EPD_ProductIds);
 		table = Tables.createViewer(parent, M.Type, M.Value);
-		UI.gridData(table.getControl(), true, true).heightHint = 100;
+		UI.stretchXY(table.getControl()).heightHint = 100;
 		table.setLabelProvider(new LabelProvider());
 		Tables.bindColumnWidths(table, 0.4, 0.6);
 

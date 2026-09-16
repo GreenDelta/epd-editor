@@ -34,7 +34,7 @@ class EntityIdTable {
 		this.contact = editor.contact;
 		UI.formLabel(parent, tk, M.EntityIds, Tooltips.Contact_EntityIds);
 		table = Tables.createViewer(parent, M.Type, M.Value);
-		UI.gridData(table.getControl(), true, true).heightHint = 100;
+		UI.stretchXY(table.getControl()).heightHint = 100;
 		table.setLabelProvider(new LabelProvider());
 		Tables.bindColumnWidths(table, 0.4, 0.6);
 

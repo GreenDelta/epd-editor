@@ -71,7 +71,7 @@ public class RefSelectionDialog extends FormDialog {
 		filterText = UI.formText(body);
 		Section section = UI.section(body, tk, "Content");
 		addSectionActions(section);
-		UI.gridData(section, true, true);
+		UI.stretchXY(section);
 		Composite composite = UI.sectionClient(section, tk);
 		UI.gridLayout(composite, 1);
 		createViewer(composite);
@@ -96,7 +96,7 @@ public class RefSelectionDialog extends FormDialog {
 		viewer = NavigationTree.viewer(composite);
 		RefTextFilter filter = new RefTextFilter(filterText, viewer);
 		viewer.setFilters(filter);
-		UI.gridData(viewer.getTree(), true, true);
+		UI.stretchXY(viewer.getTree());
 		viewer.addSelectionChangedListener(new SelectionChange());
 		viewer.addDoubleClickListener(new DoubleClick());
 		viewer.setInput(Navigator.getTypeRoot(modelType));

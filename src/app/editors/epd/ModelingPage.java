@@ -104,7 +104,7 @@ class ModelingPage extends FormPage {
 
 	private void createSubTypeViewer(Composite parent) {
 		var combo = new ComboViewer(parent, SWT.READ_ONLY);
-		UI.gridData(combo.getControl(), true, false);
+		UI.stretchX(combo.getControl());
 		combo.setContentProvider(ArrayContentProvider.getInstance());
 		combo.setLabelProvider(new LabelProvider() {
 			@Override

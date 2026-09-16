@@ -22,7 +22,7 @@ class LocationCombo {
 	void create(Composite parent, String selectedCode, Consumer<String> fn) {
 		initLocations(selectedCode);
 		combo = new Combo(parent, SWT.NONE);
-		UI.gridData(combo, true, false);
+		UI.stretchX(combo);
 		String[] items = new String[locations.size() + 1];
 		items[0] = "";
 		int selectedIdx = 0;

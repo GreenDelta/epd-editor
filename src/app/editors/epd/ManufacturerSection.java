@@ -89,7 +89,7 @@ class ManufacturerSection {
 			UI.gridLayout(comp, 1);
 
 			var top = tk.createComposite(comp);
-			UI.gridData(top, true, false);
+			UI.stretchX(top);
 			UI.gridLayout(top, 2, 10, 0);
 			contactRow(top);
 			providingDataRow(top);
@@ -131,7 +131,7 @@ class ManufacturerSection {
 				M.OlcLocationCode);
 			siteTable.setLabelProvider(new SiteLabel());
 			Tables.bindColumnWidths(siteTable, 0.2, 0.2, 0.2, 0.2, 0.2);
-			UI.gridData(siteTable.getControl(), true, true).heightHint = 100;
+			UI.stretchXY(siteTable.getControl()).heightHint = 100;
 
 			var ms = new ModifySupport<EpdSite>(siteTable);
 			ms.bind(M.ManufacturingSite, new SiteModifier(0))

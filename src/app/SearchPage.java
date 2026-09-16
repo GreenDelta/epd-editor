@@ -82,7 +82,7 @@ public class SearchPage extends FormEditor {
 			Composite body = UI.formBody(mform.getForm(), tk);
 			createControls(body, tk);
 			Composite comp = UI.formComposite(body, tk);
-			UI.gridData(comp, true, true);
+			UI.stretchXY(comp);
 			table = Tables.createViewer(comp, M.Name, M.UUID, M.Version);
 			table.setLabelProvider(new RefTableLabel());
 			Tables.bindColumnWidths(table, 0.6, 0.2, 0.2);
@@ -96,9 +96,9 @@ public class SearchPage extends FormEditor {
 
 		private void createControls(Composite body, FormToolkit tk) {
 			Composite comp = UI.formComposite(body, tk);
-			UI.gridData(comp, true, false);
+			UI.stretchX(comp);
 			text = tk.createText(comp, null, SWT.BORDER);
-			UI.gridData(text, true, false).heightHint = 20;
+			UI.stretchX(text).heightHint = 20;
 			text.addTraverseListener(e -> {
 				if (e.detail == SWT.TRAVERSE_RETURN) {
 					doIt();

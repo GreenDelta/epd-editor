@@ -200,7 +200,7 @@ public class QMetaDataPage extends FormPage {
 		Composite c = tk.createComposite(comp);
 		UI.gridLayout(c, 2, 10, 0);
 		Text text = UI.formMultiText(c, tk, "Comment:");
-		GridData gd = UI.gridData(text, true, false);
+		GridData gd = UI.stretchX(text);
 		gd.widthHint = 500;
 		gd.heightHint = 50;
 		return text;

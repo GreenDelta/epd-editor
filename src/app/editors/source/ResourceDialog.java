@@ -62,21 +62,21 @@ class ResourceDialog extends FormDialog {
 		var fileCheck = tk.createButton(body, "Local file", SWT.RADIO);
 		fileCheck.setSelection(true);
 		var fileComp = tk.createComposite(body);
-		UI.gridData(fileComp, true, false);
+		UI.stretchX(fileComp);
 		UI.gridLayout(fileComp, 2);
 		var fileText = tk.createText(
 			fileComp, "", SWT.READ_ONLY | SWT.BORDER);
-		UI.gridData(fileText, true, false);
+		UI.stretchX(fileText);
 		var fileBtn = tk.createButton(fileComp, "Select", SWT.NONE);
 
 		// URL
 		var urlCheck = tk.createButton(body, "URL to web resource", SWT.RADIO);
 		urlCheck.setSelection(false);
 		var urlComp = tk.createComposite(body);
-		UI.gridData(urlComp, true, false);
+		UI.stretchX(urlComp);
 		UI.gridLayout(urlComp, 1);
 		var urlText = tk.createText(urlComp, "https://...", SWT.BORDER);
-		UI.gridData(urlText, true, false).minimumWidth = 400;
+		UI.stretchX(urlText).minimumWidth = 400;
 		urlText.setEnabled(false);
 
 		Controls.onSelect(fileCheck, _ -> {
@@ -147,7 +147,7 @@ class ResourceDialog extends FormDialog {
 			return copy;
 		} catch (Exception e) {
 			LoggerFactory.getLogger(getClass())
-				.error("failed to copy file " + file, e);
+				.error("failed to copy file {}", file, e);
 			return file;
 		}
 	}

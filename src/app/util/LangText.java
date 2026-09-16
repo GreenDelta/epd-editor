@@ -67,13 +67,13 @@ public class LangText {
 	public void draw(Composite comp) {
 		UI.formLabel(comp, tk, label);
 		var innerComp = tk.createComposite(comp);
-		UI.gridData(innerComp, true, false);
+		UI.stretchX(innerComp);
 		UI.innerGrid(innerComp, 2);
 		int flags = multiLines
 				? SWT.BORDER | SWT.V_SCROLL | SWT.WRAP | SWT.MULTI
 				: SWT.BORDER;
 		var text = tk.createText(innerComp, "", flags);
-		var grid = UI.gridData(text, true, false);
+		var grid = UI.stretchX(text);
 		if (multiLines) {
 			grid.minimumHeight = 100;
 			grid.heightHint = 100;

@@ -88,7 +88,7 @@ public class DownloadDialog extends Wizard {
 			UI.gridLayout(parent, 1);
 			Composite comp = new Composite(parent, SWT.NONE);
 			UI.innerGrid(comp, 2).verticalSpacing = 10;
-			UI.gridData(comp, true, false);
+			UI.stretchX(comp);
 			conCombo = ConnectionCombo.create(comp);
 			conCombo.select(con);
 			createChecks(comp);

@@ -120,15 +120,15 @@ public class CategoryDialog extends FormDialog {
 
 	private void createCombo(FormToolkit tk, Composite body) {
 		var comp = UI.formComposite(body, tk);
-		UI.gridData(comp, true, false);
+		UI.stretchX(comp);
 		UI.formLabel(comp, tk, M.ClassificationSystem);
 		var combo = new ComboViewer(comp);
 		combo.setContentProvider(ArrayContentProvider.getInstance());
-		UI.gridData(combo.getControl(), true, false);
+		UI.stretchX(combo.getControl());
 		combo.setLabelProvider(new ComboLabel());
 		combo.setInput(systems);
 		if (!systems.isEmpty()) {
-			selectedSystem = systems.get(0);
+			selectedSystem = systems.getFirst();
 			combo.setSelection(new StructuredSelection(selectedSystem));
 		}
 		combo.addSelectionChangedListener(_ -> {
@@ -141,11 +141,11 @@ public class CategoryDialog extends FormDialog {
 
 	private void createTree(Composite body) {
 		treeViewer = new TreeViewer(body);
-		UI.gridData(treeViewer.getControl(), true, true);
+		UI.stretchXY(treeViewer.getControl());
 		treeViewer.setContentProvider(new TreeContent());
 		treeViewer.setLabelProvider(new TreeLabel());
 		if (!systems.isEmpty())
-			treeViewer.setInput(systems.get(0));
+			treeViewer.setInput(systems.getFirst());
 		treeViewer.addSelectionChangedListener(
 				_ -> selectedCategory = Viewers.getFirstSelected(treeViewer));
 	}

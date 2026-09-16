@@ -141,12 +141,12 @@ public class ExportDialog extends Wizard {
 
 			// the file selection component
 			Composite browseComp = new Composite(comp, SWT.NONE);
-			UI.gridData(browseComp, true, false);
+			UI.stretchX(browseComp);
 			UI.innerGrid(browseComp, 3);
 			Text text = UI.formText(browseComp, M.File);
 			text.setEditable(false);
 			text.setBackground(Colors.white());
-			UI.gridData(text, true, false);
+			UI.stretchX(text);
 			Button browseButn = new Button(browseComp, SWT.NONE);
 			browseButn.setText(M.Browse);
 			Controls.onSelect(browseButn, _ -> {

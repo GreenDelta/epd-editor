@@ -61,7 +61,7 @@ public class Tables {
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
 		createColumns(viewer, properties, labelProvider);
-		GridData data = UI.gridData(table, true, true);
+		GridData data = UI.stretchXY(table);
 		data.minimumHeight = 150;
 		return viewer;
 	}

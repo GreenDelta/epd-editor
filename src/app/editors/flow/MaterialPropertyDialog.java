@@ -39,7 +39,7 @@ class MaterialPropertyDialog extends Dialog {
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		UI.gridLayout(composite, 1);
-		UI.gridData(composite, true, false);
+		UI.stretchX(composite);
 		new Label(composite, SWT.NONE)
 			.setText(M.SelectAMaterialProperty);
 		createViewer(composite);
@@ -48,7 +48,7 @@ class MaterialPropertyDialog extends Dialog {
 
 	private void createViewer(Composite parent) {
 		var combo = new ComboViewer(parent, SWT.READ_ONLY);
-		UI.gridData(combo.getCombo(), true, false);
+		UI.stretchX(combo.getCombo());
 		combo.setContentProvider(ArrayContentProvider.getInstance());
 		combo.setLabelProvider(new PropertyLabel());
 		setInput(combo);
@@ -62,7 +62,7 @@ class MaterialPropertyDialog extends Dialog {
 			props.sort((p1, p2) -> Strings.compareIgnoreCase(p1.name, p2.name));
 			combo.setInput(props);
 			if (!props.isEmpty()) {
-				selectedProperty = props.get(0);
+				selectedProperty = props.getFirst();
 				var selection = new StructuredSelection(selectedProperty);
 				combo.setSelection(selection);
 			}

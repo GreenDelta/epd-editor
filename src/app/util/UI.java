@@ -167,6 +167,37 @@ public class UI {
 		return data;
 	}
 
+	/// Sets a grid data to the given control that makes it grabbing and filling
+	/// the horizontal space of its parent, and that centers it vertically. The
+	/// created grid data is returned so that it can be modified further.
+	///
+	/// The width hint of one pixel is a workaround for a bug in the Eclipse grid
+	/// layout where controls report a much too large preferred size and thus
+	/// overflow their container:
+	/// [bug 215997](https://bugs.eclipse.org/bugs/show_bug.cgi?id=215997).
+	public static GridData stretchX(Control control) {
+		var data = new GridData(SWT.FILL, SWT.CENTER, true, false);
+		data.widthHint = 1;
+		control.setLayoutData(data);
+		return data;
+	}
+
+	/// Sets a grid data to the given control that makes it grabbing and filling
+	/// the whole space of its parent, horizontally and vertically. The created
+	/// grid data is returned so that it can be modified further.
+	///
+	/// Like in [stretchX], the hints of one pixel are a workaround for a bug in
+	/// the Eclipse grid layout where controls report a much too large preferred
+	/// size and thus overflow their container:
+	/// [bug 215997](https://bugs.eclipse.org/bugs/show_bug.cgi?id=215997).
+	public static GridData stretchXY(Control control) {
+		var data = new GridData(SWT.FILL, SWT.FILL, true, true);
+		data.widthHint = 1;
+		data.heightHint = 1;
+		control.setLayoutData(data);
+		return data;
+	}
+
 	public static GridData gridWidth(Control control, int width) {
 		GridData data = gridData(control, false, false);
 		data.widthHint = width;
@@ -212,7 +243,7 @@ public class UI {
 		s.setTitleBarBorderColor(Colors.get(170, 170, 170));
 		s.setTitleBarForeground(Colors.get(70, 70, 70));
 		s.setToggleColor(Colors.get(70, 70, 70));
-		gridData(s, true, false);
+		stretchX(s);
 		s.setText(label);
 		return s;
 	}
@@ -240,7 +271,7 @@ public class UI {
 		layout.numColumns = 1;
 		body.setLayout(layout);
 		tk.paintBordersFor(body);
-		gridData(body, true, true);
+		stretchXY(body);
 		return body;
 	}
 
@@ -323,7 +354,7 @@ public class UI {
 		if (tooltip != null) {
 			text.setToolTipText(tooltip);
 		}
-		gridData(text, true, false);
+		stretchX(text);
 		return text;
 	}
 
@@ -349,7 +380,7 @@ public class UI {
 		if (tooltip != null) {
 			text.setToolTipText(tooltip);
 		}
-		GridData gd = gridData(text, true, false);
+		GridData gd = stretchX(text);
 		gd.minimumHeight = 100;
 		gd.heightHint = 100;
 		gd.widthHint = 100;
@@ -372,7 +403,7 @@ public class UI {
 		if (tooltip != null) {
 			combo.setToolTipText(tooltip);
 		}
-		gridData(combo, true, false);
+		stretchX(combo);
 		return combo;
 	}
 

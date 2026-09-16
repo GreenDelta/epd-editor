@@ -37,7 +37,7 @@ class ScenarioDataSection {
 		combo = UI.formCombo(client, tk, "Scenario");
 		combo.addSelectionListener(Controls.onSelect(_ -> renderDetail()));
 		detailComp = tk.createComposite(client);
-		UI.gridData(detailComp, true, false);
+		UI.stretchX(detailComp);
 		UI.gridLayout(detailComp, 1, 10, 0);
 		fillCombo();
 		if (combo.getItemCount() > 0) {
@@ -102,7 +102,7 @@ class ScenarioDataSection {
 		var eol = eolOf(scenario);
 
 		var comp = tk.createComposite(detailComp);
-		UI.gridData(comp, true, false);
+		UI.stretchX(comp);
 		UI.innerGrid(comp, 5);
 
 		// Waste collection

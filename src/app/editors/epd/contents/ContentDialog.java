@@ -1,9 +1,7 @@
 package app.editors.epd.contents;
 
-import app.App;
-import app.M;
-import app.rcp.Texts;
-import app.util.UI;
+import java.util.Arrays;
+
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
@@ -15,7 +13,10 @@ import org.openlca.ilcd.processes.epd.EpdContentDeclaration;
 import org.openlca.ilcd.processes.epd.EpdContentElement;
 import org.openlca.ilcd.processes.epd.EpdInnerContentElement;
 
-import java.util.Arrays;
+import app.App;
+import app.M;
+import app.rcp.Texts;
+import app.util.UI;
 
 class ContentDialog extends FormDialog {
 
@@ -66,13 +67,13 @@ class ContentDialog extends FormDialog {
 		Composite body = UI.formBody(mform.getForm(), tk);
 
 		Composite comp = UI.formComposite(body, tk);
-		UI.gridData(comp, true, false);
+		UI.stretchX(comp);
 		UI.gridLayout(comp, 3);
 
 		// the parent combo
 		if (Content.canHaveParent(elem, decl)) {
 			Combo combo = UI.formCombo(comp, tk, "Parent element");
-			UI.gridData(combo, true, false);
+			UI.stretchX(combo);
 			UI.filler(comp, tk);
 			new ParentCombo(decl, elem).bind(combo).onChange(
 				p -> this.parent = p);
@@ -82,7 +83,7 @@ class ContentDialog extends FormDialog {
 		// name
 		nameText = UI.formText(comp, tk, M.Name);
 		Texts.set(nameText, App.s(elem.getName()));
-		UI.gridData(nameText, true, false).widthHint = 350;
+		UI.stretchX(nameText).widthHint = 350;
 		UI.filler(comp, tk);
 
 		// weight percentage

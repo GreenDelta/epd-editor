@@ -40,7 +40,7 @@ public class XmlPage extends FormPage {
 		var body = UI.formBody(form, tk);
 		text = new StyledText(body, SWT.NONE);
 		tk.adapt(text);
-		UI.gridData(text, true, true);
+		UI.stretchXY(text);
 		fillText();
 		form.reflow(true);
 	}

@@ -42,7 +42,7 @@ class ConnectionPage extends FormPage {
 			con.password = pwText.getText();
 			editor.setDirty();
 		});
-		UI.gridData(pwText, true, false);
+		UI.stretchX(pwText);
 
 		new DataStockLink(editor).render(comp, tk);
 		new DataSection(con).create(body, tk);

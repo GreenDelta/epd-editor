@@ -66,8 +66,6 @@ public class ResultPage extends FormPage {
 		scenarioData = new ScenarioDataSection(editor, body, tk);
 		moduleTable = createModuleSection(body, tk);
 		moduleTable.setInput(modules);
-		//resultTable = createResultSection(body, tk);
-		//resultTable.refresh();
 		resultMatrix = createResultSection(body, tk);
 		form.reflow(true);
 	}
@@ -115,7 +113,6 @@ public class ResultPage extends FormPage {
 		var columns = new String[]{
 				M.Module,
 				M.Scenario,
-				M.ProductSystem,
 				M.Description};
 
 		var table = Tables.createViewer(comp, columns);
@@ -123,8 +120,8 @@ public class ResultPage extends FormPage {
 		table.getTable().setToolTipText(Tooltips.EPD_Modules);
 		Tables.addSorter(table, 0, EpdModuleEntry::getModule);
 		Tables.addSorter(table, 1, EpdModuleEntry::getScenario);
-		Tables.addSorter(table, 3, EpdModuleEntry::getDescription);
-		Tables.bindColumnWidths(table, 0.25, 0.25, 0.25, 0.25);
+		Tables.addSorter(table, 2, EpdModuleEntry::getDescription);
+		Tables.bindColumnWidths(table, 0.25, 0.25, 0.5);
 
 		var actions = createModuleActions();
 		Actions.bind(section, actions);
@@ -188,8 +185,6 @@ public class ResultPage extends FormPage {
 		UI.gridData(section, true, true);
 		var composite = UI.sectionClient(section, tk);
 		UI.gridLayout(composite, 1);
-		// var table = new ResultTable(editor, epd);
-		// table.create(composite);
 		Actions.bind(section, createResultActions());
 		var matrix = new ResultMatrix(editor, composite);
 		matrix.render(modules);
@@ -262,8 +257,7 @@ public class ResultPage extends FormPage {
 			return switch (col) {
 				case 0 -> e.getModule();
 				case 1 -> e.getScenario();
-				case 2 -> "";
-				case 3 -> e.getDescription();
+				case 2 -> e.getDescription();
 				default -> null;
 			};
 		}

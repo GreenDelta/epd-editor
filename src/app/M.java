@@ -188,7 +188,6 @@ public class M extends NLS {
 	public static String PrecedingDataSetVersion;
 	public static String ProductFlow;
 	public static String ProductIds;
-	public static String ProductSystem;
 	public static String ProductVariability;
 	public static String Project;
 	public static String Property;

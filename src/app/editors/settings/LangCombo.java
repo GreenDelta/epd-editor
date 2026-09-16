@@ -37,7 +37,7 @@ class LangCombo {
 
 	void render(Composite comp, FormToolkit tk) {
 		combo = UI.formCombo(comp, tk, M.Language);
-		UI.gridData(combo, false, false).widthHint = 300;
+		UI.stretchNone(combo).widthHint = 300;
 		String[] items = new String[codes.length];
 		int selected = -1;
 		for (int i = 0; i < codes.length; i++) {

@@ -56,7 +56,7 @@ class DataSection {
 		UI.innerGrid(comp, 3);
 		TypeCombo typeCombo = TypeCombo.create(comp, tk);
 		Text searchText = tk.createText(comp, "", SWT.BORDER);
-		UI.gridData(searchText, false, false).widthHint = 350;
+		UI.stretchNone(searchText).widthHint = 350;
 		Button button = tk.createButton(comp, M.Search, SWT.NONE);
 		Controls.onSelect(
 				button,

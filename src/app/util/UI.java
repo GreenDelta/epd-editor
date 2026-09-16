@@ -157,16 +157,6 @@ public class UI {
 		toolkit.paintBordersFor(composite);
 	}
 
-	public static GridData gridData(
-		Control control, boolean hFill, boolean vFill
-	) {
-		int hStyle = hFill ? SWT.FILL : SWT.LEFT;
-		int vStyle = vFill ? SWT.FILL : SWT.CENTER;
-		GridData data = new GridData(hStyle, vStyle, hFill, vFill);
-		control.setLayoutData(data);
-		return data;
-	}
-
 	/// Sets a grid data to the given control that makes it grabbing and filling
 	/// the horizontal space of its parent, and that centers it vertically. The
 	/// created grid data is returned so that it can be modified further.
@@ -198,8 +188,22 @@ public class UI {
 		return data;
 	}
 
+	/// Sets a grid data to the given control that does not stretch it: the
+	/// control keeps its preferred size and is aligned to the left and centered
+	/// vertically. The created grid data is returned so that it can be modified
+	/// further, for example by setting a `widthHint`.
+	///
+	/// In contrast to [stretchX] and [stretchXY], no width or height hint is set
+	/// here because such a hint would collapse the control to the hinted size
+	/// instead of keeping its preferred size.
+	public static GridData stretchNone(Control control) {
+		var data = new GridData(SWT.LEFT, SWT.CENTER, false, false);
+		control.setLayoutData(data);
+		return data;
+	}
+
 	public static GridData gridWidth(Control control, int width) {
-		GridData data = gridData(control, false, false);
+		GridData data = stretchNone(control);
 		data.widthHint = width;
 		return data;
 	}
@@ -428,7 +432,7 @@ public class UI {
 		if (tooltip != null) {
 			lab.setToolTipText(tooltip);
 		}
-		GridData gridData = gridData(lab, false, false);
+		GridData gridData = stretchNone(lab);
 		gridData.verticalAlignment = SWT.TOP;
 		gridData.verticalIndent = 2;
 		return lab;

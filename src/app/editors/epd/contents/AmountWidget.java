@@ -1,13 +1,14 @@
 package app.editors.epd.contents;
 
-import app.rcp.Texts;
-import app.util.UI;
+import java.util.Arrays;
+
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.openlca.ilcd.processes.epd.EpdContentAmount;
 
-import java.util.Arrays;
+import app.rcp.Texts;
+import app.util.UI;
 
 class AmountWidget {
 
@@ -22,7 +23,7 @@ class AmountWidget {
 		minText = UI.formText(comp, tk, "Lower value:");
 		maxText = UI.formText(comp, tk, "Upper value:");
 		Arrays.asList(valText, minText, maxText).forEach(t -> {
-			UI.gridData(t, false, false).widthHint = 80;
+			UI.stretchNone(t).widthHint = 80;
 			Texts.validateNumber(t);
 		});
 	}

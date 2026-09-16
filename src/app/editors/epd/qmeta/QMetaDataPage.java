@@ -110,7 +110,7 @@ public class QMetaDataPage extends FormPage {
 				button.setSelection(true);
 				button.notifyListeners(SWT.Selection, new Event());
 				});
-			
+
 			if (Objects.equals(selected.get(), config[i])) {
 				var selectedQ = selected.get();
 				if (selectedQ.answer == null) {

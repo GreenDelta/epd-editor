@@ -176,7 +176,7 @@ public class LangTextDialog extends FormDialog {
 
 		static LangCombo create(Composite comp) {
 			var combo = new Combo(comp, SWT.READ_ONLY);
-			var comboGrid = UI.gridData(combo, false, false);
+			var comboGrid = UI.stretchNone(combo);
 			comboGrid.widthHint = 200;
 			comboGrid.minimumWidth = 200;
 

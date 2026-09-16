@@ -160,7 +160,7 @@ class DataSetSection {
 
 	private void profileCombo(Composite comp, FormToolkit tk) {
 		var combo = UI.formCombo(comp, tk, M.DefaultEPDProfile);
-		UI.gridData(combo, false, false).widthHint = 300;
+		UI.stretchNone(combo).widthHint = 300;
 		var profiles = EpdProfiles.getAll();
 		profiles.sort((p1, p2) -> Strings.compareIgnoreCase(p1.getName(), p2.getName()));
 		var items = new String[profiles.size()];
@@ -198,7 +198,7 @@ class DataSetSection {
 		UI.innerGrid(inner, 2);
 		Text text = tk.createText(inner, "");
 		text.setEditable(false);
-		UI.gridData(text, false, false).widthHint = 310;
+		UI.stretchNone(text).widthHint = 310;
 		if (file.exists()) {
 			text.setText("~/.epd_editor/q-metatdata/questions.json");
 		}

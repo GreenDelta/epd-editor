@@ -104,7 +104,7 @@ public class LangText {
 		var link = tk.createImageHyperlink(innerComp, SWT.NONE);
 		link.setForeground(Colors.linkBlue());
 		link.setText(App.lang());
-		var linkGrid = UI.gridData(link, false, false);
+		var linkGrid = UI.stretchNone(link);
 		linkGrid.verticalAlignment = SWT.TOP;
 		linkGrid.verticalIndent = 2;
 

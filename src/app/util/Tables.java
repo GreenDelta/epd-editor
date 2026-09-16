@@ -46,7 +46,7 @@ public class Tables {
 	 * <li>content provider = {@link ArrayContentProvider}
 	 * <li>lines and header are visible
 	 * <li>grid data with horizontal and vertical fill
-	 * 
+	 *
 	 */
 	public static TableViewer createViewer(Composite parent,
 			String[] properties, IBaseLabelProvider labelProvider) {

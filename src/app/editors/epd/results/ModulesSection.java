@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.TreeSet;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -13,6 +14,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.epd.EpdProfileModule;
 import org.openlca.ilcd.epd.EpdProfiles;
 import org.openlca.ilcd.processes.Process;
@@ -201,30 +203,38 @@ class ModulesSection {
 
 		@Override
 		protected String getItem(EpdModuleEntry e) {
-			return e.getScenario();
+			var scenario = e.getScenario();
+			return scenario != null ? scenario : "";
 		}
 
 		@Override
 		protected String[] getItems(EpdModuleEntry e) {
-			var scenarios = Epds.getScenarios(epd);
-			String[] names = new String[scenarios.size()];
-			for (int i = 0; i < scenarios.size(); i++) {
-				names[i] = scenarios.get(i).getName();
+			// the first item is an empty entry that means that no
+			// scenario is assigned to the module
+			var names = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+			for (var scenario : Epds.getScenarios(epd)) {
+				var name = scenario.getName();
+				if (!Strings.isBlank(name)) {
+					names.add(name);
+				}
 			}
-			Arrays.sort(names);
-			return names;
+			var items = new ArrayList<String>();
+			items.add("");
+			items.addAll(names);
+			return items.toArray(new String[0]);
 		}
 
 		@Override
 		protected String getText(String scenario) {
-			return scenario;
+			return scenario != null ? scenario : "";
 		}
 
 		@Override
 		protected void setItem(EpdModuleEntry e, String scenario) {
-			if (Objects.equals(e.getScenario(), scenario))
+			var value = Strings.isBlank(scenario) ? null : scenario;
+			if (Objects.equals(e.getScenario(), value))
 				return;
-			e.withScenario(scenario);
+			e.withScenario(value);
 			editor.setDirty();
 		}
 	}

@@ -22,6 +22,7 @@ import app.editors.refs.RefLink;
 import app.editors.refs.RefTableSection;
 import app.rcp.Icon;
 import app.util.Actions;
+import app.util.Controls;
 import app.util.LangText;
 import app.util.UI;
 import app.util.Viewers;
@@ -130,7 +131,7 @@ class ReviewSection {
 				ISelection s = new StructuredSelection(review.getType());
 				c.setSelection(s);
 			}
-			c.addSelectionChangedListener((e) -> {
+			Controls.onSelect(c, (e) -> {
 				review.withType(Viewers.getFirst(e.getSelection()));
 				editor.setDirty();
 			});

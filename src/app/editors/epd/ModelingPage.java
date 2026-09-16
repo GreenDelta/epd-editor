@@ -23,6 +23,7 @@ import app.M;
 import app.Tooltips;
 import app.editors.refs.RefTableSection;
 import app.rcp.Labels;
+import app.util.Controls;
 import app.util.LangText;
 import app.util.UI;
 import app.util.Viewers;
@@ -121,7 +122,7 @@ class ModelingPage extends FormPage {
 		if (current != null) {
 			combo.setSelection(new StructuredSelection(current));
 		}
-		combo.addSelectionChangedListener(e -> {
+		Controls.onSelect(combo, e -> {
 			EpdSubType next = Viewers.getFirst(e.getSelection());
 			Epds.withSubType(epd, next);
 			editor.setDirty();

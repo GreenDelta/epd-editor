@@ -20,6 +20,7 @@ import org.openlca.ilcd.util.Epds;
 
 import app.M;
 import app.rcp.Labels;
+import app.util.Controls;
 import app.util.DoubleText;
 import app.util.LangText;
 import app.util.UI;
@@ -169,7 +170,7 @@ class VariabilitySection {
 			: NONE;
 		combo.setSelection(new StructuredSelection(initial));
 
-		combo.addSelectionChangedListener(e -> {
+		Controls.onSelect(combo, e -> {
 			var obj = Viewers.getFirst(e.getSelection());
 			if (obj == null
 				|| obj == NONE

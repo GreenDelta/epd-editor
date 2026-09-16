@@ -35,7 +35,7 @@ class ScenarioDataSection {
 		var client = UI.sectionClient(section, tk);
 		UI.gridLayout(client, 1);
 		combo = UI.formCombo(client, tk, "Scenario");
-		combo.addSelectionListener(Controls.onSelect(_ -> renderDetail()));
+		Controls.onSelect(combo, _ -> renderDetail());
 		detailComp = tk.createComposite(client);
 		UI.stretchX(detailComp);
 		UI.gridLayout(detailComp, 1, 10, 0);

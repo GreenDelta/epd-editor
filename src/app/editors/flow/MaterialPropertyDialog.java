@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import app.M;
 import app.store.MaterialProperties;
+import app.util.Controls;
 import app.util.UI;
 import app.util.Viewers;
 import epd.model.MaterialProperty;
@@ -52,7 +53,7 @@ class MaterialPropertyDialog extends Dialog {
 		combo.setContentProvider(ArrayContentProvider.getInstance());
 		combo.setLabelProvider(new PropertyLabel());
 		setInput(combo);
-		combo.addSelectionChangedListener(
+		Controls.onSelect(combo,
 			e -> selectedProperty = Viewers.getFirst(e.getSelection()));
 	}
 

@@ -29,6 +29,7 @@ import app.M;
 import app.rcp.Icon;
 import app.rcp.Labels;
 import app.store.CategorySystems;
+import app.util.Controls;
 import app.util.UI;
 import app.util.Viewers;
 
@@ -131,7 +132,7 @@ public class CategoryDialog extends FormDialog {
 			selectedSystem = systems.getFirst();
 			combo.setSelection(new StructuredSelection(selectedSystem));
 		}
-		combo.addSelectionChangedListener(_ -> {
+		Controls.onSelect(combo, _ -> {
 			selectedSystem = Viewers.getFirstSelected(combo);
 			if (selectedSystem == null)
 				return;

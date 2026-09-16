@@ -2,6 +2,8 @@ package app.util;
 
 import java.util.function.Consumer;
 
+import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionEvent;
@@ -22,8 +24,37 @@ public class Controls {
 	private Controls() {
 	}
 
+	/// Adds the given selection handler to the given combo.
 	public static void onSelect(Combo combo, Consumer<SelectionEvent> fn) {
-		combo.addSelectionListener(onSelect(fn));
+		if (combo == null || fn == null)
+			return;
+		combo.addSelectionListener(onSelect(e -> {
+			fn.accept(e);
+			// On GTK the pop-up list of a combo can take the focus so that it falls
+			// back to the first control of the page afterwards, which scrolls a
+			// scrolled form to its top; thus we set the focus back to the combo here.
+			if (!combo.isDisposed()) {
+				combo.setFocus();
+			}
+		}));
+	}
+
+	/// Adds the given selection handler to the given combo viewer.
+	public static void onSelect(
+		ComboViewer viewer, Consumer<SelectionChangedEvent> fn
+	) {
+		if (viewer == null || fn == null)
+			return;
+		viewer.addSelectionChangedListener(e -> {
+			fn.accept(e);
+			var control = viewer.getControl();
+			// On GTK the pop-up list of a combo can take the focus so that it falls
+			// back to the first control of the page afterwards, which scrolls a
+			// scrolled form to its top; thus we set the focus back to the combo here.
+			if (control != null && !control.isDisposed()) {
+				control.setFocus();
+			}
+		});
 	}
 
 	public static void onSelect(Button button, Consumer<SelectionEvent> fn) {

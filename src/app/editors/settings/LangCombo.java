@@ -1,12 +1,15 @@
 package app.editors.settings;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
-import java.util.TreeSet;
 import java.util.function.Consumer;
 
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.openlca.commons.Strings;
 
 import app.M;
 import app.util.Controls;
@@ -15,20 +18,14 @@ import app.util.UI;
 class LangCombo {
 
 	private final String initial;
-	private final String[] codes;
+	private final List<Lang> languages;
 
 	private Combo combo;
 	private Consumer<String> changeFn;
 
 	LangCombo(String initial) {
 		this.initial = initial;
-		TreeSet<String> set = new TreeSet<>();
-		for (Locale loc : Locale.getAvailableLocales()) {
-			String lang = loc.getLanguage();
-			if (!org.openlca.commons.Strings.isBlank(lang))
-				set.add(lang);
-		}
-		codes = set.toArray(new String[0]);
+		this.languages = Lang.getAll();
 	}
 
 	void onChange(Consumer<String> fn) {
@@ -38,12 +35,12 @@ class LangCombo {
 	void render(Composite comp, FormToolkit tk) {
 		combo = UI.formCombo(comp, tk, M.Language);
 		UI.stretchNone(combo).widthHint = 300;
-		String[] items = new String[codes.length];
+		var items = new String[languages.size()];
 		int selected = -1;
-		for (int i = 0; i < codes.length; i++) {
-			String code = codes[i];
-			items[i] = getDisplayLanguage(code);
-			if (org.openlca.commons.Strings.equalsIgnoreCase(initial, code))
+		for (int i = 0; i < languages.size(); i++) {
+			var lang = languages.get(i);
+			items[i] = lang.label();
+			if (Strings.equalsIgnoreCase(initial, lang.code()))
 				selected = i;
 		}
 		combo.setItems(items);
@@ -52,16 +49,36 @@ class LangCombo {
 		Controls.onSelect(combo, _ -> {
 			if (changeFn == null)
 				return;
-			changeFn.accept(codes[combo.getSelectionIndex()]);
+			int i = combo.getSelectionIndex();
+			if (i < 0 || i >= languages.size())
+				return;
+			changeFn.accept(languages.get(i).code());
 		});
 	}
 
-	private String getDisplayLanguage(String code) {
-		for (Locale loc : Locale.getAvailableLocales()) {
-			if (org.openlca.commons.Strings.equalsIgnoreCase(code, loc.getLanguage()))
-				return loc.getDisplayLanguage();
-		}
-		return M.Unknown;
-	}
+	/// A language with its ISO code and the name that is displayed for it.
+	private record Lang(String code, String name) {
 
+		/// Collects the languages that are available in the current JVM, sorted by
+		/// their display names.
+		static List<Lang> getAll() {
+			var map = new HashMap<String, Lang>();
+			for (var loc : Locale.getAvailableLocales()) {
+				var code = loc.getLanguage();
+				if (Strings.isBlank(code))
+					continue;
+				var key = code.toLowerCase(Locale.ROOT);
+				if (map.containsKey(key))
+					continue;
+				map.put(key, new Lang(code, loc.getDisplayLanguage()));
+			}
+			var list = new ArrayList<>(map.values());
+			list.sort((a, b) -> Strings.compareIgnoreCase(a.name(), b.name()));
+			return list;
+		}
+
+		String label() {
+			return name + " (" + code + ")";
+		}
+	}
 }

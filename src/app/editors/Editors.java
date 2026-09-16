@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.App;
-import app.AppSettings;
 import app.M;
 import app.editors.connection.ConnectionEditor;
 import app.editors.contact.ContactEditor;
@@ -129,12 +128,14 @@ public class Editors {
 	public static void addInfoPages(BaseEditor editor, IDataSet ds) {
 		if (ds == null || editor == null)
 			return;
-		AppSettings settings = App.settings();
+		var settings = App.settings();
 		try {
-			if (settings.showDataSetXML)
+			if (settings.showDataSetXML) {
 				editor.addPage(new XmlPage(editor, ds));
-			if (settings.showDataSetDependencies)
+			}
+			if (settings.showDataSetDependencies) {
 				editor.addPage(new DependencyPage(editor, ds));
+			}
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Editors.class);
 			log.error("Failed to add info pages", e);

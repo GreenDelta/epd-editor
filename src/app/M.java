@@ -101,6 +101,7 @@ public class M extends NLS {
 	public static String FlowProperties;
 	public static String FlowProperty;
 	public static String Flows;
+	public static String FunctionalUnit;
 	public static String ForEnergyRecovery;
 	public static String ForFinalDeposition;
 	public static String ForRecycling;
@@ -175,6 +176,7 @@ public class M extends NLS {
 	public static String OlcLocationCode;
 	public static String Open;
 	public static String OpenEditor;
+	public static String OtherParameter;
 	public static String OverwriteExistingDataSets;
 	public static String Owner;
 
@@ -188,6 +190,7 @@ public class M extends NLS {
 	public static String PrecedingDataSetVersion;
 	public static String ProductFlow;
 	public static String ProductIds;
+	public static String ProductionPeriod;
 	public static String ProductVariability;
 	public static String Project;
 	public static String Property;
@@ -202,6 +205,7 @@ public class M extends NLS {
 
 	public static String RangeOfProducts;
 	public static String ReferenceDataURL;
+	public static String ReferenceFlow;
 	public static String ReferenceGrade;
 	public static String ReferenceOriginalEPD;
 	public static String ReferenceServiceLife;

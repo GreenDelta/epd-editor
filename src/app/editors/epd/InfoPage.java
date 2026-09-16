@@ -15,6 +15,7 @@ import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.QuantitativeReferenceType;
 import org.openlca.ilcd.processes.Exchange;
 import org.openlca.ilcd.processes.Process;
+import org.openlca.ilcd.processes.QuantitativeReference;
 import org.openlca.ilcd.util.Epds;
 
 import app.App;
@@ -58,7 +59,7 @@ class InfoPage extends FormPage {
 		var tb = LangText.builder(editor, tk);
 		infoSection(body, tb);
 		categorySection(body);
-		qRefSection(body);
+		qRefSection(body, tb);
 
 		RefTableSection.create(DataSetType.SOURCE)
 				.withSupplier(() -> Epds.withDataSetInfo(epd).withExternalDocs())
@@ -116,7 +117,7 @@ class InfoPage extends FormPage {
 		section.render(body, tk);
 	}
 
-	private void qRefSection(Composite parent) {
+	private void qRefSection(Composite parent, TextBuilder tb) {
 		var comp = UI.formSection(parent, tk,
 				M.DeclaredProduct, Tooltips.EPD_DeclaredProduct);
 		UI.formLabel(comp, tk, M.ProductFlow, Tooltips.EPD_DeclaredProduct);
@@ -149,13 +150,68 @@ class InfoPage extends FormPage {
 			editor.setDirty();
 		});
 
+		var qRef = epd.withProcessInfo().withQuantitativeReference();
+		createQRefTypeCombo(comp, qRef);
+
+		tb.nextMulti(M.FunctionalUnit, Tooltips.EPD_DeclaredProduct)
+				.val(qRef.getFunctionalUnit())
+				.edit(qRef::withFunctionalUnit)
+				.draw(comp);
+
 		ProductIdTable.create(editor, comp, tk);
+	}
+
+	/// The types of the quantitative reference in the order in which they are
+	/// shown in the combo box.
+	private static final QuantitativeReferenceType[] Q_REF_TYPES = {
+		QuantitativeReferenceType.REFERENCE_FLOWS,
+		QuantitativeReferenceType.FUNCTIONAL_UNIT,
+		QuantitativeReferenceType.PRODUCTION_PERIOD,
+		QuantitativeReferenceType.OTHER_PARAMETER
+	};
+
+	private void createQRefTypeCombo(
+			Composite comp, QuantitativeReference qRef) {
+		var combo = UI.formCombo(comp, tk,
+				M.QuantitativeReference, Tooltips.EPD_DeclaredProduct);
+		var items = new String[Q_REF_TYPES.length];
+		int selected = -1;
+		for (int i = 0; i < Q_REF_TYPES.length; i++) {
+			items[i] = label(Q_REF_TYPES[i]);
+			if (Q_REF_TYPES[i] == qRef.getType()) {
+				selected = i;
+			}
+		}
+		combo.setItems(items);
+		if (selected >= 0) {
+			combo.select(selected);
+		}
+		Controls.onSelect(combo, _ -> {
+			int i = combo.getSelectionIndex();
+			if (i < 0 || i >= Q_REF_TYPES.length)
+				return;
+			qRef.withType(Q_REF_TYPES[i]);
+			editor.setDirty();
+		});
+	}
+
+	private static String label(QuantitativeReferenceType type) {
+		return switch (type) {
+			case REFERENCE_FLOWS -> M.ReferenceFlow;
+			case FUNCTIONAL_UNIT -> M.FunctionalUnit;
+			case PRODUCTION_PERIOD -> M.ProductionPeriod;
+			case OTHER_PARAMETER -> M.OtherParameter;
+		};
 	}
 
 	private Exchange withProductExchange() {
 		var qRef = epd.withProcessInfo()
-				.withQuantitativeReference()
-				.withType(QuantitativeReferenceType.REFERENCE_FLOWS);
+				.withQuantitativeReference();
+		// the type of the quantitative reference is set by the user;
+		// we only set the default here
+		if (qRef.getType() == null) {
+			qRef.withType(QuantitativeReferenceType.REFERENCE_FLOWS);
+		}
 		if (qRef.getReferenceFlows().isEmpty()) {
 			qRef.withReferenceFlows().add(1);
 		}

@@ -18,8 +18,6 @@ import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -84,44 +82,42 @@ public class Tables {
 
 	public static void bindColumnWidths(TableViewer viewer,
 			double... percents) {
-		bindColumnWidths(viewer.getTable(), percents);
+		bindColumnWidths(viewer == null ? null : viewer.getTable(), percents);
 	}
 
-	/**
-	 * Binds the given percentage values (values between 0 and 1) to the column
-	 * widths of the given table
-	 */
+	/// Binds the given percentage values (values between 0 and 1) to the column
+	/// widths of the given table so that the columns fill the available width of
+	/// the table.
+	///
+	/// The columns are only resized when the width of the table changes by more
+	/// than 4 pixels: setting column widths triggers resize events again, and
+	/// columns that were resized by hand stay in place this way.
 	public static void bindColumnWidths(Table table, double... percents) {
 		if (table == null || percents == null)
 			return;
+		table.addControlListener(new ControlAdapter() {
 
-		ControlAdapter resizer = new ControlAdapter() {
+			private int width = table.getSize().x;
+
 			@Override
 			public void controlResized(ControlEvent e) {
-				double width = table.getSize().x - 25;
-				TableColumn[] columns = table.getColumns();
-				for (int i = 0; i < columns.length; i++) {
+				int nextWidth = table.getSize().x;
+				if (Math.abs(nextWidth - width) < 5)
+					return;
+				width = nextWidth;
+
+				int count = table.getColumnCount();
+				double total = nextWidth
+					- 2 * table.getBorderWidth()
+					- (count - 1) * table.getGridLineWidth();
+				for (int i = 0; i < count; i++) {
 					if (i >= percents.length)
 						break;
-					double colWidth = percents[i] * width;
-					columns[i].setWidth((int) colWidth);
+					double colWidth = percents[i] * total;
+					table.getColumn(i).setWidth((int) colWidth);
 				}
 			}
-		};
-		table.addControlListener(resizer);
-
-		// resize the columns when the table is initially
-		// painted as the control events are not always thrown.
-		// removing the paint listener again takes a bit so
-		// that the resizing may is done several times initially.
-		table.addPaintListener(new PaintListener() {
-			@Override
-			public void paintControl(PaintEvent e) {
-				resizer.controlResized(null);
-				table.removePaintListener(this);
-			}
 		});
-
 	}
 
 	/** Add an event handler for double clicks on the given table viewer. */

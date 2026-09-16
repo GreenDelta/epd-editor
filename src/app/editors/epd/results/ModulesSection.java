@@ -54,11 +54,16 @@ class ModulesSection {
 		section.setToolTipText(Tooltips.EPD_Modules);
 		var comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
-		var columns = new String[]{
-				M.Module,
-				M.Scenario,
-				M.Description};
+		if (modules.size() > 1) {
+			// We collapse the modules section for EPDs with more
+			// than one module. We assume that in this case an
+			// already existing EPD is edited or just viewed,
+			// making the editor a bit easier to read.
+			section.setExpanded(false);
+		}
 
+		var columns = new String[]{
+			M.Module, M.Scenario, M.Description};
 		table = Tables.createViewer(comp, columns);
 		table.setLabelProvider(new ModuleLabel());
 		table.getTable().setToolTipText(Tooltips.EPD_Modules);
@@ -95,9 +100,9 @@ class ModulesSection {
 	private Action[] createActions() {
 		var actions = new Action[2];
 		actions[0] = Actions.create(
-				M.Add, Icon.ADD.des(), this::createEntry);
+			M.Add, Icon.ADD.des(), this::createEntry);
 		actions[1] = Actions.create(
-				M.Remove, Icon.DELETE.des(), this::removeEntry);
+			M.Remove, Icon.DELETE.des(), this::removeEntry);
 		return actions;
 	}
 
@@ -148,7 +153,7 @@ class ModulesSection {
 	}
 
 	private static class ModuleLabel extends LabelProvider implements
-			ITableLabelProvider {
+		ITableLabelProvider {
 
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
@@ -170,7 +175,7 @@ class ModulesSection {
 	}
 
 	private class ModuleModifier extends
-			ComboModifier<EpdModuleEntry, String> {
+		ComboModifier<EpdModuleEntry, String> {
 
 		@Override
 		protected String getItem(EpdModuleEntry e) {
@@ -180,8 +185,8 @@ class ModulesSection {
 		@Override
 		protected String[] getItems(EpdModuleEntry e) {
 			return Arrays.stream(profileModules())
-					.map(EpdProfileModule::getName)
-					.toArray(String[]::new);
+				.map(EpdProfileModule::getName)
+				.toArray(String[]::new);
 		}
 
 		@Override
@@ -199,7 +204,7 @@ class ModulesSection {
 	}
 
 	private class ScenarioModifier extends
-			ComboModifier<EpdModuleEntry, String> {
+		ComboModifier<EpdModuleEntry, String> {
 
 		@Override
 		protected String getItem(EpdModuleEntry e) {

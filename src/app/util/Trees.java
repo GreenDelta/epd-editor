@@ -1,7 +1,5 @@
 package app.util;
 
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.function.Consumer;
 
 import org.eclipse.jface.viewers.CellLabelProvider;
@@ -73,25 +71,39 @@ public class Trees {
 		}
 	}
 
-	/**
-	 * Binds the given percentage values (values between 0 and 1) to the column
-	 * widths of the given tree
-	 */
+	/// Binds the given percentage values (values between 0 and 1) to the column
+	/// widths of the given tree so that the columns fill the available width of
+	/// the tree.
+	///
+	/// The columns are only resized when the width of the tree changes by more
+	/// than 4 pixels: setting column widths triggers resize events again, and
+	/// columns that were resized by hand stay in place this way.
 	public static void bindColumnWidths(Tree tree, double... percents) {
-		bindColumnWidths(tree, 0, percents);
-	}
-
-	public static void bindColumnWidths(Tree tree, int minimum,
-			double... percents) {
 		if (tree == null || percents == null)
 			return;
-		TreeResizeListener treeListener = new TreeResizeListener(tree, minimum,
-				percents);
-		ColumnResizeListener columnListener = new ColumnResizeListener(
-				treeListener);
-		for (TreeColumn column : tree.getColumns())
-			column.addControlListener(columnListener);
-		tree.addControlListener(treeListener);
+		tree.addControlListener(new ControlAdapter() {
+
+			private int width = tree.getSize().x;
+
+			@Override
+			public void controlResized(ControlEvent e) {
+				int nextWidth = tree.getSize().x;
+				if (Math.abs(nextWidth - width) < 5)
+					return;
+				width = nextWidth;
+
+				int count = tree.getColumnCount();
+				double total = nextWidth
+					- 2 * tree.getBorderWidth()
+					- (count - 1) * tree.getGridLineWidth();
+				for (int i = 0; i < count; i++) {
+					if (i >= percents.length)
+						break;
+					double colWidth = percents[i] * total;
+					tree.getColumn(i).setWidth((int) colWidth);
+				}
+			}
+		});
 	}
 
 	/** Add an event handler for double clicks on the given tree viewer. */
@@ -131,82 +143,5 @@ public class Trees {
 		});
 	}
 
-	// In order to be able to resize columns manually, we must know if a column
-	// was resized before, and in those cases, don't resize the columns
-	// automatically.
-	private static class ColumnResizeListener extends ControlAdapter {
-		private final TreeResizeListener depending;
-		private boolean enabled = true;
-		private boolean initialized;
-
-		private ColumnResizeListener(TreeResizeListener depending) {
-			this.depending = depending;
-		}
-
-		@Override
-		public void controlResized(ControlEvent e) {
-			if (!enabled)
-				return;
-			if (!initialized) {
-				initialized = true;
-				return;
-			}
-			depending.enabled = false;
-			enabled = false;
-			Timer t = new Timer();
-			t.schedule(new TimerTask() {
-				@Override
-				public void run() {
-					depending.enabled = true;
-					enabled = true;
-				}
-			}, 100);
-		}
-	}
-
-	private static class TreeResizeListener extends ControlAdapter {
-		private final Tree tree;
-		private final double[] percents;
-		private final int minimum;
-		private boolean enabled = true;
-		private boolean initialized;
-
-		private TreeResizeListener(Tree tree, int minimum, double[] percents) {
-			this.tree = tree;
-			this.minimum = minimum;
-			this.percents = percents;
-		}
-
-		@Override
-		public void controlResized(ControlEvent e) {
-			if (!enabled && initialized)
-				return;
-			double width = tree.getSize().x - 25;
-			if (width <= 0)
-				return;
-			TreeColumn[] columns = tree.getColumns();
-			int indexOfLargest = -1;
-			double max = 0;
-			double diff = 0;
-			for (int i = 0; i < columns.length; i++) {
-				if (i >= percents.length)
-					break;
-				double colWidth = percents[i] * width;
-				if (max < colWidth) {
-					max = colWidth;
-					indexOfLargest = i;
-				}
-				if (colWidth < minimum) {
-					colWidth = minimum;
-					diff += minimum - colWidth;
-				}
-				columns[i].setWidth((int) colWidth);
-			}
-			if (diff > 0) {
-				columns[indexOfLargest].setWidth((int) (max - diff));
-			}
-			initialized = true;
-		}
-
-	}
 }
+

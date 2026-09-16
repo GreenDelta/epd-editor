@@ -22,6 +22,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.HyperlinkSettings;
 import org.eclipse.ui.forms.IManagedForm;
+import org.eclipse.ui.forms.events.ExpansionAdapter;
+import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
@@ -44,7 +46,7 @@ public class UI {
 	}
 
 	public static Composite infoSection(IDataSet ds, Composite parent,
-		FormToolkit tk) {
+																			FormToolkit tk) {
 		Composite comp = UI.formSection(parent, tk,
 			M.GeneralInformation, Tooltips.All_GeneralInformation);
 		Text text = UI.formText(comp, tk, M.UUID, Tooltips.All_UUID);
@@ -176,14 +178,20 @@ public class UI {
 	/// the whole space of its parent, horizontally and vertically. The created
 	/// grid data is returned so that it can be modified further.
 	///
-	/// Like in [stretchX], the hints of one pixel are a workaround for a bug in
-	/// the Eclipse grid layout where controls report a much too large preferred
-	/// size and thus overflow their container:
+	/// Like in [stretchX], the width hint of one pixel is a workaround for a bug
+	/// in the Eclipse grid layout where controls report a much too large
+	/// preferred size and thus overflow their container:
 	/// [bug 215997](https://bugs.eclipse.org/bugs/show_bug.cgi?id=215997).
+	///
+	/// No height hint is set for expandable controls like sections: such a hint
+	/// overrides the preferred height, so that a collapsed section would be
+	/// squeezed into a single line and could not be expanded anymore.
 	public static GridData stretchXY(Control control) {
 		var data = new GridData(SWT.FILL, SWT.FILL, true, true);
 		data.widthHint = 1;
-		data.heightHint = 1;
+		if (!(control instanceof ExpandableComposite)) {
+			data.heightHint = 1;
+		}
 		control.setLayoutData(data);
 		return data;
 	}
@@ -235,10 +243,14 @@ public class UI {
 		return sectionClient(section, tk);
 	}
 
+	/// Creates a collapsible section with the given title that stretches
+	/// horizontally. If the section was given a vertical grab (see [stretchXY]),
+	/// this grab is released while the section is collapsed so that a collapsed
+	/// section does not leave an empty area behind.
 	public static Section section(
 		Composite parent, FormToolkit tk, String label
 	) {
-		Section s = tk.createSection(parent,
+		var s = tk.createSection(parent,
 			ExpandableComposite.TITLE_BAR
 				| ExpandableComposite.FOCUS_TITLE
 				| ExpandableComposite.EXPANDED
@@ -249,6 +261,28 @@ public class UI {
 		s.setToggleColor(Colors.get(70, 70, 70));
 		stretchX(s);
 		s.setText(label);
+
+		s.addExpansionListener(new ExpansionAdapter() {
+
+			private boolean grabsV;
+
+			@Override
+			public void expansionStateChanged(ExpansionEvent e) {
+				if (!(s.getLayoutData() instanceof GridData gd))
+					return;
+				boolean expanded = s.isExpanded();
+				if (!expanded) {
+					grabsV = gd.grabExcessVerticalSpace;
+				}
+				if (!grabsV)
+					return;
+				gd.grabExcessVerticalSpace = expanded;
+				gd.verticalAlignment = expanded
+					? GridData.FILL
+					: GridData.BEGINNING;
+				s.getParent().layout(true, true);
+			}
+		});
 		return s;
 	}
 
@@ -313,13 +347,15 @@ public class UI {
 		return comp;
 	}
 
-	public static Button formCheckBox(Composite comp, FormToolkit tk,
-		String label) {
+	public static Button formCheckBox(
+		Composite comp, FormToolkit tk, String label
+	) {
 		return formCheckBox(comp, tk, label, null);
 	}
 
-	public static Button formCheckBox(Composite comp, FormToolkit tk,
-		String label, String tooltip) {
+	public static Button formCheckBox(
+		Composite comp, FormToolkit tk, String label, String tooltip
+	) {
 		formLabel(comp, tk, label, tooltip);
 		Button button = tk != null
 			? tk.createButton(comp, null, SWT.CHECK)
@@ -372,8 +408,9 @@ public class UI {
 		return formMultiText(comp, tk, label, null);
 	}
 
-	public static Text formMultiText(Composite comp, FormToolkit tk,
-		String label, String tooltip) {
+	public static Text formMultiText(
+		Composite comp, FormToolkit tk, String label, String tooltip
+	) {
 		if (label != null) {
 			formLabel(comp, tk, label, tooltip);
 		}
@@ -395,13 +432,15 @@ public class UI {
 		return formCombo(comp, null, label);
 	}
 
-	public static Combo formCombo(Composite comp, FormToolkit tk,
-		String label) {
+	public static Combo formCombo(
+		Composite comp, FormToolkit tk, String label
+	) {
 		return formCombo(comp, tk, label, null);
 	}
 
-	public static Combo formCombo(Composite comp, FormToolkit tk,
-		String label, String tooltip) {
+	public static Combo formCombo(
+		Composite comp, FormToolkit tk, String label, String tooltip
+	) {
 		formLabel(comp, tk, label, tooltip);
 		Combo combo = new Combo(comp, SWT.READ_ONLY);
 		if (tooltip != null) {
@@ -415,13 +454,15 @@ public class UI {
 		return formLabel(comp, null, label);
 	}
 
-	public static Label formLabel(Composite parent, FormToolkit tk,
-		String label) {
+	public static Label formLabel(
+		Composite parent, FormToolkit tk, String label
+	) {
 		return formLabel(parent, tk, label, null);
 	}
 
-	public static Label formLabel(Composite parent, FormToolkit tk,
-		String label, String tooltip) {
+	public static Label formLabel(
+		Composite parent, FormToolkit tk, String label, String tooltip
+	) {
 		Label lab;
 		if (tk != null)
 			lab = tk.createLabel(parent, label, SWT.NONE);

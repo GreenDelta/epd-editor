@@ -71,4 +71,14 @@ public class MethodEditor extends BaseEditor {
 		}
 	}
 
+	@Override
+	public boolean isSaveAsAllowed() {
+		return true;
+	}
+
+	@Override
+	public void doSaveAs() {
+		saveAs(method != null ? method.copy() : null);
+	}
+
 }

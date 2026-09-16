@@ -1,6 +1,10 @@
 package app.store;
 
+import java.util.UUID;
+
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.commons.IDataSet;
+import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.util.DataSets;
 import org.slf4j.Logger;
@@ -33,7 +37,7 @@ public final class Data {
 			new NaviSync(workspace.index()).run();
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Data.class);
-			log.error("Failed to update data set: " + ds, e);
+			log.error("Failed to update data set: {}", ds, e);
 		}
 	}
 
@@ -48,7 +52,7 @@ public final class Data {
 			new NaviSync(workspace.index()).run();
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Data.class);
-			log.error("failed to delete data set " + ref, e);
+			log.error("failed to delete data set {}", ref, e);
 		}
 	}
 
@@ -60,7 +64,7 @@ public final class Data {
 			return store.get(ref.getDataSetClass(), ref.getUUID());
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Data.class);
-			log.error("failed to load data set " + ref, e);
+			log.error("failed to load data set {}", ref, e);
 			return null;
 		}
 	}
@@ -73,5 +77,19 @@ public final class Data {
 			.toString();
 		DataSets.withVersion(ds, v);
 		DataSets.withTimeStamp(ds, Xml.now());
+	}
+
+	/// Assigns a new identity to the given data set: a new UUID, a version
+	/// reset to `00.00.000`, the current time stamp, and the given name. This
+	/// is used when a data set is duplicated or saved as a copy.
+	public static void assignNewIdentity(IDataSet ds, String name) {
+		if (ds == null)
+			return;
+		DataSets.withUUID(ds, UUID.randomUUID().toString());
+		DataSets.withVersion(ds, Version.asString(0));
+		DataSets.withTimeStamp(ds, Xml.now());
+		if (Strings.isNotBlank(name)) {
+			DataSets.withBaseName(ds, LangString.of(name.strip(), App.lang()));
+		}
 	}
 }

@@ -1,14 +1,10 @@
 package app.navi.actions;
 
-import java.util.UUID;
-
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
 import org.openlca.ilcd.commons.IDataSet;
-import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
-import org.openlca.ilcd.util.DataSets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +16,6 @@ import app.rcp.Icon;
 import app.store.Data;
 import app.util.MsgBox;
 import app.util.UI;
-import epd.model.Xml;
 
 public class DuplicateAction extends Action {
 
@@ -63,10 +58,7 @@ public class DuplicateAction extends Action {
 		var ds = App.store().get(dsClass, e.ref().getUUID());
 		if (ds == null)
 			return null;
-		DataSets.withUUID(ds, UUID.randomUUID().toString());
-		DataSets.withVersion(ds, "00.00.000");
-		DataSets.withTimeStamp(ds, Xml.now());
-		DataSets.withBaseName(ds, LangString.of(name, App.lang()));
+		Data.assignNewIdentity(ds, name);
 		return ds;
 	}
 }

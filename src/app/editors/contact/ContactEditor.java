@@ -62,6 +62,16 @@ public class ContactEditor extends BaseEditor {
 	}
 
 	@Override
+	public boolean isSaveAsAllowed() {
+		return true;
+	}
+
+	@Override
+	public void doSaveAs() {
+		saveAs(contact != null ? contact.copy() : null);
+	}
+
+	@Override
 	protected void addPages() {
 		try {
 			addPage(new ContactPage(this));

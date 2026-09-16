@@ -62,6 +62,16 @@ public class SourceEditor extends BaseEditor {
 	}
 
 	@Override
+	public boolean isSaveAsAllowed() {
+		return true;
+	}
+
+	@Override
+	public void doSaveAs() {
+		saveAs(source != null ? source.copy() : null);
+	}
+
+	@Override
 	protected void addPages() {
 		try {
 			addPage(new SourcePage(this));

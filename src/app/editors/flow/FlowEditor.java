@@ -55,10 +55,7 @@ public class FlowEditor extends BaseEditor {
 	public void doSave(IProgressMonitor monitor) {
 		try {
 			Data.updateVersion(flow);
-			var copy = flow.copy();
-			Cleanup.on(copy);
-			MaterialPropertyValue.write(materialProperties, copy);
-			Data.save(copy);
+			Data.save(savableCopy());
 
 			saveHandlers.forEach(Runnable::run);
 			dirty = false;
@@ -69,6 +66,27 @@ public class FlowEditor extends BaseEditor {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to save flow data set", e);
 		}
+	}
+
+	@Override
+	public boolean isSaveAsAllowed() {
+		return true;
+	}
+
+	@Override
+	public void doSaveAs() {
+		saveAs(savableCopy());
+	}
+
+	/// Creates a copy of the flow that can be saved: with the material
+	/// properties of this editor and without empty extension elements.
+	private Flow savableCopy() {
+		if (flow == null)
+			return null;
+		var copy = flow.copy();
+		Cleanup.on(copy);
+		MaterialPropertyValue.write(materialProperties, copy);
+		return copy;
 	}
 
 	@Override

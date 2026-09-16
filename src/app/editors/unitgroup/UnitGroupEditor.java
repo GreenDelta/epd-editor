@@ -62,6 +62,16 @@ public class UnitGroupEditor extends BaseEditor {
 	}
 
 	@Override
+	public boolean isSaveAsAllowed() {
+		return true;
+	}
+
+	@Override
+	public void doSaveAs() {
+		saveAs(unitGroup != null ? unitGroup.copy() : null);
+	}
+
+	@Override
 	protected void addPages() {
 		try {
 			addPage(new InfoPage(this));

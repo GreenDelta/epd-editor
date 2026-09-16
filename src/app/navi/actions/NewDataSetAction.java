@@ -3,7 +3,6 @@ package app.navi.actions;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
 
 import org.eclipse.jface.action.Action;
 import org.openlca.ilcd.commons.Category;
@@ -11,7 +10,6 @@ import org.openlca.ilcd.commons.Classification;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.FlowType;
 import org.openlca.ilcd.commons.IDataSet;
-import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.ProcessType;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.contacts.Contact;
@@ -25,7 +23,6 @@ import org.openlca.ilcd.util.DataSets;
 import org.openlca.ilcd.util.Flows;
 import org.openlca.ilcd.util.Processes;
 
-import app.App;
 import app.M;
 import app.editors.Editors;
 import app.navi.CategoryElement;
@@ -35,7 +32,6 @@ import app.navi.TypeElement;
 import app.rcp.Icon;
 import app.store.Data;
 import app.util.MsgBox;
-import epd.model.Xml;
 
 public class NewDataSetAction extends Action {
 
@@ -121,14 +117,11 @@ public class NewDataSetAction extends Action {
 	}
 
 	private <T extends IDataSet> T init(T ds) {
-		DataSets.withUUID(ds, UUID.randomUUID().toString());
-		DataSets.withBaseName(ds, LangString.of(getLabel(), App.lang()));
+		Data.assignNewIdentity(ds, getLabel());
 		var category = getClassification();
 		if (category != null) {
 			DataSets.withClassifications(ds).add(category);
 		}
-		DataSets.withTimeStamp(ds, Xml.now());
-		DataSets.withVersion(ds, "00.00.000");
 		return ds;
 	}
 

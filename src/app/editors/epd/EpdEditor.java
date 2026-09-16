@@ -1,26 +1,20 @@
 package app.editors.epd;
 
 import java.util.Objects;
-import java.util.UUID;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.dialogs.InputDialog;
-import org.eclipse.jface.window.Window;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
-import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.epd.EpdProfile;
 import org.openlca.ilcd.epd.EpdProfiles;
 import org.openlca.ilcd.processes.Process;
-import org.openlca.ilcd.util.Epds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.AppSettings;
-import app.M;
 import app.editors.BaseEditor;
 import app.editors.Editors;
 import app.editors.epd.contents.ContentDeclarationPage;
@@ -29,10 +23,7 @@ import app.editors.epd.results.ResultPage;
 import app.editors.refs.RefCheck;
 import app.editors.refs.RefEditorInput;
 import app.store.Data;
-import app.util.UI;
 import epd.io.Cleanup;
-import epd.model.Version;
-import epd.model.Xml;
 import epd.model.qmeta.QMetaData;
 
 public class EpdEditor extends BaseEditor {
@@ -125,24 +116,7 @@ public class EpdEditor extends BaseEditor {
 
 	@Override
 	public void doSaveAs() {
-		var d = new InputDialog(UI.shell(), M.SaveAs,
-				M.SaveAs_Message + ": ",
-				M.EPD + " " + M.Name, null);
-		if (d.open() != Window.OK)
-			return;
-		var name = d.getValue();
-		try {
-			var copy = createSavableCopy();
-			LangString.set(
-					Epds.withProcessName(copy).withBaseName(), name, App.lang());
-			Epds.withUUID(copy, UUID.randomUUID().toString());
-			Epds.withVersion(copy, Version.asString(0));
-			Epds.withTimeStamp(copy, Xml.now());
-			Data.save(copy);
-			EpdEditor.open(Ref.of(copy));
-		} catch (Exception e) {
-			log.error("failed to save EPD as new data set", e);
-		}
+		saveAs(createSavableCopy());
 	}
 
 	private Process createSavableCopy() {

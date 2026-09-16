@@ -62,6 +62,16 @@ public class FlowPropertyEditor extends BaseEditor {
 	}
 
 	@Override
+	public boolean isSaveAsAllowed() {
+		return true;
+	}
+
+	@Override
+	public void doSaveAs() {
+		saveAs(property != null ? property.copy() : null);
+	}
+
+	@Override
 	protected void addPages() {
 		try {
 			addPage(new FlowPropertyPage(this));

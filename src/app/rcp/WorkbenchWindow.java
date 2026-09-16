@@ -47,6 +47,20 @@ public class WorkbenchWindow extends WorkbenchWindowAdvisor {
 
 	@Override
 	public void postWindowOpen() {
+
+		// close old editors that may still be
+		// open after an EPD Editor crash
+		var conf = getWindowConfigurer();
+		if (conf != null) {
+			var window = conf.getWindow();
+			if (window != null) {
+				var page = window.getActivePage();
+				if (page != null) {
+					page.closeAllEditors(false);
+				}
+			}
+		}
+
 		var appVersion = App.version();
 		var workspaceVersion = App.getWorkspace().version();
 		if (Objects.equals(appVersion, workspaceVersion)) {

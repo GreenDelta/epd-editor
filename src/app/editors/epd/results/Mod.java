@@ -55,6 +55,11 @@ record Mod(String module, String scenario) {
 				: "?";
 	}
 
+	/// Creates the key of a module entry: the module name and, if present, its
+	/// scenario name, joined with `" / "`. This key identifies module entries
+	/// and their values and is used as column label in the Excel import and
+	/// export. A module name never contains a slash, so a key can be split at
+	/// its first slash into the module and the scenario part.
 	static String key(String module, String scenario) {
 		if (Strings.isBlank(module))
 			return "?";

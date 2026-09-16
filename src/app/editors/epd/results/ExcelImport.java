@@ -33,6 +33,12 @@ import org.slf4j.LoggerFactory;
 
 import app.App;
 
+/// Reads the results of an EPD from an Excel file as it is written by
+/// [ExcelExport]: the sheet `Results` (or the first sheet) contains one row per
+/// indicator with the UUID, code, name and unit of the indicator in the first
+/// four columns and its values in the module columns from column 4 on. The
+/// module entries and scenarios of the EPD are synchronized with the module
+/// labels in the header row and the optional sheet `Scenarios`.
 public class ExcelImport implements Runnable {
 
 	private final Process epd;
@@ -216,6 +222,10 @@ public class ExcelImport implements Runnable {
 		return slots;
 	}
 
+	/// Parses a module entry from a column label of the form `module` or
+	/// `module / scenario`. We only split at the first slash because a module
+	/// name never contains one while a scenario name may. Labels with an
+	/// unknown module are ignored.
 	private EpdModuleEntry parseModuleKey(String label, Set<String> mods) {
 		if (Strings.isBlank(label))
 			return null;

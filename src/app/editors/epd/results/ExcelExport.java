@@ -19,6 +19,10 @@ import org.slf4j.LoggerFactory;
 import app.App;
 import app.M;
 
+/// Writes the results of an EPD to an Excel file: the sheet `Results` contains
+/// the columns UUID, code, indicator and unit followed by one column per module
+/// entry (`module` or `module / scenario`), and the sheet `Scenarios` lists the
+/// scenario names with their group, description and default flag.
 public class ExcelExport implements Runnable {
 
 	private final Process epd;

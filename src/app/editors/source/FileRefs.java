@@ -37,6 +37,16 @@ final class FileRefs {
 				+ fileName.substring(idx);
 	}
 
+	/// Checks if the given file reference points to a file that was attached to
+	/// the given source data set; the names of such files contain the UUID of
+	/// the source.
+	static boolean hasSourceUuid(FileRef ref, String sourceUuid) {
+		var uri = ref == null ? null : ref.getUri();
+		return Strings.isNotBlank(uri)
+			&& Strings.isNotBlank(sourceUuid)
+			&& uri.contains(sourceUuid);
+	}
+
 	// see https://github.com/GreenDelta/epd-editor/issues/39
 	static boolean isNonAscii(File file) {
 		if (file == null || !file.isFile())

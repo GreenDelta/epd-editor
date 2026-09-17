@@ -1,5 +1,6 @@
 package app.editors.source;
 
+import java.nio.file.Files;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -11,11 +12,14 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.openlca.ilcd.sources.FileRef;
 import org.openlca.ilcd.util.DataSets;
 import org.openlca.ilcd.util.Sources;
+import org.slf4j.LoggerFactory;
 
 import app.M;
 import app.Tooltips;
+import app.navi.Navigator;
 import app.rcp.Icon;
 import app.util.Actions;
+import app.util.MsgBox;
 import app.util.Tables;
 import app.util.UI;
 import app.util.Viewers;
@@ -66,8 +70,34 @@ class FileTable {
 		fileRefs.remove(ref);
 		table.setInput(fileRefs);
 		editor.setDirty();
+		deleteFile(ref);
 	}
 
+	/// When the given file was attached to this source, which means that its
+	/// name contains the UUID of the source, and it is not referenced by
+	/// another entry of this table, we ask the user if this file should also be
+	/// deleted from the `external_docs` folder.
+	private void deleteFile(FileRef ref) {
+		if (!FileRefs.hasSourceUuid(ref, DataSets.getUUID(editor.source)))
+			return;
+		var uri = ref.getUri();
+		for (var other : fileRefs) {
+			if (uri.equals(other.getUri()))
+				return;
+		}
+		var file = FileRefs.localFileOf(ref).orElse(null);
+		if (file == null)
+			return;
+		if (!MsgBox.ask(M.DeleteFile, M.SourceFileDeleteQuestion))
+			return;
+		try {
+			Files.delete(file.toPath());
+			Navigator.refreshFolders();
+		} catch (Exception e) {
+			LoggerFactory.getLogger(getClass())
+				.error("failed to delete file {}", file, e);
+		}
+	}
 
 	private static class Label extends ColumnLabelProvider {
 

@@ -2,6 +2,7 @@ package app.editors.source;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.openlca.ilcd.sources.FileRef;
 
 public class FileRefsTest {
 
@@ -17,6 +18,19 @@ public class FileRefsTest {
 			FileRefs.withUuid("README", UUID));
 		Assert.assertEquals(".gitignore_" + UUID,
 			FileRefs.withUuid(".gitignore", UUID));
+	}
+
+	@Test
+	public void testHasSourceUuid() {
+		Assert.assertTrue(FileRefs.hasSourceUuid(
+			new FileRef().withUri("flow_chart_" + UUID + ".png"), UUID));
+		Assert.assertFalse(FileRefs.hasSourceUuid(
+			new FileRef().withUri("flow_chart.png"), UUID));
+		Assert.assertFalse(FileRefs.hasSourceUuid(
+			new FileRef().withUri("flow_chart_" + UUID + ".png"), null));
+		Assert.assertFalse(FileRefs.hasSourceUuid(
+			new FileRef().withUri(null), UUID));
+		Assert.assertFalse(FileRefs.hasSourceUuid(null, UUID));
 	}
 
 	@Test

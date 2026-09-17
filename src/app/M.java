@@ -39,6 +39,8 @@ public class M extends NLS {
 	public static String Contacts;
 	public static String ConversionFactor;
 	public static String Copy;
+	public static String CopyFile;
+	public static String CopyFileQuestion;
 	public static String Copyright;
 	public static String CountryCode;
 
@@ -97,6 +99,7 @@ public class M extends NLS {
 	public static String Extras;
 
 	public static String FacilityIdentifier;
+	public static String FailedToCopyFile;
 	public static String FailedToGetDataStocks;
 	public static String File;
 	public static String Filter;
@@ -266,6 +269,7 @@ public class M extends NLS {
 	public static String SingleProductionSite;
 	public static String SoftwareOrDatabase;
 	public static String Source;
+	public static String SourceFileDeleteQuestion;
 	public static String Sources;
 	public static String SourceType;
 	public static String Specific;

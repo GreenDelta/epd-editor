@@ -46,6 +46,8 @@ public class M extends NLS {
 
 	public static String Data;
 	public static String DataEntry;
+	public static String DataFolderIsEmpty;
+	public static String DataFolderIsEmpty_Message;
 	public static String DataFormats;
 	public static String DataSet;
 	public static String DataSetGeneratorModeller;
@@ -93,6 +95,7 @@ public class M extends NLS {
 	public static String ExportDataPackage;
 	public static String ExportDataSet;
 	public static String ExportFailed;
+	public static String ExportMetaData;
 	public static String ExternalDocumentationSources;
 	public static String ExternalFile;
 	public static String ExternalFiles;

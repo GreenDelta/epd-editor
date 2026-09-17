@@ -19,6 +19,7 @@ import org.openlca.ilcd.contacts.Contact;
 import org.openlca.ilcd.flowproperties.FlowProperty;
 import org.openlca.ilcd.flows.Flow;
 import org.openlca.ilcd.io.ZipStore;
+import org.openlca.ilcd.methods.ImpactMethod;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.sources.Source;
 import org.openlca.ilcd.units.UnitGroup;
@@ -127,6 +128,7 @@ public class ZipImport implements IRunnableWithProgress {
 				FlowProperty.class,
 				Flow.class,
 				Process.class,
+				ImpactMethod.class,
 		};
 	}
 

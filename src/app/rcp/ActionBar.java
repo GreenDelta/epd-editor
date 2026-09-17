@@ -31,6 +31,7 @@ import app.navi.TypeElement;
 import app.navi.actions.NewDataSetAction;
 import app.store.CleanUp;
 import app.store.IndexBuilder;
+import app.store.MetaDataExcelExport;
 import app.store.ZipExport;
 import app.store.ZipImport;
 import app.store.indata.InDataImport;
@@ -90,6 +91,8 @@ public class ActionBar extends ActionBarAdvisor {
 		m.add(new Separator());
 		m.add(Actions.create(M.ImportInDataRefData,
 				Icon.IMPORT.des(), this::importInData));
+		m.add(Actions.create(M.ExportMetaData,
+				Icon.EXCEL.des(), this::exportMetaData));
 		m.add(new Separator());
 		m.add(Actions.create(M.ReloadNavigation,
 				Icon.RELOAD.des(), () -> App.run(new IndexBuilder())));
@@ -169,6 +172,19 @@ public class ActionBar extends ActionBarAdvisor {
 		if (source == null)
 			return;
 		App.run(new InDataImport(source));
+	}
+
+	private void exportMetaData() {
+		var file = FileChooser.save("meta-data.xlsx", "*.xlsx");
+		if (file == null)
+			return;
+		var export = MetaDataExcelExport.of(file);
+		App.run(export, () -> {
+			if (export.isDoneWithSuccess())
+				return;
+			MsgBox.error(M.ExportFailed,
+				"Export failed. Is the file already opened?");
+		});
 	}
 
 	private void validateStore() {

@@ -15,6 +15,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.io.Xml;
+import org.openlca.ilcd.models.Model;
 import org.openlca.ilcd.util.DataSets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,6 +96,11 @@ public class InDataImport implements IRunnableWithProgress {
 		var ref = entry.ref();
 		try {
 			var type = ref.getDataSetClass();
+			if (type == Model.class) {
+				// life cycle models are not supported by the EPD editor
+				log.info("skip life cycle model {}", entry.name());
+				return;
+			}
 			var oldVersion = storedVersion(type, ref);
 			if (oldVersion != null
 				&& !Version.isNewer(ref.getVersion(), oldVersion)) {

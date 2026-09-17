@@ -48,7 +48,8 @@ public class UnitGroupEditor extends BaseEditor {
 	public void doSave(IProgressMonitor monitor) {
 		try {
 			Data.updateVersion(unitGroup);
-			Data.save(unitGroup);
+			if (!save(unitGroup))
+				return;
 			for (Runnable handler : saveHandlers) {
 				handler.run();
 			}

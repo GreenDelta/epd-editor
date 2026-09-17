@@ -48,7 +48,8 @@ public class ContactEditor extends BaseEditor {
 	public void doSave(IProgressMonitor monitor) {
 		try {
 			Data.updateVersion(contact);
-			Data.save(contact);
+			if (!save(contact))
+				return;
 			for (Runnable handler : saveHandlers) {
 				handler.run();
 			}

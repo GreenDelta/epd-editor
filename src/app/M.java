@@ -104,6 +104,7 @@ public class M extends NLS {
 	public static String FacilityIdentifier;
 	public static String FailedToCopyFile;
 	public static String FailedToGetDataStocks;
+	public static String FailedToSaveDataSet;
 	public static String File;
 	public static String Filter;
 	public static String Flow;

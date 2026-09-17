@@ -48,7 +48,8 @@ public class SourceEditor extends BaseEditor {
 	public void doSave(IProgressMonitor monitor) {
 		try {
 			Data.updateVersion(source);
-			Data.save(source);
+			if (!save(source))
+				return;
 			for (Runnable handler : saveHandlers) {
 				handler.run();
 			}

@@ -2,6 +2,7 @@ package app.store;
 
 import java.util.UUID;
 
+import org.openlca.commons.Res;
 import org.openlca.commons.Strings;
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.LangString;
@@ -20,9 +21,12 @@ public final class Data {
 	private Data() {
 	}
 
-	public static void save(IDataSet ds) {
+	/// Saves the given data set in the local data store and updates the data set
+	/// index. Returns an error when this failed; the error is also written to
+	/// the log.
+	public static Res<Void> save(IDataSet ds) {
 		if (ds == null)
-			return;
+			return Res.error("No data set given");
 		try {
 			Ref ref = Ref.of(ds);
 			var workspace = App.getWorkspace();
@@ -35,9 +39,11 @@ public final class Data {
 
 			RefTrees.cache(ds);
 			new NaviSync(workspace.index()).run();
+			return Res.ok();
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(Data.class);
-			log.error("Failed to update data set: {}", ds, e);
+			log.error("failed to save data set {}", ds, e);
+			return Res.error("Failed to save data set", e);
 		}
 	}
 

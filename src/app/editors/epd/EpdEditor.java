@@ -104,7 +104,8 @@ public class EpdEditor extends BaseEditor {
 		try {
 			Data.updateVersion(epd);
 			var ds = createSavableCopy();
-			Data.save(ds);
+			if (!save(ds))
+				return;
 			saveHandlers.forEach(Runnable::run);
 			dirty = false;
 			editorDirtyStateChanged();

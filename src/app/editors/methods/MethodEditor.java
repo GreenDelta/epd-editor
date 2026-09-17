@@ -58,7 +58,8 @@ public class MethodEditor extends BaseEditor {
 	public void doSave(IProgressMonitor monitor) {
 		try {
 			Data.updateVersion(method);
-			Data.save(method);
+			if (!save(method))
+				return;
 			for (Runnable handler : saveHandlers) {
 				handler.run();
 			}

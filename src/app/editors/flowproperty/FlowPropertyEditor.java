@@ -48,7 +48,8 @@ public class FlowPropertyEditor extends BaseEditor {
 	public void doSave(IProgressMonitor monitor) {
 		try {
 			Data.updateVersion(property);
-			Data.save(property);
+			if (!save(property))
+				return;
 			for (Runnable handler : saveHandlers) {
 				handler.run();
 			}

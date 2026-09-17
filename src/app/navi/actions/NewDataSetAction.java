@@ -83,7 +83,11 @@ public class NewDataSetAction extends Action {
 		if (ds == null)
 			return;
 		try {
-			Data.save(ds);
+			var res = Data.save(ds);
+			if (res.isError()) {
+				MsgBox.error(M.FailedToSaveDataSet, res.error());
+				return;
+			}
 			Editors.open(Ref.of(ds));
 		} catch (Exception e) {
 			MsgBox.error("Failed to create data set", e.getMessage());

@@ -14,6 +14,7 @@ import org.openlca.ilcd.util.DataSets;
 import app.App;
 import app.M;
 import app.store.Data;
+import app.util.MsgBox;
 import app.util.UI;
 
 public abstract class BaseEditor extends FormEditor implements IEditor {
@@ -38,6 +39,16 @@ public abstract class BaseEditor extends FormEditor implements IEditor {
 		saveHandlers.add(handler);
 	}
 
+	/// Saves the given data set and reports an error to the user when this
+	/// failed. Returns `true` when the data set was saved.
+	protected boolean save(IDataSet ds) {
+		var res = Data.save(ds);
+		if (res.isOk())
+			return true;
+		MsgBox.error(M.FailedToSaveDataSet, res.error());
+		return false;
+	}
+
 	/// Asks for a new name, assigns a new identity to the given copy of the
 	/// data set that is edited in this editor, saves it, and opens it in a new
 	/// editor. Nothing is done when the given copy is `null`.
@@ -50,7 +61,8 @@ public abstract class BaseEditor extends FormEditor implements IEditor {
 		if (d.open() != Window.OK || Strings.isBlank(d.getValue()))
 			return;
 		Data.assignNewIdentity(copy, d.getValue());
-		Data.save(copy);
+		if (!save(copy))
+			return;
 		Editors.open(Ref.of(copy));
 	}
 

@@ -30,7 +30,12 @@ public class RefCheck {
 		RefSync.updateRefs(ds, App.index());
 		Data.updateVersion(ds);
 		RefSync.updateSelfRefVersion(ds);
-		Data.save(ds);
+		var res = Data.save(ds);
+		if (res.isError()) {
+			// the reopened editor would ask the same question again
+			MsgBox.error(M.FailedToSaveDataSet, res.error());
+			return;
+		}
 		Ref ref = Ref.of(ds);
 		Editors.close(ref);
 		Editors.open(ref);

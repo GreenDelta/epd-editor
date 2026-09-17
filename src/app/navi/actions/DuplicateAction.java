@@ -43,7 +43,11 @@ public class DuplicateAction extends Action {
 					+ e.ref().getType() + " id=" + e.ref().getUUID());
 				return;
 			}
-			Data.save(ds);
+			var res = Data.save(ds);
+			if (res.isError()) {
+				MsgBox.error(M.FailedToSaveDataSet, res.error());
+				return;
+			}
 			Editors.open(Ref.of(ds));
 		} catch (Exception ex) {
 			Logger log = LoggerFactory.getLogger(getClass());

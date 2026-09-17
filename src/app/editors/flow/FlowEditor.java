@@ -55,7 +55,8 @@ public class FlowEditor extends BaseEditor {
 	public void doSave(IProgressMonitor monitor) {
 		try {
 			Data.updateVersion(flow);
-			Data.save(savableCopy());
+			if (!save(savableCopy()))
+				return;
 
 			saveHandlers.forEach(Runnable::run);
 			dirty = false;

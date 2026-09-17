@@ -128,7 +128,10 @@ class FlowUpdateCheck {
 							RefSync.updateRefs(p, App.index());
 							Data.updateVersion(p);
 							RefSync.updateSelfRefVersion(p);
-							Data.save(p);
+							var res = Data.save(p);
+							if (res.isError()) {
+								throw new RuntimeException(res.error());
+							}
 						} catch (Exception innerE) {
 							throw new RuntimeException(innerE);
 						}

@@ -7,7 +7,9 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.sources.DataSetInfo;
 import org.openlca.ilcd.sources.Source;
+import org.openlca.ilcd.sources.SourceType;
 import org.openlca.ilcd.util.Sources;
 
 import app.App;
@@ -17,11 +19,27 @@ import app.editors.CategorySection;
 import app.editors.CommonAdminSection;
 import app.editors.refs.RefLink;
 import app.editors.refs.RefTableSection;
+import app.rcp.Labels;
+import app.util.Controls;
 import app.util.LangText;
 import app.util.TextBuilder;
 import app.util.UI;
 
 class SourcePage extends FormPage {
+
+	/// The source types in the order in which they are shown in the combo box.
+	private static final SourceType[] SOURCE_TYPES = {
+		SourceType.ARTICLE_IN_PERIODICAL,
+		SourceType.CHAPTER_IN_ANTHOLOGY,
+		SourceType.DIRECT_MEASUREMENT,
+		SourceType.MONOGRAPH,
+		SourceType.ORAL_COMMUNICATION,
+		SourceType.PERSONAL_WRITTEN_COMMUNICATION,
+		SourceType.QUESTIONNAIRE,
+		SourceType.SOFTWARE_OR_DATABASE,
+		SourceType.OTHER_UNPUBLISHED_AND_GREY_LITERATURE,
+		SourceType.UNDEFINED
+	};
 
 	private final Source source;
 	private final SourceEditor editor;
@@ -68,7 +86,8 @@ class SourcePage extends FormPage {
 				.edit(info::withDescription)
 				.draw(comp);
 
-		// TODO: source type combo
+		createSourceTypeCombo(comp, info);
+
 		UI.formLabel(comp, tk, M.Logo, Tooltips.Source_Logo);
 		RefLink logo = new RefLink(comp, tk, DataSetType.SOURCE);
 		logo.setRef(info.getLogo());
@@ -77,6 +96,29 @@ class SourcePage extends FormPage {
 			editor.setDirty();
 		});
 		UI.fileLink(source, comp, tk);
+	}
+
+	private void createSourceTypeCombo(Composite comp, DataSetInfo info) {
+		var combo = UI.formCombo(comp, tk, M.SourceType);
+		var items = new String[SOURCE_TYPES.length];
+		int selected = -1;
+		for (int i = 0; i < SOURCE_TYPES.length; i++) {
+			items[i] = Labels.get(SOURCE_TYPES[i]);
+			if (SOURCE_TYPES[i] == info.getType()) {
+				selected = i;
+			}
+		}
+		combo.setItems(items);
+		if (selected >= 0) {
+			combo.select(selected);
+		}
+		Controls.onSelect(combo, _ -> {
+			int i = combo.getSelectionIndex();
+			if (i < 0 || i >= SOURCE_TYPES.length)
+				return;
+			info.withType(SOURCE_TYPES[i]);
+			editor.setDirty();
+		});
 	}
 
 	private void categorySection(Composite body) {

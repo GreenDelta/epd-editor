@@ -15,12 +15,14 @@ public class M extends NLS {
 	public static String AlreadyExists;
 	public static String Amount;
 	public static String ApplicationSettings;
+	public static String ArticleInPeriodical;
 	public static String AvailableValidationProfiles;
 	public static String Average;
 
 	public static String Browse;
 
 	public static String CategoryPath;
+	public static String ChapterInAnthology;
 	public static String CheckEPDsOnProductUpdates;
 	public static String Citation;
 	public static String Classification;
@@ -64,6 +66,7 @@ public class M extends NLS {
 	public static String DeleteReview;
 	public static String DependentInternalReview;
 	public static String Description;
+	public static String DirectMeasurement;
 	public static String Documentation;
 	public static String DocumentationDataQualityManagement;
 	public static String Documentor;
@@ -153,6 +156,7 @@ public class M extends NLS {
 	public static String ModellingAndValidation;
 	public static String Module;
 	public static String Modules;
+	public static String Monograph;
 	public static String MultipleManufacturers;
 
 	public static String Name;
@@ -176,7 +180,9 @@ public class M extends NLS {
 	public static String OlcLocationCode;
 	public static String Open;
 	public static String OpenEditor;
+	public static String OralCommunication;
 	public static String OtherParameter;
+	public static String OtherUnpublishedAndGreyLiterature;
 	public static String OverwriteExistingDataSets;
 	public static String Owner;
 
@@ -186,6 +192,7 @@ public class M extends NLS {
 	public static String PcrCompliance;
 	public static String PcrCutOffRules;
 	public static String PcrUpstreamDataDeviating;
+	public static String PersonalWrittenCommunication;
 	public static String Pictogram;
 	public static String PrecedingDataSetVersion;
 	public static String ProductFlow;
@@ -203,6 +210,7 @@ public class M extends NLS {
 	public static String QuantitativeReference;
 	public static String QuantitativeScenarioData;
 
+	public static String Questionnaire;
 	public static String RangeOfProducts;
 	public static String ReferenceDataURL;
 	public static String ReferenceFlow;
@@ -255,8 +263,10 @@ public class M extends NLS {
 	public static String SingleManufacturerMultipleSites;
 	public static String SingleProduct;
 	public static String SingleProductionSite;
+	public static String SoftwareOrDatabase;
 	public static String Source;
 	public static String Sources;
+	public static String SourceType;
 	public static String Specific;
 	public static String Status;
 	public static String StreetAddress;
@@ -278,6 +288,7 @@ public class M extends NLS {
 	public static String TimeDescription;
 	public static String Type;
 
+	public static String Undefined;
 	public static String Unit;
 	public static String UnitDescription;
 	public static String UnitGroup;

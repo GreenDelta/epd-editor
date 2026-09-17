@@ -7,6 +7,7 @@ import org.openlca.ilcd.processes.epd.EpdManufacturerVariability;
 import org.openlca.ilcd.processes.epd.EpdProductVariability;
 import org.openlca.ilcd.processes.epd.EpdSubType;
 import org.openlca.ilcd.processes.epd.EpdVariationRange;
+import org.openlca.ilcd.sources.SourceType;
 
 import app.App;
 import app.M;
@@ -51,6 +52,25 @@ public class Labels {
 			case SOURCE -> M.Source;
 			case UNIT_GROUP -> M.UnitGroup;
 			default -> M.Unknown;
+		};
+	}
+
+	public static String get(SourceType type) {
+		if (type == null)
+			return "";
+		return switch (type) {
+			case ARTICLE_IN_PERIODICAL -> M.ArticleInPeriodical;
+			case CHAPTER_IN_ANTHOLOGY -> M.ChapterInAnthology;
+			case DIRECT_MEASUREMENT -> M.DirectMeasurement;
+			case MONOGRAPH -> M.Monograph;
+			case ORAL_COMMUNICATION -> M.OralCommunication;
+			case PERSONAL_WRITTEN_COMMUNICATION ->
+				M.PersonalWrittenCommunication;
+			case QUESTIONNAIRE -> M.Questionnaire;
+			case SOFTWARE_OR_DATABASE -> M.SoftwareOrDatabase;
+			case OTHER_UNPUBLISHED_AND_GREY_LITERATURE ->
+				M.OtherUnpublishedAndGreyLiterature;
+			case UNDEFINED -> M.Undefined;
 		};
 	}
 

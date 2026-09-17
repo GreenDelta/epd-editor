@@ -25,7 +25,7 @@ public class SourceEditor extends BaseEditor {
 	public static void open(Ref ref) {
 		if (ref == null)
 			return;
-		RefEditorInput input = new RefEditorInput(ref);
+		var input = new RefEditorInput(ref);
 		Editors.open(input, ID);
 	}
 
@@ -35,7 +35,7 @@ public class SourceEditor extends BaseEditor {
 		super.init(s, input);
 		Editors.setTabTitle(input, this);
 		try {
-			RefEditorInput in = (RefEditorInput) input;
+			var in = (RefEditorInput) input;
 			source = App.store().get(Source.class, in.ref().getUUID());
 			RefCheck.on(source);
 		} catch (Exception e) {

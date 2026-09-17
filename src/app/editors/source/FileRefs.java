@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.sources.FileRef;
 
 import app.App;
@@ -22,6 +23,20 @@ final class FileRefs {
 		return isNonAscii(file);
 	}
 
+	/// Inserts the given UUID before the file extension of the given file name:
+	/// `flow_chart.png` becomes `flow_chart_<uuid>.png`. When the name has no
+	/// extension, the UUID is appended. This is used to make the names of
+	/// external documents unique in the `external_docs` folder.
+	static String withUuid(String fileName, String uuid) {
+		if (Strings.isBlank(fileName) || Strings.isBlank(uuid))
+			return fileName;
+		int idx = fileName.lastIndexOf('.');
+		return idx <= 0
+			? fileName + "_" + uuid
+			: fileName.substring(0, idx) + "_" + uuid
+				+ fileName.substring(idx);
+	}
+
 	// see https://github.com/GreenDelta/epd-editor/issues/39
 	static boolean isNonAscii(File file) {
 		if (file == null || !file.isFile())
@@ -30,6 +45,4 @@ final class FileRefs {
 			.newEncoder()
 			.canEncode(file.getName());
 	}
-
-
 }

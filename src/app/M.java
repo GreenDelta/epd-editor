@@ -14,6 +14,7 @@ public class M extends NLS {
 	public static String AdministrativeInformation;
 	public static String AlreadyExists;
 	public static String Amount;
+	public static String AppendUuidToFileName;
 	public static String ApplicationSettings;
 	public static String ArticleInPeriodical;
 	public static String AvailableValidationProfiles;

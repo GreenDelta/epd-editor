@@ -15,6 +15,7 @@ import org.openlca.ilcd.sources.FileRef;
 import org.slf4j.LoggerFactory;
 
 import app.App;
+import app.M;
 import app.navi.Navigator;
 import app.util.Controls;
 import app.util.MsgBox;
@@ -22,12 +23,14 @@ import app.util.UI;
 
 class ResourceDialog extends FormDialog {
 
+	private final String sourceUuid;
+
 	private File file;
 	private String url;
 	private boolean isFile = true;
 
-	static Optional<FileRef> select() {
-		var dialog = new ResourceDialog();
+	static Optional<FileRef> select(String sourceUuid) {
+		var dialog = new ResourceDialog(sourceUuid);
 		if (dialog.open() != OK)
 			return Optional.empty();
 		if (dialog.isFile) {
@@ -43,8 +46,9 @@ class ResourceDialog extends FormDialog {
 		}
 	}
 
-	private ResourceDialog() {
+	private ResourceDialog(String sourceUuid) {
 		super(UI.shell());
+		this.sourceUuid = sourceUuid;
 	}
 
 	@Override
@@ -68,6 +72,10 @@ class ResourceDialog extends FormDialog {
 			fileComp, "", SWT.READ_ONLY | SWT.BORDER);
 		UI.stretchX(fileText);
 		var fileBtn = tk.createButton(fileComp, "Select", SWT.NONE);
+		var uuidCheck = tk.createButton(fileComp,
+			M.AppendUuidToFileName, SWT.CHECK);
+		uuidCheck.setSelection(true);
+		UI.stretchX(uuidCheck).horizontalSpan = 2;
 
 		// URL
 		var urlCheck = tk.createButton(body, "URL to web resource", SWT.RADIO);
@@ -83,19 +91,20 @@ class ResourceDialog extends FormDialog {
 			isFile = fileCheck.getSelection();
 			fileText.setEnabled(isFile);
 			fileBtn.setEnabled(isFile);
+			uuidCheck.setEnabled(isFile);
 			urlText.setEnabled(!isFile);
 		});
 
 		urlText.addModifyListener(_ -> url = urlText.getText().strip());
 		Controls.onSelect(fileBtn, _ -> {
-			selectFile();
+			selectFile(uuidCheck.getSelection());
 			if (file != null) {
 				fileText.setText(file.getName());
 			}
 		});
 	}
 
-	private void selectFile() {
+	private void selectFile(boolean appendUuid) {
 		var docDir = new File(App.store().getRootFolder(), "external_docs");
 		if (!docDir.exists()) {
 			try {
@@ -125,32 +134,42 @@ class ResourceDialog extends FormDialog {
 				return;
 		}
 
-		this.file = checkCopy(docDir, file);
+		this.file = storeInDocs(docDir, file, appendUuid);
 	}
 
-	private File checkCopy(File dir, File file) {
-		if (!file.exists())
+	/// Copies the given file into the external docs folder and returns the file
+	/// under which it is stored there. When `appendUuid` is true, the UUID of
+	/// the source is inserted into the file name so that the names of external
+	/// documents are unique; a file with this name is overwritten then.
+	private File storeInDocs(File dir, File file, boolean appendUuid) {
+		var target = appendUuid
+			? new File(dir, FileRefs.withUuid(file.getName(), sourceUuid))
+			: new File(dir, file.getName());
+		if (target.equals(file))
 			return file;
-		var copy = new File(dir, file.getName());
-		if (copy.exists())
-			return copy;
-		boolean b = MsgBox.ask("Copy file?", "The selected file is "
-			+ "not located in the 'external_docs' folder but for data "
-			+ "exchange it should be in this folder. Should we make a "
-			+	"copy there?");
-		if (!b)
-			return file;
+		if (!appendUuid && target.exists())
+			return target;
+
+		var parent = file.getParentFile();
+		if (parent == null || !parent.equals(dir)) {
+			boolean b = MsgBox.ask("Copy file?", "The selected file is "
+				+ "not located in the 'external_docs' folder but for data "
+				+ "exchange it should be in this folder. Should we make a "
+				+ "copy there?");
+			if (!b)
+				return file;
+		}
+
 		try {
-			Files.copy(file.toPath(), copy.toPath(),
+			Files.copy(file.toPath(), target.toPath(),
 				StandardCopyOption.REPLACE_EXISTING);
 			Navigator.refreshFolders();
-			return copy;
+			return target;
 		} catch (Exception e) {
 			LoggerFactory.getLogger(getClass())
 				.error("failed to copy file {}", file, e);
 			return file;
 		}
 	}
-
 
 }

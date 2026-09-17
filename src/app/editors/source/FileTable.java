@@ -9,6 +9,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.openlca.ilcd.sources.FileRef;
+import org.openlca.ilcd.util.DataSets;
 import org.openlca.ilcd.util.Sources;
 
 import app.M;
@@ -49,7 +50,8 @@ class FileTable {
 	}
 
 	private void add() {
-		var ref = ResourceDialog.select().orElse(null);
+		var ref = ResourceDialog.select(DataSets.getUUID(editor.source))
+			.orElse(null);
 		if (ref == null)
 			return;
 		fileRefs.add(ref);

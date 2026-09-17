@@ -33,6 +33,8 @@ import app.store.CleanUp;
 import app.store.IndexBuilder;
 import app.store.ZipExport;
 import app.store.ZipImport;
+import app.store.indata.InDataImport;
+import app.store.indata.InDataImportDialog;
 import app.store.validation.Validation;
 import app.util.Actions;
 import app.util.FileChooser;
@@ -85,6 +87,9 @@ public class ActionBar extends ActionBarAdvisor {
 				Icon.SETTINGS.des(), SettingsPage::open));
 		m.add(Actions.create(M.MaterialProperties,
 				Icon.QUANTITY.des(), MaterialPropertyEditor::open));
+		m.add(new Separator());
+		m.add(Actions.create(M.ImportInDataRefData,
+				Icon.IMPORT.des(), this::importInData));
 		m.add(new Separator());
 		m.add(Actions.create(M.ReloadNavigation,
 				Icon.RELOAD.des(), () -> App.run(new IndexBuilder())));
@@ -157,6 +162,13 @@ public class ActionBar extends ActionBarAdvisor {
 			log.error("failed to export data sets", e);
 			MsgBox.error("Data export failed: " + e.getMessage());
 		}
+	}
+
+	private void importInData() {
+		var source = InDataImportDialog.show().orElse(null);
+		if (source == null)
+			return;
+		App.run(new InDataImport(source));
 	}
 
 	private void validateStore() {

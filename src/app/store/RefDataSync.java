@@ -129,12 +129,6 @@ public class RefDataSync implements Runnable {
 			return false;
 		if (oldRef == null)
 			return true;
-		Version newV = Version.fromString(newRef.getVersion());
-		Version oldV = Version.fromString(oldRef.getVersion());
-		if (newV.getMajor() != oldV.getMajor())
-			return newV.getMajor() > oldV.getMajor();
-		if (newV.getMinor() != oldV.getMinor())
-			return newV.getMinor() > oldV.getMinor();
-		return newV.getUpdate() > oldV.getUpdate();
+		return Version.isNewer(newRef.getVersion(), oldRef.getVersion());
 	}
 }

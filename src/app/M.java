@@ -129,7 +129,11 @@ public class M extends NLS {
 	public static String ImportDataPackage;
 	public static String Imported;
 	public static String ImportFile;
+	public static String ImportInDataRefData;
 	public static String IncludeDependentDataSets;
+	public static String InDataDownloadOption;
+	public static String InDataImportTitle;
+	public static String InDataLocalOption;
 	public static String IndependentExternalReview;
 	public static String IndependentInternalReview;
 	public static String IndependentReviewPanel;
@@ -174,6 +178,7 @@ public class M extends NLS {
 	public static String NewSource;
 	public static String NewUnitGroup;
 	public static String NoDataFoundOnServer;
+	public static String NoDataSetInArchive;
 	public static String None;
 	public static String NotReviewed;
 	public static String NoValidationProfile;
@@ -306,6 +311,7 @@ public class M extends NLS {
 	public static String Update;
 	public static String UpdateClassifications;
 	public static String UpdateClassificationsQuestion;
+	public static String Updated;
 	public static String UpdateDataSetRefs_Question;
 	public static String UpdatedReferenceData;
 	public static String UpdateMajorVersion;

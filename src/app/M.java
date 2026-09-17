@@ -183,6 +183,7 @@ public class M extends NLS {
 	public static String NewUnitGroup;
 	public static String NoDataFoundOnServer;
 	public static String NoDataSetInArchive;
+	public static String NoDataSetInFile;
 	public static String None;
 	public static String NotReviewed;
 	public static String NoValidationProfile;

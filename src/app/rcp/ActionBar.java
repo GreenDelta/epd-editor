@@ -32,6 +32,7 @@ import app.navi.actions.NewDataSetAction;
 import app.store.CleanUp;
 import app.store.IndexBuilder;
 import app.store.MetaDataExcelExport;
+import app.store.XmlImport;
 import app.store.ZipExport;
 import app.store.ZipImport;
 import app.store.indata.InDataImport;
@@ -70,7 +71,7 @@ public class ActionBar extends ActionBarAdvisor {
 		fileMenu.add(Actions.create(M.ValidateDataSets,
 				Icon.OK.des(), this::validateStore));
 		fileMenu.add(Actions.create(M.ImportDataPackage,
-				Icon.IMPORT.des(), this::importZip));
+				Icon.IMPORT.des(), this::importDataSets));
 		fileMenu.add(Actions.create(M.ExportDataPackage,
 				Icon.EXPORT.des(), this::exportZip));
 		menuBar.add(fileMenu);
@@ -134,22 +135,28 @@ public class ActionBar extends ActionBarAdvisor {
 		App.run(new CleanUp());
 	}
 
-	private void importZip() {
-		var zipFile = FileChooser.open("*.zip");
-		if (zipFile == null)
+	private void importDataSets() {
+		var file = FileChooser.open("*.zip;*.xml");
+		if (file == null)
 			return;
-		boolean b = MsgBox.ask("Import data sets?", "Should we import all "
-				+ "data sets from the selected file?");
+		boolean isXml = file.getName().toLowerCase().endsWith(".xml");
+		boolean b = MsgBox.ask("Import data sets?", isXml
+				? "Should we import the data set from the selected file?"
+				: "Should we import all data sets from the selected file?");
 		if (!b)
 			return;
 		try {
 			var progress = PlatformUI.getWorkbench().getProgressService();
-			var zip = new ZipStore(zipFile);
-			progress.run(true, true, new ZipImport(zip));
+			if (isXml) {
+				progress.run(true, true, new XmlImport(file));
+			} else {
+				var zip = new ZipStore(file);
+				progress.run(true, true, new ZipImport(zip));
+			}
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(getClass());
 			log.error("failed to import data sets", e);
-			MsgBox.error("Data export failed: " + e.getMessage());
+			MsgBox.error("Data import failed: " + e.getMessage());
 		}
 	}
 

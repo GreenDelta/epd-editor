@@ -4,11 +4,9 @@ import java.util.Comparator;
 
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.Section;
 import org.openlca.ilcd.epd.EpdProfile;
 import org.openlca.ilcd.epd.EpdProfileModule;
 
@@ -28,10 +26,11 @@ class ModuleTable {
 	}
 
 	void render(Composite body, FormToolkit tk) {
-		Section section = UI.section(body, tk, M.Modules);
-		Composite comp = UI.sectionClient(section, tk);
+		var section = UI.section(body, tk, M.Modules);
+		UI.stretchXY(section);
+		var comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
-		TableViewer table = Tables.createViewer(comp, M.Index,
+		var table = Tables.createViewer(comp, M.Index,
 			M.Name, M.Description);
 		Tables.bindColumnWidths(table, 0.2, 0.3, 0.5);
 		table.setLabelProvider(new Label());

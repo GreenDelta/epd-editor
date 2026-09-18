@@ -41,4 +41,18 @@ record ProfileInfo(File file, @Nullable Profile profile) {
 			? ""
 			: profile.getVersion();
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof ProfileInfo other))
+			return false;
+		return file.equals(other.file);
+	}
+
+	@Override
+	public int hashCode() {
+		return file.hashCode();
+	}
 }

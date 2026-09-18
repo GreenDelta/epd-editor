@@ -29,6 +29,7 @@ class IndicatorTable {
 
 	void render(Composite body, FormToolkit tk) {
 		var section = UI.section(body, tk, M.EnvironmentalIndicators);
+		UI.stretchXY(section);
 		var comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
 		table = Tables.createViewer(comp, M.Indicator,

@@ -28,7 +28,6 @@ import app.editors.epd.EpdEditor;
 import app.editors.flow.FlowEditor;
 import app.editors.flowproperty.FlowPropertyEditor;
 import app.editors.methods.MethodEditor;
-import app.editors.profiles.ProfileEditor;
 import app.editors.refs.RefEditorInput;
 import app.editors.source.SourceEditor;
 import app.editors.unitgroup.UnitGroupEditor;
@@ -85,12 +84,14 @@ public class Editors {
 	}
 
 	public static void close(EpdProfile profile) {
-		if (profile == null)
+		if (profile == null || Strings.isBlank(profile.getId()))
 			return;
+		// note: several editors use a SimpleEditorInput without an ID; these
+		// must not be matched by a profile with an empty ID
 		close(i ->
-			i instanceof ProfileEditor.Input input
-				&& input.profile != null
-				&& Objects.equals(profile.getId(), input.profile.getId()));
+			i instanceof SimpleEditorInput input
+				&& input.id != null
+				&& Objects.equals(profile.getId(), input.id));
 	}
 
 	public static void closeAll() {

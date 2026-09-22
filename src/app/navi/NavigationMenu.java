@@ -8,24 +8,31 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.navigator.CommonActionProvider;
 import org.eclipse.ui.navigator.CommonViewer;
+import org.openlca.ilcd.epd.EpdProfile;
 import org.openlca.ilcd.io.SodaConnection;
 
+import app.App;
 import app.M;
 import app.editors.Editors;
 import app.editors.classifications.ClassificationEditor;
 import app.editors.connection.ConnectionEditor;
 import app.editors.locations.LocationEditor;
+import app.editors.profiles.ProfileEditor;
 import app.navi.actions.ClassificationSync;
 import app.navi.actions.ConnectionDeleteAction;
 import app.navi.actions.DuplicateAction;
+import app.navi.actions.DuplicateProfileAction;
 import app.navi.actions.FileDeletion;
 import app.navi.actions.FileImport;
 import app.navi.actions.NewConnectionAction;
 import app.navi.actions.NewDataSetAction;
+import app.navi.actions.NewProfileAction;
+import app.navi.actions.ProfileDeleteAction;
 import app.navi.actions.RefDeleteAction;
 import app.rcp.Icon;
 import app.store.Connections;
 import app.store.ExportDialog;
+import app.store.Profiles;
 import app.store.validation.ValidationDialog;
 import app.util.Actions;
 import app.util.UI;
@@ -63,7 +70,12 @@ public class NavigationMenu extends CommonActionProvider {
 		menu.add(expandAll);
 
 		var refresh = Actions.create(
-			"Refresh", Icon.RELOAD.des(), Navigator::refreshAll);
+			"Refresh", Icon.RELOAD.des(), () -> {
+				// profile files may have been changed outside of the
+				// application, so we reload them here
+				Profiles.reload();
+				Navigator.refreshAll();
+			});
 		menu.add(refresh);
 
 		menuAdded = true;
@@ -76,7 +88,7 @@ public class NavigationMenu extends CommonActionProvider {
 		List<NavigationElement> elements = Viewers.getAll(s);
 		if (elements.isEmpty())
 			return;
-		var first = elements.get(0);
+		var first = elements.getFirst();
 		if (first instanceof TypeElement e) {
 			menu.add(new NewDataSetAction(e));
 		}
@@ -104,6 +116,31 @@ public class NavigationMenu extends CommonActionProvider {
 					() -> ConnectionEditor.open(e.connection())));
 			menu.add(new ConnectionDeleteAction(e));
 		}
+
+		if (first instanceof ProfileFolder) {
+			menu.add(new NewProfileAction());
+		}
+
+		if (first instanceof ProfileElement e) {
+			addForProfile(e.profile(), menu);
+		}
+	}
+
+	private void addForProfile(EpdProfile profile, IMenuManager menu) {
+		menu.add(Actions.create(M.Open, Icon.OPEN.des(),
+			() -> ProfileEditor.open(profile)));
+		menu.add(new DuplicateProfileAction(profile));
+		menu.add(Actions.create(M.SetAsActiveProfile, Icon.OK.des(),
+			() -> setAsActiveProfile(profile)));
+		menu.add(new ProfileDeleteAction(profile));
+	}
+
+	private void setAsActiveProfile(EpdProfile profile) {
+		if (profile == null || profile.getId() == null)
+			return;
+		var settings = App.settings();
+		settings.profile = profile.getId();
+		settings.save(App.getWorkspace());
 	}
 
 	private void forRef(RefElement e, IMenuManager menu) {

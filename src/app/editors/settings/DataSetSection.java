@@ -15,13 +15,13 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.openlca.commons.Strings;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.Ref;
-import org.openlca.ilcd.epd.EpdProfiles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.App;
 import app.AppSettings;
 import app.M;
+import app.store.Profiles;
 import app.store.RefTrees;
 import app.util.Controls;
 import app.util.FileChooser;
@@ -161,7 +161,7 @@ class DataSetSection {
 	private void profileCombo(Composite comp, FormToolkit tk) {
 		var combo = UI.formCombo(comp, tk, M.DefaultEPDProfile);
 		UI.stretchNone(combo).widthHint = 300;
-		var profiles = EpdProfiles.getAll();
+		var profiles = Profiles.getAll();
 		profiles.sort((p1, p2) -> Strings.compareIgnoreCase(p1.getName(), p2.getName()));
 		var items = new String[profiles.size()];
 		int selected = -1;

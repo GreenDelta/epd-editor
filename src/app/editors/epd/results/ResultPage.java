@@ -8,7 +8,6 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.openlca.commons.Strings;
-import org.openlca.ilcd.epd.EpdProfiles;
 import org.openlca.ilcd.processes.Process;
 
 import app.App;
@@ -16,6 +15,7 @@ import app.M;
 import app.Tooltips;
 import app.editors.epd.EpdEditor;
 import app.rcp.Icon;
+import app.store.Profiles;
 import app.util.Actions;
 import app.util.Controls;
 import app.util.FileChooser;
@@ -55,7 +55,7 @@ public class ResultPage extends FormPage {
 		var comp = UI.formSection(body, tk, M.EPDProfile, Tooltips.EPD_EPDProfile);
 		var combo = UI.formCombo(comp, tk, M.EPDProfile, Tooltips.EPD_EPDProfile);
 		int selected = -1;
-		var profiles = EpdProfiles.getAll();
+		var profiles = Profiles.getAll();
 		profiles.sort((p1, p2) -> Strings.compareIgnoreCase(p1.getName(), p2.getName()));
 		var items = new String[profiles.size()];
 		for (int i = 0; i < profiles.size(); i++) {

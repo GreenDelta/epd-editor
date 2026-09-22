@@ -1,10 +1,10 @@
 package app.navi;
 
 import org.eclipse.swt.graphics.Image;
-import org.openlca.ilcd.epd.EpdProfiles;
 
 import app.M;
 import app.rcp.Icon;
+import app.store.Profiles;
 
 public class ProfileFolder extends NavigationElement {
 
@@ -39,7 +39,7 @@ public class ProfileFolder extends NavigationElement {
 		if (childs == null)
 			return;
 		childs.clear();
-		for (var p : EpdProfiles.getAll()) {
+		for (var p : Profiles.getAll()) {
 			childs.add(new ProfileElement(this, p));
 		}
 	}

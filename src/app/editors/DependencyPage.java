@@ -16,12 +16,12 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.openlca.commons.Strings;
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
-import org.openlca.ilcd.epd.EpdProfiles;
 import org.openlca.ilcd.util.RefTree;
 
 import app.App;
 import app.M;
 import app.rcp.Icon;
+import app.store.Profiles;
 import app.util.Colors;
 import app.util.Trees;
 import app.util.UI;
@@ -83,7 +83,7 @@ public class DependencyPage extends FormPage {
 	/// available in the current EPD profiles.
 	private Set<String> profileIds() {
 		var ids = new HashSet<String>();
-		for (var profile : EpdProfiles.getAll()) {
+		for (var profile : Profiles.getAll()) {
 			for (var i : profile.getIndicators()) {
 				addIdOf(ids, i.getRef());
 				addIdOf(ids, i.getUnit());

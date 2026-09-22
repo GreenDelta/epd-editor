@@ -17,16 +17,18 @@ public class Activator extends AbstractUIPlugin {
 	public static final String PLUGIN_ID = "app";
 	private static Activator plugin;
 
+	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		App.initRCP();
+		App.init();
 		LoggerConfig.setUp();
 		Logger log = LoggerFactory.getLogger(getClass());
 		log.info("Using workspace {}", App.getWorkspace());
 		log.info("Data set language {}", App.lang());
 	}
 
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);

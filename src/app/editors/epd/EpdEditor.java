@@ -8,7 +8,6 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.epd.EpdProfile;
-import org.openlca.ilcd.epd.EpdProfiles;
 import org.openlca.ilcd.processes.Process;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +22,7 @@ import app.editors.epd.results.ResultPage;
 import app.editors.refs.RefCheck;
 import app.editors.refs.RefEditorInput;
 import app.store.Data;
+import app.store.Profiles;
 import epd.io.Cleanup;
 import epd.model.qmeta.QMetaData;
 
@@ -51,7 +51,7 @@ public class EpdEditor extends BaseEditor {
 			var in = (RefEditorInput) input;
 			epd = App.store().get(Process.class, in.ref().getUUID());
 			profile = Objects.requireNonNullElse(
-					EpdProfiles.of(epd), App.getDefaultProfile());
+					Profiles.of(epd), App.getDefaultProfile());
 			qmeta = QMetaData.read(epd);
 			RefCheck.on(epd);
 		} catch (Exception e) {

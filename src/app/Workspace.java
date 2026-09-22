@@ -189,7 +189,8 @@ public class Workspace {
 		@Override
 		public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
 				throws IOException {
-			var target = targetDir.resolve(sourceDir.relativize(file));
+			var relative = sourceDir.relativize(file);
+			var target = targetDir.resolve(relative);
 
 			// do not overwrite user settings
 			if (target.getFileName().toString().equals("settings.json")
@@ -197,10 +198,25 @@ public class Workspace {
 				return FileVisitResult.CONTINUE;
 			}
 
+			// do not overwrite user defined EPD profiles
+			if (isUserProfile(relative) && Files.exists(target)) {
+				return FileVisitResult.CONTINUE;
+			}
+
 			Files.copy(file, target,
 					StandardCopyOption.REPLACE_EXISTING,
 					StandardCopyOption.COPY_ATTRIBUTES);
 			return FileVisitResult.CONTINUE;
+		}
+
+		/// Returns true when the given relative path points to a user defined
+		/// EPD profile. These are stored in the `profiles` folder of the
+		/// workspace and must never be overwritten by the reference data that
+		/// is shipped with the application.
+		private static boolean isUserProfile(Path relative) {
+			return relative != null
+				&& relative.getNameCount() > 0
+				&& relative.getName(0).toString().equals("profiles");
 		}
 	}
 }

@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import app.rcp.Activator;
+import app.store.Profiles;
 import epd.index.Index;
 
 public class App {
@@ -37,19 +38,14 @@ public class App {
 	/**
 	 * Initializes the workspace and resources of the RCP application.
 	 */
-	public static void initRCP() {
-		try {
-			_workspace = Workspace.openDefault();
-			Platform.getInstanceLocation().release();
-			var url = new URL("file", null,
-					_workspace.folder.getAbsolutePath());
-			Platform.getInstanceLocation().set(url, true);
-		} catch (Exception e) {
-			var log = LoggerFactory.getLogger(App.class);
-			log.error("failed to init App", e);
-		}
+	public static void init() throws Exception {
+		_workspace = Workspace.openDefault();
+		Platform.getInstanceLocation().release();
+		var url = new URL("file", null,
+			_workspace.folder.getAbsolutePath());
+		Platform.getInstanceLocation().set(url, true);
+		Profiles.load();
 	}
-
 
 	/**
 	 * Get the folder where EPD Editor is installed. This is where the EPDEditor.ini file is
@@ -96,10 +92,10 @@ public class App {
 
 	public static EpdProfile getDefaultProfile() {
 		var s = settings();
-		var profile = EpdProfiles.get(s.profile);
+		var profile = Profiles.get(s.profile);
 		return profile != null
-				? profile
-				: EpdProfiles.EN_15804_A2_EF30.get();
+			? profile
+			: EpdProfiles.EN_15804_A2_EF30.get();
 	}
 
 	public static synchronized void updateIndex(Index index) {
@@ -109,8 +105,8 @@ public class App {
 	public static String lang() {
 		var lang = settings().lang;
 		return Strings.isNotBlank(lang)
-				? lang
-				: "en";
+			? lang
+			: "en";
 	}
 
 	public static String s(List<LangString> strings) {
@@ -122,8 +118,8 @@ public class App {
 
 	public static String s(Ref ref) {
 		return ref != null
-				? s(ref.getName())
-				: "";
+			? s(ref.getName())
+			: "";
 	}
 
 	public static String header(List<LangString> strings, int length) {
@@ -168,7 +164,7 @@ public class App {
 		if (p == null)
 			return;
 		var progress = PlatformUI.getWorkbench()
-				.getProgressService();
+			.getProgressService();
 		try {
 			progress.run(true, true, p);
 			if (uiFn != null) {
@@ -204,14 +200,14 @@ public class App {
 		var ref = new AtomicReference<T>();
 		try {
 			PlatformUI.getWorkbench().getProgressService()
-					.busyCursorWhile((monitor) -> {
-						monitor.beginTask(task, IProgressMonitor.UNKNOWN);
-						ref.set(fn.get());
-						monitor.done();
-					});
+				.busyCursorWhile((monitor) -> {
+					monitor.beginTask(task, IProgressMonitor.UNKNOWN);
+					ref.set(fn.get());
+					monitor.done();
+				});
 		} catch (Exception e) {
 			LoggerFactory.getLogger(App.class)
-					.error("failed to execute task {}", task, e);
+				.error("failed to execute task {}", task, e);
 		}
 		return ref.get();
 	}

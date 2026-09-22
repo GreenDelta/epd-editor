@@ -357,6 +357,21 @@ public class M extends NLS {
 
 	public static String XMLField;
 
+	public static String AddFlowIndicator;
+	public static String AddLCIAIndicator;
+	public static String BuiltInProfileNotice;
+	public static String ComplianceSystem;
+	public static String CopyOfProfile;
+	public static String DeleteProfile;
+	public static String DeleteProfileQuestion;
+	public static String DuplicateProfile;
+	public static String FailedToDeleteProfile;
+	public static String FailedToSaveProfile;
+	public static String InputFlow;
+	public static String NewModule;
+	public static String NewProfile;
+	public static String SetUnit;
+
 	static {
 		NLS.initializeMessages("app.messages", M.class);
 	}

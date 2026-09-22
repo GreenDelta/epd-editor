@@ -8,13 +8,13 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.UIJob;
 import org.openlca.commons.Strings;
 import org.openlca.ilcd.commons.IDataSet;
 import org.openlca.ilcd.commons.Ref;
+import org.openlca.ilcd.epd.EpdProfile;
 import org.openlca.ilcd.io.SodaConnection;
 import org.openlca.ilcd.util.DataSets;
 import org.slf4j.Logger;
@@ -28,6 +28,7 @@ import app.editors.epd.EpdEditor;
 import app.editors.flow.FlowEditor;
 import app.editors.flowproperty.FlowPropertyEditor;
 import app.editors.methods.MethodEditor;
+import app.editors.profiles.ProfileEditor;
 import app.editors.refs.RefEditorInput;
 import app.editors.source.SourceEditor;
 import app.editors.unitgroup.UnitGroupEditor;
@@ -62,7 +63,8 @@ public class Editors {
 			case FLOW_PROPERTY -> FlowPropertyEditor.open(ref);
 			case UNIT_GROUP -> UnitGroupEditor.open(ref);
 			case IMPACT_METHOD -> MethodEditor.open(ref);
-			case MODEL, EXTERNAL_FILE -> {}
+			case MODEL, EXTERNAL_FILE -> {
+			}
 		}
 	}
 
@@ -71,21 +73,24 @@ public class Editors {
 	}
 
 	public static void close(Ref ref) {
-		close(input -> {
-			if (!(input instanceof RefEditorInput))
-				return false;
-			Ref editorRef = ((RefEditorInput) input).ref();
-			return Objects.equals(ref, editorRef);
-		});
+		close(i ->
+			i instanceof RefEditorInput(Ref otherRef)
+				&& Objects.equals(ref, otherRef));
 	}
 
 	public static void close(SodaConnection con) {
-		close(input -> {
-			if (!(input instanceof ConnectionEditor.Input))
-				return false;
-			SodaConnection editorCon = ((ConnectionEditor.Input) input).con;
-			return Objects.equals(con, editorCon);
-		});
+		close(i ->
+			i instanceof ConnectionEditor.Input input
+				&& Objects.equals(con, input.con));
+	}
+
+	public static void close(EpdProfile profile) {
+		if (profile == null)
+			return;
+		close(i ->
+			i instanceof ProfileEditor.Input input
+				&& input.profile != null
+				&& Objects.equals(profile.getId(), input.profile.getId()));
 	}
 
 	public static void closeAll() {
@@ -94,16 +99,16 @@ public class Editors {
 
 	private static void close(Predicate<IEditorInput> fn) {
 		try {
-			IWorkbenchPage page = getActivePage();
-			for (IEditorReference er : page.getEditorReferences()) {
-				IEditorInput input = er.getEditorInput();
+			var page = getActivePage();
+			for (var ref : page.getEditorReferences()) {
+				var input = ref.getEditorInput();
 				if (fn.test(input)) {
-					IEditorPart editor = er.getEditor(false);
+					var editor = ref.getEditor(false);
 					page.closeEditor(editor, false);
 				}
 			}
 		} catch (Exception e) {
-			Logger log = LoggerFactory.getLogger(Editors.class);
+			var log = LoggerFactory.getLogger(Editors.class);
 			log.error("Failed to close editors", e);
 		}
 	}
@@ -121,8 +126,8 @@ public class Editors {
 
 	private static IWorkbenchPage getActivePage() {
 		return PlatformUI.getWorkbench()
-				.getActiveWorkbenchWindow()
-				.getActivePage();
+			.getActiveWorkbenchWindow()
+			.getActivePage();
 	}
 
 	public static void addInfoPages(BaseEditor editor, IDataSet ds) {

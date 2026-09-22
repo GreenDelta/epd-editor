@@ -16,15 +16,16 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.openlca.commons.Strings;
 import org.openlca.ilcd.epd.EpdProfileModule;
-import org.openlca.ilcd.epd.EpdProfiles;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.epd.EpdModuleEntry;
 import org.openlca.ilcd.util.Epds;
 
+import app.App;
 import app.M;
 import app.Tooltips;
 import app.editors.epd.EpdEditor;
 import app.rcp.Icon;
+import app.store.Profiles;
 import app.util.Actions;
 import app.util.Tables;
 import app.util.UI;
@@ -144,7 +145,10 @@ class ModulesSection {
 	}
 
 	private EpdProfileModule[] profileModules() {
-		var profile = EpdProfiles.of(epd);
+		var profile = Profiles.of(epd);
+		if (profile == null) {
+			profile = App.getDefaultProfile();
+		}
 		// profiles are shared instances; we copy the module list here
 		// because we should not change the order in the profile
 		var mods = new ArrayList<>(profile.getModules());

@@ -87,6 +87,16 @@ Profiles need to be located under `validation_profiles`. A profile for the Germa
 OEKOBAUDAT is automatically added to this location when dependencies are copied
 using `mvn package` as described above under "Copy the Maven dependencies".
 
+#### EPD profiles
+EPD profiles describe the environmental indicators and modules of an EPD. The
+EPD-Editor ships three built-in profiles (EN 15804, and EN 15804+A2 with EF 3.0
+and EF 3.1). These built-in profiles are read-only.
+
+Users can create their own profiles in the navigation under "EPD profiles"
+(right-click): either from scratch or as a copy of an existing profile. User
+defined profiles are stored as XML files in the `profiles` folder of the
+workspace (`~/.epd-editor/profiles`) and can be edited, duplicated and deleted.
+
 ## License
 Unless stated otherwise, all source code of the openLCA project is licensed
 under the [Mozilla Public License, v. 2.0](http://mozilla.org/MPL/2.0/). Please

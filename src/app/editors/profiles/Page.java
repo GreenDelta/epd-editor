@@ -75,14 +75,14 @@ class Page extends FormPage {
 		}
 
 		UI.formLabel(comp, tk, M.ComplianceSystem);
-		var link = new RefLink(comp, tk, DataSetType.SOURCE);
+		var link = readOnly
+			? RefLink.readOnly(comp, tk, DataSetType.SOURCE)
+			: new RefLink(comp, tk, DataSetType.SOURCE);
 		link.setRef(profile.getComplianceSystem());
-		if (!readOnly) {
-			link.onChange(ref -> {
-				profile.withComplianceSystem(ref);
-				editor.setDirty();
-			});
-		}
+		link.onChange(ref -> {
+			profile.withComplianceSystem(ref);
+			editor.setDirty();
+		});
 
 		// reference data URL
 		var urlText = UI.formText(comp, tk, M.ReferenceDataURL);

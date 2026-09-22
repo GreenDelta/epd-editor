@@ -20,36 +20,62 @@ import app.util.UI;
 
 public class RefLink extends Composite {
 
-	private ImageHyperlink link;
 	private final DataSetType type;
 	private final FormToolkit toolkit;
+	private final boolean readOnly;
+	private ImageHyperlink link;
 	private Ref ref;
 	private Consumer<Ref> onChange;
 
 	public RefLink(Composite parent, FormToolkit tk, DataSetType type) {
+		this(parent, tk, type, false);
+	}
+
+	/// Creates a link that only displays the reference. The controls for
+	/// selecting and removing a reference are not created.
+	public static RefLink readOnly(
+		Composite parent, FormToolkit tk, DataSetType type
+	) {
+		return new RefLink(parent, tk, type, true);
+	}
+
+	private RefLink(
+		Composite parent, FormToolkit tk, DataSetType type, boolean readOnly
+	) {
 		super(parent, SWT.FILL);
 		this.type = type;
 		this.toolkit = tk;
+		this.readOnly = readOnly;
 		createContent();
 	}
 
 	private void createContent() {
 		toolkit.adapt(this);
-		UI.innerGrid(this, 3);
-		createAddButton();
-		link = toolkit.createImageHyperlink(this, SWT.TOP);
-		link.setForeground(Colors.linkBlue());
-		Controls.onClick(link, _ -> {
-			if (ref != null)
+		UI.innerGrid(this, readOnly ? 1 : 3);
+		if (!readOnly) {
+			createAddButton();
+		}
+		link = createLink();
+		setLinkText();
+		if (!readOnly) {
+			createRemoveLink();
+		}
+	}
+
+	private ImageHyperlink createLink() {
+		var hyperlink = toolkit.createImageHyperlink(this, SWT.TOP);
+		hyperlink.setForeground(Colors.linkBlue());
+		Controls.onClick(hyperlink, _ -> {
+			if (ref != null) {
 				Editors.open(ref);
-			else {
-				Ref ref = RefSelectionDialog.select(type);
-				if (ref != null)
-					setRef(ref);
+			} else if (!readOnly) {
+				var selected = RefSelectionDialog.select(type);
+				if (selected != null) {
+					setRef(selected);
+				}
 			}
 		});
-		setLinkText();
-		createRemoveLink();
+		return hyperlink;
 	}
 
 	private void createAddButton() {

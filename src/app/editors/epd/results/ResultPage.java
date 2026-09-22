@@ -1,23 +1,19 @@
 package app.editors.epd.results;
 
-import java.util.Objects;
-
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.openlca.commons.Strings;
 import org.openlca.ilcd.processes.Process;
 
 import app.App;
 import app.M;
 import app.Tooltips;
 import app.editors.epd.EpdEditor;
+import app.editors.profiles.ProfileCombo;
 import app.rcp.Icon;
-import app.store.Profiles;
 import app.util.Actions;
-import app.util.Controls;
 import app.util.FileChooser;
 import app.util.MsgBox;
 import app.util.UI;
@@ -54,30 +50,14 @@ public class ResultPage extends FormPage {
 	private void createProfileSection(Composite body, FormToolkit tk) {
 		var comp = UI.formSection(body, tk, M.EPDProfile, Tooltips.EPD_EPDProfile);
 		var combo = UI.formCombo(comp, tk, M.EPDProfile, Tooltips.EPD_EPDProfile);
-		int selected = -1;
-		var profiles = Profiles.getAll();
-		profiles.sort((p1, p2) -> Strings.compareIgnoreCase(p1.getName(), p2.getName()));
-		var items = new String[profiles.size()];
-		for (int i = 0; i < profiles.size(); i++) {
-			var profile = profiles.get(i);
-			items[i] = profile.getName() != null ? profile.getName() : "?";
-			if (Objects.equals(profile, editor.getProfile())) {
-				selected = i;
-			}
-		}
-
-		combo.setItems(items);
-		if (selected >= 0) {
-			combo.select(selected);
-		}
-		Controls.onSelect(combo, _ -> {
-			int i = combo.getSelectionIndex();
-			editor.setProfile(profiles.get(i));
-			// Note: we do not refresh the module and result sections
-			// here. The declared modules do not really change with the
-			// profile; it is more the indicator IDs that are affected.
-			// We need to think about this later.
-		});
+		var current = editor.getProfile();
+		ProfileCombo
+			.fill(combo, current != null ? current.getId() : null)
+			.onSelect(editor::setProfile);
+		// Note: we do not refresh the module and result sections
+		// here. The declared modules do not really change with the
+		// profile; it is more the indicator IDs that are affected.
+		// We need to think about this later.
 	}
 
 	private void createScenarioSection(Composite parent, FormToolkit tk) {

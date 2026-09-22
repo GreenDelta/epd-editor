@@ -3,11 +3,11 @@ package app.store;
 import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.openlca.commons.Strings;
 import org.openlca.ilcd.epd.EpdProfile;
@@ -37,94 +37,15 @@ public final class Profiles {
 
 	private static final Logger log = LoggerFactory.getLogger(Profiles.class);
 
-	/// The user defined profiles, keyed by their ID.
+	/// The user defined profiles, keyed by their ID. The map is concurrent so
+	/// that it can be read while a profile is added or removed.
 	private static final Map<String, EpdProfile> userProfiles =
-		new LinkedHashMap<>();
+		new ConcurrentHashMap<>();
 
 	/// Only set in tests to redirect the storage folder.
 	private static File folderOverride;
 
 	private Profiles() {
-	}
-
-	/// The folder where the user defined profiles are stored. It is created
-	/// when it does not exist yet.
-	public static File dir() {
-		var dir = folderOverride != null
-			? folderOverride
-			: new File(App.workspaceFolder(), "profiles");
-		if (!dir.exists()) {
-			try {
-				Files.createDirectories(dir.toPath());
-			} catch (Exception e) {
-				log.error("failed to create profile folder {}", dir, e);
-			}
-		}
-		return dir;
-	}
-
-	/// Loads all user defined profiles from the workspace. This is called
-	/// when the application starts.
-	public static void load() {
-		synchronized (Profiles.class) {
-			userProfiles.clear();
-			readFrom(dir());
-		}
-	}
-
-	/// Reloads the user defined profiles from the workspace. This should be
-	/// called when the profile files may have been changed outside of the
-	/// application.
-	public static void reload() {
-		load();
-	}
-
-	private static void readFrom(File dir) {
-		var files = dir.listFiles();
-		if (files == null)
-			return;
-		for (var file : files) {
-			if (!file.isFile() || !file.getName().endsWith(".xml"))
-				continue;
-			var profile = read(file);
-			if (profile == null)
-				continue;
-			var id = profile.getId();
-			if (Strings.isBlank(id)) {
-				log.warn("skipping profile without ID: {}", file);
-				continue;
-			}
-			if (isBuiltIn(id)) {
-				log.warn("skipping profile that shadows a built-in profile: {}", file);
-				continue;
-			}
-			if (userProfiles.containsKey(id)) {
-				log.warn("skipping profile with duplicate ID {}: {}", id, file);
-				continue;
-			}
-			normalize(profile);
-			userProfiles.put(id, profile);
-		}
-	}
-
-	/// Ensures that the module and indicator lists of a profile are not null.
-	/// The XML reader of the library may create profiles without these lists.
-	/// Several components (like the result mapping of an EPD) expect that these
-	/// lists can be iterated without a null check.
-	private static void normalize(EpdProfile profile) {
-		if (profile == null)
-			return;
-		profile.withModules();
-		profile.withIndicators();
-	}
-
-	private static EpdProfile read(File file) {
-		try {
-			return EpdProfiles.read(file);
-		} catch (Exception e) {
-			log.error("failed to read profile from {}", file, e);
-			return null;
-		}
 	}
 
 	/// Returns all available profiles: the built-in profiles in the order of
@@ -135,6 +56,15 @@ public final class Profiles {
 			list.add(v.get());
 		}
 		list.addAll(userProfiles());
+		return list;
+	}
+
+	/// Returns all available profiles sorted by name. This is the order in
+	/// which they are shown in selection boxes.
+	public static List<EpdProfile> getAllSorted() {
+		var list = getAll();
+		list.sort((p1, p2) ->
+			Strings.compareIgnoreCase(p1.getName(), p2.getName()));
 		return list;
 	}
 
@@ -152,13 +82,9 @@ public final class Profiles {
 		if (Strings.isBlank(id))
 			return null;
 		var user = userProfiles.get(id);
-		if (user != null)
-			return user;
-		for (var v : EpdProfiles.values()) {
-			if (Objects.equals(id, v.name()))
-				return v.get();
-		}
-		return null;
+		return user != null
+			? user
+			: builtIn(id);
 	}
 
 	/// Returns `true` when the given profile is a built-in profile that
@@ -169,29 +95,61 @@ public final class Profiles {
 
 	/// Returns `true` when the given ID is the ID of a built-in profile.
 	public static boolean isBuiltIn(String id) {
-		if (Strings.isBlank(id))
-			return false;
-		for (var v : EpdProfiles.values()) {
-			if (Objects.equals(id, v.name()))
-				return true;
-		}
-		return false;
+		return builtIn(id) != null;
 	}
 
 	/// Tries to find a profile that matches the indicators of the given EPD.
-	/// The built-in profiles have priority, so that a user defined profile can
-	/// never shadow a built-in profile. Returns `null` when no profile matches.
+	/// The default profile has the highest priority, followed by the other
+	/// built-in profiles, so that a user defined profile can never shadow a
+	/// built-in profile. Returns `null` when no profile matches.
 	public static EpdProfile of(Process epd) {
 		if (epd == null)
 			return null;
-		var builtIn = EpdProfiles.of(epd);
-		if (builtIn != null)
-			return builtIn;
+		var defaultProfile = EpdProfiles.getDefault();
+		if (EpdProfiles.matches(epd, defaultProfile))
+			return defaultProfile;
+		for (var v : EpdProfiles.values()) {
+			var profile = v.get();
+			if (Objects.equals(profile, defaultProfile))
+				continue;
+			if (EpdProfiles.matches(epd, profile))
+				return profile;
+		}
 		for (var profile : userProfiles()) {
 			if (EpdProfiles.matches(epd, profile))
 				return profile;
 		}
 		return null;
+	}
+
+	/// Loads all user defined profiles from the workspace. This is called
+	/// when the application starts.
+	public static void load() {
+		userProfiles.clear();
+		readFrom();
+	}
+
+	/// Reloads the user defined profiles from the workspace. This should be
+	/// called when the profile files may have been changed outside of the
+	/// application.
+	public static void reload() {
+		load();
+	}
+
+	/// The folder where the user defined profiles are stored. It is created
+	/// when it does not exist yet.
+	public static File dir() {
+		var dir = folderOverride != null
+			? folderOverride
+			: new File(App.workspaceFolder(), "profiles");
+		if (!dir.exists()) {
+			try {
+				Files.createDirectories(dir.toPath());
+			} catch (Exception e) {
+				log.error("failed to create profile folder {}", dir, e);
+			}
+		}
+		return dir;
 	}
 
 	/// Creates a new, empty user defined profile, saves it in the workspace
@@ -242,9 +200,7 @@ public final class Profiles {
 			log.error("failed to write profile to {}", file, e);
 			return false;
 		}
-		synchronized (Profiles.class) {
-			userProfiles.put(id, profile);
-		}
+		userProfiles.put(id, profile);
 		Navigator.refreshProfiles();
 		return true;
 	}
@@ -269,9 +225,7 @@ public final class Profiles {
 			}
 		}
 
-		synchronized (Profiles.class) {
-			userProfiles.remove(id);
-		}
+		userProfiles.remove(id);
 
 		var settings = App.settings();
 		if (Objects.equals(settings.profile, id)) {
@@ -284,11 +238,71 @@ public final class Profiles {
 		return true;
 	}
 
+	/// Reads all user defined profiles from the storage folder. Invalid files
+	/// and files that would shadow a built-in profile or another user defined
+	/// profile are skipped.
+	private static void readFrom() {
+		var files = dir().listFiles();
+		if (files == null)
+			return;
+		for (var file : files) {
+			if (!file.isFile() || !file.getName().endsWith(".xml"))
+				continue;
+			EpdProfile profile;
+			try {
+				profile = EpdProfiles.read(file);
+			} catch (Exception e) {
+				log.error("failed to read profile from {}", file, e);
+				continue;
+			}
+			if (profile == null)
+				continue;
+			var id = profile.getId();
+			if (Strings.isBlank(id)) {
+				log.warn("skipping profile without ID: {}", file);
+				continue;
+			}
+			if (isBuiltIn(id)) {
+				log.warn("skipping profile that shadows a built-in profile: {}", file);
+				continue;
+			}
+			if (userProfiles.containsKey(id)) {
+				log.warn("skipping profile with duplicate ID {}: {}", id, file);
+				continue;
+			}
+			normalize(profile);
+			userProfiles.put(id, profile);
+		}
+	}
+
+	/// Ensures that the module and indicator lists of a profile are not null.
+	/// The XML reader of the library may create profiles without these lists.
+	/// Several components (like the result mapping of an EPD) expect that these
+	/// lists can be iterated without a null check.
+	private static void normalize(EpdProfile profile) {
+		if (profile == null)
+			return;
+		profile.withModules();
+		profile.withIndicators();
+	}
+
+	/// Returns the built-in profile with the given ID or `null` when no such
+	/// profile exists. Note that the registry of the library is not used here:
+	/// it can be modified from the outside and has no way to remove a profile
+	/// again.
+	private static EpdProfile builtIn(String id) {
+		if (Strings.isBlank(id))
+			return null;
+		for (var v : EpdProfiles.values()) {
+			if (Objects.equals(id, v.name()))
+				return v.get();
+		}
+		return null;
+	}
+
 	/// Redirects the storage folder. This is only used in tests.
 	static void useFolder(File folder) {
-		synchronized (Profiles.class) {
-			folderOverride = folder;
-			userProfiles.clear();
-		}
+		folderOverride = folder;
+		userProfiles.clear();
 	}
 }

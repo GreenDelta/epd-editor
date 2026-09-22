@@ -4,7 +4,6 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.swt.SWT;
@@ -12,7 +11,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.openlca.commons.Strings;
 import org.openlca.ilcd.commons.DataSetType;
 import org.openlca.ilcd.commons.Ref;
 import org.slf4j.Logger;
@@ -21,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import app.App;
 import app.AppSettings;
 import app.M;
-import app.store.Profiles;
+import app.editors.profiles.ProfileCombo;
 import app.store.RefTrees;
 import app.util.Controls;
 import app.util.FileChooser;
@@ -161,29 +159,12 @@ class DataSetSection {
 	private void profileCombo(Composite comp, FormToolkit tk) {
 		var combo = UI.formCombo(comp, tk, M.DefaultEPDProfile);
 		UI.stretchNone(combo).widthHint = 300;
-		var profiles = Profiles.getAll();
-		profiles.sort((p1, p2) -> Strings.compareIgnoreCase(p1.getName(), p2.getName()));
-		var items = new String[profiles.size()];
-		int selected = -1;
-		for (int i = 0; i < items.length; i++) {
-			var profile = profiles.get(i);
-			if (Objects.equals(settings().profile, profile.getId())) {
-				selected = i;
-			}
-			items[i] = profile.getName();
-		}
-		combo.setItems(items);
-		if (selected >= 0) {
-			combo.select(selected);
-		}
-
-		Controls.onSelect(combo, _ -> {
-			int idx = combo.getSelectionIndex();
-			if (idx < 0)
-				return;
-			settings().profile = profiles.get(idx).getId();
-			page.setDirty();
-		});
+		ProfileCombo
+			.fill(combo, settings().profile)
+			.onSelect(profile -> {
+				settings().profile = profile.getId();
+				page.setDirty();
+			});
 	}
 
 	private void qMetaDataFile(Composite comp, FormToolkit tk) {

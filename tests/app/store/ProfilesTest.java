@@ -16,8 +16,10 @@ import java.util.UUID;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.openlca.commons.Strings;
 import org.openlca.ilcd.epd.EpdProfile;
 import org.openlca.ilcd.epd.EpdProfiles;
+import org.openlca.ilcd.processes.Process;
 
 public class ProfilesTest {
 
@@ -133,5 +135,42 @@ public class ProfilesTest {
 		assertNotNull(builtIn);
 		assertNotEquals("shadow", builtIn.getName());
 		assertNotEquals("must not be loaded", builtIn.getDescription());
+	}
+
+	@Test
+	public void testGetWithNullOrBlankId() {
+		assertNull(Profiles.get(null));
+		assertNull(Profiles.get(""));
+		assertNull(Profiles.get("unknown-id"));
+	}
+
+	/// The profiles that are shown in selection boxes are sorted by name.
+	@Test
+	public void testGetAllSorted() {
+		Profiles.create().withName("zzz");
+		Profiles.create().withName("aaa");
+		var all = Profiles.getAllSorted();
+		assertEquals(Profiles.getAll().size(), all.size());
+		for (int i = 1; i < all.size(); i++) {
+			var prev = all.get(i - 1).getName();
+			var next = all.get(i).getName();
+			assertTrue(Strings.compareIgnoreCase(prev, next) <= 0);
+		}
+	}
+
+	/// An EPD without indicator results matches every profile. In that case
+	/// the default profile must be returned and not an arbitrary built-in.
+	@Test
+	public void testOfPrefersDefault() {
+		var epd = new Process();
+		assertSame(EpdProfiles.getDefault(), Profiles.of(epd));
+		assertSame(EpdProfiles.getDefault(), Profiles.of(epd));
+	}
+
+	/// A user defined profile must never shadow a built-in profile.
+	@Test
+	public void testOfDoesNotPreferUserProfile() {
+		assertNotNull(Profiles.copyOf(EpdProfiles.getDefault()));
+		assertSame(EpdProfiles.getDefault(), Profiles.of(new Process()));
 	}
 }

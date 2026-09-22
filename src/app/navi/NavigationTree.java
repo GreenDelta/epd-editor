@@ -15,9 +15,16 @@ public class NavigationTree {
 	 * etc. as in the navigation tree. This viewer accepts an instance
 	 * {@link NavigationElement} as input.
 	 */
-	@SuppressWarnings("deprecation")
 	public static TreeViewer viewer(Composite parent) {
-		var viewer = new TreeViewer(parent, SWT.BORDER | SWT.SINGLE);
+		return viewer(parent, SWT.SINGLE);
+	}
+
+	/// See [viewer(Composite)]. The given style is used for the selection
+	/// behaviour of the viewer, e.g. [SWT#MULTI] for selecting multiple
+	/// elements at once.
+	@SuppressWarnings("deprecation")
+	public static TreeViewer viewer(Composite parent, int selectionStyle) {
+		var viewer = new TreeViewer(parent, SWT.BORDER | selectionStyle);
 		viewer.setContentProvider(new NavigationContent());
 		viewer.setLabelProvider(new NavigationLabel());
 		viewer.setSorter(new NavigationSorter());

@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 import org.openlca.ilcd.commons.DataSetType;
+import org.openlca.ilcd.commons.Ref;
 import org.openlca.ilcd.epd.EpdProfile;
 import org.openlca.ilcd.epd.EpdProfileIndicator;
 
@@ -130,9 +131,9 @@ class IndicatorTable {
 
 	private void bindActions(Section section) {
 		var addFlow = Actions.create(
-			M.AddFlowIndicator, Icon.ADD.des(), this::addFlowIndicator);
+			M.AddFlowIndicator, Icon.des(DataSetType.FLOW), this::addFlowIndicators);
 		var addImpact = Actions.create(
-			M.AddLCIAIndicator, Icon.ADD.des(), this::addImpactIndicator);
+			M.AddLCIAIndicator, Icon.des(DataSetType.IMPACT_METHOD), this::addImpactIndicators);
 		var setUnit = Actions.create(
 			M.SetUnit, Icon.UNIT.des(), this::setUnit);
 		var remove = Actions.create(
@@ -141,24 +142,26 @@ class IndicatorTable {
 		Actions.bind(table, addFlow, addImpact, setUnit, remove);
 	}
 
-	private void addFlowIndicator() {
-		var ref = RefSelectionDialog.select(DataSetType.FLOW);
-		if (ref != null) {
-			add(new EpdProfileIndicator().withRef(ref));
-		}
+	private void addFlowIndicators() {
+		addIndicators(RefSelectionDialog.selectMultiple(DataSetType.FLOW));
 	}
 
-	private void addImpactIndicator() {
-		var ref = RefSelectionDialog.select(DataSetType.IMPACT_METHOD);
-		if (ref != null) {
-			add(new EpdProfileIndicator().withRef(ref));
-		}
+	private void addImpactIndicators() {
+		addIndicators(
+			RefSelectionDialog.selectMultiple(DataSetType.IMPACT_METHOD));
 	}
 
-	private void add(EpdProfileIndicator indicator) {
-		if (indicators.contains(indicator))
+	/// Adds a new indicator for each of the given data set references.
+	/// References that are already used in the profile are ignored.
+	private void addIndicators(List<Ref> refs) {
+		if (refs.isEmpty())
 			return;
-		indicators.add(indicator);
+		for (var ref : refs) {
+			var indicator = new EpdProfileIndicator().withRef(ref);
+			if (!indicators.contains(indicator)) {
+				indicators.add(indicator);
+			}
+		}
 		table.setInput(indicators);
 		editor.setDirty();
 	}

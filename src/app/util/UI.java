@@ -142,8 +142,20 @@ public class UI {
 		return new Font(control.getDisplay(), fd);
 	}
 
+	/// Sets an italic version of the current font of the given control. The
+	/// created font is disposed together with the control.
 	public static void applyItalicFont(Control control) {
-		control.setFont(italicFont(control));
+		if (control == null)
+			return;
+		var font = italicFont(control);
+		if (font == null)
+			return;
+		control.setFont(font);
+		control.addDisposeListener(_ -> {
+			if (!font.isDisposed()) {
+				font.dispose();
+			}
+		});
 	}
 
 	public static void center(Shell parent, Shell child) {

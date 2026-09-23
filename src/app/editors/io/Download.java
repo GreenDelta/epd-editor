@@ -80,9 +80,8 @@ public class Download implements IRunnableWithProgress {
 			String fileName = Sources.getFileName(ref);
 			if (fileName == null || fileName.isEmpty())
 				continue;
-			try {
-				InputStream is = client.getExternalDocument(
-						Sources.getUUID(source), fileName);
+			try (InputStream is = client.getExternalDocument(
+					Sources.getUUID(source), fileName)) {
 				File target = App.store().getExternalDocument(ref);
 				Files.copy(is, target.toPath(),
 						StandardCopyOption.REPLACE_EXISTING);

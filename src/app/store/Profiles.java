@@ -29,21 +29,16 @@ import app.navi.Navigator;
 /// here. User defined profiles are stored as XML files in the `profiles`
 /// folder of the workspace. They are created, edited and deleted by the user.
 ///
-/// This class is the single source of truth for the available profiles. Note
-/// that the static registry of the library (`EpdProfiles#add`) is not used:
-/// it has no way to remove a profile again and user profiles should never
-/// shadow a built-in profile.
+/// This class is the single source of truth for the available
+/// profiles. Note that the static registry of the `olca-ilcd` library
+/// (`EpdProfiles#add`) is not used: it has no way to remove a profile
+/// again and user profiles should never shadow a built-in profile.
 public final class Profiles {
 
 	private static final Logger log = LoggerFactory.getLogger(Profiles.class);
 
-	/// The user defined profiles, keyed by their ID. The map is concurrent so
-	/// that it can be read while a profile is added or removed.
 	private static final Map<String, EpdProfile> userProfiles =
 		new ConcurrentHashMap<>();
-
-	/// Only set in tests to redirect the storage folder.
-	private static File folderOverride;
 
 	private Profiles() {
 	}
@@ -138,10 +133,8 @@ public final class Profiles {
 
 	/// The folder where the user defined profiles are stored. It is created
 	/// when it does not exist yet.
-	public static File dir() {
-		var dir = folderOverride != null
-			? folderOverride
-			: new File(App.workspaceFolder(), "profiles");
+	static File dir() {
+		var dir = new File(App.workspaceFolder(), "profiles");
 		if (!dir.exists()) {
 			try {
 				Files.createDirectories(dir.toPath());
@@ -298,11 +291,5 @@ public final class Profiles {
 				return v.get();
 		}
 		return null;
-	}
-
-	/// Redirects the storage folder. This is only used in tests.
-	static void useFolder(File folder) {
-		folderOverride = folder;
-		userProfiles.clear();
 	}
 }

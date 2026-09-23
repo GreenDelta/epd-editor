@@ -1,20 +1,10 @@
 package app.store;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.File;
-import java.nio.file.Files;
 import java.util.UUID;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.openlca.commons.Strings;
 import org.openlca.ilcd.epd.EpdProfile;
@@ -22,19 +12,6 @@ import org.openlca.ilcd.epd.EpdProfiles;
 import org.openlca.ilcd.processes.Process;
 
 public class ProfilesTest {
-
-	private File dir;
-
-	@Before
-	public void setup() throws Exception {
-		dir = Files.createTempDirectory("epd-profiles").toFile();
-		Profiles.useFolder(dir);
-	}
-
-	@After
-	public void cleanup() {
-		Profiles.useFolder(null);
-	}
 
 	@Test
 	public void testBuiltInDetection() {
@@ -63,7 +40,7 @@ public class ProfilesTest {
 
 		// it is registered and stored as a file
 		assertSame(profile, Profiles.get(id));
-		var file = new File(dir, id + ".xml");
+		var file = new File(Profiles.dir(), id + ".xml");
 		assertTrue(file.exists());
 
 		// it is read again from that file
@@ -110,7 +87,7 @@ public class ProfilesTest {
 		var profile = new EpdProfile()
 			.withId(UUID.randomUUID().toString())
 			.withName("minimal");
-		EpdProfiles.write(profile, new File(dir, "minimal.xml"));
+		EpdProfiles.write(profile, new File(Profiles.dir(), "minimal.xml"));
 
 		Profiles.reload();
 		var read = Profiles.get(profile.getId());
@@ -126,7 +103,7 @@ public class ProfilesTest {
 		var shadow = EpdProfiles.EN_15804_A2_EF30.get().copy();
 		shadow.withName("shadow");
 		shadow.withDescription("must not be loaded");
-		EpdProfiles.write(shadow, new File(dir, "shadow.xml"));
+		EpdProfiles.write(shadow, new File(Profiles.dir(), "shadow.xml"));
 
 		Profiles.reload();
 		assertTrue(Profiles.userProfiles().isEmpty());

@@ -6,6 +6,7 @@ public class M extends NLS {
 
 	public static String AboutEPDEditor;
 	public static String AccessRestrictions;
+	public static String AccessToken;
 	public static String AccreditedThirdPartyReview;
 	public static String Add;
 	public static String AddAMaterialProperty;
@@ -14,9 +15,13 @@ public class M extends NLS {
 	public static String AdministrativeInformation;
 	public static String AlreadyExists;
 	public static String Amount;
+	public static String AnonymousAccess;
 	public static String AppendUuidToFileName;
 	public static String ApplicationSettings;
 	public static String ArticleInPeriodical;
+	public static String AuthDialogMessage;
+	public static String AuthDialogTitle;
+	public static String Authentication;
 	public static String AvailableValidationProfiles;
 	public static String Average;
 
@@ -103,6 +108,7 @@ public class M extends NLS {
 
 	public static String FacilityIdentifier;
 	public static String FailedToCopyFile;
+	public static String FailedToGenerateToken;
 	public static String FailedToGetDataStocks;
 	public static String FailedToSaveDataSet;
 	public static String File;
@@ -119,6 +125,8 @@ public class M extends NLS {
 	public static String ForReUse;
 
 	public static String GeneralInformation;
+	public static String Generate;
+	public static String GenerateToken;
 	public static String Generic;
 	public static String GenericProduct;
 	public static String Geography;
@@ -301,6 +309,7 @@ public class M extends NLS {
 	public static String Template;
 	public static String Time;
 	public static String TimeDescription;
+	public static String Token;
 	public static String Type;
 
 	public static String Undefined;
@@ -327,6 +336,8 @@ public class M extends NLS {
 	public static String UseConditions;
 	public static String UsedStandards;
 	public static String User;
+	public static String UserNameAndPasswordRequired;
+	public static String UserNameRequired;
 	public static String UUID;
 
 	public static String Validate;

@@ -57,7 +57,7 @@ class DataStockLink {
 			MsgBox.error(M.FailedToGetDataStocks, error[0]);
 			return;
 		}
-		DataStockDialog dialog = new DataStockDialog(list);
+		var dialog = new DataStockDialog(list);
 		if (dialog.open() != Window.OK || dialog.selected == null)
 			return;
 		con.dataStockId = dialog.selected.getUUID();
@@ -69,7 +69,7 @@ class DataStockLink {
 	private void setLinkText() {
 		if (link == null)
 			return;
-		String t = M.None;
+		var t = M.None;
 		if (con.dataStockId != null) {
 			t = con.dataStockName + " | " + con.dataStockId;
 		}

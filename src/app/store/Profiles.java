@@ -40,6 +40,17 @@ public final class Profiles {
 	private static final Map<String, EpdProfile> userProfiles =
 		new ConcurrentHashMap<>();
 
+	/// When set, this folder is used instead of the workspace folder for the
+	/// user defined profiles. This is only used in tests.
+	private static File dirOverride;
+
+	/// Uses the given folder for the user defined profiles instead of the
+	/// workspace folder. Pass `null` to use the workspace folder again. This
+	/// is only used in tests.
+	static void useDir(File dir) {
+		dirOverride = dir;
+	}
+
 	private Profiles() {
 	}
 
@@ -132,8 +143,10 @@ public final class Profiles {
 	}
 
 	/// The folder where the user defined profiles are stored. It is created
-	/// when it does not exist yet.
+	/// when it does not exist yet. In tests it can be replaced with [useDir].
 	static File dir() {
+		if (dirOverride != null)
+			return dirOverride;
 		var dir = new File(App.workspaceFolder(), "profiles");
 		if (!dir.exists()) {
 			try {

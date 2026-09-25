@@ -1,17 +1,18 @@
 package epd.conversion;
 
-import epd.model.Xml;
+import static org.junit.Assert.*;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
+
 import org.junit.Test;
 import org.openlca.ilcd.processes.Process;
 import org.openlca.ilcd.processes.epd.EpdSubType;
 import org.openlca.ilcd.util.Epds;
 import org.openlca.ilcd.util.Processes;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.UUID;
-
-import static org.junit.Assert.*;
+import epd.model.Xml;
 
 public class SimpleExtensionTest {
 
@@ -20,10 +21,11 @@ public class SimpleExtensionTest {
 		var epd = new Process();
 		var id = UUID.randomUUID().toString();
 		Processes.withUUID(epd, id);
+		epd.withEpdVersion("1.3");
 		Tests.withStore(store -> {
 			store.put(epd);
 			var process = store.get(Process.class, id);
-			assertEquals("1.2", process.getEpdVersion());
+			assertEquals("1.3", process.getEpdVersion());
 		});
 	}
 

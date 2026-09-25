@@ -3,8 +3,11 @@ package app.store;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.util.UUID;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.openlca.commons.Strings;
 import org.openlca.ilcd.epd.EpdProfile;
@@ -12,6 +15,21 @@ import org.openlca.ilcd.epd.EpdProfiles;
 import org.openlca.ilcd.processes.Process;
 
 public class ProfilesTest {
+
+	/// The tests use a temporary folder for the profiles. Otherwise they would
+	/// write into the workspace folder of the user and would depend on files
+	/// that other tests or previous runs left there.
+	@Before
+	public void setUp() throws Exception {
+		Profiles.useDir(Files.createTempDirectory("profiles-test").toFile());
+		Profiles.reload();
+	}
+
+	@After
+	public void tearDown() {
+		Profiles.useDir(null);
+		Profiles.reload();
+	}
 
 	@Test
 	public void testBuiltInDetection() {

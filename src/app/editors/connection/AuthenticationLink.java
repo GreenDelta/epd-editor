@@ -4,6 +4,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
+import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.openlca.ilcd.io.SodaConnection;
 
 import app.M;
@@ -17,6 +18,7 @@ class AuthenticationLink {
 
 	private final ConnectionEditor editor;
 	private final SodaConnection con;
+	private ScrolledForm form;
 	private ImageHyperlink link;
 
 	AuthenticationLink(ConnectionEditor editor) {
@@ -24,7 +26,8 @@ class AuthenticationLink {
 		this.con = editor.con;
 	}
 
-	void render(Composite comp, FormToolkit tk) {
+	void render(Composite comp, FormToolkit tk, ScrolledForm form) {
+		this.form = form;
 		UI.formLabel(comp, tk, M.Authentication);
 		link = tk.createImageHyperlink(comp, SWT.NONE);
 		link.setForeground(Colors.linkBlue());
@@ -51,6 +54,11 @@ class AuthenticationLink {
 		if (link == null)
 			return;
 		link.setText(linkText(con));
-		link.getParent().pack();
+
+		// The link can grow with the new text. Note that `pack` does not work
+		// here because the size of the parents is controlled by the form
+		// layout.
+		link.getParent().layout(true, true);
+		form.reflow(true);
 	}
 }

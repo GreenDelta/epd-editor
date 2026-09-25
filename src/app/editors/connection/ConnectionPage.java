@@ -35,8 +35,8 @@ class ConnectionPage extends FormPage {
 			editor.setDirty();
 		});
 
-		new AuthenticationLink(editor).render(comp, tk);
-		new DataStockLink(editor).render(comp, tk);
+		new AuthenticationLink(editor).render(comp, tk, form);
+		new DataStockLink(editor).render(comp, tk, form);
 		new DataSection(con).create(body, tk);
 		form.reflow(true);
 	}

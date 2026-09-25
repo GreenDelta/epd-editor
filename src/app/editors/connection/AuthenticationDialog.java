@@ -47,7 +47,7 @@ class AuthenticationDialog extends FormDialog {
 
 	@Override
 	protected Point getInitialSize() {
-		return new Point(700, 450);
+		return new Point(700, 400);
 	}
 
 	@Override

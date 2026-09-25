@@ -8,6 +8,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
+import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.openlca.ilcd.descriptors.DataStock;
 import org.openlca.ilcd.io.SodaClient;
 import org.openlca.ilcd.io.SodaConnection;
@@ -23,6 +24,7 @@ class DataStockLink {
 
 	private final ConnectionEditor editor;
 	private final SodaConnection con;
+	private ScrolledForm form;
 	private ImageHyperlink link;
 
 	DataStockLink(ConnectionEditor editor) {
@@ -30,12 +32,13 @@ class DataStockLink {
 		this.con = editor.con;
 	}
 
-	void render(Composite comp, FormToolkit tk) {
+	void render(Composite comp, FormToolkit tk, ScrolledForm form) {
+		this.form = form;
 		UI.formLabel(comp, tk, M.DataStock);
 		link = tk.createImageHyperlink(comp, SWT.NONE);
 		link.setForeground(Colors.linkBlue());
 		Controls.onClick(link, _ -> {
-			String[] error = new String[1];
+			var error = new String[1];
 			List<DataStock> list = new ArrayList<>();
 			App.run("Get data stocks...",
 				() -> fetchStocks(list, error),
@@ -74,6 +77,9 @@ class DataStockLink {
 			t = con.dataStockName + " | " + con.dataStockId;
 		}
 		link.setText(t);
-		link.getParent().pack();
+
+		// the link can grow with the new text (see AuthenticationLink)
+		link.getParent().layout(true, true);
+		form.reflow(true);
 	}
 }

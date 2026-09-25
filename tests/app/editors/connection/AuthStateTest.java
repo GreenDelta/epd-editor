@@ -13,11 +13,11 @@ public class AuthStateTest {
 		var con = new SodaConnection();
 		Assert.assertEquals(AuthState.NONE, AuthState.of(con));
 
-		// a user name without credentials is anonymous access
+		// a username without credentials is anonymous access
 		con.user = "user";
 		Assert.assertEquals(AuthState.NONE, AuthState.of(con));
 
-		// a password needs a user name
+		// a password needs a username
 		con.password = "password";
 		Assert.assertEquals(AuthState.PASSWORD, AuthState.of(con));
 
@@ -25,7 +25,7 @@ public class AuthStateTest {
 		con.token = "token";
 		Assert.assertEquals(AuthState.TOKEN, AuthState.of(con));
 
-		// credentials without a user name are ignored
+		// credentials without a username are ignored
 		con.user = null;
 		Assert.assertEquals(AuthState.NONE, AuthState.of(con));
 

@@ -13,6 +13,7 @@ public class M extends NLS {
 	public static String Address;
 	public static String AddReview;
 	public static String AdministrativeInformation;
+	public static String AllMaterialPropertiesAdded;
 	public static String AlreadyExists;
 	public static String Amount;
 	public static String AnonymousAccess;

@@ -1,5 +1,7 @@
 package app.editors.flow;
 
+import java.util.List;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -11,12 +13,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.openlca.commons.Strings;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import app.M;
-import app.store.MaterialProperties;
 import app.util.Controls;
 import app.util.UI;
 import app.util.Viewers;
@@ -24,10 +22,15 @@ import epd.model.MaterialProperty;
 
 class MaterialPropertyDialog extends Dialog {
 
+	private final List<MaterialProperty> properties;
 	MaterialProperty selectedProperty;
 
-	public MaterialPropertyDialog() {
+	/**
+	 * Creates a dialog for selecting one of the given material properties.
+	 */
+	MaterialPropertyDialog(List<MaterialProperty> properties) {
 		super(UI.shell());
+		this.properties = properties != null ? properties : List.of();
 	}
 
 	@Override
@@ -58,18 +61,10 @@ class MaterialPropertyDialog extends Dialog {
 	}
 
 	private void setInput(ComboViewer combo) {
-		try {
-			var props = MaterialProperties.get();
-			props.sort((p1, p2) -> Strings.compareIgnoreCase(p1.name, p2.name));
-			combo.setInput(props);
-			if (!props.isEmpty()) {
-				selectedProperty = props.getFirst();
-				var selection = new StructuredSelection(selectedProperty);
-				combo.setSelection(selection);
-			}
-		} catch (Exception e) {
-			Logger log = LoggerFactory.getLogger(getClass());
-			log.error("failed to set viewer input", e);
+		combo.setInput(properties);
+		if (!properties.isEmpty()) {
+			selectedProperty = properties.getFirst();
+			combo.setSelection(new StructuredSelection(selectedProperty));
 		}
 	}
 

@@ -1,7 +1,6 @@
 package app.editors.flow;
 
-import java.util.ArrayList;
-import java.util.Set;
+import java.util.List;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -14,12 +13,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.openlca.commons.Strings;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import app.M;
-import app.store.MaterialProperties;
 import app.util.Controls;
 import app.util.UI;
 import app.util.Viewers;
@@ -27,17 +22,15 @@ import epd.model.MaterialProperty;
 
 class MaterialPropertyDialog extends Dialog {
 
-	private final Set<String> usedIds;
+	private final List<MaterialProperty> properties;
 	MaterialProperty selectedProperty;
 
 	/**
-	 * Creates a dialog for selecting a material property. Properties with an ID
-	 * that is contained in the given set are not offered, so that a property
-	 * cannot be added twice to the same flow.
+	 * Creates a dialog for selecting one of the given material properties.
 	 */
-	MaterialPropertyDialog(Set<String> usedIds) {
+	MaterialPropertyDialog(List<MaterialProperty> properties) {
 		super(UI.shell());
-		this.usedIds = usedIds != null ? usedIds : Set.of();
+		this.properties = properties != null ? properties : List.of();
 	}
 
 	@Override
@@ -68,23 +61,10 @@ class MaterialPropertyDialog extends Dialog {
 	}
 
 	private void setInput(ComboViewer combo) {
-		try {
-			var props = new ArrayList<MaterialProperty>();
-			for (var prop : MaterialProperties.get()) {
-				if (prop == null || usedIds.contains(prop.id))
-					continue;
-				props.add(prop);
-			}
-			props.sort((p1, p2) -> Strings.compareIgnoreCase(p1.name, p2.name));
-			combo.setInput(props);
-			if (!props.isEmpty()) {
-				selectedProperty = props.getFirst();
-				var selection = new StructuredSelection(selectedProperty);
-				combo.setSelection(selection);
-			}
-		} catch (Exception e) {
-			Logger log = LoggerFactory.getLogger(getClass());
-			log.error("failed to set viewer input", e);
+		combo.setInput(properties);
+		if (!properties.isEmpty()) {
+			selectedProperty = properties.getFirst();
+			combo.setSelection(new StructuredSelection(selectedProperty));
 		}
 	}
 

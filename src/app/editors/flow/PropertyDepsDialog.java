@@ -1,10 +1,8 @@
 package app.editors.flow;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -12,7 +10,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.FormDialog;
 import org.eclipse.ui.forms.IManagedForm;
-import org.openlca.commons.Strings;
 import org.openlca.ilcd.commons.FlowType;
 import org.openlca.ilcd.commons.LangString;
 import org.openlca.ilcd.flows.Flow;
@@ -127,29 +124,11 @@ class PropertyDepsDialog extends FormDialog {
 	) {
 
 		static DialogData of(FlowEditor editor) {
-			var unused = unusedPropertiesOf(editor);
+			var unused = MaterialProperties.getUnused(editor.materialProperties);
 			return new DialogData(
 				editor,
 				unused,
 				defaultSelectionOf(editor.flow, unused));
-		}
-
-		/**
-		 * Collects all material properties that are not used in the edited flow yet.
-		 */
-		private static List<MaterialProperty> unusedPropertiesOf(FlowEditor editor) {
-			var usedIDs = editor.materialProperties.stream()
-				.filter(val -> val.property != null)
-				.map(val -> val.property.id)
-				.collect(Collectors.toSet());
-			var props = new ArrayList<MaterialProperty>();
-			for (var prop : MaterialProperties.get()) {
-				if (usedIDs.contains(prop.id))
-					continue;
-				props.add(prop);
-			}
-			props.sort((p1, p2) -> Strings.compareIgnoreCase(p1.name, p2.name));
-			return props;
 		}
 
 		/**

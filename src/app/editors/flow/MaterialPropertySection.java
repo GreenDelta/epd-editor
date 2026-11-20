@@ -1,7 +1,6 @@
 package app.editors.flow;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -15,7 +14,9 @@ import org.eclipse.ui.forms.widgets.Section;
 import app.M;
 import app.Tooltips;
 import app.rcp.Icon;
+import app.store.MaterialProperties;
 import app.util.Actions;
+import app.util.MsgBox;
 import app.util.Tables;
 import app.util.UI;
 import app.util.Viewers;
@@ -70,11 +71,12 @@ class MaterialPropertySection {
 	private void onAdd() {
 		if (editor.flow == null)
 			return;
-		var usedIds = values.stream()
-			.filter(v -> v.property != null)
-			.map(v -> v.property.id)
-			.collect(Collectors.toSet());
-		var dialog = new MaterialPropertyDialog(usedIds);
+		var unused = MaterialProperties.getUnused(values);
+		if (unused.isEmpty()) {
+			MsgBox.info(M.AllMaterialPropertiesAdded);
+			return;
+		}
+		var dialog = new MaterialPropertyDialog(unused);
 		if (dialog.open() != Window.OK)
 			return;
 		var property = dialog.selectedProperty;

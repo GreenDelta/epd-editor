@@ -3,6 +3,7 @@ package epd.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import org.openlca.commons.Copyable;
@@ -52,6 +53,7 @@ public final class MaterialPropertyValue implements Copyable<MaterialPropertyVal
 		}
 
 		var vals = new ArrayList<MaterialPropertyValue>();
+		var seen = new HashSet<String>();
 		for (var mat : doc.getMaterials()) {
 			var details = mat.getBulkDetails();
 			if (details == null)
@@ -60,11 +62,17 @@ public final class MaterialPropertyValue implements Copyable<MaterialPropertyVal
 				var prop = props.get(p.getProperty());
 				if (prop == null || p.getValue() == null)
 					continue;
+				if (seen.contains(prop.id)) {
+					LoggerFactory.getLogger(MaterialPropertyValue.class)
+						.warn("ignored duplicate value for material property {}", prop.id);
+					continue;
+				}
 				var val = new MaterialPropertyValue();
 				val.property = prop;
 				try {
 					val.value = Double.parseDouble(p.getValue().getValue());
 					vals.add(val);
+					seen.add(prop.id);
 				} catch (Exception e) {
 					LoggerFactory.getLogger(MaterialPropertyValue.class)
 						.warn("cannot parse non-numeric material properties", e);
@@ -97,6 +105,9 @@ public final class MaterialPropertyValue implements Copyable<MaterialPropertyVal
 		// add property values
 		for (var v : vals) {
 			if (v.property == null)
+				continue;
+			// write at most one value per property
+			if (props.containsKey(v.property.id))
 				continue;
 			props.put(v.property.id, v.property);
 			var docVal = new PropertyData()

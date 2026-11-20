@@ -1,5 +1,8 @@
 package app.editors.flow;
 
+import java.util.ArrayList;
+import java.util.Set;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -24,10 +27,17 @@ import epd.model.MaterialProperty;
 
 class MaterialPropertyDialog extends Dialog {
 
+	private final Set<String> usedIds;
 	MaterialProperty selectedProperty;
 
-	public MaterialPropertyDialog() {
+	/**
+	 * Creates a dialog for selecting a material property. Properties with an ID
+	 * that is contained in the given set are not offered, so that a property
+	 * cannot be added twice to the same flow.
+	 */
+	MaterialPropertyDialog(Set<String> usedIds) {
 		super(UI.shell());
+		this.usedIds = usedIds != null ? usedIds : Set.of();
 	}
 
 	@Override
@@ -59,7 +69,12 @@ class MaterialPropertyDialog extends Dialog {
 
 	private void setInput(ComboViewer combo) {
 		try {
-			var props = MaterialProperties.get();
+			var props = new ArrayList<MaterialProperty>();
+			for (var prop : MaterialProperties.get()) {
+				if (prop == null || usedIds.contains(prop.id))
+					continue;
+				props.add(prop);
+			}
 			props.sort((p1, p2) -> Strings.compareIgnoreCase(p1.name, p2.name));
 			combo.setInput(props);
 			if (!props.isEmpty()) {

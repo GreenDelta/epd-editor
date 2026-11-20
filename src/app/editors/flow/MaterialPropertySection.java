@@ -2,11 +2,10 @@ package app.editors.flow;
 
 import java.util.List;
 
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.window.Window;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
@@ -45,9 +44,8 @@ class MaterialPropertySection {
 		UI.stretchX(section);
 		var comp = UI.sectionClient(section, tk);
 		UI.gridLayout(comp, 1);
-		table = Tables.createViewer(comp, PROPERTY, VALUE, UNIT);
-		table.getTable().setToolTipText(Tooltips.Flow_MaterialProperties);
-		table.setLabelProvider(new Label());
+		table = Tables.createViewer(
+			comp, new String[]{PROPERTY, VALUE, UNIT}, new Label());
 		Tables.bindColumnWidths(table, 0.34, 0.33, 0.33);
 		var mf = new ModifySupport<MaterialPropertyValue>(table);
 		mf.bind(VALUE, new ValueModifier());
@@ -71,6 +69,10 @@ class MaterialPropertySection {
 	private void onAdd() {
 		if (editor.flow == null)
 			return;
+		if (MaterialProperties.get().isEmpty()) {
+			MsgBox.info(M.NoMaterialPropertiesDefined);
+			return;
+		}
 		var unused = MaterialProperties.getUnused(values);
 		if (unused.isEmpty()) {
 			MsgBox.info(M.AllMaterialPropertiesAdded);
@@ -122,17 +124,45 @@ class MaterialPropertySection {
 		}
 	}
 
-	private static class Label extends LabelProvider implements ITableLabelProvider {
+	/**
+	 * Returns true when the material property of the given value occurs more
+	 * than once in the flow, e.g. because the dataset was created with duplicate
+	 * values or comes from a source with different property IDs.
+	 */
+	private boolean isDuplicate(MaterialPropertyValue val) {
+		if (val == null || val.property == null)
+			return false;
+		for (var other : values) {
+			if (other != val
+				&& other.property != null
+				&& other.property.isSameAs(val.property))
+				return true;
+		}
+		return false;
+	}
+
+	private class Label extends CellLabelProvider {
 
 		@Override
-		public Image getColumnImage(Object obj, int col) {
-			return null;
+		public void update(ViewerCell cell) {
+			if (!(cell.getElement() instanceof MaterialPropertyValue val))
+				return;
+			int col = cell.getColumnIndex();
+			cell.setText(textOf(val, col));
+			cell.setImage(col == 0 && isDuplicate(val)
+				? Icon.WARNING.img()
+				: null);
 		}
 
 		@Override
-		public String getColumnText(Object obj, int col) {
-			if (!(obj instanceof MaterialPropertyValue val))
-				return null;
+		public String getToolTipText(Object obj) {
+			// replaces the tooltip of the table, so that only one is shown
+			return obj instanceof MaterialPropertyValue val && isDuplicate(val)
+				? M.DuplicateMaterialProperty
+				: Tooltips.Flow_MaterialProperties;
+		}
+
+		private String textOf(MaterialPropertyValue val, int col) {
 			var prop = val.property;
 			return switch (col) {
 				case 0 -> prop != null ? prop.name : null;

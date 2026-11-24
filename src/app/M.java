@@ -87,6 +87,7 @@ public class M extends NLS {
 	public static String DownloadDependentDataSets;
 	public static String DownloadFailed;
 	public static String Duplicate;
+	public static String DuplicateMaterialProperty;
 
 	public static String EntityIds;
 	public static String EnvironmentalIndicators;
@@ -191,6 +192,7 @@ public class M extends NLS {
 	public static String NewSource;
 	public static String NewUnitGroup;
 	public static String NoDataFoundOnServer;
+	public static String NoMaterialPropertiesDefined;
 	public static String NoDataSetInArchive;
 	public static String NoDataSetInFile;
 	public static String None;

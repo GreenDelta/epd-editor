@@ -1,7 +1,6 @@
 package app.store;
 
 import java.io.File;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,9 +24,11 @@ public class MaterialProperties {
 		List<MaterialProperty> list = fromFile();
 		if (list != null)
 			return list;
-		try (InputStream is = MaterialProperties.class
-				.getResourceAsStream(NAME)) {
-			MaterialProperty[] props = Json.read(is, MaterialProperty[].class);
+		var stream = MaterialProperties.class.getResourceAsStream(NAME);
+		if (stream == null)
+			return new ArrayList<>();
+		try (stream) {
+			MaterialProperty[] props = Json.read(stream, MaterialProperty[].class);
 			return asList(props);
 		} catch (Exception e) {
 			Logger log = LoggerFactory.getLogger(MaterialProperties.class);
@@ -36,17 +37,15 @@ public class MaterialProperties {
 		}
 	}
 
-	/**
-	 * Returns the material properties of the store that are not used in the
-	 * given values yet, compared by ID and sorted by name. This is used to make
-	 * sure that a material property is not added twice to a flow.
-	 */
+	/// Returns the material properties of the store that are not used in the
+	/// given values yet, compared by ID and sorted by name. This is used to make
+	/// sure that a material property is not added twice to a flow.
 	public static List<MaterialProperty> getUnused(
-		List<MaterialPropertyValue> values
+		List<MaterialPropertyValue> used
 	) {
-		var usedIds = values == null
+		var usedIds = used == null
 			? Set.<String>of()
-			: values.stream()
+			: used.stream()
 				.filter(v -> v != null && v.property != null && v.property.id != null)
 				.map(v -> v.property.id)
 				.collect(Collectors.toSet());
